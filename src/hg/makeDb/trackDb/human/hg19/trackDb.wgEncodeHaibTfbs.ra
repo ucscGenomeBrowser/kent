@@ -1,0 +1,482 @@
+# HAIB TFBS (wrangler: vsmalladi)
+track wgEncodeHaibTfbs
+release alpha
+compositeTrack on
+shortLabel HAIB TFBS
+longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha Institute
+group regulation
+subGroup1 view Views Peaks=Peaks  zRaw=Raw_Signal 
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;<i>Tier1</i> H1hESC=H1-hESC&nbsp;<i>Tier2</i> HepG2=HepG2&nbsp;<i>Tier2</i> GM12891=GM12891 GM12892=GM12892 SKNMC=SK-N-MC  
+subGroup3 factor Factor BCL11A=BCL11A BCL3=BCL3 GABP=GABP POL2=Pol2 SIN3AK20=SIN3AK20 SIX5=SIX5 SP1=SP1 SRF=SRF TCF12=TCF12 USF1=USF1 zControl=Input(control)
+subGroup4 protocol Protocol PCR1x=PCR1x V0416101=v041610.1
+subGroup5 treatment Treatment None=None
+subGroup6 rep Replicate rep1=1 rep2=2
+dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=protocol 
+dimensionAchecked rep1
+dimensionBchecked PCR1x
+#dimensionCchecked NONE
+sortOrder cellType=+ factor=+ protocol=+ treatment=+ rep=+ view=+
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody protocol=protocol treatment=treatment
+priority 0
+type bed 3
+wgEncode 1
+origAssembly hg19
+nextItemButton on
+#dataVersion through the ENCODE Jan 2010 Freeze
+
+	#Peak Track HAIB TFBS#
+	#Short Labels for peak =Pk # 	
+    track wgEncodeHaibTfbsViewPeaks
+    release alpha
+    shortLabel Peaks
+    view Peaks
+    visibility pack
+    viewUi on
+    subTrack wgEncodeHaibTfbs
+    scoreFilter 0
+    scoreFilterLimits 0:1000
+    minGrayLevel 3
+    minScore 0
+
+		
+	    track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES TCF12 Pk 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-seq Peaks Rep 2 (TCF12 in H1-hESC cells)
+	    subGroups view=Peaks factor=TCF12 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=TCF12 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1315 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1130 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES TCF12 Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (TCF12 in H1-hESC cells)
+	    subGroups view=Peaks factor=TCF12 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=TCF12 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1158 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1130 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1.broadPeak.gz
+		
+	    track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES USF-1 Pk 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (USF-1 in H1-hESC cells)
+	    subGroups view=Peaks factor=USF1 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=USF-1 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1319 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1143 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2.broadPeak.gz
+		
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES USF-1 Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (USF-1 in H1-hESC cells)
+	    subGroups view=Peaks factor=USF1 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=USF-1 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1159 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1143 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1.broadPeak.gz
+
+		track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2
+    	release alpha
+    	subTrack wgEncodeHaibTfbsViewPeaks off
+    	shortLabel H1hES Sin3A Pk 2
+    	longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (Sin3Ak-20 in H1-hESC cells)
+    	subGroups view=Peaks factor=SIN3AK20 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+    	type broadPeak
+    	color 0,107,27
+    	metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=Sin3Ak-20 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1313 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1150 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+    	track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1
+    	release alpha
+    	subTrack wgEncodeHaibTfbsViewPeaks on
+    	shortLabel H1hES Sin3A Pk 1
+    	longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (Sin3Ak-20 in H1-hESC cells)
+    	subGroups view=Peaks factor=SIN3AK20 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+    	type broadPeak
+    	color 0,107,27
+    	metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=Sin3Ak-20 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1157 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1150 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1.broadPeak.gz
+
+	    track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks  off
+	    shortLabel H1hES SP1   Pk 2  
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (SP1 in H1-hESC cells)
+	    subGroups view=Peaks factor=SP1 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=SP1 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1318 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1151 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+		track wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks  on
+	    shortLabel H1hES SP1   Pk 1  
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (SP1 in H1-hESC cells)
+	    subGroups view=Peaks factor=SP1 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=SP1 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1166 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1151 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1.broadPeak.gz
+
+	    track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES SIX5  Pk 2 
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (SIX5 in H1-hESC cells)
+	    subGroups view=Peaks factor=SIX5 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SIX5 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1317 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1158 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES SIX5  Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (SIX5 in H1-hESC cells)
+	    subGroups view=Peaks factor=SIX5 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SIX5 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1162 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1158 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1.broadPeak.gz
+
+	    track wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES BCL3  Pk 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (BCL3 in H1-hESC cells)
+	    subGroups view=Peaks factor=BCL3 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL3 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1312 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1171 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	   	track wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES BCL3  Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (BCL3 in H1-hESC cells)
+	    subGroups view=Peaks factor=BCL3 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL3 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1164 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1171 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep1.broadPeak.gz
+
+	    track wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES BCL11 Pk 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (BCL11A in H1-hESC cells)
+	    subGroups view=Peaks factor=BCL11A cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL11A protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1314 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1172 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES BCL11 Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (BCL11A in H1-hESC cells)
+	    subGroups view=Peaks factor=BCL11A cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL11A protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1161 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1172 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep1.broadPeak.gz
+
+	    track wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES SRF   Pk 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (SRF in H1-hESC cells)
+	    subGroups view=Peaks factor=SRF cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SRF protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1659 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1180 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES SRF   Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (SRF in H1-hESC cells)
+	    subGroups view=Peaks factor=SRF cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SRF protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1483 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1180 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1.broadPeak.gz
+
+	    track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks off
+	    shortLabel H1hES GABP  Pk 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 2 (GABP in H1-hESC cells)
+	    subGroups view=Peaks factor=GABP cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=GABP protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=2 labVersion=SL1660 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1188 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2 fileName=wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2.broadPeak.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewPeaks on
+	    shortLabel H1hES GABP  Pk 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Rep 1 (GABP in H1-hESC cells)
+	    subGroups view=Peaks factor=GABP cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type broadPeak
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=GABP protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=Peaks replicate=1 labVersion=SL1518 softwareVersion=MACS dataVersion="ENCODE June 2010 Freeze" subId=1188 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1 fileName=wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1.broadPeak.gz
+
+
+        track wgEncodeHaibTfbsH1hescPol2Pcr1xPkRep2
+        release alpha
+        subTrack wgEncodeHaibTfbsViewPeaks off
+        shortLabel H1hES Pol2  Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (Pol2 in H1-hESC cells)
+        subGroups view=Peaks factor=POL2 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 0,107,27
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+        track wgEncodeHaibTfbsH1hescPol2Pcr1xPkRep1
+        release alpha
+        subTrack wgEncodeHaibTfbsViewPeaks on
+        shortLabel H1hES Pol2  Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (Pol2 in H1-hESC cells)
+        subGroups view=Peaks factor=POL2 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+        type broadPeak
+        color 0,107,27
+
+
+
+ 
+	#Raw Signal Track HAIB TFBS# 
+	#Short Labels for Raw Signal =Ra #  
+	track wgEncodeHaibTfbsViewzRaw
+    release alpha
+    shortLabel Raw Signal
+    view zRaw
+    subTrack wgEncodeHaibTfbs
+    minLimit 1
+    maxLimit 47957.00
+    viewLimits 1:137
+    autoScale off
+    maxHeightPixels 100:16:16
+    windowingFunction mean
+    
+    	track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep2
+    	release alpha
+    	subTrack wgEncodeHaibTfbsViewzRaw off
+    	shortLabel H1hES Sin3A Ra 2
+    	longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (Sin3Ak-20 in H1-hESC cells)
+    	subGroups view=zRaw factor=SIN3AK20 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+    	type wig -123.79 93.65
+    	color 0,107,27
+    	metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=Sin3Ak-20 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1313 dataVersion="ENCODE June 2010 Freeze" subId=1150 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#	
+	    track wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep1
+    	release alpha
+    	subTrack wgEncodeHaibTfbsViewzRaw on
+    	shortLabel H1hES Sin3A Ra 1
+    	longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Sin3Ak-20 in H1-hESC cells)
+    	subGroups view=zRaw factor=SIN3AK20 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+    	type wig -145.00 80.60
+    	color 0,107,27
+    	metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=Sin3Ak-20 	protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1157 	dataVersion="ENCODE June 2010 Freeze" subId=1150 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 	composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep1 	fileName=wgEncodeHaibTfbsH1hescSin3ak20Pcr1xRawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel H1hES SP1   Ra 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (SP1 in H1-hESC cells)
+	    subGroups view=zRaw factor=SP1 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type wig -108.44 121.10
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=SP1 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1318 dataVersion="ENCODE June 2010 Freeze" subId=1151 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+	    track wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw  on
+	    shortLabel H1hES SP1   Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (SP1 in H1-hESC cells)
+	    subGroups view=zRaw factor=SP1 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type wig -103.06 82.54
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=SP1 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1166 dataVersion="ENCODE June 2010 Freeze" subId=1151 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep1 fileName=wgEncodeHaibTfbsH1hescSp1Pcr1xRawRep1.wig.gz
+
+		track wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel H1hES SIX5  Ra 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (SIX5 in H1-hESC cells)
+	    subGroups view=zRaw factor=SIX5 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type wig -111.61 110.82
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SIX5 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1317 dataVersion="ENCODE June 2010 Freeze" subId=1158 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines for which Peaks exist#
+	    track wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw on
+	    shortLabel H1hES SIX5  Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (SIX5 in H1-hESC cells)
+	    subGroups view=zRaw factor=SIX5 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type wig -140.66 108.81
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SIX5 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1162 dataVersion="ENCODE June 2010 Freeze" subId=1158 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1 fileName=wgEncodeHaibTfbsH1hescSix5Pcr1xRawRep1.wig.gz
+
+	   	track wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw  off
+	    shortLabel H1hES BCL3  Ra 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (BCL3 in H1-hESC cells)
+	    subGroups view=zRaw factor=BCL3 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type wig -112.49 91.34
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL3 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1312 dataVersion="ENCODE June 2010 Freeze" subId=1171 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines for which Peaks exist#
+	   	track wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw on
+	    shortLabel H1hES BCL3  Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (BCL3 in H1-hESC cells)
+	    subGroups view=zRaw factor=BCL3 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type wig -128.60 105.23
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL3 protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1164 dataVersion="ENCODE June 2010 Freeze" subId=1171 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep1 fileName=wgEncodeHaibTfbsH1hescBcl3Pcr1xRawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel H1hES BCL11 Ra 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (BCL11A in H1-hESC cells)
+	    subGroups view=zRaw factor=BCL11A cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type wig -157.02 273.33
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL11A protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1314 dataVersion="ENCODE June 2010 Freeze" subId=1172 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines for which Peaks exist#
+	    track wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw on
+	    shortLabel H1hES BCL11 Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (BCL11A in H1-hESC cells)
+	    subGroups view=zRaw factor=BCL11A cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type wig -135.84 163.29
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChIPseq cell=H1-hESC antibody=BCL11A protocol=PCR1x setType=exp treatment=None inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1161 dataVersion="ENCODE June 2010 Freeze" subId=1172 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep1 fileName=wgEncodeHaibTfbsH1hescBcl11aPcr1xRawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsH1hescSrfPcr1xRawRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel H1hES SRF   Ra 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (SRF in H1-hESC cells)
+	    subGroups view=zRaw factor=SRF cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type wig -194.30 96.74
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SRF protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1659 dataVersion="ENCODE June 2010 Freeze" subId=1180 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSrfPcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescSrfPcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines for which Peaks exist#
+	    track wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw on
+	    shortLabel H1hES SRF   Ra 1
+	    longLabel ENCODE TFBS HudsonAlpha ChIP-Seq Raw Signal Rep 1 (SRF in H1-hESC cells)
+	    subGroups view=zRaw factor=SRF cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type wig -114.94 124.15
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=SRF protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1483 dataVersion="ENCODE June 2010 Freeze" subId=1180 dateSubmitted=2010-04-27 dateUnrestricted=2011-01-27 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1 fileName=wgEncodeHaibTfbsH1hescSrfPcr1xRawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel H1hES GABP  Ra 2
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 2 (GABP in H1-hESC cells)
+	    subGroups view=zRaw factor=GABP cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+	    type wig -96.58 52.07
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=GABP protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=2 labVersion=SL1660 dataVersion="ENCODE June 2010 Freeze" subId=1188 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2 fileName=wgEncodeHaibTfbsH1hescGabpPcr1xRawRep2.wig.gz
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines for which Peaks exist#
+	    track wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw on
+	    shortLabel H1hES GABP  Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (GABP in H1-hESC cells)
+	    subGroups view=zRaw factor=GABP cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+	    type wig -105.72 85.59
+	    color 0,107,27
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=H1-hESC antibody=GABP protocol=PCR1x treatment=None setType=exp inputType=H1-hESC/None/Input/PCR1x view=RawSignal replicate=1 labVersion=SL1518 dataVersion="ENCODE June 2010 Freeze" subId=1188 dateSubmitted=2010-04-29 dateUnrestricted=2011-01-29 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1 fileName=wgEncodeHaibTfbsH1hescGabpPcr1xRawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsGm12892ControlV0416101RawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel GM892 Contr Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in GM12892 cells)
+	    subGroups view=zRaw factor=zControl cellType=GM12892 protocol=V0416101 treatment=None rep=rep1
+	    type wig -197.19 321.24
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12892 antibody=Control protocol=v041610.1 treatment=None setType=exp inputType=GM12892/None/Input/v041610.1 view=RawSignal replicate=1 labVersion=SL1783 dataVersion="ENCODE June 2010 Freeze" subId=1189 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsGm12892ControlV0416101RawRep1 fileName=wgEncodeHaibTfbsGm12892ControlV0416101RawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsGm12891ControlV0416101RawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel GM891 Contr Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in GM12891 cells)
+	    subGroups view=zRaw factor=zControl cellType=GM12891 protocol=V0416101 treatment=None rep=rep1
+	    type wig -98.72 141.77
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12891 antibody=Control protocol=v041610.1 treatment=None setType=exp inputType=GM12891/None/Input/v041610.1 view=RawSignal replicate=1 labVersion=SL1782 dataVersion="ENCODE June 2010 Freeze" subId=1189 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsGm12891ControlV0416101RawRep1 fileName=wgEncodeHaibTfbsGm12891ControlV0416101RawRep1.wig.gz
+
+
+	    track wgEncodeHaibTfbsHepg2ControlV0416101RawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel HepG2 Contr Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in HepG2 cells)
+	    subGroups view=zRaw factor=zControl cellType=HepG2 protocol=V0416101 treatment=None rep=rep1
+	    type wig -87.32 58.00
+	    color 189,0,157
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=HepG2 antibody=Control protocol=v041610.1 treatment=None setType=exp inputType=HepG2/None/Input/v041610.1 view=RawSignal replicate=1 labVersion=SL1781 dataVersion="ENCODE June 2010 Freeze" subId=1189 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsHepg2ControlV0416101RawRep1 fileName=wgEncodeHaibTfbsHepg2ControlV0416101RawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsSknmcControlV0416101RawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel SKNMC Contr Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in SK-N-MC cells)
+	    subGroups view=zRaw factor=zControl cellType=SKNMC protocol=V0416101 treatment=None rep=rep1
+	    type wig -130.70 102.05
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=SK-N-MC antibody=Control protocol=v041610.1 treatment=None setType=exp inputType=SK-N-MC/None/Input/v041610.1 view=RawSignal replicate=1 labVersion=SL1714 dataVersion="ENCODE June 2010 Freeze" subId=1189 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsSknmcControlV0416101RawRep1 fileName=wgEncodeHaibTfbsSknmcControlV0416101RawRep1.wig.gz
+
+	    track wgEncodeHaibTfbsGm12878ControlV0416101RawRep1
+	    release alpha
+	    subTrack wgEncodeHaibTfbsViewzRaw off
+	    shortLabel GM878 Contr Ra 1
+	    longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Rep 1 (Control in GM12878 cells)
+	    subGroups view=zRaw factor=zControl cellType=GM12878 protocol=V0416101 treatment=None rep=rep1
+	    type wig -67.33 116.47
+	    color 153,38,0
+	    metadata project=wgEncode grant=Myers lab=HudsonAlpha dataType=ChipSeq cell=GM12878 antibody=Control protocol=v041610.1 treatment=None setType=exp inputType=GM12878/None/Input/v041610.1 view=RawSignal replicate=1 labVersion=SL1613 dataVersion="ENCODE June 2010 Freeze" subId=1189 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeHaibTfbs tableName=wgEncodeHaibTfbsGm12878ControlV0416101RawRep1 fileName=wgEncodeHaibTfbsGm12878ControlV0416101RawRep1.wig.gz
+
+		
+        track wgEncodeHaibTfbsH1hescPol2Pcr1xRawRep2
+        release alpha
+        subTrack wgEncodeHaibTfbsViewzRaw off
+        shortLabel H1hES Pol2  Ra 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (Pol2 in H1-hESC cells)
+        subGroups view=zRaw factor=POL2 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+        type wig -149.71 142.58
+        color 0,107,27
+
+		#Turn on Rep 1 for Tier 1 and Tier 2 cell lines#
+        track wgEncodeHaibTfbsH1hescPol2Pcr1xRawRep1
+        release alpha
+        subTrack wgEncodeHaibTfbsViewzRaw on
+        shortLabel H1hES Pol2  Ra 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (Pol2 in H1-hESC cells)
+        subGroups view=zRaw factor=POL2 cellType=H1hESC protocol=PCR1x treatment=None rep=rep1
+        type wig -93.17 77.26
+        color 0,107,27

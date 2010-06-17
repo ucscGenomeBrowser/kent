@@ -18,7 +18,7 @@ errAbort(
   "usage:\n"
   "   hgBedsToBedExps in.cfg out.bed out.exps\n"
   "where in.cfg is a tab separated file that describes the beds.  The columns are\n"
-  "   <factor> <cell line> <cell letter> <db/file> <data type> <multiplier> <file/table>\n"
+  "   <factor> <cell line> <cell letter> <db/file> <score col ix> <multiplier> <file/table>\n"
   "options:\n"
   "   -xxx=XXX\n"
   );

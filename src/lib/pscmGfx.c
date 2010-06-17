@@ -94,6 +94,7 @@ void pscmUnclip(struct pscmGfx *pscm)
 pscmSetClip(pscm, 0, 0, pscm->ps->userWidth, pscm->ps->userHeight);
 }
 
+#ifndef COLOR32
 static Color pscmClosestColor(struct pscmGfx *pscm, 
 	unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to r,g,b */
@@ -135,12 +136,16 @@ pscm->colorsUsed += 1;
 colHashAdd(pscm->colorHash, r, g, b, colIx);;
 return (Color)colIx;
 }
+#endif
 
 int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create
  * exact color in map. */
 {
+#ifdef COLOR32
+return MAKECOLOR_32(r,g,b);
+#else
 struct colHashEl *che;
 if (r>255||g>255||b>255) 
     errAbort("RGB values out of range (0-255).  r:%d g:%d b:%d", r, g, b);
@@ -149,15 +154,26 @@ if ((che = colHashLookup(pscm->colorHash, r, g, b)) != NULL)
 if (pscm->colorsUsed < 256)
     return pscmAddColor(pscm, r, g, b);
 return pscmClosestColor(pscm, r, g, b);
+#endif
 }
 
 
 struct rgbColor pscmColorIxToRgb(struct pscmGfx *pscm, int colorIx)
 /* Return rgb value at color index. */
 {
+#ifdef COLOR32
+static struct rgbColor rgb;
+rgb.r = (colorIx >> 0) & 0xff;
+rgb.g = (colorIx >> 8) & 0xff;
+rgb.b = (colorIx >> 16) & 0xff;
+
+return rgb;
+#else
 return pscm->colorMap[colorIx];
+#endif
 }
 
+#ifndef COLOR32
 static void pscmSetDefaultColorMap(struct pscmGfx *pscm)
 /* Set up default color map for a memGfx. */
 {
@@ -169,6 +185,13 @@ for (i=0; i<ArraySize(mgFixedColors); ++i)
     pscmFindColorIx(pscm, c->r, c->g, c->b);
     }
 }
+#endif
+
+void pscmSetWriteMode(struct pscmGfx *pscm, unsigned int writeMode)
+/* Set write mode */
+{
+pscm->writeMode = writeMode;
+}
 
 struct pscmGfx *pscmOpen(int width, int height, char *file)
 /* Return new pscmGfx. */
@@ -178,8 +201,10 @@ struct pscmGfx *pscm;
 AllocVar(pscm);
 pscm->ps = psOpen(file, width, height, 72.0 * 7.5, 0, 0);
 psTranslate(pscm->ps,0.5,0.5);  /* translate all coordinates to pixel centers */
+#ifndef COLOR32
 pscm->colorHash = colHashNew();
 pscmSetDefaultColorMap(pscm);
+#endif
 pscm->clipMinX = pscm->clipMinY = 0;
 pscm->clipMaxX = width;     
 pscm->clipMaxY = height;
@@ -199,14 +224,26 @@ if (pscm != NULL)
     }
 }
 
-void pscmSetColor(struct pscmGfx *pscm, int colorIx)
-/* Set color to index. */
+void pscmSetColor(struct pscmGfx *pscm, Color color)
+/* Set current color to Color. */
 {
-struct rgbColor *col = pscm->colorMap + colorIx;
-if (colorIx != pscm->curColor)
+struct rgbColor *col;
+
+#ifdef COLOR32
+struct rgbColor myCol;
+col = &myCol;
+
+col->r = (color >> 0) & 0xff;
+col->g = (color >> 8) & 0xff;
+col->b = (color >> 16) & 0xff;
+#else
+col = pscm->colorMap + color;
+#endif
+
+if (color != pscm->curColor)
     {
     psSetColor(pscm->ps, col->r, col->g, col->b);
-    pscm->curColor = colorIx;
+    pscm->curColor = color;
     }
 }
 
@@ -269,9 +306,9 @@ pscmBox(pscm, x, y, 1, 1, color);
 
 
 
-static void pscmVerticalSmear8(struct pscmGfx *pscm,
+static void pscmVerticalSmear(struct pscmGfx *pscm,
 	int xOff, int yOff, int width, int height, 
-	unsigned char *dots, boolean zeroClear)
+	Color *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
 {
 int x, i;
@@ -281,7 +318,7 @@ for (i=0; i<width; ++i)
     {
     x = xOff + i;
     c = dots[i];
-    if (c != 0 || !zeroClear)
+    if (c != MG_WHITE || !zeroClear)
 	{
 	pscmSetColor(pscm, c);
 	psDrawBox(ps, x, yOff, 1, height);
@@ -767,13 +804,14 @@ vg->findColorIx = (vg_findColorIx)pscmFindColorIx;
 vg->colorIxToRgb = (vg_colorIxToRgb)pscmColorIxToRgb;
 vg->setClip = (vg_setClip)pscmSetClip;
 vg->unclip = (vg_unclip)pscmUnclip;
-vg->verticalSmear8 = (vg_verticalSmear8)pscmVerticalSmear8;
+vg->verticalSmear = (vg_verticalSmear)pscmVerticalSmear;
 vg->fillUnder = (vg_fillUnder)pscmFillUnder;
 vg->drawPoly = (vg_drawPoly)pscmDrawPoly;
 vg->setHint = (vg_setHint)pscmSetHint;
 vg->getHint = (vg_getHint)pscmGetHint;
 vg->getFontPixelHeight = (vg_getFontPixelHeight)pscmGetFontPixelHeight;
 vg->getFontStringWidth = (vg_getFontStringWidth)pscmGetFontStringWidth;
+vg->setWriteMode = (vg_setWriteMode)pscmSetWriteMode;
 return vg;
 }
 

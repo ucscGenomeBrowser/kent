@@ -12,7 +12,6 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-#define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
 
 static char const rcsid[] = "$Id: memgfx.c,v 1.54 2010/06/05 19:29:53 braney Exp $";
 
@@ -241,7 +240,6 @@ if (mg != NULL)
 *pmg = NULL;
 }
 
-#ifndef COLOR32
 static void nonZeroCopy(Color *d, Color *s, int width)
 /* Copy non-zero colors. */
 {
@@ -249,18 +247,15 @@ Color c;
 int i;
 for (i=0; i<width; ++i)
     {
-    if ((c = s[i]) != 0)
+    if ((c = s[i]) != MG_WHITE)
         d[i] = c;
     }
 }
-#endif
 
-static void mgPutSegMaybeZeroClear8(struct memGfx *mg, int x, int y, int width, unsigned char *dots, boolean zeroClear)
+static void mgPutSegMaybeZeroClear(struct memGfx *mg, int x, int y, int width, Color *dots, boolean zeroClear)
 /* Put a series of dots starting at x, y and going to right width pixels.
  * Possibly don't put zero dots though. */
 {
-#ifdef COLOR32
-#else
 int x2;
 Color *pt;
 if (y < mg->clipMinY || y > mg->clipMaxY)
@@ -282,20 +277,19 @@ if (width > 0)
     else
         {
         width *= sizeof(Color);
-        memcpy(pt, dots, width * sizeof(int));
+        memcpy(pt, dots, width * sizeof(Color));
         }
     }
-#endif /* COLOR32 */
 }
 
-void mgVerticalSmear8(struct memGfx *mg,
+void mgVerticalSmear(struct memGfx *mg,
 	int xOff, int yOff, int width, int height, 
-	unsigned char *dots, boolean zeroClear)
+	Color *dots, boolean zeroClear)
 /* Put a series of one 'pixel' width vertical lines. */
 {
 while (--height >= 0)
     {
-    mgPutSegMaybeZeroClear8(mg, xOff, yOff, width, dots, zeroClear);
+    mgPutSegMaybeZeroClear(mg, xOff, yOff, width, dots, zeroClear);
     ++yOff;
     }
 }
@@ -519,17 +513,17 @@ void mgFillUnder(struct memGfx *mg, int x1, int y1, int x2, int y2,
 mgBrezy(mg, x1, y1, x2, y2, color, bottom, TRUE);
 }
 
-void mgPutSeg8(struct memGfx *mg, int x, int y, int width, unsigned char *dots)
+void mgPutSeg(struct memGfx *mg, int x, int y, int width, Color *dots)
 /* Put a series of dots starting at x, y and going to right width pixels. */
 {
-mgPutSegMaybeZeroClear8(mg, x, y, width, dots, FALSE);
+mgPutSegMaybeZeroClear(mg, x, y, width, dots, FALSE);
 }
 
-void mgPutSegZeroClear8(struct memGfx *mg, int x, int y, int width, unsigned char *dots)
+void mgPutSegZeroClear(struct memGfx *mg, int x, int y, int width, Color *dots)
 /* Put a series of dots starting at x, y and going to right width pixels.
  * Don't put zero dots though. */
 {
-mgPutSegMaybeZeroClear8(mg, x, y, width, dots, TRUE);
+mgPutSegMaybeZeroClear(mg, x, y, width, dots, TRUE);
 }
 
 
@@ -917,7 +911,7 @@ vg->colorIxToRgb = (vg_colorIxToRgb)mgColorIxToRgb;
 vg->setWriteMode = (vg_setWriteMode)mgSetWriteMode;
 vg->setClip = (vg_setClip)mgSetClip;
 vg->unclip = (vg_unclip)mgUnclip;
-vg->verticalSmear8 = (vg_verticalSmear8)mgVerticalSmear8;
+vg->verticalSmear = (vg_verticalSmear)mgVerticalSmear;
 vg->fillUnder = (vg_fillUnder)mgFillUnder;
 vg->drawPoly = (vg_drawPoly)mgDrawPoly;
 vg->setHint = (vg_setHint)mgSetHint;

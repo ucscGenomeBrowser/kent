@@ -1375,7 +1375,7 @@ lineage Genetically engineered from Human prostate epithelial cells. Multiple hu
 karyotype Diploid
 #termId BTO:0001389 (non-specific)
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
-sex F
+sex M
 tier 3
 protocol Open_Chromatin:LHSR_Crawford_protocol.pdf
 
@@ -3849,6 +3849,11 @@ tag BB2
 type mapAlgorithm
 description bowtie0.10.0 followed by blat v34
 
+term TH1014
+tag TH1014
+type mapAlgorithm
+description TopHat 1.0.14 
+
 ### readType
 # term (human-readable read type name)
 # tag (machine-readable read type name, no special characters)
@@ -3890,10 +3895,25 @@ type readType
 description Paired 75 n.t. reads
 
 #### insertLength
+#### This is being used by the Wold lab as a variable.
+#### I do not think that it needs to be controlled. - Cricket
+
+
 term 400
 tag il400
 type insertLength
 description insert length of 400nt
+
+term 200
+tag il200
+type insertLength
+description insert length of 200nt
+
+term NA
+tag ilNa 
+type insertLength
+description insert length not applicaple
+
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
 term 1k
