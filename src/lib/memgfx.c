@@ -248,7 +248,7 @@ Color c;
 int i;
 for (i=0; i<width; ++i)
     {
-    if ((c = s[i]) != 0)
+    if ((c = s[i]) != MG_WHITE)
         d[i] = c;
     }
 }
