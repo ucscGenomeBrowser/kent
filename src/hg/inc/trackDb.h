@@ -178,15 +178,11 @@ void trackDbOutput(struct trackDb *el, FILE *f, char sep, char lastSep);
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
+struct trackDb *trackDbNew();
+/* Allocate a new trackDb with just very minimal stuff filled in. */
+
 int trackDbCmp(const void *va, const void *vb);
 /* Sort track by priority. */
-
-#ifdef UNUSED
-void trackDbOverrideVisbility(struct hash *tdHash, char *visibilityRa,
-			      boolean hideFirst);
-/* Override visbility settings using a ra file.  If hideFirst, set all
- * visibilities to hide before applying visibilityRa. */
-#endif /* UNUSED */
 
 void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 /* Override priority settings using a ra file. */
