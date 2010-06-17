@@ -19,6 +19,15 @@ static char const rcsid[] = "$Id: trackDbCustom.c,v 1.90 2010/05/18 22:37:36 ken
 
 /* ----------- End of AutoSQL generated code --------------------- */
 
+struct trackDb *trackDbNew()
+/* Allocate a new trackDb with just very minimal stuff filled in. */
+{
+struct trackDb *tdb;
+AllocVar(tdb);
+tdb->canPack = 2;	/* Unknown value. */
+return tdb;
+}
+
 int trackDbCmp(const void *va, const void *vb)
 /* Compare to sort based on priority; use shortLabel as secondary sort key.
  * Note: parallel code to hgTracks.c:tgCmpPriority */
@@ -272,8 +281,7 @@ for (;;)
         break;
 
     /* Allocate track structure and fill it in until next blank line. */
-    AllocVar(bt);
-    bt->canPack = 2;	/* Unknown value */
+    bt = trackDbNew();
     slAddHead(&btList, bt);
     for (;;)
         {
