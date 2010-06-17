@@ -6,9 +6,9 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTracks
 
-O = $A.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigTrack.o \
+COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
-	coverageTrack.o cytoBandTrack.o cutterTrack.o \
+	coverageTrack.o cytoBandTrack.o cutterTrack.o doMiddle.o \
         expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \
 	mafTrack.o makeItemsTrack.o multiWig.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o switchGear.o transMapTracks.o \
@@ -16,6 +16,8 @@ O = $A.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigT
 	wigMafTrack.o encode.o variation.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
 	wiki.o wikiTrack.o imageV2.o
+
+O = $A.o ${COMMONO} 
 
 include ../../inc/cgi_build_rules.mk
 
@@ -37,6 +39,9 @@ mgsc: strip
 
 compile: $O
 	${CC} -o $A $O ${MYLIBS} ${L}
+
+hgTrackRender: hgTrackRender.o ${COMMONO}
+	${CC} -o hgTrackRender hgTrackRender.o ${COMMONO} ${MYLIBS} ${L}
 
 wigTrack.o:	wigCommon.h
 bedGraph.o:	wigCommon.h
