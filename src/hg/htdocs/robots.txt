@@ -15,3 +15,7 @@ Disallow: /qa/
 Disallow: /cgi-bin/hgTracks 
 Disallow: /cgi-bin/hgTables
 Disallow: /cgi-bin/hgLiftOver
+
+User-Agent: W3C-checklink
+Disallow:
+
