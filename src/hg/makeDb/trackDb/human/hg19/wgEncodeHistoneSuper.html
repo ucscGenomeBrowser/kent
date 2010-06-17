@@ -7,20 +7,33 @@
 </head>
 <body>
 <h2>Description</h2>
-<p>This track displays maps of chromatin state of <a
- href="http://www.genome.gov/10005107">ENCODE</a> cell types. Chemical
-modifications (methylation, acylation) to the histone proteins present
-in chromatin influence gene expression by changing how accessible the
-chromatin is to transcription.<br>
-<br>
-The ChIP-seq method involves cross-linking histones and other DNA
-associated proteins to genomic DNA within cells using formaldehyde. The
-cross-linked chromatin is subsequently extracted, mechanically sheared,
-and immunoprecipitated using specific antibodies. After reversal of
-cross-links, the immunoprecipitated DNA is sequenced and mapped to the
-human reference genome. The relative enrichment of each antibody-target
-(epitope) across the genome is inferred from the density of mapped
-fragments.<br>
+<p>These tracks display maps of chromatin state of <a
+ href="http://www.genome.gov/10005107">ENCODE</a> cell types.
+ Histones are a group of closely-related proteins that together form
+ the nucleosome: H3K4, H3K9, H3K14, H3K27, H3K79, H4K20, and H2BK5.
+ When histone proteins undergo pust-transcriptional modifications at
+ specific amino acids (methylation, acyetylation), these modifications
+ (referred to as <em>marks</em>) perform a role in regulating the
+ winding of the DNA around the nucleosome.  This in turn regulates
+ gene expression by controlling the accessibility of the chromatin.
+ Histone marks vary in their effect. Promoters, enhancers, transcribed
+ regions, and silenced regions are each associated with specific
+ histone marks.  <br>
+
+ The ChIP-seq method enables identifying regions of DNA that interact
+ with specific histone marks.  This method involves cross-linking
+ histones and other DNA associated proteins to genomic DNA within
+ cells using formaldehyde. The cross-linked chromatin is subsequently
+ extracted, mechanically sheared, and immunoprecipitated using
+ specific antibodies. This has the effect of capturing segments of DNA
+ that are bound to the protein selected by the antibody.  After
+ reversal of cross-links, the immunoprecipitated DNA is sequenced and
+ mapped to the human reference genome. The relative enrichment of each
+ antibody-target (epitope) across the genome is inferred from the
+ density of mapped fragments.  If the antibody is specific to a given
+ histone mark, then this procedure identifies segments of the genome
+ associated with that mark.<br>
+
 </p>
 <h2>Display Conventions</h2>
 These tracks are multi-view composite tracks that contains multiple

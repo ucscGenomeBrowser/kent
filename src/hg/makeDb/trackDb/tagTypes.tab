@@ -186,6 +186,7 @@ maxItems *
 maxLimit *
 maxScore broadPeak
 maxWindowToDraw bam rmsk bed
+maxWindowToQuery bigWig bed
 metadata *
 mgiUrl bed
 mgiUrlLabel bed
