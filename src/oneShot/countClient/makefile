@@ -9,3 +9,6 @@ O = countClient.o
 countClient: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/countClient $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/countClient${EXE}
+
+clean::
+	rm -f ${O}

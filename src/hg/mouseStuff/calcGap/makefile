@@ -9,3 +9,6 @@ O = calcGap.o
 calcGap: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/calcGap $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/calcGap${EXE}
+
+clean::
+	rm -f ${O}

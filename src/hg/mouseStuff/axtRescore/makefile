@@ -11,3 +11,6 @@ axtRescore: compile
 
 compile: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtRescore $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

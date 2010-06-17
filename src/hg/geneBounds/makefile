@@ -44,3 +44,7 @@ all: $(USE_DIRS:%=%.all)
 test::
 	cd clusterGenes && ${MAKE} test
 
+clean:: $(USE_DIRS:%=%.clean)
+
+%.clean::
+	( cd $* && echo $* && $(MAKE) clean )

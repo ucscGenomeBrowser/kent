@@ -9,3 +9,5 @@ O = tempLower.o
 tempLower: $O 
 	${CC} ${COPT} ${CFLAGS} -o tempLower $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

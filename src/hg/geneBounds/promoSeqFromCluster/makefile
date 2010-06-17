@@ -9,3 +9,6 @@ O = promoSeqFromCluster.o
 promoSeqFromCluster: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/promoSeqFromCluster $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/promoSeqFromCluster${EXE}
+
+clean::
+	rm -f ${O}

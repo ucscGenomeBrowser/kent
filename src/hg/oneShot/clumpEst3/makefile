@@ -9,3 +9,5 @@ O = clumpEst3.o
 clumpEst3: $O 
 	${CC} ${COPT} ${CFLAGS} -o clumpEst3 $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

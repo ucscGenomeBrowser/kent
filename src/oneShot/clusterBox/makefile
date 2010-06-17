@@ -10,3 +10,6 @@ O = clusterBox.o boxClump.o
 clusterBox: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/clusterBox $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/clusterBox${EXE}
+
+clean::
+	rm -f ${O}

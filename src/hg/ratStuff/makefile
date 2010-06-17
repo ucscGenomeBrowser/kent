@@ -1,15 +1,15 @@
 # Build all directories 
 
 all:
-	@for D in $(USE_DIRS) x; do \
+	@for D in ${USE_DIRS} x; do \
 	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE) ) ;\
+	    ( cd $$D && echo $$D && ${MAKE} ) ;\
 	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
 	    fi ;\
 	    done
 
 # List of directories to build
-USE_DIRS = $(DIRS)
+USE_DIRS = ${DIRS}
 
 DIRS = \
 	mafAddIRows \
@@ -26,3 +26,11 @@ DIRS = \
 	mafsInRegion \
 	mafOrder \
 	stageMultiz 
+
+clean::
+	@for D in ${USE_DIRS} x; do \
+	  if test "$$D" != "x" ; then \
+	    ( cd $$D && echo $$D && ${MAKE} clean ) ;\
+	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+	    fi ;\
+	    done

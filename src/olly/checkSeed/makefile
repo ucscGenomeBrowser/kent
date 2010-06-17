@@ -10,3 +10,6 @@ O = checkSeed.o
 checkSeed: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkSeed $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/checkSeed${EXE}
+
+clean::
+	rm -f ${O}

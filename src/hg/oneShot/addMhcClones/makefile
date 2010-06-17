@@ -8,3 +8,6 @@ O = addMhcClones.o
 
 addMhcClones: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/addMhcClones $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

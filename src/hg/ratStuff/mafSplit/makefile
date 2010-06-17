@@ -15,3 +15,6 @@ compile: $O ${MYLIBS}
 
 dotest:
 	( cd test  ; make )
+
+clean::
+	rm -f ${O}

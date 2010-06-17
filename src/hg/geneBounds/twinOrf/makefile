@@ -9,3 +9,6 @@ O = twinOrf.o
 twinOrf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/twinOrf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/twinOrf${EXE}
+
+clean::
+	rm -f ${O}

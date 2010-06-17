@@ -13,3 +13,6 @@ scripts:
 	    chmod +x $$F; \
             perl -c $$F && cp -upv $$F ${SCRIPTS}; \
 	done
+
+clean::
+	echo nothing to clean in hg/encode/encodeStatus/

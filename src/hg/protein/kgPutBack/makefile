@@ -10,5 +10,5 @@ kgPutBack: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/kgPutBack $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/kgPutBack${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

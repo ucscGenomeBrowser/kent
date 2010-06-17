@@ -10,3 +10,6 @@ O = ${X}.o
 ${X}: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${X} $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/${X}${EXE}
+
+clean::
+	rm -f ${O}

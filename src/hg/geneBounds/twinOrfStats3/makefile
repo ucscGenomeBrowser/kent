@@ -9,3 +9,6 @@ O = twinOrfStats3.o
 twinOrfStats3: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/twinOrfStats3 $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/twinOrfStats3${EXE}
+
+clean::
+	rm -f ${O}

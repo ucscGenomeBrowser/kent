@@ -9,3 +9,5 @@ O = evalEnds.o
 evalEnds: $O 
 	${CC} ${COPT} ${CFLAGS} -o evalEnds $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

@@ -5,3 +5,5 @@ ltcalc: ltcalc.c
 ltcalc.c: ltcalc.y
 	bison -o ltcalc.c ltcalc.y
 
+clean::
+	rm -f ltcalc ltcalc.c

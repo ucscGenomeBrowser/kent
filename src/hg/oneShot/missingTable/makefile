@@ -9,4 +9,5 @@ O = missingTable.o
 missingTable: $(O)
 	cc -o missingTable $O $(MYLIBS) $L
 
-
+clean::
+	rm -f ${O}

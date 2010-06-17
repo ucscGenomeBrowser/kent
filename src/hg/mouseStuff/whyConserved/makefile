@@ -15,3 +15,6 @@ whyConserved: $O $(MYLIBS)
 trackOverlap: trackOverlap.o
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/trackOverlap trackOverlap.o $(MYLIBS) $L
 	${STRIP} ${BINDIR}/trackOverlap${EXE}
+
+clean::
+	rm -f ${O}

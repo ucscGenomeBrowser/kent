@@ -9,3 +9,6 @@ O = axtToBed.o
 axtToBed: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtToBed $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtToBed${EXE}
+
+clean::
+	rm -f ${O}

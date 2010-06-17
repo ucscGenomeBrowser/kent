@@ -9,3 +9,6 @@ O = netSyntenic.o
 netSyntenic: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/netSyntenic $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/netSyntenic${EXE}
+
+clean::
+	rm -f ${O}

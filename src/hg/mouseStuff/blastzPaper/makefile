@@ -9,3 +9,6 @@ O = blastzPaper.o
 blastzPaper: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blastzPaper $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/blastzPaper${EXE}
+
+clean::
+	rm -f ${O}

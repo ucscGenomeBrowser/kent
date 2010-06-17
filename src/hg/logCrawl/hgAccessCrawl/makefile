@@ -9,3 +9,6 @@ O = hgAccessCrawl.o
 hgAccessCrawl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgAccessCrawl $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgAccessCrawl${EXE}
+
+clean::
+	rm -f ${O}

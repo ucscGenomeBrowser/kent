@@ -1625,21 +1625,28 @@ TMPDIR=/scratch/tmp
     cat fb.monDom5.chainFelCat4Link.txt
     # 178616721 bases of 3501660299 (5.101%) in intersection
 
-XXXX 06-16 (to be copied from felCat4.txt
+    # Swap
     mkdir /hive/data/genomes/felCat4/bed/blastz.monDom5.swap
     cd /hive/data/genomes/felCat4/bed/blastz.monDom5.swap
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/monDom5/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -workhorse=hgwdev -smallClusterHub=menk -bigClusterHub=swarm \
         -chainMinScore=5000 -chainLinearGap=loose > swap.log 2>&1 &
-    # *** All done !  Elapsed time: 100m29s
-    # *** Make sure that goldenPath/felCat4/vsMonDom5/README.txt is accurate.
-    # *** Add {chain,net}MonDom5 tracks to trackDb.ra if necessary.
+    # real    181m0.411s
+
+    #  step 'syntenicNet' failed, continue 
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/monDom5/bed/lastzFelCat4.2010-06-07/DEF \
+        -swap -syntenicNet -noDbNameCheck \
+        -continue syntenicNet \
+        -workhorse=hgwdev -smallClusterHub=menk -bigClusterHub=swarm \
+        -chainMinScore=5000 -chainLinearGap=loose > syntenicNet.log 2>&1 &
+    # real    9m46.383s
 
     cat fb.felCat4.chainMonDom5Link.txt
     #   166499264 bases of 1990635005 (8.364%) in intersection
-
 
 
 ##############################################################################

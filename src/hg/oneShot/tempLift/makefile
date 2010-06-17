@@ -9,3 +9,5 @@ O = tempLift.o
 tempLift: $O 
 	${CC} ${COPT} ${CFLAGS} -o tempLift $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

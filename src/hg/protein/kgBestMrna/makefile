@@ -34,4 +34,3 @@ compile: ${O1} ${O2}
 
 clean::
 	rm -f ${O1} ${A1} ${O2} ${A2}
-

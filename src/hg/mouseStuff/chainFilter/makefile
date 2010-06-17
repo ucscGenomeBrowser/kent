@@ -9,3 +9,6 @@ O = chainFilter.o
 chainFilter: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainFilter $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/chainFilter${EXE}
+
+clean::
+	rm -f ${O}

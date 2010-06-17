@@ -15,3 +15,6 @@ pslToBed:
 
 lib:
 	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

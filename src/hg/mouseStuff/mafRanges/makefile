@@ -15,3 +15,6 @@ ${A}: $O ${MYLIBS}
 
 test:	${A}
 	cd tests && ${MAKE}
+
+clean::
+	rm -f ${O}
