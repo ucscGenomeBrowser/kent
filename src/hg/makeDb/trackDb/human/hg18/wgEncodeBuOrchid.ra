@@ -17,6 +17,7 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
+maxWindowToQuery 10000000
 noInherit on
 
     track wgEncodeBuOrchidSignalView
