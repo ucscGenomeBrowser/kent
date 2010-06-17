@@ -27,6 +27,7 @@ struct pscmGfx
     int clipMinX, clipMaxX;     /* Clipping region upper left corner. */
     int clipMinY, clipMaxY;     /* lower right, not inclusive */
     struct hash *hints;   /* Hints to guide behavior */
+    int writeMode;        /* current write mode */
     };
 
 struct pscmGfx *pscmOpen(int width, int height, char *file);
@@ -44,8 +45,8 @@ void pscmUnclip(struct pscmGfx *pscm);
 int pscmFindColorIx(struct pscmGfx *pscm, int r, int g, int b);
 /* Find color index for rgb. */
 
-void pscmSetColor(struct pscmGfx *pscm, int colorIx);
-/* Set color to index. */
+void pscmSetColor(struct pscmGfx *pscm, Color color);
+/* Set current color to Color. */
 
 void pscmBox(struct pscmGfx *pscm, int x, int y, 
 	int width, int height, int colorIx);

@@ -28,6 +28,8 @@ typedef unsigned int Color;
 #define MG_YELLOW  0xff00ffff
 #define MG_GRAY    0xff808080
 
+#define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
+
 #ifndef USE_PNG
 #error ------ ERROR ----- you must define USE_PNG if you define COLOR32
 #endif
