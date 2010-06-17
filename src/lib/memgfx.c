@@ -12,7 +12,6 @@
 #include "vGfxPrivate.h"
 #include "colHash.h"
 
-#define MAKECOLOR_32(r,g,b) (((unsigned int)0xff<<24) | ((unsigned int)b<<16) | ((unsigned int)g << 8) | (unsigned int)r)
 
 static char const rcsid[] = "$Id: memgfx.c,v 1.54 2010/06/05 19:29:53 braney Exp $";
 
