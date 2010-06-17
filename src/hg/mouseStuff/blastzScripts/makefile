@@ -9,3 +9,6 @@ O = blastzScripts.o
 blastzScripts: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blastzScripts $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/blastzScripts${EXE}
+
+clean::
+	rm -f ${O}

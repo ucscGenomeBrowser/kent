@@ -9,3 +9,5 @@ O = faTest.o
 faTest: $O 
 	${CC} ${COPT} ${CFLAGS} -o faTest $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

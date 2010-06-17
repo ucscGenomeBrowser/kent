@@ -9,3 +9,6 @@ O = motifLogo.o
 motifLogo: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/motifLogo $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/motifLogo${EXE}
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = orthologBySynteny.o
 orthologBySynteny: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/orthologBySynteny $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/orthologBySynteny${EXE}
+
+clean::
+	rm -f ${O}

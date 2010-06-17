@@ -9,3 +9,6 @@ O = broadHub.o
 broadHub: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/broadHub $O $(MYLIBS) $L
 	${STRIP} ../bin/broadHub${EXE}
+
+clean::
+	rm -f ${O}

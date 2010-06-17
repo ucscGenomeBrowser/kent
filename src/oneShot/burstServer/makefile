@@ -9,3 +9,6 @@ O = burstServer.o
 burstServer: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/burstServer $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/burstServer${EXE}
+
+clean::
+	rm -f ${O}

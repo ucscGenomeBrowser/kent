@@ -9,3 +9,6 @@ O = pslMrnaCover.o
 pslMrnaCover: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslMrnaCover $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/pslMrnaCover${EXE}
+
+clean::
+	rm -f ${O}

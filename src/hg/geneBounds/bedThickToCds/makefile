@@ -15,4 +15,4 @@ test:	bedThickToCds
 	diff expected.cds out.cds
 
 clean:
-	rm -f $O
+	rm -f ${O}

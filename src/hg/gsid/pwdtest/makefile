@@ -19,3 +19,5 @@ my: compile
 compile: $O $(MYLIBS)
 	${CC} ${COPT} -o $A $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

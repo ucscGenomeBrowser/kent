@@ -9,3 +9,6 @@ O = parasol.o
 parasol: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/parasol $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} ../bin/parasol${EXE}
+
+clean::
+	rm -f ${O}

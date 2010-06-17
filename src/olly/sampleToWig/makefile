@@ -10,3 +10,6 @@ O = sampleToWig.o
 sampleToWig: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/sampleToWig $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/sampleToWig${EXE}
+
+clean::
+	rm -f ${O}

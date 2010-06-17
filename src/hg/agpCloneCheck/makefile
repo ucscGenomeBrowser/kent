@@ -9,3 +9,6 @@ O = agpCloneCheck.o
 
 agpCloneCheck: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpCloneCheck $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

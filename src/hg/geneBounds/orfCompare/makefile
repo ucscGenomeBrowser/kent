@@ -15,5 +15,4 @@ test:	orfCompare
 	diff expected.txt out.txt
 
 clean:
-	rm -f $O
-
+	rm -f ${O}

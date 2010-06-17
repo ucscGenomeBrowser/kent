@@ -8,3 +8,6 @@ O = findContigsWithClones.o
 
 findContigsWithClones: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/findContigsWithClones $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

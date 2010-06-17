@@ -9,3 +9,6 @@ O = agpAllToFaFile.o
 
 agpAllToFaFile: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpAllToFaFile $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

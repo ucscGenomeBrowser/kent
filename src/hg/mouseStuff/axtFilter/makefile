@@ -9,3 +9,6 @@ O = axtFilter.o
 axtFilter: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtFilter $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtFilter${EXE}
+
+clean::
+	rm -f ${O}

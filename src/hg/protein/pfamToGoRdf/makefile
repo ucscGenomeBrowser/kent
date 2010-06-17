@@ -10,5 +10,5 @@ pfamToGoRdf: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/pfamToGoRdf $O ${MYLIBS} $L
 	strip ${BINDIR}/pfamToGoRdf
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

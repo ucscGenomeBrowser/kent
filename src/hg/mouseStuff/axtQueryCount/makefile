@@ -9,3 +9,6 @@ O = axtQueryCount.o
 axtQueryCount: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtQueryCount $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtQueryCount${EXE}
+
+clean::
+	rm -f ${O}

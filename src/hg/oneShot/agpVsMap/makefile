@@ -9,3 +9,5 @@ O = agpVsMap.o
 agpVsMap: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpVsMap $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

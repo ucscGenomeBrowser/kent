@@ -31,4 +31,5 @@ compile: $O $(MYLIBS)
 test:
 	$(CGI_BIN)-$(USER)/$A
 
-
+clean::
+	rm -f ${O}

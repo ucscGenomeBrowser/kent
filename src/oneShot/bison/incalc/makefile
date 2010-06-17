@@ -5,3 +5,5 @@ incalc: incalc.c
 incalc.c: incalc.y
 	bison -o incalc.c incalc.y
 
+clean::
+	rm -f incalc incalc.c

@@ -17,4 +17,4 @@ test:	orfEnum
 	diff expectedVarious.orf outVarious.orf
 
 clean:
-	rm -f $O
+	rm -f ${O}

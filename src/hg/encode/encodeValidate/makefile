@@ -60,3 +60,6 @@ ${CONFIG_DIR}/%: config/%
 
 test:
 	cd test && ${MAKE}
+
+clean::
+	echo nothing to clean in hg/encode/encodeValidate/
