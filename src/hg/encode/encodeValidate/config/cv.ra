@@ -3909,10 +3909,11 @@ tag il200
 type insertLength
 description insert length of 200nt
 
-term NA
-tag ilNa 
-type insertLength
-description insert length not applicaple
+# commented out because it was interfering with NA in mapAlgoritm
+#term NA
+#tag ilNa 
+#type insertLength
+#description insert length not applicaple
 
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
