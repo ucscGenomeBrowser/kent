@@ -9,3 +9,6 @@ O = paraNodeStart.o
 paraNodeStart: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNodeStart $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} ../bin/paraNodeStart${EXE}
+
+clean::
+	rm -f ${O}

@@ -14,3 +14,6 @@ test: chr22
 	axtBestNear input/$@.axt $@ output/$@.axt 
 	diff expected/$@.axt output/$@.axt 
 	rm output/$@.axt
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = dupeFoo.o
 dupeFoo: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/dupeFoo $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/dupeFoo${EXE}
+
+clean::
+	rm -f ${O}

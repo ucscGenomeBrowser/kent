@@ -10,11 +10,11 @@ scopCollapse: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/scopCollapse $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/scopCollapse${EXE}
 
-clean:
-	rm -f $O
-
 test:
 	scopCollapse inFeat.tab inModel.tab outFeat.tab outDesc.tab outKnownToSuper.tab
 	diff expectedFeat.tab outFeat.tab
 	diff expectedDesc.tab outDesc.tab
 	diff expectedKnownToSuper.tab outKnownToSuper.tab
+
+clean::
+	rm -f ${O}

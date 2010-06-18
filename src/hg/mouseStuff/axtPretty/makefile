@@ -9,3 +9,6 @@ O = axtPretty.o
 axtPretty: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtPretty $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtPretty${EXE}
+
+clean::
+	rm -f ${O}

@@ -243,7 +243,7 @@ if (bbList != NULL)
 else if (maxWTQ <= winEnd-winStart)
     {
     sprintLongWithCommas(num1Buf, maxWTQ);
-    printf("<P>Zoom into a view less than %s bases to see data summary.</P>",num1Buf);
+    printf("<P>Zoom in to a view less than %s bases to see data summary.</P>",num1Buf);
     }
 else
     {

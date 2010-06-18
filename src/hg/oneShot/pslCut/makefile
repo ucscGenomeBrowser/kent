@@ -9,3 +9,5 @@ O = pslCut.o
 pslCut: $O 
 	${CC} ${COPT} ${CFLAGS} -o pslCut $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

@@ -10,3 +10,6 @@ O = newStitch2.o
 newStitch2: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/newStitch2 $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/newStitch2${EXE}
+
+clean::
+	rm -f ${O}

@@ -8,3 +8,6 @@ O = chainToPsl.o
 
 chainToPsl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainToPsl $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,5 @@ O = addChrPsl.o
 addChrPsl: $O 
 	${CC} ${COPT} ${CFLAGS} -o addChrPsl $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

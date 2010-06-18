@@ -9,3 +9,6 @@ O = threadExp.o cacheQueue.o
 
 threadExp: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/threadExp $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

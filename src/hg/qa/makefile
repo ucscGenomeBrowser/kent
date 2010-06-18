@@ -13,3 +13,7 @@ all: ${progs}
 %: %.c ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${XINC} -o ${BINDIR}/$* $*.c ${MYLIBS} $L
 
+clean::
+	rm -f apacheMonitor.o checkCardinality.o countNib.o \
+	dumpNib.o gbSeqCheck.o reviewIndexes.o seqCheck.o \
+	getChroms.o checkChain.o testSearch.o timePosTable.o

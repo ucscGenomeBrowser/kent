@@ -13,3 +13,6 @@ kgName: $(MYLIBS) kgName.o
 fbName: $(MYLIBS) fbName.o
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/fbName fbName.o $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/kgName${EXE}
+
+clean::
+	rm -f kgName.o fbName.o

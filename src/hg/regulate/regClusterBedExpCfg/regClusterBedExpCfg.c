@@ -11,6 +11,8 @@ static char const rcsid[] = "$Id: regClusterBedExpCfg.c,v 1.2 2010/05/05 00:50:3
 
 boolean encodeList = FALSE;
 
+#define SCORE_COL_IX 6
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -144,8 +146,8 @@ for (in = inList; in != NULL; in = in->next)
     camelParseTwo(midString, &cell, &factor);
     fprintf(f, "%s\t%s\t", factor, cell);
     fprintf(f, "%c\t", cell[0]);
-    fprintf(f, "file\t7\t");
-    fprintf(f, "%g\t", calcNormScoreFactor(in->name, 7));
+    fprintf(f, "file\t%d\t", SCORE_COL_IX);
+    fprintf(f, "%g\t", calcNormScoreFactor(in->name, SCORE_COL_IX));
     fprintf(f, "%s\n", in->name);
     }
 carefulClose(&f);
@@ -213,8 +215,8 @@ while (lineFileNextReal(lf, &line))
 
     fprintf(f, "%s\t%s\t", antibody, cell);
     fprintf(f, "%c\t", cell[0]);
-    fprintf(f, "file\t6\t");
-    fprintf(f, "%g\t", calcNormScoreFactor(fileName, 6));
+    fprintf(f, "file\t%d\t", SCORE_COL_IX);
+    fprintf(f, "%g\t", calcNormScoreFactor(fileName, SCORE_COL_IX));
     fprintf(f, "%s\n", fileName);
     }
 carefulClose(&f);

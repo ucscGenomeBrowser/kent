@@ -9,3 +9,5 @@ O = faFiltMasked.o
 faFiltMasked: $O 
 	${CC} ${COPT} ${CFLAGS} -o faFiltMasked $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

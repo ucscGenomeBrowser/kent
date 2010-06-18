@@ -9,3 +9,5 @@ O = oo21Nts.o
 oo21Nts: $O 
 	${CC} ${COPT} ${CFLAGS} -o oo21Nts $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

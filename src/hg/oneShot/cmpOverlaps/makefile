@@ -9,3 +9,5 @@ O = cmpOverlaps.o
 cmpOverlaps: $O 
 	${CC} ${COPT} ${CFLAGS} -o cmpOverlaps $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

@@ -12,3 +12,6 @@ include ../../inc/cgi_build_rules.mk
 
 compile: $O
 	${CC} -o $A $O ${MYLIBS} ${L}
+
+clean::
+	rm -f ${O}

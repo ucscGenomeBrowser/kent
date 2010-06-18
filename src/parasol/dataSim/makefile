@@ -9,3 +9,6 @@ O = dataSim.o
 dataSim: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/dataSim $O $(MYLIBS) $L
 #	${STRIP} ../bin/dataSim${EXE}
+
+clean::
+	rm -f ${O}

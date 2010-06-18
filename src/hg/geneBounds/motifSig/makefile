@@ -4,8 +4,14 @@ L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = motifSig.o ../lib/improbRunInfo.o
+O = motifSig.o
 
-motifSig: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/motifSig $O $(MYLIBS) $L
+motifSig: gbLib $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/motifSig $O ../lib/improbRunInfo.o $(MYLIBS) $L
 	${STRIP} ${BINDIR}/motifSig${EXE}
+
+gbLib::
+	( cd ../lib && ${MAKE} )
+
+clean::
+	rm -f ${O}

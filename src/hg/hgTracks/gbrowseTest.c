@@ -14,7 +14,7 @@ int main(int argc, char **argv)
  * http://hgwdev.cse.ucsc.edu/~angie/gbrowseTest.gif */
 {
 cgiSpoof(&argc, argv);
-cart = cartNewEmpty(0, 0, NULL, NULL);
+cart = cartFromCgiOnly(0, 0, NULL, NULL);
 oneTrackInit();
 /* Now set up a single track, load it and draw it: */
 char *trackName = cartUsualString(cart, "gbrowseTrack", "multiz5way");

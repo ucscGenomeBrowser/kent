@@ -10,3 +10,6 @@ O = addFinFinf.o
 addFinFinf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/addFinFinf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/addFinFinf${EXE}
+
+clean::
+	rm -f ${O}

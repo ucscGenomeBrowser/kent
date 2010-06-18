@@ -10,3 +10,6 @@ olly: $O $(MYLIBS)
 #	${CC} ${COPT} ${CFLAGS} -o olly $O $(MYLIBS) $L
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/olly $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/olly${EXE}
+
+clean::
+	rm -f ${O}

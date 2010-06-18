@@ -9,3 +9,5 @@ O = bridgeDif.o
 bridgeDif: $O 
 	${CC} ${COPT} ${CFLAGS} -o bridgeDif $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}
