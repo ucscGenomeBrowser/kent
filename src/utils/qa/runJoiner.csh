@@ -15,20 +15,20 @@ onintr cleanup
 set db=""
 set table=""
 set range=""
-set joinerPath=""
-# set joinerPath="~/schema"
+set joinerFile="$HOME/kent/src/hg/makeDb/schema/all.joiner"
 set noTimes=""
 
 if ( $#argv < 2 || $#argv > 4 ) then
   echo
-  echo "  runs joiner check, -keys, finding all identifiers for a table."
+  echo "  runs joinerCheck -keys, finding all identifiers for a table."
+  echo '  runs joinerCheck -times (use "noTimes" to disable).'
   echo '  set database to "all" for global.'
-  echo '  for chains/nets, use tablename format: chainDb#.'
+  echo '  for chains/nets, use tablename format: chainDb.'
   echo
-  echo "    usage:  database table [path to all.joiner]"
-  echo "           (defaults to tip of the tree) [noTimes]"
+  echo "    usage:  database table [all.joiner file to use] [noTimes]"
+  echo "    (defaults to $HOME/kent/src/hg/makeDb/schema/all.joiner)"
   echo
-  exit
+  exit 1
 else
   set db=$argv[1]
   set table=$argv[2]
@@ -37,13 +37,13 @@ endif
 if ( $#argv == 3 ) then
   set noTimes=$argv[3]
   if ( $noTimes != "noTimes" ) then
-    set joinerPath=$argv[3]
+    set joinerFile=$argv[3]
     set noTimes=""
   endif
 endif
 
 if ( $#argv == 4 ) then
-  set joinerPath=$argv[3]
+  set joinerFile=$argv[3]
   set noTimes=$argv[4]
   if ( $noTimes != "noTimes" ) then
     echo
@@ -53,31 +53,10 @@ if ( $#argv == 4 ) then
   endif
 endif
 
-if ( $joinerPath == "" ) then
-  # checkout tip of the tree
-  if ( ! -d xxJoinDirxx ) then
-    mkdir xxJoinDirxx
-  endif
-  set joinerPath="xxJoinDirxx"
-  setenv CVS_RSH ssh
-  cvs -d hgwdev:/projects/compbio/cvsroot co -d xxJoinDirxx \
-    kent/src/hg/makeDb/schema/all.joiner >& /dev/null
-
-  if ( $status ) then
-    echo
-    echo "  cvs check-out failed for all.joiner on $HOST"
-    echo
-    exit 1
-  endif
-
-endif
-
 if ($db != "all") then
   set range="-database=$db"
 endif
 
-# set joinerFile and eliminate double "/" where present
-set joinerFile=`echo ${joinerPath}/all.joiner | sed -e "s/\/\//\//"`
 
 # --------------------------------------------
 
@@ -101,13 +80,13 @@ if ( $status == 0 ) then
   endif
 else
   # set non-chain identifiers
-  tac $joinerPath/all.joiner \
+  tac $joinerFile \
     | sed "/\.$table\./,/^identifier /\!d" | \
     grep "^identifier" | gawk '{print $2}' > xxIDxx
   if ( $status ) then
    # if no identifier, look for whether table is ignored
     echo
-    tac $joinerPath/all.joiner \
+    tac $joinerFile \
       | sed "/$table/,/^tablesIgnored/\!d" | \
       grep "^tablesIgnored"
     if ( $status ) then 
@@ -115,7 +94,6 @@ else
     endif
 
     rm -f xxIDxx
-    rm -fr xxJoinDirxx 
     echo
   exit 1
   endif
@@ -146,4 +124,5 @@ endif
 
 cleanup:
 rm -f xxIDxx
-rm -fr xxJoinDirxx 
+
+exit 0
