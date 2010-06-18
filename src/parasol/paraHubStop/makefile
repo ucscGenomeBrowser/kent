@@ -8,3 +8,6 @@ O = paraHubStop.o
 paraHubStop: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/paraHubStop $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} ../bin/paraHubStop${EXE}
+
+clean::
+	rm -f ${O}

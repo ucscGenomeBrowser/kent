@@ -18,4 +18,4 @@ compile: $O
 	chmod a+rx $A
 
 clean::
-	rm -f $O $A
+	rm -f ${O} ${A}

@@ -9,3 +9,6 @@ O = trimFosmids.o
 trimFosmids: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/trimFosmids $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/trimFosmids${EXE}
+
+clean::
+	rm -f ${O}

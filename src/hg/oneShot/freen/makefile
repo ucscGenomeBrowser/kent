@@ -9,3 +9,5 @@ O = freen.o
 hello: freen.o
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/freen $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

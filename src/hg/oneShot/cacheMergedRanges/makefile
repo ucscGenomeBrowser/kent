@@ -10,3 +10,6 @@ cacheMergedRanges: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o cacheMergedRanges $O $(MYLIBS) $L
 	mv cacheMergedRanges${EXE} ${BINDIR}/
 	${STRIP} ${BINDIR}/cacheMergedRanges${EXE}
+
+clean::
+	rm -f ${O}

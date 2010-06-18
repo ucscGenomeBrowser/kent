@@ -12,3 +12,6 @@ axtToPsl: $O $(MYLIBS)
 
 test:
 	(cd tests && ${MAKE} test)
+
+clean::
+	rm -f ${O}

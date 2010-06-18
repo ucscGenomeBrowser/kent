@@ -23,3 +23,6 @@ testDnax::
 testOld:: 
 	${MKDIR} output
 	pslPretty -long -axt input/test1.psl input/S1.lst input/S2.lst output/test1.axt
+
+clean::
+	rm -f ${O}

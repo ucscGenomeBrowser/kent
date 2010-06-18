@@ -36,3 +36,6 @@ install:
 
 pipeline:
 	@${MAKE} --no-print-directory USE_DIRS="${PIPELINE_DIRS}" all
+
+clean::
+	echo nothing to clean in hg/encode/

@@ -9,3 +9,5 @@ O = howBadNt.o
 howBadNt: $O 
 	${CC} ${COPT} ${CFLAGS} -o howBadNt $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

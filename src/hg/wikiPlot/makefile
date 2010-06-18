@@ -14,3 +14,6 @@ O = wikiPlot.o
 
 compile: $O
 	${CC} -o $A $O ${MYLIBS} ${L}
+
+clean::
+	rm -f ${O}

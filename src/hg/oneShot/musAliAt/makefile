@@ -8,3 +8,6 @@ O = musAliAt.o
 
 musAliAt: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o musAliAt $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

@@ -10,3 +10,6 @@ CFLAGS=-ggdb
 pslToFa: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslToFa $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/pslToFa${EXE}
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,5 @@ O = joinToPatch.o
 joinToPatch: $O 
 	${CC} ${COPT} ${CFLAGS} -o joinToPatch $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

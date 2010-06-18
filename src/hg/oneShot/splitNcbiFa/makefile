@@ -9,3 +9,6 @@ O = splitNcbiFa.o
 splitNcbiFa: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/splitNcbiFa $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/splitNcbiFa${EXE}
+
+clean::
+	rm -f ${O}

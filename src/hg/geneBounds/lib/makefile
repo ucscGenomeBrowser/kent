@@ -7,4 +7,7 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 O = improbRunInfo.o
 
 all: $O 
-	echo all done
+	echo all done in hg/geneBounds/lib/
+
+clean::
+	rm -f ${O}

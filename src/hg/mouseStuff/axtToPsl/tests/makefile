@@ -11,3 +11,6 @@ blockBug: mkdirs
 
 mkdirs:
 	@${MKDIR} output
+
+clean::
+	rm -fr output

@@ -9,3 +9,5 @@ O = fixEnsGtf.o
 fixEnsGtf: $O 
 	${CC} ${COPT} ${CFLAGS} -o fixEnsGtf $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

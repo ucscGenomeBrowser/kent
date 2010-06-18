@@ -9,3 +9,6 @@ O = phToPsl.o
 phToPsl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/phToPsl $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/phToPsl${EXE}
+
+clean::
+	rm -f ${O}

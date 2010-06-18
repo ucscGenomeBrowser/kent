@@ -11,5 +11,5 @@ ${A}:	${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} ${HG_DEFS} ${HG_WARN} ${HG_INC} ${O} ${MYLIBS} ${L}
 	mv ${AOUT} ${BINDIR}/${A}
 
-clean:	
-	rm ${O} ${BINDIR}/${A}
+clean::
+	rm -f ${O}

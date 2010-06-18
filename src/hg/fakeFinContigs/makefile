@@ -9,3 +9,6 @@ O = fakeFinContigs.o
 
 fakeFinContigs: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/fakeFinContigs $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

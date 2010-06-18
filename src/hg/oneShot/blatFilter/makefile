@@ -8,3 +8,6 @@ O = blatFilter.o
 
 blatFilter: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blatFilter $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}
