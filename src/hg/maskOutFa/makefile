@@ -10,3 +10,6 @@ O = maskOutFa.o
 maskOutFa: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/maskOutFa $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/maskOutFa${EXE}
+
+clean::
+	rm -f ${O}

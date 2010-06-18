@@ -10,3 +10,6 @@ O = bedIntersect.o
 bedIntersect: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/bedIntersect $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/bedIntersect${EXE}
+
+clean::
+	rm -f ${O}

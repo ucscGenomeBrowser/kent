@@ -9,3 +9,6 @@ O = utrFa.o
 utrFa: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/utrFa $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/utrFa${EXE}
+
+clean::
+	rm -f ${O}

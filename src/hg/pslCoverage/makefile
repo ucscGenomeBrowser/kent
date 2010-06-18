@@ -11,3 +11,6 @@ O = pslCoverage.o
 pslCoverage: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslCoverage $O $(MYLIBS) $L
 
+
+clean::
+	rm -f ${O}

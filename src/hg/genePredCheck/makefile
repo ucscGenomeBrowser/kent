@@ -9,3 +9,6 @@ O = genePredCheck.o
 
 genePredCheck: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredCheck $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}
