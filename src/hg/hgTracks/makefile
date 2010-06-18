@@ -6,16 +6,18 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = hgTracks
 
-O = $A.o altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigTrack.o \
+COMMONO = altGraphXTrack.o bamTrack.o bedGraph.o bedTrack.o bigBedTrack.o bigWigTrack.o \
 	chainTrack.o cgapSageTrack.o chromGraphTrack.o config.o container.o contigTrack.o \
 	coverageTrack.o cytoBandTrack.o cutterTrack.o \
-        expRatioTracks.o factorSource.o goldTrack.o loweLabTracks.o \
+        expRatioTracks.o factorSource.o hgTracks.o goldTrack.o loweLabTracks.o \
 	mafTrack.o makeItemsTrack.o multiWig.o netTrack.o pslTrack.o rmskTrack.o \
 	sampleTracks.o searchTracks.o simpleTracks.o switchGear.o transMapTracks.o \
 	wabaTrack.o wigTrack.o cds.o \
 	wigMafTrack.o encode.o variation.o transcriptome.o\
 	rnaFoldTrack.o retroGene.o hapmapTrack.o rnaPLFoldTrack.o\
 	wiki.o wikiTrack.o imageV2.o
+
+O = mainMain.o ${COMMONO} 
 
 include ../../inc/cgi_build_rules.mk
 
@@ -35,8 +37,17 @@ endif
 mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
-compile: $O
+RENDERO = renderMain.o ${COMMONO}
+RENDERA = ${CGI_BIN}/hgRenderTracks
+
+compile: compileMain ${RENDERA}
+
+compileMain: $O
 	${CC} -o $A $O ${MYLIBS} ${L}
+
+${RENDERA}: ${RENDERO}
+	${CC} -o ${RENDERA} ${RENDERO} ${MYLIBS} ${L}
+#	mv ${RENDERA} ${CGI_BIN}/
 
 wigTrack.o:	wigCommon.h
 bedGraph.o:	wigCommon.h
