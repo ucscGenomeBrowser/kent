@@ -27,15 +27,15 @@ noInherit on
     subTrack wgEncodeBuOrchid
     maxHeightPixels 100:24:16
     windowingFunction maximum
-    autoScale on
+    minLimit -1
+    maxLimit 2
 
 	track wgEncodeBuOrchidSignalRep1Gm12878
 	subTrack wgEncodeBuOrchidSignalView
 	shortLabel ORChID V1
 	longLabel ENCODE Boston Univ. OH Radical Cleavage Intensity Database (ORChID) V1
 	subGroups view=Signal
-	type bigWig 0 10000
-	autoScale on
+	type bigWig -1 2
 	configurable on
 	color 153,38,0
 	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep1Gm12878 fileName=wgEncodeBuOrchidSignalRep1Gm12878.bw
@@ -45,9 +45,8 @@ noInherit on
 	shortLabel ORChID V2
 	longLabel ENCODE Boston Univ. OH Radical Cleavage Intensity Database (ORChID) V2
 	subGroups view=Signal
-	type bigWig 0 10000
+	type bigWig -1 2
 	configurable on
-	autoScale on
 	color 153,38,0
 	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep2Gm12878 fileName=wgEncodeBuOrchidSignalRep2Gm12878.bw
 
