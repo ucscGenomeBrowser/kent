@@ -1,14 +1,7 @@
 # Build txGraph source
 include ../../inc/common.mk
 
-all:    
-	@for D in $(DIRS) x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE)  ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	done
-
+# List of directories to build
 DIRS = \
     txCdsBadBed \
     txCdsCluster \
@@ -29,3 +22,15 @@ DIRS = \
     txCdsToGene \
     txCdsWeed \
     txInfoAssemble
+
+USE_DIRS = $(DIRS)
+
+all: $(USE_DIRS:%=%.all)
+
+%.all:
+	( cd $* && echo $* && $(MAKE) )
+
+clean:: $(USE_DIRS:%=%.clean)
+
+%.clean::
+	( cd $* && echo $* && $(MAKE) clean )

@@ -297,6 +297,7 @@ our %formatCheckers = (
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
     rpkm  => \&validateRpkm,
+    junction  => \&validateFreepass,
     fpkm1  => \&validateFreepass,
     fpkm2  => \&validateFreepass,
     insDistrib  => \&validateFreepass,

@@ -3909,7 +3909,7 @@ tag il200
 type insertLength
 description insert length of 200nt
 
-term NA
+term ilNA
 tag ilNa 
 type insertLength
 description insert length not applicaple

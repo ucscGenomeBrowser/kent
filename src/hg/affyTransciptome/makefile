@@ -11,3 +11,6 @@ O = affyPairsToSample normalizeSampleFile avgTranscriptomeExps maxTranscriptomeE
 	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I../../inc  -o ${BINDIR}/$@ $(addsuffix .c,$@) $(MYLIBS)
 
 all : $(O)
+
+clean::
+	rm -f ${O}
