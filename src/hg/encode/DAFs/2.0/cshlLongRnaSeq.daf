@@ -1,10 +1,10 @@
 # Data Agreement File for CSHL Long RNA-seq project $Revision: 1.3 $
 
-# This file specifies the data agreement between your lab and 
+# This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files   view    cell    localization    rnaExtract      replicate 
+# files   view    cell    localization    rnaExtract      replicate
 
 
 
@@ -21,7 +21,7 @@ variables         cell, localization, rnaExtract
 assembly          hg19
 
 noAutoCreate     yes
-validationSettings validateFiles.bam:mismatches=2
+validationSettings validateFiles.bam:mismatches=7,nMatch
 
 # Track/view definition
 view             PlusRawSig
