@@ -12,3 +12,6 @@ regionPicker: $O $(MYLIBS)
 
 tags:
 	ctags *.c $(HOME)/src/lib/*.c $(HOME)/src/inc/*.h
+
+clean::
+	rm -f ${O}

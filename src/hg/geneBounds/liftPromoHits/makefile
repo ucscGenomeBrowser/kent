@@ -9,3 +9,6 @@ O = liftPromoHits.o
 liftPromoHits: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/liftPromoHits $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/liftPromoHits${EXE}
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = rcvs.o
 rcvs: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rcvs $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/rcvs${EXE}
+
+clean::
+	rm -f ${O}

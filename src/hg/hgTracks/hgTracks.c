@@ -1,4 +1,9 @@
-/* hgTracks - Human Genome browser main cgi script. */
+/* hgTracks - the original, and still the largest module for the UCSC Human Genome
+ * Browser main cgi script.  Currently contains most of the track framework, though
+ * there's quite a bit of other framework type code in simpleTracks.c.  The main
+ * routine got moved to create a new entry point to the bulk of the code for the
+ * hgRenderTracks web service.  See mainMain.c for the main used by the hgTracks CGI. */
+
 #include "common.h"
 #include "hCommon.h"
 #include "linefile.h"
@@ -47,7 +52,7 @@
 #include "imageV2.h"
 #include "suggest.h"
 
-static char const rcsid[] = "$Id: hgTracks.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
+static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
 /* These variables persist from one incarnation of this program to the
  * next - living mostly in the cart. */
@@ -85,7 +90,6 @@ char *rulerMenu[] =
     "full"
     };
 
-static long enteredMainTime = 0;    /* time at beginning of main()  */
 char *protDbName;               /* Name of proteome database for this genome. */
 #define MAX_CONTROL_COLUMNS 6
 #define LOW 1
@@ -5102,6 +5106,27 @@ else
     rulerMode = tvHide;
 }
 
+void setLayoutGlobals()
+/* Figure out basic dimensions of display.  */
+{
+withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
+withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
+withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
+withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
+withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
+withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
+if (!hIsGsidServer())
+    {
+    revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
+    }
+#ifndef IMAGEv2_DRAG_REORDER
+withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
+#endif//ndef IMAGEv2_DRAG_REORDER
+insideX = trackOffsetX();
+insideWidth = tl.picWidth-gfxBorder-insideX;
+
+}
+
 void tracksDisplay()
 /* Put up main tracks display. This routine handles zooming and
  * scrolling. */
@@ -5158,22 +5183,7 @@ winBaseCount = winEnd - winStart;
 /* Figure out basic dimensions of display.  This
  * needs to be done early for the sake of the
  * zooming and dinking routines. */
-withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
-withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
-withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
-withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
-withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
-if (!hIsGsidServer())
-    {
-    revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
-    }
-#ifndef IMAGEv2_DRAG_REORDER
-withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
-#endif//ndef IMAGEv2_DRAG_REORDER
-insideX = trackOffsetX();
-insideWidth = tl.picWidth-gfxBorder-insideX;
-
+setLayoutGlobals();
 
 baseShowPos = cartUsualBoolean(cart, BASE_SHOWPOS, FALSE);
 baseShowAsm = cartUsualBoolean(cart, BASE_SHOWASM, FALSE);
@@ -5620,59 +5630,3 @@ printf("updating the database and the display software with a number of\n");
 printf("new tracks, including some gene predictions.  Please try again tomorrow.\n");
 }
 
-/* Other than submit and Submit all these vars should start with hgt.
- * to avoid weeding things out of other program's namespaces.
- * Because the browser is a central program, most of it's cart
- * variables are not hgt. qualified.  It's a good idea if other
- * program's unique variables be qualified with a prefix though. */
-char *excludeVars[] = { "submit", "Submit", "hgt.reset",
-            "hgt.in1", "hgt.in2", "hgt.in3", "hgt.inBase",
-            "hgt.out1", "hgt.out2", "hgt.out3",
-            "hgt.left1", "hgt.left2", "hgt.left3",
-            "hgt.right1", "hgt.right2", "hgt.right3",
-            "hgt.dinkLL", "hgt.dinkLR", "hgt.dinkRL", "hgt.dinkRR",
-            "hgt.tui", "hgt.hideAll", "hgt.visAllFromCt",
-	    "hgt.psOutput", "hideControls", "hgt.toggleRevCmplDisp",
-	    "hgt.chromName", "hgt.winStart", "hgt.winEnd", "hgt.newWinWidth",
-	    "hgt.insideX", "hgt.rulerClickHeight", "hgt.dragSelection", "hgt.revCmplDisp",
-	    "hgt.collapseGroups", "hgt.expandGroups", "hgt.suggest",
-	    "hgt.jump", "hgt.refresh",
-#ifdef CONTEXT_MENU
-	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
-#endif
-#ifdef TRACK_SEARCH
-	    searchTracks,
-#endif
-            NULL };
-
-int main(int argc, char *argv[])
-{
-enteredMainTime = clock1000();
-uglyTime(NULL);
-browserName = (hIsPrivateHost() ? "Test Browser" : "Genome Browser");
-organization = "UCSC";
-
-/* change title if this is for GSID */
-browserName = (hIsGsidServer() ? "Sequence View" : browserName);
-organization = (hIsGsidServer() ? "GSID" : organization);
-organization = (hIsGisaidServer() ? "GISAID" : organization);
-
-/* Push very early error handling - this is just
- * for the benefit of the cgiVarExists, which
- * somehow can't be moved effectively into doMiddle. */
-htmlPushEarlyHandlers();
-cgiSpoof(&argc, argv);
-htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n");
-oldVars = hashNew(10);
-if (hIsGsidServer())
-    cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);
-else
-    cartHtmlShell("UCSC Genome Browser v"CGI_VERSION, doMiddle, hUserCookie(), excludeVars, oldVars);
-if (measureTiming)
-    {
-    fprintf(stdout, "Overall total time: %ld millis<BR>\n",
-    clock1000() - enteredMainTime);
-    }
-return 0;
-}

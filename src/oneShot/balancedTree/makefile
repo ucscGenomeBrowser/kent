@@ -10,3 +10,6 @@ O = balancedTree.o
 balancedTree: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/balancedTree $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/balancedTree${EXE}
+
+clean::
+	rm -f ${O}

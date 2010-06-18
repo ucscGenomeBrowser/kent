@@ -21,3 +21,6 @@ scripts:
 
 test:
 	encodeDownloadsPage.pl test.html /usr/local/apache/htdocs/goldenPath/hg18/wgEncodeYaleChIPseq
+
+clean::
+	echo nothing to clean in hg/encode/encodeDownloadsPage/

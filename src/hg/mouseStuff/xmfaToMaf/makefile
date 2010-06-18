@@ -12,3 +12,6 @@ xmfaToMaf: $O $(MYLIBS)
 
 tags:  
 	ctags *.h *.c ../../lib/*.c ../../inc/*.h ../../../lib/*.c ../../../inc/*.h
+
+clean::
+	rm -f ${O}

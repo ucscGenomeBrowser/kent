@@ -9,4 +9,5 @@ dynAlign.exe: $(O)
 	chmod a+rx dynAlign.exe
 	mv dynAlign.exe ../../cgi-bin
 
-
+clean::
+	rm -f ${O}

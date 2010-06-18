@@ -25,4 +25,3 @@ test::
 
 clean::
 	rm -f $O
-	cd tests && ${MAKE} clean

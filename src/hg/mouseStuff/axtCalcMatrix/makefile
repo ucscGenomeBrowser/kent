@@ -9,3 +9,6 @@ O = axtCalcMatrix.o
 axtCalcMatrix: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtCalcMatrix $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtCalcMatrix${EXE}
+
+clean::
+	rm -f ${O}

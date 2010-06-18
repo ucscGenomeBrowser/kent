@@ -8,3 +8,6 @@ O = flagMhcClones.o
 
 flagMhcClones: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/flagMhcClones $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

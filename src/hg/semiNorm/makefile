@@ -10,3 +10,6 @@ O = semiNorm.o
 semiNorm: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/semiNorm $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/semiNorm${EXE}
+
+clean::
+	rm -f ${O}

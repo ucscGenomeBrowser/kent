@@ -26,3 +26,6 @@ test: chr3 chr9 chr11 chr13_random
 	${MKDIR} output
 	checkExp -verbose=4 input/$@.bed S1.len $(PSEUDO)/all_mrna.psl input/S1.lst /cluster/data/hg17/bed/pseudo/stats/checkExp/mrna.2bit /cluster/data/hg17/bed/blastzSelf/axtChain/chain/$@.chain.gz /cluster/data/hg17/nib output/$@.tab  > $@.log 
 	diff expected/$@.tab output/$@.tab 
+
+clean::
+	rm -f ${O}

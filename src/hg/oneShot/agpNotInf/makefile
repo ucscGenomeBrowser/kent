@@ -8,3 +8,6 @@ O = agpNotInf.o
 
 agpNotInf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpNotInf $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

@@ -15,3 +15,5 @@ cgiExample: $O
 	chmod a+rx cgiExample
 	mv cgiExample /usr/local/apache/cgi-bin
 
+clean::
+	rm -f ${O}

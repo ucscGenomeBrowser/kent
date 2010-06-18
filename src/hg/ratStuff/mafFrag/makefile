@@ -12,3 +12,6 @@ mafFrag: $O $(MYLIBS)
 
 test:
 	mafFrag hg16 humorMm3Rn3 chr2 69065807 69073183 - test.maf
+
+clean::
+	rm -f ${O}

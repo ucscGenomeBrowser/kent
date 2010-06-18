@@ -9,3 +9,6 @@ O = pslCrudeCmp.o
 
 pslCrudeCmp: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslCrudeCmp $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,5 @@ O = spSize.o
 spSize: $O 
 	${CC} ${COPT} ${CFLAGS} -o spSize $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

@@ -10,3 +10,6 @@ O = mafFindZero.o
 mafFindZero: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o mafFindZero $O $(MYLIBS) $L
 	${STRIP} mafFindZero${EXE}
+
+clean::
+	rm -f ${O}

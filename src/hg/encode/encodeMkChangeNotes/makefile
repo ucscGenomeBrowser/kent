@@ -17,3 +17,6 @@ scripts:
 	    chmod +x $$F; \
             cp -upv $$F ${SCRIPTS}; \
 	done
+
+clean::
+	echo nothing to clean in hg/encode/encodeMkChangeNotes/

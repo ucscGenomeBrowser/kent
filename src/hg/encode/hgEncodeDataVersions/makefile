@@ -14,3 +14,5 @@ compile: $O
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
 
+clean::
+	rm -f ${O}

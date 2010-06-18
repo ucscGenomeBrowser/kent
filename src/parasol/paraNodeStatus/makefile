@@ -10,3 +10,5 @@ paraNodeStatus: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ../bin/paraNodeStatus $O ../lib/$(MACHTYPE)/paralib.a ../../lib/$(MACHTYPE)/jkweb.a
 	${STRIP} ../bin/paraNodeStatus${EXE}
 
+clean::
+	rm -f ${O}

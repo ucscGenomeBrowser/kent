@@ -8,3 +8,6 @@ O = libScan.o
 
 libScan: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/libScan $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

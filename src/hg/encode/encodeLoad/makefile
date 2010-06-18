@@ -24,3 +24,6 @@ schemas:
 
 test:
 	doEncodeLoad.pl load /cluster/store3/encpipeline_dev/43
+
+clean::
+	echo nothing to clean in hg/encode/encodeLoad/

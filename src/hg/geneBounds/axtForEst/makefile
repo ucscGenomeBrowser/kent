@@ -9,3 +9,6 @@ O = axtForEst.o
 axtForEst: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtForEst $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/axtForEst${EXE}
+
+clean::
+	rm -f ${O}

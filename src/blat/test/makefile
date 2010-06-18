@@ -18,3 +18,5 @@ tIntronMax:
 	diff intron50k/expected/test3.psl intron50k/out/test3.psl
 	rm -rf intron50k/out
 
+clean::
+	@echo nothing to clean in blat/test/

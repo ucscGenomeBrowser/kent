@@ -9,3 +9,6 @@ O = polyInfo.o
 polyInfo: $O $(MYLIBS) makefile
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/polyInfo $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/polyInfo${EXE}
+
+clean::
+	rm -f ${O}

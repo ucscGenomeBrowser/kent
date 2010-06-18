@@ -17,3 +17,5 @@ test: test1
 	diff -x CVS -r expected/$@ output/$@
 	rm -r output
 
+clean::
+	rm -f ${O}
