@@ -8,3 +8,6 @@ O = hgExonerate.o
 
 hgExonerate: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgExonerate $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

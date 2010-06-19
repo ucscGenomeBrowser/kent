@@ -9,3 +9,6 @@ O = splitFile.o
 
 splitFile: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/splitFile $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

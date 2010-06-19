@@ -9,7 +9,9 @@ O = pslSelfJobs.o
 pslSelfJobs: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslSelfJobs $O $(MYLIBS) $L
 
-
 lib:
 	cd ../../../lib && ${MAKE}
 	cd ../../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

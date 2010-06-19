@@ -10,3 +10,6 @@ O = randomLines.o
 randomLines: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/randomLines $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/randomLines${EXE}
+
+clean::
+	rm -f ${O}

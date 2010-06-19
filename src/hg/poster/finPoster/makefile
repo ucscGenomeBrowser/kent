@@ -15,3 +15,6 @@ poster:
 
 test:
 	finPoster chr22
+
+clean::
+	rm -f ${O}

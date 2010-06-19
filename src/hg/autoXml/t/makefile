@@ -9,3 +9,6 @@ O = t.o
 t: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o t $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/autoXml${EXE}
+
+clean::
+	rm -f ${O}

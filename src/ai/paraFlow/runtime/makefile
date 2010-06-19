@@ -10,3 +10,5 @@ O = argsEnv.o array.o msort.o cacheQueue.o dir.o fileLib.o getObj.o initVar.o \
 runtime.a: $(O) 
 	ar rcus runtime.a $(O)
 
+clean::
+	rm -f ${O} runtime.a

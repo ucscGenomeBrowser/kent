@@ -10,3 +10,5 @@ O = ooCloneEnds.o
 ooCloneEnds: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneEnds $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = ppWashU.o
 ppWashU: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppWashU $O $(MYLIBS) $L
 	mv ppWashU ${BINDIR}
+
+clean::
+	rm -f ${O}

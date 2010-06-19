@@ -11,3 +11,5 @@ ooCloneSpan: $O
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneSpan $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/ooCloneSpan${EXE}
 
+clean::
+	rm -f ${O}

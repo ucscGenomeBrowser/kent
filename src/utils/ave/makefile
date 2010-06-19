@@ -8,5 +8,8 @@ MYLIBS =  $(MYLIBDIR)/jkweb.a
 O = ave.o
 
 ave: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ave $O $(MYLIBS) $L
-	${STRIP} ${BINDIR}/ave${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/ave $O $(MYLIBS) $L
+	${STRIP} ${DESTDIR}${BINDIR}/ave${EXE}
+
+clean::
+	rm -f ${O}

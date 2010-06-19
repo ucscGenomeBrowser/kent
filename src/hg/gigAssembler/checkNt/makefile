@@ -10,3 +10,6 @@ O = checkNt.o
 checkNt: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkNt $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/checkNt${EXE}
+
+clean::
+	rm -f ${O}

@@ -8,3 +8,5 @@ O = asmLong.o asmString.o asmToOld.o
 runAsm.a: $(O) 
 	ar rcus runAsm.a $(O)
 
+clean::
+	rm -f ${O} runAsm.a
