@@ -4340,3 +4340,15 @@ see doc/builds.txt for specific details.
     #	1003499831 bases of 2663369733 (37.678%) in intersection
 
 ############################################################################
+# enable native RefSeq Genes track  (2010-06-15)
+
+   # in etc/genbank.conf:
+      cavPor3.refseq.mrna.native.load = yes
+
+    ssh genbank
+    cd /cluster/data/genbank
+   ./bin/gbAlignStep -orgCat=native -initial -srcDb=refseq cavPor3
+    ssh hgwdev
+    cd /cluster/data/genbank
+   ./bin/gbDbLoadStep -byPassGbLoaded -reload -srcDb=refseq cavPor3
+############################################################################
