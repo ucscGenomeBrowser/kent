@@ -75,9 +75,9 @@ if ( $#argv == 4 ) then
 endif
 
 # get tablenames for stripping out genbank
-rm -f genbank.local
-cat $GENBANK | sed -e 's/^^//; s/.$//' > genbank.local
-echo gbLoaded >> genbank.local
+rm -f genbank.local$$
+cat $GENBANK | sed -e 's/^^//; s/.$//' > genbank.local$$
+echo gbLoaded >> genbank.local$$
 
 # 
 set active=`hgsql -h $sqlbeta -Ne "SELECT name FROM dbDb where active = 1" hgcentralbeta \
@@ -87,16 +87,16 @@ foreach machine ( $mach1 $mach2 )
   # (if not, can't do real-time check)
   if ( $db == $active ) then
     # get the full table status in real time
-    getTableStatus.csh $db $machine > $machine.tmp
+    getTableStatus.csh $db $machine > $machine.tmp$$
     if ( $status ) then
-      cat $machine.tmp
-      rm $machine.tmp
+      cat $machine.tmp$$
+      rm $machine.tmp$$
 
       exit 1
     endif
   else
     # db is either not active, or not an assembly.  must use status dumps.
-    cp `getRRdumpfile.csh $db $machine` $machine.tmp
+    cp `getRRdumpfile.csh $db $machine` $machine.tmp$$
   endif
   
   # drop header lines from file and grab appropriate fields
@@ -106,43 +106,42 @@ foreach machine ( $mach1 $mach2 )
     set subver=`getVersion.csh $machine 2`
     if ( 4 == $ver && 1 == $subver || 5 == $ver ) then
       # newer mysql versions use different fields
-      cat $machine.tmp | sed '1,2d' \
-        | awk '{print $1, $14, $15}' >& $machine.status
+      cat $machine.tmp$$ | sed '1,2d' \
+        | awk '{print $1, $14, $15}' >& $machine.status$$
     else
-      cat $machine.tmp | sed '1,2d' \
-        | awk '{print $1, $13, $14}' >& $machine.status
+      cat $machine.tmp$$ | sed '1,2d' \
+        | awk '{print $1, $13, $14}' >& $machine.status$$
     endif
   else
-    cat $machine.tmp | sed '1,2d' \
-      | awk '{print $1}' >& $machine.status
+    cat $machine.tmp$$ | sed '1,2d' \
+      | awk '{print $1}' >& $machine.status$$
   endif
-  rm $machine.tmp
+  rm $machine.tmp$$
   
   # strip genbank
-  cat $machine.status | egrep -v -f genbank.local | grep -v gbDelete_tmp \
-    > $machine.out
-  rm -f $machine.status
+  cat $machine.status$$ | egrep -v -f genbank.local$$ | grep -v gbDelete_tmp \
+    > $machine.out$$
+  rm -f $machine.status$$
 end
 
 # get diffs
-commTrio.csh $mach1.out $mach2.out | sed -e "s/\.out//g" \
-   | sed -e "s/Only/only/" > trioFile
+commTrio.csh $mach1.out$$ $mach2.out$$ | sed -e "s/\.out$$//g" \
+   | sed -e "s/Only/only/" > trioFile$$
 echo
-cat trioFile
+cat trioFile$$
 
 # process the times or table names of tables that do not match
-set firstOnly=`cat trioFile | sed -n '1p' | awk '{print $1}'`
-set secondOnly=`cat trioFile | sed -n '2p' | awk '{print $1}'`
-rm -f outFile
+set firstOnly=`cat trioFile$$ | sed -n '1p' | awk '{print $1}'`
+set secondOnly=`cat trioFile$$ | sed -n '2p' | awk '{print $1}'`
+rm -f outFile$$
 if ( 0 != $firstOnly || 0 !=  $secondOnly ) then
-  cat $mach1.out.Only | sed -e "s/^/$mach1\t/" >> outFile
-  cat $mach2.out.Only | sed -e "s/^/$mach2\t/" >> outFile
-  sort -k2 outFile 
+  cat $mach1.out$$.Only | sed -e "s/^/$mach1\t/" >> outFile$$
+  cat $mach2.out$$.Only | sed -e "s/^/$mach2\t/" >> outFile$$
+  sort -k2 outFile$$
   echo
 endif
 
-rm -f *Only
-rm -f "*out"
-rm -f trioFile
-rm -f outFile
-rm -f genbank.local
+rm -f *out$$*
+rm -f trioFile$$
+rm -f outFile$$
+rm -f genbank.local$$
