@@ -10,3 +10,6 @@ O = ${PROG}.o
 ${PROG}: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${PROG} $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/${PROG}${EXE}
+
+clean::
+	rm -f ${O}

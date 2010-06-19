@@ -9553,7 +9553,7 @@ vis = limitVisibility(tg);
 
 Color blastNameColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
-return 1;
+return MG_BLACK;
 }
 
 void blatzMethods(struct track *tg)

@@ -9,3 +9,6 @@ O = hgLoadSqlTab.o
 hgLoadSqlTab: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadSqlTab $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgLoadSqlTab${EXE}
+
+clean::
+	rm -f ${O}

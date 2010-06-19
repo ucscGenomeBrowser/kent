@@ -473,7 +473,7 @@ tissue Blood
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=392&from=cell_line_index&select=search_for_term&term=CMK&preselect=human;hamster;mouse;rat;insect;other&firstload=0
 vendorName DSMZ
 vendorId ACC-392
-sex F
+sex M
 tier 3
 protocol UW_Stam:CMK_Stam_protocol.pdf
 

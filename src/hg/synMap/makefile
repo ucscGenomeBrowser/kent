@@ -19,3 +19,6 @@ test: $(TESTS)
 
 lib:
 	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f runSlam.o createSlamParaSpec.o prep_lc_rm_for_slam.o cutOutSeqs.o createCutOutSpec.o

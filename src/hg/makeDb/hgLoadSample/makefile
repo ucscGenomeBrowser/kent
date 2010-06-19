@@ -9,3 +9,6 @@ O = hgLoadSample.o
 hgLoadSample: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgLoadSample $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgLoadSample${EXE}
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = callGraph.o
 callGraph: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/callGraph $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/callGraph${EXE}
+
+clean::
+	rm -f ${O}

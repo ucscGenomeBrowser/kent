@@ -9,3 +9,6 @@ O = hgPhMouse.o
 hgPhMouse: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgPhMouse $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgPhMouse${EXE}
+
+clean::
+	rm -f ${O}

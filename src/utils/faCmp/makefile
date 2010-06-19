@@ -9,3 +9,6 @@ O = faCmp.o
 
 faCmp: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faCmp $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

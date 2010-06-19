@@ -8,3 +8,6 @@ O = faTrans.o
 
 faTrans: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faTrans $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

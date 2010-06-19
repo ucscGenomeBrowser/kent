@@ -10,3 +10,5 @@ pslOoJobs: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslOoJobs $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/pslOoJobs${EXE}
 
+clean::
+	rm -f ${O}
