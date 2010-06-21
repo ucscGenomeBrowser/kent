@@ -1,5 +1,9 @@
 # Data Agreement File for Myers/HudsonAlpha Methyl-seq experiments $Revision: 1.2 $
 
+# The header for the associated DDF should look like this:
+# files   view    cell    restrictionEnzyme       protocol        treatment       replicate       software        Version labVersion 
+
+
 dafVersion      2.0
 
 # Lab info		
@@ -22,7 +26,7 @@ required         no
 
 view             Alignments
 longLabelPrefix  HudsonAlpha Methyl-Seq Sites
-type             tagAlign
+type             bam
 hasReplicates    yes
 required         no
 
