@@ -5,7 +5,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 A = testGitRename
-O = testGitRename.o upperFile.o
+O = justAnotherTest.o
 
 testGitRename: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
