@@ -1,0 +1,471 @@
+metaObject wgEncodeUwDgfGm06990Aln
+objType file
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeUwDgfGm06990Aln.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDgfGm06990Aln
+project wgEncode
+subId 1682
+view Alignments
+
+metaObject wgEncodeUwDgfGm06990Hotspots
+objType table
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeUwDgfGm06990Hotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+subId 1682
+tableName wgEncodeUwDgfGm06990Hotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfGm06990Pk
+objType table
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeUwDgfGm06990Pk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+subId 1682
+tableName wgEncodeUwDgfGm06990Pk
+view Peaks
+
+metaObject wgEncodeUwDgfGm06990Raw
+objType table
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeUwDgfGm06990Raw.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+subId 1682
+tableName wgEncodeUwDgfGm06990Raw
+view RawSignal
+
+metaObject wgEncodeUwDgfGm06990Sig
+objType table
+cell GM06990
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-14
+fileName wgEncodeUwDgfGm06990Sig.bigWig.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 1682
+tableName wgEncodeUwDgfGm06990Sig
+view Signal
+
+metaObject wgEncodeUwDgfHepg2Aln
+objType file
+cell HepG2
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfHepg2Aln.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDgfHepg2Aln
+project wgEncode
+subId 1814
+view Alignments
+
+metaObject wgEncodeUwDgfHepg2Hotspots
+objType table
+cell HepG2
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfHepg2Hotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+subId 1814
+tableName wgEncodeUwDgfHepg2Hotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfHepg2Pk
+objType table
+cell HepG2
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfHepg2Pk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+subId 1814
+tableName wgEncodeUwDgfHepg2Pk
+view Peaks
+
+metaObject wgEncodeUwDgfHepg2Raw
+objType table
+cell HepG2
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfHepg2Raw.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+subId 1814
+tableName wgEncodeUwDgfHepg2Raw
+view RawSignal
+
+metaObject wgEncodeUwDgfHepg2Sig
+objType table
+cell HepG2
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfHepg2Sig.bigWig.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 1814
+tableName wgEncodeUwDgfHepg2Sig
+view Signal
+
+metaObject wgEncodeUwDgfK562Aln
+objType file
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeUwDgfK562Aln.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDgfK562Aln
+project wgEncode
+subId 1815
+view Alignments
+
+metaObject wgEncodeUwDgfK562Hotspots
+objType table
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeUwDgfK562Hotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+subId 1815
+tableName wgEncodeUwDgfK562Hotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfK562Pk
+objType table
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeUwDgfK562Pk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+subId 1815
+tableName wgEncodeUwDgfK562Pk
+view Peaks
+
+metaObject wgEncodeUwDgfK562Raw
+objType table
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeUwDgfK562Raw.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+subId 1815
+tableName wgEncodeUwDgfK562Raw
+view RawSignal
+
+metaObject wgEncodeUwDgfK562Sig
+objType table
+cell K562
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
+fileName wgEncodeUwDgfK562Sig.bigWig.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 1815
+tableName wgEncodeUwDgfK562Sig
+view Signal
+
+metaObject wgEncodeUwDgfSknshraAln
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfSknshraAln.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDgfSknshraAln
+project wgEncode
+subId 1795
+view Alignments
+
+metaObject wgEncodeUwDgfSknshraHotspots
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfSknshraHotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+subId 1795
+tableName wgEncodeUwDgfSknshraHotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfSknshraPk
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfSknshraPk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+subId 1795
+tableName wgEncodeUwDgfSknshraPk
+view Peaks
+
+metaObject wgEncodeUwDgfSknshraRaw
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfSknshraRaw.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+subId 1795
+tableName wgEncodeUwDgfSknshraRaw
+view RawSignal
+
+metaObject wgEncodeUwDgfSknshraSig
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfSknshraSig.bigWig.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 1795
+tableName wgEncodeUwDgfSknshraSig
+view Signal
+
+metaObject wgEncodeUwDgfTh1Aln
+objType file
+cell Th1
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-05
+dateUnrestricted 2010-07-05
+fileName wgEncodeUwDgfTh1Aln.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDgfTh1Aln
+project wgEncode
+subId 1816
+view Alignments
+
+metaObject wgEncodeUwDgfTh1Hotspots
+objType table
+cell Th1
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-05
+dateUnrestricted 2010-07-05
+fileName wgEncodeUwDgfTh1Hotspots.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+subId 1816
+tableName wgEncodeUwDgfTh1Hotspots
+view Hotspots
+
+metaObject wgEncodeUwDgfTh1Pk
+objType table
+cell Th1
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-05
+dateUnrestricted 2010-07-05
+fileName wgEncodeUwDgfTh1Pk.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+subId 1816
+tableName wgEncodeUwDgfTh1Pk
+view Peaks
+
+metaObject wgEncodeUwDgfTh1Raw
+objType table
+cell Th1
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-05
+dateUnrestricted 2010-07-05
+fileName wgEncodeUwDgfTh1Raw.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+subId 1816
+tableName wgEncodeUwDgfTh1Raw
+view RawSignal
+
+metaObject wgEncodeUwDgfTh1Sig
+objType table
+cell Th1
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-21
+dateSubmitted 2009-10-05
+dateUnrestricted 2010-07-05
+fileName wgEncodeUwDgfTh1Sig.bigWig.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 1816
+tableName wgEncodeUwDgfTh1Sig
+view Signal
+
+# MAGIC: 216618177
