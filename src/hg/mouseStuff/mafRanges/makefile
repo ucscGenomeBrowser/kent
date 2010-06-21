@@ -7,12 +7,14 @@ MYLIBS =  ${MYLIBDIR}/jkweb.a
 A = mafRanges
 O = ${A}.o
 
-all: ${A} test
+all: ${A}
 
 ${A}: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/${A}${EXE}
 
-test:
+test:	${A}
 	cd tests && ${MAKE}
 
+clean::
+	rm -f ${O}

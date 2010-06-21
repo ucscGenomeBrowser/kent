@@ -10,5 +10,5 @@ spDbAddVarSplice: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/spDbAddVarSplice $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/spDbAddVarSplice${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

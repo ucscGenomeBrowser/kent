@@ -8,3 +8,6 @@ O = subsetTraces.o
 
 subsetTraces: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/subsetTraces $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

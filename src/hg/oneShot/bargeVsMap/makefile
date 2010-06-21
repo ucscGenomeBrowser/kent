@@ -9,3 +9,5 @@ O = bargeVsMap.o
 bargeVsMap: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/bargeVsMap $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

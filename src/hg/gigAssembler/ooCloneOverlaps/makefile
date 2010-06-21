@@ -10,3 +10,5 @@ O = ooCloneOverlaps.o
 ooCloneOverlaps: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneOverlaps $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

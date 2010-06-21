@@ -9,3 +9,6 @@ O = padFile.o
 padFile: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/padFile $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/padFile${EXE}
+
+clean::
+	rm -f ${O}

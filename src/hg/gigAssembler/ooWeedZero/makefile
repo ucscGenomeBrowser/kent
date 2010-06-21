@@ -10,3 +10,6 @@ O = ooWeedZero.o
 ooWeedZero: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooWeedZero $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/ooWeedZero${EXE}
+
+clean::
+	rm -f ${O}

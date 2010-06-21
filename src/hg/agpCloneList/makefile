@@ -9,3 +9,6 @@ O = agpCloneList.o
 
 agpCloneList: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpCloneList $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

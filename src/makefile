@@ -9,8 +9,7 @@ beta: check-beta clean cgi-beta
 
 # do a git update and clean
 update:
-	git pull origin master
-	git checkout master
+	git pull -q
 	${MAKE} clean
 
 topLibs:
@@ -59,10 +58,10 @@ blatSuite: topLibs
 
 UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
         bigBedInfo bigBedSummary bigBedToBed \
-	bigWigInfo bigWigSummary bigWigToBedGraph \
+	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
 	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib \
 	faToTwoBit gtfToGenePred htmlCheck nibFrag stringify \
-	textHistogram twoBitInfo twoBitToFa userApps wigToBigWig
+	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \
 	ratStuff/mafsInRegion ratStuff/mafSpeciesSubset pslCDnaFilter
@@ -71,18 +70,25 @@ HG_UTILS_APPLIST = bedExtendRanges
 
 userApps: topLibs hgLib
 	@for P in ${UTILS_APPLIST}; do \
-	    ( cd utils/$${P} && echo utils/$${P} && $(MAKE) ) ; \
+	    ( cd utils/$${P} && echo utils/$${P} && ${MAKE} ) ; \
 	done
 	@for P in ${HG_APPLIST}; do \
-	    ( cd hg/$${P} && echo hg/$${P} && $(MAKE) ) ; \
+	    ( cd hg/$${P} && echo hg/$${P} && ${MAKE} ) ; \
 	done
 	@for P in ${HG_UTILS_APPLIST}; do \
-	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && $(MAKE) ) ; \
+	    ( cd hg/utils/$${P} && echo hg/utils/$${P} && ${MAKE} ) ; \
 	done
 
 clean:
+	@for D in ${DIRS} x; do \
+            if test "$$D" != "x" ; then \
+                ( cd $$D && echo $$D && ${MAKE} clean ) ;\
+                x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
+            fi ;\
+	done
 	cd lib && ${MAKE} clean 
 	cd hg && ${MAKE} clean
+	cd hg && ${MAKE} clean_utils
 	cd jkOwnLib && ${MAKE} clean
 	cd utils && ${MAKE} clean
 	cd webBlat && ${MAKE} clean
@@ -120,9 +126,9 @@ etags-all:
 utils: libs
 	${MKDIR} ${SCRIPTS}
 	${MKDIR} ${DESTDIR}${BINDIR}
-	@for D in $(DIRS) x; do \
+	@for D in ${DIRS} x; do \
             if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && $(MAKE) ) ;\
+                ( cd $$D && echo $$D && ${MAKE} ) ;\
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done
@@ -130,9 +136,9 @@ utils: libs
 	cd hg && ${MAKE} utils
 
 utils-alpha: libs
-	@for D in $(DIRS) x; do \
+	@for D in ${DIRS} x; do \
             if test "$$D" != "x" ; then \
-                ( cd $$D && echo $$D && $(MAKE) ) ;\
+                ( cd $$D && echo $$D && ${MAKE} ) ;\
                 x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
             fi ;\
 	done

@@ -10,9 +10,9 @@ clusterPsl: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/clusterPsl $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/clusterPsl${EXE}
 
-test:
+test:	clusterPsl
 	clusterPsl -verbose=0 input.psl output.cluster
 	diff expected.cluster output.cluster
 
 clean:
-	rm -f $O
+	rm -f ${O}

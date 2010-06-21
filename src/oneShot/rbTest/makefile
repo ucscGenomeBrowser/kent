@@ -10,3 +10,6 @@ O = rbTest.o
 rbTest: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rbTest $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/rbTest${EXE}
+
+clean::
+	rm -f ${O}

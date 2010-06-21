@@ -10,4 +10,4 @@ ${BINDIR}/spLoadRankProp: $O $(MYLIBS)
 	${CC} ${CFLAGS} -o $@ $O $(MYLIBS) $L
 
 clean::
-	rm -f $O
+	rm -f ${O}

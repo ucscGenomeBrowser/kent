@@ -10,5 +10,5 @@ kgPepMrna: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/kgPepMrna $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/kgPepMrna${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

@@ -43,7 +43,6 @@ use vars qw/
     $opt_allowReloads
     $opt_configDir
     $opt_fileType
-    $opt_justFileDb
     $opt_metaDataOnly
     $opt_outDir
     $opt_quick
@@ -92,7 +91,6 @@ options:
                         metadata .ra files (default: submission-dir/../config)
     -database=assembly  Specify an assembly; necessary only when using -validateFile
     -fileType=type	used only with validateFile option; e.g. narrowPeak
-    -justFileDb         Just generate the fileDb.ra file which contains all metadata
     -metaDataOnly       Process DAF/DDF and just update the projects.metadata field;
                         equal to -allowReloads -skipAll
     -quick		Validate only first $quickCount lines of files
@@ -299,6 +297,10 @@ our %formatCheckers = (
     csfasta => \&validateCsfasta,
     csqual  => \&validateCsqual,
     rpkm  => \&validateRpkm,
+    junction  => \&validateFreepass,
+    fpkm1  => \&validateFreepass,
+    fpkm2  => \&validateFreepass,
+    insDistrib  => \&validateFreepass,
     fasta  => \&validateFasta,
     bowtie  => \&validateBowtie,
     psl  => \&validatePsl,
@@ -1237,9 +1239,6 @@ my $ok = GetOptions("allowReloads",
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
 $opt_sendEmail = 0 if (!defined $opt_sendEmail);
-if($opt_justFileDb) {
-   $opt_skipAll = $opt_quick = $opt_allowReloads =1;
-}
 $quickOpt = " -quick=100 " if defined ($opt_quick);  # use validateFiles to validate 100 lines
 
 if($opt_skipAll) {
@@ -1545,14 +1544,15 @@ if(!@errors) {
         # Also note that any project (like transcriptome) that doesnt have replicates should also use
         # this for their auto-create signals.
         HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
-        if( ( !defined($daf->{noAutoCreate}) || $daf->{noAutoCreate} ne "yes") && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
-        && !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})
+        if( ( !defined($daf->{noAutoCreate}) || $daf->{noAutoCreate} ne "yes")
+        && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
+        ##&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})   ## No longer create RawSignals
         && !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
         && !defined($ddfReplicateSets{$key}{VIEWS}{MinusRawSignal})
         && ($daf->{dataType} ne 'MethylSeq')) {
             # Make a list of the PlusRawSignal/MinusRawSignal or RawSignals we are going to have to make
             my @newViews = ();
-            push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};
+            #push @newViews, "RawSignal" if $daf->{TRACKS}{RawSignal}{order};  ## No longer create RawSignals
             push @newViews, "PlusRawSignal" if $daf->{TRACKS}{PlusRawSignal}{order};
             push @newViews, "MinusRawSignal" if $daf->{TRACKS}{MinusRawSignal}{order};
 
@@ -1679,11 +1679,6 @@ if($opt_skipOutput) {
     open(LOADER_RA, ">$outPath/$Encode::loadFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::loadFile\' file; error: $!\n";
     open(TRACK_RA, ">$outPath/$Encode::trackFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::trackFile\' file; error: $!\n";
     open(README, ">$outPath/README.txt") || die "SYS ERROR: Can't write '$outPath/READEME.txt' file; error: $!\n";
-}
-if($opt_justFileDb || !$opt_skipOutput) {
-    open(FILE_RA, ">$outPath/$Encode::fileDbFile") || die "SYS ERROR: Can't write '$outPath/$Encode::fileDbFile' file; error: $!\n";
-} else {
-    open(FILE_RA, ">>/dev/null");
 }
 if($opt_metaDataOnly || !$opt_skipOutput) {
     open(MDB_TXT, ">$outPath/$Encode::mdbFile") || die "SYS ERROR: Can't write \'$outPath/$Encode::mdbFile\' file; error: $!\n";
@@ -1885,8 +1880,11 @@ foreach my $ddfLine (@ddfLines) {
             }
             $subGroups .= " $groupVar=$terms{$cvTypeVar}->{$hash{$var}}->{'tag'}";
         }
+         #Venkat: Commented out the below line such that if any lab has replicates the replicate number will be placed
+	 #        in the table name. The below code was found to be to specific, however if there are any problems
+	 # I have left the code in so that we can easily add it back in.
 	#  if(defined($replicate) && ($daf->{lab} eq "HudsonAlpha" || $daf->{lab} eq "Uw") || $daf->{lab} eq "Gis") {
-           if(defined($replicate)) { 
+           if(defined($replicate)) {
 	    $subGroups .= " rep=rep$replicate"; # UGLY special casing
         }
     }
@@ -1978,20 +1976,16 @@ foreach my $ddfLine (@ddfLines) {
 
     my $fileType = $type;
     $fileType =~ s/ //g;
-    print FILE_RA "    filename $tableName.$fileType.gz\n";
     $metadata .= " composite=$compositeTrack";
 
     if($downloadOnly) {
         my $parentTable = $tableName;
         $parentTable =~ s/RawData/RawSignal/    if $parentTable =~ /RawData/;
         $parentTable =~ s/Alignments/RawSignal/ if $parentTable =~ /Alignments/;
-        print FILE_RA "    parentTable $parentTable\n";
         $metadata .= " parentTable=$parentTable";
     } else {
-        print FILE_RA "    tableName $tableName\n";
         $metadata .= " tableName=$tableName";
     }
-    print FILE_RA "    composite $compositeTrack\n";
     $metadata .= " fileName=$tableName.$fileType.gz";
 
     print LOADER_RA "tablename $tableName\n";
@@ -2009,7 +2003,6 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "downloadOnly $downloadOnly\n";
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
-    print FILE_RA "\n";
 
     # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
     if($downloadOnly) {
@@ -2030,21 +2023,21 @@ foreach my $ddfLine (@ddfLines) {
         print README "\n";
     }
     if(!$downloadOnly) {
-        print TRACK_RA "    track $tableName\n";
-        print TRACK_RA "    release alpha\n";
+        print TRACK_RA "        track $tableName\n";
+        print TRACK_RA "        release alpha\n";
         if ($tier1 eq 1) {
             # default to only Tier1 subtracks visible.  Wrangler should review if this is
             #   correct for the track
-            print TRACK_RA "    subTrack $compositeTrack\n";
+            print TRACK_RA "        parent " . $compositeTrack . "View" . $view . "\n";
         } else {
-            print TRACK_RA "    subTrack $compositeTrack off\n";
+            print TRACK_RA "        parent " . $compositeTrack . "View" . $view . " off\n";
         }
-        print TRACK_RA "    shortLabel $shortLabel\n";
-        print TRACK_RA "    longLabel $longLabel\n";
-        print TRACK_RA "    subGroups $subGroups\n";
+        print TRACK_RA "        shortLabel $shortLabel\n";
+        print TRACK_RA "        longLabel $longLabel\n";
+        print TRACK_RA "        subGroups $subGroups\n";
         if($type eq 'wig') {
             my $placeHolder = Encode::wigMinMaxPlaceHolder($tableName);
-            print TRACK_RA "    type $type $placeHolder\n";
+            print TRACK_RA "        type $type $placeHolder\n";
         } elsif($type eq 'bigWig') {
             my @cmds;
             my $tmpFile = $Encode::autoCreatedPrefix . $type  ;
@@ -2057,38 +2050,37 @@ foreach my $ddfLine (@ddfLines) {
             }
             my $lines = Encode::readFile($tmpFile);
             my $line = shift(@{$lines});
-            print TRACK_RA "    type bigWig " . $line . "\n";
+            print TRACK_RA "        type bigWig " . $line . "\n";
 
         } elsif($type eq 'gtf') { # GTF is converted to and loaded as genePred
-            print TRACK_RA "    type genePred\n";
+            print TRACK_RA "        type genePred\n";
         } elsif($type eq 'tagAlign') { # tagAligns are bed 6 but with column called 'sequence' instead of 'name'
-            print TRACK_RA "    type bed 6\n";
+            print TRACK_RA "        type bed 6\n";
         } else {
-            print TRACK_RA "    type $type\n";
+            print TRACK_RA "        type $type\n";
         }
         if(defined($ddfLine->{accession}) && length($ddfLine->{accession}) > 0) {
-            print TRACK_RA sprintf("    accession %s\n",$ddfLine->{accession});
+            print TRACK_RA sprintf("        accession %s\n",$ddfLine->{accession});
         }
         if(defined($ddfLine->{origAssembly}) && length($ddfLine->{origAssembly}) > 0) {
-            print TRACK_RA sprintf("    origAssembly %s\n",$ddfLine->{origAssembly});
+            print TRACK_RA sprintf("        origAssembly %s\n",$ddfLine->{origAssembly});
         }
         # color track by color setting for cell type in cv.ra
         if(defined($ddfLine->{cell})) {
             if(defined($terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'})) {
-                print TRACK_RA sprintf("    color %s\n",
+                print TRACK_RA sprintf("        color %s\n",
                         $terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'});
             }
         }
         # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
         # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
         print MDB_TXT sprintf("metadata %s\n", $metadata);
-        print TRACK_RA sprintf("    # subId=%s dateSubmitted=%s\n", $subId,$dateSubmitted);
+        print TRACK_RA sprintf("        # subId=%s dateSubmitted=%s\n", $subId,$dateSubmitted);
         print TRACK_RA "\n";
     }
 }
 close(LOADER_RA);
 close(TRACK_RA);
-close(FILE_RA);
 close(MDB_TXT);
 close(README);
 doTime("done out files") if $opt_timing;

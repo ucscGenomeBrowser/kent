@@ -31,9 +31,9 @@ typedef struct rgbColor (*vg_colorIxToRgb)(void *v, int colorIx);
 typedef void (*vg_setClip)(void *v, int x, int y, int width, int height);
 typedef void (*vg_setWriteMode)(void *v, unsigned int writeMode);
 typedef void (*vg_unclip)(void *v);
-typedef void (*vg_verticalSmear8)(void *v,
+typedef void (*vg_verticalSmear)(void *v,
 	    int xOff, int yOff, int width, int height, 
-	    unsigned char *dots, boolean zeroClear);
+	    Color *dots, boolean zeroClear);
 typedef void (*vg_fillUnder)(void *v, int x1, int y1, 
 	int x2, int y2, int bottom, Color color);
 typedef void (*vg_drawPoly)(void *v, struct gfxPoly *poly, Color color, boolean filled);

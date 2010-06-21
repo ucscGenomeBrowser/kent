@@ -86,6 +86,18 @@ visibility off
 type lookup knownToEnsembl name value
 search prefix
 
+name kegg
+shortLabel KEGG
+longLabel KEGG Pathway ID
+priority 2.5
+visibility off
+type association knownToKeggEntrez
+queryFull select name,value from knownToKeggEntrez
+queryOne select value,keggEntrez from knownToKeggEntrez where name = '%s'
+invQueryOne select name from knownToKeggEntrez where value = '%s'
+itemUrl http://www.genome.jp/dbget-bin/show_pathway?%s
+search prefix
+
 name HInv
 shortLabel HInv
 longLabel HInv ID

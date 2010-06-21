@@ -9,3 +9,6 @@ O = axtBest.o
 axtBest: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtBest $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtBest${EXE}
+
+clean::
+	rm -f ${O}

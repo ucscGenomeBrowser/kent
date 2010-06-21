@@ -3176,25 +3176,25 @@ for (i=0; i<size; ++i)
     }
 }
 
-void grayThreshold(UBYTE *pt, int count)
+void grayThreshold(UBYTE *pt, int count, Color *colors )
 /* Convert from 0-4 representation to gray scale rep. */
 {
-UBYTE b;
+Color b;
 int i;
 
 for (i=0; i<count; ++i)
     {
     b = pt[i];
     if (b == 0)
-	pt[i] = shadesOfGray[0];
+	colors[i] = shadesOfGray[0];
     else if (b == 1)
-	pt[i] = shadesOfGray[2];
+	colors[i] = shadesOfGray[2];
     else if (b == 2)
-	pt[i] = shadesOfGray[4];
+	colors[i] = shadesOfGray[4];
     else if (b == 3)
-	pt[i] = shadesOfGray[6];
+	colors[i] = shadesOfGray[6];
     else if (b >= 4)
-	pt[i] = shadesOfGray[9];
+	colors[i] = shadesOfGray[9];
     }
 }
 
@@ -3295,14 +3295,16 @@ if (baseWidth <= 25000000)
     AllocArray(gapUseCounts, width);
 countTrackBaseUse(tg, width, baseWidth, useCounts, gapUseCounts, hvg->rc);
 
-grayThreshold(useCounts, width);
-hvGfxVerticalSmear8(hvg,xOff,yOff,width,lineHeight,useCounts,TRUE);
+Color *colors = needMem(sizeof(Color) * width);
+grayThreshold(useCounts, width, colors);
+hvGfxVerticalSmear(hvg,xOff,yOff,width,lineHeight,colors,TRUE);
 freeMem(useCounts);
 if (gapUseCounts != NULL)
     {
     int midY = yOff + (tg->heightPer>>1);
-    grayThreshold(gapUseCounts, width);
-    hvGfxVerticalSmear8(hvg,xOff,midY,width,1,gapUseCounts,TRUE);
+    grayThreshold(gapUseCounts, width, colors);
+
+    hvGfxVerticalSmear(hvg,xOff,midY,width,1,colors,TRUE);
     freeMem(gapUseCounts);
     }
 }
@@ -6331,6 +6333,7 @@ for(ii=0; ii < 4; ii++)
 hvGfxSetClip(hvg, xOff, yOff, width*2 , 52);
 
 /* map colors from PGM to browser colors */
+Color *colors = needMem(sizeof(Color) * width);
 for(ii=0; ii < 52; ii++)
     {
     int jj;
@@ -6338,13 +6341,13 @@ for(ii=0; ii < 52; ii++)
 
     for(jj=0; jj < width + 2; jj++)
 	{
-	if (buf[jj] == 255) buf[jj] = 0;
-	else if (buf[jj] == 0x44)buf[jj] = brickColor;
-	else if (buf[jj] == 0x69)buf[jj] = greenColor;
-	else if (buf[jj] == 0x5e)buf[jj] = blueColor;
+	if (buf[jj] == 255) colors[jj] = MG_WHITE;
+	else if (buf[jj] == 0x44) colors[jj] = MG_RED;
+	else if (buf[jj] == 0x69) colors[jj] = greenColor;
+	else if (buf[jj] == 0x5e) colors[jj] = blueColor;
 	}
 
-    hvGfxVerticalSmear8(hvg,xOff,yOff+ii,width ,1,buf,TRUE);
+    hvGfxVerticalSmear(hvg,xOff,yOff+ii,width ,1, colors,TRUE);
     }
 hvGfxUnclip(hvg);
 
@@ -9550,7 +9553,7 @@ vis = limitVisibility(tg);
 
 Color blastNameColor(struct track *tg, void *item, struct hvGfx *hvg)
 {
-return 1;
+return MG_BLACK;
 }
 
 void blatzMethods(struct track *tg)

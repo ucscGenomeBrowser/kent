@@ -7,7 +7,7 @@ HTDOCS_USER=${HTDOCS}-${USER}
 
 
 GIT = git
-GITUP = ${GIT} pull origin master
+GITUP = ${GIT} pull -q
 
 user:
 	${GITUP}

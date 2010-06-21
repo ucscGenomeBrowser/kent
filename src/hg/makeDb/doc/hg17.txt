@@ -24716,3 +24716,51 @@ by a single Makefile. This is available from:
 
 see doc/builds.txt for specific details.
 ############################################################################
+# UPDATE KEGG TABLES (DONE, Fan, 6/18/10)
+
+mkdir -p /hive/data/genomes/hg17/bed/pathways/kegg
+cd /hive/data/genomes/hg17/bed/pathways/kegg
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+
+cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+cut -f 2 j.tmp >j.hsa
+cut -f 1,3 j.tmp >j.1
+paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+rm j.hsa j.1
+rm j.tmp
+
+hgsql hg17 -e 'drop table keggMapDesc'
+hgsql hg17 < ~/kent/src/hg/lib/keggMapDesc.sql
+hgsql hg17 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+
+cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+hgsql hg17 -e 'drop table keggPathway'
+hgsql hg17 < ~/kent/src/hg/lib/keggPathway.sql
+hgsql hg17 -e 'load data local infile "j.tmp" into table keggPathway'
+
+hgsql hg17 -N -e \
+'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+>keggPathway.tab
+
+hgsql hg17 -e 'delete from keggPathway'
+
+hgsql hg17 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+rm j.tmp
+############################################################################
+# Add KEGG column to hg17 Gene Sorter (Done, Fan, 6/18/2010)
+
+mkdir -p /hive/data/genomes/hg17/bed/geneSorter
+cd /hive/data/genomes/hg17/bed/geneSorter
+hgsql hg17 -N -e 'select kgId, mapID, mapID, "+", locusID from keggPathway' |sort -u|sed -e 's/\t+\t/+/' > knownToKeggEntrez.tab
+
+hgsql hg17 -e 'drop table knownToKeggEntrez'
+
+hgsql hg17 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
+
+hgsql hg17 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
+
+#############################################################################

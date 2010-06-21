@@ -164,12 +164,12 @@ hvg->clipMaxY = hvg->height;
 vgUnclip(hvg->vg);
 }
 
-INLINE void hvGfxVerticalSmear8(struct hvGfx *hvg,
+INLINE void hvGfxVerticalSmear(struct hvGfx *hvg,
                                int xOff, int yOff, int width, int height, 
-                               unsigned char *dots, boolean zeroClear)
+                               Color *dots, boolean zeroClear)
 /* Put a series of one '8-bit pixel' width vertical lines. */
 {
-vgVerticalSmear8(hvg->vg, hvGfxAdjXW(hvg, xOff, width), yOff, width, height, dots, zeroClear);
+vgVerticalSmear(hvg->vg, hvGfxAdjXW(hvg, xOff, width), yOff, width, height, dots, zeroClear);
 }
 
 INLINE void hvGfxFillUnder(struct hvGfx *hvg, int x1, int y1, int x2, int y2, 

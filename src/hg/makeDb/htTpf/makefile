@@ -9,3 +9,6 @@ O = htTpf.o
 htTpf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/htTpf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/htTpf${EXE}
+
+clean::
+	rm -f ${O}

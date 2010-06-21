@@ -11,7 +11,7 @@ clusterGenes: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/clusterGenes $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/clusterGenes${EXE}
 
-test::
+test::	clusterGenes
 	(cd tests && ${MAKE} test)
 
 clean::

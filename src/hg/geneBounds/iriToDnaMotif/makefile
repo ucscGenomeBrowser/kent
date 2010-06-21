@@ -4,9 +4,15 @@ L += -lm $(MYSQLLIBS)
 MYLIBDIR = ../../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = iriToDnaMotif.o ../lib/improbRunInfo.o
+O = iriToDnaMotif.o
 
-iriToDnaMotif: $O $(MYLIBS)
+iriToDnaMotif: gbLib $O $(MYLIBS)
 	cd ../lib && ${MAKE}
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/iriToDnaMotif $O $(MYLIBS) $L
+	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/iriToDnaMotif $O ../lib/improbRunInfo.o $(MYLIBS) $L
 	${STRIP} ${BINDIR}/iriToDnaMotif${EXE}
+
+gbLib::
+	( cd ../lib && ${MAKE} )
+
+clean::
+	rm -f ${O}

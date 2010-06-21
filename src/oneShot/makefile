@@ -9,3 +9,6 @@ O = oneShot.o
 oneShot: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/oneShot $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/oneShot${EXE}
+
+clean::
+	rm -f ${O}

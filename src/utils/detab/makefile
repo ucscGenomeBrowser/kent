@@ -10,3 +10,6 @@ O = detab.o
 detab: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/detab $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/detab${EXE}
+
+clean::
+	rm -f ${O}

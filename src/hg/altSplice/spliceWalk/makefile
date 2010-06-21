@@ -23,3 +23,6 @@ test: $(TESTS)
 
 lib:
 	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f ${O} ${O}.o

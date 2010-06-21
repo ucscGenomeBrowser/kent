@@ -24,3 +24,6 @@ test:
 	cd tests && ./testPcr output/testPcr
 	diff -r -x CVS tests/expected tests/output
 	rm -r tests/output
+
+clean::
+	rm -fr ${O} tests/output

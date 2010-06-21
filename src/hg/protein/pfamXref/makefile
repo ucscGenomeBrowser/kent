@@ -12,4 +12,4 @@ $A: $O ${MYLIBS}
 	${STRIP} ${BINDIR}/$A${EXE}
 
 clean::
-	rm -f $O
+	rm -f ${O}

@@ -24,3 +24,6 @@ ret:
 	gcc -c out.c
 	gcc -O -o t out.o t.o ../runtime/runtime.a ../../../lib/powerpc/jkweb.a -lm
 	t
+
+clean::
+	rm -f ${O}

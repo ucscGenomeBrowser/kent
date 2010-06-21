@@ -10,3 +10,6 @@ O = checkGoldDupes.o
 checkGoldDupes: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkGoldDupes $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/checkGoldDupes${EXE}
+
+clean::
+	rm -f ${O}

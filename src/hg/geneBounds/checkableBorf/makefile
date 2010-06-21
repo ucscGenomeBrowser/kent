@@ -9,3 +9,6 @@ O = checkableBorf.o
 checkableBorf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/checkableBorf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/checkableBorf${EXE}
+
+clean::
+	rm -f ${O}

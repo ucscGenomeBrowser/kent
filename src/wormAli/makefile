@@ -10,3 +10,6 @@ install: wormAli.exe
 	chmod g-w wormAli.exe
 	chmod a+rx wormAli.exe
 	mv wormAli.exe ${CGI_BIN}/
+
+clean::
+	rm -f wormAli.exe ${AOUT} ${O}

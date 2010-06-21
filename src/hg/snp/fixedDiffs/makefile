@@ -12,3 +12,6 @@ all: fixedDiffs
 fixedDiffs: fixedDiffs.o ${MYLIBS}
 	${CC} ${COPT} -O -o fixedDiffs fixedDiffs.o ${MYLIBS} $L
 
+
+clean::
+	rm -f ${O}

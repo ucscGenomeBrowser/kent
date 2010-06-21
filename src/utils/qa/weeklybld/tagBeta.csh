@@ -33,8 +33,10 @@ endif
 echo "Tagging beta tag to branch $BRANCHNN [${0}: `date`]"
 
 git tag -d beta   # delete local tag
+git fetch
 git push origin :beta   # delete old beta tag on shared repo
-git push origin origin/v225_branch:refs/tags/beta   # create new tag at current branch tip
+git fetch
+git push origin origin/v${BRANCHNN}_branch:refs/tags/beta   # create new tag at current branch tip
 if ( $status ) then
  echo "git shared-repo tag failed for beta tag with branch $BRANCHNN on $HOST [${0}: `date`]"
  exit 1

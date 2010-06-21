@@ -18,3 +18,6 @@ test: $(TESTO)
 
 lib:
 	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

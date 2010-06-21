@@ -4,9 +4,7 @@ include ../../inc/common.mk
 # make SCRIPTS=/cluster/bin/scripts
 
 install:
-
-	${GIT} pull origin master
-	${GIT} checkout master
+	${GIT} pull -q
 	cp -p --remove-destination activeGenbank.csh       ${SCRIPTS}
 	cp -p --remove-destination alertBqueue.csh         ${SCRIPTS}
 	cp -p --remove-destination allowTraffic.csh        ${SCRIPTS}
@@ -128,3 +126,6 @@ install:
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
 	cp -p --remove-destination whoMadeIt.csh           ${SCRIPTS}
+
+clean::
+	@echo nothing to clean in src/utils/qa/

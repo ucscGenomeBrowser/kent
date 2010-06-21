@@ -9,3 +9,6 @@ O = mafToAxt.o
 mafToAxt: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafToAxt $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/mafToAxt${EXE}
+
+clean::
+	rm -f ${O}

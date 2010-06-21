@@ -548,25 +548,37 @@ cdb->useCount = 1;
 return cdb;
 }
 
-struct cart *cartNewEmpty(unsigned int userId, unsigned int sessionId,
-	char **exclude, struct hash *oldVars)
-/* Create a new empty cart structure without reading from the database. */
+struct cart *cartFromHash(struct hash *hash)
+/* Create a cart from hash */
 {
 struct cart *cart;
-char *ex;
-
 AllocVar(cart);
-cart->hash = newHash(12);
+cart->hash = hash;
 cart->exclude = newHash(7);
-cart->userId = userId;
-cart->sessionId = sessionId;
 cart->userInfo = emptyCartDb();
 cart->sessionInfo = emptyCartDb();
+return cart;
+}
 
+struct cart *cartOfNothing()
+/* Create a new, empty, cart with no real connection to the database. */
+{
+return cartFromHash(newHash(0));
+}
+
+struct cart *cartFromCgiOnly(unsigned int userId, unsigned int sessionId,
+	char **exclude, struct hash *oldVars)
+/* Create a new cart that contains only CGI variables, nothing from the
+ * database. */
+{
+struct cart *cart = cartOfNothing();
+cart->userId = userId;
+cart->sessionId = sessionId;
 loadCgiOverHash(cart, oldVars);
 
 if (exclude != NULL)
     {
+    char *ex;
     while ((ex = *exclude++))
 	cartExclude(cart, ex);
     }

@@ -7,3 +7,6 @@ xenWorm: $(O)
 	chmod a+x ${AOUT}
 	chmod g-w ${AOUT}
 	mv ${AOUT} ../../cgi-bin/xenWorm.exe
+
+clean::
+	rm -f ${O}

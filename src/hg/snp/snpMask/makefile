@@ -47,3 +47,5 @@ seqWithInsertions: seqWithInsertions.o ${MYLIBS}
 seqWithoutDeletions: seqWithoutDeletions.o ${MYLIBS}
 	${CC} ${COPT} -O -o seqWithoutDeletions seqWithoutDeletions.o ${MYLIBS} $L
 
+clean::
+	rm -f ${O}

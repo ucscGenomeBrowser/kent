@@ -66,7 +66,7 @@ errAbort(
   "options:\n"
   "   -zero      add blocks with zero count, normally these are ommitted\n"
   "   -bed12     expect bed12 and count based on blocks\n"
-  "              normally only first three fields are used.\n"
+  "              Without this option, only the first three fields are used.\n"
   "   -max       if counts per base overflows set to max (%lu) instead of exiting\n"
   "   -outBounds output min/max to stderr\n"
   "   -chromSize=sizefile\tRead chrom sizes from file instead of database\n"

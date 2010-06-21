@@ -1,6 +1,6 @@
 include ../../inc/common.mk
 
-GITUP = git pull origin master
+GITUP = git pull -q
 
 # recursive target to do install to DEST, with extra excludes EXCL.
 

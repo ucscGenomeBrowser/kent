@@ -13,3 +13,7 @@ alpha:: $(SUBDIRS:%=%.alpha)
 beta:: $(SUBDIRS:%=%.beta)
 %.beta:
 	(cd $* && ${MAKE} beta)
+
+clean:: $(SUBDIRS:%=%.clean)
+%.clean:
+	(cd $* && ${MAKE} clean)

@@ -8,3 +8,6 @@ O = blatTheory.o
 
 blatTheory: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/blatTheory $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

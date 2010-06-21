@@ -8,3 +8,5 @@ ccCp: $O
 
 #	${CC} ${COPT} ${CFLAGS} -o /projects/compbio/experiments/hg/bin/$(MACHTYPE)/ccCp $O ../../lib/$(MACHTYPE)/jkweb.a 
 
+clean::
+	rm -f ${O}

@@ -9,3 +9,5 @@ O = sangPairs.o
 sangPairs: $O 
 	${CC} ${COPT} ${CFLAGS} -o sangPairs $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

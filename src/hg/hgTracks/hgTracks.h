@@ -333,6 +333,7 @@ struct gsidSeq
 extern struct trackLayout tl;
 
 extern struct cart *cart; /* The cart where we keep persistent variables. */
+extern struct hash *oldVars;       /* List of vars from previous cart. */
 extern struct track *trackList;    /* List of all tracks. */
 struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
@@ -412,10 +413,6 @@ extern int maxRGBShade;
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
 #define MAF_DOUBLE_GAP '='
-
-void initTl();
-/* Initialize layout around small font and a picture about 600 pixels
- * wide. */
 
 void abbr(char *s, char *fluff);
 /* Cut out fluff from s. */
@@ -559,7 +556,7 @@ void innerLine(struct hvGfx *hvg, int x, int y, int w, Color color);
  * end.  This pixel is needed for PostScript only, but doesn't
  * hurt elsewhere. */
 
-void grayThreshold(UBYTE *pt, int count);
+void grayThreshold(UBYTE *pt, int count, Color *colors);
 /* Convert from 0-4 representation to gray scale rep. */
 
 /* Some little functional stubs to fill in track group
@@ -1058,6 +1055,19 @@ void setRulerMode();
 #define configPriorityOverride "hgt_priorityOverride"
 #define searchTracks "hgt_searchTracks"
 #define hgtJsCommand "hgt_doJsCommand"
+
+void doMiddle(struct cart *theCart);
+/* Print the body of html file.   */
+
+void initTl();
+/* Initialize layout around small font and a picture about 800 pixels
+ * wide. */
+
+void setLayoutGlobals();
+/* Figure out basic dimensions of display.  */
+
+void makeActiveImage(struct track *trackList, char *psOutput);
+/* Make image and image map. */
 
 void configPage();
 /* Put up configuration page. */

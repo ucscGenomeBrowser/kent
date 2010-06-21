@@ -30,4 +30,3 @@ testWeb: compile
 
 clean::
 	rm -f test.gif testWeb.gif
-

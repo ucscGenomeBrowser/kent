@@ -8,3 +8,6 @@ O = hgSoftberryHom.o
 
 hgSoftberryHom: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgSoftberryHom $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

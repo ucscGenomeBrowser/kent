@@ -8,3 +8,6 @@ O = mhcToNt.o
 
 mhcToNt: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mhcToNt $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

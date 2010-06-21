@@ -9,3 +9,6 @@ O = expToRna.o
 expToRna: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/expToRna $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/expToRna${EXE}
+
+clean::
+	rm -f ${O}
