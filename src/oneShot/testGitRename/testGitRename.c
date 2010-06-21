@@ -22,20 +22,8 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void testGitRename(char *input, char *output)
+void testGitRename(char *input, char *output);
 /* testGitRename - Just a little something to test renaming, merging, etc.. */
-{
-struct lineFile *lf = lineFileOpen(input, TRUE);
-FILE *f = mustOpen(output, "w");
-char *line;
-while (lineFileNext(lf, &line, NULL))
-    {
-    touppers(line);
-    fprintf(f, "%s\n", line);
-    }
-
-carefulClose(&f);
-}
 
 int main(int argc, char *argv[])
 /* Process command line. */

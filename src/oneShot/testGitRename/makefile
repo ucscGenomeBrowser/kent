@@ -5,7 +5,7 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 A = testGitRename
-O = testGitRename.o
+O = testGitRename.o upperFile.o
 
 testGitRename: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
@@ -16,3 +16,7 @@ compile:: ${O}
 
 clean::
 	rm -f ${A}${EXE} ${O}
+
+test:
+	testGitRename test.in test.out
+	diff test.expected test.out
