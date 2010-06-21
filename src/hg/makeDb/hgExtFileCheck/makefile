@@ -9,3 +9,6 @@ O = hgExtFileCheck.o
 
 hgExtFileCheck: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgExtFileCheck $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

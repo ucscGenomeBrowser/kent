@@ -10,3 +10,5 @@ O = ooCloneInfo.o
 ooCloneInfo: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneInfo $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

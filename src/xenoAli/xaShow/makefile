@@ -10,3 +10,5 @@ xaShow.exe: $(O)
 	chmod g-w xaShow.exe
 	mv xaShow.exe $(HOME)/.html/cgi-bin
 
+clean::
+	rm -f ${O}

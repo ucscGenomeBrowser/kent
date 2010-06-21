@@ -49,4 +49,3 @@ push:
 clean::
 	rm -f formPushQ.h $(A)
 	rm -f pushQ.o
-

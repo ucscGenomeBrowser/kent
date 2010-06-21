@@ -9,3 +9,6 @@ O = tfbsConsSort.o
 tfbsConsSort: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/tfbsConsSort $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/tfbsConsSort${EXE}
+
+clean::
+	rm -f ${O}

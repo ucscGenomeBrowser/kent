@@ -59,4 +59,3 @@ pslTrack.o:	cds.h
 
 clean::
 	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif
-

@@ -11,8 +11,10 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a ../lib/$(MACHTYPE)/libSpliceG
 
 O =  axtCountBeds
 
-
 exe: $(O)
 
 lib:
 	cd ../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

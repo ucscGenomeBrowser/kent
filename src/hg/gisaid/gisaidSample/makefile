@@ -31,4 +31,3 @@ beta::
 compile: $O 
 	${CC} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
-

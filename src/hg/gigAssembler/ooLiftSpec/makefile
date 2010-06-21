@@ -10,3 +10,5 @@ O = ooLiftSpec.o
 ooLiftSpec: $O ../../../lib/$(MACHTYPE)/jkweb.a 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooLiftSpec $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

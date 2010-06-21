@@ -8,4 +8,5 @@ cbAli.exe: $(O)
 	chmod a+rx cbAli.exe
 	mv cbAli.exe ../cgi-bin
 
-
+clean::
+	rm -f ${O} cbAli.exe

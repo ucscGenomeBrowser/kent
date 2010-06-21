@@ -9,3 +9,6 @@ O = hgSgdPep.o
 hgSgdPep: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgSgdPep $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgSgdPep${EXE}
+
+clean::
+	rm -f ${O}

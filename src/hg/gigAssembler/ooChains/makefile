@@ -10,7 +10,9 @@ O = ooChains.o
 ooChains: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooChains $O $(MYLIBS) $L
 
-
 lib:
 	cd ../../lib && ${MAKE}
 	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

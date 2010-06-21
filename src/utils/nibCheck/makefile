@@ -12,3 +12,6 @@ nibCheck: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) -lm
 	mv ${AOUT} nibCheck
 	chmod a+rx nibCheck
+
+clean::
+	rm -f ${O}

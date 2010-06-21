@@ -9,3 +9,6 @@ O = catDir.o
 
 catDir: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/catDir $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

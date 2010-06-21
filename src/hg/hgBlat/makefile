@@ -18,4 +18,3 @@ compile: $O
 
 clean::
 	rm -f hgSs_*.fa hgSs_*.pslx
-

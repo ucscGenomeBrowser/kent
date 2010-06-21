@@ -126,3 +126,6 @@ install:
 	cp -p --remove-destination updateTimes.csh         ${SCRIPTS}
 	cp -p --remove-destination updateTimesDb.csh       ${SCRIPTS}
 	cp -p --remove-destination whoMadeIt.csh           ${SCRIPTS}
+
+clean::
+	@echo nothing to clean in src/utils/qa/

@@ -9,3 +9,5 @@ O = mm.o
 mm: $O 
 	${CC} ${COPT} ${CFLAGS} -o mm $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

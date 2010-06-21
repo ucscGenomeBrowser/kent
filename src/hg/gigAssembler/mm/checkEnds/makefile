@@ -9,3 +9,5 @@ O = checkEnds.o
 checkEnds: $O 
 	${CC} ${COPT} ${CFLAGS} -o checkEnds $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

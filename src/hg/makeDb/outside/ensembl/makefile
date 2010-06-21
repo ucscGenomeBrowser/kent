@@ -14,4 +14,5 @@ ${SCRIPTS}/%: %
 	cp -f $< $@
 	chmod a+rx $@
 
-
+clean::
+	@echo nothing to clean in src/hg/makeDb/outside/ensembl/
