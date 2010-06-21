@@ -5,3 +5,5 @@ rpcalc: rpcalc.c
 rpcalc.c: rpcalc.y
 	bison -o rpcalc.c rpcalc.y
 
+clean::
+	rm -f rpcalc rpcalc.c

@@ -9,3 +9,5 @@ O = patchToAgp.o
 patchToAgp: $O 
 	${CC} ${COPT} ${CFLAGS} -o patchToAgp $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

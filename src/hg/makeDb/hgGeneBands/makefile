@@ -10,3 +10,6 @@ O = hgGeneBands.o
 hgGeneBands: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgGeneBands $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgGeneBands${EXE}
+
+clean::
+	rm -f ${O}

@@ -8,3 +8,5 @@ O = preProcGgfAndy.o
 preProcGgfAndy: $O 
 	gcc -o ${BINDIR}/preProcGgfAndy $O $(MYLIBS)
 
+clean::
+	rm -f ${O}

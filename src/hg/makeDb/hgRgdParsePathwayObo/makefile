@@ -15,5 +15,7 @@ test: test1
 	${MKDIR} output/$@
 	hgRgdParsePathwayObo input/$@ output/$@
 	diff -x CVS -r expected/$@ output/$@
-	rm -r output
+	rm -fr output
 
+clean::
+	rm -fr ${O} output

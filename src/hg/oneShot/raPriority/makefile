@@ -9,3 +9,6 @@ O = raPriority.o
 raPriority: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/raPriority $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/raPriority${EXE}
+
+clean::
+	rm -f ${O}

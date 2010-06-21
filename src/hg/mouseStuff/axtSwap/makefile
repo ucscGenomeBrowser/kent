@@ -9,3 +9,6 @@ O = axtSwap.o
 axtSwap: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/axtSwap $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/axtSwap${EXE}
+
+clean::
+	rm -f ${O}

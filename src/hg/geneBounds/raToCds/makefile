@@ -9,3 +9,6 @@ O = raToCds.o
 raToCds: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/raToCds $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/raToCds${EXE}
+
+clean::
+	rm -f ${O}

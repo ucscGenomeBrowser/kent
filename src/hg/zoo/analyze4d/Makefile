@@ -14,3 +14,5 @@ compile: $O
 	chmod a+rx $A
 	mv $A $(HOME)/bin/$(MACHTYPE)/analyze4d
 
+clean::
+	rm -f ${O}

@@ -9,3 +9,5 @@ O = tetFilter.o
 tetFilter: $O 
 	${CC} ${COPT} ${CFLAGS} -o tetFilter $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

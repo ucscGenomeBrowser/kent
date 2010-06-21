@@ -9,3 +9,6 @@ O = faFlyBaseToUcsc.o
 faFlyBaseToUcsc: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faFlyBaseToUcsc $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/faFlyBaseToUcsc${EXE}
+
+clean::
+	rm -f ${O}

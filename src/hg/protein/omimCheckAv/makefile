@@ -21,7 +21,6 @@ alpha: compile
 beta: compile
 	mv $A /usr/local/apache/cgi-bin-beta/$A
 
-
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} $O $(MYLIBS) $(L) 
 	mv ${AOUT} $A${EXE}
@@ -34,3 +33,5 @@ lib:
 tags: 
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
 
+clean::
+	rm -f ${O}

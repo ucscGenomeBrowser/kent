@@ -9,3 +9,6 @@ O = rmFromFinf.o
 rmFromFinf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/rmFromFinf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/rmFromFinf${EXE}
+
+clean::
+	rm -f ${O}

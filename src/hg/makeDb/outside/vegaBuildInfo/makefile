@@ -12,3 +12,5 @@ all: ${BIN}/vegaBuildInfo
 ${BIN}/vegaBuildInfo: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${BIN}/vegaBuildInfo $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

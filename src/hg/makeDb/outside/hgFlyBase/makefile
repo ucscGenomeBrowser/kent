@@ -9,3 +9,6 @@ O = hgFlyBase.o
 hgFlyBase: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgFlyBase $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/hgFlyBase${EXE}
+
+clean::
+	rm -f ${O}

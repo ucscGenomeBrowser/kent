@@ -9,4 +9,5 @@ L += ${JKWEB}
 ${BINDIR}/cluster: $(O) $(JKWEB)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/cluster $O $(L)
 
-
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = orfStats.o
 orfStats: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/orfStats $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/orfStats${EXE}
+
+clean::
+	rm -f ${O}

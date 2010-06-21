@@ -9,4 +9,5 @@ O = patJobs.o
 patJobs: $(O)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/patJobs $O ../../../../lib/$(MACHTYPE)/jkweb.a
 
-
+clean::
+	rm -f ${O}

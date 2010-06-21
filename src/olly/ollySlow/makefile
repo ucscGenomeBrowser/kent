@@ -10,3 +10,6 @@ O = ollySlow.o
 ollySlow: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ollySlow $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/ollySlow${EXE}
+
+clean::
+	rm -f ${O}

@@ -13,3 +13,6 @@ g2gSeqOverlap: $O $(MYLIBS)
 
 lib:
 	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

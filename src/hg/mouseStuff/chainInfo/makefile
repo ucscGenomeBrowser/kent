@@ -15,3 +15,5 @@ test: 22 7
 	diff expected/chr$@.out output/chr$@.out 
 	rm output/chr$@.out 
 
+clean::
+	rm -f ${O}

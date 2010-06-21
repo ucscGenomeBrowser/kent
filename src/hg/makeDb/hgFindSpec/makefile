@@ -12,3 +12,5 @@ hgFindSpec: compile
 compile: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgFindSpec $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

@@ -10,3 +10,6 @@ O = stringify.o
 stringify: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/stringify $O $(MYLIBS) $L
 	${STRIP} ${DESTDIR}${BINDIR}/stringify${EXE}
+
+clean::
+	rm -f ${O}

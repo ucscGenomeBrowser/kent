@@ -1,17 +1,6 @@
 include ../../../inc/common.mk
 # Build all directories in makeDb 
 
-all:
-	@for D in $(USE_DIRS) x; do \
-	  if test "$$D" != "x" ; then \
-	    ( cd $$D && echo $$D && $(MAKE) ) ;\
-	    x=$$? ; if [ $$x -ne 0 ]; then exit $$x ; fi \
-	    fi ;\
-	    done
-
-test::
-	cd joinerCheck && ${MAKE} test
-
 # List of directories to build
 USE_DIRS = $(DIRS)
 
@@ -22,3 +11,15 @@ DIRS = \
 	dbFindFieldsWith \
 	dbSnoop
 	
+all: $(USE_DIRS:%=%.all)
+
+%.all:
+	( cd $* && echo $* && $(MAKE) )
+
+clean:: $(USE_DIRS:%=%.clean)
+
+%.clean::
+	( cd $* && echo $* && $(MAKE) clean )
+
+test::
+	cd joinerCheck && ${MAKE} test

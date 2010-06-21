@@ -19,7 +19,7 @@ dragAndDrop subTracks
 priority 0
 type bed 3
 wgEncode 1
-dataVersion through the ENCODE Jan 2010 Freeze
+dataVersion through the ENCODE Jun 2010 Freeze
 noInherit on
 
     track wgEncodeUwHistoneViewPeaks
@@ -34,7 +34,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in BJ cells)
         subGroups view=aPeaks factor=CTCF cellType=BJ rank=1st
         type narrowPeak
         origAssembly hg18
@@ -44,7 +44,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12878 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12878 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12878 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -55,7 +55,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in K562 cells)
         subGroups view=aPeaks factor=CTCF cellType=K562 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -66,7 +66,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM06990 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM06990 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -76,7 +76,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in Caco-2 cells)
         subGroups view=aPeaks factor=CTCF cellType=Caco2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -86,7 +86,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12864 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12864 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12864 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12864 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -96,7 +96,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12865 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12865 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12865 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12865 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -106,7 +106,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12872 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12872 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12872 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12872 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -116,7 +116,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12874 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12874 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12874 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12874 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -126,7 +126,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in BJ cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=BJ rank=1st
         type narrowPeak
         origAssembly hg18
@@ -136,7 +136,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEK293 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HEK293 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HEK293 cells)
         subGroups view=aPeaks factor=CTCF cellType=HEK293 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -146,7 +146,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HeLa-S3 cells)
         subGroups view=aPeaks factor=CTCF cellType=HELA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -157,7 +157,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HepG2 cells)
         subGroups view=aPeaks factor=CTCF cellType=HEPG2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -168,7 +168,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL-60 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HL-60 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HL-60 cells)
         subGroups view=aPeaks factor=CTCF cellType=HL60 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -178,7 +178,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HMEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HMEC cells)
         subGroups view=aPeaks factor=CTCF cellType=HMEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -188,7 +188,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HRE cells)
         subGroups view=aPeaks factor=CTCF cellType=HRE rank=1st
         type narrowPeak
         origAssembly hg18
@@ -198,7 +198,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in HUVEC cells)
         subGroups view=aPeaks factor=CTCF cellType=HUVEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -209,7 +209,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in NHEK cells)
         subGroups view=aPeaks factor=CTCF cellType=NHEK rank=1st
         type narrowPeak
         origAssembly hg18
@@ -220,7 +220,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in SAEC cells)
         subGroups view=aPeaks factor=CTCF cellType=SAEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -230,7 +230,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=CTCF cellType=SKNSHRA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -240,7 +240,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel WERI-Rb-1 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in WERI-Rb-1 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in WERI-Rb-1 cells)
         subGroups view=aPeaks factor=CTCF cellType=WERIRb1 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -250,7 +250,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in BJ cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=BJ rank=1st
         type narrowPeak
         origAssembly hg18
@@ -260,7 +260,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in BJ cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=BJ rank=1st
         type narrowPeak
         origAssembly hg18
@@ -270,7 +270,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in Caco-2 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=Caco2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -280,7 +280,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in Caco-2 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=Caco2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -290,7 +290,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in Caco-2 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=Caco2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -300,7 +300,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in GM06990 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=GM06990 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -310,7 +310,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in BJ cells)
         subGroups view=aPeaks factor=CTCF cellType=BJ rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -320,7 +320,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel K562 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in K562 cells)
         subGroups view=aPeaks factor=CTCF cellType=K562 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -331,7 +331,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12878 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12878 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12878 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -342,7 +342,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in Caco-2 cells)
         subGroups view=aPeaks factor=CTCF cellType=Caco2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -352,7 +352,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM06990 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM06990 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -362,7 +362,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12865 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12865 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12865 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12865 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -372,7 +372,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12872 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12872 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12872 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12872 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -382,7 +382,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12874 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12874 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12874 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12874 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -392,7 +392,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in BJ cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=BJ rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -402,7 +402,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in Caco-2 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=Caco2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -412,7 +412,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in HeLa-S3 cells)
         subGroups view=aPeaks factor=CTCF cellType=HELA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -423,7 +423,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in HepG2 cells)
         subGroups view=aPeaks factor=CTCF cellType=HEPG2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -434,7 +434,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in HRE cells)
         subGroups view=aPeaks factor=CTCF cellType=HRE rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -444,7 +444,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in HUVEC cells)
         subGroups view=aPeaks factor=CTCF cellType=HUVEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -455,7 +455,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in NHEK cells)
         subGroups view=aPeaks factor=CTCF cellType=NHEK rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -466,7 +466,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in SAEC cells)
         subGroups view=aPeaks factor=CTCF cellType=SAEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -476,7 +476,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=CTCF cellType=SKNSHRA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -486,7 +486,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in BJ cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=BJ rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -496,7 +496,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel BJ H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in BJ cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in BJ cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=BJ rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -506,7 +506,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in Caco-2 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=Caco2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -516,7 +516,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in GM06990 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=GM06990 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -526,7 +526,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in GM06990 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=GM06990 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -536,7 +536,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in GM06990 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=GM06990 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -546,7 +546,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in GM06990 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=GM06990 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -556,7 +556,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12878 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in GM12878 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=GM12878 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -567,7 +567,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12878 H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in GM12878 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=GM12878 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -578,7 +578,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel GM12878 H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in GM12878 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=GM12878 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -589,7 +589,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in HeLa-S3 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HELA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -600,7 +600,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in HeLa-S3 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HELA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -611,7 +611,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in HeLa-S3 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HELA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -622,7 +622,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in HepG2 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HEPG2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -633,7 +633,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in HepG2 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HEPG2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -644,7 +644,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in HepG2 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HEPG2 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -655,7 +655,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL-60 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in HL-60 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in HL-60 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HL60 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -665,7 +665,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HMEC H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in HMEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in HMEC cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HMEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -675,7 +675,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in HRE cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HRE rank=1st
         type narrowPeak
         origAssembly hg18
@@ -685,7 +685,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in HRE cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HRE rank=1st
         type narrowPeak
         origAssembly hg18
@@ -695,7 +695,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HUVEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -706,7 +706,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HUVEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -717,7 +717,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HUVEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -728,7 +728,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in K562 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=K562 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -739,7 +739,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in K562 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=K562 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -750,7 +750,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks
         shortLabel K562 H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in K562 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=K562 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -761,7 +761,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in NHEK cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=NHEK rank=1st
         type narrowPeak
         origAssembly hg18
@@ -772,7 +772,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in NHEK cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=NHEK rank=1st
         type narrowPeak
         origAssembly hg18
@@ -783,7 +783,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in NHEK cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=NHEK rank=1st
         type narrowPeak
         origAssembly hg18
@@ -794,7 +794,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in SAEC cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=SAEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -804,7 +804,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in SAEC cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=SAEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -814,7 +814,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in SAEC cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=SAEC rank=1st
         type narrowPeak
         origAssembly hg18
@@ -824,7 +824,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=SKNSHRA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -834,7 +834,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA H3K27me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K27me3 in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K27me3 in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=SKNSHRA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -844,7 +844,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA H3K36me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K36me3 in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K36me3 in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=SKNSHRA rank=1st
         type narrowPeak
         origAssembly hg18
@@ -854,7 +854,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12864 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12864 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12864 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12864 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -864,7 +864,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel Caco-2 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in Caco-2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in Caco-2 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=Caco2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -874,7 +874,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM06990 H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in GM06990 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in GM06990 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=GM06990 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -884,7 +884,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12878 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in GM12878 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=GM12878 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -895,7 +895,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12878 H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in GM12878 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=GM12878 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -906,7 +906,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12878 H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in GM12878 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in GM12878 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=GM12878 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -917,7 +917,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in HeLa-S3 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HELA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -928,7 +928,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in HeLa-S3 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HELA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -939,7 +939,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HeLa-S3 H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in HeLa-S3 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in HeLa-S3 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HELA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -950,7 +950,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in HepG2 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HEPG2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -961,7 +961,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HepG2 H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in HepG2 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in HepG2 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HEPG2 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -972,7 +972,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HL-60 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in HL-60 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in HL-60 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HL60 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -982,7 +982,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in HRE cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HRE rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -992,7 +992,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in HRE cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HRE rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1002,7 +1002,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in HRE cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HRE rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1012,7 +1012,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HUVEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1023,7 +1023,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=HUVEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1034,7 +1034,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HUVEC H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in HUVEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in HUVEC cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=HUVEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1045,7 +1045,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel K562 H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in K562 cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=K562 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1056,7 +1056,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel K562 H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in K562 cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=K562 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1067,7 +1067,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel K562 H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in K562 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in K562 cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=K562 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1078,7 +1078,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in NHEK cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=NHEK rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1089,7 +1089,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in NHEK cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=NHEK rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1100,7 +1100,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in SAEC cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=SAEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1110,7 +1110,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in SAEC cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=SAEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1120,7 +1120,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SAEC H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in SAEC cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in SAEC cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=SAEC rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1130,7 +1130,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA H3K4me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K4me3 in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K4me3 in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=SKNSHRA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1140,7 +1140,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=SKNSHRA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1150,7 +1150,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel SK-N-SH_RA H3K36me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K36me3 in SK-N-SH_RA cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K36me3 in SK-N-SH_RA cells)
         subGroups view=aPeaks factor=H3K36me3 cellType=SKNSHRA rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1160,7 +1160,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12873 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12873 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12873 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12873 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -1170,7 +1170,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12875 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12875 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12875 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12875 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -1180,7 +1180,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HRE H3K4me3 P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (H3K4me3 in HRE cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (H3K4me3 in HRE cells)
         subGroups view=aPeaks factor=H3K04me3 cellType=HRE rank=1st
         type narrowPeak
         origAssembly hg18
@@ -1190,7 +1190,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12801 CTCF P1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 1st (CTCF in GM12801 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 1st (CTCF in GM12801 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12801 rank=1st
         type narrowPeak
         origAssembly hg18
@@ -1200,7 +1200,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12873 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12873 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12873 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12873 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1210,7 +1210,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel HEK293 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in HEK293 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in HEK293 cells)
         subGroups view=aPeaks factor=CTCF cellType=HEK293 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1220,7 +1220,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel GM12875 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in GM12875 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in GM12875 cells)
         subGroups view=aPeaks factor=CTCF cellType=GM12875 rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1230,7 +1230,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel NHEK H3K27me3 P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (H3K27me3 in NHEK cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (H3K27me3 in NHEK cells)
         subGroups view=aPeaks factor=H3K27me3 cellType=NHEK rank=2nd
         type narrowPeak
         origAssembly hg18
@@ -1241,7 +1241,7 @@ noInherit on
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
         shortLabel WERI-Rb-1 CTCF P2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 0.5%) - 2nd (CTCF in WERI-Rb-1 cells)
+        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) - 2nd (CTCF in WERI-Rb-1 cells)
         subGroups view=aPeaks factor=CTCF cellType=WERIRb1 rank=2nd
         type narrowPeak
         origAssembly hg18

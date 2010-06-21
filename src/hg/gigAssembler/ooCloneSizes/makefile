@@ -10,3 +10,5 @@ O = ooCloneSizes.o
 ooCloneSizes: $O 
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/ooCloneSizes $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

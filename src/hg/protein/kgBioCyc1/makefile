@@ -10,5 +10,5 @@ kgBioCyc1: $O ${MYLIBS}
 	${CC} ${COPT} -o ${BINDIR}/kgBioCyc1 $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/kgBioCyc1${EXE}
 
-clean:
-	rm -f $O
+clean::
+	rm -f ${O}

@@ -16,3 +16,6 @@ ${SCRIPTS}/%: %
 	chmod a+rx $<
 	rm -f $@
 	cp -pf $< $@
+
+clean::
+	@echo nothing to clean in src/utils/gitTools/

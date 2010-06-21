@@ -9,3 +9,6 @@ O = lavToAxt.o
 lavToAxt: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/lavToAxt $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/lavToAxt${EXE}
+
+clean::
+	rm -f ${O}

@@ -16401,13 +16401,43 @@ see file: ucscGenes10.txt
       # Get all of the narrowPeak file for wgEncodeYaleChIPseq into tfbs/yale
       # directory and create all.lst by cutting and pasting 
       # the file list from
-      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
+      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPSeq/
       cd /hive/users/kent/regulate/tfbs/yale
       grep narrowPeak all. > peak.lst
       cut -f 2 peak.lst > file.lst
       foreach i (`cat file.lst`)
-          wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/$i
+          wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPSeq/$i
       end
+
+      # Get the narrow and broad peak files into the tfbs/hudsonAlpha dir
+      # For this one I checked that the files in 
+      # /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq
+      # were the same for *Peak.gz as those at
+      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
+      # and then did a symbolic link for easy access
+      mkdir /hive/users/kent/regulate/tfbs/hudsonAlpha
+      cd /hive/users/kent/regulate/tfbs/hudsonAlpha
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq ftpDir
+      ls ftpDir/*Peak.gz > inFiles
+
+      # Make files that merge replicates.  I'll describe what I did rather
+      # than make a script for it because it's likely to change.  I looked
+      # through and noted that there was a single file lacking a replicate:
+      #     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf.broadPeak.gz
+      # and excluded that.  I made a batch file that then called
+      # encodeMergeReplicates on all replicate pairs with the following
+      # options:
+      #      -add -maxMin -uniqueName
+      # which resulted in a "merged" directory full of 70 files in the form
+      #     wgEncodeHudsonalphaChipSeqPeaksHepg2Pol2.*Peak
+
+      # Clean this up a bit to make all a uniform narrowPeak format by doing
+      cd merged
+      foreach i (*.broadPeak)
+         awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' $i > $i:r.narrowPeak
+      end
+      rm *.broadPeak
+
       regClusterBedExpCfg peak.lst -encodeList peak.cfg
       # Then edit peak.cfg to make sure all cell lines have uniq letters
       hgBedsToBedExps peak.cfg peak.bed peak.exps
@@ -30173,7 +30203,43 @@ hgLoadBed hg18 decipher decipher.bed
 # create knownToDecipher table.
 hgMapToGene -all hg18 decipher knownGene knownToDecipher
 #############################################################################
-# Add KEGG column to hg18 Gene Sorter (Done, Fan, 6/15/2010)
+# UPDATE KEGG TABLES (DONE, Fan, 6/18/10)
+
+mkdir -p /hive/data/genomes/hg18/bed/pathways/kegg
+cd /hive/data/genomes/hg18/bed/pathways/kegg
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+
+cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+cut -f 2 j.tmp >j.hsa
+cut -f 1,3 j.tmp >j.1
+paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+rm j.hsa j.1
+rm j.tmp
+
+hgsql hg18 -e 'drop table keggMapDesc'
+hgsql hg18 < ~/kent/src/hg/lib/keggMapDesc.sql
+hgsql hg18 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+
+cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+hgsql hg18 -e 'drop table keggPathway'
+hgsql hg18 < ~/kent/src/hg/lib/keggPathway.sql
+hgsql hg18 -e 'load data local infile "j.tmp" into table keggPathway'
+
+hgsql hg18 -N -e \
+'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+>keggPathway.tab
+
+hgsql hg18 -e 'delete from keggPathway'
+
+hgsql hg18 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+rm j.tmp
+
+#############################################################################
+# Add KEGG column to hg18 Gene Sorter (Done, Fan, 6/18/2010)
 
 mkdir -p /hive/data/genomes/hg18/bed/geneSorter
 cd /hive/data/genomes/hg18/bed/geneSorter

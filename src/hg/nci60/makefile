@@ -11,11 +11,10 @@ O = findStanAlignments  stanToBedAndExpRecs
 	${CC} ${COPT} ${CFLAGS}  -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
 	cp $@ ${BINDIR}/
 
-all : $(O)
+all: $(O)
 
-#$(O) : %: %.c ../lib/$(ARCHTYPE)/libsugnet.a 
+#$(O): %: %.c ../lib/$(ARCHTYPE)/libsugnet.a 
 #	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I$(KENT_DIR)/inc -I$(KENT_DIR)/hg/inc -o $@ $(addsuffix .c,$@)  $(SUGNET_LIBS) $(KENT_LIBS)
 
-clean :
-	rm -f $(O)
-	rm -rf $(ARCHTYPE) 
+clean::
+	rm -fr ${O} ${ARCHTYPE} 

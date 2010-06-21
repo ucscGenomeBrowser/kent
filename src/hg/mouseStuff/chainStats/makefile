@@ -9,3 +9,6 @@ O = chainStats.o
 chainStats: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/chainStats $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/chainStats${EXE}
+
+clean::
+	rm -f ${O}

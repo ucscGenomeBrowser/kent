@@ -10,3 +10,6 @@ O = mafAddIRows.o
 mafAddIRows: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/mafAddIRows $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/mafAddIRows${EXE}
+
+clean::
+	rm -f ${O}
