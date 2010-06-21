@@ -1,5 +1,6 @@
 /* upperFile - convert file to upper case. */
-#include "common.h
+
+#include "common.h"
 #include "linefile.h"
 
 void testGitRename(char *input, char *output)
