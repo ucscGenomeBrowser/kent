@@ -2,9 +2,10 @@
 
 #include "common.h"
 #include "linefile.h"
+#include "upperFile.h"
 
-void testGitRename(char *input, char *output)
-/* testGitRename - Just a little something to test renaming, merging, etc.. */
+void upperFile(char *input, char *output)
+/* upperFile - convert file to upper case. */
 {
 struct lineFile *lf = lineFileOpen(input, TRUE);
 FILE *f = mustOpen(output, "w");
@@ -14,7 +15,6 @@ while (lineFileNext(lf, &line, NULL))
     touppers(line);
     fprintf(f, "%s\n", line);
     }
-
 carefulClose(&f);
 }
 
