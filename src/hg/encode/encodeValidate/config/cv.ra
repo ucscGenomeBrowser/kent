@@ -2706,8 +2706,8 @@ targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
 
-term H3K76me2
-tag H3K76me2
+term H3K79me2
+tag H3K79me2
 type Antibody
 antibodyDescription (provisional) Unknown at this time
 targetDescription (provisional) Unknown at this time
