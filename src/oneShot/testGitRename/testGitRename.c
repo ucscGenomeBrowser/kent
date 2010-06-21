@@ -12,7 +12,7 @@ void usage()
 errAbort(
   "testGitRename - Just a little something to test renaming, merging, etc.\n"
   "usage:\n"
-  "   testGitRename XXX\n"
+  "   testGitRename input output\n"
   "options:\n"
   "   -xxx=XXX\n"
   );
@@ -22,17 +22,27 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void testGitRename(char *XXX)
+void testGitRename(char *input, char *output)
 /* testGitRename - Just a little something to test renaming, merging, etc.. */
 {
+struct lineFile *lf = lineFileOpen(input, TRUE);
+FILE *f = mustOpen(output, "w");
+char *line;
+while (lineFileNext(lf, &line, NULL))
+    {
+    touppers(line);
+    fprintf(f, "%s\n", line);
+    }
+
+carefulClose(&f);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 2)
+if (argc != 3)
     usage();
-testGitRename(argv[1]);
+testGitRename(argv[1], argv[2]);
 return 0;
 }
