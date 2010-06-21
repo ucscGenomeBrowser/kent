@@ -1,0 +1,5780 @@
+metaObject wgEncodeUwDnaseAg04449AlnRep1
+objType file
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-05
+fileName wgEncodeUwDnaseAg04449AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg04449AlnRep1
+project wgEncode
+replicate 1
+subId 1257
+view Alignments
+
+metaObject wgEncodeUwDnaseAg04449AlnRep2
+objType file
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04449AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg04449AlnRep2
+project wgEncode
+replicate 2
+subId 1548
+view Alignments
+
+metaObject wgEncodeUwDnaseAg04449HotspotsRep1
+objType table
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-05
+fileName wgEncodeUwDnaseAg04449HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1257
+tableName wgEncodeUwDnaseAg04449HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg04449HotspotsRep2
+objType table
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04449HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1548
+tableName wgEncodeUwDnaseAg04449HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg04449PkRep1
+objType table
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-05
+fileName wgEncodeUwDnaseAg04449PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1257
+tableName wgEncodeUwDnaseAg04449PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseAg04449PkRep2
+objType table
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04449PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1548
+tableName wgEncodeUwDnaseAg04449PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseAg04449RawRep1
+objType table
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-07
+dateSubmitted 2010-01-06
+dateUnrestricted 2010-10-05
+fileName wgEncodeUwDnaseAg04449RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1257
+tableName wgEncodeUwDnaseAg04449RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg04449RawRep2
+objType table
+cell AG04449
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04449RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1548
+tableName wgEncodeUwDnaseAg04449RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg04450AlnRep1
+objType file
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg04450AlnRep1
+project wgEncode
+replicate 1
+subId 1550
+view Alignments
+
+metaObject wgEncodeUwDnaseAg04450AlnRep2
+objType file
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg04450AlnRep2
+project wgEncode
+replicate 2
+subId 1549
+view Alignments
+
+metaObject wgEncodeUwDnaseAg04450HotspotsRep1
+objType table
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1550
+tableName wgEncodeUwDnaseAg04450HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg04450HotspotsRep2
+objType table
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1549
+tableName wgEncodeUwDnaseAg04450HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg04450PkRep1
+objType table
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1550
+tableName wgEncodeUwDnaseAg04450PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseAg04450PkRep2
+objType table
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1549
+tableName wgEncodeUwDnaseAg04450PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseAg04450RawRep1
+objType table
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1550
+tableName wgEncodeUwDnaseAg04450RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg04450RawRep2
+objType table
+cell AG04450
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg04450RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1549
+tableName wgEncodeUwDnaseAg04450RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg09309AlnRep1
+objType file
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg09309AlnRep1
+project wgEncode
+replicate 1
+subId 1551
+view Alignments
+
+metaObject wgEncodeUwDnaseAg09309AlnRep2
+objType file
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg09309AlnRep2
+project wgEncode
+replicate 2
+subId 1552
+view Alignments
+
+metaObject wgEncodeUwDnaseAg09309HotspotsRep1
+objType table
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1551
+tableName wgEncodeUwDnaseAg09309HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg09309HotspotsRep2
+objType table
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1552
+tableName wgEncodeUwDnaseAg09309HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg09309PkRep1
+objType table
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1551
+tableName wgEncodeUwDnaseAg09309PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseAg09309PkRep2
+objType table
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1552
+tableName wgEncodeUwDnaseAg09309PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseAg09309RawRep1
+objType table
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1551
+tableName wgEncodeUwDnaseAg09309RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg09309RawRep2
+objType table
+cell AG09309
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09309RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1552
+tableName wgEncodeUwDnaseAg09309RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg09319AlnRep1
+objType file
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg09319AlnRep1
+project wgEncode
+replicate 1
+subId 1554
+view Alignments
+
+metaObject wgEncodeUwDnaseAg09319AlnRep2
+objType file
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg09319AlnRep2
+project wgEncode
+replicate 2
+subId 1553
+view Alignments
+
+metaObject wgEncodeUwDnaseAg09319HotspotsRep1
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1554
+tableName wgEncodeUwDnaseAg09319HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg09319HotspotsRep2
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1553
+tableName wgEncodeUwDnaseAg09319HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg09319PkRep1
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1554
+tableName wgEncodeUwDnaseAg09319PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseAg09319PkRep2
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1553
+tableName wgEncodeUwDnaseAg09319PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseAg09319RawRep1
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1554
+tableName wgEncodeUwDnaseAg09319RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg09319RawRep2
+objType table
+cell AG09319
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-07
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseAg09319RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1553
+tableName wgEncodeUwDnaseAg09319RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg10803AlnRep1
+objType file
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg10803AlnRep1
+project wgEncode
+replicate 1
+subId 1576
+view Alignments
+
+metaObject wgEncodeUwDnaseAg10803AlnRep2
+objType file
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseAg10803AlnRep2
+project wgEncode
+replicate 2
+subId 1555
+view Alignments
+
+metaObject wgEncodeUwDnaseAg10803HotspotsRep1
+objType table
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1576
+tableName wgEncodeUwDnaseAg10803HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg10803HotspotsRep2
+objType table
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1555
+tableName wgEncodeUwDnaseAg10803HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseAg10803PkRep1
+objType table
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1576
+tableName wgEncodeUwDnaseAg10803PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseAg10803PkRep2
+objType table
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1555
+tableName wgEncodeUwDnaseAg10803PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseAg10803RawRep1
+objType table
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1576
+tableName wgEncodeUwDnaseAg10803RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseAg10803RawRep2
+objType table
+cell AG10803
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseAg10803RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1555
+tableName wgEncodeUwDnaseAg10803RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseBjAlnRep1
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-06-19
+dateUnrestricted 2011-03-19
+fileName wgEncodeUwDnaseBjAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseBjAlnRep1
+project wgEncode
+replicate 1
+subId 1648
+view Alignments
+
+metaObject wgEncodeUwDnaseBjAlnRep2
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-06
+dateSubmitted 2010-06-06
+dateUnrestricted 2011-03-06
+fileName wgEncodeUwDnaseBjAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseBjAlnRep2
+project wgEncode
+replicate 2
+subId 1249
+view Alignments
+
+metaObject wgEncodeUwDnaseBjHotspotsRep1
+objType table
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-06-19
+dateUnrestricted 2011-03-19
+fileName wgEncodeUwDnaseBjHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1648
+tableName wgEncodeUwDnaseBjHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseBjHotspotsRep2
+objType table
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-06
+dateSubmitted 2010-06-06
+dateUnrestricted 2011-03-06
+fileName wgEncodeUwDnaseBjHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1249
+tableName wgEncodeUwDnaseBjHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseBjPkRep1
+objType table
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-06-19
+dateUnrestricted 2011-03-19
+fileName wgEncodeUwDnaseBjPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1648
+tableName wgEncodeUwDnaseBjPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseBjPkRep2
+objType table
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-06
+dateSubmitted 2010-06-06
+dateUnrestricted 2011-03-06
+fileName wgEncodeUwDnaseBjPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1249
+tableName wgEncodeUwDnaseBjPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseBjRawDataRep2
+objType file
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-06
+dateSubmitted 2010-06-06
+dateUnrestricted 2011-03-06
+fileName wgEncodeUwDnaseBjRawDataRep2.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+parentTable wgEncodeUwDnaseBjRawSignalRep2
+project wgEncode
+replicate 2
+subId 1249
+view RawData
+
+metaObject wgEncodeUwDnaseBjRawRep1
+objType table
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-06-19
+dateUnrestricted 2011-03-19
+fileName wgEncodeUwDnaseBjRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1648
+tableName wgEncodeUwDnaseBjRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseBjRawRep2
+objType table
+cell BJ
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-06
+dateSubmitted 2010-06-06
+dateUnrestricted 2011-03-06
+fileName wgEncodeUwDnaseBjRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1249
+tableName wgEncodeUwDnaseBjRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseCaco2AlnRep1
+objType file
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-24
+dateUnrestricted 2010-01-24
+fileName wgEncodeUwDnaseCaco2AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseCaco2AlnRep1
+project wgEncode
+replicate 1
+subId 1644
+view Alignments
+
+metaObject wgEncodeUwDnaseCaco2AlnRep2
+objType file
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-03-30
+fileName wgEncodeUwDnaseCaco2AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseCaco2AlnRep2
+project wgEncode
+replicate 2
+subId 1590
+view Alignments
+
+metaObject wgEncodeUwDnaseCaco2HotspotsRep1
+objType table
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-24
+dateUnrestricted 2010-01-24
+fileName wgEncodeUwDnaseCaco2HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1644
+tableName wgEncodeUwDnaseCaco2HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseCaco2HotspotsRep2
+objType table
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-03-30
+fileName wgEncodeUwDnaseCaco2HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1590
+tableName wgEncodeUwDnaseCaco2HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseCaco2PkRep1
+objType table
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-24
+dateUnrestricted 2010-01-24
+fileName wgEncodeUwDnaseCaco2PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1644
+tableName wgEncodeUwDnaseCaco2PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseCaco2PkRep2
+objType table
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-03-30
+fileName wgEncodeUwDnaseCaco2PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1590
+tableName wgEncodeUwDnaseCaco2PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseCaco2RawRep1
+objType table
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-24
+dateUnrestricted 2010-01-24
+fileName wgEncodeUwDnaseCaco2RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1644
+tableName wgEncodeUwDnaseCaco2RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseCaco2RawRep2
+objType table
+cell Caco-2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-03-30
+fileName wgEncodeUwDnaseCaco2RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1590
+tableName wgEncodeUwDnaseCaco2RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseCmkAlnRep1
+objType file
+cell CMK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseCmkAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseCmkAlnRep1
+project wgEncode
+replicate 1
+subId 1586
+view Alignments
+
+metaObject wgEncodeUwDnaseCmkHotspotsRep1
+objType table
+cell CMK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseCmkHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1586
+tableName wgEncodeUwDnaseCmkHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseCmkPkRep1
+objType table
+cell CMK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseCmkPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1586
+tableName wgEncodeUwDnaseCmkPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseCmkRawRep1
+objType table
+cell CMK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseCmkRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1586
+tableName wgEncodeUwDnaseCmkRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm06990AlnRep1
+objType file
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseGm06990AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseGm06990AlnRep1
+project wgEncode
+replicate 1
+subId 1616
+view Alignments
+
+metaObject wgEncodeUwDnaseGm06990AlnRep2
+objType file
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm06990AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseGm06990AlnRep2
+project wgEncode
+replicate 2
+subId 1614
+view Alignments
+
+metaObject wgEncodeUwDnaseGm06990HotspotsRep1
+objType table
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseGm06990HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1616
+tableName wgEncodeUwDnaseGm06990HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm06990HotspotsRep2
+objType table
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm06990HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1614
+tableName wgEncodeUwDnaseGm06990HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm06990PkRep1
+objType table
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseGm06990PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1616
+tableName wgEncodeUwDnaseGm06990PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseGm06990PkRep2
+objType table
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm06990PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1614
+tableName wgEncodeUwDnaseGm06990PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseGm06990RawRep1
+objType table
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseGm06990RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1616
+tableName wgEncodeUwDnaseGm06990RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm06990RawRep2
+objType table
+cell GM06990
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm06990RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1614
+tableName wgEncodeUwDnaseGm06990RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm12865AlnRep1
+objType file
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseGm12865AlnRep1
+project wgEncode
+replicate 1
+subId 1564
+view Alignments
+
+metaObject wgEncodeUwDnaseGm12865AlnRep2
+objType file
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseGm12865AlnRep2
+project wgEncode
+replicate 2
+subId 1589
+view Alignments
+
+metaObject wgEncodeUwDnaseGm12865HotspotsRep1
+objType table
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1564
+tableName wgEncodeUwDnaseGm12865HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm12865HotspotsRep2
+objType table
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1589
+tableName wgEncodeUwDnaseGm12865HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm12865PkRep1
+objType table
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1564
+tableName wgEncodeUwDnaseGm12865PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseGm12865PkRep2
+objType table
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1589
+tableName wgEncodeUwDnaseGm12865PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseGm12865RawRep1
+objType table
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1564
+tableName wgEncodeUwDnaseGm12865RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm12865RawRep2
+objType table
+cell GM12865
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseGm12865RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1589
+tableName wgEncodeUwDnaseGm12865RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm12878AlnRep1
+objType file
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseGm12878AlnRep1
+project wgEncode
+replicate 1
+subId 1587
+view Alignments
+
+metaObject wgEncodeUwDnaseGm12878AlnRep2
+objType file
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseGm12878AlnRep2
+project wgEncode
+replicate 2
+subId 1649
+view Alignments
+
+metaObject wgEncodeUwDnaseGm12878HotspotsRep1
+objType table
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1587
+tableName wgEncodeUwDnaseGm12878HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm12878HotspotsRep2
+objType table
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1649
+tableName wgEncodeUwDnaseGm12878HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseGm12878PkRep1
+objType table
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1587
+tableName wgEncodeUwDnaseGm12878PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseGm12878PkRep2
+objType table
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1649
+tableName wgEncodeUwDnaseGm12878PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseGm12878RawRep1
+objType table
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1587
+tableName wgEncodeUwDnaseGm12878RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseGm12878RawRep2
+objType table
+cell GM12878
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseGm12878RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1649
+tableName wgEncodeUwDnaseGm12878RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseH1hescAlnRep1
+objType file
+cell H1-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-18
+fileName wgEncodeUwDnaseH1hescAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseH1hescAlnRep1
+project wgEncode
+replicate 1
+subId 1588
+view Alignments
+
+metaObject wgEncodeUwDnaseH1hescHotspotsRep1
+objType table
+cell H1-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-18
+fileName wgEncodeUwDnaseH1hescHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1588
+tableName wgEncodeUwDnaseH1hescHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseH1hescPkRep1
+objType table
+cell H1-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-18
+fileName wgEncodeUwDnaseH1hescPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1588
+tableName wgEncodeUwDnaseH1hescPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseH1hescRawRep1
+objType table
+cell H1-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-18
+fileName wgEncodeUwDnaseH1hescRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1588
+tableName wgEncodeUwDnaseH1hescRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseH7esAlnRep1
+objType file
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseH7esAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseH7esAlnRep1
+project wgEncode
+replicate 1
+subId 1592
+view Alignments
+
+metaObject wgEncodeUwDnaseH7esHotspotsRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseH7esHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1592
+tableName wgEncodeUwDnaseH7esHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseH7esPkRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseH7esPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1592
+tableName wgEncodeUwDnaseH7esPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseH7esRawRep1
+objType table
+cell H7-hESC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseH7esRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1592
+tableName wgEncodeUwDnaseH7esRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHaeAlnRep1
+objType file
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHaeAlnRep1
+project wgEncode
+replicate 1
+subId 1565
+view Alignments
+
+metaObject wgEncodeUwDnaseHaeAlnRep2
+objType file
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHaeAlnRep2
+project wgEncode
+replicate 2
+subId 1579
+view Alignments
+
+metaObject wgEncodeUwDnaseHaeHotspotsRep1
+objType table
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1565
+tableName wgEncodeUwDnaseHaeHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHaeHotspotsRep2
+objType table
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1579
+tableName wgEncodeUwDnaseHaeHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHaePkRep1
+objType table
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1565
+tableName wgEncodeUwDnaseHaePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHaePkRep2
+objType table
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1579
+tableName wgEncodeUwDnaseHaePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHaeRawRep1
+objType table
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1565
+tableName wgEncodeUwDnaseHaeRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHaeRawRep2
+objType table
+cell HAEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHaeRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1579
+tableName wgEncodeUwDnaseHaeRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcfAlnRep1
+objType file
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcfAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHcfAlnRep1
+project wgEncode
+replicate 1
+subId 1591
+view Alignments
+
+metaObject wgEncodeUwDnaseHcfAlnRep2
+objType file
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcfAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHcfAlnRep2
+project wgEncode
+replicate 2
+subId 1593
+view Alignments
+
+metaObject wgEncodeUwDnaseHcfHotspotsRep1
+objType table
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1591
+tableName wgEncodeUwDnaseHcfHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcfHotspotsRep2
+objType table
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcfHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1593
+tableName wgEncodeUwDnaseHcfHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcfPkRep1
+objType table
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcfPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1591
+tableName wgEncodeUwDnaseHcfPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHcfPkRep2
+objType table
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcfPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1593
+tableName wgEncodeUwDnaseHcfPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHcfRawRep1
+objType table
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcfRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1591
+tableName wgEncodeUwDnaseHcfRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcfRawRep2
+objType table
+cell HCF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcfRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1593
+tableName wgEncodeUwDnaseHcfRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcmAlnRep1
+objType file
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHcmAlnRep1
+project wgEncode
+replicate 1
+subId 1600
+view Alignments
+
+metaObject wgEncodeUwDnaseHcmAlnRep2
+objType file
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHcmAlnRep2
+project wgEncode
+replicate 2
+subId 1595
+view Alignments
+
+metaObject wgEncodeUwDnaseHcmHotspotsRep1
+objType table
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1600
+tableName wgEncodeUwDnaseHcmHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcmHotspotsRep2
+objType table
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1595
+tableName wgEncodeUwDnaseHcmHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcmPkRep1
+objType table
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1600
+tableName wgEncodeUwDnaseHcmPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHcmPkRep2
+objType table
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1595
+tableName wgEncodeUwDnaseHcmPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHcmRawRep1
+objType table
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1600
+tableName wgEncodeUwDnaseHcmRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcmRawRep2
+objType table
+cell HCM
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHcmRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1595
+tableName wgEncodeUwDnaseHcmRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcpeAlnRep1
+objType file
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHcpeAlnRep1
+project wgEncode
+replicate 1
+subId 1598
+view Alignments
+
+metaObject wgEncodeUwDnaseHcpeAlnRep2
+objType file
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHcpeAlnRep2
+project wgEncode
+replicate 2
+subId 1599
+view Alignments
+
+metaObject wgEncodeUwDnaseHcpeHotspotsRep1
+objType table
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1598
+tableName wgEncodeUwDnaseHcpeHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcpeHotspotsRep2
+objType table
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1599
+tableName wgEncodeUwDnaseHcpeHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHcpePkRep1
+objType table
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1598
+tableName wgEncodeUwDnaseHcpePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHcpePkRep2
+objType table
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1599
+tableName wgEncodeUwDnaseHcpePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHcpeRawRep1
+objType table
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1598
+tableName wgEncodeUwDnaseHcpeRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHcpeRawRep2
+objType table
+cell HCPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHcpeRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1599
+tableName wgEncodeUwDnaseHcpeRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHeeAlnRep1
+objType file
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseHeeAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHeeAlnRep1
+project wgEncode
+replicate 1
+subId 1601
+view Alignments
+
+metaObject wgEncodeUwDnaseHeeAlnRep2
+objType file
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHeeAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHeeAlnRep2
+project wgEncode
+replicate 2
+subId 1602
+view Alignments
+
+metaObject wgEncodeUwDnaseHeeHotspotsRep1
+objType table
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseHeeHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1601
+tableName wgEncodeUwDnaseHeeHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHeeHotspotsRep2
+objType table
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHeeHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1602
+tableName wgEncodeUwDnaseHeeHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHeePkRep1
+objType table
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseHeePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1601
+tableName wgEncodeUwDnaseHeePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHeePkRep2
+objType table
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHeePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1602
+tableName wgEncodeUwDnaseHeePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHeeRawRep1
+objType table
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseHeeRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1601
+tableName wgEncodeUwDnaseHeeRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHeeRawRep2
+objType table
+cell HEEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHeeRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1602
+tableName wgEncodeUwDnaseHeeRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHelas3AlnRep1
+objType file
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHelas3AlnRep1
+project wgEncode
+replicate 1
+subId 1605
+view Alignments
+
+metaObject wgEncodeUwDnaseHelas3AlnRep2
+objType file
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHelas3AlnRep2
+project wgEncode
+replicate 2
+subId 1604
+view Alignments
+
+metaObject wgEncodeUwDnaseHelas3HotspotsRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1605
+tableName wgEncodeUwDnaseHelas3HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHelas3HotspotsRep2
+objType table
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1604
+tableName wgEncodeUwDnaseHelas3HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHelas3PkRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1605
+tableName wgEncodeUwDnaseHelas3PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHelas3PkRep2
+objType table
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1604
+tableName wgEncodeUwDnaseHelas3PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHelas3RawRep1
+objType table
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1605
+tableName wgEncodeUwDnaseHelas3RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHelas3RawRep2
+objType table
+cell HeLa-S3
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHelas3RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1604
+tableName wgEncodeUwDnaseHelas3RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHepg2AlnRep1
+objType file
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseHepg2AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHepg2AlnRep1
+project wgEncode
+replicate 1
+subId 1617
+view Alignments
+
+metaObject wgEncodeUwDnaseHepg2AlnRep2
+objType file
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHepg2AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHepg2AlnRep2
+project wgEncode
+replicate 2
+subId 1615
+view Alignments
+
+metaObject wgEncodeUwDnaseHepg2HotspotsRep1
+objType table
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseHepg2HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1617
+tableName wgEncodeUwDnaseHepg2HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHepg2HotspotsRep2
+objType table
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHepg2HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1615
+tableName wgEncodeUwDnaseHepg2HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHepg2PkRep1
+objType table
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseHepg2PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1617
+tableName wgEncodeUwDnaseHepg2PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHepg2PkRep2
+objType table
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHepg2PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1615
+tableName wgEncodeUwDnaseHepg2PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHepg2RawRep1
+objType table
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2008-11-19
+dateUnrestricted 2009-08-18
+fileName wgEncodeUwDnaseHepg2RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1617
+tableName wgEncodeUwDnaseHepg2RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHepg2RawRep2
+objType table
+cell HepG2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-01
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHepg2RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1615
+tableName wgEncodeUwDnaseHepg2RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHgfAlnRep1
+objType file
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHgfAlnRep1
+project wgEncode
+replicate 1
+subId 1563
+view Alignments
+
+metaObject wgEncodeUwDnaseHgfAlnRep2
+objType file
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHgfAlnRep2
+project wgEncode
+replicate 2
+subId 1603
+view Alignments
+
+metaObject wgEncodeUwDnaseHgfHotspotsRep1
+objType table
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1563
+tableName wgEncodeUwDnaseHgfHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHgfHotspotsRep2
+objType table
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1603
+tableName wgEncodeUwDnaseHgfHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHgfPkRep1
+objType table
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1563
+tableName wgEncodeUwDnaseHgfPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHgfPkRep2
+objType table
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1603
+tableName wgEncodeUwDnaseHgfPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHgfRawRep1
+objType table
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1563
+tableName wgEncodeUwDnaseHgfRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHgfRawRep2
+objType table
+cell HGF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-10-20
+dateUnrestricted 2010-07-20
+fileName wgEncodeUwDnaseHgfRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1603
+tableName wgEncodeUwDnaseHgfRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHl60AlnRep1
+objType file
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHl60AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHl60AlnRep1
+project wgEncode
+replicate 1
+subId 1571
+view Alignments
+
+metaObject wgEncodeUwDnaseHl60AlnRep2
+objType file
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseHl60AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHl60AlnRep2
+project wgEncode
+replicate 2
+subId 1570
+view Alignments
+
+metaObject wgEncodeUwDnaseHl60HotspotsRep1
+objType table
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseHl60HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1571
+tableName wgEncodeUwDnaseHl60HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHl60HotspotsRep2
+objType table
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseHl60HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1570
+tableName wgEncodeUwDnaseHl60HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHl60PkRep1
+objType table
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseHl60PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1571
+tableName wgEncodeUwDnaseHl60PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHl60PkRep2
+objType table
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseHl60PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1570
+tableName wgEncodeUwDnaseHl60PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHl60RawRep1
+objType table
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseHl60RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1571
+tableName wgEncodeUwDnaseHl60RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHl60RawRep2
+objType table
+cell HL-60
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseHl60RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1570
+tableName wgEncodeUwDnaseHl60RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHmecAlnRep1
+objType file
+cell HMEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHmecAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHmecAlnRep1
+project wgEncode
+replicate 1
+subId 1572
+view Alignments
+
+metaObject wgEncodeUwDnaseHmecHotspotsRep1
+objType table
+cell HMEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHmecHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1572
+tableName wgEncodeUwDnaseHmecHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHmecPkRep1
+objType table
+cell HMEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHmecPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1572
+tableName wgEncodeUwDnaseHmecPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHmecRawRep1
+objType table
+cell HMEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-30
+dateUnrestricted 2010-06-30
+fileName wgEncodeUwDnaseHmecRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1572
+tableName wgEncodeUwDnaseHmecRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHnpceAlnRep1
+objType file
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHnpceAlnRep1
+project wgEncode
+replicate 1
+subId 1619
+view Alignments
+
+metaObject wgEncodeUwDnaseHnpceAlnRep2
+objType file
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHnpceAlnRep2
+project wgEncode
+replicate 2
+subId 1620
+view Alignments
+
+metaObject wgEncodeUwDnaseHnpceHotspotsRep1
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1619
+tableName wgEncodeUwDnaseHnpceHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHnpceHotspotsRep2
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1620
+tableName wgEncodeUwDnaseHnpceHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHnpcePkRep1
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpcePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1619
+tableName wgEncodeUwDnaseHnpcePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHnpcePkRep2
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpcePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1620
+tableName wgEncodeUwDnaseHnpcePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHnpceRawRep1
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1619
+tableName wgEncodeUwDnaseHnpceRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHnpceRawRep2
+objType table
+cell HNPCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-07
+fileName wgEncodeUwDnaseHnpceRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1620
+tableName wgEncodeUwDnaseHnpceRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHrceAlnRep1
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHrceAlnRep1
+project wgEncode
+replicate 1
+subId 1577
+view Alignments
+
+metaObject wgEncodeUwDnaseHrceAlnRep2
+objType file
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHrceAlnRep2
+project wgEncode
+replicate 2
+subId 1566
+view Alignments
+
+metaObject wgEncodeUwDnaseHrceHotspotsRep1
+objType table
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1577
+tableName wgEncodeUwDnaseHrceHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrceHotspotsRep2
+objType table
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1566
+tableName wgEncodeUwDnaseHrceHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrcePkRep1
+objType table
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrcePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1577
+tableName wgEncodeUwDnaseHrcePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHrcePkRep2
+objType table
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrcePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1566
+tableName wgEncodeUwDnaseHrcePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHrceRawRep1
+objType table
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1577
+tableName wgEncodeUwDnaseHrceRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHrceRawRep2
+objType table
+cell HRCEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrceRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1566
+tableName wgEncodeUwDnaseHrceRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHreAlnRep1
+objType file
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHreAlnRep1
+project wgEncode
+replicate 1
+subId 1578
+view Alignments
+
+metaObject wgEncodeUwDnaseHreAlnRep2
+objType file
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHreAlnRep2
+project wgEncode
+replicate 2
+subId 1567
+view Alignments
+
+metaObject wgEncodeUwDnaseHreHotspotsRep1
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1578
+tableName wgEncodeUwDnaseHreHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHreHotspotsRep2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1567
+tableName wgEncodeUwDnaseHreHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrePkRep1
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1578
+tableName wgEncodeUwDnaseHrePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHrePkRep2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHrePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1567
+tableName wgEncodeUwDnaseHrePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHreRawRep1
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1578
+tableName wgEncodeUwDnaseHreRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHreRawRep2
+objType table
+cell HRE
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseHreRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1567
+tableName wgEncodeUwDnaseHreRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHrpeAlnRep1
+objType file
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHrpeAlnRep1
+project wgEncode
+replicate 1
+subId 1622
+view Alignments
+
+metaObject wgEncodeUwDnaseHrpeAlnRep2
+objType file
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHrpeAlnRep2
+project wgEncode
+replicate 2
+subId 1621
+view Alignments
+
+metaObject wgEncodeUwDnaseHrpeHotspotsRep1
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1622
+tableName wgEncodeUwDnaseHrpeHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrpeHotspotsRep2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1621
+tableName wgEncodeUwDnaseHrpeHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseHrpePkRep1
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpePkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1622
+tableName wgEncodeUwDnaseHrpePkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHrpePkRep2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpePkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1621
+tableName wgEncodeUwDnaseHrpePkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseHrpeRawRep1
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1622
+tableName wgEncodeUwDnaseHrpeRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseHrpeRawRep2
+objType table
+cell HRPEpiC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseHrpeRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1621
+tableName wgEncodeUwDnaseHrpeRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseHuvecAlnRep1
+objType file
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseHuvecAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseHuvecAlnRep1
+project wgEncode
+replicate 1
+subId 1624
+view Alignments
+
+metaObject wgEncodeUwDnaseHuvecHotspotsRep1
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseHuvecHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1624
+tableName wgEncodeUwDnaseHuvecHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseHuvecPkRep1
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseHuvecPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1624
+tableName wgEncodeUwDnaseHuvecPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseHuvecRawRep1
+objType table
+cell HUVEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-18
+dateSubmitted 2009-04-27
+dateUnrestricted 2010-01-27
+fileName wgEncodeUwDnaseHuvecRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1624
+tableName wgEncodeUwDnaseHuvecRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseK562AlnRep1
+objType file
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseK562AlnRep1
+project wgEncode
+replicate 1
+subId 1676
+view Alignments
+
+metaObject wgEncodeUwDnaseK562AlnRep2
+objType file
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseK562AlnRep2
+project wgEncode
+replicate 2
+subId 1675
+view Alignments
+
+metaObject wgEncodeUwDnaseK562HotspotsRep1
+objType table
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1676
+tableName wgEncodeUwDnaseK562HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseK562HotspotsRep2
+objType table
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1675
+tableName wgEncodeUwDnaseK562HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseK562PkRep1
+objType table
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1676
+tableName wgEncodeUwDnaseK562PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseK562PkRep2
+objType table
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-02
+dateUnrestricted 2010-04-01
+fileName wgEncodeUwDnaseK562PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1675
+tableName wgEncodeUwDnaseK562PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseK562RawRep1
+objType table
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1676
+tableName wgEncodeUwDnaseK562RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseK562RawRep2
+objType table
+cell K562
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeUwDnaseK562RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1675
+tableName wgEncodeUwDnaseK562RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseMcf7AlnRep1
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwDnaseMcf7AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseMcf7AlnRep1
+project wgEncode
+replicate 1
+subId 1628
+view Alignments
+
+metaObject wgEncodeUwDnaseMcf7AlnRep2
+objType file
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseMcf7AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseMcf7AlnRep2
+project wgEncode
+replicate 2
+subId 1562
+view Alignments
+
+metaObject wgEncodeUwDnaseMcf7HotspotsRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwDnaseMcf7HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1628
+tableName wgEncodeUwDnaseMcf7HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseMcf7HotspotsRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseMcf7HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1562
+tableName wgEncodeUwDnaseMcf7HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseMcf7PkRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwDnaseMcf7PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1628
+tableName wgEncodeUwDnaseMcf7PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseMcf7PkRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseMcf7PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1562
+tableName wgEncodeUwDnaseMcf7PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseMcf7RawRep1
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-29
+dateUnrestricted 2010-06-29
+fileName wgEncodeUwDnaseMcf7RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1628
+tableName wgEncodeUwDnaseMcf7RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseMcf7RawRep2
+objType table
+cell MCF-7
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseMcf7RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1562
+tableName wgEncodeUwDnaseMcf7RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseNb4AlnRep1
+objType file
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNb4AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNb4AlnRep1
+project wgEncode
+replicate 1
+subId 1559
+view Alignments
+
+metaObject wgEncodeUwDnaseNb4AlnRep2
+objType file
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNb4AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNb4AlnRep2
+project wgEncode
+replicate 2
+subId 1558
+view Alignments
+
+metaObject wgEncodeUwDnaseNb4HotspotsRep1
+objType table
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNb4HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1559
+tableName wgEncodeUwDnaseNb4HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseNb4HotspotsRep2
+objType table
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNb4HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1558
+tableName wgEncodeUwDnaseNb4HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseNb4PkRep1
+objType table
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNb4PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1559
+tableName wgEncodeUwDnaseNb4PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseNb4PkRep2
+objType table
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNb4PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1558
+tableName wgEncodeUwDnaseNb4PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseNb4RawRep1
+objType table
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNb4RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1559
+tableName wgEncodeUwDnaseNb4RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseNb4RawRep2
+objType table
+cell NB4
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNb4RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1558
+tableName wgEncodeUwDnaseNb4RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseNhdfneoAlnRep1
+objType file
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNhdfneoAlnRep1
+project wgEncode
+replicate 1
+subId 1629
+view Alignments
+
+metaObject wgEncodeUwDnaseNhdfneoAlnRep2
+objType file
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNhdfneoAlnRep2
+project wgEncode
+replicate 2
+subId 1568
+view Alignments
+
+metaObject wgEncodeUwDnaseNhdfneoHotspotsRep1
+objType table
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1629
+tableName wgEncodeUwDnaseNhdfneoHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseNhdfneoHotspotsRep2
+objType table
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1568
+tableName wgEncodeUwDnaseNhdfneoHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseNhdfneoPkRep1
+objType table
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1629
+tableName wgEncodeUwDnaseNhdfneoPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseNhdfneoPkRep2
+objType table
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1568
+tableName wgEncodeUwDnaseNhdfneoPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseNhdfneoRawRep1
+objType table
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2010-01-08
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1629
+tableName wgEncodeUwDnaseNhdfneoRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseNhdfneoRawRep2
+objType table
+cell NHDF-neo
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-09
+dateUnrestricted 2010-10-08
+fileName wgEncodeUwDnaseNhdfneoRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1568
+tableName wgEncodeUwDnaseNhdfneoRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseNhekAlnRep1
+objType file
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNhekAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNhekAlnRep1
+project wgEncode
+replicate 1
+subId 1630
+view Alignments
+
+metaObject wgEncodeUwDnaseNhekHotspotsRep1
+objType table
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNhekHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1630
+tableName wgEncodeUwDnaseNhekHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseNhekPkRep1
+objType table
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNhekPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1630
+tableName wgEncodeUwDnaseNhekPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseNhekRawRep1
+objType table
+cell NHEK
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseNhekRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1630
+tableName wgEncodeUwDnaseNhekRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseNhlfAlnRep1
+objType file
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNhlfAlnRep1
+project wgEncode
+replicate 1
+subId 1560
+view Alignments
+
+metaObject wgEncodeUwDnaseNhlfAlnRep2
+objType file
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseNhlfAlnRep2
+project wgEncode
+replicate 2
+subId 1561
+view Alignments
+
+metaObject wgEncodeUwDnaseNhlfHotspotsRep1
+objType table
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1560
+tableName wgEncodeUwDnaseNhlfHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseNhlfHotspotsRep2
+objType table
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1561
+tableName wgEncodeUwDnaseNhlfHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseNhlfPkRep1
+objType table
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1560
+tableName wgEncodeUwDnaseNhlfPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseNhlfPkRep2
+objType table
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1561
+tableName wgEncodeUwDnaseNhlfPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseNhlfRawRep1
+objType table
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1560
+tableName wgEncodeUwDnaseNhlfRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseNhlfRawRep2
+objType table
+cell NHLF
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2010-01-10
+dateUnrestricted 2010-10-09
+fileName wgEncodeUwDnaseNhlfRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1561
+tableName wgEncodeUwDnaseNhlfRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnasePanc1AlnRep1
+objType file
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnasePanc1AlnRep1
+project wgEncode
+replicate 1
+subId 1627
+view Alignments
+
+metaObject wgEncodeUwDnasePanc1AlnRep2
+objType file
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1AlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnasePanc1AlnRep2
+project wgEncode
+replicate 2
+subId 1569
+view Alignments
+
+metaObject wgEncodeUwDnasePanc1HotspotsRep1
+objType table
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1627
+tableName wgEncodeUwDnasePanc1HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnasePanc1HotspotsRep2
+objType table
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1HotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1569
+tableName wgEncodeUwDnasePanc1HotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnasePanc1PkRep1
+objType table
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1627
+tableName wgEncodeUwDnasePanc1PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnasePanc1PkRep2
+objType table
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1PkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1569
+tableName wgEncodeUwDnasePanc1PkRep2
+view Peaks
+
+metaObject wgEncodeUwDnasePanc1RawRep1
+objType table
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1627
+tableName wgEncodeUwDnasePanc1RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnasePanc1RawRep2
+objType table
+cell PANC-1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnasePanc1RawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1569
+tableName wgEncodeUwDnasePanc1RawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseSaecAlnRep1
+objType file
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseSaecAlnRep1
+project wgEncode
+replicate 1
+subId 1557
+view Alignments
+
+metaObject wgEncodeUwDnaseSaecAlnRep2
+objType file
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseSaecAlnRep2
+project wgEncode
+replicate 2
+subId 1556
+view Alignments
+
+metaObject wgEncodeUwDnaseSaecHotspotsRep1
+objType table
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1557
+tableName wgEncodeUwDnaseSaecHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseSaecHotspotsRep2
+objType table
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1556
+tableName wgEncodeUwDnaseSaecHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseSaecPkRep1
+objType table
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1557
+tableName wgEncodeUwDnaseSaecPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseSaecPkRep2
+objType table
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1556
+tableName wgEncodeUwDnaseSaecPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseSaecRawRep1
+objType table
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1557
+tableName wgEncodeUwDnaseSaecRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseSaecRawRep2
+objType table
+cell SAEC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-09-19
+dateUnrestricted 2010-06-19
+fileName wgEncodeUwDnaseSaecRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1556
+tableName wgEncodeUwDnaseSaecRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseSkmcAlnRep1
+objType file
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseSkmcAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseSkmcAlnRep1
+project wgEncode
+replicate 1
+subId 1573
+view Alignments
+
+metaObject wgEncodeUwDnaseSkmcAlnRep2
+objType file
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-10-27
+dateUnrestricted 2010-07-26
+fileName wgEncodeUwDnaseSkmcAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseSkmcAlnRep2
+project wgEncode
+replicate 2
+subId 1642
+view Alignments
+
+metaObject wgEncodeUwDnaseSkmcHotspotsRep1
+objType table
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseSkmcHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1573
+tableName wgEncodeUwDnaseSkmcHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseSkmcHotspotsRep2
+objType table
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-10-27
+dateUnrestricted 2010-07-26
+fileName wgEncodeUwDnaseSkmcHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1642
+tableName wgEncodeUwDnaseSkmcHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseSkmcPkRep1
+objType table
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseSkmcPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1573
+tableName wgEncodeUwDnaseSkmcPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseSkmcPkRep2
+objType table
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-10-27
+dateUnrestricted 2010-07-26
+fileName wgEncodeUwDnaseSkmcPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1642
+tableName wgEncodeUwDnaseSkmcPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseSkmcRawRep1
+objType table
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseSkmcRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1573
+tableName wgEncodeUwDnaseSkmcRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseSkmcRawRep2
+objType table
+cell SKMC
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-10-27
+dateUnrestricted 2010-07-26
+fileName wgEncodeUwDnaseSkmcRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1642
+tableName wgEncodeUwDnaseSkmcRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseSknshraAlnRep1
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeUwDnaseSknshraAlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseSknshraAlnRep1
+project wgEncode
+replicate 1
+subId 1640
+view Alignments
+
+metaObject wgEncodeUwDnaseSknshraAlnRep2
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-21
+fileName wgEncodeUwDnaseSknshraAlnRep2.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseSknshraAlnRep2
+project wgEncode
+replicate 2
+subId 1643
+view Alignments
+
+metaObject wgEncodeUwDnaseSknshraHotspotsRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeUwDnaseSknshraHotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1640
+tableName wgEncodeUwDnaseSknshraHotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseSknshraHotspotsRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-17
+dateUnrestricted 2010-04-17
+fileName wgEncodeUwDnaseSknshraHotspotsRep2.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1643
+tableName wgEncodeUwDnaseSknshraHotspotsRep2
+view Hotspots
+
+metaObject wgEncodeUwDnaseSknshraPkRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeUwDnaseSknshraPkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1640
+tableName wgEncodeUwDnaseSknshraPkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseSknshraPkRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-17
+dateUnrestricted 2010-04-17
+fileName wgEncodeUwDnaseSknshraPkRep2.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1643
+tableName wgEncodeUwDnaseSknshraPkRep2
+view Peaks
+
+metaObject wgEncodeUwDnaseSknshraRawRep1
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-17
+dateUnrestricted 2010-01-17
+fileName wgEncodeUwDnaseSknshraRawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1640
+tableName wgEncodeUwDnaseSknshraRawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseSknshraRawRep2
+objType table
+cell SK-N-SH_RA
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-07-17
+dateUnrestricted 2010-04-17
+fileName wgEncodeUwDnaseSknshraRawRep2.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 2
+subId 1643
+tableName wgEncodeUwDnaseSknshraRawRep2
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh1AlnRep1
+objType file
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeUwDnaseTh1AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseTh1AlnRep1
+project wgEncode
+replicate 1
+subId 1641
+view Alignments
+
+metaObject wgEncodeUwDnaseTh1HotspotsRep1
+objType table
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeUwDnaseTh1HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1641
+tableName wgEncodeUwDnaseTh1HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh1PkRep1
+objType table
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeUwDnaseTh1PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1641
+tableName wgEncodeUwDnaseTh1PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseTh1RawRep1
+objType table
+cell Th1
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2008-11-20
+dateUnrestricted 2009-08-20
+fileName wgEncodeUwDnaseTh1RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1641
+tableName wgEncodeUwDnaseTh1RawRep1
+view RawSignal
+
+metaObject wgEncodeUwDnaseTh2AlnRep1
+objType file
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseTh2AlnRep1.bam.gz
+grant Stam
+lab UW
+labVersion Bowtie 0.12.5
+origAssembly hg18
+parentTable wgEncodeUwDnaseTh2AlnRep1
+project wgEncode
+replicate 1
+subId 1677
+view Alignments
+
+metaObject wgEncodeUwDnaseTh2HotspotsRep1
+objType table
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseTh2HotspotsRep1.broadPeak.gz
+grant Stam
+lab UW
+labVersion Hotspot-v5.1
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1677
+tableName wgEncodeUwDnaseTh2HotspotsRep1
+view Hotspots
+
+metaObject wgEncodeUwDnaseTh2PkRep1
+objType table
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseTh2PkRep1.narrowPeak.gz
+grant Stam
+lab UW
+labVersion lmax-v1.0
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1677
+tableName wgEncodeUwDnaseTh2PkRep1
+view Peaks
+
+metaObject wgEncodeUwDnaseTh2RawRep1
+objType table
+cell Th2
+composite wgEncodeUwDnase
+dataType DnaseSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-19
+dateSubmitted 2009-04-29
+dateUnrestricted 2010-01-29
+fileName wgEncodeUwDnaseTh2RawRep1.bigWig.gz
+grant Stam
+lab UW
+labVersion WindowDensity-bin20-win+/-75
+origAssembly hg18
+project wgEncode
+replicate 1
+subId 1677
+tableName wgEncodeUwDnaseTh2RawRep1
+view RawSignal
+
+# MAGIC: 434593343
