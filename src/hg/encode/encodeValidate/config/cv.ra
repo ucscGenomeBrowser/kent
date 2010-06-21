@@ -1950,7 +1950,7 @@ tissue Blood
 category L
 description B-cell lymphoma
 vendorName Weissman lab
-vendorId 
+vendorId
 orderUrl (Contact Sherman Weissman)
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
@@ -2502,6 +2502,22 @@ targetId GeneCard:GC01M089030
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M089030
 validation missing
 
+term H2A.Z
+tag H2AZ
+type Antibody
+antibodyDescription (provisional) Unknown at this time
+targetDescription (provisional) Unknown at this time
+#antibodyDescription rabbit polyclonal
+#targetDescription Histone H3 (tri-methyl K36). Marks regions of RNAPII elongation, including coding and non-coding transcripts.
+#orderUrl http://www.abcam.com/index.html?datasheet=9050
+#vendorName Abcam
+#vendorId ab9050
+lab Bernstein
+#lots 136353
+#targetId GeneCard:GC01M148078
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
+
 term H3K4me1
 tag H3K4me1
 type Antibody
@@ -2688,6 +2704,22 @@ lab Farnham
 lots
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
+validation missing
+
+term H3K79me2
+tag H3K79me2
+type Antibody
+antibodyDescription (provisional) Unknown at this time
+targetDescription (provisional) Unknown at this time
+#antibodyDescription rabbit polyclonal
+#targetDescription Histone H3 (tri-methyl K36). Marks regions of RNAPII elongation, including coding and non-coding transcripts.
+#orderUrl http://www.abcam.com/index.html?datasheet=9050
+#vendorName Abcam
+#vendorId ab9050
+lab Bernstein
+#lots 136353
+#targetId GeneCard:GC01M148078
+#targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
 validation missing
 
 term H4K20me1
@@ -3271,8 +3303,8 @@ validation missing
 term STAT3
 tag STAT3
 type Antibody
-targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis. 
-antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin 
+targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis.
+antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin
 vendorName Santa Cruz Biotech
 vendorId sc-482
 orderUrl http://www.scbt.com/datasheet-482-stat3-c-20-antibody.html
@@ -3852,7 +3884,7 @@ description bowtie0.10.0 followed by blat v34
 term TH1014
 tag TH1014
 type mapAlgorithm
-description TopHat 1.0.14 
+description TopHat 1.0.14
 
 ### readType
 # term (human-readable read type name)
@@ -3910,7 +3942,7 @@ type insertLength
 description insert length of 200nt
 
 term ilNA
-tag ilNa 
+tag ilNa
 type insertLength
 description insert length not applicaple
 
