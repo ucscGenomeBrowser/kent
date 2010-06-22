@@ -145,7 +145,7 @@ echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
-    echo "Ready for pairings, day 9, Git reports completed for v${BRANCHNN} review http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
+    echo "Ready for pairings, day 9, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
 else
     echo "Git Reports had some error, no ok file found. [${0}: `date`]"
 endif
