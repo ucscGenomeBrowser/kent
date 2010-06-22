@@ -38,7 +38,7 @@ mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
 RENDERO = renderMain.o ${COMMONO}
-RENDERA = ${CGI_BIN}/hgRenderTracks
+RENDERA = ./hgRenderTracks
 
 compile: compileMain ${RENDERA}
 
