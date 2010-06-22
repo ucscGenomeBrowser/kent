@@ -30,11 +30,13 @@ errAbort(
 "counts all objects in all databases.\n"
 "   mdbQuery \"select  obj,cell,antibody from hg18 where antibody like 'pol%%'\"\n"
 "print the obj, cell, and antibody fields from all objects where there is an antibody fields\n"
-"and that field starts with pol\n"
+"and that field starts with pol.  Note obj is treated differently from other fields a bit\n"
+"since it comes from the obj column rather than the var/val columns in the database table.\n"
 "OPTIONS:\n"
 "   -out=type output one of the following types.  Default is %s\n"
 "        line - a line full of this=that; pairs\n"
-"        table - three column obj/var/val format\n"
+"        3col - three column obj/var/val format\n"
+"        tab - tab-separated format.\n"
 "        ra - two column ra format with objs as stanzas\n"
 "   -table=name - use the given table.  Default is metaDb\n"
 , clOut
@@ -91,7 +93,7 @@ else
 }
 
 static void raOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
-/* Output fields  from tdb to file in ra format.  */
+/* Output fields  from mdb to file in ra format.  */
 {
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
@@ -109,8 +111,8 @@ for (field = fieldList; field != NULL; field = field->next)
 fprintf(out, "\n");
 }
 
-static void tableOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
-/* Output fields  from tdb to file in three column obj/var/val format. */
+static void threeColOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
+/* Output fields  from mdb to file in three column obj/var/val format. */
 {
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
@@ -126,7 +128,7 @@ for (field = fieldList; field != NULL; field = field->next)
 }
 
 static void lineOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
-/* Output fields  from tdb to file in this=that;  line format.  */
+/* Output fields  from mdb to file in this=that;  line format.  */
 {
 struct slName *fieldList = rql->fieldList, *field;
 fprintf(out, "%s", mdb->obj);
@@ -141,6 +143,41 @@ for (field = fieldList; field != NULL; field = field->next)
 	}
     }
 fprintf(out, "\n");
+}
+
+static void tabOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
+/* Output fields  from mdb to file in tab-separated format.  */
+{
+/* First make sure no wildcards in field name */
+struct slName *fieldList = rql->fieldList, *field;
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    if (anyWild(field->name))
+        errAbort("No wildcards in field names with out=tab option");
+    }
+for (field = fieldList; field != NULL; field = field->next)
+    {
+    char *val = NULL;
+    if (sameString(field->name, "obj"))
+        val = mdb->obj;
+    else
+	{
+	struct mdbVar *var;
+	for (var = mdb->vars; var != NULL; var = var->next)
+	    {
+	    if (sameString(field->name, var->var))
+		{
+		val = var->val;
+		break;
+		}
+	    }
+	}
+    fprintf(out, "%s", naForNull(val));
+    if (field->next == NULL)
+	fprintf(out, "\n");
+    else
+	fprintf(out, "\t");
+    }
 }
 
 void mdbQuery(char *statement)
@@ -199,11 +236,15 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	       raOutput(rql, mdb, stdout);
 	    else if (sameString(clOut, "line"))
 	       lineOutput(rql, mdb, stdout);
-	    else if (sameString(clOut, "table"))
-	       tableOutput(rql, mdb, stdout);
+	    else if (sameString(clOut, "3col"))
+	       threeColOutput(rql, mdb, stdout);
+	    else if (sameString(clOut, "tab"))
+	       tabOutput(rql, mdb, stdout);
 	    else
 	       errAbort("Unknown out type %s", clOut);
 	    }
+	if (rql->limit >= 0 && matchCount >= rql->limit)
+	    break;
 	}
     }
 if (sameString(rql->command, "count"))

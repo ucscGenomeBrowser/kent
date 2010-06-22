@@ -10,7 +10,7 @@ longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/H
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line  NT2D1=NT2-D1 K562=K562
-subGroup3 factor Factor H3K27me3=H3K27me3 H3K36me3B=H3K36me3B H3K4me3=H3K4me3 H3K4me1=H3K4me1 H3K9ac=H3K9ac H3K9acB=H3K9acB Input=Input
+subGroup3 factor Factor H3K27me3=H3K27me3 H3K36me3B=H3K36me3B H3K4me3=H3K4me3 H3K4me1=H3K4me1 H3K9ac=H3K9ac H3K9acB=H3K9acB H3K9me3=H3K9me3 Input=Input
 		# Display names for H3K36me3B and H3K9acB might be better used consult TIM (found in cv.ra)
 subGroup4 control Control std=Standard UCD=UC_Davis
 subGroup5 treatment Treatment None=None
@@ -111,11 +111,30 @@ wgEncode 1
         track wgEncodeSydhHistoneNt2d1H3k36me3bUcdPk
         release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
-       shortLabel NT2D H3K36me3 Pk
+        shortLabel NT2D H3K36me3 Pk
         longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K36me3B in NT2-D1 cells)
         subGroups view=Peaks factor=H3K36me3B cellType=NT2D1 control=UCD treatment=None
         type narrowPeak
     # subId=1354 dateSubmitted=2010-06-11
+
+        track wgEncodeSydhHistoneNt2d1H3k9me3UcdPk
+        release alpha
+        subTrack wgEncodeSydhHistoneViewPeaks on
+        shortLabel NT2D H3K9me3  Pk
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K9me3 in NT2-D1 cells)
+        subGroups view=Peaks factor=H3K9me3 cellType=NT2D1 control=UCD treatment=None
+        type narrowPeak
+    # subId=1831 dateSubmitted=2010-06-22
+
+   		track wgEncodeSydhHistoneNt2d1H3k4me1UcdPk
+        release alpha
+        subTrack wgEncodeSydhHistoneViewPeaks on
+        shortLabel NT2D H3K4me1  Pk
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K4me1 in NT2-D1 cells)
+        subGroups view=Peaks factor=H3K4me1 cellType=NT2D1 control=UCD treatment=None
+        type narrowPeak
+    # subId=1830 dateSubmitted=2010-06-22
+
 
 
 	#Signal Track SYDH Histone#
@@ -221,3 +240,24 @@ wgEncode 1
         type bigWig 1.000000 5119.000000
     # subId=1354 dateSubmitted=2010-06-11
 	# Need to investigate if I need to change the factor of H3K36me3B-> H3K36me3
+
+        track wgEncodeSydhHistoneNt2d1H3k9me3UcdSig
+        release alpha
+        subTrack wgEncodeSydhHistoneViewSignal on
+        shortLabel NT2D H3K9me3  Sg
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K9me3 in NT2-D1 cells)
+        subGroups view=Signal factor=H3K9me3 cellType=NT2D1 control=UCD treatment=None
+        type bigWig 1.000000 86089.000000
+    # subId=1831 dateSubmitted=2010-06-22
+
+        track wgEncodeSydhHistoneNt2d1H3k4me1UcdSig
+        release alpha
+        subTrack wgEncodeSydhHistoneViewSignal on
+        shortLabel NT2D H3K4me1  Sg
+        longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Signal (H3K4me1 in NT2-D1 cells)
+        subGroups view=Signal factor=H3K4me1 cellType=NT2D1 control=UCD treatment=None
+        type bigWig 1.000000 6506.000000
+    # subId=1830 dateSubmitted=2010-06-22
+
+
+
