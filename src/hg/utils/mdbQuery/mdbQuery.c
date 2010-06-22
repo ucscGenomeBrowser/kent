@@ -32,6 +32,7 @@ errAbort(
 "print the obj, cell, and antibody fields from all objects where there is an antibody fields\n"
 "and that field starts with pol.  Note obj is treated differently from other fields a bit\n"
 "since it comes from the obj column rather than the var/val columns in the database table.\n"
+"You can use metaObject as a synonym for obj.\n"
 "OPTIONS:\n"
 "   -out=type output one of the following types.  Default is %s\n"
 "        line - a line full of this=that; pairs\n"
@@ -100,7 +101,7 @@ for (field = fieldList; field != NULL; field = field->next)
     {
     struct mdbVar *var;
     boolean doWild = anyWild(field->name);
-    if (stringMatch(field->name, "obj", doWild))
+    if (stringMatch(field->name, "obj", doWild) || stringMatch(field->name, "metaObject", doWild))
         fprintf(out, "%s %s\n", "metaObject", mdb->obj);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
@@ -158,7 +159,7 @@ for (field = fieldList; field != NULL; field = field->next)
 for (field = fieldList; field != NULL; field = field->next)
     {
     char *val = NULL;
-    if (sameString(field->name, "obj"))
+    if (sameString(field->name, "obj") || sameString(field->name, "metaObject"))
         val = mdb->obj;
     else
 	{
