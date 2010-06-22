@@ -315,7 +315,7 @@ void makeDiffAndSplit(struct commit *c, char *u, boolean full)
 {
 safef(gitCmd,sizeof(gitCmd), 
     "git diff -b -w --no-prefix%s %s^! > %s"  
-    , full ? " --unified=10000" : ""
+    , full ? " --unified=100000" : ""
     , c->commitId, tempMakeDiffName);
 //git shorthand: x^! is equiv to range x^ x, 
 //  i.e. just the one commit and nothing more.
@@ -325,7 +325,7 @@ if (sameString(c->commitId, "dc78303b079985b5a146d093bbb8a5d06489562d"))
     {
     safef(gitCmd,sizeof(gitCmd), 
 	"git show -b -w --no-prefix%s %s > %s"  
-	, full ? " --unified=10000" : ""
+	, full ? " --unified=100000" : ""
 	, c->commitId, tempMakeDiffName);
     }
 
