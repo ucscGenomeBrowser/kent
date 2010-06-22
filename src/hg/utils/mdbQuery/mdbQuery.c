@@ -101,7 +101,7 @@ for (field = fieldList; field != NULL; field = field->next)
     struct mdbVar *var;
     boolean doWild = anyWild(field->name);
     if (stringMatch(field->name, "obj", doWild))
-        fprintf(out, "%s %s\n", "obj", mdb->obj);
+        fprintf(out, "%s %s\n", "metaObject", mdb->obj);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
 	if (stringMatch(field->name, var->var, doWild))
