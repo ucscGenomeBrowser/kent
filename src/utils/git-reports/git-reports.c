@@ -320,6 +320,15 @@ safef(gitCmd,sizeof(gitCmd),
 //git shorthand: x^! is equiv to range x^ x, 
 //  i.e. just the one commit and nothing more.
 
+// hack until better fix - this is the case where there is no previous commit
+if (sameString(c->commitId, "dc78303b079985b5a146d093bbb8a5d06489562d"))
+    {
+    safef(gitCmd,sizeof(gitCmd), 
+	"git show -b -w --no-prefix%s %s > %s"  
+	, full ? " --unified=10000" : ""
+	, c->commitId, tempMakeDiffName);
+    }
+
 runShell(gitCmd);
 
 
