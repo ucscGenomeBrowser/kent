@@ -595,3 +595,5 @@ noInherit on
         color 46,0,184
         # subId=1405 dateSubmitted=2010-06-14
 
+# Riken CAGE (wrangler: braney)
+include wgEncodeRikenCage.ra
