@@ -45,7 +45,7 @@ set branchTag="v${BRANCHNN}_base"
 if ( "$mode" == "review") then
     set reviewTag="v${NEXTNN}_preview"
 else
-    set reviewTag="v${BRNACHNN}_preview"
+    set reviewTag="v${BRANCHNN}_preview"
 endif
 
 if ( "$BRANCHNN" == "" ) then
