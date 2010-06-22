@@ -36,7 +36,7 @@ errAbort(
 "OPTIONS:\n"
 "   -out=type output one of the following types.  Default is %s\n"
 "        line - a line full of this=that; pairs\n"
-"        3col - three column obj/var/val format\n"
+"        4col - 4 column obj/var/varType/val format like in metaDb table\n"
 "        tab - tab-separated format.\n"
 "        ra - two column ra format with objs as stanzas\n"
 "   -table=name - use the given table.  Default is metaDb\n"
@@ -112,7 +112,7 @@ for (field = fieldList; field != NULL; field = field->next)
 fprintf(out, "\n");
 }
 
-static void threeColOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
+static void fourColOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
 /* Output fields  from mdb to file in three column obj/var/val format. */
 {
 struct slName *fieldList = rql->fieldList, *field;
@@ -123,7 +123,8 @@ for (field = fieldList; field != NULL; field = field->next)
     for (var = mdb->vars; var != NULL; var = var->next)
         {
 	if (stringMatch(field->name, var->var, doWild))
-	    fprintf(out, "%s\t%s\t%s\n", mdb->obj, var->var, var->val);
+	    fprintf(out, "%s\t%s\t%s\t%s\n", mdb->obj, var->var, 
+	    	mdbVarTypeEnumToString(var->varType), var->val);
 	}
     }
 }
@@ -242,8 +243,8 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	       raOutput(rql, mdb, stdout);
 	    else if (sameString(clOut, "line"))
 	       lineOutput(rql, mdb, stdout);
-	    else if (sameString(clOut, "3col"))
-	       threeColOutput(rql, mdb, stdout);
+	    else if (sameString(clOut, "4col"))
+	       fourColOutput(rql, mdb, stdout);
 	    else if (sameString(clOut, "tab"))
 	       tabOutput(rql, mdb, stdout);
 	    else
