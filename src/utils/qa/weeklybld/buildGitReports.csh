@@ -41,8 +41,12 @@ echo
 echo "now building Git reports on $HOST. [${0}: `date`]"
 
 @ NEXTNN=$BRANCHNN + 1
-set branchTag="v${BRANCHNN}_base"  # !!!!! TODO soon to change it to "v${BRANCHNN}_base without origin/"
-set reviewTag="v${NEXTNN}_preview"
+set branchTag="v${BRANCHNN}_base"
+if ( "$mode" == "review") then
+    set reviewTag="v${NEXTNN}_preview"
+else
+    set reviewTag="v${BRNACHNN}_preview"
+endif
 
 if ( "$BRANCHNN" == "" ) then
  echo "BRANCHNN undefined."
