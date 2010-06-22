@@ -1,4 +1,5 @@
-/* mdbQuery - Select things from metaDb table.. */
+/* mdbQuery - Select objects from metaDb table.  Print all or selected fields in a variety 
+ * of formats. */
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"
@@ -19,15 +20,14 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-"mdbQuery - Select things from metaDb table.\n"
+"mdbQuery - Select objects from metaDb table. Print all or selected fields in a variety\n"
+"of formats\n"
 "usage:\n"
 "   mdbQuery sqlStatement\n"
 "Where the SQL statement is enclosed in quotations to avoid the shell interpreting it.\n"
 "Only a very restricted subset of a single SQL statement (select) is supported.   Examples:\n"
 "    mdbQuery \"select count(*) from hg18\"\n"
-"counts all of the objects in hg18 and prints the results to stdout\n"
-"   mdbQuery \"select count(*) from *\"\n"
-"counts all objects in all databases.\n"
+"counts all of the metaDb objects in the hg18 database and prints the results to stdout\n"
 "   mdbQuery \"select  obj,cell,antibody from hg18 where antibody like 'pol%%'\"\n"
 "print the obj, cell, and antibody fields from all objects where there is an antibody fields\n"
 "and that field starts with pol.  Note obj is treated differently from other fields a bit\n"
@@ -207,7 +207,12 @@ verbose(2, "%d databases in from clause\n", slCount(dbOrderList));
 if (slCount(dbOrderList) != 1)
     {
     if (dbOrderList == NULL)
-        errAbort("No database %s", rql->tableList->name);
+	{
+	if (rql->tableList == NULL)
+	    errAbort("Missing from clause in sql statement");
+	else
+	    errAbort("No database %s", rql->tableList->name);
+	}
     else
         errAbort("Too many matching databases");
     }
