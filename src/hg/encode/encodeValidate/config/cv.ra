@@ -3940,7 +3940,7 @@ description insert length of 200nt
 term ilNA
 tag ilNa
 type insertLength
-description insert length not applicaple
+description insert length not applicable
 
 
 ### fragSize : DNA Fragment Size for GIS DNA PET (gPET)
