@@ -16,3 +16,5 @@ fix: makeFix.o
 test: test.o
 	${CC} ${COPT} ${CFLAGS} -o test test.o $(MYLIBS) $L
 
+clean::
+	rm -f ${O} test.o makeFix.o

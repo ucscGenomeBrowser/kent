@@ -17,3 +17,5 @@ SCRIPT_FILES = \
 	verbose.rb \
 	ra.rb 
 
+clean::
+	@echo nothing to clean in src/hg/utils/ruby/

@@ -10,3 +10,6 @@ O = faPolyASizes.o
 faPolyASizes: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faPolyASizes${EXE} $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/faPolyASizes${EXE}
+
+clean::
+	rm -f ${O}

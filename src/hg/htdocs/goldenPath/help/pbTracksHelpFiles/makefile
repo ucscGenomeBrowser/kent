@@ -16,3 +16,6 @@ global:
 	cat $$F|sed -e 's/genome-wide/proteome-wide/g'|\
 	sed -e 's/Genome-wide/Proteome-wide/g' > ./pbGlobal/$$F;\
 	done
+
+clean::
+	rm -rf pbGlobal

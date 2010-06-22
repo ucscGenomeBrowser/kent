@@ -11,6 +11,10 @@ hgRatioMicroarray: $O $(MYLIBS)
 	${STRIP} ${BINDIR}/hgRatioMicroarray${EXE}
 
 test:
+	${MKDIR} output
 	hgRatioMicroarray gnfHumanU95All gnfHumanU95AllRatio -clump=gnfClump.ra -noLoad -limit=100 -tab=output
 	diff -x CVS -r expected output
-	rm -r output
+	rm -fr output
+
+clean::
+	rm -fr ${O} output

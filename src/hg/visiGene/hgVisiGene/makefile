@@ -28,6 +28,3 @@ gif:
 
 testVisiSearch:  visiSearch.o testVisiSearch.o
 	${CC} -o testVisiSearch visiSearch.o testVisiSearch.o ${MYLIBS} ${L}
-
-clean::
-	rm -f ${O}

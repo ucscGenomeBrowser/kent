@@ -9,3 +9,6 @@ O = sanger22gtf.o
 sanger22gtf: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/sanger22gtf $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/sanger22gtf${EXE}
+
+clean::
+	rm -f ${O}

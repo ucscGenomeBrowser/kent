@@ -7,3 +7,6 @@ ${BINDIR}/aliGlue: $(O)
 
 strip:
 	${STRIP} ${BINDIR}/aliGlue${EXE}
+
+clean::
+	rm -f ${O}

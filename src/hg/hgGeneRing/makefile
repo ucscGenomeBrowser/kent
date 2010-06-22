@@ -39,7 +39,3 @@ backup: clean
 
 push:
 	scp $(APACHE)/cgi-bin/$(A) hgwbeta:$(APACHE)/cgi-bin/
-
-clean::
-	rm -f $O
-

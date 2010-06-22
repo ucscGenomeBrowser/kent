@@ -9,3 +9,6 @@ O = pslUnpile.o
 
 pslUnpile: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/pslUnpile $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

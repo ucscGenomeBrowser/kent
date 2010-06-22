@@ -9,4 +9,5 @@ O = repMaskJobs.o
 repMaskJobs: $(O)
 	${CC} ${COPT} ${CFLAGS} -o repMaskJobs $O ../../../../lib/$(MACHTYPE)/jkweb.a
 
-
+clean::
+	rm -f ${O}

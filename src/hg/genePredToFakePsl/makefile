@@ -8,3 +8,6 @@ O = genePredToFakePsl.o
 
 genePredToFakePsl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredToFakePsl $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

@@ -9,3 +9,6 @@ O = hgProtIdToGenePred.o
 hgProtIdToGenePred: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgProtIdToGenePred $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgProtIdToGenePred${EXE}
+
+clean::
+	rm -f ${O}

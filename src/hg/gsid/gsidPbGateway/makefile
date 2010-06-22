@@ -19,4 +19,3 @@ compile: $O
 
 mgsc: strip
 	mv $A ${CGI_BIN}/$A
-

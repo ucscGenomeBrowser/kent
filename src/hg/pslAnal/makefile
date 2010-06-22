@@ -24,3 +24,6 @@ lib:
 
 tags:  
 	ctags *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
+
+clean::
+	rm -f ${O}

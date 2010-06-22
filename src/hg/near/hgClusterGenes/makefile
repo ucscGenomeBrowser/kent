@@ -9,3 +9,6 @@ O = hgClusterGenes.o
 hgClusterGenes: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgClusterGenes $O $(MYLIBS) $L
 #	${STRIP} ${BINDIR}/hgClusterGenes${EXE}
+
+clean::
+	rm -f ${O}

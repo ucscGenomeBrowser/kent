@@ -11,3 +11,5 @@ hgAddLiftOverChain: $O ${MYLIBS}
 	${CC} -o ${BINDIR}/${A} $O ${MYLIBS} $L
 	${STRIP} ${BINDIR}/${A}${EXE}
 
+clean::
+	rm -f ${O}

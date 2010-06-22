@@ -10,3 +10,6 @@ O = intronEnds.o
 intronEnds: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/intronEnds $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/intronEnds${EXE}
+
+clean::
+	rm -f ${O}

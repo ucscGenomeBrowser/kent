@@ -8,3 +8,6 @@ O = hgKgMrna.o
 
 hgKgMrna: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgKgMrna $O $(MYLIBS) $L
+
+clean::
+	rm -f ${O}

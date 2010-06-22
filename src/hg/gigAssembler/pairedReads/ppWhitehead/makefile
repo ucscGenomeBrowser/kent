@@ -10,3 +10,5 @@ ppWhitehead: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppWhitehead $O $(MYLIBS) $L
 	mv ppWhitehead ${BINDIR}
 
+clean::
+	rm -f ${O}

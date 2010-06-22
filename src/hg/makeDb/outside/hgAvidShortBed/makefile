@@ -9,3 +9,6 @@ O = hgAvidShortBed.o
 hgAvidShortBed: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgAvidShortBed $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgAvidShortBed${EXE}
+
+clean::
+	rm -f ${O}

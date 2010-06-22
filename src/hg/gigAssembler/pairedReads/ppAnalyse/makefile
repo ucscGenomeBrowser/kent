@@ -10,4 +10,5 @@ ppAnalyse: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ppAnalyse $O $(MYLIBS) $L
 	mv ppAnalyse ${BINDIR}
 
-
+clean::
+	rm -f ${O}

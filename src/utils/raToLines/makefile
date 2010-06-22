@@ -14,3 +14,5 @@ linesToRa: linesToRa.o
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/linesToRa linesToRa.o $(MYLIBS) $L
 	#${STRIP} ${BINDIR}/linesToRa${EXE}
 
+clean::
+	rm -f raToLines.o linesToRa.o

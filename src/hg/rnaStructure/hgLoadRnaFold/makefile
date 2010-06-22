@@ -15,3 +15,6 @@ test:
 	hgLoadRnaFold -tab=output -noLoad hg16 test input
 	diff -x CVS -r expected output
 	rm -r output
+
+clean::
+	rm -f ${O}

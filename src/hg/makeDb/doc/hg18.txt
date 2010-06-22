@@ -11298,6 +11298,31 @@ mysql> alter table snp126orthoPanTro2RheMac2 add index chrom (chrom, bin);
     | hgLoadBed hg18 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
+    #	fix off-by one error:
+    sed -e 's/\t_\t/\t-\t/' hg18genomicSuperDup.tab \
+    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' > hg18.gsd.bed
+    #	run this perl script:
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<hg18.gsd.bed") or die "can not read hg18.gsd.bed";
+while (my $line = <FH>) {
+        chomp $line;
+    my ($chr, $start, $rest) = split('\s+', $line, 3);
+    printf "%s\t%d\t%s\n", $chr, $start-1, $rest;
+}
+close (FH);
+    #
+    ./addOne.pl > oneLarger.bed
+    #	check first column:
+    ave -col=2 hg18.gsd.bed
+    ave -col=2 oneLarger.bed
+    #	reload table
+    hgLoadBed hg18 genomicSuperDups oneLarger.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
 ############################################################################
 # GENE BOUNDS (RNACLUSTER) (DONE 08-09-2006 Fan)
 # Create rnaCluster table (depends on {est,mrna}OrientInfo)
@@ -30203,7 +30228,43 @@ hgLoadBed hg18 decipher decipher.bed
 # create knownToDecipher table.
 hgMapToGene -all hg18 decipher knownGene knownToDecipher
 #############################################################################
-# Add KEGG column to hg18 Gene Sorter (Done, Fan, 6/15/2010)
+# UPDATE KEGG TABLES (DONE, Fan, 6/18/10)
+
+mkdir -p /hive/data/genomes/hg18/bed/pathways/kegg
+cd /hive/data/genomes/hg18/bed/pathways/kegg
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+
+cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+cut -f 2 j.tmp >j.hsa
+cut -f 1,3 j.tmp >j.1
+paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+rm j.hsa j.1
+rm j.tmp
+
+hgsql hg18 -e 'drop table keggMapDesc'
+hgsql hg18 < ~/kent/src/hg/lib/keggMapDesc.sql
+hgsql hg18 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+
+cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+hgsql hg18 -e 'drop table keggPathway'
+hgsql hg18 < ~/kent/src/hg/lib/keggPathway.sql
+hgsql hg18 -e 'load data local infile "j.tmp" into table keggPathway'
+
+hgsql hg18 -N -e \
+'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+>keggPathway.tab
+
+hgsql hg18 -e 'delete from keggPathway'
+
+hgsql hg18 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+rm j.tmp
+
+#############################################################################
+# Add KEGG column to hg18 Gene Sorter (Done, Fan, 6/18/2010)
 
 mkdir -p /hive/data/genomes/hg18/bed/geneSorter
 cd /hive/data/genomes/hg18/bed/geneSorter
