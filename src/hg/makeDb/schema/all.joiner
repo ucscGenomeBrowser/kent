@@ -3055,6 +3055,7 @@ tablesIgnored hgFixed
 
 tablesIgnored $gbd
     NIAGene
+    affyDrosDev%
     ancientRepeat
     axtInfo
     bam%
