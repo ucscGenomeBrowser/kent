@@ -10,3 +10,6 @@ O = faFilterN.o
 faFilterN: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faFilterN $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/faFilterN${EXE}
+
+clean::
+	rm -f ${O}

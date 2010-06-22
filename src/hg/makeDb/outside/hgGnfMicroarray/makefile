@@ -11,6 +11,10 @@ hgGnfMicroarray: $O $(MYLIBS)
 	${STRIP} ${BINDIR}/hgGnfMicroarray${EXE}
 
 test:
+	${MKDIR} output
 	hgGnfMicroarray -tab=output -noLoad -limit=100 gnfHumanU95Exps gnfHumanU95All /projects/compbio/data/microarray/affyGnfHuman/data_public_U95
 	diff -x CVS -r expected output
-	rm -r output
+	rm -fr output
+
+clean::
+	rm -fr ${O} output

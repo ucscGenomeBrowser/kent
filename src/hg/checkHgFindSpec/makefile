@@ -16,3 +16,6 @@ $A: $O $(MYLIBS)
 
 install: compile
 	mv $A ${BINDIR}/$A
+
+clean::
+	rm -f ${O}

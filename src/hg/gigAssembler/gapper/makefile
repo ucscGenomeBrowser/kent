@@ -14,3 +14,6 @@ gapper: $O $(MYLIBS)
 lib:
 	cd ../../lib && ${MAKE}
 	cd ../../../lib && ${MAKE}
+
+clean::
+	rm -f ${O}

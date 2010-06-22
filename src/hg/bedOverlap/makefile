@@ -22,3 +22,6 @@ test:	test2 test4 test5
 	bedOverlap input/$@.noBin output/$@.bed 
 	diff expected/$@.bed output/$@.bed 
 	rm output/$@.bed
+
+clean::
+	rm -fr ${O} output

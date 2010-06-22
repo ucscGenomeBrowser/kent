@@ -58,7 +58,7 @@ file ddf
 type string
 required no
 
-field growthProtocol
+field protocolID
 file ddf
 type string
 required no
@@ -84,6 +84,11 @@ type string
 required no
 
 field origAssembly
+file ddf
+type string
+required no
+
+field insLength
 file ddf
 type string
 required no

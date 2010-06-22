@@ -10,3 +10,6 @@ O = faNcbiToUcsc.o
 faNcbiToUcsc: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/faNcbiToUcsc $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/faNcbiToUcsc${EXE}
+
+clean::
+	rm -f ${O}

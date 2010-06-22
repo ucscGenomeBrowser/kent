@@ -22,3 +22,6 @@ all:
                 chmod 775 $(SCRIPT_DIR)/$$I ;\
             fi ;\
 	done
+
+clean::
+	@echo nothing to clean in src/hg/makeDb/makeLoChain/

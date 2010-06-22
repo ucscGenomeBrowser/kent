@@ -38,7 +38,7 @@ mgsc: strip
 	mv $A ${CGI_BIN}/$A
 
 RENDERO = renderMain.o ${COMMONO}
-RENDERA = ${CGI_BIN}/hgRenderTracks
+RENDERA = ./hgRenderTracks
 
 compile: compileMain ${RENDERA}
 
@@ -59,4 +59,3 @@ pslTrack.o:	cds.h
 
 clean::
 	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif
-

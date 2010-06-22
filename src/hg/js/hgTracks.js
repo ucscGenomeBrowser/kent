@@ -1191,12 +1191,15 @@ $(document).ready(function()
         }
     }
 
+    // Tim, LRM doesn't like the following code (which set's focus to the position box), b/c in many browser (e.g. FF) this means
+    // PgUp/PgDown doesn't work when you load hgTracks (perhaps we should discuss with QA).
     {
         var pos = $("input[name='position']");
         if( pos != undefined)
             $( pos ).focus();
     }
-    if($("#tabs")) {
+    
+    if($("#tabs").length > 0) {
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
                             show: function(event, ui) {

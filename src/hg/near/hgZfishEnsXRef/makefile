@@ -11,3 +11,6 @@ hgEnsGeneXRef: $O $(MYLIBS)
 	${STRIP} ${BINDIR}/hgEnsGeneXRef${EXE}
 compile: $O 
 	${CC} -o hgEnsGeneXRef $O ${MYLIBS} ${L}
+
+clean::
+	rm -f ${O}

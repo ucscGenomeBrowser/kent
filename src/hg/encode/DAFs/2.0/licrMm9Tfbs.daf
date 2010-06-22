@@ -5,27 +5,27 @@ grant             Ren
 lab               LICR
 dataType          ChipSeq
 variables         cell, antibody,sex,age,strain,control
-compositeSuffix   LicrChipSeq
+compositeSuffix   LicrTfbs
 assembly          mm9
-medianFragmentLength 225
+medianFragmentLength 200
 dafVersion        2.0
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=32,nMatch;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=25;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  LICR ChIP-seq Peaks
+longLabelPrefix  LICR TFBS Peaks
 type             broadPeak
 hasReplicates    no
 required         no
 
 view             Signal
-longLabelPrefix  LICR ChIP-seq Signal
+longLabelPrefix  LICR TFBS Signal
 type             bigWig
 hasReplicates    no
 required         yes
 
 view             Alignments
-longLabelPrefix  LICR ChIP-seq Alignments
+longLabelPrefix  LICR TFBS Alignments
 type             bam
 hasReplicates    yes
 required         yes

@@ -9,3 +9,5 @@ O = mmTestSet.o
 mmTestSet: $O 
 	${CC} ${COPT} ${CFLAGS} -o mmTestSet $O $(MYLIBS) $L
 
+clean::
+	rm -f ${O}

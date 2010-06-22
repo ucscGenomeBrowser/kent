@@ -15,4 +15,7 @@ test:
 	diff expected.tab out.tab
 	spacedToTab in.txt -sizes=17,21,22 out2.tab
 	diff expected2.tab out2.tab
+	rm -f out.tab out2.tab
 
+clean::
+	rm -f ${O} out.tab out2.tab

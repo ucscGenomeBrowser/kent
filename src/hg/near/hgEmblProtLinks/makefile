@@ -9,3 +9,6 @@ O = hgEmblProtLinks.o
 hgEmblProtLinks: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/hgEmblProtLinks $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/hgEmblProtLinks${EXE}
+
+clean::
+	rm -f ${O}

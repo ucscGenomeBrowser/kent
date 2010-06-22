@@ -218,3 +218,5 @@ subSnpCondense: subSnpCondense.o ${MYLIBS}
 trimHeader: trimHeader.o ${MYLIBS}
 	${CC} -O -o trimHeader trimHeader.o ${MYLIBS} $L
 
+clean::
+	rm -f ${O}

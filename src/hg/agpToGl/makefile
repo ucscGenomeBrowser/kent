@@ -10,3 +10,6 @@ O = agpToGl.o
 agpToGl: $O $(MYLIBS)
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/agpToGl $O $(MYLIBS) $L
 	${STRIP} ${BINDIR}/agpToGl${EXE}
+
+clean::
+	rm -f ${O}
