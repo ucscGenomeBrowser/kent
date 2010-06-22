@@ -3585,7 +3585,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     }
 hFreeConn(&conn);
 }
-
+  
 struct trackDb *hTrackDbForTrack(char *db, char *track)
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
@@ -3596,6 +3596,44 @@ struct trackDb *hTrackDbForTrack(char *db, char *track)
 /* Get track list .*/
 struct trackDb *tdbList = hTrackDb(db, NULL);
 return rFindTrack(0, tdbList, track);
+}
+
+struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
+/* Load trackDb object for a track. If need be grab its ancestors too. 
+ * This does not load children. hTrackDbForTrack will handle children, and
+ * is actually faster if being called on lots of tracks.  This function
+ * though is faster on one or two tracks. */
+{
+uglyf("hTrackDbForTrackAndAncestors(%s,%s)\n", db, track);
+struct sqlConnection *conn = hAllocConn(db);
+struct trackDb *tdb = loadTrackDbForTrack(conn, track);
+struct trackDb *ancestor = tdb;
+for (;;)
+    {
+    /* Get name of previous generation if any handling both
+     * composite and supertrack ancestor tags. */
+    char *parentTrack = NULL;
+    char *parent = trackDbLocalSetting(ancestor, "parent");
+    if (parent != NULL)
+	parentTrack = cloneFirstWord(parent);  
+    if (parentTrack == NULL)
+        {
+	char *super = trackDbLocalSetting(ancestor, "superTrack");
+	if (super != NULL && !startsWith("on", super))
+	    parentTrack = cloneFirstWord(super);
+	}
+
+    /* If no parent we're done. */
+    uglyf("parentTrack = %s\n", parentTrack);
+    if (parentTrack == NULL)
+        break;
+
+    ancestor->parent = loadTrackDbForTrack(conn, parentTrack);
+    ancestor = ancestor->parent;
+    }
+
+hFreeConn(&conn);
+return tdb;
 }
 
 struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb)
