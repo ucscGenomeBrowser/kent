@@ -2,20 +2,15 @@
 
 include ../../../inc/common.mk
 
-all: scripts
-
-scripts:
-	${MKDIR} ${SCRIPTS}
-	@for F in ${SCRIPT_FILES}; do \
-	    chmod +x $$F; \
-	    rm -f ${SCRIPTS}/$${F}; \
-	    echo cp -p $$F ${SCRIPTS}; \
-	    cp -p $$F ${SCRIPTS}; \
-	 done
-
-alpha: scripts
-
-clean:
+LIB_FILES = \
+	Encode.pm \
+	EnsGeneAutomate.pm \
+	HgAutomate.pm \
+	HgDb.pm \
+	HgRemoteScript.pm \
+	HgStepManager.pm \
+	RAFile.pm \
+	SafePipe.pm
 
 SCRIPT_FILES = \
 	blastz-make-joblist \
@@ -33,12 +28,6 @@ SCRIPT_FILES = \
 	ensVersions \
 	extractNestedRepeats.pl \
 	extractGtf.pl \
-	Encode.pm \
-	EnsGeneAutomate.pm \
-	HgAutomate.pm \
-	HgDb.pm \
-	HgRemoteScript.pm \
-	HgStepManager.pm \
 	liftRMAlign.pl \
 	makeDownloads.pl \
 	makeGenomeDb.pl \
@@ -46,7 +35,28 @@ SCRIPT_FILES = \
 	monthlyUpdateIgtc.csh \
 	simplePartition.pl \
 	partitionSequence.pl \
-	RAFile.pm \
-	SafePipe.pm \
 	updateIgtc.pl
 
+all: mkDir libFiles $(SCRIPT_FILES:%=%.all)
+
+%.all:
+	rm -f ${SCRIPTS}/$*
+	echo cp -p $* ${SCRIPTS}
+	cp -p $* ${SCRIPTS}
+	chmod +x ${SCRIPTS}/$*
+
+mkDir:
+	${MKDIR} ${SCRIPTS}
+	
+libFiles: mkDir $(LIB_FILES:%=%.libFile)
+
+%.libFile:
+	rm -f ${SCRIPTS}/$*
+	echo cp -p $* ${SCRIPTS}
+	cp -p $* ${SCRIPTS}
+	chmod 664 ${SCRIPTS}/$*
+
+alpha: all
+
+clean:
+	@echo nothing to clean in src/hg/utils/automation/
