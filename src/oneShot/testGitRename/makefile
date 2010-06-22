@@ -20,3 +20,4 @@ clean::
 test:
 	testGitRename test.in test.out
 	diff test.expected test.out
+
