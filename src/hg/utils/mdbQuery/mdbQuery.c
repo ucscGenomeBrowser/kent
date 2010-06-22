@@ -10,7 +10,10 @@
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
+/* Variables that can be set from command line. */
 char *clOut = "line";
+char *clTable = "metaDb";
+
 
 void usage()
 /* Explain usage and exit. */
@@ -37,8 +40,6 @@ errAbort(
 , clOut
   );
 }
-
-char *clTable = "metaDb";
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
@@ -163,6 +164,9 @@ for (t = rql->tableList; t != NULL; t = t->next)
 	}
     }
 verbose(2, "%d databases in from clause\n", slCount(dbOrderList));
+
+/* Make sure we actually only have one valid database, and put database variable
+ * to it's name. */
 if (slCount(dbOrderList) != 1)
     {
     if (dbOrderList == NULL)
@@ -173,27 +177,37 @@ if (slCount(dbOrderList) != 1)
 
 db = dbOrderList->val;
 char *database = db->name;
-struct sqlConnection *conn = sqlConnect(database);
 
+/* Grab list of all metaDb obj. */
+struct sqlConnection *conn = sqlConnect(database);
 struct mdbObj *mdb, *mdbList = mdbObjsQueryAll(conn, clTable);
 verbose(2, "%d objects in %s.%s\n", slCount(mdbList), database, clTable);
+sqlDisconnect(&conn);
 
+/* Loop through all objects, evaluating the RQL on them. */
 struct lm *lm = lmInit(0);
+int matchCount = 0;
+boolean doSelect = sameString(rql->command, "select");
 for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
     {
     if (rqlStatementMatch(rql, mdb, lm))
 	{
-	if (sameString(clOut, "ra"))
-	   raOutput(rql, mdb, stdout);
-	else if (sameString(clOut, "line"))
-	   lineOutput(rql, mdb, stdout);
-	else if (sameString(clOut, "table"))
-	   tableOutput(rql, mdb, stdout);
-	else
-	   errAbort("Unknown out type %s", clOut);
+	matchCount += 1;
+	if (doSelect)
+	    {
+	    if (sameString(clOut, "ra"))
+	       raOutput(rql, mdb, stdout);
+	    else if (sameString(clOut, "line"))
+	       lineOutput(rql, mdb, stdout);
+	    else if (sameString(clOut, "table"))
+	       tableOutput(rql, mdb, stdout);
+	    else
+	       errAbort("Unknown out type %s", clOut);
+	    }
 	}
     }
-sqlDisconnect(&conn);
+if (sameString(rql->command, "count"))
+    printf("%d\n", matchCount);
 }
 
 int main(int argc, char *argv[])
