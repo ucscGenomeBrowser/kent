@@ -6,7 +6,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam.gz
@@ -29,7 +28,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam.gz
@@ -52,7 +50,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdSig.bigWig.gz
@@ -1333,7 +1330,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam.gz
@@ -1356,7 +1352,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam.gz
@@ -1379,7 +1374,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdSig.bigWig.gz
@@ -1602,7 +1596,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam.gz
@@ -1625,7 +1618,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam.gz
@@ -1648,7 +1640,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdSig.bigWig.gz
@@ -2075,7 +2066,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam.gz
@@ -2098,7 +2088,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam.gz
@@ -2121,7 +2110,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdSig.bigWig.gz
@@ -2755,7 +2743,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam.gz
@@ -2778,7 +2765,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam.gz
@@ -2801,7 +2787,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdSig.bigWig.gz
@@ -4280,7 +4265,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam.gz
@@ -4303,7 +4287,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam.gz
@@ -4326,7 +4309,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam.gz
@@ -4349,7 +4331,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdSig.bigWig.gz
@@ -4417,7 +4398,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam.gz
@@ -4508,7 +4488,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam.gz
@@ -4667,7 +4646,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam.gz
@@ -4758,7 +4736,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam.gz
@@ -4917,7 +4894,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam.gz
@@ -5008,7 +4984,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam.gz
@@ -5099,7 +5074,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam.gz
@@ -5190,7 +5164,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam.gz
@@ -5281,7 +5254,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam.gz
@@ -5326,7 +5298,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam.gz
@@ -5349,7 +5320,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneK562ControlStdSig.bigWig.gz
@@ -6096,7 +6066,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam.gz
@@ -6119,7 +6088,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam.gz
@@ -6142,7 +6110,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdSig.bigWig.gz
@@ -6210,7 +6177,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-20
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam.gz
@@ -6301,7 +6267,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam.gz
@@ -6392,7 +6357,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam.gz
@@ -6483,7 +6447,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam.gz
@@ -6574,7 +6537,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam.gz
@@ -6665,7 +6627,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam.gz
@@ -6756,7 +6717,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam.gz
@@ -6847,7 +6807,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam.gz
@@ -6938,7 +6897,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam.gz
@@ -7029,7 +6987,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam.gz
@@ -7142,7 +7099,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam.gz
@@ -7165,7 +7121,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam.gz
@@ -7188,7 +7143,6 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdSig.bigWig.gz
@@ -7814,4 +7768,4 @@ subId 1699
 tableName wgEncodeBroadHistoneNhlfH4k20me1StdSig
 view Signal
 
-# MAGIC: 60690713
+# MAGIC: -354568253
