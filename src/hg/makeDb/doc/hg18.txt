@@ -11298,6 +11298,31 @@ mysql> alter table snp126orthoPanTro2RheMac2 add index chrom (chrom, bin);
     | hgLoadBed hg18 genomicSuperDups stdin \
       -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
 
+    #	fix off-by one error:
+    sed -e 's/\t_\t/\t-\t/' hg18genomicSuperDup.tab \
+    | awk '($3 - $2) >= 1000 && ($9 - $8) >= 1000 {print;}' > hg18.gsd.bed
+    #	run this perl script:
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<hg18.gsd.bed") or die "can not read hg18.gsd.bed";
+while (my $line = <FH>) {
+        chomp $line;
+    my ($chr, $start, $rest) = split('\s+', $line, 3);
+    printf "%s\t%d\t%s\n", $chr, $start-1, $rest;
+}
+close (FH);
+    #
+    ./addOne.pl > oneLarger.bed
+    #	check first column:
+    ave -col=2 hg18.gsd.bed
+    ave -col=2 oneLarger.bed
+    #	reload table
+    hgLoadBed hg18 genomicSuperDups oneLarger.bed \
+      -sqlTable=$HOME/kent/src/hg/lib/genomicSuperDups.sql
+
 ############################################################################
 # GENE BOUNDS (RNACLUSTER) (DONE 08-09-2006 Fan)
 # Create rnaCluster table (depends on {est,mrna}OrientInfo)

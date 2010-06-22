@@ -1,0 +1,37 @@
+# Data Agreement File for Ren Lab ChIP-seq experiments  $Revision: 1.1 $
+
+# Lab and general info
+grant             Ren 
+lab               LICR
+dataType          ChipSeq
+variables         cell, antibody,sex,age,strain,control
+compositeSuffix   LicrHistone
+assembly          mm9
+medianFragmentLength 200
+dafVersion        2.0
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=25;validateFiles.fastq:quick=1000
+
+# Track/view definition
+view             Peaks
+longLabelPrefix  LICR Histone Peaks
+type             broadPeak
+hasReplicates    no
+required         no
+
+view             Signal
+longLabelPrefix  LICR Histone Signal
+type             bigWig
+hasReplicates    no
+required         yes
+
+view             Alignments
+longLabelPrefix  LICR Histone Alignments
+type             bam
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         yes
+
