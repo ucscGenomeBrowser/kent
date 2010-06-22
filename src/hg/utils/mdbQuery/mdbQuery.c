@@ -50,7 +50,7 @@ static struct optionSpec options[] = {
 };
 
 static char *lookupField(void *record, char *key)
-/* Lookup a field in a tdbRecord. */
+/* Lookup a field in a mdbObj. */
 {
 struct mdbObj *mdb = record;
 if (sameString(key, "obj"))
@@ -82,7 +82,7 @@ else
     }
 }
 
-static boolean match(char *a, char *b, boolean wild)
+static boolean stringMatch(char *a, char *b, boolean wild)
 /* Return true if strings a and b are the same.  If wild is true, do comparision 
  * expanding wildcards in a. */
 {
@@ -100,11 +100,11 @@ for (field = fieldList; field != NULL; field = field->next)
     {
     struct mdbVar *var;
     boolean doWild = anyWild(field->name);
-    if (match(field->name, "obj", doWild))
+    if (stringMatch(field->name, "obj", doWild))
         fprintf(out, "%s %s\n", "obj", mdb->obj);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
-	if (match(field->name, var->var, doWild))
+	if (stringMatch(field->name, var->var, doWild))
 	    fprintf(out, "%s %s\n", var->var, var->val);
 	}
     }
@@ -121,7 +121,7 @@ for (field = fieldList; field != NULL; field = field->next)
     boolean doWild = anyWild(field->name);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
-	if (match(field->name, var->var, doWild))
+	if (stringMatch(field->name, var->var, doWild))
 	    fprintf(out, "%s\t%s\t%s\n", mdb->obj, var->var, var->val);
 	}
     }
@@ -138,7 +138,7 @@ for (field = fieldList; field != NULL; field = field->next)
     boolean doWild = anyWild(field->name);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
-	if (match(field->name, var->var, doWild))
+	if (stringMatch(field->name, var->var, doWild))
 	    fprintf(out, " %s=%s;", var->var, var->val);
 	}
     }
@@ -202,7 +202,7 @@ for (t = rql->tableList; t != NULL; t = t->next)
     }
 verbose(2, "%d databases in from clause\n", slCount(dbOrderList));
 
-/* Make sure we actually only have one valid database, and put database variable
+/* Make sure we actually only have one valid database, and point database variable
  * to it's name. */
 if (slCount(dbOrderList) != 1)
     {
