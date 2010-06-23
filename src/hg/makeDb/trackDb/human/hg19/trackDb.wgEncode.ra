@@ -9,6 +9,7 @@ include trackDb.wgEncodeHaibTfbs.ra
 include trackDb.wgEncodeSydhTfbs.ra
 include trackDb.wgEncodeSydhHistone.ra
 include wgEncodeBroadHistone.ra
+include wgEncodeOpenChromChip.ra
 include wgEncodeUwHistone.ra
 include wgEncodeUwDgf.ra
 include wgEncodeUwDnase.ra

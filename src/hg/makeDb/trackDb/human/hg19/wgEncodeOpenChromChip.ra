@@ -1,0 +1,969 @@
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeChromatinMap.ra,v 1.1 2010/05/27 21:34:43 tdreszer Exp $
+
+# Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
+
+track wgEncodeOpenChromChip
+compositeTrack on
+shortLabel Open Chromatin
+longLabel ENCODE Open Chromatin, UT-Austin ChIP-seq
+group regulation
+subGroup1 view Views Peaks=Peaks SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
+subGroup2 cellType Cell_Line AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
+subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
+sortOrder cellType=+ factor=+ view=+
+dimensions dimensionY=cellType dimensionX=factor
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell factor=antibody
+noInherit on
+configurable on
+useScore 0
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeOpenChromChipViewPeaks
+    shortLabel Peaks
+    view Peaks
+    visibility pack
+    parent wgEncodeOpenChromChip
+    pValueFilter 0.0
+    pValueFilterLimits 0:16
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    scoreMin 600
+
+        track wgEncodeOpenChromChipGm12878CmycPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel GM12878 c-Myc Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in GM12878 cells)
+        subGroups view=Peaks factor=CMYC cellType=GM12878
+        type narrowPeak
+        origAssembly hg18
+        color 153,38,0
+        # subId=1229 dateSubmitted=2010-06-02
+
+        track wgEncodeOpenChromChipGm12878Pol2Pk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel GM12878 Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in GM12878 cells)
+        subGroups view=Peaks factor=POL2 cellType=GM12878
+        type narrowPeak
+        origAssembly hg18
+        color 153,38,0
+        # subId=1478 dateSubmitted=2010-06-15
+
+        track wgEncodeOpenChromChipGm12891CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel GM12891 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12891 cells)
+        subGroups view=Peaks factor=CTCF cellType=GM12891
+        type narrowPeak
+        origAssembly hg18
+        # subId=1490 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm12892CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel GM12892 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM12892 cells)
+        subGroups view=Peaks factor=CTCF cellType=GM12892
+        type narrowPeak
+        origAssembly hg18
+        # subId=1491 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HeLa-S3 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HeLa-S3 cells)
+        subGroups view=Peaks factor=CTCF cellType=HELA
+        type narrowPeak
+        origAssembly hg18
+        color 0,119,158
+        # subId=1499 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipH1hescCtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel H1-hESC CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in H1-hESC cells)
+        subGroups view=Peaks factor=CTCF cellType=H1
+        type narrowPeak
+        origAssembly hg18
+        color 0,107,27
+        # subId=1500 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3CmycPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HeLa-S3 c-Myc Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HeLa-S3 cells)
+        subGroups view=Peaks factor=CMYC cellType=HELA
+        type narrowPeak
+        origAssembly hg18
+        color 0,119,158
+        # subId=1501 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipH1hescCmycPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel H1-hESC c-Myc Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in H1-hESC cells)
+        subGroups view=Peaks factor=CMYC cellType=H1
+        type narrowPeak
+        origAssembly hg18
+        color 0,107,27
+        # subId=1504 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3Pol2Pk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HeLa-S3 Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HeLa-S3 cells)
+        subGroups view=Peaks factor=POL2 cellType=HELA
+        type narrowPeak
+        origAssembly hg18
+        color 0,119,158
+        # subId=1505 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19238CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel GM19238 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM19238 cells)
+        subGroups view=Peaks factor=CTCF cellType=GM19238
+        type narrowPeak
+        origAssembly hg18
+        # subId=1516 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HepG2 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HepG2 cells)
+        subGroups view=Peaks factor=CTCF cellType=HEPG2
+        type narrowPeak
+        origAssembly hg18
+        color 189,0,157
+        # subId=1517 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19239CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel GM19239 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM19239 cells)
+        subGroups view=Peaks factor=CTCF cellType=GM19239
+        type narrowPeak
+        origAssembly hg18
+        # subId=1525 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2Pol2Pk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HepG2 Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HepG2 cells)
+        subGroups view=Peaks factor=POL2 cellType=HEPG2
+        type narrowPeak
+        origAssembly hg18
+        color 189,0,157
+        # subId=1526 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2CmycPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HepG2 c-Myc Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HepG2 cells)
+        subGroups view=Peaks factor=CMYC cellType=HEPG2
+        type narrowPeak
+        origAssembly hg18
+        color 189,0,157
+        # subId=1527 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19240CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel GM19240 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in GM19240 cells)
+        subGroups view=Peaks factor=CTCF cellType=GM19240
+        type narrowPeak
+        origAssembly hg18
+        # subId=1536 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecCtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HUVEC CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in HUVEC cells)
+        subGroups view=Peaks factor=CTCF cellType=HUVEC
+        type narrowPeak
+        origAssembly hg18
+        color 224,75,0
+        # subId=1537 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel K562 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in K562 cells)
+        subGroups view=Peaks factor=CTCF cellType=K562
+        type narrowPeak
+        origAssembly hg18
+        color 46,0,184
+        # subId=1538 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipNhekCtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel NHEK CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in NHEK cells)
+        subGroups view=Peaks factor=CTCF cellType=NHEK
+        type narrowPeak
+        origAssembly hg18
+        color 179,0,134
+        # subId=1539 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecPol2Pk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HUVEC Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in HUVEC cells)
+        subGroups view=Peaks factor=POL2 cellType=HUVEC
+        type narrowPeak
+        origAssembly hg18
+        color 224,75,0
+        # subId=1540 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562Pol2Pk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel K562 Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in K562 cells)
+        subGroups view=Peaks factor=POL2 cellType=K562
+        type narrowPeak
+        origAssembly hg18
+        color 46,0,184
+        # subId=1541 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecCmycPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel HUVEC c-Myc Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in HUVEC cells)
+        subGroups view=Peaks factor=CMYC cellType=HUVEC
+        type narrowPeak
+        origAssembly hg18
+        color 224,75,0
+        # subId=1542 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562CmycPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel K562 c-Myc Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (c-Myc in K562 cells)
+        subGroups view=Peaks factor=CMYC cellType=K562
+        type narrowPeak
+        origAssembly hg18
+        color 46,0,184
+        # subId=1543 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipMcf7CtcfPk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel MCF-7 CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (CTCF in MCF-7 cells)
+        subGroups view=Peaks factor=CTCF cellType=MCF7
+        type narrowPeak
+        origAssembly hg18
+        # subId=1580 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipProgfibPol2PkRep1
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel ProgFib Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks Replicate 1 (Pol2 in ProgFib cells)
+        subGroups view=Peaks factor=POL2 cellType=PROG
+        type narrowPeak
+        origAssembly hg18
+        # subId=1652 dateSubmitted=2010-06-19
+
+        track wgEncodeOpenChromChipProgfibCtcfPkRep1
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks off
+        shortLabel ProgFib CTCF Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks Replicate 1 (CTCF in ProgFib cells)
+        subGroups view=Peaks factor=CTCF cellType=PROG
+        type narrowPeak
+        origAssembly hg18
+        # subId=1657 dateSubmitted=2010-06-19
+
+        track wgEncodeOpenChromChipH1hescPol2Pk
+        release alpha
+        parent wgEncodeOpenChromChipViewPeaks
+        shortLabel H1-hESC Pol2 Pk
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Peaks (Pol2 in H1-hESC cells)
+        subGroups view=Peaks factor=POL2 cellType=H1
+        type narrowPeak
+        origAssembly hg18
+        color 0,107,27
+        # subId=1833 dateSubmitted=2010-06-22
+
+
+    track wgEncodeOpenChromChipViewSignal
+    shortLabel Signal (F-Seq Density)
+    view SIG
+    visibility full
+    parent wgEncodeOpenChromChip
+    viewLimits 0:0.4
+    minLimit 0
+    maxLimit 29.05
+    autoScale off
+    windowingFunction maximum
+    maxHeightPixels 100:32:16
+
+        track wgEncodeOpenChromChipGm12878CmycSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel GM12878 c-Myc FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in GM12878 cells)
+        subGroups view=SIG factor=CMYC cellType=GM12878
+        type bigWig 0.000000 0.750000
+        origAssembly hg18
+        color 153,38,0
+        # subId=1229 dateSubmitted=2010-06-02
+
+        track wgEncodeOpenChromChipGm12878Pol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel GM12878 Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in GM12878 cells)
+        subGroups view=SIG factor=POL2 cellType=GM12878
+        type bigWig 0.000000 3.535200
+        origAssembly hg18
+        color 153,38,0
+        # subId=1478 dateSubmitted=2010-06-15
+
+        track wgEncodeOpenChromChipGm12891CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel GM12891 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM12891 cells)
+        subGroups view=SIG factor=CTCF cellType=GM12891
+        type bigWig 0.000000 16.499300
+        origAssembly hg18
+        # subId=1490 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm12892CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel GM12892 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM12892 cells)
+        subGroups view=SIG factor=CTCF cellType=GM12892
+        type bigWig 0.000000 13.367100
+        origAssembly hg18
+        # subId=1491 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HeLa-S3 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HeLa-S3 cells)
+        subGroups view=SIG factor=CTCF cellType=HELA
+        type bigWig 0.000000 8.258300
+        origAssembly hg18
+        color 0,119,158
+        # subId=1499 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipH1hescCtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel H1-hESC CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in H1-hESC cells)
+        subGroups view=SIG factor=CTCF cellType=H1
+        type bigWig 0.000000 10.491300
+        origAssembly hg18
+        color 0,107,27
+        # subId=1500 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3CmycSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HeLa-S3 c-Myc FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HeLa-S3 cells)
+        subGroups view=SIG factor=CMYC cellType=HELA
+        type bigWig 0.000000 0.824800
+        origAssembly hg18
+        color 0,119,158
+        # subId=1501 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipH1hescCmycSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel H1-hESC c-Myc FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in H1-hESC cells)
+        subGroups view=SIG factor=CMYC cellType=H1
+        type bigWig 0.000000 1.701300
+        origAssembly hg18
+        color 0,107,27
+        # subId=1504 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3Pol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HeLa-S3 Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in HeLa-S3 cells)
+        subGroups view=SIG factor=POL2 cellType=HELA
+        type bigWig 0.000000 4.858800
+        origAssembly hg18
+        color 0,119,158
+        # subId=1505 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19238CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel GM19238 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM19238 cells)
+        subGroups view=SIG factor=CTCF cellType=GM19238
+        type bigWig 0.000000 15.617600
+        origAssembly hg18
+        # subId=1516 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HepG2 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HepG2 cells)
+        subGroups view=SIG factor=CTCF cellType=HEPG2
+        type bigWig 0.000000 7.433400
+        origAssembly hg18
+        color 189,0,157
+        # subId=1517 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm12878InputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel GM12878 Input FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Input in GM12878 cells)
+        subGroups view=SIG factor=zCTRL cellType=GM12878
+        type bigWig 0.000000 3.131200
+        origAssembly hg18
+        color 153,38,0
+        # subId=1518 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19239CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel GM19239 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM19239 cells)
+        subGroups view=SIG factor=CTCF cellType=GM19239
+        type bigWig 0.000000 13.094600
+        origAssembly hg18
+        # subId=1525 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2Pol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HepG2 Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in HepG2 cells)
+        subGroups view=SIG factor=POL2 cellType=HEPG2
+        type bigWig 0.000000 6.043500
+        origAssembly hg18
+        color 189,0,157
+        # subId=1526 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2CmycSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HepG2 c-Myc FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HepG2 cells)
+        subGroups view=SIG factor=CMYC cellType=HEPG2
+        type bigWig 0.000000 1.815900
+        origAssembly hg18
+        color 189,0,157
+        # subId=1527 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19240CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel GM19240 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in GM19240 cells)
+        subGroups view=SIG factor=CTCF cellType=GM19240
+        type bigWig 0.000000 16.539000
+        origAssembly hg18
+        # subId=1536 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecCtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HUVEC CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in HUVEC cells)
+        subGroups view=SIG factor=CTCF cellType=HUVEC
+        type bigWig 0.000000 10.211700
+        origAssembly hg18
+        color 224,75,0
+        # subId=1537 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel K562 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in K562 cells)
+        subGroups view=SIG factor=CTCF cellType=K562
+        type bigWig 0.000000 6.820800
+        origAssembly hg18
+        color 46,0,184
+        # subId=1538 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipNhekCtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel NHEK CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in NHEK cells)
+        subGroups view=SIG factor=CTCF cellType=NHEK
+        type bigWig 0.000000 16.593500
+        origAssembly hg18
+        color 179,0,134
+        # subId=1539 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecPol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HUVEC Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in HUVEC cells)
+        subGroups view=SIG factor=POL2 cellType=HUVEC
+        type bigWig 0.000000 10.084000
+        origAssembly hg18
+        color 224,75,0
+        # subId=1540 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562Pol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel K562 Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in K562 cells)
+        subGroups view=SIG factor=POL2 cellType=K562
+        type bigWig 0.000000 5.497300
+        origAssembly hg18
+        color 46,0,184
+        # subId=1541 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecCmycSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HUVEC c-Myc FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in HUVEC cells)
+        subGroups view=SIG factor=CMYC cellType=HUVEC
+        type bigWig 0.000000 2.169800
+        origAssembly hg18
+        color 224,75,0
+        # subId=1542 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562CmycSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel K562 c-Myc FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (c-Myc in K562 cells)
+        subGroups view=SIG factor=CMYC cellType=K562
+        type bigWig 0.000000 1.981500
+        origAssembly hg18
+        color 46,0,184
+        # subId=1543 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipMcf7CtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel MCF-7 CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in MCF-7 cells)
+        subGroups view=SIG factor=CTCF cellType=MCF7
+        type bigWig 0.000000 10.135200
+        origAssembly hg18
+        # subId=1580 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562InputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel K562 Input FD
+        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in K562 cells)
+        subGroups view=SIG factor=zCTRL cellType=K562
+        type bigWig 0.000000 3.978400
+        origAssembly hg18
+        color 46,0,184
+        # subId=1606 dateSubmitted=2010-06-18
+
+        track wgEncodeOpenChromChipHuvecInputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HUVEC Input FD
+        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HUVEC cells)
+        subGroups view=SIG factor=zCTRL cellType=HUVEC
+        type bigWig 0.000000 4.696200
+        origAssembly hg18
+        color 224,75,0
+        # subId=1607 dateSubmitted=2010-06-18
+
+        track wgEncodeOpenChromChipHepg2InputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HepG2 Input FD
+        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HepG2 cells)
+        subGroups view=SIG factor=zCTRL cellType=HEPG2
+        type bigWig 0.000000 5.315900
+        origAssembly hg18
+        color 189,0,157
+        # subId=1608 dateSubmitted=2010-06-18
+
+        track wgEncodeOpenChromChipHelas3InputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel HeLa-S3 Input FD
+        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in HeLa-S3 cells)
+        subGroups view=SIG factor=zCTRL cellType=HELA
+        type bigWig 0.000000 3.396000
+        origAssembly hg18
+        color 0,119,158
+        # subId=1609 dateSubmitted=2010-06-18
+
+        track wgEncodeOpenChromChipProgfibPol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel ProgFib Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in ProgFib cells)
+        subGroups view=SIG factor=POL2 cellType=PROG
+        type bigWig 0.000000 5.686900
+        origAssembly hg18
+        # subId=1652 dateSubmitted=2010-06-19
+
+        track wgEncodeOpenChromChipProgfibCtcfSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel ProgFib CTCF FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (CTCF in ProgFib cells)
+        subGroups view=SIG factor=CTCF cellType=PROG
+        type bigWig 0.000000 4.544500
+        origAssembly hg18
+        # subId=1657 dateSubmitted=2010-06-19
+
+        track wgEncodeOpenChromChipProgfibInputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel ProgFib Input FD
+        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in ProgFib cells)
+        subGroups view=SIG factor=zCTRL cellType=PROG
+        type bigWig 0.000000 3.510000
+        origAssembly hg18
+        # subId=1832 dateSubmitted=2010-06-22
+
+        track wgEncodeOpenChromChipH1hescPol2Sig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal
+        shortLabel H1-hESC Pol2 FD
+        longLabel ENCODE Open Chromatin, UT ChIP-seq F-Seq Density Signal (Pol2 in H1-hESC cells)
+        subGroups view=SIG factor=POL2 cellType=H1
+        type bigWig 0.000000 2.933300
+        origAssembly hg18
+        color 0,107,27
+        # subId=1833 dateSubmitted=2010-06-22
+
+        track wgEncodeOpenChromChipMcf7InputSig
+        release alpha
+        parent wgEncodeOpenChromChipViewSignal off
+        shortLabel MCF-7 Input FD
+        longLabel ENCODE Open Chromatin, UT Input F-Seq Density Signal (Input in MCF-7 cells)
+        subGroups view=SIG factor=zCTRL cellType=MCF7
+        type bigWig 0.000000 3.677800
+        origAssembly hg18
+        # subId=1834 dateSubmitted=2010-06-22
+
+
+    track wgEncodeOpenChromChipViewSigBo
+    shortLabel Signal (Base Overlap)
+    view SIGBO
+    visibility full
+    parent wgEncodeOpenChromChip
+    viewLimits 0:100
+    minLimit 0
+    maxLimit 8719
+    autoScale off
+    windowingFunction maximum
+    maxHeightPixels 100:32:16
+
+        track wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel GM12878 c-Myc BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in GM12878 cells)
+        subGroups view=SIGBO factor=CMYC cellType=GM12878
+        type bigWig 0.000000 599.000000
+        origAssembly hg18
+        color 153,38,0
+        # subId=1229 dateSubmitted=2010-06-02
+
+        track wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel GM12878 Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in GM12878 cells)
+        subGroups view=SIGBO factor=POL2 cellType=GM12878
+        type bigWig 0.000000 2100.000000
+        origAssembly hg18
+        color 153,38,0
+        # subId=1478 dateSubmitted=2010-06-15
+
+        track wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel GM12891 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12891 cells)
+        subGroups view=SIGBO factor=CTCF cellType=GM12891
+        type bigWig 0.000000 3417.000000
+        origAssembly hg18
+        # subId=1490 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel GM12892 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM12892 cells)
+        subGroups view=SIGBO factor=CTCF cellType=GM12892
+        type bigWig 0.000000 3515.000000
+        origAssembly hg18
+        # subId=1491 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HeLa-S3 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HeLa-S3 cells)
+        subGroups view=SIGBO factor=CTCF cellType=HELA
+        type bigWig 0.000000 1958.000000
+        origAssembly hg18
+        color 0,119,158
+        # subId=1499 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel H1-hESC CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in H1-hESC cells)
+        subGroups view=SIGBO factor=CTCF cellType=H1
+        type bigWig 0.000000 1248.000000
+        origAssembly hg18
+        color 0,107,27
+        # subId=1500 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HeLa-S3 c-Myc BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HeLa-S3 cells)
+        subGroups view=SIGBO factor=CMYC cellType=HELA
+        type bigWig 0.000000 183.000000
+        origAssembly hg18
+        color 0,119,158
+        # subId=1501 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel H1-hESC c-Myc BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in H1-hESC cells)
+        subGroups view=SIGBO factor=CMYC cellType=H1
+        type bigWig 0.000000 626.000000
+        origAssembly hg18
+        color 0,107,27
+        # subId=1504 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HeLa-S3 Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in HeLa-S3 cells)
+        subGroups view=SIGBO factor=POL2 cellType=HELA
+        type bigWig 0.000000 2084.000000
+        origAssembly hg18
+        color 0,119,158
+        # subId=1505 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel GM19238 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM19238 cells)
+        subGroups view=SIGBO factor=CTCF cellType=GM19238
+        type bigWig 0.000000 3403.000000
+        origAssembly hg18
+        # subId=1516 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HepG2 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HepG2 cells)
+        subGroups view=SIGBO factor=CTCF cellType=HEPG2
+        type bigWig 0.000000 629.000000
+        origAssembly hg18
+        color 189,0,157
+        # subId=1517 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel GM19239 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM19239 cells)
+        subGroups view=SIGBO factor=CTCF cellType=GM19239
+        type bigWig 0.000000 2555.000000
+        origAssembly hg18
+        # subId=1525 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HepG2 Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in HepG2 cells)
+        subGroups view=SIGBO factor=POL2 cellType=HEPG2
+        type bigWig 0.000000 2206.000000
+        origAssembly hg18
+        color 189,0,157
+        # subId=1526 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HepG2 c-Myc BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HepG2 cells)
+        subGroups view=SIGBO factor=CMYC cellType=HEPG2
+        type bigWig 0.000000 558.000000
+        origAssembly hg18
+        color 189,0,157
+        # subId=1527 dateSubmitted=2010-06-16
+
+        track wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel GM19240 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in GM19240 cells)
+        subGroups view=SIGBO factor=CTCF cellType=GM19240
+        type bigWig 0.000000 3688.000000
+        origAssembly hg18
+        # subId=1536 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HUVEC CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in HUVEC cells)
+        subGroups view=SIGBO factor=CTCF cellType=HUVEC
+        type bigWig 0.000000 1348.000000
+        origAssembly hg18
+        color 224,75,0
+        # subId=1537 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel K562 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in K562 cells)
+        subGroups view=SIGBO factor=CTCF cellType=K562
+        type bigWig 0.000000 3149.000000
+        origAssembly hg18
+        color 46,0,184
+        # subId=1538 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel NHEK CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in NHEK cells)
+        subGroups view=SIGBO factor=CTCF cellType=NHEK
+        type bigWig 0.000000 3899.000000
+        origAssembly hg18
+        color 179,0,134
+        # subId=1539 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HUVEC Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in HUVEC cells)
+        subGroups view=SIGBO factor=POL2 cellType=HUVEC
+        type bigWig 0.000000 3853.000000
+        origAssembly hg18
+        color 224,75,0
+        # subId=1540 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562Pol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel K562 Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in K562 cells)
+        subGroups view=SIGBO factor=POL2 cellType=K562
+        type bigWig 0.000000 4459.000000
+        origAssembly hg18
+        color 46,0,184
+        # subId=1541 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel HUVEC c-Myc BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in HUVEC cells)
+        subGroups view=SIGBO factor=CMYC cellType=HUVEC
+        type bigWig 0.000000 530.000000
+        origAssembly hg18
+        color 224,75,0
+        # subId=1542 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipK562CmycBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel K562 c-Myc BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (c-Myc in K562 cells)
+        subGroups view=SIGBO factor=CMYC cellType=K562
+        type bigWig 0.000000 1968.000000
+        origAssembly hg18
+        color 46,0,184
+        # subId=1543 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel MCF-7 CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in MCF-7 cells)
+        subGroups view=SIGBO factor=CTCF cellType=MCF7
+        type bigWig 0.000000 4684.000000
+        origAssembly hg18
+        # subId=1580 dateSubmitted=2010-06-17
+
+        track wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel ProgFib Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in ProgFib cells)
+        subGroups view=SIGBO factor=POL2 cellType=PROG
+        type bigWig 0.000000 4358.000000
+        origAssembly hg18
+        # subId=1652 dateSubmitted=2010-06-19
+
+        track wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo off
+        shortLabel ProgFib CTCF BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (CTCF in ProgFib cells)
+        subGroups view=SIGBO factor=CTCF cellType=PROG
+        type bigWig 0.000000 1963.000000
+        origAssembly hg18
+        # subId=1657 dateSubmitted=2010-06-19
+
+        track wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromChipViewSigBo
+        shortLabel H1-hESC Pol2 BO
+        longLabel ENCODE Open Chromatin, UT ChIP-seq Base Overlap Signal (Pol2 in H1-hESC cells)
+        subGroups view=SIGBO factor=POL2 cellType=H1
+        type bigWig 0.000000 1223.000000
+        origAssembly hg18
+        color 0,107,27
+        # subId=1833 dateSubmitted=2010-06-22
+
