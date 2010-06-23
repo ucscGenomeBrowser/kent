@@ -235,7 +235,7 @@ module PipelineBackground
 
       #yell "\n\nGALT! cmd=[#{cmd}]\n\n"   # DEBUG remove
 
-      timeout = 36000  # 10 hours
+      timeout = 72000  # 20 hours
       exitCode = run_with_timeout(cmd, timeout)
       if exitCode != 0
         new_status project, "upload failed"
