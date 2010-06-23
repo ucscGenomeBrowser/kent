@@ -63,10 +63,10 @@ endif
 ./updateCgiVersion.csh real
 
 if ( $status ) then
- echo "cvs-cgi-version-update failed on $HOST [${0}: `date`]"
+ echo "git-cgi-version-update failed on $HOST [${0}: `date`]"
  exit 1
 endif
-echo "cvs-cgi-version-update done on $HOST [${0}: `date`]"
+echo "git-cgi-version-update done on $HOST [${0}: `date`]"
 
 
 echo
@@ -81,11 +81,11 @@ echo "new branch v$BRANCHNN created."
 
 echo
 echo
-echo  "NOW STARTING CVS-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
+echo  "NOW STARTING Git-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
-rm -f doNewCvs.log
+rm -f doNewGit.log
 #echo debug: disabled buildCvsReports
-ssh -n hgwdev $WEEKLYBLD/buildCvsReports.csh branch real >& doNewCvs.log &
+ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
 echo
@@ -138,16 +138,16 @@ echo "build on beta done for v$BRANCHNN [${0}: `date`]"
 echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER galt kent browser-qa
 
 echo
-echo "Waiting for the background beta:cvs-reports to finish [${0}: `date`]"
+echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"
 echo "Waiting for the background ${BOX32}:doNewBranch32.csh to finish [${0}: `date`]"
 wait
 echo "Wait complete, checking results. [${0}: `date`]"
-if ( -e CvsReports.ok ) then
-    echo "CVS Reports finished ok. [${0}: `date`]"
+if ( -e GitReports.ok ) then
+    echo "Git Reports finished ok. [${0}: `date`]"
     echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
-    echo "Ready for pairings, day 9, CVS reports completed for v${BRANCHNN} review http://genecats.cse.ucsc.edu/cvs-reports/ (history at http://genecats.cse.ucsc.edu/cvs-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
+    echo "Ready for pairings, day 9, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
 else
-    echo "CVS Reports had some error, no ok file found. [${0}: `date`]"
+    echo "Git Reports had some error, no ok file found. [${0}: `date`]"
 endif
 echo
 if (-e 32bitUtils.ok) then

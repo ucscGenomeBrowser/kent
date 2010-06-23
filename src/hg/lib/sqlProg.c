@@ -80,3 +80,36 @@ execvp(nargv[0], nargv);
 errnoAbort("exec of %s failed", nargv[0]);
 }
 
+void sqlExecProgProfile(char *profile, char *prog, char **progArgs, int userArgc, char *userArgv[])
+/* 
+ * Exec one of the sql programs using user and password defined in localDb.XXX variables from ~/.hg.conf 
+ * progArgs is NULL-terminate array of program-specific arguments to add,
+ * which maybe NULL. userArgv are arguments passed in from the command line.
+ * The program is execvp-ed, this function does not return. 
+ */
+{
+int i, j = 0, nargc=cntArgv(progArgs)+userArgc+6;
+char **nargv, passArg[128], hostArg[128], optionStr[128];
+safef(optionStr, sizeof(optionStr), "%s.password", profile);
+safef(passArg, sizeof(passArg), "-p%s", cfgOption(optionStr));
+safef(optionStr, sizeof(optionStr), "%s.host", profile);
+safef(hostArg, sizeof(hostArg), "-h%s", cfgOption(optionStr));
+AllocArray(nargv, nargc);
+
+nargv[j++] = prog;
+nargv[j++] = "-u";
+safef(optionStr, sizeof(optionStr), "%s.user", profile);
+nargv[j++] = cfgOption(optionStr);
+nargv[j++] = passArg;
+nargv[j++] = hostArg;
+if (progArgs != NULL)
+    {
+    for (i = 0; progArgs[i] != NULL; i++)
+        nargv[j++] = progArgs[i];
+    }
+for (i = 0; i < userArgc; i++)
+    nargv[j++] = userArgv[i];
+nargv[j++] = NULL;
+execvp(nargv[0], nargv);
+errnoAbort("exec of %s failed", nargv[0]);
+}

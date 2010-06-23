@@ -3848,7 +3848,9 @@ group regulation
 subGroup1 view Views ALN=Alignments COV=Coverage CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
 subGroup3 assayType Assay_Type MRE1=MRE_reads MRE2=MRE_coverage MRE3=MRE_CpG MeDIP1=MeDIP_reads MeDIP2=MeDIP_coverage H3K4me3=H3K4me3 RNA1=RNA_reads RNA2=RNA_coverage
-dimensions dimensionX=sampleType dimensionY=assayType
+dimensions 
+sortOrder assayType=+ view=+
+#dimensions dimensionX=sampleType dimensionY=assayType
 dividers assayType 
 #hierachy view ALN=2 COV=3 CG=4
 dragAndDrop subTracks
