@@ -1,5 +1,6 @@
 
 LIST=\
+wgEncodeBroadHistone.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeSunyAlbanyTiling.ra \

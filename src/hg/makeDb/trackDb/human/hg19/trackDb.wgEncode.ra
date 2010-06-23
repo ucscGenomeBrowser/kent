@@ -8,9 +8,10 @@ include trackDb.wgEncodeSunyAlbanyTiling.ra
 include trackDb.wgEncodeHaibTfbs.ra
 include trackDb.wgEncodeSydhTfbs.ra
 include trackDb.wgEncodeSydhHistone.ra
+include wgEncodeBroadHistone.ra
 include wgEncodeUwHistone.ra
-include wgEncodeUwDnase.ra
 include wgEncodeUwDgf.ra
+include wgEncodeUwDnase.ra
 
 
 track wgEncodeMapability
@@ -597,3 +598,5 @@ noInherit on
         color 46,0,184
         # subId=1405 dateSubmitted=2010-06-14
 
+# Riken CAGE (wrangler: braney)
+include wgEncodeRikenCage.ra
