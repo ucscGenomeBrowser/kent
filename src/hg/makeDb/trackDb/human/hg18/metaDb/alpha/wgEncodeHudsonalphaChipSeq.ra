@@ -5065,7 +5065,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Gabp.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -5112,7 +5112,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Nrsf.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -5255,7 +5255,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Pol2.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -5374,7 +5374,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Srf.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -6228,7 +6228,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Gabp.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -6275,7 +6275,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Nrsf.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -6298,7 +6298,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Pol2.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -6417,7 +6417,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1K562Srf.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -6511,7 +6511,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1Pfsk1Foxp2.narrowPeaks.gz
 grant Myers
 inputType PFSK-1/None/Input/PCR1x
 lab HudsonAlpha
@@ -6556,7 +6556,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1SknmcFoxp2.narrowPeaks.gz
 grant Myers
 inputType SK-N-MC/None/Input/PCR1x
 lab HudsonAlpha
@@ -6983,7 +6983,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Gabp.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -7030,7 +7030,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Nrsf.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -7173,7 +7173,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Pol2.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -7292,7 +7292,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Srf.narrowPeaks.gz
 grant Myers
 inputType GM12878/None/Input/PCR2x
 lab HudsonAlpha
@@ -8126,7 +8126,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Gabp.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -8173,7 +8173,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Nrsf.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -8196,7 +8196,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Pol2.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -8315,7 +8315,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2K562Srf.narrowPeaks.gz
 grant Myers
 inputType K562/None/Input/PCR2x
 lab HudsonAlpha
@@ -8409,7 +8409,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2Pfsk1Foxp2.narrowPeaks.gz
 grant Myers
 inputType PFSK-1/None/Input/PCR1x
 lab HudsonAlpha
@@ -8454,7 +8454,7 @@ dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-10-31
 dateUnrestricted 2009-07-31
-fileName wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2.narrowPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep2SknmcFoxp2.narrowPeaks.gz
 grant Myers
 inputType SK-N-MC/None/Input/PCR1x
 lab HudsonAlpha
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 454594751
+# MAGIC: -350254661
