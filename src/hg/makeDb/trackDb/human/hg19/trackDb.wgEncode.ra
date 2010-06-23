@@ -516,4 +516,4 @@ query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 include wgEncodeRikenCage.ra
 
 # CSHL Small RNA (wrangler: cricket)
-include wgEncodeCshlShortRnaSeq.ra
+####include wgEncodeCshlShortRnaSeq.ra
