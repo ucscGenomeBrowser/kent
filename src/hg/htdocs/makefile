@@ -10,11 +10,9 @@ GIT = git
 GITUP = ${GIT} pull -q
 
 user:
-	${GITUP}
 	${MAKE} doInstall destDir=${HTDOCS_USER} extra=doSymLink
 
 alpha:
-	${GITUP}
 	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
 
 beta:
@@ -22,15 +20,12 @@ beta:
 	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
 
 alphaCancerPublic:
-	${GITUP} cancerGenomics index.html
 	${MAKE} doInstallCancerPublic destDir=${HTDOCS} extra=doSymLink
 
 alphaCancerSU2C:
-	${GITUP} cancerGenomics index.html
 	${MAKE} doInstallCancerSU2C destDir=${HTDOCS} extra=doSymLink
 
 alphaCancerTCGA:
-	${GITUP} cancerGenomics index.html
 	${MAKE} doInstallCancerTCGA destDir=${HTDOCS} extra=doSymLink
 
 # Recursive target to do install to destDir, with extra excludes excl and
