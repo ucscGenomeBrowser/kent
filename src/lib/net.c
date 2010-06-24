@@ -1230,7 +1230,7 @@ else
     struct lineFile *lf = NULL;
     char *newUrl = NULL;
     int newSd = 0;
-    if (startsWith("http://",url))
+    if (startsWith("http://",url) || startsWith("https://",url))
 	{  
 	if (!netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
 	    {
