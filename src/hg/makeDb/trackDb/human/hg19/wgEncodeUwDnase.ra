@@ -4,6 +4,7 @@
 
 track wgEncodeUwDnase
 compositeTrack on
+superTrack wgEncodeDNAseSuper
 shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
