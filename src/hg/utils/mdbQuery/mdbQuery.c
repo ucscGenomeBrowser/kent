@@ -113,7 +113,7 @@ fprintf(out, "\n");
 }
 
 static void fourColOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
-/* Output fields  from mdb to file in three column obj/var/val format. */
+/* Output fields  from mdb to file in four column obj/var/varType/val format. */
 {
 struct slName *fieldList = rql->fieldList, *field;
 for (field = fieldList; field != NULL; field = field->next)
