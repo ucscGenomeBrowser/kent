@@ -1,12 +1,13 @@
 # Stanford/Yale/UCD/Harvard Histone ChIP-seq (wrangler: vsmalladi)
 track wgEncodeSydhHistone
 compositeTrack on
+superTrack wgEncodeHistoneSuper
 priority 0
 type bed 3
 origAssembly hg19
 nextItemButton on
 shortLabel SYDH Histone
-longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard 
+longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
 subGroup2 cellType Cell_Line  NT2D1=NT2-D1 K562=K562
@@ -14,7 +15,7 @@ subGroup3 factor Factor H3K27me3=H3K27me3 H3K36me3B=H3K36me3B H3K4me3=H3K4me3 H3
 		# Display names for H3K36me3B and H3K9acB might be better used consult TIM (found in cv.ra)
 subGroup4 control Control std=Standard UCD=UC_Davis
 subGroup5 treatment Treatment None=None
-dimensions dimensionX=factor dimensionY=cellType 
+dimensions dimensionX=factor dimensionY=cellType
 sortOrder cellType=+ factor=+ control=+ view=+
 #sortOrder cellType=+ factor=+ view=+
 dragAndDrop subTracks
@@ -67,7 +68,7 @@ wgEncode 1
 	    type narrowPeak
 	    metadata project=wgEncode grant=Snyder lab=UCDavis dataType=ChIPseq cell=NT2-D1 antibody=H3K9ac treatment=None control=std setType=exp inputType=NT2-D1/None/Input/std view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1173 dateSubmitted=2010-05-04 dateUnrestricted=2011-02-04 composite=wgEncodeSydhHistone tableName=wgEncodeSydhHistoneNt2d1H3k9acStdPk fileName=wgEncodeSydhHistoneNt2d1H3k9acStdPk.narrowPeak.gz
 
-		# All Tier 1 cell lines turned on#        
+		# All Tier 1 cell lines turned on#
 		track wgEncodeSydhHistoneK562H3k4me1UcdPk
         release alpha
         subTrack wgEncodeSydhHistoneViewPeaks on
@@ -138,7 +139,7 @@ wgEncode 1
 
 
 	#Signal Track SYDH Histone#
-	#Short Labels for signal =Sg # 
+	#Short Labels for signal =Sg #
 	track wgEncodeSydhHistoneViewSignal
     release alpha
     shortLabel Signal
