@@ -10,6 +10,8 @@
 
 static char const rcsid[] = "$Id: hgBedsToBedExps.c,v 1.6 2010/05/06 18:02:38 kent Exp $";
 
+boolean dupeLetterOk = FALSE;
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -18,13 +20,14 @@ errAbort(
   "usage:\n"
   "   hgBedsToBedExps in.cfg out.bed out.exps\n"
   "where in.cfg is a tab separated file that describes the beds.  The columns are\n"
-  "   <factor> <cell line> <cell letter> <db/file> <score col ix> <multiplier> <file/table>\n"
+  "   <factor> <cell name> <cell letter> <db/file> <score col ix> <multiplier> <file/table>\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -dupeLetterOk - if true don't insist that all cell letters be unique\n"
   );
 }
 
 static struct optionSpec options[] = {
+   {"dupeLetterOk", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -62,9 +65,13 @@ for (cfg = cfgList; cfg != NULL; cfg = cfg->next)
 	source->source = cfg->source;
 	source->sourceId = cfg->sourceId;
 	source->sourceIx = sourceIx++;
-	if (hashLookup(uniqHash, source->sourceId))
-	    errAbort("Source ID %s associated with two different source names including %s", source->sourceId, source->source);
-	hashAdd(uniqHash, source->sourceId, NULL);
+	if (!dupeLetterOk)
+	    {
+	    if (hashLookup(uniqHash, source->sourceId))
+		errAbort("Source ID %s associated with two different source names including %s", 
+			source->sourceId, source->source);
+	    hashAdd(uniqHash, source->sourceId, NULL);
+	    }
 	slAddHead(&sourceList, source);
 	hashAdd(hash, source->source, source);
 	}
@@ -150,6 +157,7 @@ if (sameString(cfg->dataSource, "file"))
 	bg->dataValue = lineFileNeedDouble(lf, row, cfg->scoreCol) * cfg->multiplier;
 	slAddHead(&bgList, bg);
 	}
+    lineFileClose(&lf);
     }
 else
     {
@@ -301,6 +309,7 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
+dupeLetterOk = optionExists("dupeLetterOk");
 hgBedsToBedExps(argv[1], argv[2], argv[3]);
 return 0;
 }
