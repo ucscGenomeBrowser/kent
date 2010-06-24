@@ -19,6 +19,7 @@ char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 static struct hash *geneHash = NULL;
 static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
+static char *mapability = NULL;
 
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
@@ -398,7 +399,7 @@ struct genePred *el, *retVal = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
+safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript order by k.chrom");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -550,7 +551,8 @@ while(!done)
         if (pos >= 0)
             {
             int len = strlen(overlapA->name);
-            if (len > 1 || (overlapA->chromEnd - overlapA->chromStart))
+            DNA snp = parseSnp(overlapA->name, NULL);
+            if (overlapA->chromEnd - overlapA->chromStart)
                 {
                 int delta = len - (overlapA->chromEnd - overlapA->chromStart);
                 if (delta % 3)
@@ -558,7 +560,7 @@ while(!done)
                 else
                     code = IN_FRAME_INS;
                 }
-            else
+            else if(snp)
                 {
                 unsigned codonStart;
                 unsigned aaIndex = (pos / 3) + 1;
@@ -573,7 +575,7 @@ while(!done)
                 strncpy(original, gp->name2 + codonStart, 3);
                 strncpy(new, gp->name2 + codonStart, 3);
                 original[3] = new[3] = 0;
-                new[pos % 3] = parseSnp(overlapA->name, NULL);
+                new[pos % 3] = snp;
                 if (gp->strand[0] == '-')
                     complement(new + (pos % 3), 1);
                 AA originalAA = lookupCodon(original);
@@ -595,6 +597,8 @@ while(!done)
                 if (debug)
                     fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
                 }
+            else
+                code = SYNONYMOUS;
             }
         else
             {
@@ -700,12 +704,11 @@ while(!done)
                         }
                     else
                         pos = bed->chromStart-motifStart;
-                    before = motifScore(motif, seq);
+                    before = dnaMotifBitScore(motif, seq->dna);
                     strncpy(beforeDna, seq->dna, seq->size);
                     beforeDna[seq->size] = 0;
-
                     seq->dna[pos] = snp;
-                    after = motifScore(motif, seq);
+                    after = dnaMotifBitScore(motif, seq->dna);
                     strncpy(afterDna, seq->dna, seq->size);
                     afterDna[seq->size] = 0;
                     delta = before - after;
