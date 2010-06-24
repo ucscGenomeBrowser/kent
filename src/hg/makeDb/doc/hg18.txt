@@ -12599,102 +12599,6 @@ CONTIG=$3
 TARGET=/san/sanvol1/scratch/hg18/coverage/maskedContigs/$CHROM/$CONTIG.fa.gz
 CLONESRC=/san/sanvol1/scratch/hg18/coverage.2006-10-23/unPlacedSplit/$CHROM/$CONTIG/$CLONE.fa.gz
 OOC=/san/sanvol1/scratch/hg18/coverage/maskedContigs/ooc/$CHROM/$CONTIG.10.ooc
-RESULT="${HERE}/psl/${CHROM}/${CONTIG}/${CLONE}.psl"
-mkdir -p psl/${CHROM}/${CONTIG}
-if [ ! -s ${CLONESRC} ]; then
-        echo "Can not find: ${CLONESRC}" 1>/dev/stderr
-        exit 255
-fi
-if [ ! -s ${TARGET} ]; then
-        echo "Can not find: ${TARGET}" 1>/dev/stderr
-        exit 255
-fi
-if [ ! -s ${OOC} ]; then
-        echo "Can not find: ${OOC}" 1>/dev/stderr
-        exit 255
-fi
-WRKDIR="/scratch/tmp/hg18_${CHROM}/${CONTIG}/${CLONE}"
-mkdir -p "${WRKDIR}"
-cd ${WRKDIR}
-zcat ${CLONESRC} > ${CLONE}.fa
-zcat ${TARGET} > ${CONTIG}.fa
-cp -p ${OOC} ./10.ooc
-/cluster/bin/x86_64/psLayout ${CONTIG}.fa ${CLONE}.fa genomic 10.ooc ${RESULT}
-RET=$?
-cd ${HERE}
-rm -fr ${WRKDIR}
-rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}/${CONTIG}"
-rmdir --ignore-fail-on-non-empty "/scratch/tmp/hg18_${CHROM}"
-exit ${RET}
-'_EOF_'
-# << happy emacs
-    chmod +x runPsLayout.sh
-
-    para create jobList
-    para try; para check; ... etc ...
-    para time
-# Completed: 14569 of 14569 jobs
-# CPU time in finished jobs:    4863551s   81059.19m  1350.99h   56.29d  0.154 y
-# IO & Wait Time:                 64196s    1069.93m    17.83h    0.74d  0.002 y
-# Average job time:                 338s       5.64m     0.09h    0.00d
-# Longest finished job:           36681s     611.35m    10.19h    0.42d
-# Submission to last job:         68213s    1136.88m    18.95h    0.79d
-
-    #	combine into a single result
-    pslSort dirs raw.psl tmp psl/*/*
-
-
-    #	combine into a single result
-    time pslSort dirs raw.psl tmp psl/*
-    #	real    550m57.744s
-    #	user    324m56.251s
-    #	sys     10m15.358s
-    ls -og raw.psl
-    #	-rw-rw-r--  1 39273644954 Nov  2 20:23 raw.psl
-    #	Wow ...
-    time pslReps -nohead -nearTop=0.001 -singleHit \
-	raw.psl repsSingle.psl /dev/null
-    #	real    15m14.462s
-    #	user    13m6.580s
-    #	sys     1m50.304s
-    ls -og repsSingle.psl
-    #	-rw-rw-r--    1    73403317 Nov  3 09:44 repsSingle.psl
-
-    ###########################################################
-    #  And now, combining all results together
-    mkdir /san/sanvol1/scratch/hg18/coverage.2006-10-23/finalPsl
-    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23/finalPsl
-    ln -s ../runLastOnes/repsSingle.psl lastOnes.psl
-    ln -s ../runFish/raw.psl fish.psl
-    ln -s ../runUnPlaced/raw.psl unPlaced.psl
-    ln -s ../runUnPlacedChr/raw.psl unPlacedChr.psl
-    ln -s ../runPlacedNotSplit/raw.psl placed.psl
-    cd /san/sanvol1/scratch/hg18/coverage.2006-10-23
-    time pslSort dirs raw.psl tmp finalPsl
-    #	real    18m53.770s
-    #	user    12m19.002s
-    #	sys     1m17.504s
-    ls -og raw.psl
-    #	-rw-rw-r--   1 7742802124 Nov  3 10:10 raw.psl
-    time pslReps -nohead -nearTop=0.001 -singleHit \
-        raw.psl repsSingle.psl /dev/null
-    clusterClone -allowDuplicates -agp -minCover=80 \
-        -maxGap=60000 repsSingle.psl > single.agp 2> single.out
-    sort -k1,1 -k2,2n single.agp | ../coverage/fixPhase.pl \
-        /cluster/data/hg18/bed/coverage/phase.txt > contig_overlaps.agp \
-        2> singleToOverlaps.out
-    awk -F'\t' '{printf "%s\t%s\t%s\t%s\t0\t%s\n", $1,$2,$3,$6,$9}' \
-        contig_overlaps.agp > cOverlaps.bed
-    liftUp chrOverlaps.bed /san/sanvol1/scratch/hg18/bacends/liftContigs.lft \
-        warn cOverlaps.bed
-    #	Load up that chrOverlaps.bed as a custom track to see these results
-
-    #	And back to the original business of eliminating obsolete clones
-    awk '{print $6}' contig_overlaps.agp | sort -u > clone.coverage.list
-    time $HOME/kent/src/hg/makeDb/hgClonePos/ckMultipleVersions.pl \
-	clone.coverage.list > /dev/null 2> obsolete.clones
-
-    time $HOME/kent/src/hg/makeDb/hgClonePos/removeObsoleteClones.sh \
 	contig_overlaps.agp obsolete.clones > clean_overlaps.agp
     #	looks like it removes 295 lines
     wc -l contig_overlaps.agp clean_overlaps.agp
@@ -16412,17 +16316,83 @@ see file: ucscGenes10.txt
 # ENCODE Regulation track  (In progress May 2010, very rough instructions
 # as am still defining how to build track...)
 
+      #make root dir
+      mkdir -p /cluster/data/hg18/bed/wgEncodeReg
+      cd /cluster/data/hg18/bed/wgEncodeReg
+
       # Create the DNAse peak clusters subtrack.
       # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
       # unzipped in directory /hive/users/kent/regulate/dnase/peaks
-      cd /hive/users/kent/regulate/dnase
+      mkdir dnase
+      cd dnase
       ls -1 peaks/*.narrowPeak > peak.lst
       regClusterMakeTableOfTables peak.lst peak.table
       regCluster peak.table /dev/null peak.bed
       awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg18 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
 
-      # Create the Transcription Factor Binding Site subtrack
+      # Create the Transcription Factor Binding Site subtrack.  This is a bit
+      # complex because it is merging data from the Snyder lab (yale) and from
+      # HudsonAlpha (hud),  and the hud data has replicates while the yale
+      # data does not.
+
+      # Create hud/replicates directory full of gzipped narrow peak files,
+      # converting broad peak files as needed.
+      mkdir -p /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates
+      cd /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq
+      foreach i (*.narrowPeak*.gz)
+           cp $i /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates 
+      end
+      foreach i (*.broadPeak*.gz)
+            zcat $i | awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' > \
+	    /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates/$i:r:r.narrowPeak
+      end
+      cd /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates
+      gzip *.narrowPeak
+
+      # Get ra file that includes the file name and other info we need for hud
+      cd /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud
+      mkdir hud
+      cd hud
+      mdbQuery "select fileName,antibody,cell,replicate,treatment from hg18 \
+	where view='Peaks' and lab='HudsonAlpha' and dataType='ChipSeq'" \
+	-out=ra | sed s/broadPeak/narrowPeak/ >  hud.ra
+
+      # Generate merged dir full of merged replicates.
+      mkdir merged
+      encodeMergeReplicatesBatch hud.ra replicates merge.sh merged.ra merged
+      chmod a+x merge.sh
+      merge.sh
+
+      # Generate symbolic links to directories containing pooled peak files
+      # for yale and for hud
+      cd /cluster/data/hg18/bed/wgEncodeReg/tfbs
+      ln -s /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/merged hudPeaks
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeYaleChIPseq yalePeaks
+
+      # Get ra file that includes the file name and other info we need for yale
+      mdbQuery "select fileName,antibody,cell,treatment from hg18 where lab like '%Snyder%' and dataType like 'ChipSeq' and view='Peaks'" out=ra | sed 's/wgEncode/yalePeaks\/wgEncode/' > yale.ra
+
+      # Get ra file for hud
+      cat hud/merged.ra | sed 's/wgEncode/hudPeaks\/wgEncode/' > hud.ra
+
+      # Combine both ra files and convert to three column tab-separated
+      cat yale.ra hud.ra | raToTab stdin bothLabs.tab -cols=fileName,cell,antibody
+
+      # Set up config file for clustering job.  This includes calculating some
+      # normalization factors for the score.  The cellLetter.tab assigns
+      # letters to cell lines, and is created by hand in the source tree.
+      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter.tab .
+      regClusterBedExpCfg -tabList bothLabs.tab bothLabs.cfg -cellLetter=cellLetter.tab
+
+      # Do the actual clustering and load results into database
+      hgBedsToBedExps -dupeLetterOk bothLabs.cfg peak.bed peak.exps
+      awk '$2 != $3' peak.bed > filtered.bed
+      hgLoadBed hg18 wgEncodeRegTfbsClustered filtered.bed
+      hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
+      
+
+
       # Get all of the narrowPeak file for wgEncodeYaleChIPseq into tfbs/yale
       # directory and create all.lst by cutting and pasting 
       # the file list from
@@ -16463,10 +16433,32 @@ see file: ucscGenes10.txt
       end
       rm *.broadPeak
 
+      # Still need to get total list for both Yale and HudsonAlpha TFBS
+      # tracks.
+      mdbQuery "select fileName,antibody,cell,replicate,treatment from hg18 \
+	where view='Peaks' and lab='HudsonAlpha' and dataType='ChipSeq'" \
+	-out=ra > hud.ra
+      encodeMergeReplicatesBatch hud.ra inDir out.sh out.ra outDir
+      cp out.sh doHud.sh
+      # edit doHud.sh to correct line with bad metadata to read:
+      # encodeMergeReplicates -add -maxMin -uniqueName
+      # inDir/wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1.narrowPeak.gz
+      # inDir/wgEncodeHudsonalphaChipSeqPeaksRep2Gm12878Taf1.broadPeak.gz
+      # outDir/wgEncodeHudsonalphaChipSeqPeaksMergedGm12878Taf1.broadPeak
+      doHud.sh
+
+      # Clean up to make uniformly narrowPeak
+      cd outDir
+      gunzip *.gz
+      foreach i (*.broadPeak)
+         awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' $i > $i:r.narrowPeak
+      end
+      rm *.broadPeak
+
       regClusterBedExpCfg peak.lst -encodeList peak.cfg
       # Then edit peak.cfg to make sure all cell lines have uniq letters
       hgBedsToBedExps peak.cfg peak.bed peak.exps
-      awk '$2 != $3' peak.bed > filtered.bed
+      awk '$2 != $3' peak.bed  | grep -v Pol2 > filtered.bed
       hgLoadBed hg18 wgEncodeRegTfbsClustered filtered.bed
       hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
@@ -16479,239 +16471,6 @@ see file: ucscGenes10.txt
    cd /san/sanVol1/scratch/andy/cgapSage
    echo "select * from cgapSageLib" | hgsql hg18 | tail +2 > libs.txt
    echo "select * from snp127 where class='single' and locType='exact'" | hgsql hg18 | tail +2 | cut -f2- > allSnpss.txt
-   echo "select name from snp127Exceptions where exception='ObservedWrongSize' or exception='SingleClassBetweenLocType' or exception='SingleClassRangeLocType' or exception='MultipleAlignment'" | hgsql hg18 | tail +2 > exceptions
-  tabGrep -v exceptions 4 allSnps.txt > snps.txt
-   rm allSnps.txt exceptions
-   echo select chrom,chromStart,chromEnd,name from simpleRepeat | hgsql hg18 | tail +2 > trf.bed
-   cut -f1-4 snps.txt > snps.bed
-   overlapSelect -selectFmt=bed -inFmt=bed -nonOverlapping trf.bed snps.bed snps.noTrf.bed
-   cut -f4 snps.noTrf.bed > snps.noTrf
-   tabGrep snps.noTrf 4 snps.txt > snps.noTrf.txt
-   mv snps.noTrf.txt snps.txt
-   grep -v random /cluster/data/hg18/chrom.sizes | grep -v hap > chrom.sizes
-   mkdir chromSnps
-   for c in `cat chrom.sizes | cut -f1`; do
-     awk "{if (\$1==\"$c\") print;}" snps.txt > chromSnps/$c.snps.txt;
-     echo $c;
-   done
-   rm snps.txt
-   wget ftp://ftp1.nci.nih.gov/pub/SAGE/HUMAN/Hs.libraries.gz
-   gunzip Hs.libraries.gz
-cat << "EOF" > cleanLibs.awk
-BEGIN{FS="\t"}
-{
-for (i = 1; i <= 12; i++)
-    {
-    printf("%s\t", $i);
-    }
-sex = "";
-if ($13=="male")
-    {
-    sex = "male,";
-    }
-else if ($13=="female")
-    {
-    sex = "female,";
-    }
-else if ($13=="male and female")
-    {
-    sex = "male,female,";
-    }
-else if ($13=="unknown")
-    {
-    sex = "";
-    }
-printf("%s\t", sex);
-for (i = 14; i <= 20; i++)
-    {
-    printf("%s\t", $i);
-    }
-printf("%s\n", $21);
-}
-EOF
-   tail +2 Hs.libraries | awk -f cleanLibs.awk > libs.txt
-   ln -s ~/kent/src/hg/lib/cgapSage/cgapSageLib.sql
-   hgLoadSqlTab hg18 cgapSageLib cgapSageLib.sql libs.txt
-   partitionSequence.pl -lstDir small 5000000 30 hg18.2bit chrom.sizes 0 > sequence.lst
-   grep -v small sequence.lst > seq.lst
-   cat small/* >> seq.lst
-   mv seq.lst sequence.lst
-   rm -rf small/
-   wget ftp://ftp1.nci.nih.gov/pub/SAGE/HUMAN/Hs_long.frequencies.gz
-   gunzip Hs_long.frequencies.gz
-   cat << "EOF" > doJobList.sh
-#!/bin/bash
-
-# basic vars
-
-part=$1;
-range=${part#*2bit:};
-chrom=${range%:*};
-nums=${range#*:}
-firstnum=${nums:0:1}
-
-outDir=output/${chrom}/${firstnum}
-mkdir -p $outDir
-echo ./doFind.sh $1 {check out exists `pwd`/${outDir}/${range}.bed}
-EOF
-   chmod +x doJobList.sh
-   for part in `cat sequence.lst`; do ./doJobList.sh $part >> jobList; done
-   cat << "EOF" > doFind.sh
-#!/bin/bash
-
-# basic vars
-
-part=$1;
-range=${part#*2bit:};
-chrom=${range%:*};
-nums=${range#*:}
-firstnum=${nums:0:1}
-
-# dirs/files
-
-startDir=`pwd`
-scratch=/scratch/tmp/$part
-output=$2
-
-# begin
-
-mkdir -p $scratch
-pushd $scratch
-twoBitToFa -noMask $startDir/"$part" part.fa
-cgapSageFind part.fa $startDir/Hs_long.frequencies $startDir/libs.txt \
-     $startDir/chromSnps/${chrom}.snps.txt output.bed
-cp output.bed $output
-popd
-rm -rf $scratch
-EOF
-chmod +x doFind.sh
-ssh pk
-cd /san/sanVol1/scratch/andy/cgapSage
-para create jobList
-para try
-para push
-# takes like 5-10 min
-exit
-# back to hgwdev
-find output/ -name '*.bed' -exec cat '{}' >> output.bed \;
-cgapSageDupeRemove output.bed tmp.bed
-cgapSageDupeRemove -unique tmp.bed final.bed
-ln -s ~/kent/src/hg/lib/cgapSage/cgapSage.sql
-hgLoadBed -sqlTable=cgapSage.sql -tab hg18 cgapSage final.bed
-
-#########################################################################
-# HapMap SNPs (DONE 2007-05-23 Andy)
-# rel22
-# OBSOLETED by Phase II+III SNPs 3/09 angie (see HAPMAP REL27 GENOTYPES)
-# Tables renamed to [originalName]PhaseII 3/9/09
-ssh hgwdev
-bash
-cd /cluster/data/hg18/bed
-mkdir -p hapmap/zips
-cd hapmap/zips
-# archived to http://www.hapmap.org/genotypes/2007-03
-wget -nd -r -N -A html http://www.hapmap.org/genotypes/latest_ncbi_build36/rs_strand/non-redundant/
-grep gz index.html | sed 's/^.*href=\"\(geno.*\.txt\.gz\)\".*$/\1/' > files.txt
-wget -N -i files.txt --base=http://www.hapmap.org/genotypes/latest_ncbi_build36/rs_strand/non-redundant/
-rm index.html robots.txt files.txt
-cd ../
-mkdir samples
-cd samples/
-wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_CEU.txt.gz
-wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_CHB.txt.gz
-wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_JPT.txt.gz
-wget http://www.hapmap.org/downloads/samples_individuals/pedinfo2sample_YRI.txt.gz
-cp /cluster/store12/snp/hapmap/rel21a/genotypes/2007-01/rs_strand/non-redundant/*.pl .
-ln -s ../zips
-./filterPedigree.pl < pedinfo2sample_CEU.txt > filtered.CEU
-./filterPedigree.pl < pedinfo2sample_YRI.txt > filtered.YRI
-zcat zips/*chr22_CEU* | head -1 | tr ' ' '\n' > header.CEU
-zcat zips/*chr22_YRI* | head -1 | tr ' ' '\n' > header.YRI
-grep -n -f filtered.CEU header.CEU | cut -f1 -d':' > offsets.CEU
-grep -n -f filtered.YRI header.YRI | cut -f1 -d':' > offsets.YRI
-for pop in CEU YRI CHB JPT; do
-   for f in zips/genotypes_chr*_${pop}_r22_nr.b36.txt.gz; do
-      zcat $f | ./filter${pop}.pl >> ../${pop}.merge
-      echo Done with $f
-   done
-done
-cd ../
-for pop in CEU YRI CHB JPT; do
-   ~/kent/src/hg/snp/snpLoad/hapmap1 ${pop}.merge ${pop}.condense
-   mv hapmap1.log ${pop}.hapmap1.log
-done
-wc -l *.log
-#0 CEU.hapmap1.log
-#0 CHB.hapmap1.log
-#0 JPT.hapmap1.log
-#0 YRI.hapmap1.log
-#0 total
-rm *.log
-cp ~/kent/src/hg/lib/hapmapSnps.sql .
-for pop in CEU CHB JPT YRI; do
-     sed "s/hapmapSnps/hapmapSnps$pop/" hapmapSnps.sql > hapmapSnps${pop}.sql
-     hgLoadBed -sqlTable=hapmapSnps${pop}.sql hg18 hapmapSnps$pop ${pop}.condense
-done
-# Don't worry if you see:
-#load of hapmapSnpsCEU did not go as planned... etc.
-# unless it says rows skipped.
-~/kent/src/hg/snp/snpLoad/hapmap2 hg18
-#building CEU hash...
-#Can't start query:
-#select * from hapmapAllelesCEU
-#
-#mySQL error 1146: Table 'hg18.hapmapAllelesCEU' doesn't exist
-# But this works:
-~heather/kent/src/hg/snp/snpLoad/hapmap2 hg18
-# (gotta bug Heather about that one)
-ln -s ~/kent/src/hg/lib/hapmapSnpsCombined.sql
-hgLoadBed -sqlTable=hapmapSnpsCombined.sql hg18 hapmapSnpsCombined hapmapSnpsCombined.tab
-# Checks:
-~heather/kent/src/hg/snp/snpLoad/snpCheckCluster2 hg18 hapmapSnpsCombined
-#match count = 0
-### clean up
-rm *.sql hapmapSnpsCombined.tab bed.tab
-tar cfvz merge.tar.gz *.merge
-tar cfvz condense.tar.gz *.condense
-rm *.condense *.merge
-mkdir logs
-mv *.errors *.log *.out logs
-mkdir orthos
-cd orthos/
-
-# hgWiggle output has the chromosome in a comment, followed by the values
-# This script prints that chromosome on every line
-cat << "EOF" > joinify.awk
-{
-if ($1 == "variableStep")
-   {
-   sub("chrom=", "", $2);
-   chrom = $2;
-   }
-else if ($1 != "#")
-   {
-   printf("%s,%s\t%s\n", chrom, $1, $2);
-   }
-}
-EOF
-
-cat << "EOF" > join.sh
-#!/bin/bash
-sed 's/\(^chr\w\+\)\t/\1,/' $1 > bed
-sort -k1,1 bed > tmp; mv tmp bed
-awk -f joinify.awk $2 > scores
-sort -k1,1 scores > tmp; mv tmp scores
-join -1 1 -2 1 bed scores | tr ',' ' ' |
-  awk '{printf("%s\t%s\t%s\t%s\t%d\t%s\t%s\n", $1, $2, $3, $4, $8, $6, $7);}' > qual.tab
-rm scores bed
-EOF
-chmod +x join.sh
-
-# chimp alleles
-cd /cluster/data/dbSNP/ortho/hg18/panTro2Seq
-awk '{printf("%s\t%s\t%s\t%s\t0\t%s\t%s\n", $2, $3, $4, $5, $7, $8);}' snp126orthoPrelim.tab > snp126orthoPrelim.bed
-cp snp126orthoPrelim.bed /cluster/data/hg18/bed/hapmap/orthos/panTro2.bed.new
-cd /cluster/data/hg18/bed/hapmap/orthos
 hgWiggle -db=panTro2 -bedFile=panTro2.bed quality > panTro2.scores
 # create qual.tab; combine panTro2 sequence with panTro2 quality score
 ./join.sh panTro2.bed.new panTro2.scores
@@ -24784,298 +24543,6 @@ echo "update grp set label='Regulation' where name='regulation'" | hgsql hg18
     # expect those.  Make sure there aren't any other types of errors:
     foreach f (*.gz)
       set track = `echo $f:r:r:r \
-        | perl -wpe 's/^([AG])(\w+)$/kiddEichlerDisc$1\L$2/ || die;'`
-      checkTableCoords hg18 $track |& egrep -v 'overlapping|!= end'
-    end
-    # No output, good.
-
-    # Get clone ID -> NCBI acc mapping (same as for hg17; redownloaded to
-    # make sure).
-    mkdir /cluster/data/hg18/bed/kiddEichlerDiscordant/cloneIds
-    cd /cluster/data/hg18/bed/kiddEichlerDiscordant/cloneIds
-    # Saved off emailed file from Jeff Kidd to clones_used_3nov.txt.accessions;
-    # get trace archive trace names for end reads:
-    foreach n (7 9 10 11 12 13 14)
-      wget http://hgsv.washington.edu/general/download/clone_mapping/ABC$n/ABC$n.conversion.gz
-    end
-    # ABC8 has _a and _b files:
-    wget http://hgsv.washington.edu/general/download/clone_mapping/ABC8/ABC8_a.conversion.gz
-    wget http://hgsv.washington.edu/general/download/clone_mapping/ABC8/ABC8_b.conversion.gz
-    # That file is not available for G248.
-    gunzip *.gz
-    # Combine the relevant data from the .conversion files; keep only those
-    # IDs that are used in the tracks.
-    zcat ../[AG]*.gz \
-    | cut -f 4 \
-    | egrep -v '^(#chrom|track|name)' \
-    | sed -e 's/,.*//' \
-    | sort -u > discIds.txt
-    grep -h -v ^163722_163722- *.conversion \
-    | perl -wpe 's/^OurClone.*\n// || s/^\d+_(HUMAN|\d+_).*\n$// || \
-      s/^(\d+_)?(ABC|G)(\d+)(_\d\d?)?(_\d\d?)?_0*(\d+?_[A-Z]\d\d?)\.(F|FORWARD|R|REVERSE)\.\d+\t(\w+)$/$2$3_$6\t$7\t$8/ || \
-      warn "Parse line $.:\n$_";' \
-    | sort > allEnds.tab
-    grep -wFf discIds.txt allEnds.tab > discEnds.txt
-    wc -l discIds.txt allEnds.tab discEnds.txt
-#   352330 discIds.txt
-# 17490847 allEnds.tab
-#   781513 discEnds.txt
-    # discEnds.txt has 2 lines (forward & reverse) for most of its ids...
-    # ideally we would see 2*(352330) lines in discEnds.txt.
-    # Get a list of which discordant clone IDs don't have ends in *.conv*:
-    cut -f 1 allEnds.tab | uniq > all.tmp
-    comm -23 discIds.txt all.tmp > discNotInConv.txt
-    wc -l discNotInConv.txt
-#41853 discNotInConv.txt
-    cat > combine.pl <<'_EOF_'
-#!/usr/bin/perl -w
-use strict;
-my ($cloneFile, $endsFile) = @ARGV;
-open(CLONES, $cloneFile) || die "Can't open $cloneFile: $!\n";
-my %idInfo;
-while(<CLONES>) {
-  (s/^(\d+_)?(ABC|G)(\d+)(_\d\d?)?(_\d\d?)?_0*(\d+?_[A-Z]\d\d?)\t(\w+)$/$2$3_$6\t$7/ && m/^(\w+)\t(\w+)/) || \
-  m/^(G248\w+)\t(\w+)$/ || die "Parse line $.:$_";
-  my ($id, $acc) = ($1, $2);
-  $idInfo{$id}->[0] = $acc;
-}
-close(CLONES);
-open(ENDS, $endsFile) || die "Can't open $endsFile: $!\n";
-while (<ENDS>) {
-  chomp; my ($id, $dir, $traceName) = split("\t");
-  if ($dir =~ /^F/) {
-    $idInfo{$id}->[1] = $traceName;
-  } elsif ($dir =~ /^R/) {
-    $idInfo{$id}->[2] = $traceName;
-  } else { die "What is this \$dir: $dir ?\n"; }
-}
-close(ENDS);
-foreach my $id (sort keys %idInfo) {
-  my $infoRef = $idInfo{$id};
-  $infoRef->[0] = '' if (! defined $infoRef->[0]);
-  $infoRef->[1] = 0 if (! defined $infoRef->[1]);
-  $infoRef->[2] = 0 if (! defined $infoRef->[2]);
-  print join("\t", $id, @{$infoRef}) . "\n";
-}
-'_EOF_'
-    # << emacs
-    chmod a+x combine.pl
-    combine.pl clones_used_3nov.txt.accessions discEnds.txt \
-    | sort > kiddEichlerToNcbi.txt
-    # Load table:
-    hgLoadSqlTab hg18 kiddEichlerToNcbi \
-      $HOME/kent/src/hg/lib/kiddEichlerToNcbi.sql kiddEichlerToNcbi.txt
-    # Add to makeDb/schema/all.joiner, then check:
-    runJoiner.csh hg18 kiddEichlerToNcbi $HOME/kent/src/hg/makeDb/schema
-
-
-############################################################################
-# hgPal downloads 28way refGene, knownGene, knownCanonical
-    ssh hgwdev
-    screen
-    bash
-    rm -rf /cluster/data/hg18/bed/multiz28way/pal
-    mkdir /cluster/data/hg18/bed/multiz28way/pal
-    cd /cluster/data/hg18/bed/multiz28way/pal
-    cat > order.lst <<EOF
-hg18
-panTro2
-rheMac2
-otoGar1
-tupBel1
-mm8
-rn4
-cavPor2
-oryCun1
-sorAra1
-eriEur1
-canFam2
-felCat3
-equCab1
-bosTau3
-dasNov1
-loxAfr1
-echTel1
-monDom4
-ornAna1
-anoCar1
-galGal3
-xenTro2
-danRer4
-tetNig1
-fr2
-gasAcu1
-oryLat1
-EOF
-
-    mz=multiz28way
-    gp=refGene
-    db=hg18
-    mkdir exonAA exonNuc ppredAA ppredNuc
-    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
-    do
-	echo "date"
-	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
-	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
-	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
-	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
-	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
-	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
-	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
-	    gzip -c > exonAA/$j.exonAA.fa.gz"
-    done > $gp.jobs
-
-    time sh -x $gp.jobs > $gp.jobs.log 2>&1 &
-    sleep 1
-    tail -f $gp.jobs.log
-
-# real    232m24.611s
-# user    13m59.669s
-# sys     5m5.601s
-
-    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
-    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
-
-    rm -rf exonAA exonNuc ppredAA ppredNuc
-
-    # we're only distributing exons at the moment
-    mz=multiz28way
-    gp=refGene
-    db=hg18
-    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-
-    mz=multiz28way
-    gp=knownGene
-    db=hg18
-
-    mkdir exonAA exonNuc ppredAA ppredNuc
-    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
-    do
-	echo "date"
-	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
-	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
-	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
-	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
-	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
-	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
-	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
-	    gzip -c > exonAA/$j.exonAA.fa.gz"
-    done > $gp.$mz.jobs
-
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
-    sleep 1
-    tail -f $gp.$mz.job.log
-
-# real    248m39.293s
-# user    23m30.788s
-# sys     8m2.714s
-
-    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
-    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
-
-    rm -rf exonAA exonNuc ppredAA ppredNuc
-
-    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-
-    # now do the canonical set
-    cd /cluster/data/hg18/bed/multiz28way/pal
-    mz=multiz28way
-    gp=knownCanonical
-    db=hg18
-    for j in `awk '{print $1}' /cluster/data/hg18/chrom.sizes`
-    do
-	echo "select chrom, chromStart, chromEnd, transcript from knownCanonical where chrom='$j'" | hgsql $db | tail -n +2 > $j.known.bed
-    done
-
-    mkdir exonAA exonNuc ppredAA ppredNuc
-    for j in `sort -nk 2 /cluster/data/$db/chrom.sizes | awk '{print $1}'`
-    do
-	echo "date"
-	echo "mafGene -geneBeds=$j.known.bed  $db $mz knownGene order.lst stdout | \
-	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -noTrans $db $mz knownGene order.lst stdout | \
-	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -exons -noTrans $db $mz knownGene order.lst stdout | \
-	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
-	echo "mafGene -geneBeds=$j.known.bed -exons $db $mz knownGene order.lst stdout | \
-	    gzip -c > exonAA/$j.exonAA.fa.gz"
-    done > $gp.$mz.jobs
-
-    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 &
-    sleep 1
-    tail -f $gp.$mz.job.log
-
-# real    216m41.700s
-# user    10m22.016s
-# sys     4m6.917s
-
-    rm *.known.bed
-    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
-    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
-    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
-    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
-
-    rm -rf exonAA exonNuc ppredAA ppredNuc
-
-    pd=/usr/local/apache/htdocs/goldenPath/$db/$mz
-    ln -s `pwd`/$gp.$mz.exonAA.fa.gz $pd/$gp.exonAA.fa.gz
-    ln -s `pwd`/$gp.$mz.exonNuc.fa.gz $pd/$gp.exonNuc.fa.gz
-
-#########################################################################
-
-################################################
-# AUTOMATE UPSTREAM FILE CREATION (2008-10-15 markd)
-update genbank.conf:
-hg18.upstreamGeneTbl = refGene
-hg18.upstreamMaf = multiz28way /hive/data/genomes/hg18/bed/multiz28way/species.lst
-
-#########################################################################
-# BarskiChIPseq tracks      Begun: 2008-09-19 Finished: 2008-09-22 Tim
-# Barski, et al 2007 Paper - High-Resolution Mapping of Histone Modifications in the Human Genome
-# Solexa high-throughput sequencing: ChIPseq data
-# http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/hgtcell.html
-
-ssh hgwdev
-mkdir /hive/data/genomes/hg18/bed/Barski2007/lab
-cd /hive/data/genomes/hg18/bed/Barski2007/lab
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K4me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K4me2.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K4me3.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K9me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K9me2.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K9me3.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K27me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K27me2.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K27me3.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K36me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K36me3.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K79me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K79me2.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K79me3.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3R2me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3R2me2.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H4K20me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H4K20me3.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H4R3me2.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H2BK5me1.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H2AZ.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/PolII.bed
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/CTCF.bed
-
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K4me1.vstep.gz
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K4me2.vstep.gz
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K4me3.vstep.gz
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K9me1.vstep.gz
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K9me2.vstep.gz
-wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K9me3.vstep.gz
 wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K27me1.vstep.gz
 wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K27me2.vstep.gz
 wget http://dir.nhlbi.nih.gov/Papers/lmi/epigenomes/data/H3K27me3.vstep.gz

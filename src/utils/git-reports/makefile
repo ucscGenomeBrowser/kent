@@ -17,7 +17,7 @@ clean::
 	rm -f ${O} *.tmp
 
 install:
-	make BINDIR=/cluster/bin/${MACHTYPE}
+	${MAKE} BINDIR=/cluster/bin/${MACHTYPE}
 
 test: $(EXE)
 	rm -fr ${HOME}/public_html/git-reports

@@ -1,0 +1,95 @@
+track wgEncodeCaltechRnaSeq
+compositeTrack on
+shortLabel Caltech RnaSeq
+longLabel ENCODE Caltech Myers RnaSeq
+group expression
+subGroup1 view Views PlusSignal=PlusSignal Aligns=Aligns Splices=Splices MinusSignal=MinusSignal
+subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1hESC HeLaS3=HeLaS3 HepG2=HepG2 HUVEC=HUVEC K562=K562 NHEK=NHEK
+#subGroup3 localization Localization 0-cell=Cell
+#subGroup3 rnaExtract RNA_Extract longPolyA=Long_PolyA+
+subGroup3 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 blowBlat=Bowtie0.98+BLAT bow098=Bowtie_0.981 erng3b=Erange_3.0b erng32a=erng32a BB2=Bowtie0.10.0+BLAT TH1014=TopHat1.0.14
+subGroup4 readType Read_Type r1x32=Single_32nt r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt
+subGroup5 insertLength Insert_Length il400=400 ilNa=NA
+subGroup6 rep Replicate 1=1 2=2 3=3 4=4
+dimensions dimensionX=cellType dimensionY=readType dimensionZ=mapAlgorithm
+sortOrder cellType=+ readType=+ mapAlgorithm=+ insertLength=+ view=+
+controlledVocabulary encode/cv.ra cellType readType mapAlgorithm insertLength
+dragAndDrop subTracks
+visibilityViewDefaults  PlusSignal=hide Aligns=hide Splices=hide MinusSignal=hide
+priority 0
+type bed 3
+wgEncode 1
+
+
+    	track wgEncodeCaltechRnaSeqViewAligns
+    	shortLabel Alignments
+    	view Aligns
+    	visibility hide
+    	parent wgEncodeCaltechRnaSeq
+
+		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1
+		release alpha
+		parent wgEncodeCaltechRnaSeqViewAligns off
+		shortLabel NHEK 1
+		longLabel ENCODE Caltech RNA-seq Alignments Replicate 1 (in NHEK cells)
+		subGroups view=Aligns cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=1
+		type bam
+		color 179,0,134
+		# subId=1483 dateSubmitted=2010-06-18
+
+	track wgEncodeCaltechRnaSeqViewSplices
+    	shortLabel Splice Sites
+    	view Splices
+    	visibility squish
+    	parent wgEncodeCaltechRnaSeq
+
+		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1
+		release alpha
+		parent wgEncodeCaltechRnaSeqViewSplices off
+		shortLabel NHEK 1
+		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in NHEK cells)
+		subGroups view=Splices cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=1
+		type bam
+		color 179,0,134
+		# subId=1483 dateSubmitted=2010-06-18
+
+
+    track wgEncodeCaltechRnaSeqViewMinusRawSignal
+    shortLabel Minus Raw Signal
+    view MinusRawSignal
+    visibility full
+    parent wgEncodeCaltechRnaSeq
+    maxHeightPixels 100:24:16
+    autoScale on
+    windowingFunction maximum
+
+        track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
+        release alpha
+        parent wgEncodeCaltechRnaSeqViewMinusSignal off
+        shortLabel NHEK 1
+        longLabel ENCODE Caltech RNA-seq Minus Signal Replicate 1 (in NHEK cells)
+        subGroups view=MinusSignal cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
+        type bigWig 1.000000 69353.000000
+        color 179,0,134
+        # subId=1483 dateSubmitted=2010-06-18
+
+
+    track wgEncodeCaltechRnaSeqViewPlusRawSignal
+    shortLabel Plus Raw Signal
+    view PlusRawSignal
+    visibility full
+    parent wgEncodeCaltechRnaSeq
+    maxHeightPixels 100:24:16
+    autoScale on
+    windowingFunction maximum
+
+        track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
+        release alpha
+        parent wgEncodeCaltechRnaSeqViewPlusSignal off
+        shortLabel NHEK 1
+        longLabel ENCODE Caltech RNA-seq Plus Signal Replicate 1 (in NHEK cells)
+        subGroups view=PlusSignal cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
+        type bigWig 1.000000 25640.000000
+        color 179,0,134
+        # subId=1483 dateSubmitted=2010-06-18
+
