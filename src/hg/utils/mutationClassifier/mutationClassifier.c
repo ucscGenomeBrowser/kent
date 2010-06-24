@@ -37,8 +37,9 @@ static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 #define NONCODING "nonCoding"
 
 static struct optionSpec optionSpecs[] = {
-    {"outputExtension", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
+    {"mapability", OPTION_STRING},
+    {"outputExtension", OPTION_STRING},
     {NULL, 0}
 };
 
@@ -496,7 +497,6 @@ long time = clock1000();
 struct genePred *genes = readGenes(database, conn);
 fprintf(stderr, "readGenes took: %ld ms\n", clock1000() - time);
 verbose(2, "%d canonical known genes\n", slCount(genes));
-exit(1);
 
 while(!done)
     {
@@ -757,6 +757,7 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 outputExtension = optionVal("outputExtension", NULL);
 lazyLoading = optionExists("lazyLoading");
+mapability = optionVal("mapability", NULL);
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);
