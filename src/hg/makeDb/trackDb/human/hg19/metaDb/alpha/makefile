@@ -5,6 +5,7 @@ wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeOpenChromChip.ra \
 wgEncodeOpenChromDnase.ra \
+wgEncodeOpenChromFaire.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyGeneST.ra \
 wgEncodeSydhHistone.ra \
