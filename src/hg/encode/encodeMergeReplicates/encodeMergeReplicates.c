@@ -25,7 +25,7 @@ void usage()
 {
 errAbort(
   "encodeMergeReplicates - Merge together replicates for a pooled output.  \n"
-  "Only works on narrowPeak and broadPeak files currently.\n"
+  "Only works on narrowPeak and broadPeak files currently. Ignores strand.\n"
   "usage:\n"
   "   encodeMergeReplicates in1 in2 in3 ... output\n"
   "options:\n"
@@ -106,14 +106,20 @@ void outputClusterNarrowPeak(struct peakCluster *cluster, FILE *f, boolean add,
 	boolean gotThreshold, double threshold, boolean forceUniqueName)
 /* Output cluster of overlapping narrowPeaks - doing average of items. */
 {
-struct slRef *ref, *refList=cluster->itemRefList;
+/* Some variables to keep statistics on all items in cluster. */
 double sumP = 0.0, sumQ = 0.0, sumSignal = 0.0;
 long long sumStart = 0, sumEnd = 0;
 long long sumPeak = 0, sumScore = 0;
+
+/* To figure out what to name the cluster, we look for the name of the best 
+ * (highest scoring) item. */
+struct slRef *ref, *refList=cluster->itemRefList;
 struct peakItem *bestItem = bestItemInRefList(refList);
 int itemCount = 0;
 char *bestLine = bestItem->asciiLine;
 char *bestName = NULL;
+
+/* Figure out # of words to output based on best item (oh my) */
 int wordCount = chopByWhite(bestLine, NULL, 0);
 boolean gotP = FALSE, gotQ = FALSE;
 for (ref = refList; ref != NULL; ref = ref->next)
@@ -144,16 +150,26 @@ for (ref = refList; ref != NULL; ref = ref->next)
     sumPeak += peak;
     itemCount += 1;
     }
+
+/* Handle much of the averaging by multiplying by scale factor rather than 
+ * dividing by itemCount. */
 double scaleFactor = 1.0;
 if (!add)
     scaleFactor = 1.0/itemCount;
 double signalValue = sumSignal * scaleFactor;
+
+/* Apply threshold if have one. */
 if (!gotThreshold || signalValue >= threshold)
     {
+    /* Output chrom/start/end fields. Start and end are averaged from all items regardless 
+     * of add flag*/
     fprintf(f, "%s\t", cluster->chrom);		// chrom
     int chromStart = sumStart/itemCount;
     fprintf(f, "%d\t", chromStart);			// chromStart
     fprintf(f, "%d\t", (int)(sumEnd/itemCount));	// chromEnd
+
+    /* Figure out what to call it,  same name as best item usually, but can force a
+     * unique numerical suffix.  This will replace any existing numerical suffix. */
     char *name = bestName;
     char uniqPrefix[64];
     char uniqName[100];
@@ -165,10 +181,16 @@ if (!gotThreshold || signalValue >= threshold)
 	name = uniqName;
 	}
     fprintf(f, "%s\t", name);			// name
+
+    /* Output score - possibly averaged. */
     int score = sumScore*scaleFactor;
     if (score > 1000) score = 1000;
     fprintf(f, "%d\t", score);			// score 0-1000
+
+    /* Some day need to come back to strand... */
     fprintf(f, ".\t");				// strand
+
+    /* Output signal, P and Q, possibly doing average, handling not. */
     fprintf(f, "%g\t", sumSignal*scaleFactor);	// signalValue
     if (gotP)
 	fprintf(f, "%g\t", sumP*scaleFactor);		// pValue
@@ -178,6 +200,9 @@ if (!gotThreshold || signalValue >= threshold)
 	fprintf(f, "%g", sumQ*scaleFactor);		// qValue
     else
 	fprintf(f, "-1");
+
+    /* Here we need to do something else if there's a mix of narrow and broad in input, or
+     * some but not all are -1. */
     if (wordCount > 9)
 	fprintf(f, "\t%d", (int)(sumPeak/itemCount - chromStart));
     fprintf(f, "\n");
