@@ -1,4 +1,5 @@
-/* mdbQuery - Select things from metaDb table.. */
+/* mdbQuery - Select objects from metaDb table.  Print all or selected fields in a variety 
+ * of formats. */
 #include "common.h"
 #include "linefile.h"
 #include "localmem.h"
@@ -19,23 +20,23 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-"mdbQuery - Select things from metaDb table.\n"
+"mdbQuery - Select objects from metaDb table. Print all or selected fields in a variety\n"
+"of formats\n"
 "usage:\n"
 "   mdbQuery sqlStatement\n"
 "Where the SQL statement is enclosed in quotations to avoid the shell interpreting it.\n"
 "Only a very restricted subset of a single SQL statement (select) is supported.   Examples:\n"
 "    mdbQuery \"select count(*) from hg18\"\n"
-"counts all of the objects in hg18 and prints the results to stdout\n"
-"   mdbQuery \"select count(*) from *\"\n"
-"counts all objects in all databases.\n"
+"counts all of the metaDb objects in the hg18 database and prints the results to stdout\n"
 "   mdbQuery \"select  obj,cell,antibody from hg18 where antibody like 'pol%%'\"\n"
 "print the obj, cell, and antibody fields from all objects where there is an antibody fields\n"
 "and that field starts with pol.  Note obj is treated differently from other fields a bit\n"
 "since it comes from the obj column rather than the var/val columns in the database table.\n"
+"You can use metaObject as a synonym for obj.\n"
 "OPTIONS:\n"
 "   -out=type output one of the following types.  Default is %s\n"
 "        line - a line full of this=that; pairs\n"
-"        3col - three column obj/var/val format\n"
+"        4col - 4 column obj/var/varType/val format like in metaDb table\n"
 "        tab - tab-separated format.\n"
 "        ra - two column ra format with objs as stanzas\n"
 "   -table=name - use the given table.  Default is metaDb\n"
@@ -50,7 +51,7 @@ static struct optionSpec options[] = {
 };
 
 static char *lookupField(void *record, char *key)
-/* Lookup a field in a tdbRecord. */
+/* Lookup a field in a mdbObj. */
 {
 struct mdbObj *mdb = record;
 if (sameString(key, "obj"))
@@ -82,7 +83,7 @@ else
     }
 }
 
-static boolean match(char *a, char *b, boolean wild)
+static boolean stringMatch(char *a, char *b, boolean wild)
 /* Return true if strings a and b are the same.  If wild is true, do comparision 
  * expanding wildcards in a. */
 {
@@ -100,18 +101,18 @@ for (field = fieldList; field != NULL; field = field->next)
     {
     struct mdbVar *var;
     boolean doWild = anyWild(field->name);
-    if (match(field->name, "obj", doWild))
-        fprintf(out, "%s %s\n", "obj", mdb->obj);
+    if (stringMatch(field->name, "obj", doWild) || stringMatch(field->name, "metaObject", doWild))
+        fprintf(out, "%s %s\n", "metaObject", mdb->obj);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
-	if (match(field->name, var->var, doWild))
+	if (stringMatch(field->name, var->var, doWild))
 	    fprintf(out, "%s %s\n", var->var, var->val);
 	}
     }
 fprintf(out, "\n");
 }
 
-static void threeColOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
+static void fourColOutput(struct rqlStatement *rql, struct mdbObj *mdb, FILE *out)
 /* Output fields  from mdb to file in three column obj/var/val format. */
 {
 struct slName *fieldList = rql->fieldList, *field;
@@ -121,8 +122,9 @@ for (field = fieldList; field != NULL; field = field->next)
     boolean doWild = anyWild(field->name);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
-	if (match(field->name, var->var, doWild))
-	    fprintf(out, "%s\t%s\t%s\n", mdb->obj, var->var, var->val);
+	if (stringMatch(field->name, var->var, doWild))
+	    fprintf(out, "%s\t%s\t%s\t%s\n", mdb->obj, var->var, 
+	    	mdbVarTypeEnumToString(var->varType), var->val);
 	}
     }
 }
@@ -138,7 +140,7 @@ for (field = fieldList; field != NULL; field = field->next)
     boolean doWild = anyWild(field->name);
     for (var = mdb->vars; var != NULL; var = var->next)
         {
-	if (match(field->name, var->var, doWild))
+	if (stringMatch(field->name, var->var, doWild))
 	    fprintf(out, " %s=%s;", var->var, var->val);
 	}
     }
@@ -158,7 +160,7 @@ for (field = fieldList; field != NULL; field = field->next)
 for (field = fieldList; field != NULL; field = field->next)
     {
     char *val = NULL;
-    if (sameString(field->name, "obj"))
+    if (sameString(field->name, "obj") || sameString(field->name, "metaObject"))
         val = mdb->obj;
     else
 	{
@@ -202,12 +204,17 @@ for (t = rql->tableList; t != NULL; t = t->next)
     }
 verbose(2, "%d databases in from clause\n", slCount(dbOrderList));
 
-/* Make sure we actually only have one valid database, and put database variable
+/* Make sure we actually only have one valid database, and point database variable
  * to it's name. */
 if (slCount(dbOrderList) != 1)
     {
     if (dbOrderList == NULL)
-        errAbort("No database %s", rql->tableList->name);
+	{
+	if (rql->tableList == NULL)
+	    errAbort("Missing from clause in sql statement");
+	else
+	    errAbort("No database %s", rql->tableList->name);
+	}
     else
         errAbort("Too many matching databases");
     }
@@ -236,8 +243,8 @@ for (mdb = mdbList; mdb != NULL; mdb = mdb->next)
 	       raOutput(rql, mdb, stdout);
 	    else if (sameString(clOut, "line"))
 	       lineOutput(rql, mdb, stdout);
-	    else if (sameString(clOut, "3col"))
-	       threeColOutput(rql, mdb, stdout);
+	    else if (sameString(clOut, "4col"))
+	       fourColOutput(rql, mdb, stdout);
 	    else if (sameString(clOut, "tab"))
 	       tabOutput(rql, mdb, stdout);
 	    else

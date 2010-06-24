@@ -454,8 +454,7 @@ organism Human
 description Chorion cells (outermost of two fetal membranes)
 tissue FetalMembrane
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
-#vendorId TIB-152
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 karyotype unknown
 termId BTO:0000252
@@ -484,8 +483,7 @@ organism Human
 description Decidua cells (part of the mucous membrane lining uterus)
 tissue Cervix
 vendorName Dr. Amy Murtha at Duke University (Durham, NC).
-#vendorId TIB-152
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+orderUrl http://www.dukehealth.org/physicians/amy_p_murtha
 lineage Fetal membranes were collected from women who underwent planned cesarean delivery at term, before labor and without rupture of membranes.
 karyotype unknown
 termId BTO:0001360
@@ -596,8 +594,8 @@ vendorId GM12801
 orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12801&PgId=166
 lineage CEPH/Utah - European Caucasion - Male; Epstein-Barr Virus
 karyotype relatively normal
-termId BTO:0001522 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001522&termName=B-lymphocyte%20cell%20line BTO:0001522
+termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex M
 tier 3
 protocol UW_Stam:GM12801_Stam_protocol.pdf
@@ -1219,7 +1217,7 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 sex U
 tier 3
-protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
+protocol Broad_Histone:HMEC_Bernstein_protocol.pdf <Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
 term HNPCEpiC
 tag HNPCE
@@ -1369,8 +1367,7 @@ organism Human
 description Human prostate epithelial cells (PrEC) were infected with amphotropic retroviruses encoding the SV40 large T antigen (L), the telomerase catalytic subunit hTERT (H), the SV40 small T antigen (S) and an oncogenic allele of H-ras (R) to create LHSR cells.
 tissue Epithelium
 vendorName Genetically engineered in the lab of William Hahn at the Dana Farber Cancer Institute, Boston, MA.
-#vendorId TIB-152
-#orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=TIB-152&Template=cellBiology
+orderUrl http://physicians.dana-farber.org/directory/profile.asp?dbase=main&setsize=10&display=Y&nxtfmt=pc&pgt=William+C.+Hahn,+MD,+PhD&gs=r&picture_id=0000378&lookup=Y&pict_id=0000378
 lineage Genetically engineered from Human prostate epithelial cells. Multiple human donors, all of whom are HIV-1, Hepatitis B and Hepatitis C negative.
 karyotype Diploid
 #termId BTO:0001389 (non-specific)
@@ -1675,8 +1672,7 @@ organism Human
 description Primary Human Tracheal Epithelial Cells
 tissue Epithelium
 vendorName Dr. Cal Cotton at Case Western Reserve University
-vendorId
-orderUrl
+orderUrl https://www.case.edu/cgi-bin/directory/pb_lookup.cgi?search_text=calvin+cotton&submit.x=0&submit.y=0&submit=Search&search_method=regular&page_num=1
 lineage primary
 termId BTO:0001120 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120&termName=epithelial%20cell%20line
@@ -3581,7 +3577,7 @@ tag T7Tag
 type ripTgtProtein
 alternativeSymbols Novagen T7 Tag Cat# 69522
 description Negative Control Ab (T7 Tag Mouse Monoclonal)
-url http://www.emdbiosciences.com/Products/ProductDisplay.asp?catno=69522
+url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
 
 term ELAVL1
 tag ELAVL1
@@ -3685,7 +3681,7 @@ orderUrl http://www.millipore.com/catalogue/item/05-1529
 term Hexim1
 tag Hexim1
 type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
 targetDescription Hexim1
 vendorName Millipore
 vendorId 07-955
@@ -3725,7 +3721,7 @@ antibodyDescription Negative Control Ab (T7 Tag Mouse Monoclonal)
 targetDescription T7Tag
 vendorName Novagen
 vendorId 69522
-orderUrl http://www.emdbiosciences.com/Products/ProductDisplay.asp?catno=69522
+orderUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
 
 term p54nrb
 tag p54nrb
@@ -3875,12 +3871,12 @@ description bowtie v0.981 followed by blat v34
 term BB2
 tag BB2
 type mapAlgorithm
-description bowtie0.10.0 followed by blat v34
+description bowtie v0.10.0 followed by blat v34
 
 term TH1014
 tag TH1014
 type mapAlgorithm
-description TopHat 1.0.14
+description TopHat v1.0.14
 
 ### readType
 # term (human-readable read type name)
@@ -3947,22 +3943,22 @@ description insert length not applicable
 term 1k
 tag f1k
 type fragSize
-description 1kb DNA fragments
+description 1 kb DNA fragments
 
 term 5k
 tag f5k
 type fragSize
-description 5kb DNA fragments
+description 5 kb DNA fragments
 
 term 10k
 tag f10k
 type fragSize
-description 10kb DNA fragments
+description 10 kb DNA fragments
 
 term 20k
 tag f20k
 type fragSize
-description 20kb DNA fragments
+description 20 kb DNA fragments
 
 
 ### localization
@@ -3976,7 +3972,7 @@ term cell
 tag cell
 type localization
 description Whole cell
-termId GO:0005634
+termId GO:0005623
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005623
 label whole_cell
 
@@ -4018,14 +4014,14 @@ termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:000
 term nucleoplasm
 tag nucleoplasm
 type localization
-description That part of the nuclear content other than the chromosomes or the nucleolus.
+description That part of the nuclear content other than the chromosomes or the nucleolus
 termId GO:0005654
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0005654
 
 term nuclearMatrix
 tag nuclearMatrix
 type localization
-description The dense fibrillar network lying on the inner side of the nuclear membrane.
+description The dense fibrillar network lying on the inner side of the nuclear membrane
 termId GO:0016363
 termUrl http://amigo.geneontology.org/cgi-bin/amigo/term-details.cgi?term=GO:0016363
 
@@ -4183,7 +4179,7 @@ description Input signal from Normal Mouse IgG ChIP-seq.
 term IgG-rab
 tag IGGrab
 type control
-description Input signal from normal Rabbit IgG ChIP-seq.
+description Input signal from Normal Rabbit IgG ChIP-seq.
 
 term IgG-rat
 tag IGGrat
@@ -4294,7 +4290,7 @@ type treatment
 
 term MNaseD
 tag MNaseD
-description "Fragmented using micrococcal nuclease digestion"
+description Fragmented using micrococcal nuclease digestion
 type treatment
 label MNase
 

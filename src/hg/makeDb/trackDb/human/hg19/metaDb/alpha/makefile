@@ -3,6 +3,7 @@ LIST=\
 wgEncodeBroadHistone.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
+wgEncodeOpenChromChip.ra \
 wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyGeneST.ra \
 wgEncodeSydhHistone.ra \
