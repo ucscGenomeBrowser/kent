@@ -5397,7 +5397,7 @@ dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2008-12-10
 dateUnrestricted 2009-08-10
-fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1.broadPeak.gz
+fileName wgEncodeHudsonalphaChipSeqPeaksRep1Gm12878Taf1.narrowPeak.gz
 grant Myers
 inputType GM12878/None/Input/PCR1x
 lab HudsonAlpha
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -350254661
+# MAGIC: 251546188
