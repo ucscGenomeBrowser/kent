@@ -1,0 +1,281 @@
+# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeUwDGF.ra,v 1.1 2010/05/27 21:50:07 tdreszer Exp $
+
+# UW DGF (wrangler: Venkat, assisted by Tim)
+
+track wgEncodeUwDgf
+compositeTrack on
+superTrack wgEncodeDNAseSuper
+shortLabel UW DNase DGF
+longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
+group regulation
+#subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
+subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
+subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 SKNSHRA=SK-N-SH_RA Th1=Th1
+dimensions dimensionX=cellType
+sortOrder cellType=+ view=+
+noInherit on
+controlledVocabulary encode/cv.ra cellType=cell
+dragAndDrop subTracks
+priority 0
+type bed 3
+dataVersion through the ENCODE Jun 2010 Freeze
+wgEncode 1
+
+    track wgEncodeUwDgfViewHotspots
+    shortLabel Hotspots
+    view Hotspots
+    visibility pack
+    parent wgEncodeUwDgf
+    pValueFilter 0.0
+    pValueFilterLimits 1:324
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    minGrayLevel 2
+
+        track wgEncodeUwDgfGm06990Hotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel GM06990
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in GM06990 cells)
+        subGroups view=Hotspots cellType=GM06990
+        type broadPeak
+        origAssembly hg18
+        # subId=1682 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfSknshraHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel SK-N-SH_RA
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in SK-N-SH_RA cells)
+        subGroups view=Hotspots cellType=SKNSHRA
+        type broadPeak
+        origAssembly hg18
+        # subId=1795 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfHepg2Hotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HepG2
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in HepG2 cells)
+        subGroups view=Hotspots cellType=HepG2
+        type broadPeak
+        origAssembly hg18
+        color 189,0,157
+        # subId=1814 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfK562Hotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots
+        shortLabel K562
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in K562 cells)
+        subGroups view=Hotspots cellType=K562
+        type broadPeak
+        origAssembly hg18
+        color 46,0,184
+        # subId=1815 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfTh1Hotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel Th1
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in Th1 cells)
+        subGroups view=Hotspots cellType=Th1
+        type broadPeak
+        origAssembly hg18
+        # subId=1816 dateSubmitted=2010-06-21
+
+
+    track wgEncodeUwDgfViewPeaks
+    shortLabel Peaks
+    view Peaks
+    visibility dense
+    parent wgEncodeUwDgf
+    pValueFilter 0.0
+    pValueFilterLimits 1:324
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    minGrayLevel 3
+
+        track wgEncodeUwDgfGm06990Pk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel GM06990 Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 1%) (in GM06990 cells)
+        subGroups view=Peaks cellType=GM06990
+        type narrowPeak
+        origAssembly hg18
+        # subId=1682 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfSknshraPk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel SK-N-SH_RA Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 1%) (in SK-N-SH_RA cells)
+        subGroups view=Peaks cellType=SKNSHRA
+        type narrowPeak
+        origAssembly hg18
+        # subId=1795 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfHepg2Pk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HepG2 Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 1%) (in HepG2 cells)
+        subGroups view=Peaks cellType=HepG2
+        type narrowPeak
+        origAssembly hg18
+        color 189,0,157
+        # subId=1814 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfK562Pk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks
+        shortLabel K562 Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 1%) (in K562 cells)
+        subGroups view=Peaks cellType=K562
+        type narrowPeak
+        origAssembly hg18
+        color 46,0,184
+        # subId=1815 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfTh1Pk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel Th1 Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 1%) (in Th1 cells)
+        subGroups view=Peaks cellType=Th1
+        type narrowPeak
+        origAssembly hg18
+        # subId=1816 dateSubmitted=2010-06-21
+
+
+    track wgEncodeUwDgfViewSignal
+    shortLabel Signal
+    view Signal
+    visibility full
+    parent wgEncodeUwDgf
+    viewLimits 2:30
+    minLimit 1
+    maxLimit 70530
+    autoScale off
+    maxHeightPixels 100:32:16
+    windowingFunction maximum
+
+        track wgEncodeUwDgfGm06990Sig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel GM06990 Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in GM06990 cells)
+        subGroups view=Signal cellType=GM06990
+        type bigWig 1.000000 9745.000000
+        origAssembly hg18
+        # subId=1682 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfSknshraSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel SK-N-SH_RA Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in SK-N-SH_RA cells)
+        subGroups view=Signal cellType=SKNSHRA
+        type bigWig 1.000000 6713.000000
+        origAssembly hg18
+        # subId=1795 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfHepg2Sig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HepG2 Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HepG2 cells)
+        subGroups view=Signal cellType=HepG2
+        type bigWig 1.000000 23188.000000
+        origAssembly hg18
+        color 189,0,157
+        # subId=1814 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfK562Sig
+        release alpha
+        parent wgEncodeUwDgfViewSignal
+        shortLabel K562 Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in K562 cells)
+        subGroups view=Signal cellType=K562
+        type bigWig 1.000000 70530.000000
+        origAssembly hg18
+        color 46,0,184
+        # subId=1815 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfTh1Sig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel Th1 Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in Th1 cells)
+        subGroups view=Signal cellType=Th1
+        type bigWig 1.000000 15550.000000
+        origAssembly hg18
+        # subId=1816 dateSubmitted=2010-06-21
+
+
+    track wgEncodeUwDgfViewzRaw
+    shortLabel RawSignal
+    view zRaw
+    visibility hide
+    parent wgEncodeUwDgf
+    viewLimits 1:250
+    minLimit 1
+    maxLimit 218367.00
+    autoScale off
+    maxHeightPixels 100:32:16
+    windowingFunction maximum
+
+        track wgEncodeUwDgfGm06990Raw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel GM06990 Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in GM06990 cells)
+        subGroups view=zRaw cellType=GM06990
+        type bigWig 1.000000 57178.000000
+        origAssembly hg18
+        # subId=1682 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfSknshraRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel SK-N-SH_RA Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in SK-N-SH_RA cells)
+        subGroups view=zRaw cellType=SKNSHRA
+        type bigWig 1.000000 36298.000000
+        origAssembly hg18
+        # subId=1795 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfHepg2Raw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HepG2 Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in HepG2 cells)
+        subGroups view=zRaw cellType=HepG2
+        type bigWig 1.000000 102081.000000
+        origAssembly hg18
+        color 189,0,157
+        # subId=1814 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfK562Raw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw
+        shortLabel K562 Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in K562 cells)
+        subGroups view=zRaw cellType=K562
+        type bigWig 1.000000 218367.000000
+        origAssembly hg18
+        color 46,0,184
+        # subId=1815 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfTh1Raw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel Th1 Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in Th1 cells)
+        subGroups view=zRaw cellType=Th1
+        type bigWig 1.000000 108696.000000
+        origAssembly hg18
+        # subId=1816 dateSubmitted=2010-06-21
+
+
