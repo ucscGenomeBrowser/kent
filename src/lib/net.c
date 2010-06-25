@@ -1272,7 +1272,7 @@ struct parallelConn
     off_t received;             /* bytes received */
     };
 
-void writeParaFetchStatus(char *origPath, struct parallelConn *pcList, boolean isFinal)
+void writeParaFetchStatus(char *origPath, struct parallelConn *pcList, char *url, off_t fileSize, boolean isFinal)
 /* Write a status file.
  * This has two purposes.
  * First, we can use it to resume a failed transfer.
@@ -1286,6 +1286,8 @@ struct parallelConn *pc = NULL;
 
 FILE *f = mustOpen(outTempX, "w");
 int part = 0;
+fprintf(f, "%s\n", url);
+fprintf(f, "%lld\n", (long long)fileSize);
 for(pc = pcList; pc; pc = pc->next)
     {
     fprintf(f, "part%d %lld %lld %lld\n", part
@@ -1544,7 +1546,7 @@ while (TRUE)
 			}
 		    --connOpen;
 		    ++reOpen;
-		    writeParaFetchStatus(origPath, pcList, FALSE);
+		    writeParaFetchStatus(origPath, pcList, url, fileSize, FALSE);
 		    sinceLastStatus = 0;
 		    continue; 
 		    }
@@ -1581,7 +1583,7 @@ while (TRUE)
 		sinceLastStatus += readCount;
 		if (sinceLastStatus >= 100*1024*1024)
 		    {
-    		    writeParaFetchStatus(origPath, pcList, FALSE);
+		    writeParaFetchStatus(origPath, pcList, url, fileSize, FALSE);
 		    sinceLastStatus = 0;
 		    }
 		}
@@ -1607,8 +1609,8 @@ while (TRUE)
 
 close(out);
 
-/* delete the status file */
-writeParaFetchStatus(origPath, pcList, TRUE);
+/* delete the status file - by passing TRUE */
+writeParaFetchStatus(origPath, pcList, url, fileSize, TRUE);
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);
