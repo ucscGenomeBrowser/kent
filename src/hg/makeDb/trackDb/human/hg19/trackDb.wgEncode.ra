@@ -8,10 +8,15 @@ include trackDb.wgEncodeSunyAlbanyTiling.ra
 include trackDb.wgEncodeHaibTfbs.ra
 include trackDb.wgEncodeSydhTfbs.ra
 include trackDb.wgEncodeSydhHistone.ra
+include wgEncodeBroadHistone.ra
+include wgEncodeOpenChromChip.ra
+include wgEncodeOpenChromDnase.ra
+include wgEncodeOpenChromFaire.ra
 include wgEncodeUwHistone.ra
-include wgEncodeUwDnase.ra
 include wgEncodeUwDgf.ra
-
+include wgEncodeUwDnase.ra
+include trackDb.wgEncodeCshlLongRnaSeq.ra
+include trackDb.wgEncodeCaltechRnaSeq.ra
 
 track wgEncodeMapability
 compositeTrack on
@@ -509,91 +514,9 @@ searchPriority 2.5
 query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 
 
-track wgEncodeCshlShortRnaSeq
-compositeTrack on
-shortLabel CSHL ShortRnaSeq
-longLabel ENCODE CSHL Gingeras ShortRnaSeq
-group expression
-subGroup1 view Views 3-MinusRawSignal=MinusRawSignal 2-PlusRawSignal=PlusRawSignal 4-Alignments=Alignments
-subGroup2 cellType Cell_Line K562=K562
-subGroup3 localization Localization chromatin=chromatin
-subGroup4 rnaExtract RnaExtract short=short
-dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
-dragAndDrop subTracks
-visibilityViewDefaults  MinusRawSignal=hide PlusRawSignal=hide Alignments=hide
-priority 0
-type bed 3
-wgEncode 1
-noInherit on
 
-    track wgEncodeCshlShortRnaSeqView4-Alignments
-    shortLabel Alignments
-    view 4-Alignments
-    visibility dense
-    subTrack wgEncodeCshlShortRnaSeq
-    viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
-    #autoScale on
-    #transformFunc NONE
-    windowingFunction mean
-    maxHeightPixels 100:24:16
+# Riken CAGE (wrangler: cricket)
+include wgEncodeRikenCage.ra
 
-        track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
-        release alpha
-        subTrack wgEncodeCshlShortRnaSeqView4-Alignments off
-        shortLabel K562 chromatin short Aln
-        longLabel ENCODE CSHL RNA-seq Alignments (short in K562 chromatin)
-        subGroups view=4-Alignments cellType=K562 localization=chromatin rnaExtract=short
-        type bam
-        color 46,0,184
-        ## subId=1405 dateSubmitted=2010-06-14
-
-    track wgEncodeCshlShortRnaSeqView3-MinusRawSignal
-    shortLabel Minus Raw Signal
-    view 3-MinusRawSignal
-    visibility dense
-    subTrack wgEncodeCshlShortRnaSeq
-    viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
-    autoScale on
-    transformFunc NONE
-    windowingFunction mean
-    maxHeightPixels 100:24:16
-
-        track wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
-        release alpha
-        subTrack wgEncodeCshlShortRnaSeqView3-MinusRawSignal off
-        shortLabel K562 chromatin short MinusRaw
-        longLabel ENCODE CSHL RNA-seq Minus Strand Raw Signal (short in K562 chromatin)
-        subGroups view=3-MinusRawSignal cellType=K562 localization=chromatin rnaExtract=short
-        type bigWig 1.000000 3291154.000000
-        color 46,0,184
-        ## subId=1405 dateSubmitted=2010-06-14
-
-    track wgEncodeCshlShortRnaSeqView2-PlusRawSignal
-    shortLabel Plus Raw Signal
-    view 2-PlusRawSignal
-    visibility dense
-    subTrack wgEncodeCshlShortRnaSeq
-    viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
-    autoScale on
-    transformFunc NONE
-    windowingFunction mean
-    maxHeightPixels 100:24:16
-
-        track wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
-        release alpha
-        subTrack wgEncodeCshlShortRnaSeqView2-PlusRawSignal
-        shortLabel K562 chromatin short PlusRaw
-        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short in K562 chromatin)
-        subGroups view=2-PlusRawSignal cellType=K562 localization=chromatin rnaExtract=short
-        type bigWig 1.000000 4650292.000000
-        color 46,0,184
-        # subId=1405 dateSubmitted=2010-06-14
-
+# CSHL Small RNA (wrangler: cricket)
+####include wgEncodeCshlShortRnaSeq.ra

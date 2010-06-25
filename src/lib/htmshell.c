@@ -199,13 +199,10 @@ char *htmlWarnEndPattern()
 return "<!-- HGERROR-END -->\n";
 }
 
-#define WARNBOX_IN_USE
 #ifdef WARNBOX_IN_USE
-static void htmlWarnBoxSetup(FILE *f)
+void htmlWarnBoxSetup(FILE *f)
 /* Creates an invisible, empty warning box than can be filled with errors
- * and then made visible.  dirDepth is the number of levels beneath apache
- * root that caller's HTML will appear to the web client.  E.g. if writing
- * HTML from cgi-bin, dirDepth is 1; if trash/body/, 2. */
+ * and then made visible. */
 {
 // Only set this up once per page
 static boolean htmlWarnBoxSetUpAlready=FALSE;

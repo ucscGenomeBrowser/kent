@@ -1777,7 +1777,7 @@ group regulation
     container multiWig
     noInherit on
     type wig 0 10000
-    superTrack wgEncodeReg full
+    superTrack wgEncodeReg hide
     shortLabel Enhancer H3K27Ac
     longLabel H3K27Ac - An Enhancer and Promoter Histone Mark on 8 Cell Lines from ENCODE
     release alpha
@@ -1957,6 +1957,7 @@ group regulation
     release alpha
     type bed 5 .
     superTrack wgEncodeReg dense
+    inputTrackTable wgEncodeRegDnaseClusteredInputs
     inputTracks wgEncodeUwDnaseSeq
     inputTracksSubgroupSelect view=aPeaks
     inputTracksSubgroupDisplay cellType rank
@@ -1971,6 +1972,7 @@ group regulation
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
+    inputTrackTable wgEncodeRegTfbsClusteredInputs
     inputTracks wgEncodeYaleChIPseq wgEncodeHudsonalphaChipSeq
     inputTracksSubgroupSelect view=Peaks
     inputTracksSubgroupDisplay cellType factor

@@ -1,0 +1,87 @@
+track wgEncodeRikenCage
+release alpha
+compositeTrack on
+shortLabel RIKEN CAGE Loc
+longLabel ENCODE RIKEN RNA Subcellular Localization by CAGE Tags
+group expression
+subGroup1 view Views 1-PlusClusters=Plus_Clusters 3-MinusClusters=Minus_Clusters 5-Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1hESC HepG2=HepG2 HUVEC=HUVEC K562=K562 NHEK=NHEK prostate=Prostate
+subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
+subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
+dimensions dimensionX=cellType dimensionZ=rnaExtract dimensionY=localization
+dimensionZchecked longNonPolyA,longPolyA,total
+sortOrder cellType=+ localization=+ rnaExtract=+ view=+
+dragAndDrop subTracks
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
+noInherit on
+priority 0
+type bed 3
+wgEncode 1
+
+    track wgEncodeRikenCageView1-PlusClusters
+    release alpha
+    shortLabel Plus Clusters
+    view 1-PlusClusters
+    visibility full
+    parent wgEncodeRikenCage
+    maxHeightPixels 100:24:16
+    minLimit .005
+    maxLimit 25183
+    viewLimits 0:30
+    autoScale off
+    windowingFunction mean
+
+        track wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
+        release alpha
+        subTrack wgEncodeRikenCageView1-PlusClusters off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
+        subGroups view=1-PlusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
+        type bedGraph 4
+        color 179,0,134
+        # subId=1811 dateSubmitted=2010-06-21
+
+
+    track wgEncodeRikenCageView3-MinusClusters
+        release alpha
+    shortLabel Minus Clusters
+    view 3-MinusClusters
+    visibility full
+    parent wgEncodeRikenCage
+    maxHeightPixels 100:24:16
+    minLimit .005
+    maxLimit 25183
+    viewLimits 0:30
+    windowingFunction mean
+    autoScale off
+
+        track wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters
+        release alpha
+        subTrack wgEncodeRikenCageView3-MinusClusters off
+        shortLabel NHEK cytosol longNonPolyA
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
+        subGroups view=3-MinusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
+        type bedGraph 4
+        color 179,0,134
+        # subId=1811 dateSubmitted=2010-06-21
+
+
+    track wgEncodeRikenCageView5-Alignments
+        release alpha
+    shortLabel Alignments
+    view 5-Alignments
+    visibility hide
+    parent wgEncodeRikenCage
+
+        track wgEncodeRikenCageNhekCytosolLongnonpolyaAln
+        release alpha
+        subTrack wgEncodeRikenCageView5-Alignments off
+        shortLabel NHEK cytosol longNonPolyA Aln
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in NHEK cytosol)
+        subGroups view=5-Alignments cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
+        type bam
+        color 179,0,134
+        # subId=1811 dateSubmitted=2010-06-21
+
+
+
