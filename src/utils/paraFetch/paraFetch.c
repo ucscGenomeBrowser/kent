@@ -20,13 +20,11 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void paraFetch(int numConnections, char *url, char *outPath)
+boolean paraFetch(int numConnections, char *url, char *outPath)
 /* Fetch given URL, send to stdout. */
 {
-parallelFetch(url, numConnections, outPath);
+return parallelFetch(url, numConnections, outPath);
 }
-
-
 
 int main(int argc, char *argv[])
 /* Process command line. */
@@ -34,7 +32,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 4)
     usage();
-paraFetch(atoi(argv[1]), argv[2], argv[3]);
+if (!paraFetch(atoi(argv[1]), argv[2], argv[3]))
+    exit(1);
 return 0;
 }
 
