@@ -19,7 +19,6 @@ char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 static struct hash *geneHash = NULL;
 static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
-static char *mapability = NULL;
 
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
@@ -39,7 +38,6 @@ static char *mapability = NULL;
 
 static struct optionSpec optionSpecs[] = {
     {"lazyLoading", OPTION_BOOLEAN},
-    {"mapability", OPTION_STRING},
     {"outputExtension", OPTION_STRING},
     {NULL, 0}
 };
@@ -485,10 +483,6 @@ else
 
 static void mutationClassifier(char *database, char **files, int fileCount)
 {
-struct bed7 *overlapA = NULL;
-struct bed7 *bed, *unusedA = NULL;
-struct genePredStub *overlapB = NULL;
-struct bed7 *snps = NULL;
 int i, fileIndex = 0;
 struct sqlConnection *conn = sqlConnect(database);
 boolean done = FALSE;
@@ -501,6 +495,10 @@ verbose(2, "%d canonical known genes\n", slCount(genes));
 
 while(!done)
     {
+    struct bed7 *overlapA = NULL;
+    struct bed7 *bed, *unusedA = NULL;
+    struct genePredStub *overlapB = NULL;
+    struct bed7 *snps = NULL;
     FILE *output;
     static struct hash *used = NULL;
 
@@ -519,7 +517,6 @@ while(!done)
         splitPath(files[fileIndex], dir, name, extension);
         sprintf(path, "%s%s.%s", dir, name, outputExtension);
         verbose(2, "writing to output file: %s\n", path);
-        slFreeList(&snps);
         readBedFile(&snps, files[fileIndex]);
         fileIndex++;
         done = fileIndex == fileCount;
@@ -751,6 +748,9 @@ while(!done)
     fprintf(stderr, "regulation model took: %ld ms\n", clock1000() - time);
     if(outputExtension != NULL)
         fclose(output);
+    slFreeList(&overlapA);
+    slFreeList(&overlapB);
+    slFreeList(&snps);
     }
 sqlDisconnect(&conn);
 }
@@ -760,7 +760,6 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 outputExtension = optionVal("outputExtension", NULL);
 lazyLoading = optionExists("lazyLoading");
-mapability = optionVal("mapability", NULL);
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);
