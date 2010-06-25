@@ -16,6 +16,7 @@
 #include "base64.h"
 #include "cheapcgi.h"
 #include "https.h"
+#include "sqlNum.h"
 
 static char const rcsid[] = "$Id: net.c,v 1.80 2010/04/14 07:42:06 galt Exp $";
 
@@ -1308,6 +1309,90 @@ if (isFinal)  /* We are done and just looking to get rid of the file. */
 }
 
 
+boolean readParaFetchStatus(char *origPath, struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, char **pDateString)
+/* Write a status file.
+ * This has two purposes.
+ * First, we can use it to resume a failed transfer.
+ * Second, we can use it to follow progress */
+{
+char outTemp[1024];
+char outStat[1024];
+safef(outStat, sizeof(outStat), "%s.paraFetchStatus", origPath);
+safef(outTemp, sizeof(outTemp), "%s.paraFetch", origPath);
+struct parallelConn *pcList = NULL, *pc = NULL;
+
+if (!fileExists(outStat))
+    {
+    unlink(outTemp);
+    return FALSE;
+    }
+
+if (!fileExists(outTemp))
+    {
+    unlink(outStat);
+    return FALSE;
+    }
+
+char *line, *word;
+struct lineFile *lf = lineFileOpen(outStat, TRUE);
+if (!lineFileNext(lf, &line, NULL))
+    {
+    unlink(outTemp);
+    unlink(outStat);
+    return FALSE;
+    }
+char *url = cloneString(line);
+if (!lineFileNext(lf, &line, NULL))
+    {
+    unlink(outTemp);
+    unlink(outStat);
+    return FALSE;
+    }
+off_t fileSize = sqlLongLong(line);
+if (!lineFileNext(lf, &line, NULL))
+    {
+    unlink(outTemp);
+    unlink(outStat);
+    return FALSE;
+    }
+char *dateString = cloneString(line);
+while (lineFileNext(lf, &line, NULL))
+    {
+    word = nextWord(&line);
+    AllocVar(pc);
+    pc->next = NULL;
+    pc->sd = -4;  /* no connection tried yet */
+    word = nextWord(&line);
+    pc->rangeStart = sqlLongLong(word);
+    word = nextWord(&line);
+    pc->partSize = sqlLongLong(word);
+    word = nextWord(&line);
+    pc->received = sqlLongLong(word);
+    if (pc->received == pc->partSize)
+	pc->sd = -1;  /* part all done already */
+    slAddHead(&pcList, pc);
+    }
+slReverse(&pcList);
+
+lineFileClose(&lf);
+
+if (slCount(pcList) < 1)
+    {
+    unlink(outTemp);
+    unlink(outStat);
+    return FALSE;
+    }
+
+*pPcList = pcList;
+*pUrl = url;
+*pFileSize = fileSize;
+*pDateString = dateString;
+
+return TRUE;
+
+}
+
+
 boolean parallelFetch(char *url, int numConnections, char *outPath)
 /* Open multiple parallel connections to URL to speed downloading */
 {
@@ -1394,31 +1479,45 @@ int c;
 verbose(2,"debug partSize=%llu\n", (unsigned long long) partSize); //debug
 
 
-
 /* n is the highest-numbered descriptor */
 int n = 0;
 int connOpen = 0;
 int reOpen = 0;
 
-/* make a list of connections and open them */
+
+struct parallelConn *restartPcList = NULL;
+char *restartUrl = NULL;
+off_t restartFileSize = 0;
+char *restartDateString = "";
+boolean restartable = readParaFetchStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString);
+
 struct parallelConn *pcList = NULL, *pc;
-for (c = 0; c < numConnections; ++c)
+
+if (restartable 
+ && sameString(url, restartUrl)
+ && fileSize == restartFileSize
+ && sameString(dateString, restartDateString))
     {
-    AllocVar(pc);
-    pc->next = NULL;
-    pc->rangeStart = base;
-    base += partSize;
-    pc->partSize = partSize;
-    if (fileSize != -1 && pc->rangeStart+pc->partSize >= fileSize)
-	pc->partSize = fileSize - pc->rangeStart;
-    pc->received = 0;
-    pc->sd = -4;  /* no connection tried yet */
-    slAddHead(&pcList, pc);
+    pcList = restartPcList;
     }
-slReverse(&pcList);
-
-
-    
+else
+    {
+    /* make a list of connections */
+    for (c = 0; c < numConnections; ++c)
+	{
+	AllocVar(pc);
+	pc->next = NULL;
+	pc->rangeStart = base;
+	base += partSize;
+	pc->partSize = partSize;
+	if (fileSize != -1 && pc->rangeStart+pc->partSize >= fileSize)
+	    pc->partSize = fileSize - pc->rangeStart;
+	pc->received = 0;
+	pc->sd = -4;  /* no connection tried yet */
+	slAddHead(&pcList, pc);
+	}
+    slReverse(&pcList);
+    }
 
 int out = open(outPath, O_CREAT|O_WRONLY, 0664);
 if (out < 0)
