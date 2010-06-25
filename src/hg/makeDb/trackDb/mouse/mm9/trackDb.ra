@@ -571,7 +571,7 @@ shortLabel scripture_ES
 longLabel Guttman NatBiotech 2010 Scripture predicted transcripts, mouse ES cells
 group regulation
 priority 100
-visibility pack
+visibility hide
 color 176,48,96
 type bed 12 .
 
@@ -580,7 +580,7 @@ shortLabel scripture_MLF
 longLabel Guttman NatBiotech 2010 Scripture predicted transcripts, mouse lung fibroblasts
 group regulation
 priority 100
-visibility pack
+visibility hide
 color 176,48,96
 type bed 12 .
 
@@ -589,6 +589,6 @@ shortLabel scripture_NPC
 longLabel Guttman NatBiotech 2010 Scripture predicted transcripts, mouse neuronal precursors
 group regulation
 priority 100
-visibility pack
+visibility hide
 color 176,48,96
 type bed 12 .
