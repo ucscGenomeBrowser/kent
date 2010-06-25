@@ -573,7 +573,7 @@ group regulation
 priority 100
 visibility pack
 color 176,48,96
-type bed .
+type bed 12 .
 
 track scripture_MLF
 shortLabel scripture_MLF
@@ -582,7 +582,7 @@ group regulation
 priority 100
 visibility pack
 color 176,48,96
-type bed .
+type bed 12 .
 
 track scripture_NPC
 shortLabel scripture_NPC
@@ -591,4 +591,4 @@ group regulation
 priority 100
 visibility pack
 color 176,48,96
-type bed .
+type bed 12 .
