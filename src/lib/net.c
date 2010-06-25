@@ -1328,6 +1328,12 @@ if (numConnections > 50)    /* ignore high values for numConnections */
 
 verbose(2,"debug numConnections=%d\n", numConnections); //debug
 
+if (numConnections < 1)
+    {
+    warn("number of connections must be greater than 0 for %s, can't proceed, sorry", url);
+    return FALSE;
+    }
+
 /* what is the size of each part */
 off_t partSize = (fileSize + numConnections -1) / numConnections;
 if (fileSize == -1) 
@@ -1342,6 +1348,7 @@ verbose(2,"debug partSize=%llu\n", (unsigned long long) partSize); //debug
 /* n is the highest-numbered descriptor */
 int n = 0;
 int connOpen = 0;
+int reOpen = 0;
 
 /* make a list of connections and open them */
 struct parallelConn *pcList = NULL, *pc;
@@ -1387,26 +1394,34 @@ char buf[BUFSIZE];
 while (TRUE)
     {
 
-    /* See if we need to open any connections */
+    /* See if we need to open any connections, either new or retries */
     for(pc = pcList; pc; pc = pc->next)
 	{
-	if (pc->sd == -4)  /* never been opened */
+	if ((pc->sd == -4)  /* never even tried to open yet */
+	 || ((reOpen>0)      /* some connections have been released */
+	    && (pc->sd == -2  /* started but not finished */
+	    ||  pc->sd == -3)))  /* not even started */
 	    {
 	    char urlExt[1024];
 	    safef(urlExt, sizeof(urlExt), "%s;byterange=%llu-%llu"
 	    , url
-	    , (unsigned long long) pc->rangeStart
+	    , (unsigned long long) pc->rangeStart + pc->received
 	    , (unsigned long long) pc->rangeStart + pc->partSize - 1 );
 
 	    verbose(2,"debug opening url %s\n", urlExt); //debug
 
+	    int oldSd = pc->sd;  /* in case we need to remember where we were */
+	    if (oldSd != -4)      /* decrement whether we succeed or not */
+		--reOpen;
+	    if (oldSd == -4) 
+		oldSd = -3;       /* ok this one just changes */
 	    if (fileSize == -1)
 		pc->sd = netUrlOpen(url);
 	    else
 		pc->sd = netUrlOpen(urlExt);
 	    if (pc->sd < 0)
 		{
-		pc->sd = -3;  /* failed to open, can retry later */
+		pc->sd = oldSd;  /* failed to open, can retry later */
 		}
 	    else
 		{
@@ -1494,6 +1509,7 @@ while (TRUE)
 			return FALSE;
 			}
 		    --connOpen;
+		    ++reOpen;
 		    continue;     // DEBUG DOES THIS HELP?  
 		    }
 		if (readCount < 0)
