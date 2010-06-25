@@ -1355,47 +1355,13 @@ for (c = 0; c < numConnections; ++c)
     if (fileSize != -1 && pc->rangeStart+pc->partSize >= fileSize)
 	pc->partSize = fileSize - pc->rangeStart;
     pc->received = 0;
-    char urlExt[1024];
-    safef(urlExt, sizeof(urlExt), "%s;byterange=%llu-%llu"
-    , url
-    , (unsigned long long) pc->rangeStart
-    , (unsigned long long) pc->rangeStart + pc->partSize - 1 );
-
-    verbose(2,"debug opening url %s\n", urlExt); //debug
-
-    if (fileSize == -1)
-	pc->sd = netUrlOpen(url);
-    else
-    	pc->sd = netUrlOpen(urlExt);
-    if (pc->sd < 0)
-	{
-	warn("Couldn't open %s", url);
-	return FALSE;
-	}
-    char *newUrl = NULL;
-    int newSd = 0;
-    if (startsWith("http://",url) || startsWith("https://",url))
-	{
-	if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, url, &newSd, &newUrl))
-	    {
-	    warn("Error processing http response for %s", url);
-	    return FALSE;
-	    }
-	if (newUrl) 
-	    {
-	    /*  Update sd with newSd, replace it with newUrl, etc. */
-	    pc->sd = newSd;
-	    warn("Redirects not supported at this time: %s re-directed to: %s", url, newUrl);
-	    freeMem(newUrl);  /* redirects with byterange do not work anyway */
-	    return FALSE;
-	    }
-	}
-    if (pc->sd > n)
-	n = pc->sd;
-    ++connOpen;
+    pc->sd = -4;  /* no connection tried yet */
     slAddHead(&pcList, pc);
     }
 slReverse(&pcList);
+
+
+    
 
 int out = open(outPath, O_CREAT|O_WRONLY, 0664);
 if (out < 0)
@@ -1418,14 +1384,68 @@ ssize_t readCount = 0;
 char buf[BUFSIZE];
 
 #define SELTIMEOUT 5
-while (connOpen > 0)
+while (TRUE)
     {
+
+    /* See if we need to open any connections */
+    for(pc = pcList; pc; pc = pc->next)
+	{
+	if (pc->sd == -4)  /* never been opened */
+	    {
+	    char urlExt[1024];
+	    safef(urlExt, sizeof(urlExt), "%s;byterange=%llu-%llu"
+	    , url
+	    , (unsigned long long) pc->rangeStart
+	    , (unsigned long long) pc->rangeStart + pc->partSize - 1 );
+
+	    verbose(2,"debug opening url %s\n", urlExt); //debug
+
+	    if (fileSize == -1)
+		pc->sd = netUrlOpen(url);
+	    else
+		pc->sd = netUrlOpen(urlExt);
+	    if (pc->sd < 0)
+		{
+		pc->sd = -3;  /* failed to open, can retry later */
+		}
+	    else
+		{
+		char *newUrl = NULL;
+		int newSd = 0;
+		if (startsWith("http://",url) || startsWith("https://",url))
+		    {
+		    if (!netSkipHttpHeaderLinesHandlingRedirect(pc->sd, url, &newSd, &newUrl))
+			{
+			warn("Error processing http response for %s", url);
+			return FALSE;
+			}
+		    if (newUrl) 
+			{
+			/*  Update sd with newSd, replace it with newUrl, etc. */
+			pc->sd = newSd;
+			warn("Redirects not supported at this time: %s re-directed to: %s", url, newUrl);
+			freeMem(newUrl);  /* redirects with byterange do not work anyway */
+			return FALSE;
+			}
+		    }
+		++connOpen;
+		}
+	    }
+	}
+
+
+    if (connOpen == 0)
+	{
+	warn("Unable to open any connections to download %s, can't proceed, sorry", url);
+	return FALSE;
+	}
+
 
     FD_ZERO(&rfds);
     n = 0;
     for(pc = pcList; pc; pc = pc->next)
 	{
-	if (pc->sd != -1)
+	if (pc->sd >= 0)
 	    {
 	    FD_SET(pc->sd, &rfds);    /* reset descriptor in readfds for select() */
 	    if (pc->sd > n)
@@ -1470,10 +1490,7 @@ while (connOpen > 0)
 
 		    if (fileSize != -1 && pc->received != pc->partSize)	
 			{
-			warn("error expected to read %llu, actually read %llu bytes for url %s"
-			    , (unsigned long long) pc->partSize
-			    , (unsigned long long) pc->received
-			    , url);
+			pc->sd = -2;  /* conn was closed before all data was sent, can retry later */
 			return FALSE;
 			}
 		    --connOpen;
@@ -1515,6 +1532,16 @@ while (connOpen > 0)
 	{
 	warn("No data within %d seconds for %s", SELTIMEOUT, url);
 	return FALSE;
+	}
+
+    /* are we done? */
+    if (connOpen == 0)
+	{
+	boolean done = TRUE;
+	for(pc = pcList; pc; pc = pc->next)
+	    if (pc->sd != -1)
+		done = FALSE;
+	if (done) break;
 	}
 
     }
