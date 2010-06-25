@@ -1276,6 +1276,10 @@ struct parallelConn
 boolean parallelFetch(char *url, int numConnections, char *outPath)
 /* Open multiple parallel connections to URL to speed downloading */
 {
+char *origPath = outPath;
+char outTemp[1024];
+safef(outTemp, sizeof(outTemp), "%s.paraFetch", outPath);
+outPath = outTemp;
 /* get the size of the file to be downloaded */
 off_t fileSize = 0;
 if (startsWith("http://",url) || startsWith("https://",url))
@@ -1291,10 +1295,14 @@ if (startsWith("http://",url) || startsWith("https://",url))
     if (sizeString == NULL)
 	{
 	hashFree(&hash);
-	warn("No Content-Length: returned in header for %s, can't proceed, sorry", url);
-	return FALSE;
+	warn("No Content-Length: returned in header for %s, must limit to a single connection, will not know if data is complete", url);
+	numConnections = 1;
+	fileSize = -1;
 	}
-    fileSize = atoll(sizeString);
+    else
+	{
+	fileSize = atoll(sizeString);
+	}
     hashFree(&hash);
     }
 else
@@ -1322,6 +1330,8 @@ verbose(2,"debug numConnections=%d\n", numConnections); //debug
 
 /* what is the size of each part */
 off_t partSize = (fileSize + numConnections -1) / numConnections;
+if (fileSize == -1) 
+    partSize = -1;
 off_t base = 0;
 int c;
 
@@ -1342,7 +1352,7 @@ for (c = 0; c < numConnections; ++c)
     pc->rangeStart = base;
     base += partSize;
     pc->partSize = partSize;
-    if (pc->rangeStart+pc->partSize >= fileSize)
+    if (fileSize != -1 && pc->rangeStart+pc->partSize >= fileSize)
 	pc->partSize = fileSize - pc->rangeStart;
     pc->received = 0;
     char urlExt[1024];
@@ -1353,7 +1363,10 @@ for (c = 0; c < numConnections; ++c)
 
     verbose(2,"debug opening url %s\n", urlExt); //debug
 
-    pc->sd = netUrlOpen(urlExt);
+    if (fileSize == -1)
+	pc->sd = netUrlOpen(url);
+    else
+    	pc->sd = netUrlOpen(urlExt);
     if (pc->sd < 0)
 	{
 	warn("Couldn't open %s", url);
@@ -1372,7 +1385,9 @@ for (c = 0; c < numConnections; ++c)
 	    {
 	    /*  Update sd with newSd, replace it with newUrl, etc. */
 	    pc->sd = newSd;
+	    warn("Redirects not supported at this time: %s re-directed to: %s", url, newUrl);
 	    freeMem(newUrl);  /* redirects with byterange do not work anyway */
+	    return FALSE;
 	    }
 	}
     if (pc->sd > n)
@@ -1453,7 +1468,7 @@ while (connOpen > 0)
 		    verbose(2,"debug closing descriptor: %d\n", pc->sd); //debug
 		    pc->sd = -1;
 
-		    if (pc->received != pc->partSize)	
+		    if (fileSize != -1 && pc->received != pc->partSize)	
 			{
 			warn("error expected to read %llu, actually read %llu bytes for url %s"
 			    , (unsigned long long) pc->partSize
@@ -1505,6 +1520,9 @@ while (connOpen > 0)
     }
 
 close(out);
+
+/* rename the successful download to the original name */
+rename(outTemp, origPath);
 
 return TRUE;
 }
