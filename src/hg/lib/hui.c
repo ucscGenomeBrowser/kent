@@ -1430,20 +1430,25 @@ static char *wiggleTransformFuncOptions[] = {
     "LOG"
     };
 
+static char *wiggleTransformFuncLabels[] = {
+    "NONE",
+    "LOG (ln(1+x))"
+    };
+
 enum wiggleTransformFuncEnum wiggleTransformFuncToEnum(char *string)
 /* Convert from string to enum representation. */
 {
 int x = stringIx(string, wiggleTransformFuncOptions);
 if (x < 0)
-   errAbort("hui::wiggleTransformFuncToEnum() - Unknown option %s", string);
+    errAbort("hui::wiggleTransformFuncToEnum() - Unknown option %s", string);
 return x;
 }
 
 void wiggleTransformFuncDropDown(char *var, char *curVal)
 /* Make drop down of options. */
 {
-cgiMakeDropList(var, wiggleTransformFuncOptions,
-    ArraySize(wiggleTransformFuncOptions), curVal);
+cgiMakeDropListFull(var, wiggleTransformFuncLabels, wiggleTransformFuncOptions,
+    ArraySize(wiggleTransformFuncOptions), curVal, NULL);
 }
 
 static char *wiggleAlwaysZeroOptions[] = {
