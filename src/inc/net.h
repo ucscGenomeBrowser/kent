@@ -216,5 +216,9 @@ boolean netSkipHttpHeaderLinesHandlingRedirect(int sd, char *url, int *redirecte
 boolean netGetFtpInfo(char *url, long long *retSize, time_t *retTime);
 /* Return date and size of ftp url file */
 
+
+boolean parallelFetch(char *url, int numConnections, char *outPath);
+/* Open multiple parallel connections to URL to speed downloading */
+
 #endif /* NET_H */
 
