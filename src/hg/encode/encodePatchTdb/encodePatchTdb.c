@@ -85,7 +85,7 @@ struct raFile
 void recordLocationReport(struct raRecord *rec, FILE *out)
 /* Write out where record ends. */
 {
-fprintf(out, "in stanza from lines %d-%d of %s\n", 
+fprintf(out, "in stanza from lines %d-%d of %s\n",
 	rec->startLineIx, rec->endLineIx, rec->file->name);
 }
 
@@ -230,21 +230,27 @@ static void checkSubsAreForParent(char *parentName, struct raRecord *subList)
 struct raRecord *sub;
 for (sub = subList; sub != NULL; sub = sub->next)
     {
-    char *subParent = cloneFirstWord(raRecordMustFindTagVal(sub, "subTrack"));
-    if (!sameString(parentName, subParent))
-        recordAbort(sub, "%s has subTrack %s, expecting subtrack %s", 
+    char *parent = raRecordFindTagVal(sub, "parent");
+    if (parent == NULL)
+        parent = raRecordMustFindTagVal(sub, "subTrack");
+    char *subParent = cloneFirstWord(parent);
+    if (!startsWith(parentName, subParent))
+        recordAbort(sub, "%s has parent %s, expecting %s",
 		sub->key, subParent, parentName);
     }
 }
 
-boolean hasViewSubtracks(struct raRecord *parent)
-/*  Return TRUE if parent has view subtracks. */
+static char *findViewTrackName(struct raRecord *parent, char *view)
+/* Returns the name of the viewInTheMiddle track for a given view tag */
 {
-struct raRecord *sub;
-for (sub = parent->children; sub != NULL; sub = sub->next)
-    if (raRecordFindTag(sub, "view"))
-        return TRUE;
-return FALSE;
+struct raRecord *mid;
+for (mid = parent->children; mid != NULL; mid = mid->olderSibling)
+    {
+    char *viewName = raRecordFindTagVal(mid, "view");
+    if (viewName != NULL && sameString(viewName,view))
+        return mid->key;
+    }
+return NULL;
 }
 
 struct raRecord *rFindView(struct raRecord *r, char *view)
@@ -312,7 +318,9 @@ for (rec = list; rec != NULL; rec = rec->next)
 /* Scan through linking up parents. */
 for (rec = list; rec != NULL; rec = rec->next)
     {
-    char *subTrack = raRecordFindTagVal(rec, "subTrack");
+    char *subTrack = raRecordFindTagVal(rec, "parent");
+    if (subTrack == NULL)
+        subTrack = raRecordFindTagVal(rec, "subTrack");
     if (subTrack != NULL)
 	{
 	char *release = raRecordFindTagVal(rec, "release");
@@ -430,15 +438,17 @@ for (;;)
 return s;
 }
 
-void substituteParentText(struct raRecord *parent, struct raRecord *view, 
+void substituteParentText(struct raRecord *parent, struct raRecord *view,
 	struct raRecord *sub)
 /* Convert subtrack parent with subtrack view. */
 {
-struct raTag *t = raRecordMustFindTag(sub, "subTrack");
+struct raTag *t = raRecordFindTag(sub, "parent");
+if (t == NULL)
+    t = raRecordMustFindTag(sub, "subTrack");
 struct dyString *dy = dyStringNew(0);
 char *s = firstTagInText(t->text);
 dyStringAppendN(dy, t->text, s - t->text);
-dyStringPrintf(dy, "subTrack %s", view->key);
+dyStringPrintf(dy, "parent %s", view->key);
 /* Skip over subTrack and name in original text. */
 int i;
 for (i=0; i<2; ++i)
@@ -496,14 +506,14 @@ for (t = r->tagList; t != NULL; t = t->next)
         {
 	int i;
 	e = strchr(s, '\n');
-	if (e == s)  // empty line, keep empty 
+	if (e == s)  // empty line, keep empty
 	    {
 	    dyStringAppendC(dy, '\n');
 	    e += 1;
 	    }
 	else
 	    {
-	    // Indent some extra. 
+	    // Indent some extra.
 	    for (i=0; i<charCount; ++i)
 		dyStringAppendC(dy, c);
 	    if (e == NULL)
@@ -518,6 +528,15 @@ for (t = r->tagList; t != NULL; t = t->next)
 	    }
 	}
     t->text = cloneString(dy->string);
+    }
+if (r->endComments != NULL)
+    {
+    dyStringClear(dy);
+    int i;
+    for (i=0; i<charCount; ++i)
+        dyStringAppendC(dy, c);
+    dyStringAppend(dy, r->endComments);
+    r->endComments = cloneString(dy->string);
     }
 dyStringFree(&dy);
 }
@@ -535,7 +554,7 @@ addToStartOfTextLines(r, '#', 1);
 }
 
 void substituteIntoView(struct raRecord *sub, struct raRecord *oldSub, struct raRecord *view)
-/* Substitute sub for oldSub as a child of view.  Assumes oldSub is in same file and after view. 
+/* Substitute sub for oldSub as a child of view.  Assumes oldSub is in same file and after view.
  * Leaves in oldSub, but "commented out" */
 {
 sub->parent = view;
@@ -550,38 +569,33 @@ else
 void patchInSubtrack(struct raRecord *parent, struct raRecord *sub)
 /* Patch sub into the correct view of parent */
 {
-if (hasViewSubtracks(parent))
-    {
-    char *viewOfSub = findViewOfSub(sub);
-    if (viewOfSub == NULL)
-        recordAbort(sub, "Can only handle subtracks with view in subGroups");
-    char viewTrackName[PATH_LEN];
-    safef(viewTrackName, sizeof(viewTrackName), "%sView%s", parent->key, viewOfSub);
-    char *parentRelease = raRecordFindTagVal(parent, "release");
-    char *subRelease = raRecordFindTagVal(sub, "release");
-    char *release = nonNullRelease(parentRelease, subRelease);
-    struct raRecord *view = findRecordCompatibleWithRelease(parent->file, release, viewTrackName);
-    validateParentViewSub(parent, view, sub);
-    substituteParentText(parent, view, sub);
-    makeSureBlankLineBefore(sub);
+char *viewOfSub = findViewOfSub(sub);
+if (viewOfSub == NULL)
+    recordAbort(sub, "Can only handle subtracks with view in subGroups");
+char *viewTrackName = findViewTrackName(parent,viewOfSub);
+if(viewTrackName == NULL)
+    recordAbort(sub, "Can't find view track name for %s in subtrack %s and parent %s.",viewOfSub,sub->key,parent->key);
+char *parentRelease = raRecordFindTagVal(parent, "release");
+char *subRelease = raRecordFindTagVal(sub, "release");
+char *release = nonNullRelease(parentRelease, subRelease);
+struct raRecord *view = findRecordCompatibleWithRelease(parent->file, release, viewTrackName);
+validateParentViewSub(parent, view, sub);
+substituteParentText(parent, view, sub);
+makeSureBlankLineBefore(sub);
+if(raRecordFindTag(sub, "subTrack"))
     indentTdbText(sub, 4);
-    struct raRecord *oldSub = findRecordCompatibleWithRelease(parent->file, release, sub->key);
-    if (glReplace)
-        {
-	if (oldSub == NULL)
-	    recordAbort(sub, "%s doesn't exist but using mode=replace\n", sub->key);
-	substituteIntoView(sub, oldSub, view);
-	}
-    else
-        {
-	if (oldSub != NULL)
-	    recordAbort(sub, "record %s already exists - use mode=replace", sub->key);
-	patchIntoEndOfView(sub, view);
-	}
+struct raRecord *oldSub = findRecordCompatibleWithRelease(parent->file, release, sub->key);
+if (glReplace)
+    {
+    if (oldSub == NULL)
+        recordAbort(sub, "%s doesn't exist but using mode=replace\n", sub->key);
+    substituteIntoView(sub, oldSub, view);
     }
 else
     {
-    recordAbort(parent, "Can only handle parents with views for now.");
+    if (oldSub != NULL)
+        recordAbort(sub, "record %s already exists - use mode=replace", sub->key);
+    patchIntoEndOfView(sub, view);
     }
 }
 
@@ -617,23 +631,29 @@ if (hasTrack)
     subList = patchList->next;
     }
 else
-   {
-   parentName = cloneFirstWord(raRecordMustFindTagVal(patchList, "subTrack"));
-   subList = patchList;
-   }
+    {
+    char *val = raRecordFindTagVal(patchList, "parent");
+    if (val == NULL)
+        val = raRecordMustFindTagVal(patchList, "subTrack");
+    parentName = cloneFirstWord(val);
+    subList = patchList;
+    val = strstr(parentName,"View"); // NOTE: Requires viewInTheMiddle follows naming convention {parentTrack}View{ViewName}
+    if ( val != NULL)
+        *val = '\0';  // Chop off the view portion of the name.
+    }
 checkSubsAreForParent(parentName, subList);
 
 /* Load file to patch. */
 struct raFile *tdbFile = raFileRead(tdbFileName);
 int oldTdbCount = slCount(tdbFile->recordList);
 if (oldTdbCount < 50)
-    warn("%s only has %d records, I hope you meant to hit a new file\n", tdbFileName, 
+    warn("%s only has %d records, I hope you meant to hit a new file\n", tdbFileName,
     	oldTdbCount);
 linkUpParents(tdbFile);
 
 struct raRecord *tdbParent = findRecordCompatibleWithRelease(tdbFile, "alpha", parentName);
 if (!tdbParent)
-    errAbort("Can't find composite track %s compatible with alpha mode in %s", 
+    errAbort("Can't find composite track %s compatible with alpha mode in %s",
     	parentName, tdbFileName);
 patchInSubtracks(tdbParent, subList);
 
