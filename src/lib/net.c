@@ -1309,7 +1309,8 @@ if (isFinal)  /* We are done and just looking to get rid of the file. */
 }
 
 
-boolean readParaFetchStatus(char *origPath, struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, char **pDateString)
+boolean readParaFetchStatus(char *origPath, 
+    struct parallelConn **pPcList, char **pUrl, off_t *pFileSize, char **pDateString, off_t *pTotalDownloaded)
 /* Write a status file.
  * This has two purposes.
  * First, we can use it to resume a failed transfer.
@@ -1320,6 +1321,7 @@ char outStat[1024];
 safef(outStat, sizeof(outStat), "%s.paraFetchStatus", origPath);
 safef(outTemp, sizeof(outTemp), "%s.paraFetch", origPath);
 struct parallelConn *pcList = NULL, *pc = NULL;
+off_t totalDownloaded = 0;
 
 if (!fileExists(outStat))
     {
@@ -1370,6 +1372,7 @@ while (lineFileNext(lf, &line, NULL))
     pc->received = sqlLongLong(word);
     if (pc->received == pc->partSize)
 	pc->sd = -1;  /* part all done already */
+    totalDownloaded += pc->received;
     slAddHead(&pcList, pc);
     }
 slReverse(&pcList);
@@ -1387,6 +1390,7 @@ if (slCount(pcList) < 1)
 *pUrl = url;
 *pFileSize = fileSize;
 *pDateString = dateString;
+*pTotalDownloaded = totalDownloaded;
 
 return TRUE;
 
@@ -1489,7 +1493,8 @@ struct parallelConn *restartPcList = NULL;
 char *restartUrl = NULL;
 off_t restartFileSize = 0;
 char *restartDateString = "";
-boolean restartable = readParaFetchStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString);
+off_t restartTotalDownloaded = 0;
+boolean restartable = readParaFetchStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString, &restartTotalDownloaded);
 
 struct parallelConn *pcList = NULL, *pc;
 
@@ -1499,6 +1504,7 @@ if (restartable
  && sameString(dateString, restartDateString))
     {
     pcList = restartPcList;
+    totalDownloaded = restartTotalDownloaded;
     }
 else
     {
@@ -1542,6 +1548,16 @@ char buf[BUFSIZE];
 #define SELTIMEOUT 5
 while (TRUE)
     {
+
+    /* are we done? */
+    if (connOpen == 0)
+	{
+	boolean done = TRUE;
+	for(pc = pcList; pc; pc = pc->next)
+	    if (pc->sd != -1)
+		done = FALSE;
+	if (done) break;
+	}
 
     /* See if we need to open any connections, either new or retries */
     for(pc = pcList; pc; pc = pc->next)
@@ -1706,16 +1722,6 @@ while (TRUE)
 	{
 	warn("No data within %d seconds for %s", SELTIMEOUT, url);
 	return FALSE;
-	}
-
-    /* are we done? */
-    if (connOpen == 0)
-	{
-	boolean done = TRUE;
-	for(pc = pcList; pc; pc = pc->next)
-	    if (pc->sd != -1)
-		done = FALSE;
-	if (done) break;
 	}
 
     }
