@@ -1,4 +1,9 @@
+We switched our source code control system from CVS to Git on June 12, 2010.
+This README is OBSOLETE. For more details, please see:
 
+  http://genomewiki.ucsc.edu/index.php/CVS_to_Git_Migration
+
+=====================================================================
 Use the following procedures to create you own personal copy of the
 kent source tree where you can have your own edits to the source tree
 that are not part of the development at UCSC.  For example, mirror sites
