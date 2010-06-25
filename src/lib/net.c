@@ -1272,7 +1272,7 @@ struct parallelConn
     off_t received;             /* bytes received */
     };
 
-void writeParaFetchStatus(char *origPath, struct parallelConn *pcList, char *url, off_t fileSize, boolean isFinal)
+void writeParaFetchStatus(char *origPath, struct parallelConn *pcList, char *url, off_t fileSize, char *dateString, boolean isFinal)
 /* Write a status file.
  * This has two purposes.
  * First, we can use it to resume a failed transfer.
@@ -1288,6 +1288,7 @@ FILE *f = mustOpen(outTempX, "w");
 int part = 0;
 fprintf(f, "%s\n", url);
 fprintf(f, "%lld\n", (long long)fileSize);
+fprintf(f, "%s\n", dateString);
 for(pc = pcList; pc; pc = pc->next)
     {
     fprintf(f, "part%d %lld %lld %lld\n", part
@@ -1318,6 +1319,7 @@ outPath = outTemp;
 off_t fileSize = 0;
 off_t totalDownloaded = 0;
 ssize_t sinceLastStatus = 0;
+char *dateString = "";
 if (startsWith("http://",url) || startsWith("https://",url))
     {
     struct hash *hash = newHash(0);
@@ -1339,6 +1341,9 @@ if (startsWith("http://",url) || startsWith("https://",url))
 	{
 	fileSize = atoll(sizeString);
 	}
+    char *ds = hashFindValUpperCase(hash, "Last-Modified:");
+    if (ds)
+	dateString = cloneString(ds);
     hashFree(&hash);
     }
 else
@@ -1352,6 +1357,15 @@ else
 	return FALSE;
 	}
     fileSize = size;
+
+    struct tm  *ts;
+    char ftpTime[80];
+ 
+    /* Format the time "Tue, 15 Jun 2010 06:45:08 GMT" */
+    ts = localtime(&t);
+    strftime(ftpTime, sizeof(ftpTime), "%a, %d %b %Y %H:%M:%S %Z", ts);
+    dateString = cloneString(ftpTime);
+
     }
 
 verbose(2,"debug fileSize=%llu\n", (unsigned long long) fileSize); //debug
@@ -1546,7 +1560,7 @@ while (TRUE)
 			}
 		    --connOpen;
 		    ++reOpen;
-		    writeParaFetchStatus(origPath, pcList, url, fileSize, FALSE);
+		    writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
 		    sinceLastStatus = 0;
 		    continue; 
 		    }
@@ -1583,7 +1597,7 @@ while (TRUE)
 		sinceLastStatus += readCount;
 		if (sinceLastStatus >= 100*1024*1024)
 		    {
-		    writeParaFetchStatus(origPath, pcList, url, fileSize, FALSE);
+		    writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
 		    sinceLastStatus = 0;
 		    }
 		}
@@ -1610,7 +1624,7 @@ while (TRUE)
 close(out);
 
 /* delete the status file - by passing TRUE */
-writeParaFetchStatus(origPath, pcList, url, fileSize, TRUE);
+writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, TRUE);  // DEBUG RESTORE!!
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);
