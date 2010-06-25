@@ -1266,12 +1266,44 @@ struct parallelConn
 /* struct to information on a parallel connection */
     {
     struct parallelConn *next;  /* next connection */
-    char *url;                  /* full url including byterange */
     int sd;                     /* socket descriptor */
     off_t rangeStart;           /* where does the range start */
     off_t partSize;             /* range size */
     off_t received;             /* bytes received */
     };
+
+void writeParaFetchStatus(char *origPath, struct parallelConn *pcList, boolean isFinal)
+/* Write a status file.
+ * This has two purposes.
+ * First, we can use it to resume a failed transfer.
+ * Second, we can use it to follow progress */
+{
+char outTempX[1024];
+char outTemp[1024];
+safef(outTempX, sizeof(outTempX), "%s.paraFetchStatusX", origPath);
+safef(outTemp, sizeof(outTemp), "%s.paraFetchStatus", origPath);
+struct parallelConn *pc = NULL;
+
+FILE *f = mustOpen(outTempX, "w");
+int part = 0;
+for(pc = pcList; pc; pc = pc->next)
+    {
+    fprintf(f, "part%d %lld %lld %lld\n", part
+	, (long long)pc->rangeStart
+	, (long long)pc->partSize
+	, (long long)pc->received);
+    ++part;
+    }
+
+carefulClose(&f);
+
+/* rename the successful status to the original name */
+rename(outTempX, outTemp);
+
+if (isFinal)  /* We are done and just looking to get rid of the file. */
+    unlink(outTemp);
+}
+
 
 boolean parallelFetch(char *url, int numConnections, char *outPath)
 /* Open multiple parallel connections to URL to speed downloading */
@@ -1510,7 +1542,8 @@ while (TRUE)
 			}
 		    --connOpen;
 		    ++reOpen;
-		    continue;     // DEBUG DOES THIS HELP?  
+		    writeParaFetchStatus(origPath, pcList, FALSE);
+		    continue; 
 		    }
 		if (readCount < 0)
 		    {
@@ -1563,6 +1596,9 @@ while (TRUE)
     }
 
 close(out);
+
+/* delete the status file */
+writeParaFetchStatus(origPath, pcList, TRUE);
 
 /* rename the successful download to the original name */
 rename(outTemp, origPath);
