@@ -6,9 +6,10 @@
 #Some information on tracks used as input for a clustering track
 CREATE TABLE clusterInputTrackTable (
     tableName varchar(255) not null,	# Name of table used as an input
-    cell varchar(255) not null,	# Name of cell line
+    source varchar(255) not null,	# Name of cell line or other biological source
+    factor varchar(255) not null,	# Name of factor
               #Indices
     PRIMARY KEY(tableName),
-    INDEX (cell)
-
+    INDEX(source),
+    INDEX(factor)
 );
