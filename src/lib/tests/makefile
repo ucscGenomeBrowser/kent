@@ -210,9 +210,6 @@ miniBlat:  mkdirs miniBlat.o ${MYLIBS}
 fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
 	${CC} ${COPT} -o fetchUrlTest fetchUrlTest.o ${MYLIBS} ${L}
 
-paraFetch:  mkdirs paraFetch.o ${MYLIBS}
-	${CC} ${COPT} -o paraFetch paraFetch.o ${MYLIBS} ${L}
-
 ##
 # gff3 tests
 ##
