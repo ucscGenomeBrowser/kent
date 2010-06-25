@@ -5225,8 +5225,9 @@ if (color)
 	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
 	    }
 	}
-    mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
-	     tg->track, tg->mapItemName(tg, bed), sPhenotypes);
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
     }
 if (tg->subType == lfWithBarbs)
     {

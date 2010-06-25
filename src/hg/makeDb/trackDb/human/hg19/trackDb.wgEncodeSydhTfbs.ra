@@ -2,6 +2,7 @@
 track wgEncodeSydhTfbs
 release alpha
 compositeTrack on
+superTrack wgEncodeTfBindingSuper dense
 shortLabel  SYDH TFBS
 longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from Stanford/Yale/UC-Davis/Harvard
 group regulation
@@ -47,7 +48,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsGm12878WhipIggmusPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks 
-	    shortLabel GM12878 WHIP  Pk
+	    shortLabel GM12878 WHIP   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (WHIP in GM12878 cells)
 	    subGroups view=Peaks factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
 	    type narrowPeak
@@ -57,7 +58,7 @@ wgEncode 1
    	    track wgEncodeSydhTfbsHelas3Rad21IggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HeLa-S3 Rad21 Pk
+	    shortLabel HeLa-S3 Rad21  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in HeLa-S3 cells)
 	    subGroups view=Peaks factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone 
 	    type narrowPeak
@@ -67,7 +68,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3TbpIggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HeLa-S3 TBP   Pk
+	    shortLabel HeLa-S3 TBP    Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in HeLa-S3 cells)
 	    subGroups view=Peaks factor=TBP cellType=HeLaS3 control=IGGrab treatment=aNone
 	    type narrowPeak
@@ -77,7 +78,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3Elk4UcdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HeLa-S3 ELK4  Pk
+	    shortLabel HeLa-S3 ELK4   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ELK4 in HeLa-S3 cells)
 	    subGroups view=Peaks factor=ELK4 cellType=HeLaS3 control=UCD treatment=aNone
 	    type narrowPeak
@@ -87,7 +88,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3Irf3IggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HeLa-S3 IRF3  Pk
+	    shortLabel HeLa-S3 IRF3   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF3 in HeLa-S3 cells)
 	    subGroups view=Peaks factor=IRF3 cellType=HeLaS3 control=IGGrab treatment=aNone
 	    type narrowPeak
@@ -97,7 +98,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2CjunIggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HepG2   c-Jun Pk
+	    shortLabel HepG2   c-Jun  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (c-Jun in HepG2 cells)
 	    subGroups view=Peaks factor=cJUN cellType=HepG2 control=IGGrab treatment=aNone
 	    type narrowPeak
@@ -107,7 +108,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2Pol2IggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HepG2   Pol2  Pk
+	    shortLabel HepG2   Pol2   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in HepG2 cells)
 	    subGroups view=Peaks factor=POL2 cellType=HepG2 control=IGGrab treatment=aNone
 	    type narrowPeak
@@ -117,7 +118,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2TbpIggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HepG2   TBP   Pk
+	    shortLabel HepG2   TBP    Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in HepG2 cells)
 	    subGroups view=Peaks factor=TBP cellType=HepG2 control=IGGrab treatment=aNone
 	    type narrowPeak
@@ -127,7 +128,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsH1hescSuz12UcdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel H1-hESC SUZ12 Pk
+	    shortLabel H1-hESC SUZ12  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (SUZ12 in H1-hESC cells)
 	    subGroups view=Peaks factor=SUZ12 cellType=H1hESC control=UCD treatment=aNone
 	    type narrowPeak
@@ -138,7 +139,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Ccnt2StdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks on
-	    shortLabel K562    CCNT2 Pk
+	    shortLabel K562    CCNT2  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (CCNT2 in K562 cells)
 	    subGroups view=Peaks factor=CCNT2 cellType=K562 control=std treatment=aNone
 	    type narrowPeak
@@ -149,7 +150,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Hmgn3StdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks on
-	    shortLabel K562    HMGN3 Pk
+	    shortLabel K562    HMGN3  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (HMGN3 in K562 cells)
 	    subGroups view=Peaks factor=HMGN3 cellType=K562 control=std treatment=aNone
 	    type narrowPeak
@@ -160,7 +161,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Irf1Ifna30StdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel K562/a3 IRF1  Pk
+	    shortLabel K562/a3 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
 	    subGroups view=Peaks factor=IRF1 cellType=uK562 control=std treatment=IFNa30
 	    type narrowPeak
@@ -171,7 +172,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Irf1Ifng6hStdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel K562/g6 IRF1  Pk
+	    shortLabel K562/g6 IRF1   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF1 in K562 cells)
 	    subGroups view=Peaks factor=IRF1 cellType=vK562 control=std treatment=IFNg6h
 	    type narrowPeak
@@ -182,7 +183,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Nrf1IggrabPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks on
-	    shortLabel K562    Nrf1  Pk 
+	    shortLabel K562    Nrf1   Pk 
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Nrf1 in K562 cells)
 	    subGroups view=Peaks factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
 	    type narrowPeak
@@ -193,7 +194,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Gtf2bStdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks on
-	    shortLabel K562    GTF2B Pk
+	    shortLabel K562    GTF2B  Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GTF2B in K562 cells)
 	    subGroups view=Peaks factor=GTF2B cellType=K562 control=std treatment=aNone
 	    type narrowPeak
@@ -204,7 +205,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Usf2StdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks on
-	    shortLabel K562    USF2  Pk
+	    shortLabel K562    USF2   Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (USF2 in K562 cells)
 	    subGroups view=Peaks factor=USF2 cellType=K562 control=std treatment=aNone
 	    type narrowPeak
@@ -214,7 +215,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2Znf274UcdPk
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewPeaks off
-	    shortLabel HepG2   ZNF27 Pk
+	    shortLabel HepG2   ZNF274 Pk
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in HepG2 cells)
 	    subGroups view=Peaks factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
 	    type narrowPeak
@@ -225,7 +226,7 @@ wgEncode 1
         track wgEncodeSydhTfbsGm12878Znf274UcdPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks on
-        shortLabel GM12878 ZNF27 Pk
+        shortLabel GM12878 ZNF274 Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (ZNF274 in GM12878 cells)
         subGroups view=Peaks factor=ZNF274 cellType=GM12878 control=UCD treatment=aNone
         type narrowPeak
@@ -235,7 +236,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHuvecGata2UcdPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HUVEC   GATA2 Pk
+        shortLabel HUVEC   GATA2  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (GATA-2 in HUVEC cells)
         subGroups view=Peaks factor=GATA2 cellType=HUVEC control=UCD treatment=aNone
         type narrowPeak
@@ -245,7 +246,7 @@ wgEncode 1
         track wgEncodeSydhTfbsH1hescMaxUcdPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel H1-hESC Max   Pk
+        shortLabel H1-hESC Max    Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Max in H1-hESC cells)
         subGroups view=Peaks factor=MAX cellType=H1hESC control=UCD treatment=aNone
         type narrowPeak
@@ -255,7 +256,7 @@ wgEncode 1
         track wgEncodeSydhTfbsRajiPol2UcdPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel Raji    Pol2  Pk
+        shortLabel Raji    Pol2   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Pol2 in Raji cells)
         subGroups view=Peaks factor=POL2 cellType=Raji control=UCD treatment=aNone
         type narrowPeak
@@ -265,7 +266,7 @@ wgEncode 1
         track wgEncodeSydhTfbsGm12878TbpIggmusPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks on
-        shortLabel GM12878 TBP   Pk
+        shortLabel GM12878 TBP    Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (TBP in GM12878 cells)
         subGroups view=Peaks factor=TBP cellType=GM12878 control=IGGmus treatment=aNone
         type narrowPeak
@@ -275,7 +276,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2JundIggrabPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2   JunD  Pk
+        shortLabel HepG2   JunD   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (JunD in HepG2 cells)
         subGroups view=Peaks factor=JUND cellType=HepG2 control=IGGrab treatment=aNone
         type narrowPeak
@@ -285,7 +286,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Nrf1IggrabPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2   Nrf1  Pk
+        shortLabel HepG2   Nrf1   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Nrf1 in HepG2 cells)
         subGroups view=Peaks factor=NRF1 cellType=HepG2 control=IGGrab treatment=aNone
         type narrowPeak
@@ -295,7 +296,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Rad21IggrabPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2   Rad21 Pk
+        shortLabel HepG2   Rad21  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (Rad21 in HepG2 cells)
         subGroups view=Peaks factor=RAD21 cellType=HepG2 control=IGGrab treatment=aNone
         type narrowPeak
@@ -305,7 +306,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Usf2IggrabPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2   USF2  Pk
+        shortLabel HepG2   USF2   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (USF2 in HepG2 cells)
         subGroups view=Peaks factor=USF2 cellType=HepG2 control=IGGrab treatment=aNone
         type narrowPeak
@@ -315,7 +316,7 @@ wgEncode 1
         track wgEncodeSydhTfbsU2osSetdb1UcdPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel U2OS    SETDB Pk
+        shortLabel U2OS    SETDB  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (SETDB1 in U2OS cells)
         subGroups view=Peaks factor=SETDB1 cellType=U2OS control=UCD treatment=aNone
         type narrowPeak
@@ -324,7 +325,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHelas3Stat3IggrabPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HeLa-S3 STAT3 Pk
+        shortLabel HeLa-S3 STAT3  Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (STAT3 in HeLa-S3 cells)
         subGroups view=Peaks factor=STAT3 cellType=HeLaS3 control=IGGrab treatment=aNone
         type narrowPeak
@@ -334,7 +335,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Irf3IggrabPk
         release alpha
         subTrack wgEncodeSydhTfbsViewPeaks off
-        shortLabel HepG2   IRF3  Pk
+        shortLabel HepG2   IRF3   Pk
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (IRF3 in HepG2 cells)
         subGroups view=Peaks factor=IRF3 cellType=HepG2 control=IGGrab treatment=aNone
         type narrowPeak
@@ -362,7 +363,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsGm12878WhipIggmusSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel GM12878 WHIP  Sg
+	    shortLabel GM12878 WHIP   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (WHIP in GM12878 cells)
 	    subGroups view=Signal factor=WHIP cellType=GM12878 control=IGGmus treatment=aNone 
 	    type bigWig 1 8218
@@ -372,7 +373,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3Rad21IggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 Rad21 Sg
+	    shortLabel HeLa-S3 Rad21  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HeLa-S3 cells)
 	    subGroups view=Signal factor=RAD21 cellType=HeLaS3 control=IGGrab treatment=aNone 
 	    type bigWig 1 7218
@@ -382,7 +383,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3TbpIggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 TBP   Sg
+	    shortLabel HeLa-S3 TBP    Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HeLa-S3 cells)
 	    subGroups view=Signal factor=TBP cellType=HeLaS3 control=IGGrab treatment=aNone
 	    type bigWig 1 32937
@@ -392,7 +393,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3Elk4UcdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 ELK4  Sg
+	    shortLabel HeLa-S3 ELK4   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ELK4 in HeLa-S3 cells)
 	    subGroups view=Signal factor=ELK4 cellType=HeLaS3 control=UCD treatment=aNone
 	    type bigWig 1 87098
@@ -402,7 +403,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3Irf3IggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 IRF3  Sg
+	    shortLabel HeLa-S3 IRF3   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HeLa-S3 cells)
 	    subGroups view=Signal factor=IRF3 cellType=HeLaS3 control=IGGrab treatment=aNone
 	    type bigWig 1 12871
@@ -412,7 +413,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHelas3InputUcdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HeLa-S3 Input Sg
+	    shortLabel HeLa-S3 Input  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HeLa-S3 cells)
 	    subGroups view=Signal factor=zInputucd cellType=HeLaS3 control=UCD treatment=aNone
 	    type bigWig 1 8970
@@ -423,7 +424,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2CjunIggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   c-Jun Sg
+	    shortLabel HepG2   c-Jun  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (c-Jun in HepG2 cells)
 	    subGroups view=Signal factor=cJUN cellType=HepG2 control=IGGrab treatment=aNone
 	    type bigWig 1 51236
@@ -433,7 +434,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2Pol2IggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   Pol2  Sg
+	    shortLabel HepG2   Pol2   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in HepG2 cells)
 	    subGroups view=Signal factor=POL2 cellType=HepG2 control=IGGrab treatment=aNone
 	    type bigWig 1 40167
@@ -443,7 +444,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2InputIggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   Input Sg
+	    shortLabel HepG2   Input  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HepG2 cells)
 	    subGroups view=Signal factor=zInputrab cellType=HepG2 control=IGGrab treatment=aNone
 	    type bigWig 1 10514
@@ -453,7 +454,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2TbpIggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   TBP   Sg
+	    shortLabel HepG2   TBP    Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in HepG2 cells)
 	    subGroups view=Signal factor=TBP cellType=HepG2 control=IGGrab treatment=aNone
 	    type bigWig 1 33317
@@ -463,7 +464,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsH1hescSuz12UcdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel H1-hESC SUZ12 Sg
+	    shortLabel H1-hESC SUZ12  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SUZ12 in H1-hESC cells)
 	    subGroups view=Signal factor=SUZ12 cellType=H1hESC control=UCD treatment=aNone
 	    type bigWig 1 14985
@@ -473,7 +474,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsH1hescInputUcdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel H1-hESC Input Sg
+	    shortLabel H1-hESC Input  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in H1-hESC cells)
 	    subGroups view=Signal factor=zInputucd cellType=H1hESC control=UCD treatment=aNone
 	    type bigWig 1 5725
@@ -484,7 +485,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Ccnt2StdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    CCNT2 Sg
+	    shortLabel K562    CCNT2  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (CCNT2 in K562 cells)
 	    subGroups view=Signal factor=CCNT2 cellType=K562 control=std treatment=aNone
 	    type bigWig 1 6951
@@ -495,7 +496,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Hmgn3StdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    HMGN3 Sg
+	    shortLabel K562    HMGN3  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (HMGN3 in K562 cells)
 	    subGroups view=Signal factor=HMGN3 cellType=K562 control=std treatment=aNone
 	    type bigWig 1 11280
@@ -506,7 +507,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Irf1Ifna30StdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel K562/a3 IRF1  Sg
+	    shortLabel K562/a3 IRF1   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
 	    subGroups view=Signal factor=IRF1 cellType=uK562 control=std treatment=IFNa30
 	    type bigWig 1 8013
@@ -517,7 +518,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Irf1Ifng6hStdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel K562/g6 IRF1  Sg
+	    shortLabel K562/g6 IRF1   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF1 in K562 cells)
 	    subGroups view=Signal factor=IRF1 cellType=vK562 control=std treatment=IFNg6h
 	    type bigWig 1 12768
@@ -528,7 +529,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Nrf1IggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    Nrf1  Sg
+	    shortLabel K562    Nrf1   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in K562 cells)
 	    subGroups view=Signal factor=NRF1 cellType=K562 control=IGGrab treatment=aNone
 	    type bigWig 1 8153
@@ -539,7 +540,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562InputIggrabSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    Input Sg
+	    shortLabel K562    Input  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in K562 cells)
 	    subGroups view=Signal factor=zInputrab cellType=K562 control=IGGrab treatment=aNone
 	    type bigWig 1 6064
@@ -550,7 +551,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Gtf2bStdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    GTF2B Sg
+	    shortLabel K562    GTF2B  Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GTF2B in K562 cells)
 	    subGroups view=Signal factor=GTF2B cellType=K562 control=std treatment=aNone
 	    type bigWig 1 2739
@@ -561,7 +562,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsK562Usf2StdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal on
-	    shortLabel K562    USF2  Sg
+	    shortLabel K562    USF2   Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in K562 cells)
 	    subGroups view=Signal factor=USF2 cellType=K562 control=std treatment=aNone
 	    type bigWig 1 15189
@@ -571,7 +572,7 @@ wgEncode 1
 	    track wgEncodeSydhTfbsHepg2Znf274UcdSig
 	    release alpha
 	    subTrack wgEncodeSydhTfbsViewSignal off
-	    shortLabel HepG2   ZNF27 Sg
+	    shortLabel HepG2   ZNF274 Sg
 	    longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in HepG2 cells)
 	    subGroups view=Signal factor=ZNF274 cellType=HepG2 control=UCD treatment=aNone
 	    type bigWig 1.000000 9811.000000
@@ -582,7 +583,7 @@ wgEncode 1
         track wgEncodeSydhTfbsGm12878Znf274UcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal on
-        shortLabel GM12878 ZNF27 Sg
+        shortLabel GM12878 ZNF274 Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (ZNF274 in GM12878 cells)
         subGroups view=Signal factor=ZNF274 cellType=GM12878 control=UCD treatment=aNone
         type bigWig 1.000000 11447.000000
@@ -592,7 +593,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHuvecGata2UcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HUVEC   GATA2 Sg
+        shortLabel HUVEC   GATA2  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (GATA-2 in HUVEC cells)
         subGroups view=Signal factor=GATA2 cellType=HUVEC control=UCD treatment=aNone
         type bigWig 1.000000 14280.000000
@@ -602,7 +603,7 @@ wgEncode 1
         track wgEncodeSydhTfbsH1hescMaxUcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel H1-hESC Max   Sg
+        shortLabel H1-hESC Max    Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Max in H1-hESC cells)
         subGroups view=Signal factor=MAX cellType=H1hESC control=UCD treatment=aNone
         type bigWig 1.000000 4069.000000
@@ -612,7 +613,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHuvecInputUcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HUVEC   Input Sg
+        shortLabel HUVEC   Input  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in HUVEC cells)
         subGroups view=Signal factor=zInputucd cellType=HUVEC control=UCD treatment=aNone
         type bigWig 1.000000 21529.000000
@@ -622,7 +623,7 @@ wgEncode 1
         track wgEncodeSydhTfbsRajiPol2UcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel Raji    Pol2  Sg
+        shortLabel Raji    Pol2   Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Pol2 in Raji cells)
         subGroups view=Signal factor=POL2 cellType=Raji control=UCD treatment=aNone
         type bigWig 1.000000 17093.000000
@@ -631,7 +632,7 @@ wgEncode 1
         track wgEncodeSydhTfbsRajiInputUcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel Raji    Input Sg
+        shortLabel Raji    Input  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in Raji cells)
         subGroups view=Signal factor=zInputucd cellType=Raji control=UCD treatment=aNone
         type bigWig 1.000000 6507.000000
@@ -641,7 +642,7 @@ wgEncode 1
         track wgEncodeSydhTfbsGm12878TbpIggmusSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal on
-        shortLabel GM12878 TBP   Sg
+        shortLabel GM12878 TBP    Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (TBP in GM12878 cells)
         subGroups view=Signal factor=TBP cellType=GM12878 control=IGGmus treatment=aNone
         type bigWig 1.000000 54051.000000
@@ -651,7 +652,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2JundIggrabSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   JunD  Sg
+        shortLabel HepG2   JunD   Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (JunD in HepG2 cells)
         subGroups view=Signal factor=JUND cellType=HepG2 control=IGGrab treatment=aNone
         type bigWig 1.000000 97703.000000
@@ -661,7 +662,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Nrf1IggrabSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   Nrf1  Sg
+        shortLabel HepG2   Nrf1   Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Nrf1 in HepG2 cells)
         subGroups view=Signal factor=NRF1 cellType=HepG2 control=IGGrab treatment=aNone
         type bigWig 1.000000 10552.000000
@@ -671,7 +672,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Rad21IggrabSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   Rad21 Sg
+        shortLabel HepG2   Rad21  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Rad21 in HepG2 cells)
         subGroups view=Signal factor=RAD21 cellType=HepG2 control=IGGrab treatment=aNone
         type bigWig 1.000000 8537.000000
@@ -681,7 +682,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Usf2IggrabSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   USF2  Sg
+        shortLabel HepG2   USF2   Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (USF2 in HepG2 cells)
         subGroups view=Signal factor=USF2 cellType=HepG2 control=IGGrab treatment=aNone
         type bigWig 1.000000 11782.000000
@@ -691,7 +692,7 @@ wgEncode 1
         track wgEncodeSydhTfbsU2osInputUcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel U2OS    Input Sg
+        shortLabel U2OS    Input  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (Input in U2OS cells)
         subGroups view=Signal factor=zInputucd cellType=U2OS control=UCD treatment=aNone
         type bigWig 1.000000 10233.000000
@@ -700,7 +701,7 @@ wgEncode 1
         track wgEncodeSydhTfbsU2osSetdb1UcdSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel U2OS    SETDB Sg
+        shortLabel U2OS    SETDB  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (SETDB1 in U2OS cells)
         subGroups view=Signal factor=SETDB1 cellType=U2OS control=UCD treatment=aNone
         type bigWig 1.000000 18192.000000
@@ -709,7 +710,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHelas3Stat3IggrabSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HeLa-S3 STAT3 Sg
+        shortLabel HeLa-S3 STAT3  Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (STAT3 in HeLa-S3 cells)
         subGroups view=Signal factor=STAT3 cellType=HeLaS3 control=IGGrab treatment=aNone
         type bigWig 1.000000 10023.000000
@@ -719,7 +720,7 @@ wgEncode 1
         track wgEncodeSydhTfbsHepg2Irf3IggrabSig
         release alpha
         subTrack wgEncodeSydhTfbsViewSignal off
-        shortLabel HepG2   IRF3  Sg
+        shortLabel HepG2   IRF3   Sg
         longLabel ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal (IRF3 in HepG2 cells)
         subGroups view=Signal factor=IRF3 cellType=HepG2 control=IGGrab treatment=aNone
         type bigWig 1.000000 10533.000000

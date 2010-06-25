@@ -699,8 +699,8 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
         }
     freeMem(words);
     slReverse(&mdbByVars);
-    verbose(3, "mdbByVarsLineParse() parsed:%d first: %s=%s.\n",
-        slCount(mdbByVars->vals),mdbByVars->var,mdbByVars->vals->val);
+    verbose(3, "mdbByVarsLineParse() parsed:%d first: %s%s='%s'.\n",
+        slCount(mdbByVars->vals),mdbByVars->var,(mdbByVars->notEqual?"!":""),mdbByVars->vals->val);
 return mdbByVars;
 }
 
@@ -1162,11 +1162,17 @@ struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct md
             dyStringPrintf(dy, " where (var ");
         else
             dyStringPrintf(dy, " OR (var ");
-        if(rootVar->notEqual && rootVar->vals == NULL)
-            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
 
-        dyStringPrintf(dy, "%s '%s'",
-            (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
+        if(rootVar->notEqual && rootVar->vals == NULL)
+            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");  // one of: "NOT LIKE". "!=" or "NOT EXISTS"
+
+        if(rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0)
+            {
+            dyStringPrintf(dy, "%s '%s'",
+                (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
+            }
+        else
+            dyStringPrintf(dy, "EXISTS");
 
         struct mdbLimbVal *limbVal;
         boolean multiVals = FALSE;
@@ -1235,27 +1241,50 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
         return NULL;
 
     struct dyString *dy = newDyString(4096);
-    dyStringPrintf(dy, "select t1.obj,t1.var,t1.varType,t1.val from %s t1", table);
+    dyStringPrintf(dy, "SELECT T1.obj,T1.var,T1.varType,T1.val FROM %s T1", table);
 
     struct mdbByVar *rootVar;
     boolean gotVar = FALSE;
     int tix;
     for(rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
         {
+///////////////
+        boolean hasVal = (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0);
         if(!gotVar)
             {
-            dyStringPrintf(dy, " where t1.obj in ");
+            dyStringPrintf(dy, " WHERE ");
             gotVar=TRUE;
             }
         else
-            dyStringPrintf(dy, " AND t1.obj in ");
-        dyStringPrintf(dy, "(select t%d.obj from %s t%d where t%d.obj = t1.obj and t%d.var ",tix,table,tix,tix,tix);
+            dyStringPrintf(dy, " AND ");
 
-        if(rootVar->notEqual && rootVar->vals == NULL)
+        if(!hasVal && rootVar->notEqual)
+            dyStringPrintf(dy, "NOT EXISTS ");
+        else
+            dyStringPrintf(dy, "EXISTS ");
+
+        dyStringPrintf(dy, "(SELECT T%d.obj FROM %s T%d WHERE T%d.obj = T1.obj AND T%d.var ",tix,table,tix,tix,tix);
+
+        if(hasVal && rootVar->notEqual && rootVar->vals == NULL)
             dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
 
         dyStringPrintf(dy, "%s '%s'",
-            (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
+            (strchr(rootVar->var,'%')?"LIKE":"="), rootVar->var);
+///////////////
+//        if(!gotVar)
+//            {
+//            dyStringPrintf(dy, " where t1.obj in ");
+//            gotVar=TRUE;
+//            }
+//        else
+//            dyStringPrintf(dy, " AND t1.obj in ");
+//        dyStringPrintf(dy, "(select t%d.obj from %s t%d where t%d.obj = t1.obj and t%d.var ",tix,table,tix,tix,tix);
+//
+//        if(rootVar->notEqual && rootVar->vals == NULL)
+//            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
+//
+//        dyStringPrintf(dy, "%s '%s'",
+//            (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
 
         struct mdbLimbVal *limbVal;
         boolean multiVals = FALSE;
@@ -1266,17 +1295,17 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 
             if(!multiVals)
                 {
-                dyStringPrintf(dy, " and t%d.val ",tix);
+                dyStringPrintf(dy, " AND T%d.val ",tix);
                 if(rootVar->notEqual)
                     dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
                 if(limbVal->next == NULL) // only one val
                     {
                     dyStringPrintf(dy, "%s '%s'",
-                        (strchr(limbVal->val,'%')?"like":"="), sqlEscapeString(limbVal->val));
+                        (strchr(limbVal->val,'%')?"LIKE":"="), sqlEscapeString(limbVal->val));
                     break;
                     }
                 else
-                    dyStringPrintf(dy, "in (");
+                    dyStringPrintf(dy, "IN (");
                 multiVals=TRUE;
                 }
             else
@@ -1287,7 +1316,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
             dyStringPrintf(dy, ")");
         dyStringPrintf(dy, ")");
         }
-    dyStringPrintf(dy, " order by obj, var");
+    dyStringPrintf(dy, " ORDER BY T1.obj, T1.var");
     verbose(2, "Requesting query:\n\t%s;\n",dyStringContents(dy));
 
     struct mdb *mdb = mdbLoadByQuery(conn, dyStringCannibalize(&dy));
