@@ -1314,6 +1314,8 @@ safef(outTemp, sizeof(outTemp), "%s.paraFetch", outPath);
 outPath = outTemp;
 /* get the size of the file to be downloaded */
 off_t fileSize = 0;
+off_t totalDownloaded = 0;
+ssize_t sinceLastStatus = 0;
 if (startsWith("http://",url) || startsWith("https://",url))
     {
     struct hash *hash = newHash(0);
@@ -1543,6 +1545,7 @@ while (TRUE)
 		    --connOpen;
 		    ++reOpen;
 		    writeParaFetchStatus(origPath, pcList, FALSE);
+		    sinceLastStatus = 0;
 		    continue; 
 		    }
 		if (readCount < 0)
@@ -1574,6 +1577,13 @@ while (TRUE)
 		    return FALSE;
 		    }
 		pc->received += readCount;
+		totalDownloaded += readCount;
+		sinceLastStatus += readCount;
+		if (sinceLastStatus >= 100*1024*1024)
+		    {
+    		    writeParaFetchStatus(origPath, pcList, FALSE);
+		    sinceLastStatus = 0;
+		    }
 		}
 	    }
 	}
@@ -1603,6 +1613,12 @@ writeParaFetchStatus(origPath, pcList, TRUE);
 /* rename the successful download to the original name */
 rename(outTemp, origPath);
 
+if (fileSize != -1 && totalDownloaded != fileSize)
+    {
+    warn("Unexpected result: Total downloaded bytes %lld is not equal to fileSize %lld"
+	, (long long) totalDownloaded
+	, (long long) fileSize);
+    }
 return TRUE;
 }
 
