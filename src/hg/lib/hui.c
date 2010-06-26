@@ -2951,7 +2951,7 @@ for (;compared==0 && colA!=NULL && colB!=NULL;colA=colA->next,colB=colB->next)
 if(compared != 0)
     return compared;
 
-return strcmp(a->tdb->shortLabel, b->tdb->shortLabel); // Last chance
+return strcasecmp(a->tdb->shortLabel, b->tdb->shortLabel); // Last chance
 }
 
 void sortTdbItemsAndUpdatePriorities(sortableTdbItem **items)
