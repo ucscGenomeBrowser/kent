@@ -27,9 +27,11 @@ cd $BUILDDIR/userApps
 
 echo "Checking out kent/src branch $BRANCHNN. [${0}: `date`]"
 
+set branch = "v"$BRANCHNN"_branch"
+
 git clone -q $GITSHAREDREPO kent
 cd kent
-git checkout -tb $dir origin/$dir
+git checkout -tb $branch origin/$branch
 set err = $status
 if ( $err ) then
  echo "error running git clone and checkout of kent in $BUILDDIR/userApps : $err [${0}: `date`]" 
