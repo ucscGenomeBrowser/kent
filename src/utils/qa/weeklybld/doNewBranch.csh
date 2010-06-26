@@ -129,13 +129,13 @@ echo "Build branch sandbox on beta [${0}: `date`]"
 if ( $status ) then
      echo "build on beta failed for v$BRANCHNN [${0}: `date`]"
     # echo "v$BRANCHNN build on beta failed." | mail -s "'v$BRANCHNN Build failed on beta'" $USER galt browser-qa
-    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "'v$BRANCHNN Build failed on beta'" $USER
+    echo "v$BRANCHNN build on beta failed [${0}: `date`]." | mail -s "v$BRANCHNN Build failed on beta" $USER
     echo "Waiting for any other processes to finish"
     wait
     exit 1
 endif
 echo "build on beta done for v$BRANCHNN [${0}: `date`]"
-echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "'v$BRANCHNN Build complete on beta (day 9).'" $USER galt kent browser-qa
+echo "v$BRANCHNN built successfully on beta (day 9)." | mail -s "v$BRANCHNN Build complete on beta (day 9)." $USER galt kent browser-qa
 
 echo
 echo "Waiting for the background beta:git-reports to finish [${0}: `date`]"
