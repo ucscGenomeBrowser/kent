@@ -19,17 +19,17 @@ echo "now unpacking new branch $BRANCHNN on `uname -n` [${0}: `date`]"
 #unpack the new branch on BUILDDIR for beta
 # for later: is this faster to co on kkstore or not?
 cd $BUILDDIR
-set dir = "v"$BRANCHNN"_branch" 
-if ( -d $dir ) then
+set branch = "v"$BRANCHNN"_branch" 
+if ( -d $branch ) then
  echo "removing old branch dir. [${0}: `date`]"
- rm -fr $dir 
+ rm -fr $branch 
 endif
-mkdir -p $dir
+mkdir -p $branch
 cd $dir
 echo "Checking out branch $BRANCHNN. [${0}: `date`]"
 git clone -q $GITSHAREDREPO kent
 cd kent
-git checkout -tb $dir origin/$dir
+git checkout -tb $branch origin/$branch
 set err = $status
 if ( $err ) then
  echo "error running git clone and checkout of kent in $BUILDDIR/$dir : $err [${0}: `date`]" 
