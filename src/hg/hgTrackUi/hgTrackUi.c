@@ -2143,7 +2143,7 @@ void superTrackUi(struct trackDb *superTdb)
 {
 struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
-slReverse(&superTdb->subtracks);
+tdbSortPrioritiesFromCart(cart, &superTdb->subtracks);
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
     if (!hTableOrSplitExists(database, tdb->table) && tdb->subtracks != NULL &&
