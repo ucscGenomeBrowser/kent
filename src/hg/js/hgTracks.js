@@ -1198,7 +1198,6 @@ $(document).ready(function()
         if( pos != undefined)
             $( pos ).focus();
     }
-    
     if($("#tabs").length > 0) {
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
@@ -1210,6 +1209,24 @@ $(document).ready(function()
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
+    }
+
+    for (var id in trackDbJson) {
+        var rec = trackDbJson[id];
+        if(rec.type == "remote") {
+            if($("#img_data_" + id).length > 0) {
+                var script = document.createElement('script');
+                // XXXX add current image width
+//              XXXX implement this  var pos = parsePosition(getPosition());
+                var pos = new Object();
+                pos.chromStart = 1;
+                pos.chromEnd = 10;
+                script.setAttribute('src', rec.url + "?track=" + id + "&jsonp=remoteTrackCallback&chrom=" + pos.chrom +
+                                    "&start=" + pos.chromStart + "&end=" + pos.chromEnd);
+                // load the script
+                document.getElementsByTagName('head')[0].appendChild(script); 
+            }
+        }
     }
 });
 
@@ -1639,6 +1656,7 @@ function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
 
+    alert(response);
     $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
@@ -1837,5 +1855,29 @@ function searchKeydown(event)
         $('#searchSubmit').click();
         // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
         // $('#searchTracks').submit();
+    }
+}
+
+function remoteTrackCallback(rec)
+// jsonp callback to load a remote track.
+{
+    if(rec.error) {
+        alert("retrieval from remote site failed with error: " + rec.error)
+    } else {
+        var track = rec.track;
+        $('#img_data_' + track).attr('style', '');
+        $('#img_data_' + track).attr('height', rec.height);
+        $('#img_data_' + track).attr('width', rec.width);
+        $('#img_data_' + track).attr('src', rec.img);
+        $('#td_data_' + track + ' > div').each(function(index) {
+                                                   if(index == 1) {
+                                                       var style = $(this).attr('style');
+                                                       style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
+                                                       $(this).attr('style', style);
+                                                   }
+                                               });
+        var style = $('#p_btn_' + track).attr('style');
+        style = style.replace(/height:\s*\d+/i, "height:" + rec.height);
+        $('#p_btn_' + track).attr('style', style);
     }
 }
