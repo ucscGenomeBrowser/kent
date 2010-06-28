@@ -5,7 +5,7 @@ if ( "$HOST" != "hgwbeta" ) then
  exit 1
 endif
 
-#cd $WEEKLYBLD #DEBUG RESTORE
+cd $WEEKLYBLD
 
 set table=CherryPickCommits.conf
 if ( ! -e $table ) then
@@ -109,8 +109,7 @@ while ( $#list > 0 )
 	echo "emailing the cherry-pick"
 	set mailMsg = "The following commit has been cherry-picked onto v${BRANCHNN} branch:\n$c"
 	set subject = '"'"Cherry-Pick complete."'"'
-	#echo "$mailMsg" | mail -s "$subject" $USER galt browser-qa  # DEBUG RESTORE
-	echo "$mailMsg" | mail -s "$subject" galt
+	echo "$mailMsg" | mail -s "$subject" $USER galt browser-qa
 
 	# do git pull in 64-bit build repo	
 	echo "doing git pull in 64-bit build repo"
@@ -165,6 +164,7 @@ if ( "$errpull32" == "1" ) then
 endif
 
 # return to master branch
+echo "Returning to master branch"
 git checkout master
 if ($status) then
     echo "error running:  git checkout master"
