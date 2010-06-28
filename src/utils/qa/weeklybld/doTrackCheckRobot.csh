@@ -9,7 +9,7 @@ endif
 set log = TrackCheck-v${BRANCHNN}.log
 set HGDB_CONF = $HOME/.hg.conf.beta
 cd $JAVABUILD/kent/java/classes/edu/ucsc/genome/qa/cgiCheck
-nohup TrackCheck full.props >& $WEEKLYBLD/logs/$log 
+nohup TrackCheck $JAVABUILD/kent/java/src/edu/ucsc/genome/qa/cgiCheck/full.props >& $WEEKLYBLD/logs/$log 
 # tail -f $WEELYBLD/logs/$log
 # egrep -i "not|warn|err" $WEEKLYBLD/logs/$log
 
