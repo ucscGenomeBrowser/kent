@@ -1,16 +1,14 @@
-# Data Agreement File for LICR Lab ChIP-seq (Histone) experiments for mm9
-
-$Revision: 1.2 $
-
-# This file specifies the data agreement between your lab and 
-# the DCC.  It should not be changed unilaterally.
+# Data Agreement File for PSU ChIP-seq (Histone) experiments for mm9
+ 
+$Revision: 1.1 $
 
 # Lab and general info
-grant             Ren 
-lab               LICR
+grant             Haridson
+lab               PSU-Mouse
+#Lab can also be Caltech-Mouse for (H3K27ac antibodies)
 dataType          ChipSeq
 variables         cell, antibody,sex,age,strain,control
-compositeSuffix   LicrHistone
+compositeSuffix   PsuHistone
 assembly          mm9
 medianFragmentLength 200
 dafVersion        2.0
@@ -18,19 +16,19 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=2
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  LICR Histone Peaks
+longLabelPrefix  PSU Histone Peaks
 type             broadPeak
 hasReplicates    no
 required         no
 
 view             Signal
-longLabelPrefix  LICR Histone Signal
+longLabelPrefix  PSU Histone Signal
 type             bigWig
 hasReplicates    no
 required         yes
 
 view             Alignments
-longLabelPrefix  LICR Histone Alignments
+longLabelPrefix  PSU Histone Alignments
 type             bam
 hasReplicates    yes
 required         yes
