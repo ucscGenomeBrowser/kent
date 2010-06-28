@@ -11,8 +11,10 @@ if ( -e kent ) then
     echo "cleaning out old zips/kent. [${0}: `date`]"
     rm -fr kent
 endif
+mkdir kent
+cd kent
 
-set zip = "jksrc.v"$BRANCHNN".zip"
+set zip = "../jksrc.v"$BRANCHNN".zip"
 echo "unzipping $zip. [${0}: `date`]"
 unzip $zip >& /dev/null
 set err = $status
@@ -22,7 +24,6 @@ if ( $err ) then
 endif 
 
 echo "Make libs. [${0}: `date`]"
-cd kent
 cd src
 make libs >& make.log
 sed -i -e "s/-DJK_WARN//g" make.log
