@@ -9,7 +9,7 @@ endif
 # run on hgwdev
 set log = LiftOverTest-v${BRANCHNN}.log
 cd $JAVABUILD
-nohup LiftOverTest src/edu/ucsc/genome/util/LiftOverTest.props >& $WEEKLYBLD/logs/$log 
+nohup LiftOverTest kent/java/src/edu/ucsc/genome/util/LiftOverTest.props >& $WEEKLYBLD/logs/$log 
 
 echo "LiftOverTest robot done. Check to see if any errors in $WEEKLYBLD/logs/$log."
 

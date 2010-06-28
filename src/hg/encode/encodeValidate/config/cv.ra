@@ -3738,7 +3738,7 @@ type ripAntibody
 antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein (PABP). Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
 targetDescription PABP
 vendorName Millipore
-vendorId 04-1466
+vendorId 04-1467
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 
 term phospho-4E-BP1/2/3_Thr45
@@ -3891,17 +3891,17 @@ description Single 25 n.t. reads
 term 1x32
 tag r1x32
 type readType
-description Single 32 n.t. read
+description Single 32 n.t. reads
 
 term 1x36
 tag r1x36
 type readType
-description Single 36 n.t. read
+description Single 36 n.t. reads
 
 term 1x50
 tag r1x50
 type readType
-description Single 50 n.t. read
+description Single 50 n.t. reads
 
 term 1x75
 tag r1x75

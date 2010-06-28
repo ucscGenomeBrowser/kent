@@ -19,11 +19,11 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" != "0" ) then
  echo "errs found:"
  echo "$res"
- echo "$res" | mail -s "'Errors in searchRobot on $HOST'" $USER galt browser-qa
+ echo "$res" | mail -s "Errors in searchRobot on $HOST" $USER galt browser-qa
  exit 1
 endif
 #
 echo Done.
-echo "$res" | mail -s "'v${BRANCHNN} search robot done successfully on $HOST.'" $USER galt browser-qa
+echo "$res" | mail -s "v${BRANCHNN} search robot done successfully on $HOST." $USER galt browser-qa
 exit 0
 

@@ -4,6 +4,7 @@
 
 track wgEncodeUwHistone
 compositeTrack on
+superTrack wgEncodeHistoneSuper
 shortLabel UW Histone
 longLabel ENCODE Histone Modifications by Univ. Washington ChIP-seq
 group regulation
