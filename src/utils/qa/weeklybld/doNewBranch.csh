@@ -39,6 +39,12 @@ if ( "$LASTREVIEWDAY" == "" ) then
  exit 1
 endif
 
+set currentBranch=`git branch | grep master`
+if ("$currentBranch" != "* master") then
+    echo "Error: must be on master branch"
+endif
+
+
 if ( "$1" != "real" ) then
 	echo
 	echo "Not real.   To make real changes, put real as cmdline parm."
