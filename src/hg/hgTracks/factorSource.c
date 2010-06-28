@@ -76,6 +76,17 @@ if (vis == tvFull || vis == tvPack)
     }
 }
 
+static void factorSourceDraw(struct track *track, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+/* Draw factorSource items. */
+{
+if (vis == tvDense)
+    slSort(&track->items, bedCmpScore);
+genericDrawItems(track, seqStart, seqEnd, hvg, xOff, yOff, width,
+	font, color, vis);
+}
+
 void factorSourceMethods(struct track *track)
 /* Set up special methods for factorSource type tracks. */
 {
@@ -83,6 +94,7 @@ void factorSourceMethods(struct track *track)
 track->bedSize = 15;
 bedMethods(track);
 track->drawItemAt = factorSourceDrawItemAt;
+track->drawItems = factorSourceDraw;
 track->loadItems = loadAll;
 track->itemRightPixels = rightPixels;
 

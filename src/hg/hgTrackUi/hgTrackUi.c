@@ -2143,10 +2143,11 @@ void superTrackUi(struct trackDb *superTdb)
 {
 struct trackDb *tdb;
 printf("<P><TABLE CELLPADDING=2>");
+tdbSortPrioritiesFromCart(cart, &superTdb->subtracks);
 for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
     {
     if (!hTableOrSplitExists(database, tdb->table) && tdb->subtracks != NULL &&
-    	trackDbLocalSetting(tdb, "compositeTrack") == NULL) 
+    	trackDbLocalSetting(tdb, "compositeTrack") == NULL)
 	// NOTE: tdb if composite, is not yet populated with it's own subtracks!
         continue;
     printf("<TR>");
