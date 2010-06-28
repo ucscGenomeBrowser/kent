@@ -145,14 +145,6 @@ end
 
 echo "All commits specified found."
 
-if ( "$1" != "real" ) then
-	echo
-	echo "Not real.   To make real changes, put real as cmdline parm."
-	echo
-	exit 0
-endif 
-
-
 if ( "$errpull64" == "1" ) then
     echo "error updating 64-bit sandbox."
     exit 1
@@ -170,6 +162,13 @@ if ($status) then
     echo "error running:  git checkout master"
     exit 1
 endif
+
+if ( "$1" != "real" ) then
+	echo
+	echo "Not real.   To make real changes, put real as cmdline parm."
+	echo
+	exit 0
+endif 
 
 exit 0
 
