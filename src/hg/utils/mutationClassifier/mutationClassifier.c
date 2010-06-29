@@ -1,3 +1,5 @@
+/* Classify mutations as missense etc. */
+
 #include <math.h>
 #include "common.h"
 #include "memalloc.h"
@@ -14,11 +16,12 @@
 #include "dnaMotifSql.h"
 #include "genomeRangeTree.h"
 
-static int debug = 0;
+int debug = 0;
 char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
-static struct hash *geneHash = NULL;
-static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
+struct hash *geneHash = NULL;
+float scoreDelta = -1;
+char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
@@ -37,8 +40,10 @@ static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 #define NONCODING "nonCoding"
 
 static struct optionSpec optionSpecs[] = {
+    {"clusterTable", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
     {"outputExtension", OPTION_STRING},
+    {"scoreDelta", OPTION_FLOAT},
     {NULL, 0}
 };
 
@@ -74,8 +79,10 @@ errAbort(
   "usage:\n"
   "   mutationClassifier database snp.bed(s)\n"
   "options:\n"
-  "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
+  "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
+  "   -scoreDelta\t\tLook for regulatory sites with score(after) - score(before) < scoreDelta (defaults to %.1f).\n"
+  "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > scoreDelta.)\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
@@ -103,6 +110,7 @@ errAbort(
   "\n"
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
+  scoreDelta,
   SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY
   );
 }
@@ -684,9 +692,8 @@ while(!done)
                     {
                     struct dnaSeq *seq;
                     char beforeDna[256], afterDna[256];
-                    int maxDelta = 0;
-                    int delta, pos;
-                    float before, after;
+                    int pos;
+                    float delta, before, after, maxDelta = 0;
 
                     seq = hDnaFromSeq(database, bed->chrom, motifStart, motifEnd, dnaUpper);
                     if(refCall && seq->dna[bed->chromStart-motifStart] != refCall)
@@ -708,11 +715,9 @@ while(!done)
                     after = dnaMotifBitScore(motif, seq->dna);
                     strncpy(afterDna, seq->dna, seq->size);
                     afterDna[seq->size] = 0;
-                    delta = before - after;
-                    if(delta >= 1)
+                    delta = after - before;
+                    if((scoreDelta > 0 && delta > scoreDelta && delta > maxDelta) || (scoreDelta < 0 && delta < scoreDelta && delta < maxDelta))
                         {
-                        if(delta > maxDelta)
-                            {
                             maxDelta = delta;
                             if(debug)
                                 fprintf(stderr, "%s:%d-%d: %s\t%c-%c: %d == %d ?; %.2f -> %.2f\n\t%s\t%s\n",
@@ -722,7 +727,6 @@ while(!done)
                             safef(line, sizeof(line), "%s %.2f>%.2f", motifName, before, after);
                             code = REGULATORY;
                             // XXXX record (somehow) that we have used this record.
-                            }
                         }
                     }
                 if(code != NULL)
@@ -751,6 +755,8 @@ while(!done)
     slFreeList(&overlapA);
     slFreeList(&overlapB);
     slFreeList(&snps);
+    slFreeList(&unusedA);
+    freeHash(&used);
     }
 sqlDisconnect(&conn);
 }
@@ -758,8 +764,10 @@ sqlDisconnect(&conn);
 int main(int argc, char** argv)
 {
 optionInit(&argc, argv, optionSpecs);
-outputExtension = optionVal("outputExtension", NULL);
+clusterTable = optionVal("clusterTable", clusterTable);
 lazyLoading = optionExists("lazyLoading");
+outputExtension = optionVal("outputExtension", NULL);
+scoreDelta = optionFloat("scoreDelta", scoreDelta);
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);
