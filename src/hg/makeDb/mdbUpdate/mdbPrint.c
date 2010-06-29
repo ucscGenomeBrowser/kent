@@ -76,6 +76,8 @@ static struct optionSpec optionSpecs[] = {
     {"updMdb",   OPTION_STRING},// MDB table to update
     {"updSelect",OPTION_STRING},// Experiment defining vars: "var1,var2"
     {"updVars",  OPTION_STRING},// Vars to update: "var1,var2"
+    {"expTbl",   OPTION_STRING},// Name of Experiment table
+    {"expVars",  OPTION_STRING},// Experiment defining vars: "var1,var2"
     {NULL,       0}
 };
 
@@ -87,6 +89,7 @@ errAbort(
   "usage:\n"
   "   mdbPrint {db} [-table=] -vars=\"var1=val1 var2=val2...\"\n"
   "            -updDB={db} -updMdb={metaDb} -updSelect=var1,var2,... -updVars=varA,varB,...\n"
+  "            -expTbl={table} -expVars=var1,var2,...\n"
   "Options:\n"
   "    {db}     Database to query metadata from.  This argument is required.\n"
   "    -table   Table to query metadata from.  Default is the sandbox version of\n"
@@ -101,9 +104,13 @@ errAbort(
   "                the mdbUpdate (via '-vars').\n"
   "    -updVars    A comma separated list of variables that will be set in the\n"
   "                mdbUpdate lines (via '-setVars').\n"
+  "                Special case updVar=\"expId={n}\" to insert expIds starting with 'n'.\n"
+  "    Print INSERT SQL statements to load experiment table with metadata values.\n"
+  "    -expTbl     The experiment table name to be used in insert statements.\n"
+  "    -expVars    A comma separated list of variables that are expiment defining\n"
   "The purpose of this special option is to generate mdbUpdate commands from existing metadata.\n"
   "Examples:\n"
-  "  mdbPrint hg18 -vars=\"composite=wgEncodeYaleChIPseq\" -upd=hg19 -updMdb=metaDb_braney\n"
+  "  mdbPrint hg18 -vars=\"composite=wgEncodeYaleChIPseq\" -updDb=hg19 -updMdb=metaDb_braney\n"
   "    (cont.)     -updSelect=grant,cell,antibody,treatment -updVars=dateSubmitted,dateUnrestricted\n"
   "           This command assists importing dateSubmitted from hg18 to hg19 for all\n"
   "           objects in hg19 that match the grant, cell, antibody, and treatment of\n"
@@ -114,10 +121,15 @@ errAbort(
   "       (cont.) -setVars=\"dateSubmitted=2009-01-08 dateUnrestricted=2009-08-07\" -test\n"
   "     mdbUpdate hg19 ...\n"
   "           Note the -test flag in the output that will allow confirmation of effects before actual update.\n"
-  "  mdbPrint hg18 -vars=\"composite=wgEncodeYaleChIPseq view=RawSignal\" -upd=hg18 -updMdb=metaDb_vsmalladi\n"
+  "  mdbPrint hg18 -vars=\"composite=wgEncodeYaleChIPseq view=RawSignal\" -updDb=hg18 -updMdb=metaDb_vsmalladi\n"
   "    (cont.)     -updSelect=obj -updVars=fileName\n"
   "           You can select by object too (but not in combination with other vars).  This example shows\n"
   "           how to assist updating vals to the same mdb, where an editor or awk is also needed.\n"
+  "  mdbPrint hg18 -vars=\"composite=wgEncodeBroad\" -updDb=hg18 -updMdb=metaDb_vsmalladi\n"
+  "    (cont.)     -updSelect=grant,cell,antibody -updVars=expId=1200\n"
+  "           This will create mdbUpdate statements to add expId to the mdb for Broad, starting with expId=1200.\n"
+  "  mdbPrint hg18 -vars=\"composite=wgEncodeBroad\" -expTbl=expTable -expVars=expId,grant,cell,antibody\n"
+  "           This will create SQL insert statements for adding expTable entries based upon mdb contents.\n"
   );
 }
 
@@ -234,6 +246,13 @@ else
 
                 mdbObjPrintUpdateLines(&queryResults,optionVal("updDb",NULL),optionVal("updMdb",NULL),
                                                     optionVal("updSelect",NULL),optionVal("updVars",NULL));
+                }
+            else if(optionExists("expVars")) // Special print of insert SQl statements for exp table
+                {
+                if(!optionExists("expTbl"))
+                    errAbort("To print insert SQL statements, both 'expTbl' and 'expVars' must be defined.\n");
+
+                mdbObjPrintInsertToExperimentsTable(&queryResults,optionVal("expTbl",NULL),optionVal("expVars",NULL));
                 }
             else
                 mdbObjPrint(queryResults,raStyle);

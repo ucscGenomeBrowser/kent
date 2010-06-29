@@ -77,6 +77,7 @@ while ( $#list > 0 )
     git show --stat $c
     if ($status) then
 	echo "failed running: git show --stat $c"
+	echo "You might get this error you need to fetch or pull on master brancha: fatal: bad object <commitId>"
 	exit 1
     endif
     if ( "$1" == "real" ) then
@@ -87,7 +88,7 @@ while ( $#list > 0 )
 	if ($status) then
 	    echo "! ! ! failed running: git cherry-pick -x $c"
 	    echo "This may be because of conflicts which you will need to resolve and commit."
-	    echo "You might also get this error if the changes in the commit specified have already been cherry-picked or patched into the branch."
+	    echo "You might get this error if the changes in the commit specified have already been cherry-picked or patched into the branch."
 	    exit 1
 	endif
 

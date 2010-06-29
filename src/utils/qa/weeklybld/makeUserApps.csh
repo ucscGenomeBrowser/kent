@@ -40,9 +40,9 @@ endif
 cd ..
 
 set BINDIR=linux.$MACHTYPE
-set DESTDIR=$BUILDDIR/userApps
-rm -rf $DESTDIR/$BINDIR
-mkdir $DESTDIR/$BINDIR
+set DESTDIR=$BUILDDIR/userApps/  # must end in slash because of makefile weirdness
+rm -rf $DESTDIR$BINDIR
+mkdir $DESTDIR$BINDIR
 
 # configure settings like SSL and BAM in common.mk
 echo "Configuring settings on userApp sandbox $BRANCHNN $HOST [${0}: `date`]"
@@ -50,13 +50,13 @@ $WEEKLYBLD/configureSandbox.csh . $WEEKLYBLD/downloadBuildSettings.mk
 
 cd kent/src 
 make BINDIR=$BINDIR DESTDIR=$DESTDIR userApps > make.log
-./utils/userApps/mkREADME.sh $DESTDIR/$BINDIR FOOTER
+./utils/userApps/mkREADME.sh $DESTDIR$BINDIR FOOTER
 cd ../..
 
 # copy everything if 64 bit
 if ("$HOST" == "hgwbeta") then
   #clear out the old and copy in the new
-  foreach f ( ${DESTDIR}/${BINDIR}/* )
+  foreach f ( ${DESTDIR}${BINDIR}/* )
     echo $f
     ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t"
     scp -p $f qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/$f:t
@@ -66,7 +66,7 @@ endif
 # copy liftOver if 32 bit
 if ("$HOST" == "$BOX32") then
   ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/exe/$BINDIR/liftOver"
-  scp -p ${DESTDIR}/${BINDIR}/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
+  scp -p ${DESTDIR}${BINDIR}/liftOver qateam@hgdownload:/mirrordata/apache/htdocs/admin/exe/$BINDIR/
 endif
 
 echo "userApps $MACHTYPE built on $HOST and scp'd to hgdownload [${0}: START=${ScriptStart} END=`date`]"
