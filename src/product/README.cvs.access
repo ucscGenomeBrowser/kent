@@ -1,4 +1,9 @@
+We switched our source code control system from CVS to Git on June 12, 2010.
+This README is OBSOLETE. For more details, please see:
 
+  http://genomewiki.ucsc.edu/index.php/CVS_to_Git_Migration
+
+=====================================================================
 To fetch the source tree via CVS,
 set the following environment in your shell environment:
 

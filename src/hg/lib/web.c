@@ -126,7 +126,7 @@ if (withHtmlHeader)
 	"<HEAD>" "\n"
 	);
     printf("\t%s\n", headerText);
-    puts("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
+    printf("\t<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">" "\n"
 	 "\t<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">" "\n"
          "\t<META HTTP-EQUIV=\"Pragma\" CONTENT=\"no-cache\">" "\n"
          "\t<META HTTP-EQUIV=\"Expires\" CONTENT=\"-1\">" "\n"
@@ -155,6 +155,9 @@ if (withHtmlHeader)
     printf("</HEAD>" "\n"
            "<BODY BGCOLOR=\"#%s\" LINK=\"#0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">",
            hgColOutside());
+    #ifdef WARNBOX_IN_USE
+    htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
+    #endif//def WARNBOX_IN_USE
     commonCssStyles();
     }
 puts(

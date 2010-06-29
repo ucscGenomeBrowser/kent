@@ -18,8 +18,8 @@ the MySQL database to be around.
 GENERAL INSTALL INSTRUCTIONS
 
 1. Get the code.  The best way to do this now for
-   Unix users is via CVS following the instructions at:
-     http://genome.ucsc.edu/admin/cvs.html
+   Unix users is via Git following the instructions at:
+     http://genome.ucsc.edu/admin/git.html
    Or, fetch the entire source in a single file:
      http://hgdownload.cse.ucsc.edu/admin/jksrc.zip
    Note futher documentation for the build process in your
@@ -104,7 +104,7 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
    and more documentation in this source tree about setting up
    a working browser in README files:
    jksrc/product/README.building.source
-   jksrc/product/README.cvs.access
+   jksrc/product/README.local.git.source
    jksrc/product/README.mysql.setup
    jksrc/product/README.install
    jksrc/product/README.trackDb

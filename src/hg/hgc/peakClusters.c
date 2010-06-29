@@ -292,18 +292,15 @@ if (cluster != NULL)
     printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
     printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
+#ifdef OLD
     /* Get list of tracks we'll look through for input. */
-    char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
     struct slName *inTrackList = stringToSlNames(inputTracks);
 
     /* Get list of subgroups to select on */
     char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
     struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
 
-    /* Get list of subgroups to display */
-    char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
-    struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
-
+    /* Add factorId as selection criteria*/
     /* Figure out factor ID and add it as selection criteria*/
     char *factorId = findFactorId(inTrackList, cluster->name);
     struct slPair *factorSel = slPairNew("factor", cloneString(factorId));
@@ -312,6 +309,17 @@ if (cluster != NULL)
     /* Get list of tracks that match criteria. */
     struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
     struct slName *matchTrack;
+#endif /* OLD */
+
+    /* Get list of tracks we'll look through for input. */
+    char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
+    safef(query, sizeof(query), "select tableName from %s where factor='%s' order by source", inputTrackTable, cluster->name);
+    struct slName *matchTrackList = sqlQuickList(conn, query);
+    struct slName *matchTrack;
+
+    /* Get list of subgroups to display */
+    char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
+    struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
 
     /* In a new section put up list of hits. */
     webNewSection("List of %s Items in Cluster", cluster->name);

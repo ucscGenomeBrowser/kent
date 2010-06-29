@@ -20,23 +20,6 @@ this method has led to the discovery of functional regulatory elements that
 include enhancers, silencers, insulators, promotors, locus control regions and
 novel elements. DNaseI hypersensitivity signifies chromatin accessibility
 following binding of trans-acting factors in place of a canonical nucleosome.
-</P><P>
-<B>FAIRE data</B>: FAIRE (Formaldehyde Assisted Isolation of Regulatory
-Elements) is a method to isolate and identify nucleosome-depleted regions of
-the genome.  FAIRE was initially discovered in yeast and subsequently shown to
-identify active regulatory elements in human cells (Giresi <em>et al.</em>,
-2007). Although less well-characterized than DNase, FAIRE also appears to
-identify functional regulatory elements that include enhancers, silencers,
-insulators, promotors, locus control regions and novel elements. DNA fragments
-isolated by FAIRE are 100-200 bp in length, with the average length being 140
-bp.
-</P><P>
-<B>ChIP data</B>: ChIP (Chromatin Immunoprecipitation) is a method to identify
-the specific location of proteins that are directly or indirectly bound to
-genomic DNA. By identifying the binding location of sequence-specific
-transcription factors, general transcription machinery components, and chromatin
-factors, ChIP can help in the functional annotation of the open chromatin
-regions identified by DNaseI HS mapping and FAIRE.
 </P>
 
 <H2> Display Conventions and Configuration </H2>
@@ -51,8 +34,8 @@ The Crawford lab recommends setting the &quot;Data view scaling:
 mode. In general, for each experiment in each of the cell types, the Open
 Chromatin tracks contain the following views:
 <DL>
-<DT><I>Peaks</I></DT><DD> Regions of enriched signal in either
-DNaseI HS, FAIRE, or ChIP experiments.  Peaks were called based on signals
+<DT><I>Peaks</I></DT><DD> Regions of enriched signal DNaseI HS experiments.  
+Peaks were called based on signals
 created using F-Seq, a software program developed at Duke (Boyle <em>et al.</em>,
 2008b).  Significant regions were determined by performing ROC analysis of
 sequence data using data from the 1% ENCODE arrays, and determining a cut-off
@@ -60,15 +43,6 @@ value at approximately the 95% sensitivity level.  The solid vertical line in
 the peak represents the point with highest signal.   ENCODE Peaks tables contain
 a p-value for statistical significance.  For these data, this was determined by
 fitting the data to a gamma distribution.</DD>
-<DT><I>Peaks (Zinba)</I></DT><DD> Enriched regions for FAIRE data were called
-using ZINBA (Zero Inflated Negative Binomial Algorithm). ZINBA is a flexible
-statistical method that uses a generalized linear model to select genomic
-windows with enriched sequence counts after adjusting for relevant confounding
-factors such as mapability, GC content, and copy number alterations.
-Significant regions are selected using the set of standardized residuals
-below a false discovery rate (qvalue) threshold. Peaks were further refined
-using a shape detection algorithm to identify local maxima and boundaries of
-the Signal (Base Overlap) data within each significant region.</DD>
 <DT><I>Signal (F-Seq Density)</I></DT><DD> Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
@@ -83,12 +57,8 @@ creation of these annotations.</DD>
 <DT><I>Signal (Base Overlap)</I></DT><DD> An alternative version of the
 <I>Signal (F-Seq Density)</I> track annotation that provides a higher resolution
 view of the raw sequence data. This track also includes the combined set of
-sequences from all replicates.  For each sequence, the aligned read is extended
-in the following way: for DNase, the read is extended 5 bp in both directions
-from its 5' aligned end where DNase cut the DNA; for FAIRE and ChIP, the
-sequence is extend to a fragment length of 134 bp from the 5' aligned end
-representing the approximate average fragment length.  The score at each base
-pair represents the number of extended fragments that overlap the base pair.
+sequences from all replicates.  For each sequence, the aligned read is extended 
+5 bp in both directions from its 5' aligned end where DNase cut the DNA.
 </DD>
 <DT><I>Alignments</I></DT><DD> Mappings of short reads to the genome (currently
 only available for <A TARGET=_BLANK
@@ -126,33 +96,6 @@ growths (replicates) were compared to verify the reproducibility of the data.
 A more detailed protocol is available
 <A HREF="../../ENCODE/protocols/general/Duke_DNase_protocol.pdf">here</A>.</P>
 </P><P>
-<em>FAIRE</em> was performed (Giresi <em>et al.</em>, 2007) by cross-linking proteins
-to DNA using 1% formaldehyde solution, and the complex was sheared using
-sonication.  Phenol/chloroform extractions were performed to remove DNA
-fragments cross-linked to protein. The DNA recovered in the aqueous phase was
-hybridized to NimbleGen Human ENCODE tiling arrays (1% of the genome) and sequenced
-using a Solexa sequencing system.  The ENCODE array data were used to verify
-the accuracy of the sequencing data, and multiple independent growths
-(replicates) were compared to assess the reproducibility of the data.
-A more detailed protocol is available
-<A HREF="../../ENCODE/protocols/general/FAIRE_UNC_procedure.pdf">here</A>.
-Also see Giresi <em>et al.</em>, 2009.</P>
-</P><P>
-To perform <em>ChIP</em>, proteins were cross-linked to DNA <em>in vivo</em>
-using 1% formaldehyde solution (Bhinge <em>et al.</em>, 2007, ENCODE Project
-Consortium., 2007). Cross-linked chromatin was sheared by sonication and
-immunoprecipitated using a specific antibody against the protein of interest.
-After reversal of the cross-links, the immunoprecipitated DNA was used to
-identify the genomic location of transcription factor binding. This was
-accomplished by Solexa sequencing of the ends of the immunoprecipitated DNA
-(ChIP-seq), as well as labeling and hybridization of the immunoprecipitated
-DNA to NimbleGen Human ENCODE tiling arrays (1% of the genome) along with the
-input DNA as reference (ChIP-chip). The ENCODE array data were used to verify
-the accuracy of the sequencing data, and multiple independent growths
-(replicates) were compared to assess the reproducibility of the data. A more
-detailed protocol is available
-<A HREF="../../ENCODE/protocols/general/UTA_ChIPseq_protocol.pdf">here</A>.</P>
-</P><P>
 ENCODE Array data were normalized using the Tukey biweight normalization, and
 peaks were called using ChIPOTle (Buck, <em>et al.</em>, 2005) at multiple
 levels of significance.  Regions matched on size to these peaks that were
@@ -164,9 +107,9 @@ Other sequences were also filtered based on their alignment to problematic
 regions (such as satellites and rRNA genes).  The resulting digital signal was
 converted to a continuous wiggle track using F-Seq that employs Parzen kernel
 density estimation to create base pair scores (Boyle <em>et al.</em>, 2008b).
-Discrete DNase HS, FAIRE, and ChIP sites (peaks) were identified from
-DNase/FAIRE/ChIP-seq using F-Seq by setting a Parzen cutoff based on ROC curve
-analysis using peaks and non-peaks identified from DNase/FAIRE/ChIP-chip using
+Discrete DNase HS sites (peaks) were identified from
+DNase using F-Seq by setting a Parzen cutoff based on ROC curve
+analysis using peaks and non-peaks identified from DNase using
 NimbleGen Human ENCODE tiling arrays (1% of the genome).
 </P><P>
 <em>Input</em> data was generated for GM12878, K562, HeLa-S3, HepG2, and HUVEC.
@@ -180,6 +123,7 @@ should provide corrections for sequencing biases and alignment artifacts,
 but obviously not for cell type specific copy number changes.
 </P>
 
+<!--
 <h2>Release Notes</h2>
 <P>
 This is Release 3 (Mar 2010) of this track, which includes 18 new cell line
@@ -193,7 +137,7 @@ marked with "submittedDataVersion=V", followed by a number and reason for
 replacement. Previous versions of these files are available for download from the
 <A HREF="ftp://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeChromatinMap/"
  TARGET=_BLANK>FTP site</A>.
-
+-->
 <H2>Credits</H2>
 <P>
 These data and annotations were created by a collaboration of multiple
