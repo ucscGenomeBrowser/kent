@@ -1,6 +1,7 @@
 # CSHL long rna-seq (wrangler: braney)
 track wgEncodeCshlLongRnaSeq
 compositeTrack on
+superTrack wgEncodeRnaSeqSuper
 shortLabel CSHL Long RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
 group expression
@@ -8,7 +9,7 @@ subGroup1 view Views 1-PlusRawSig=Plus_Raw_Signal 2-MinusRawSig=Minus_Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 localization Localization cell=Cell cytosol=Cytosol
 subGroup4 rnaExtract Rna_Extract total=Total_RNA longPolyA=Long_PolyA+
-subGroup5 rep Replicate 1=1 2=2
+subGroup5 rep Replicate 1=1 2=2 3=3 4=4
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract dimensionA=rep
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
