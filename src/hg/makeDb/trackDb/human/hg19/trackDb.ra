@@ -1573,3 +1573,38 @@ type bigWig 0 100
 minLimit 0
 maxLimit 100
 html gc5Base
+
+track affyExonArray
+compositeTrack on
+shortLabel Affy Exon
+longLabel Affymetrix $Organism Exon Array
+group expression
+priority 103.29
+visibility hide
+type bed 12
+noInherit on
+    
+    track affyExonArrayExons 
+    subTrack affyExonArray off
+    shortLabel Af Ex Exons
+    longLabel Exons interrogated on the Affymetrix $Organism Exon Array
+    type bed 12
+    
+    track affyExonArrayProbesets
+    subTrack affyExonArray
+    shortLabel Af Ex Probesets
+    longLabel Probesets on the Affymetrix $Organism Exon Array 
+    type bed 12
+    
+    track affyExonArrayProbes 
+    subTrack affyExonArray off
+    shortLabel Af Ex Probes
+    longLabel Probes from the Affymetrix $Organism Exon Array
+    type bed 10
+
+    track affyExonArrayGeneProbesets
+    subTrack affyExonArray off
+    shortLabel Af Ex GProbesets
+    longLabel Gene probesets on the Affymetrix $Organism Exon Array
+    type bed 12
+    
