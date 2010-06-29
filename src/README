@@ -104,7 +104,7 @@ INSTALL INSTRUCTIONS FOR CODE USING THE BROWSER DATABASE
    and more documentation in this source tree about setting up
    a working browser in README files:
    jksrc/product/README.building.source
-   jksrc/product/README.git.access
+   jksrc/product/README.local.git.source
    jksrc/product/README.mysql.setup
    jksrc/product/README.install
    jksrc/product/README.trackDb

@@ -2,7 +2,7 @@ Use the following procedures to create you own personal copy of the kent source
 tree where you can have your own edits that are not part of the development at
 UCSC.  This is useful for mirror sites that have their own customizations in
 the source tree for local circumstances.
-
+ 
 Setting Up Your Own Personal Git Kent Repository:
 
  Install Git software version 1.6.2.2 or later. Many easy-to-install packages
