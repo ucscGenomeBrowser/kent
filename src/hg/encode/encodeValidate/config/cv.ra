@@ -1961,6 +1961,7 @@ organism Mouse
 description leukemia (K562 analog)
 tissue Blood
 color 46,0,184
+sex U
 
 # Gene types
 # term (human-readable cell type name)
