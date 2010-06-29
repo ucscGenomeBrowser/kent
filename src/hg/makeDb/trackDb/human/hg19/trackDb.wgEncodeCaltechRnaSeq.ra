@@ -1,4 +1,5 @@
 track wgEncodeCaltechRnaSeq
+superTrack wgEncodeRnaSeqSuper
 compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel ENCODE Caltech Myers RNA-seq
@@ -9,7 +10,7 @@ subGroup3 mapAlgorithm Map_Algorithm blat34=BLAT_3.4 blowBlat=Bowtie0.98+BLAT bo
 subGroup4 readType Read_Type r1x32=Single_32nt r1x75=Single_75nt r1x75D=Single_Strand-Specific_75nt r2x75=Paired_75nt
 subGroup5 insertLength Insert_Length il200=200 il400=400 ilNa=NA
 subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4
-dimensions dimensionX=cellType dimensionY=readType dimensionZ=rep
+dimensions dimensionX=cellType dimensionY=readType dimensionZ=rep dimensionA=insertLength
 sortOrder cellType=+ readType=+ insertLength=+ view=+ rep=+
 controlledVocabulary encode/cv.ra cellType readType mapAlgorithm insertLength
 dragAndDrop subTracks
@@ -144,7 +145,6 @@ wgEncode 1
             color 0,107,27
         # subId=1669 dateSubmitted=2010-06-21
 
-
             track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1
             release alpha
             subTrack wgEncodeCaltechRnaSeqViewPaired on
@@ -189,14 +189,16 @@ wgEncode 1
         # subId=1670 dateSubmitted=2010-06-21
 
 
-            track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2
-            release alpha
-            subTrack wgEncodeCaltechRnaSeqViewPaired on
-            shortLabel GM12878 2
-            longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in GM12878 cells)
-            subGroups view=Paired cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
-            type bam
-            color 153,38,0
+ #   This track has been revoked
+
+#            track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2
+#            release alpha
+#            subTrack wgEncodeCaltechRnaSeqViewPaired on
+#            shortLabel GM12878 2
+#            longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 2 (in GM12878 cells)
+#            subGroups view=Paired cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
+#            type bam
+#            color 153,38,0
         # subId=1671 dateSubmitted=2010-06-22
 
 
@@ -645,14 +647,16 @@ wgEncode 1
             color 0,107,27
         # subId=1670 dateSubmitted=2010-06-21
 
-            track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2
-            release alpha
-            subTrack wgEncodeCaltechRnaSeqViewSplices on
-            shortLabel GM12878 2
-            longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in GM12878 cells)
-            subGroups view=Splices cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
-            type bam
-            color 153,38,0
+ #   This track has been revoked
+
+#            track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2
+#            release alpha
+#            subTrack wgEncodeCaltechRnaSeqViewSplices on
+#            shortLabel GM12878 2
+#            longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 2 (in GM12878 cells)
+#            subGroups view=Splices cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
+#            type bam
+#            color 153,38,0
         # subId=1671 dateSubmitted=2010-06-22
 
             track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2
@@ -1105,14 +1109,15 @@ wgEncode 1
             color 0,107,27
         # subId=1670 dateSubmitted=2010-06-21
 
-            track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
-            release alpha
-            subTrack wgEncodeCaltechRnaSeqViewSignal on
-            shortLabel GM12878 Sig 2
-            longLabel ENCODE Caltech RNA-seq Signal Replicate 2 (in GM12878 cells)
-            subGroups view=Signal cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
-            type bigWig 0.000000 65533.000000
-            color 153,38,0
+# Submission revoked
+#            track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
+#            release alpha
+#            subTrack wgEncodeCaltechRnaSeqViewSignal on
+#            shortLabel GM12878 Sig 2
+#            longLabel ENCODE Caltech RNA-seq Signal Replicate 2 (in GM12878 cells)
+#            subGroups view=Signal cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
+#            type bigWig 0.000000 65533.000000
+#            color 153,38,0
         # subId=1671 dateSubmitted=2010-06-22
 
             track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
