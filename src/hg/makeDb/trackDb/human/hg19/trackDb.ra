@@ -1588,23 +1588,27 @@ noInherit on
     subTrack affyExonArray off
     shortLabel Af Ex Exons
     longLabel Exons interrogated on the Affymetrix $Organism Exon Array
+    visibility hide
     type bed 12
     
     track affyExonArrayProbesets
     subTrack affyExonArray
     shortLabel Af Ex Probesets
     longLabel Probesets on the Affymetrix $Organism Exon Array 
+    visibility dense
     type bed 12
     
     track affyExonArrayProbes 
     subTrack affyExonArray off
     shortLabel Af Ex Probes
     longLabel Probes from the Affymetrix $Organism Exon Array
+    visibility hide
     type bed 10
 
     track affyExonArrayGeneProbesets
     subTrack affyExonArray off
     shortLabel Af Ex GProbesets
     longLabel Gene probesets on the Affymetrix $Organism Exon Array
+    visibility hide
     type bed 12
     
