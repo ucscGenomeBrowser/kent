@@ -1612,3 +1612,13 @@ noInherit on
     visibility hide
     type bed 12
     
+track haplotypeLocations
+shortLabel HapsLocate
+longLabel Haplotype locations on reference sequence
+visibility hide
+type bed 4
+group map
+priority 25
+color 0,0,0
+url http:/cgi-bin/hgTracks?position=$$
+urlLabel Haplotype sequence:
