@@ -21,11 +21,11 @@ set wc = `echo "$res" | wc -w`
 if ( "$wc" == "0" ) then
  echo "errs found:"
  echo "$res2"
- echo "$res2" | mail -s "'Errors in hgTablesTestRobot on $HOST'" $USER rhead pauline
+ echo "$res2" | mail -s "Errors in hgTablesTestRobot on $HOST" $USER rhead pauline
  exit 1
 endif
 #
 echo Done.
-echo "$res2" | mail -s "'v${BRANCHNN} hgTablesTest robot done successfully on $HOST.'" $USER rhead pauline
+echo "$res2" | mail -s "v${BRANCHNN} hgTablesTest robot done successfully on $HOST." $USER rhead pauline
 exit 0
 

@@ -16,12 +16,14 @@ if (! -d $JAVABUILD ) then
 endif    
 cd $JAVABUILD
 
+set branch="v${BRANCHNN}_branch"
+
 git clone -q $GITSHAREDREPO kent
 cd kent
-git checkout -tb $dir origin/$dir
+git checkout -tb $branch origin/$branch
 set err = $status
 if ( $err ) then
- echo "error running git clone and checkout of kent in $BUILDDIR/$dir : $err [${0}: `date`]" 
+ echo "error running git clone and checkout of kent in $JAVABUILD : $err [${0}: `date`]" 
  exit 1
 endif 
 cd ..

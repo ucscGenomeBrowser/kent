@@ -13,7 +13,7 @@ lab	        HudsonAlpha
 dataType	MethylRrbs
 compositeSuffix HaibMethylRrbs
 group           regulation
-variables	cell,treatment,growthProtocol
+variables	cell,treatment
 assembly	hg19
 
 validationSettings validateFiles.fastq:quick=10000
