@@ -19,9 +19,9 @@
 int debug = 0;
 char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
-struct hash *geneHash = NULL;
 float scoreDelta = -1;
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
+static int maxNearestGene = 10000;
 
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
@@ -42,6 +42,7 @@ char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 static struct optionSpec optionSpecs[] = {
     {"clusterTable", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
+    {"maxNearestGene", OPTION_INT},
     {"outputExtension", OPTION_STRING},
     {"scoreDelta", OPTION_FLOAT},
     {NULL, 0}
@@ -80,8 +81,9 @@ errAbort(
   "   mutationClassifier database snp.bed(s)\n"
   "options:\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
+  "   -maxNearestGene\tMaximum distance used when computing nearest gene (default: %d).\n"
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
-  "   -scoreDelta\t\tLook for regulatory sites with score(after) - score(before) < scoreDelta (defaults to %.1f).\n"
+  "   -scoreDelta\t\tLook for regulatory sites with score(after) - score(before) < scoreDelta (default: %.1f).\n"
   "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > scoreDelta.)\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
@@ -101,7 +103,7 @@ errAbort(
   "%s\n"
   "%s\n"
   "%s\n"
-  "%s\n"
+  "%s\toutput includes factor name, score change, and nearest gene (within %d bases)\n"
   "\n"
   "snp.bed should be bed4 (with SNP base in the name field).\n"
   "SNPs are assumed to be on positive strand, unless snp.bed is bed7 with\n"
@@ -110,8 +112,8 @@ errAbort(
   "\n"
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
-  scoreDelta,
-  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY
+  maxNearestGene, scoreDelta,
+  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY, maxNearestGene
   );
 }
 
@@ -405,26 +407,31 @@ struct genePred *el, *retVal = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
+struct hash *geneHash = newHash(16);
+
+// get geneSymbols for output purposes
+safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(geneHash, row[0], (void *) cloneString(row[1]));
+sqlFreeResult(&sr);
+
 safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript order by k.chrom");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    struct hashEl *el;
     struct genePred *gp = genePredLoad(row);
+    if ((el = hashLookup(geneHash, gp->name)))
+        {
+        freeMem(gp->name);
+        gp->name = cloneString((char *) el->val);
+        }
     gp->name2 = NULL;
     slAddHead(&retVal, gp);
     }
 sqlFreeResult(&sr);
 
-// get geneSymbol for output purposes (we use a hash b/c it doesn't fit into struct genePred
-geneHash = newHash(16);
-safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *geneSymbol = cloneString(row[1]);
-    hashAdd(geneHash, row[0], (void *) geneSymbol);
-    }
-sqlFreeResult(&sr);
 slSort(&retVal, genePredCmp);
 if(!lazyLoading)
     {
@@ -433,6 +440,7 @@ if(!lazyLoading)
         clipGenPred(database, el);
         }
     }
+freeHash(&geneHash);
 return(retVal);
 }
 
@@ -487,6 +495,39 @@ else
     sqlDisconnect(&conn);
     return motif;
     }
+}
+
+static struct genePred *findNearestGene(struct bed *bed, struct genePred *genes, int maxDistance)
+// return nearest gene (or NULL if none found)
+// Currently inefficient (O(length genes)).
+{
+struct genePred *retVal = NULL;
+int minDistance = 0;
+for(; genes != NULL; genes = genes->next)
+    {
+    if(sameString(bed->chrom, genes->chrom))
+        {
+        if(bedItemsOverlap(bed, genes))
+            {
+            retVal = genes;
+            minDistance = 0;
+            }
+        else
+            {
+            int diff;
+            if(bed->chromStart < genes->txStart)
+                diff = genes->txStart - bed->chromStart;
+            else
+                diff = bed->chromStart - genes->txEnd;
+            if(diff < maxDistance && (retVal == NULL || diff < minDistance))
+                {
+                retVal = genes;
+                minDistance = diff;
+                }
+            }
+        }
+    }
+    return retVal;
 }
 
 static void mutationClassifier(char *database, char **files, int fileCount)
@@ -643,13 +684,7 @@ while(!done)
             }
         if (code)
             {
-            char *geneSymbol = gp->name;
-            struct hashEl *el;
-            if ((el = hashLookup(geneHash, geneSymbol)))
-                {
-                geneSymbol = (char *) el->val;
-                }
-            printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, geneSymbol, code, additional, overlapA->key);
+            printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, gp->name, code, additional, overlapA->key);
             }
         }
     fprintf(stderr, "gene model took: %ld ms\n", clock1000() - time);
@@ -724,7 +759,11 @@ while(!done)
                                         bed->chrom, bed->chromStart, bed->chromEnd,
                                         bed->name, seq->dna[pos], snp,
                                         seq->size, motif->columnCount, before, after, beforeDna, afterDna);
-                            safef(line, sizeof(line), "%s %.2f>%.2f", motifName, before, after);
+                            struct genePred *nearestGene = findNearestGene((struct bed *) bed, genes, maxNearestGene);
+                            if(nearestGene == NULL)
+                                safef(line, sizeof(line), "%s;%.2f>%.2f", motifName, before, after);
+                            else
+                                safef(line, sizeof(line), "%s;%.2f>%.2f;%s", motifName, before, after, nearestGene->name);
                             code = REGULATORY;
                             // XXXX record (somehow) that we have used this record.
                         }
@@ -766,6 +805,7 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 clusterTable = optionVal("clusterTable", clusterTable);
 lazyLoading = optionExists("lazyLoading");
+maxNearestGene = optionInt("maxNearestGene", maxNearestGene);
 outputExtension = optionVal("outputExtension", NULL);
 scoreDelta = optionFloat("scoreDelta", scoreDelta);
 if (argc < 3)
