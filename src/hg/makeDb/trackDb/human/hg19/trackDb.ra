@@ -1622,3 +1622,4 @@ priority 25
 color 0,0,0
 url http:/cgi-bin/hgTracks?position=$$
 urlLabel Haplotype sequence:
+chromosomes  chr4,chr6,chr17
