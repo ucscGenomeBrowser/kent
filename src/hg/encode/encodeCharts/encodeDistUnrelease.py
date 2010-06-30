@@ -75,7 +75,7 @@ def processReportFile (reportFile, keyIndex):
   if keyIndex == 5:
     labels = encodeReportLib.orderFreezeDateLabels(labelHash.keys())
   elif keyIndex == 8:
-    labels = ['loaded', 'displayed', 'approved', 'reviewing']
+    labels = ['loaded', 'downloads', 'displayed', 'approved', 'reviewing']
   else:
     tmpLabels = sorted(labelHash.iteritems(), key=operator.itemgetter(1), 
                        reverse=True)
