@@ -98,6 +98,8 @@ DIRS = \
 	fixCr \
 	gapSplit \
 	gffPeek \
+	git-reports \
+	gitTools \
 	headRest \
 	htmlPics \
 	htmlCheck \
