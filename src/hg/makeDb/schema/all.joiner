@@ -571,7 +571,7 @@ identifier refGeneRetro dependency
     $hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
 
 identifier retroRefGene dependency
-"Link refGene to ucscRetroInfo"
+"Link ucscRetroInfo to refGene"
     $hg,mm9.ucscRetroInfo.refSeq dupeOk
     $hg,mm9.refGene.name minCheck=0.11
 
