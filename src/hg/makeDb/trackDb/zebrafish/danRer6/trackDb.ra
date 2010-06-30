@@ -38,7 +38,7 @@ windowingFunction mean
 summary multiz6waySummary
 speciesCodonDefault danRer6
 speciesGroups vertebrate
-sGroup_vertebrate gasAcu1 tetNig2 xenTro2 mm9 hg19
+sGroup_vertebrate tetNig2 gasAcu1 xenTro2 mm9 hg19
 treeImage phylo/danRer6_6way.gif
 
 track phastConsElements6way
