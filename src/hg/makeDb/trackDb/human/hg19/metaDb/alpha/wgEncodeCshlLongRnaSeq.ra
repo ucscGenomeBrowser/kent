@@ -1,0 +1,337 @@
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep1
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep1.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep1
+view AllRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep2.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep2
+view AllRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
+view MinusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
+view MinusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
+objType table
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1502
+tableName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1
+view AllRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2
+view AllRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
+view Alignments
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
+view MinusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
+view MinusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
+view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
+objType table
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType LongRnaSeq
+dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-06-17
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-2010
+fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2.bigWig.gz
+grant Gingeras
+lab CSHL
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 1503
+tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
+view PlusRawSig
+
+# MAGIC: -1927838696
