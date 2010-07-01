@@ -25,7 +25,8 @@ errAbort(
   "usage:\n"
   "   regClusterBedExpCfg inputFileList output.cfg\n"
   "options:\n"
-  "   -cellLetter=file.tab - two color file of form <letter> <name> for cell lines\n"
+  "   -cellLetter=file.tab - two column file of form <letter> <name> for cell lines\n"
+  "           If not present the first letter of the cell name will be used\n"
   "   -tabList - the inputFileList is in three column format of form:\n"
   "           <fileName> <cell> <factor>\n"
   "   -encodeList - the inputFileList is of format you might get from cut and paste of\n"
@@ -45,7 +46,7 @@ static struct optionSpec options[] = {
 };
 
 char *cellAbbreviation(char *cell)
-/* Return abbreviated version of cell-name (which may be stored in input buf)  */
+/* Return abbreviated version of cell-name */
 {
 if (cellLetterHash != NULL)
     {
