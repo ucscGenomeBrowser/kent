@@ -16,15 +16,17 @@ ifeq (${USE_SSL},1)
     HG_DEFS+=-DUSE_SSL
 endif
 
-# libpng: disabled by default
-ifeq (${USE_PNG},1)
+# libpng: enabled by default
+ifneq (${USE_PNG},0)
     ifeq (${PNGLIB},)
 	PNGLIB=-lpng
     endif
     L+=${PNGLIB}
     HG_DEFS+=-DUSE_PNG
     HG_INC+=${PNGINCL}
-    ifeq (${COLOR32},1)
+
+    # 32-bit color enabled by default
+    ifneq (${COLOR32},0)
         HG_DEFS+=-DCOLOR32
     endif
 endif

@@ -10,8 +10,12 @@
 static char const rcsid[] = "$Id: regClusterBedExpCfg.c,v 1.2 2010/05/05 00:50:37 kent Exp $";
 
 boolean encodeList = FALSE;
+boolean tabList = FALSE;
+char *cellLetter = NULL;
 
 #define SCORE_COL_IX 6
+
+struct hash *cellLetterHash;
 
 void usage()
 /* Explain usage and exit. */
@@ -21,19 +25,44 @@ errAbort(
   "usage:\n"
   "   regClusterBedExpCfg inputFileList output.cfg\n"
   "options:\n"
+  "   -cellLetter=file.tab - two column file of form <letter> <name> for cell lines\n"
+  "           If not present the first letter of the cell name will be used\n"
+  "   -tabList - the inputFileList is in three column format of form:\n"
+  "           <fileName> <cell> <factor>\n"
   "   -encodeList - the inputFileList is of format you might get from cut and paste of\n"
   "        encode downloads page - tab separated with following columns:\n"
   "             <relDate> <fileName> <fileSize> <submitDate> <metadata>\n"
   "        where the metadata component is in the format:\n"
   "              this=that; that=two words; that=whatever\n"
-  "        and the antibody and factor tags in the metadata are used\n"
+  "        and the antibody and cell tags in the metadata are used\n"
   );
 }
 
 static struct optionSpec options[] = {
    {"encodeList", OPTION_BOOLEAN},
+   {"tabList", OPTION_BOOLEAN},
+   {"cellLetter", OPTION_STRING},
    {NULL, 0},
 };
+
+char *cellAbbreviation(char *cell)
+/* Return abbreviated version of cell-name */
+{
+if (cellLetterHash != NULL)
+    {
+    char *val = hashFindVal(cellLetterHash, cell);
+    if (val == NULL)
+        errAbort("cell %s isn't in %s", cell, cellLetter);
+    return val;
+    }
+else
+    {
+    static char buf[2];
+    buf[0] = cell[0];
+    buf[1] = 0;
+    return buf;
+    }
+}
 
 int commonPrefixSize(struct slName *list)
 /* Return length of common prefix */
@@ -122,7 +151,7 @@ while (lineFileRow(lf, row))
     sumSquares += x*x;
     n += 1;
     }
-
+lineFileClose(&lf);
 double std = calcStdFromSums(sum, sumSquares, n);
 double mean = sum/n;
 double highEnd = mean + std;
@@ -145,11 +174,34 @@ for (in = inList; in != NULL; in = in->next)
     char *factor, *cell;
     camelParseTwo(midString, &cell, &factor);
     fprintf(f, "%s\t%s\t", factor, cell);
-    fprintf(f, "%c\t", cell[0]);
+    fprintf(f, "%s\t", cellAbbreviation(cell));
     fprintf(f, "file\t%d\t", SCORE_COL_IX);
     fprintf(f, "%g\t", calcNormScoreFactor(in->name, SCORE_COL_IX));
     fprintf(f, "%s\n", in->name);
     }
+carefulClose(&f);
+}
+
+void makeConfigFromTabList(char *input, char *output)
+/* makeConfigFromFileList - Create config file for hgBedsToBedExps from list of file/cell/ab. */
+{
+struct lineFile *lf = lineFileOpen(input, TRUE);
+char *row[3];
+FILE *f = mustOpen(output, "w");
+
+while (lineFileRow(lf, row))
+    {
+    char *fileName = row[0];
+    char *cell = row[1];
+    char *factor = row[2];
+    verbose(2, "%s\n", fileName);
+    fprintf(f, "%s\t%s\t", factor, cell);
+    fprintf(f, "%s\t", cellAbbreviation(cell));
+    fprintf(f, "file\t%d\t", SCORE_COL_IX);
+    fprintf(f, "%g\t", calcNormScoreFactor(fileName, SCORE_COL_IX));
+    fprintf(f, "%s\n", fileName);
+    }
+lineFileClose(&lf);
 carefulClose(&f);
 }
 
@@ -214,7 +266,7 @@ while (lineFileNextReal(lf, &line))
         errAbort("No antibody in metadata line %d of %s", lf->lineIx, lf->fileName);
 
     fprintf(f, "%s\t%s\t", antibody, cell);
-    fprintf(f, "%c\t", cell[0]);
+    fprintf(f, "%s\t", cellAbbreviation(cell));
     fprintf(f, "file\t%d\t", SCORE_COL_IX);
     fprintf(f, "%g\t", calcNormScoreFactor(fileName, SCORE_COL_IX));
     fprintf(f, "%s\n", fileName);
@@ -225,8 +277,12 @@ carefulClose(&f);
 void regClusterBedExpCfg(char *input, char *output)
 /* regClusterBedExpCfg - Create config file for hgBedsToBedExps from list of files.. */
 {
+if (cellLetter)
+    cellLetterHash = hashTwoColumnFile(cellLetter);
 if (encodeList)
     makeConfigFromEncodeList(input, output);
+else if (tabList)
+    makeConfigFromTabList(input, output);
 else
     makeConfigFromFileList(input, output);
 }
@@ -238,6 +294,8 @@ optionInit(&argc, argv, options);
 if (argc != 3)
     usage();
 encodeList = optionExists("encodeList");
+tabList = optionExists("tabList");
+cellLetter = optionVal("cellLetter", cellLetter);
 regClusterBedExpCfg(argv[1], argv[2]);
 return 0;
 }

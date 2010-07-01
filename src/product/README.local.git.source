@@ -1,0 +1,72 @@
+Use the following procedures to create you own personal copy of the kent source
+tree where you can have your own edits that are not part of the development at
+UCSC.  This is useful for mirror sites that have their own customizations in
+the source tree for local circumstances.
+ 
+Setting Up Your Own Personal Git Kent Repository:
+
+ Install Git software version 1.6.2.2 or later. Many easy-to-install packages
+ are available. Also getting the git tarball and compiling it is simple using
+ standard unix methods. See also:
+ http://genomewiki.ucsc.edu/index.php/Installing_git
+
+Configure Git with:
+
+ $ cd $HOME
+ $ git config --global user.name "Your Name Here"
+ $ git config --global user.email yourlogin@your.com
+
+Starting an initial Git local repository: 
+
+ The location /gitroot is an example; any directory name can be used. This
+ will be your master copy of the Genome Browser source tree.
+
+ $ mkdir /gitroot
+ $ cd /gitroot
+ $ git clone git://genome-source.cse.ucsc.edu/kent.git
+    or if firewall prevents git daemon port 9418 use
+ $ git clone http://genome-source.cse.ucsc.edu/kent.git 
+
+ The kent source tree will be imported to /gitroot/kent folder.
+
+Tracking the beta branch at the UCSC repository:
+
+ Most mirror users want to use the beta branch which has tested, released 
+ versions of the Browser.
+
+ $ git checkout -t -b beta origin/beta
+
+ This creates a tracking branch called beta that tracks the real beta branch
+ in our public central read-only repository, and checks it out.
+
+ Periodically, when you want to get the latest UCSC release:
+ 
+ $ cd /gitroot/kent/src
+ $ git pull
+ $ make .... # perform the usual compile steps
+ 
+ You can make customizations on your beta branch and check them in to the
+ local repository with the usual git commands:
+
+ $ git add mycustomfile
+ $ git commit -m 'added new customization'
+
+ If you have added valuable customizations, you may wish to have your
+ repository backed up regularly. This can be done with standard backup 
+ procedures.
+
+You will want to keep your source tree up to date with the UCSC version.
+Browser development continues and many new features and bug fixes are added
+weekly. Since a Git update can make it difficult to recover from changes to
+source in the same area, it is best to perform this update on a test source
+tree to see if it will have any source change clashes that need to be resolved.
+A biweekly update and test build is recommended. Please note, when the source 
+code is updated to include operations on new columns that have been added to
+database tables, the CGI binaries will fail to operate until the new columns
+are added to your database tables.  This is especially important for any tables
+in the hgcentral database.  UCSC will keep any product sites informed of
+database changes.
+
+See src/product/README.trackDb for instructions on keeping local tracks
+separate from UCSC Genome Browser tracks.
+

@@ -32,8 +32,8 @@ dyStringPrintf(json, "%s{\n", tabs);
 makeIndent(tabs, sizeof(tabs), indent + 1);
 dyStringPrintf(json, "%s\"track\": \"%s\",\n%s\"shortLabel\": \"%s\",\n%s\"longLabel\": \"%s\",\n%s\"group\": \"%s\"",
                tabs, tdb->track,
-               tabs, javaScriptLiteralEncode(tdb->shortLabel), tabs, javaScriptLiteralEncode(tdb->longLabel),
-               tabs, javaScriptLiteralEncode(tdb->grp));
+               tabs, tdb->shortLabel, tabs, tdb->longLabel,
+               tabs, tdb->grp);
 if(tdbIsComposite(tdb) && tdb->subtracks != NULL)
     {
     struct trackDb *ptr;
@@ -126,8 +126,8 @@ else
 // It's debatable whether the type should be text/plain, text/javascript or application/javascript; I think
 // any of the types containing "javascript" don't work with IE6, so I'm using text/plain
 
-puts("Content-Type:text/plain");
-puts("\n");
+puts("Content-Type:text/javascript\n");
+//puts("\n");
 if(jsonp)
     printf("%s(%s)", jsonp, dyStringContents(output));
 else 

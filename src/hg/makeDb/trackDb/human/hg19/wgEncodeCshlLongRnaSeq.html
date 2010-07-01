@@ -16,10 +16,16 @@ functional elements in the sequence of the human genome.
 This track is a multi-view composite track that contains the following
 <EM>views</EM>:
 <DL>
+
 <DT><i>Alignments</i>
-<DD>The Alignments view shows reads mapped to the genome.
-<DT><i>Raw Signal</i>
-<DD>The Raw Signal views show the density of aligned tags on the plus and minus strand.
+<DD>The Alignments view shows reads mapped to the genome.  Sequences determined 
+to be transcribed on the positive strand are shown in <span style="color:blue">blue</span>.  
+Sequences determined to be transcribed on the negative strand are shown in 
+<span style="color:orange">orange</span>.  Sequences for which the direction of 
+transcription was not able to be determined are shown in <B>black</B>.
+
+<DT><i>Raw Signals</i>
+<DD>The Raw Signal views show the density of aligned tags on the plus, minus, and on both strands.
 </DL>
 
 <H2>Methods</H2>
@@ -27,6 +33,24 @@ This track is a multi-view composite track that contains the following
 Cells were grown according to the approved 
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
 <P>
+<H3>Sample preparation and sequencing</H3>
+
+<DT><i>K562 and GM12878 total cell, total RNA</i><P>
+Standard Illumina Pair-end kit with the sole exception that a "tagged" random 
+hexamer was used to prime the 1st strand synthesis: 5&prime;ACTGTAGGN6-3&prime;.  
+The addition of this tag is what permits us to make strand assignments for the reads. 
+The sequence of the tag is reported in the 5&prime; end of the read.  Asymmetric PCR 
+can place the tag on either the 1st or 2nd read depending on which strand it used as 
+a template. Strand assignments are made by looking for the tag at the 5&prime; end of 
+either read 1 or read 2. Read 1 is physically linked to read 2. Therefore, if a tag 
+is present on one end strand assignments are made for both ends.  We noted during 
+analysis that the tags are generally 5&prime; truncated.  We only "strand" reads that 
+contain ACTGTAGG, CTGTAGG, TGTAGG, GTAGG. Between 63-68% of reads could be stranded 
+in these libraries. It is possible to cull additional stranded reads that contain 
+non-templated TAGG, AGG, GG, or G sequences at their 5&prime; end. The peak in 
+insert size distribution is between 200-250 nucleotides.
+
+<DT><i>K562 cytosol, polyA+ RNA </i><P>
 Oligo-dT selected poly-A+ RNA was RiboMinus-treated according to the
 manufacturer's protocol (Invitrogen). The RNA was treated with tobacco alkaline
 pyrophosphatase to eliminate any 5&prime; cap structures and hydrolyzed to ~200
@@ -43,14 +67,20 @@ resulting in trimming of their 3&prime; ends. Consequently, the mapped read
 lengths are variable. 
 </P>
 
-<H2>Analysis</H2>
+<H3>Analysis</H3>
 <P>
-The reads were mapped to the human (hg18, March 2006) assembly using Timo
-Lassmann's Nexalign program as follows:
-<P>
-Only uniquely (one loci), exactly (no mis-matches) aligned reads are reported in
-the processed files.
+<DT><i>K562 and GM12878 total cell, total RNA</i><P>
+Tags were removed from the 5&prime; ends of the reads in accordance to their 
+lengths and strand assignments made.  Subsequently, the reads were trimmed 
+from their 3&prime; ends to a final length of 50 nucleotides and were mapped 
+using NexAlign, a program developed by Timo Lassman, RIKEN.   We allowed up to 
+2 mismatches across the entire length and only report reads that mapped to a 
+single/unique locus in the assembled hg18 genome. 
 
+<DT><i>K562 cytosol, polyA+ RNA</i><P>
+Reads were mapped to the human (hg18, March 2006) assembly using Nexalign, with only
+uniquely mapping (one loci), exactly matching (no mis-matches) aligned reads reported in
+the processed files, as follows:
 <OL>
 <LI>Collect the read sequences from Illumina non-filtered output files.
 </LI>
@@ -82,19 +112,36 @@ only the reads that could not be aligned continue to the next step.
 </LI>
 </OL>
 </P>
-
 <H2>Verification</H2>
 
 <P>Verification was done by comparison of referential data generated from 8
 individual sequencing lanes (Illumina technology). 
 </P>
 
+<H2>Release Notes</H2>
+This is Release 2 (Nov 2009) of this track. It includes data from additional 
+experiments, and changes in formatting for the existing data described below.
+<P>
+The K562 cytosol alignments are exactly the same data as Release 1, but the 
+alignments are now formatted in the bed14 format described below.
+These data have the string submittedDataVersion="V2 - file format change" in 
+their metadata and the table names are appended with the string "V2".
+<P>
+The data format for the alignments in this track are provided in bigBed format.  
+Each record is in bed 14 format with the first 12 fields described 
+<A TARGET=_BLANK HREF="http://genome.ucsc.edu/FAQ/FAQformat#format1">here.</A>
+The final two fields are the two paired sequences, or in the case of single 
+alignments, the 13th field is the sequence and the 14th field is a single N.
+
 <H2>Credits</H2>
 
+<DT><i>K562 cytosol, polyA+ RNA</i><P>
 <P>These data were generated and analyzed by the transcriptome group at
 Cold Spring Harbor Laboratories, and the Center for Genomic
 Regulation (Barcelona), who are participants in the ENCODE Transcriptome Group.
 </P>
+<DT><i>K562 and GM12878 total cell, total RNA</i><P>
+Credits: Carrie A. Davis, Jorg Drenkow, Huaien Wang, Alex Dobin and Tom Gingeras
 
 <P>
 Contacts: 

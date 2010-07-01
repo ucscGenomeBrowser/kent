@@ -1,21 +1,24 @@
-/* hgTrackRender - execute enough of browser to render one track. */
+/* renderMain - execute enough of browser to render list of tracks without touching cart or
+ * writing form. . */
 
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "htmshell.h"
+#include "options.h"
 #include "errabort.h"
 #include "portable.h"
 #include "cheapcgi.h"
 #include "ra.h"
 #include "hdb.h"
 #include "hgTracks.h"
+#include "imageV2.h"
 
 static void usage()
 /* Print out usage and exit - just temporary. */
 {
 errAbort(
-"hgTrackRender - execute enough of browser to render one track.\n"
+"hgRenderTracks - execute enough of browser to render a list of tracks\n"
 "usage:\n"
 "      hgTrackRender track.ra cart.ra output.ps\n"
 "where track.ra is a trackDb.ra entry flattened out to include stuff inherited from parent\n"
@@ -23,12 +26,31 @@ errAbort(
 );
 }
 
+static struct optionSpec options[] = {
+   {NULL, 0},
+};
+
+struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);
+/* Load trackDb object for a track. If need be grab its ancestors too. 
+ * This does not load children. hTrackDbForTrack will handle children, and
+ * is actually faster if being called on lots of tracks.  This function
+ * though is faster on one or two tracks. */
+
+static void hashIntoHash(struct hash *newStuff, struct hash *hash)
+/* Add newStuff into hash. */
+{
+struct hashCookie cookie = hashFirst(newStuff);
+struct hashEl *hel;
+while ((hel = hashNext(&cookie)) != NULL)
+    hashAdd(hash, hel->name, hel->val);
+}
+
 struct track *trackFromSettingsHash(struct hash *settings)
 /* Wrap a trackDb, and then a track around settings, and return track. */
 {
-struct trackDb *tdb = trackDbNew();
-tdb->settingsHash = settings;
-tdb->track = hashMustFindVal(settings, "track");
+char *trackName = hashMustFindVal(settings, "track");
+struct trackDb *tdb = hTrackDbForTrackAndAncestors(database, trackName);
+hashIntoHash(settings, tdb->settingsHash);
 trackDbFieldsFromSettings(tdb);
 trackDbAddTableField(tdb);
 return trackFromTrackDb(tdb);
@@ -49,8 +71,6 @@ position = cloneString(hashMustFindVal(cartHash, "position"));
 if (!hgParseChromRange(NULL, position, &chromName, &winStart, &winEnd))
     errAbort("position not in chrom:start-end format");
 
-uglyf("Got %d vars in %s\n", cartHash->elCount, cartFile);
-
 /* Initialize layout. */
 initTl();
 setLayoutGlobals();
@@ -65,23 +85,29 @@ while ((trackRa = raNextRecord(lf)) != NULL)
     }
 slReverse(&trackList);
 lineFileClose(&lf);
-uglyf("Got %d tracks in %s\n", slCount(trackList), trackFile);
 
+verboseTime(2, "Before load %d tracks", slCount(trackList));
 /* Prepare track list for drawing. */
 for (track = trackList; track != NULL; track = track->next)
     {
     track->loadItems(track);
-    uglyf("%s has %d items\n", track->track, slCount(track->items));
     }
-makeActiveImage(trackList, outFile);
+verboseTime(2, "After load");
+
+/* Initialize global image box. */
+int sideSliceWidth  = 0;   // Just being explicit
+if (withLeftLabels)
+    sideSliceWidth   = (insideX - gfxBorder*3) + 2;
+theImgBox = imgBoxStart(database,chromName,winStart,winEnd,(!revCmplDisp),sideSliceWidth,tl.picWidth);
+makeActiveImage(trackList, NULL);
+verboseTime(2,"After makeActiveImage");
 }
 
 int main(int argc, char *argv[])
 {
 /* Set up some timing since we're trying to optimize things very often. */
 long enteredMainTime = clock1000();
-uglyTime(NULL);
-measureTiming = TRUE;
+verboseTimeInit();
 
 /* Push very early error handling - this is just
  * for the benefit of the cgiVarExists, which
@@ -89,17 +115,14 @@ measureTiming = TRUE;
 // htmlPushEarlyHandlers();
 
 /* Set up cgi vars from command line. */
-cgiSpoof(&argc, argv);
+// cgiSpoof(&argc, argv);
+optionInit(&argc, argv, options);
 
 if (argc != 4)
     usage();
 
 hgTrackRenderFromCommandLine(argv[1], argv[2], argv[3]);
 
-if (measureTiming)
-    {
-    fprintf(stdout, "Overall total time: %ld millis<BR>\n",
-    clock1000() - enteredMainTime);
-    }
+verbose(2, "Overall total time: %ld millis<BR>\n", clock1000() - enteredMainTime);
 return 0;
 }

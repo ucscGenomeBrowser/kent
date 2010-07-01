@@ -1,4 +1,6 @@
-# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
+# Data Agreement File for Stanford/Yale ChIP-seq (Transcription Factor Binding Sites) experiments for mm9  
+
+$Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -8,6 +10,7 @@ dafVersion        2.0
 # Lab and general info
 grant             Snyder
 lab               Stanford
+#Lab alternatives. lab Yale
 dataType          ChIPseq
 compositeSuffix   SydhTfbs
 dataAgreementSuffix Stanf

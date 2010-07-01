@@ -1309,6 +1309,11 @@ do
     echo "done upstream${S}.maf.gz"
 done
 
+    # make downloads
+    cd /usr/local/apache/htdocs/goldenPath/danRer6/multiz6way
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/6way.nh
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/downloads/README.txt
+
     cd /usr/local/apache/htdocs/goldenPath/danRer6/multiz6way/maf
     ln -s /hive/data/genomes/danRer6/bed/multiz6way/downloads/maf/up*.gz .
     md5sum up*.gz >> md5sum.txt
@@ -1702,6 +1707,8 @@ html ../../phastConsElements
     pushd /usr/local/apache/htdocs-hgdownload/goldenPath/danRer6/phastCons6way/
     ln -s /hive/data/genomes/danRer6/bed/multiz6way/cons/all/downloads/* .
     md5sum *.gz >> md5sum.txt
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/cons/README.txt
+    ln -s /hive/data/genomes/danRer6/bed/multiz6way/cons/all/all.mod
     popd
 
     #	encode those files into wiggle data
@@ -1724,6 +1731,9 @@ html ../../phastConsElements
     wigTableStats.sh danRer6 phastCons6way
 # db.table             min max mean   count     sumData     stdDev   viewLimits
 #danRer6.phastCons6way   0 1 0.712241 237215280 1.68955e+08 0.337377 viewLimits=0:1
+
+
+
 
     #  Create histogram to get an overview of all the data
     hgWiggle -doHistogram -db=danRer6 \

@@ -430,6 +430,12 @@ struct trackDb *hTrackDbForTrack(char *db, char *track);
  * "noInherit on"...) This will die if the current database does not have
  * a trackDb, but will return NULL if track is not found. */
 
+struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track);
+/* Load trackDb object for a track. If need be grab its ancestors too. 
+ * This does not load children. hTrackDbForTrack will handle children, and
+ * is actually faster if being called on lots of tracks.  This function
+ * though is faster on one or two tracks. */
+
 struct trackDb *hCompositeTrackDbForSubtrack(char *db, struct trackDb *sTdb);
 /* Given a trackDb that may be for a subtrack of a composite track, 
  * return the trackDb for the composite track if we can find it, else NULL.

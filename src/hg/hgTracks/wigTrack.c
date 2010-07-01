@@ -1419,9 +1419,8 @@ int centerOffset = 0;
 double lines[2];	/*	lines to label	*/
 int numberOfLines = 1;	/*	at least one: 0.0	*/
 int i;			/*	loop counter	*/
-struct wigCartOptions *wigCart;
+struct wigCartOptions *wigCart = (struct wigCartOptions *) tg->extraUiData;
 
-wigCart = (struct wigCartOptions *) tg->extraUiData;
 lines[0] = 0.0;
 lines[1] = wigCart->yLineMark;
 if (wigCart->yLineOnOff == wiggleYLineMarkOn)
@@ -1481,14 +1480,17 @@ else if (tg->limitedVis == tvFull)
 	    }
 	else
 	    {
+	    enum wiggleTransformFuncEnum transformFunc = wigCart->transformFunc;
+	    boolean gotLog = (transformFunc == wiggleTransformFuncLog);
+	    char *transform = (gotLog ? "ln(x+1) " : "");
             if (hvg->rc)
                 {
-                safef(upper, sizeof(upper), "%c %g", upperTic, graphUpperLimit);
+                safef(upper, sizeof(upper), "%c %s%g", upperTic, transform, graphUpperLimit);
                 safef(lower, sizeof(lower), "_ %g", graphLowerLimit);
                 }
             else
                 {
-                safef(upper, sizeof(upper), "%g %c", graphUpperLimit, upperTic);
+                safef(upper, sizeof(upper), "%s%g %c", transform, graphUpperLimit, upperTic);
                 safef(lower, sizeof(lower), "%g _", graphLowerLimit);
                 }
 	    }

@@ -1,0 +1,40 @@
+# Data Agreement File for PSU ChIP-seq (Histone) experiments for mm9
+ 
+$Revision: 1.1 $
+
+# Lab and general info
+grant             Haridson
+lab               PSU-Mouse
+#Lab can also be Caltech-Mouse for (H3K27ac antibodies)
+dataType          ChipSeq
+variables         cell, antibody,sex,age,strain,control
+compositeSuffix   PsuHistone
+assembly          mm9
+medianFragmentLength 200
+dafVersion        2.0
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=25;validateFiles.fastq:quick=1000
+
+# Track/view definition
+view             Peaks
+longLabelPrefix  PSU Histone Peaks
+type             broadPeak
+hasReplicates    no
+required         no
+
+view             Signal
+longLabelPrefix  PSU Histone Signal
+type             bigWig
+hasReplicates    no
+required         yes
+
+view             Alignments
+longLabelPrefix  PSU Histone Alignments
+type             bam
+hasReplicates    yes
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    yes
+required         yes
+

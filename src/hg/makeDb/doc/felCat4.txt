@@ -594,8 +594,8 @@ XXXX 06-04 TODO add track
 
 
 #####################################################################
-# LASTZ Panda Swap (working 2010-06-16 re-do - Chin)
-XXXX 06-17 running (from ailMel1 side )
+# LASTZ Panda Swap (DONE 2010-06-16 re-do - Chin)
+
     cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
     cat fb.felCat4.chainAilMel1Link.txt
     # 1503647735 bases of 1990635005 (75.536%) in intersection
@@ -608,34 +608,54 @@ XXXX 06-17 running (from ailMel1 side )
         felCat4 ailMel1 > rbest.log 2>&1 &
     #   real    234m49.556s
 
-    #   re-run swap 04-26
+    #swap 2010-06-28 
     mkdir /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
     cd /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    # real    155m57.566s
+    # real   213m28.468s
+
+    # the swap run failed due to
+    # mod of
+    # /usr/local/apache/htdocs-hgdownload/goldenPath/ailMel1/liftOver/md5sum.txt
+    # was set to 
+    #   -r--r--r-- 1 382 Apr 26 17:17 md5sum.txt
+    # correct this to 664 by cluster-admin
+    # and continue from  download step
+   time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
+       -continue=download \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > download.log 2>&1 &
+    # real    32m9.204s
+    # *** All done !  Elapsed time: 32m9s
+    # *** Make sure that goldenPath/ailMel1/vsFelCat4/README.txt is accurate.
+    # *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
+
     cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap
     cat fb.ailMel1.chainFelCat4Link.txt
     # 1507273252 bases of 2245312831 (67.130%) in intersection
 
     #   Due to the SEQ1 and SEQ2 spec'ed in
-    # /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-01/DEF
+    # /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF
     # need to copy the dDirectory from ailMel1 to felCatv17e
     #  without this, 6way step will have problem
     #  cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap]
     #  cp -pr * /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap/ 
     #  cd /hive/data/genomes/felCat4/bed
-    #  ln -s lastzAilMel1.2010-06-01 lastz.ailMel1
+    #  ln -s lastzAilMel1.2010-06-07 lastz.ailMel1
 
 
-    # mkdir /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-01
-    # cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-01
-    # cp -rp * /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-01/ 
+    # mkdir /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07
+    # cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
+    # cp -rp * /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07/ 
     # cd /hive/data/genomes/felCat4/bed
-    # ln -s /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-01 lastz.ailMel1
+    # ln -s /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07 lastz.ailMel1
     # cd /hive/data/genomes/ailMel1/bed
     # ln -s  blastz.felCat4.swap  lastz.felCat4
 
@@ -682,7 +702,7 @@ XXXX 06-17 running (from ailMel1 side )
 
 ############################################################################
 # ctgPos2 track - showing clone sequence locations on chromosomes
-#       (DONE - 2010-03-30 - Chin)
+#       (DONE - 2010-06-28 - Chin)
     mkdir /hive/data/genomes/felCat4/bed/ctgPos2
     cd /hive/data/genomes/felCat4/bed/ctgPos2
     cat << '_EOF_' > agpToCtgPos2.pl
@@ -736,8 +756,9 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # at src/makeDb/trackdb do "make update" or/and "make alpha"
 
 #########################################################################
-# all.joiner update, downloads and in pushQ - (DONE - 2010-04-09 Chin)
+# all.joiner update, downloads and in pushQ - (working 2010-06-28 Chin)
     cd $HOME/kent/src/hg/makeDb/schema
+    # add felCat4 after felCat3
     # fixup all.joiner until this is a clean output
     joinerCheck -database=felCat4 -all all.joiner
     
