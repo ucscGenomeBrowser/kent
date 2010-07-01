@@ -19,7 +19,7 @@
 int debug = 0;
 char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
-float scoreDelta = -1;
+float minDelta = -1;
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 static int maxNearestGene = 10000;
 
@@ -44,7 +44,7 @@ static struct optionSpec optionSpecs[] = {
     {"lazyLoading", OPTION_BOOLEAN},
     {"maxNearestGene", OPTION_INT},
     {"outputExtension", OPTION_STRING},
-    {"scoreDelta", OPTION_FLOAT},
+    {"minDelta", OPTION_FLOAT},
     {NULL, 0}
 };
 
@@ -82,9 +82,9 @@ errAbort(
   "options:\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
   "   -maxNearestGene\tMaximum distance used when computing nearest gene (default: %d).\n"
+  "   -minDelta\t\tLook for regulatory sites with score(after) - score(before) < minDelta (default: %.1f).\n"
+  "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > minDelta.)\n"
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
-  "   -scoreDelta\t\tLook for regulatory sites with score(after) - score(before) < scoreDelta (default: %.1f).\n"
-  "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > scoreDelta.)\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
@@ -112,7 +112,7 @@ errAbort(
   "\n"
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
-  maxNearestGene, scoreDelta,
+  maxNearestGene, minDelta,
   SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY, maxNearestGene
   );
 }
@@ -416,7 +416,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hashAdd(geneHash, row[0], (void *) cloneString(row[1]));
 sqlFreeResult(&sr);
 
-safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript order by k.chrom");
+safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -751,7 +751,7 @@ while(!done)
                     strncpy(afterDna, seq->dna, seq->size);
                     afterDna[seq->size] = 0;
                     delta = after - before;
-                    if((scoreDelta > 0 && delta > scoreDelta && delta > maxDelta) || (scoreDelta < 0 && delta < scoreDelta && delta < maxDelta))
+                    if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
                         {
                             maxDelta = delta;
                             if(debug)
@@ -807,7 +807,7 @@ clusterTable = optionVal("clusterTable", clusterTable);
 lazyLoading = optionExists("lazyLoading");
 maxNearestGene = optionInt("maxNearestGene", maxNearestGene);
 outputExtension = optionVal("outputExtension", NULL);
-scoreDelta = optionFloat("scoreDelta", scoreDelta);
+minDelta = optionFloat("minDelta", minDelta);
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);
