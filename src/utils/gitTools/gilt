@@ -25,7 +25,7 @@ fi
 onbranch=`git branch | grep '^[*]' | sed -e 's/* //'`
 mymaster=`git log  HEAD ^origin/master | grep '^commit' | wc -l`
 omaster=`git  log ^HEAD  origin/master | grep '^commit' | wc -l`
-staged=`git diff --stat --cached $dir`
+staged=`git diff --stat --cached`
 dirty=`git diff --stat $dir`
 
 echo "On $onbranch branch."
