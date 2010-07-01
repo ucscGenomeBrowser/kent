@@ -4488,44 +4488,44 @@ description Strain 129, has widely available embryonic stem cells
 # term (human-readable name)
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be age)
-# Stage (either embryonic or adult.  cannot say how/where this is used)
+# stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
 
 term E11.5
-tag E11_5
+tag E11half
 type age
-Stage Embryonic
-Description Embryonic day 11.5
+stage Embryonic
+description Embryonic day 11.5
 
 term E13.5
-tag E13_5
+tag E13half
 type age
-Stage Embryonic
-Description Embryonic day 13.5
+stage Embryonic
+description Embryonic day 13.5
 
 term E14
 tag E14
 type age
-Stage Embryonic
-Description Embryonic day 14
+stage Embryonic
+description Embryonic day 14
 
 term E14.5
-tag E14_5
+tag E14half
 type age
-Stage Embryonic
-Description Embryonic day 14.5
+stage Embryonic
+description Embryonic day 14.5
 
 term E18
-tag E118
+tag E18
 type age
-Stage Embryonic
-Description Embryonic day 18
+stage Embryonic
+description Embryonic day 18
 
 term adult-8wks
-tag adult_8wks
+tag adult8wks
 type age
 Stage Adult
-Description Adult 8 weeks
+description Adult 8 weeks
 
 ### Sex
 # Expected fields:

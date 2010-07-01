@@ -110,7 +110,7 @@ def main():
 
   # Headers for the columns in the data matrix
   description = [(titleTag[keyField], "string")]
-  fullLabel = ['released', 'reviewing', 'approved', 'displayed', 'loaded']
+  fullLabel = ['released', 'reviewing', 'approved', 'displayed', 'downloads', 'loaded']
   statusLabel = []
   for label in fullLabel:
     if label == 'released' and norelease == 1:
