@@ -12,6 +12,10 @@ wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \
+wgEncodeCaltechRnaSeq.ra \
+wgEncodeCshlLongRnaSeq.ra \
+wgEncodeCshlShortRnaSeq.ra \
 wgEncodeUwDgf.ra 
 
 include ../../../../makefile.metaDb
+
