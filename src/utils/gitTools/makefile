@@ -1,5 +1,5 @@
 include ../../inc/common.mk
-GITTOOLS= gitFiles 
+GITTOOLS= gitFiles gilt 
 
 all: ${GITTOOLS:%=${BINDIR}/%}
 
