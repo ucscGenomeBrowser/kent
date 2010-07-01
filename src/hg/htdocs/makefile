@@ -8,6 +8,7 @@ HTDOCS_USER=${HTDOCS}-${USER}
 
 GIT = git
 GITUP = ${GIT} pull -q
+FIND=gitFiles
 
 user:
 	${GITUP}
@@ -61,7 +62,7 @@ doInstallCancerTCGA: doRsync ${extra}
 # use care in changing
 rsyncOpts = --times --recursive --executability --omit-dir-times --relative --cvs-exclude --exclude='makefile'
 doRsync:
-	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `gitFiles` ${destDir}
+	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
 
 # build symbolic links
 doSymLink: doRsync

@@ -10292,3 +10292,28 @@ hgsql hg19 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql hg19 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
+# Haplotype locations (DONE - 2010-06-29 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/haplotypeLocations
+    cd /hive/data/genomes/hg19/bed/haplotypeLocations
+    for H in 1 2 3 4 5 6 7 8 9
+do
+    grep -v "^#" ../../download/alternate_loci/ALT_REF_LOCI_${H}/placed_scaffolds/alt_locus_scaf2primary.pos | awk -F'\t' '
+{
+printf "chr%d\t%d\t%d\t%s\n", $3, $4, $6, $1
+}
+'
+done | sed -e "s/HSCHR6_MHC_APD_CTG1/chr6_apd_hap1/;
+s/HSCHR6_MHC_COX_CTG1/chr6_cox_hap2/;
+s/HSCHR6_MHC_DBB_CTG1/chr6_dbb_hap3/;
+s/HSCHR6_MHC_MANN_CTG1/chr6_mann_hap4/;
+s/HSCHR6_MHC_MCF_CTG1/chr6_mcf_hap5/;
+s/HSCHR6_MHC_QBL_CTG1/chr6_qbl_hap6/;
+s/HSCHR6_MHC_SSTO_CTG1/chr6_ssto_hap7/;
+s/HSCHR4_1_CTG9/chr4_ctg9_hap1/;
+s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
+
+    hgLoadBed hg19 haplotypeLocations haplotypeLocations.bed
+    featureBits hg19 haplotypeLocations
+# 7207422 bases of 2897316137 (0.249%) in intersection
+
+#############################################################################

@@ -239,13 +239,13 @@ ailMel1.perChromTables = no
     #	739076250 bases of 2245312831 (32.916%) in intersection
 
 #######################################################################
-# felCat4 Cat BLASTZ/CHAIN/NET (working  - 2010-06-07 - Chin)
+# felCat4 Cat BLASTZ/CHAIN/NET (DONE  - 2010-06-07 - Chin)
     screen # use a screen to manage this multi-day job
     mkdir /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
     cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
 
     cat << '_EOF_' > DEF
-# human vs. cat
+# panda vs. cat
 # maximum M allowed with lastz is only 254
 BLASTZ_M=254
 
@@ -268,54 +268,86 @@ TMPDIR=/scratch/tmp
 '_EOF_'
     # << this line keeps emacs coloring happy
 
-XXXX 06-07
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
         -syntenicNet -noDbNameCheck \
         -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
         > do.log 2>&1 &
-    #  Command failed:
-    #     doClusterRun.csh
-    # manually run the doClusterRun.csh  03/28
-    time ./doClusterRun.csh > doClusterRun.log 2>&1 &
-    # real    93m42.604s
-    #  check with counting file number in psl directory to make sure that
-    #  all jobs were completed.
-    # manually start with "cat" step
+    # real    2761m37.696s
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         `pwd`/DEF \
-        -syntenicNet -continue=cat -noDbNameCheck \
+        -continue blastz \
+        -syntenicNet -noDbNameCheck \
         -chainMinScore=3000 -chainLinearGap=medium \
-        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
-        > cat.log 2>&1 &
-    # real    346m8.431s
+        -workhorse=hgwdev -smallClusterHub=memk -bigClusterHub=swarm \
+        > blastz.log 2>&1 &
+    # real    2909m58.289s
+    # *** All done !  Elapsed time: 2909m58s
+    # *** Make sure that goldenPath/felCat4/vsAilMel1/README.txt is accurate.
+    # *** Add {chain,net}AilMel1 tracks to trackDb.ra if necessary.
+    
     cat fb.felCat4.chainAilMel1Link.txt
     # 1503647735 bases of 1990635005 (75.536%) in intersection
-    # run rbest 2010-04-30
+
+    # run rbest 2010-06-28 (screen 10498 Job 10560)
     time doRecipBest.pl -workhorse=hgwdev -buildDir=`pwd` \
         felCat4 ailMel1 > rbest.log 2>&1 &
-    #   real    234m49.556s
+    #   real    463m40.359s
 
-
-
+    #swap (Copied from felCat4.txt) 
     mkdir /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
     cd /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
         -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
         -chainMinScore=3000 -chainLinearGap=medium > swap.log 2>&1 &
-    # real    155m57.566s
+    # real   213m28.468s
 
-    # need to change name back due to the seq1 and seq2 switch
-    # more TODO  XXXX 03/29
-    # so should be able to do
-    #	cat fb.felCat4.chainAilMel1Link.txt
-    # without 
-    # cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap
+    # the swap run failed due to
+    # mod of
+    # /usr/local/apache/htdocs-hgdownload/goldenPath/ailMel1/liftOver/md5sum.txt
+    # was set to 
+    #   -r--r--r-- 1 382 Apr 26 17:17 md5sum.txt
+    # correct this to 664 by cluster-admin
+    # and continue from  download step
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+        /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
+       -continue=download \
+        -swap -syntenicNet -noDbNameCheck \
+        -workhorse=hgwdev -smallClusterHub=encodek -bigClusterHub=swarm \
+        -chainMinScore=3000 -chainLinearGap=medium > download.log 2>&1 &
+    # real    32m9.204s
+    # *** All done !  Elapsed time: 32m9s
+    # *** Make sure that goldenPath/ailMel1/vsFelCat4/README.txt is accurate.
+    # *** Add {chain,net}FelCat4 tracks to trackDb.ra if necessary.
+
+    cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap
     cat fb.ailMel1.chainFelCat4Link.txt
     # 1507273252 bases of 2245312831 (67.130%) in intersection
+
+    #   Due to the SEQ1 and SEQ2 spec'ed in
+    # /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF
+    # need to copy the dDirectory from ailMel1 to felCatv17e
+    #  without this, 6way step will have problem
+    #  cd /hive/data/genomes/ailMel1/bed/blastz.felCat4.swap]
+    #  cp -pr * /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap/ 
+    #  cd /hive/data/genomes/felCat4/bed
+    #  ln -s lastzAilMel1.2010-06-07 lastz.ailMel1
+
+
+    # mkdir /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07
+    # cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
+    # cp -rp * /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07/ 
+    # cd /hive/data/genomes/felCat4/bed
+    # ln -s /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07
+    # lastz.ailMel1
+    # cd /hive/data/genomes/ailMel1/bed
+    # ln -s  blastz.felCat4.swap  lastz.felCat4
+
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (DONE - 2010-04-01 - Hiram)
