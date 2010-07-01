@@ -8,8 +8,9 @@ ENCODE submissions based on a specified keyfield.
 import cgi, cgitb
 import datetime
 import json
-import sys
 import operator
+import re
+import sys
 
 # Import local modules found in "/hive/groups/encode/dcc/charts"
 sys.path.append("/hive/groups/encode/dcc/charts")
@@ -43,8 +44,8 @@ def processReportFile (reportFile, keyIndex):
     if keyIndex == 8 and (status == 'revoked' or status == 'replaced'):
       continue
 
-    if (keyIndex == 5 and keyLabel == "post ENCODE Jan 2010 Freeze"):
-      keyLabel = "post Jan-2010"
+    if keyIndex == 5:
+      keyLabel = encodeReportLib.parseFreezeLabel(keyLabel)
 
     # Convert dates into ints
     submitDate = encodeReportLib.convertDate(startDate)
@@ -154,10 +155,7 @@ def main():
   chart_config['tooltipFontSize'] = 16
 
   if (keyField == 'freeze'):
-    # Can't specify "orange" since IE8 doesn't support CSS2.1
-    colors = ['red', '#ffa500', 'yellow', 'green', 'blue', 'indigo', 'violet']
-    colors = colors[0:len(labels)]
-    chart_config['colors'] = colors
+    chart_config['colors'] = encodeReportLib.getColorArray(len(labels))
 
   template_vars['chart_config'] = json.dumps(chart_config)
 
