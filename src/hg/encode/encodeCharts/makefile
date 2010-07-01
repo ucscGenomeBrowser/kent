@@ -1,10 +1,10 @@
 include ../../../inc/common.mk
 
 # files to be installed grouped by location
-libFiles = encodeTimeline.py encodeStatus.py encodeReport.py \
+libFiles = gviz_api.py important.dates.tab encodeReportLib.py
+cgiFiles = encodeTimeline.py encodeStatus.py encodeReport.py \
            encodeReportFilter.py encodeDist.py encodeDistUnrelease.py \
            encodeJune2010-Freeze.py
-cgiFiles = gviz_api.py important.dates.tab encodeReportLib.py
 htmlFiles = June2010-Freeze.html
 
 # install destinations for files
