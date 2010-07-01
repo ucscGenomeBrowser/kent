@@ -6,6 +6,7 @@ filtering based on specified keyfields and values.
 """
 
 import cgi, cgitb
+import re
 import sys
 
 # Import local modules found in "/hive/groups/encode/dcc/charts"
@@ -40,8 +41,16 @@ def main():
     printErrorMsg("Error: Must specify both key and value variables")
     return
 
-  if keyValue == "post Jan-2010":
-    keyValue = "post ENCODE Jan 2010 Freeze"
+  # Convert from standard freeze value to non-standard for "post" case
+  pattern = re.compile("post (.{3})\-(\d{4})")
+  m = pattern.match(keyValue)
+  if m:
+    month = m.group(1)
+    year = m.group(2)
+    if month == 'Jun':
+      # Adjust for June
+      month = 'June'
+    keyValue = "post ENCODE %s %s Freeze" % (month, year)
 
   status = form.getvalue('status')
   if not status:
