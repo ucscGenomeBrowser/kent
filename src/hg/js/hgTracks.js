@@ -162,7 +162,7 @@ if(revCmplDisp) {
 var newStart = winStart + startDelta;
 var newEnd = winStart + 1 + endDelta;
 if(newEnd > winEnd) {
-    ewEnd = winEnd;
+    newEnd = winEnd;
 }
 return {chromStart : newStart, chromEnd : newEnd};
 }
@@ -1215,15 +1215,12 @@ $(document).ready(function()
         var rec = trackDbJson[id];
         if(rec.type == "remote") {
             if($("#img_data_" + id).length > 0) {
+                // load the remote track renderer via jsonp
                 var script = document.createElement('script');
                 // XXXX add current image width
-//              XXXX implement this  var pos = parsePosition(getPosition());
-                var pos = new Object();
-                pos.chromStart = 1;
-                pos.chromEnd = 10;
-                script.setAttribute('src', rec.url + "?track=" + id + "&jsonp=remoteTrackCallback&chrom=" + pos.chrom +
-                                    "&start=" + pos.chromStart + "&end=" + pos.chromEnd);
-                // load the script
+                var pos = parsePosition(getPosition());
+                script.setAttribute('src', rec.url + "?track=" + id + "&jsonp=remoteTrackCallback&c=" + pos.chrom +
+                                    "&s=" + pos.start + "&e=" + pos.end);
                 document.getElementsByTagName('head')[0].appendChild(script); 
             }
         }
