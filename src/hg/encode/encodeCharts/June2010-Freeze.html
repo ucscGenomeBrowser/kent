@@ -15,11 +15,11 @@
     var chart;
 
     var spreadSheetUrl = "http://spreadsheets.google.com/ccc?key=t2l4K2na4q_6TKd2VPgPXbQ&headers=1";
-    var reportUrl = "http://hgwdev-bsuh.cse.ucsc.edu/cgi-bin/encodeJune2010-Freeze.py";
+    var reportUrl = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeJune2010-Freeze.py";
  
     function initialize() {
       var queryExpected = new google.visualization.Query(spreadSheetUrl);
-      queryExpected.setQuery('SELECT A, COUNT(H) WHERE G != "mm9" GROUP BY A ORDER BY A');
+      queryExpected.setQuery('SELECT A, COUNT(H) WHERE G = "hg19" GROUP BY A ORDER BY A');
       queryExpected.send(handleQueryExpectedResponse);
     }
  
@@ -53,7 +53,7 @@
       /* Fix certain values */
       for (i=0; i<dtExpected.getNumberOfRows(); i++) { 
         if (dtExpected.getValue(i, 0) == 'Stanford') {
-          dtExpected.setValue(i, 1, 410);
+          dtExpected.setValue(i, 1, 200);
         } else if (dtExpected.getValue(i, 0) == 'Transcriptome') {
           dtExpected.setValue(i, 1, 120);
         }
@@ -63,6 +63,16 @@
       dataJoin.setColumnLabel(1, 'Submitted')
       dataJoin.setColumnLabel(2, 'Expected')
       dataJoin.sort(0);
+
+      var totalSubmitted = 0;
+      var totalExpected = 0;
+      for (i=0; i<dataJoin.getNumberOfRows(); i++) {
+        totalSubmitted += dataJoin.getValue(i, 1);
+        totalExpected += dataJoin.getValue(i, 2);
+      }
+      dataJoin.addRow(['Total', totalSubmitted, totalExpected]);
+      $("#total").html("Total submissions: " + totalSubmitted + " / " + 
+                       "Total expected: " + totalExpected);
 
       chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
       chart.draw(dataJoin, {width:1024, height:512,
@@ -93,7 +103,7 @@
             projectValue = 'Yale';
           }
 
-          var urlString = "http://hgwdev-bsuh.cse.ucsc.edu/cgi-bin/encodeReportFilter.py?" 
+          var urlString = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeReportFilter.py?" 
             + "key=project"
             + "&value=" + projectValue
             + "&status=all"
@@ -105,7 +115,7 @@
           window.open(urlString);
         } else if (item.column == 2) {
           var queryExpected = new google.visualization.Query(spreadSheetUrl);
-          queryExpected.setQuery('SELECT * WHERE G != "mm9" AND A = "' + projectValue + '"');
+          queryExpected.setQuery('SELECT * WHERE G = "hg19" AND A = "' + projectValue + '"');
           queryExpected.send(handleQueryExpectTableResponse);
 
           return;
@@ -131,10 +141,13 @@
  
 <body> 
   <h2>ENCODE June 2010 Freeze Progress<br>
-    <font size="-1"><div id="date"></div></font>
+    <font size="-1">
+      <div id="date"></div>
+      <div id="total"></div>
+    </font>
   </h2>
   <script type="text/javascript">
-      var url = "http://hgwdev-bsuh.cse.ucsc.edu/cgi-bin/encodeReport.py?reportDate=1";
+      var url = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeReport.py?reportDate=1";
       $.getJSON(url+"&callback=?",
                 function (jsonData) {
                   var reportDateString = "(Report Date: " + jsonData.currentDate + ")";
