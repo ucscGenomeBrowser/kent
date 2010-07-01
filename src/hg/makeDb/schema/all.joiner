@@ -28,7 +28,7 @@ set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droG
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set equCab equCab1,equCab2
-set felCat felCat3,felCatV17e
+set felCat felCat3,felCat4,felCatV17e
 set fr fr1,fr2
 set galGal galGal2,galGal3
 set gasAcu gasAcu1
