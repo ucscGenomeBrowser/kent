@@ -1,7 +1,8 @@
 include ../../inc/common.mk
-GITTOOLS= gitFiles gilt 
+GITTOOLS= 
+GITSCRIPTS= gitFiles gilt 
 
-all: ${GITTOOLS:%=${BINDIR}/%}
+all: ${GITTOOLS:%=${BINDIR}/%} ${GITSCRIPTS:%=${SCRIPTS}/%}
 
 ${BINDIR}/%: %
 	@${MKDIR} ${BINDIR}
@@ -9,7 +10,7 @@ ${BINDIR}/%: %
 	rm -f $@
 	cp -pf $< $@
 
-scripts: ${GITTOOLS:%=${SCRIPTS}/%}
+scripts: ${GITSCRIPTS:%=${SCRIPTS}/%}
 
 ${SCRIPTS}/%: %
 	@${MKDIR} ${SCRIPTS}
