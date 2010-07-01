@@ -30,12 +30,12 @@ dirty=`git diff --stat $dir`
 
 echo "On $onbranch branch."
 
-if [ "$mymaster" > 0 ] && [ "$omaster" > 0 ]; then
+if [ "$mymaster" -gt "0" ] && [ "$omaster" -gt "0" ]; then
     echo "Your branch and 'origin/master' have diverged,"
     echo "and have $mymaster and $omaster different commit(s) each, respectively."
-elif (["$mymaster" == 0] && ["$omaster" > 0]); then
+elif [ "$mymaster" -eq "0" ] && [ "$omaster" -gt "0" ]; then
     echo "Your branch is behind 'origin/master' by $omaster commits, and can be fast-forwarded."
-elif (["$mymaster" > 0] && ["$omaster" == 0]); then
+elif [ "$mymaster" -gt "0" ] && [ "$omaster" -eq "0" ]; then
     echo "Your branch is ahead of 'origin/master' by $mymaster commits."
 fi
 
