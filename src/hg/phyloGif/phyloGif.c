@@ -723,10 +723,17 @@ if (onWeb)
     printf("Content-type: image/gif\r\n");
     printf("\r\n");
     }
+#ifdef USE_PNG
+if (!mgSaveToPng(stdout, mg, FALSE))
+    {
+    errAbort("Couldn't save png to stdout");
+    }
+#else
 if (!mgSaveToGif(stdout, mg, FALSE))
     {
     errAbort("Couldn't save gif to stdout");
     }
+#endif
 
 if (cgiOptionalString("phyloGif_submit"))
     cartCheckout(&cart);
