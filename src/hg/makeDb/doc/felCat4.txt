@@ -594,7 +594,7 @@ XXXX 06-04 TODO add track
 
 
 #####################################################################
-# LASTZ Panda Swap (working 2010-06-16 re-do - Chin)
+# LASTZ Panda Swap (DONE 2010-06-16 re-do - Chin)
 
     cd /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07
     cat fb.felCat4.chainAilMel1Link.txt
@@ -608,10 +608,10 @@ XXXX 06-04 TODO add track
         felCat4 ailMel1 > rbest.log 2>&1 &
     #   real    234m49.556s
 
-    #swap 2010-06-28 (Screen 14497 id 14962)
+    #swap 2010-06-28 
     mkdir /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
     cd /hive/data/genomes/felCat4/bed/blastz.ailMel1.swap
-XXXX 06-28
+
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
         -swap -syntenicNet -noDbNameCheck \
@@ -625,7 +625,7 @@ XXXX 06-28
     # was set to 
     #   -r--r--r-- 1 382 Apr 26 17:17 md5sum.txt
     # correct this to 664 by cluster-admin
-    # and continue from  download step (id 30480, screen ????)
+    # and continue from  download step
    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
         /hive/data/genomes/ailMel1/bed/lastzFelCat4.2010-06-07/DEF \
        -continue=download \
