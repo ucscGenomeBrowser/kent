@@ -34,9 +34,19 @@ if [ "$mymaster" -gt "0" ] && [ "$omaster" -gt "0" ]; then
     echo "Your branch and 'origin/master' have diverged,"
     echo "and have $mymaster and $omaster different commit(s) each, respectively."
 elif [ "$mymaster" -eq "0" ] && [ "$omaster" -gt "0" ]; then
-    echo "Your branch is behind 'origin/master' by $omaster commits, and can be fast-forwarded."
+    if [ "$omaster" -eq "1" ]; then
+	plural=""
+    else
+	plural="s"
+    fi
+    echo "Your branch is behind 'origin/master' by $omaster commit$plural, and can be fast-forwarded."
 elif [ "$mymaster" -gt "0" ] && [ "$omaster" -eq "0" ]; then
-    echo "Your branch is ahead of 'origin/master' by $mymaster commits."
+    if [ "$mymaster" -eq "1" ]; then
+	plural=""
+    else
+	plural="s"
+    fi
+    echo "Your branch is ahead of 'origin/master' by $mymaster commit$plural."
 fi
 
 if [ -n "$staged" ]; then
