@@ -33,6 +33,7 @@ boolean isSort;
 boolean privateData;
 boolean allowOther;
 boolean allowBadLength;
+boolean complementMinus;
 int quick;
 struct hash *chrHash = NULL;
 char dnaChars[256];
@@ -105,7 +106,8 @@ errAbort(
 //"   -acceptDot                   Accept '.' as 'N' in DNA sequence\n"
   "   -version                     Print version\n"
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
-  "   -allowBadLength              allow chromosomes that have the wrong length\n"
+  "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
+  "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
   , MAX_ERRORS);
 }
 
@@ -131,6 +133,7 @@ static struct optionSpec options[] = {
    {"version", OPTION_BOOLEAN},
    {"allowOther", OPTION_BOOLEAN},
    {"allowBadLength", OPTION_BOOLEAN},
+   {"complementMinus", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -1188,6 +1191,9 @@ for (i = 0;   (i < nCigar);  i++)
 
 *dnaPtr = 0;
 
+if (complementMinus && (strand == '-'))
+    reverseComplement(seq, strlen(seq));
+
 int length = strlen(seq);
 if (matchFirst && (matchFirst < length))
     length = matchFirst;
@@ -1205,7 +1211,7 @@ else
     incr = 1;
     }
 
-for (i = start; (strand == '-') ? i <= 0 : i < strlen(seq); i += incr)
+for (i = start; (strand == '-') ? i >= 0 : i < strlen(seq); i += incr)
     {
     char c = tolower(seq[i]);
     if ((dna[i] != '-') && (checkMismatch(c,  dna[i])))
@@ -1220,7 +1226,7 @@ if (mm > mismatches)
     {
     char match[10000];
 
-    for(i = 0; i < checkLength; i++)
+    for(i = 0; i < strlen(seq); i++)
         {
         if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
             match[i] = ' ';
@@ -1448,6 +1454,7 @@ quick          = optionExists("quick") ? optionInt("quick",QUICK_DEFAULT) : 0;
 colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 allowOther     = optionExists("allowOther");
 allowBadLength = optionExists("allowBadLength");
+complementMinus = optionExists("complementMinus");
 
 initArrays();
 dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.

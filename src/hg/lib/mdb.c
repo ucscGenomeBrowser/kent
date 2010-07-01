@@ -1532,6 +1532,13 @@ if(updCount <= 0)
 char **updateVars = needMem(sizeof(char *) * updCount);
 updCount = chopByChar(varsToSet,',',updateVars,updCount);
 int ix=0;
+boolean updExpId = (updCount == 1 && startsWithWordByDelimiter("expId",'=',updateVars[0]));
+int startingId=0;
+if(updExpId)
+    {
+    startingId = sqlSigned(skipBeyondDelimit(updateVars[0],'='));
+    updateVars[0][strlen("expId")] = '\0';
+    }
 
 struct mdbObj *mdbObj = NULL;
 struct dyString *thisSelection = newDyString(256);
@@ -1545,11 +1552,11 @@ for(mdbObj=*mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     dyStringClear(thisSelection);
     if(sameWord(varsToSelect,"obj"))
         {
-        dyStringPrintf(thisSelection,"obj=%s",mdbObj->obj);
+        dyStringPrintf(thisSelection,"-obj=%s",mdbObj->obj);
         }
     else
         {
-        dyStringPrintf(thisSelection,"vars=\"");
+        dyStringPrintf(thisSelection,"-vars=\"");
         for(ix = 0;ix < selCount; ix++)
             {
             char *val = mdbObjFindValue(mdbObj,selectVars[ix]);
@@ -1573,23 +1580,99 @@ for(mdbObj=*mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     printf("mdbUpdate %s table=%s %s",dbToUpdate,tableToUpdate,dyStringContents(thisSelection));
 
     // Now look up the value of each var to update
-    printf(" setVars=\"");
+    printf(" -setVars=\"");
     for(ix = 0;ix < updCount; ix++)
         {
-        char *val = mdbObjFindValue(mdbObj,updateVars[ix]);
-        if(val != NULL) // What to do for NULLS? Ignore
+        if(updExpId)
+            printf("expId=%u",startingId++);// FIXME: Need to make single quotes work since already within double quotes!
+        else
             {
-            printf("%s=",updateVars[ix]);
-            if(strchr(val, ' ') != NULL) // Has blanks
-                printf("'%s' ",val);// FIXME: Need to make single quotes work since already within double quotes!
-            else
-                printf("%s ",val);
+            char *val = mdbObjFindValue(mdbObj,updateVars[ix]);
+            if(val != NULL) // What to do for NULLS? Ignore
+                {
+                printf("%s=",updateVars[ix]);
+                if(strchr(val, ' ') != NULL) // Has blanks
+                    printf("'%s' ",val);// FIXME: Need to make single quotes work since already within double quotes!
+                else
+                    printf("%s ",val);
+                }
             }
         }
     printf("\" -test\n"); // Always test first
     }
 dyStringFree(&thisSelection);
 dyStringFree(&lastSelection);
+}
+
+void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars)
+// prints insert statments for the experiments taable to backfile experiments submitted before the experiments table existed
+{
+if(expTableName == NULL || expDefiningVars == NULL)
+    errAbort("mdbObjPrintInsertToExpTbl is missing important parameter.\n");
+
+int varCount = 0;
+char **expVars = NULL;
+if(sameWord(expDefiningVars,"obj"))
+    errAbort("mdbObjPrintInsertToExpTbl 'obj' is an invalid experiment defining variable.\n");
+
+// Sort objs to avoid duplicate mdbUpdate statements
+mdbObjsSortOnVars(mdbObjs, expDefiningVars);
+
+// Parse list of selcting vars (could be simply expId or expId,replicate,view)
+varCount = chopByChar(expDefiningVars,',',NULL,0);
+if(varCount <= 0)
+    errAbort("mdbObjPrintInsertToExpTbl is missing experiment defining variables.\n");
+expVars = needMem(sizeof(char *) * varCount);
+varCount = chopByChar(expDefiningVars,',',expVars,varCount);
+int ix=0;
+
+struct mdbObj *mdbObj = NULL;
+struct dyString *varNames = newDyString(256);
+struct dyString *varVals = newDyString(256);
+struct dyString *lastVals = newDyString(256);
+for(mdbObj=*mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
+    {
+    if(mdbObj->obj == NULL || mdbObj->deleteThis)
+        continue;
+
+    // Build this selection string
+    dyStringClear(varNames);
+    dyStringClear(varVals);
+
+    boolean first=TRUE;
+    // "insert into expTable (cell,antibody) values ('GM12878','CTCF');
+    for(ix = 0;ix < varCount; ix++)
+        {
+        char *val = mdbObjFindValue(mdbObj,expVars[ix]);
+        if(val != NULL) // TODO what to do for NULLS?
+            {
+            if(first)
+                first=FALSE;
+            else
+                {
+                dyStringPrintf(varNames,",");
+                dyStringPrintf(varVals,",");
+                }
+            dyStringPrintf(varNames,"%s", expVars[ix]);
+            if(countLeadingDigits(val) == strlen(val))
+                dyStringPrintf(varVals,"%s",val);
+            else
+                dyStringPrintf(varVals,"'%s'",val);
+            }
+        }
+
+    // Don't bother making another mdpUpdate line if selection is the same.
+    if(sameString(dyStringContents(lastVals),dyStringContents(varVals)))
+        continue;
+    dyStringClear(lastVals);
+    dyStringAppend(lastVals,dyStringContents(varVals));
+
+    printf("INSERT INTO %s (%s) VALUES (%s);\n",expTableName,dyStringContents(varNames),dyStringContents(varVals));
+
+    }
+dyStringFree(&varNames);
+dyStringFree(&varVals);
+dyStringFree(&lastVals);
 }
 
 // ----------------- Utilities -----------------

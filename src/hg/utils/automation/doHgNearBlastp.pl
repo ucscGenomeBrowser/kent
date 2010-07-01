@@ -298,7 +298,7 @@ $cladeEs[$fish][$worm]  = $cladeEs[$worm][$fish]  = 0.01;
 $cladeEs[$fish][$yeast] = $cladeEs[$yeast][$fish] = 0.01;
 $cladeEs[$fly][$worm]  = $cladeEs[$worm][$fly]  = 0.01;
 $cladeEs[$fly][$yeast] = $cladeEs[$yeast][$fly] = 0.01;
-$cladeEs[$worm][$yeast] = $cladeEs[$worm][$yeast] = 0.01;
+$cladeEs[$worm][$yeast] = $cladeEs[$yeast][$worm] = 0.01;
 
 sub calcE {
   # Look up the blastp e parameter (max E-value) by clade distances
