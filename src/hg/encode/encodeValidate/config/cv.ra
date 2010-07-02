@@ -1082,7 +1082,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol Yale_TFSB:HCT-116_protocol.pdf
+protocol Yale_TFSB:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -1938,6 +1938,34 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+term BoneMarrow
+tag BoneMarrow
+type Cell Line
+organism Mouse
+tissue Bone
+category T
+description Bone Marrow
+vendorName LICR lab
+termId 6943
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
+color 153,38,0
+sex U
+protocol BoneMarrow_Ren_protocol.pdf
+
+term Cerebellum
+tag Cerebellum
+type Cell Line
+organism Mouse
+tissue Cerebellum
+category T
+description Cerebellum
+vendorName LICR lab
+termId 7012
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+color 153,38,0
+sex U
+protocol Cerebellum_Ren_protocol.pdf
+
 term CH12
 tag CH12
 type Cell Line
@@ -1954,6 +1982,149 @@ color 153,38,0
 sex U
 protocol CH12_Weissman_protocol.pdf
 
+term Colon
+tag Colon
+type Cell Line
+organism Mouse
+tissue Colon
+category T
+description Colon
+vendorName LICR lab
+termId 6984
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
+color 153,38,0
+sex U
+protocol Colon_Ren_protocol.pdf
+
+term Cortex
+tag Cortex
+type Cell Line
+organism Mouse
+tissue Cortex
+category T
+description Cortex
+vendorName LICR lab
+termId 4465
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
+color 153,38,0
+sex U
+protocol Cortex_Ren_protocol.pdf
+
+term G1E
+tag G1E
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Gata1- erythroid progenitor
+vendorName Mitch Weiss lab
+orderUrl weissmi@email.chop.edu
+termId 7079
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+color 153,38,0
+sex U
+protocol G1E_Hardison_protocol.pdf
+
+term G1E
+tag G1E_E4_E2
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
+vendorName Mitch Weiss lab
+orderUrl weissmi@email.chop.edu
+termId 7079
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+color 153,38,0
+sex U
+protocol G1E_E4_E2_Hardison_protocol.pdf
+
+term Heart
+tag Heart
+type Cell Line
+organism Mouse
+tissue Heart
+category T
+description Heart
+vendorName LICR lab
+termId 7103
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
+color 153,38,0
+sex U
+protocol Heart_Ren_protocol.pdf
+
+term Limb
+tag Limb
+type Cell Line
+organism Mouse
+tissue Limb
+category T
+description Limb
+vendorName LICR lab
+termId 7127
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
+color 153,38,0
+sex U
+protocol Limb_Ren_protocol.pdf
+
+term Liver
+tag Liver
+type Cell Line
+organism Mouse
+tissue Liver
+category T
+description Liver
+vendorName LICR lab
+termId 6963
+ermUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+color 153,38,0
+sex U
+protocol Liver_Ren_protocol.pdf
+
+term Lung
+tag Lung
+type Cell Line
+organism Mouse
+tissue Lung
+category T
+description Lung
+vendorName LICR lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol Lung_Ren_protocol.pdf
+
+term MEF
+tag MEF
+type Cell Line
+organism Mouse
+tissue MEF
+category T
+description MEF
+vendorName LICR lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol MEF_Ren_protocol.pdf
+
+term Megakaryocyte
+tag Megakaryocyte
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Megakaryocyte
+vendorName Mitch Weiss lab
+orderUrl weissmi@email.chop.edu
+termId 7054
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+color 153,38,0
+sex U
+protocol Megakaryocyte_Hardison_protocol.pdf
+
 term MEL
 tag MEL
 type Cell Line
@@ -1962,6 +2133,133 @@ description leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
+
+term Myocyte
+tag Myocyte
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Myocyte
+vendorName 
+orderUrl 
+color 153,38,0
+sex U
+protocol Myocyte_Hardison_protocol.pdf
+
+term Muscle
+tag Muscle
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Muscle
+vendorName 
+orderUrl 
+termId 7054
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+color 153,38,0
+sex U
+protocol Muscle_Hardison_protocol.pdf
+
+term OlfactoryBulb
+tag OlfactoryBulb
+type Cell Line
+organism Mouse
+tissue OlfactoryBulb
+category T
+description OlfactoryBulb
+vendorName LICR lab
+termId 7015
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+color 153,38,0
+sex U
+protocol OlfactoryBulb_Ren_protocol.pdf
+
+term Pancreas
+tag Pancreas
+type Cell Line
+organism Mouse
+tissue Pancreas
+category T
+description Pancreas
+vendorName LICR lab
+termId 7015
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+color 153,38,0
+sex U
+protocol Pancreas_Ren_protocol.pdf
+
+term Placenta
+tag Placenta
+type Cell Line
+organism Mouse
+tissue Placenta
+category T
+description Placenta
+vendorName LICR lab
+termId 6957
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
+color 153,38,0
+sex U
+protocol Placenta_Ren_protocol.pdf
+
+term SmallIntestine
+tag SmallIntestine
+type Cell Line
+organism Mouse
+tissue SmallIntestine
+category T
+description SmallIntestine
+vendorName LICR lab
+termId 6978
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
+color 153,38,0
+sex U
+protocol SmallIntestine_Ren_protocol.pdf
+
+term Spleen
+tag Spleen
+type Cell Line
+organism Mouse
+tissue Spleen
+category T
+description Spleen
+vendorName LICR lab
+termId 7038
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
+color 153,38,0
+sex U
+protocol Spleen_Ren_protocol.pdf
+
+term Testis
+tag Testis
+type Cell Line
+organism Mouse
+tissue Testis
+category T
+description Testis
+vendorName LICR lab
+termId 9201
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
+color 153,38,0
+sex U
+protocol Testis_Ren_protocol.pdf
+
+term Thymus
+tag Thymus
+type Cell Line
+organism Mouse
+tissue Thymus
+category T
+description Thymus
+vendorName LICR lab
+termId 7037
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
+color 153,38,0
+sex U
+protocol Thymus_Ren_protocol.pdf
+
 
 # Gene types
 # term (human-readable cell type name)

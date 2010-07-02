@@ -1,5 +1,6 @@
 /* writegif.c - stuff to write out a GIF file.  See also comprs.c */
 
+#ifndef USE_PNG
 #include "common.h"
 #include "memgfx.h"
 #include "gifcodes.h"
@@ -95,3 +96,4 @@ if (!mgSaveToGif(gifFile, screen, useTransparency))
 if (fclose(gifFile) != 0)
     errnoAbort("fclose failed");
 }
+#endif
