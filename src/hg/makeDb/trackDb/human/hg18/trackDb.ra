@@ -3879,7 +3879,7 @@ longLabel UCSF Brain DNA methylation
 group regulation
 subGroup1 view Views ALN=Alignments COV=Coverage CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
-subGroup3 assayType Assay_Type MRE1=MRE_reads MRE2=MRE_coverage MRE3=MRE_CpG MeDIP1=MeDIP_reads MeDIP2=MeDIP_coverage H3K4me3=H3K4me3 RNA1=RNA_reads RNA2=RNA_coverage
+subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
 dimensions 
 sortOrder assayType=+ view=+
 #dimensions dimensionX=sampleType dimensionY=assayType
@@ -3923,7 +3923,7 @@ type bed 3
       shortLabel Brain Smart Reads
       longLabel Brain RNAseq smart-tagged reads
       parent ucsfBrainMethylViewALN
-      subGroups view=ALN sampleType=Brain assayType=RNA1
+      subGroups view=ALN sampleType=Brain assayType=RNA2
       type bed 9
       noInherit on
       itemRgb on
@@ -3996,7 +3996,7 @@ type bed 3
       shortLabel Brain RNAseq Coverage
       longLabel Brain RNAseq read coverage
       parent ucsfBrainMethylViewCOV
-      subGroups view=COV sampleType=Brain assayType=RNA2
+      subGroups view=COV sampleType=Brain assayType=RNA1
       type bedGraph 4
       noInherit on
       maxHeightPixels 128:32:16
