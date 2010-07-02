@@ -132,6 +132,10 @@ taxId 9685
         > makeGenomeDb.log 2>&1
     #   real    10m1.157s
 
+    # Manually fix up the  description in dbDb:
+    # hgsql -e "UPDATE dbDb set description='Dec. 2008 (NHGRI/GTB V17e/felCat4)' where name='felCat4';"  hgcentraltest
+
+
     # set up track
     mkdir /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/cat/felCat4
     cp /cluster/data/felCat4/TemporaryTrackDbCheckout/kent/src/hg/makeDb/trackDb/cat/felCat4/* /cluster/home/chinhli/kent/src/hg/makeDb/trackDb/cat/felCat4/
@@ -765,9 +769,20 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     mkdir /hive/data/genomes/felCat4/goldenPath
     cd /hive/data/genomes/felCat4/goldenPath
     makeDownloads.pl felCat4 > do.log 2>&1
+    # *** All done!
+    # *** Please take a look at the downloads for felCat4 using a web browser.
+    # *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/felCat4.
+    # *** Edit each README.txt to resolve any notes marked with "***":
+    #	/hive/data/genomes/felCat4/goldenPath/database/README.txt
+    #	/hive/data/genomes/felCat4/goldenPath/bigZips/README.txt
+    #	(The htdocs/goldenPath/felCat4/*/README.txt "files" are just links to those.)
+    # *** If you have to make any edits that would always apply to future
+    #	assemblies from the same sequencing center, please edit them into
+    #	~/kent/src/hg/utils/automation/makeDownloads.pl (or ask Angie for help).
+
     #  vi /hive/data/genomes/felCat4/goldenPath/database/README.txt
     #  vi  /hive/data/genomes/felCat4/goldenPath/bigZips/README.txt
-
+   
 
     #   now ready for pushQ entry
     mkdir /hive/data/genomes/felCat4/pushQ
@@ -791,8 +806,8 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 
 #####################################################################
-## 6-Way Multiz (DONE - 2010-05-07 - Chin)
-##  (Redo mafSplit and all steps followed working 2010-05-23 - Chin)
+## 6-Way Multiz (working 2010-07-01 - Chin)
+##  (????Redo mafSplit and all steps followed working 2010-05-23 - Chin)
  
 # use /cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh 
     mkdir /hive/data/genomes/felCat4/bed/multiz6way
@@ -838,12 +853,12 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
     # make sure all symlinks lastz.DB -> lastzDb-date
     #   exist here and at the swap locations, the perl script expects this
     #   in order to find featureBits numbers.
-    cd /hive/data/genomes/felCat4/bed]
+    cd /hive/data/genomes/felCat4/bed
     ln -s blastz.hg19.swap lastz.hg19
     ln -s blastz.canFam2.swap lastz.canFam2
     ln -s blastz.mm9.swap lastz.mm9
     ln -s blastz.monDom5.swap lastz.monDom5
-    ln -s /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-01 /
+    ln -s /hive/data/genomes/felCat4/bed/lastzAilMel1.2010-06-07 \
             lastz.ailMel1
 
 
@@ -854,7 +869,6 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 #!/usr/bin/env perl
 use strict;
 use warnings;
-
 
 open (FH, "grep -y felCat4 6way.distances.txt | sort -k3,3n|") or
         die "can not read 6way.distances.txt";
@@ -901,6 +915,14 @@ close (FH);
     # << happy emacs
     chmod +x ./sizeStats.pl
     ./sizeStats.pl
+XXXX 07-01# 02  0.1986 - Panda ailMel1    (% 75.536) (N/A)
+# 04  0.2011 - Dog canFam2      (% 73.720) (N/A)
+# 06  0.3567 - Human hg19       (% 60.870) (N/A)
+# 08  0.5692 - Mouse mm9        (% 30.972) (N/A)
+# 10  0.7913 - Opossum monDom5  (% 8.364) (N/A)
+
+
+
 #
 #       If you can fill in all the numbers in this table, you are ready for
 #       the multiple alignment procedure
