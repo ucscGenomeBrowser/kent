@@ -2702,7 +2702,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
 lab Myers
-validation ETS1_validation.pdf
+validation Myers_ETS1: ETS1_validation.pdf
 
 term FOSL2
 tag FOSL2
@@ -3199,10 +3199,10 @@ targetDescription The protein encoded by this gene is a DNA-binding transcriptio
 vendorName Santa Cruz Biotech
 vendorId sc-313
 orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
-lab Meyers
+lab Myers
 targetId GeneCard:GC15P100107
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A&search=mef2a
-validation MEF2A_validation.pdf
+validation Myers_MEF2A: MEF2A_validation.pdf
 
 term NELFe
 tag NELFE
