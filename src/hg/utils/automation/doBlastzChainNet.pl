@@ -1347,7 +1347,7 @@ rm -rf $HgAutomate::goldenPath/$tDb/vs$QDb
 mkdir $HgAutomate::goldenPath/$tDb/vs$QDb
 cd $HgAutomate::goldenPath/$tDb/vs$QDb
 ln -s $runDir/$tDb.$qDb.all.chain.gz .
-cp -p $runDir/README.txt .
+ln -s $runDir/README.txt .
 ln -s $runDir/md5sum.txt .
 
 _EOF_
