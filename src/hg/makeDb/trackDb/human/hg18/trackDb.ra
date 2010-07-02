@@ -4056,9 +4056,9 @@ autoScale Off
 maxHeightPixels 128:32:11
 
 
-track rfamHumanExact
-shortLabel RfamExactMatch
-longLabel Exact genomic alignments of Rfam consensus sequences with $organism annotations
+track rfamHuman
+shortLabel RfamConsensus
+longLabel Strong genomic alignments of Rfam consensus sequences with $organism annotations
 visibility hide
 group genes
 type psl mRNA

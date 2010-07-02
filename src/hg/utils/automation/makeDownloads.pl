@@ -204,6 +204,7 @@ end
 # Make compressed archive files of per-chrom .agp, .out, TRF .bed,
 # soft- and hard-masked .fa:
 cd $topDir
+ln -s $topDir/$db.2bit $runDir/bigZips/$db.2bit
 
 tar cvzf $runDir/bigZips/chromAgp.tar.gz @chromAgpFiles
 _EOF_
@@ -954,7 +955,6 @@ sub doCompress {
   $bossScript->add(<<_EOF_
 rm -rf bigZips database
 mkdir bigZips database
-ln -s $topDir/$db.2bit bigZips
 mkdir -p liftOver
 
 _EOF_

@@ -102,12 +102,9 @@ char *htmlWarnStartPattern();
 char *htmlWarnEndPattern();
 /* Return ending pattern for warning message. */
 
-#define WARNBOX_IN_USE
-#ifdef WARNBOX_IN_USE
 void htmlWarnBoxSetup(FILE *f);
 /* Creates an invisible, empty warning box than can be filled with errors
  * and then made visible. */
-#endif//def WARNBOX_IN_USE
 
 void htmlAbort();
 /* Terminate HTML file.  Exposed for cart's use. */
