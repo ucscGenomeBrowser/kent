@@ -2,27 +2,51 @@
 <p>These tracks contain information relevant to the regulation of transcription from the 
 <A HREF=/ENCODE/>ENCODE project</A>. The <i>Transcription</i> subtrack shows transcription 
 levels assayed by sequencing of polyadenylated RNA from a variety of cell types.  The <i>Enhancer
-H3K4Me1</i> and <i>Promoter H3K4Me3</i> tracks show where the modification of histone proteins
-is suggestive of enhancer and promoter activity respectively. These histone modifications, 
-particularly H3K4Me1 are quite broad.  The actual enhancers are typically just a small portion
-of the area marked by H3K4Me1. The <i>DNAse clusters</i> shows regions where the chromatin is
-hypersensitive to cutting by the DNAse enzyme, which has been assayed in a large number of cell 
-types. Regulatory regions in general tend to be DNAse sensitive, and promoters particularly so.
-The <i>Txn Factor ChIP</i> shows regions where transcription factors, proteins responsible for 
+H3K4Me1</i> and <i>Enhancer H3K27Ac</i> subtrack show where modification of histone proteins
+is suggestive of enhancer and to a lesser extent with promoter activity.  These histone 
+modifications, particularly H3K4Me1 are quite broad.  The actual enhancers are typically just a 
+small portion of the area marked by these histone modifications.  The <i>Promoter H3K4Me3</i> 
+track shows a histone mark associated with promoters.  The <i>DNAse Clusters</i> shows regions 
+where the chromatin is hypersensitive to cutting by the DNAse enzyme, which has 
+been assayed in a large number of cell types. Regulatory regions in general tend to be 
+DNAse sensitive, and promoters particularly so.  The <i>Txn Factor ChIP</i> shows regions 
+where transcription factors, proteins responsible for 
 modulating gene transcription, bind as assayed by chromatin immunoprecipitation with antibodies 
 specific to the transcription factor followed by sequencing of the precipitated DNA.
 </p><p>
 These tracks complement each other, and together can shed much light on regulatory DNA. The histone
 marks are informative at a high level, but have a resolution of just 200 bases or so, and do not
-give you much in the way of functional detail.  The DNAse hypersensitive assay is higher resolution
-at the base level, and as a single assay can be done on a large number of cell types. But at the functional level DNAse hypersensitivity tells you little beyond that the region is very likely to be 
-regulatory in nature.  The transcription factor ChIP assay is high resolution at the DNA level, 
-and often due to the very specific nature of the transcription factors, is informative functionally
-in detail.  However since each transcription factor must be assayed separately, the information is
-only available for a limited number of transcription factors on a limited number of cell lines. The
-fact that all of these assays are relatively independent of each other gives increased confidence
-when multiple tracks are suggesting a regulatory function for a region.
+give you much in the way of functional detail.  The DNAse hypersensitive assay is higher 
+resolution at the DNA level, and can be done on a large number of cell types since it's just 
+a single assay, but at the functional level DNAse hypersensitivity tells you little beyond that 
+the region is very likely to be regulatory in nature.  The transcription 
+factor ChIP assay is high resolution at the DNA level, and due to the very specific nature 
+of the transcription factors, is often informative functionally in detail.  However since each 
+transcription factor must be assayed separately, the information is
+only available for a limited number of transcription factors on a limited number of cell lines. 
+Though each assay has its strengths and weaknesses, the fact that all of these assays are 
+relatively independent of each other gives increased confidence when multiple tracks are 
+suggesting a regulatory function for a region.
 </p><p>
 For additional information please click on the hyperlinks for the individual tracks above.
+Also note that additional histone marks and transcription information is available in other
+ENCODE tracks.  This integrative track just shows a selection of the most informative data of
+most general interest.
+<H2>Display conventions</H2>
+</p><p>
+The transcription and histone mark displays by default use a transparent overlay method of 
+displaying data from a number of cell lines in a single track.  The same colors are used for 
+the same cell lines in these tracks, and these colors are relatively light and saturated so
+as to work best with the transparent overlay.  Unfortunately outside of these tracks different
+color conventions are used that are darker and so don't work as well with transparency.  For
+the DNase and Transcription Factor ChIP tracks contain information on so many cell lines that
+a color convention is inadequate.  Instead these tracks show gray boxes where the darkness of 
+the box is proportional to the maximum value seen in any cell line in that region. Clicking on
+the item takes you to a details page where the values for each cell line assayed are displayed.
+</p>
+<H2>Credits</H2>
+<p>
+The data from this track comes from the Brad Bernstein, Rick Myers, Mike Snyder, and Barbara Wold 
+labs.  The integrative view was developed by Jim Kent at UCSC.
 </p>
 
