@@ -4584,7 +4584,7 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
-term Estradiol_10nm
+term Estradiol_10nM
 tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
 type treatment
@@ -4614,7 +4614,7 @@ tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
 type treatment
 
-term Genistein_100nm
+term Genistein_100nM
 tag GEN1h
 description  1h,100nM Genistein   (Myers)
 type treatment
