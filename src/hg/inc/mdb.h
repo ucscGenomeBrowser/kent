@@ -221,7 +221,7 @@ struct mdbObj *mdbObjQueryByObj(struct sqlConnection *conn,char *table,char *obj
 
 struct mdbByVar *mdbByVarsQuery(struct sqlConnection *conn,char *table,struct mdbByVar *mdbByVars);
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ANY conditions.
-// ReturthisSelectionns new mdbByVar struct fully populated and sorted in var,val,obj order.
+// Returns new mdbByVar struct fully populated and sorted in var,val,obj order.
 #define mdbByVarsQueryAll(conn,table) mdbByVarsQuery((conn),(table),NULL)
 
 struct mdbByVar *mdbByVarQueryByVar(struct sqlConnection *conn,char *table,char *varName,char *val);
@@ -244,12 +244,6 @@ int mdbObjCount(struct mdbObj *mdbObjs, boolean objs);
 
 int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
-
-void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *expDefiningVars,char *varsToSet);
-// prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
-
-void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars);
-// prints insert statments for the experiments taable to backfile experiments submitted before the experiments table existed
 
 // ----------------- Utilities -----------------
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);

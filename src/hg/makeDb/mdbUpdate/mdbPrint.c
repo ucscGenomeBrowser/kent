@@ -1,6 +1,7 @@
 /* mdbPrint - Prints metadata objects and variables from the mdb metadata table. */
 #include "common.h"
 #include "linefile.h"
+#include "dystring.h"
 #include "options.h"
 #include "mdb.h"
 
@@ -38,7 +39,8 @@ errAbort(
   "    -obj={objName}  Request a single object.  Can be narrowed by var and val.\n"
   "    -var={varName}  Request a single variable.  Can be narrowed by val.\n"
   "    -vars={var=val...}  Request a combination of var=val pairs.\n\n"
-  "                    Use of 'var!=val', 'var=v%%' and 'var=?' are supported.\n"
+  "        Use: 'var=val'  'var=v%%'  'var='  'var=val1,val2' (val1 or val2).\n"
+  "             'var!=val' 'var!=v%%' 'var!=' 'var!=val1,val2' are all supported.\n"
   "There are two basic views of the data: by objects and by variables.  The default view "
   "is by object.  Each object will print out in an RA style stanza (by default) or as "
   "a single line of output containing all var=val pairs. In 'byVar' view, each RA style "
@@ -131,6 +133,187 @@ errAbort(
   "  mdbPrint hg18 -vars=\"composite=wgEncodeBroad\" -expTbl=expTable -expVars=expId,grant,cell,antibody\n"
   "           This will create SQL insert statements for adding expTable entries based upon mdb contents.\n"
   );
+}
+
+void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *varsToSelect,char *varsToUpdate)
+// prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
+// Specialty print for importing vars from one db or table to another
+{
+if(dbToUpdate == NULL || tableToUpdate == NULL || varsToSelect == NULL || varsToUpdate == NULL)
+    errAbort("mdbObjPrintUpdateLines is missing important parameter.\n");
+
+// Parse variables that will be used to select mdb objects
+// varsToSelect is comma delimited string of var names.  Vals are discovered in each obj
+int selCount = 0;
+char **selVars = NULL;
+if (differentWord(varsToSelect,"obj"))
+    {
+    // Sort objs to avoid duplicate mdbUpdate statements
+    mdbObjsSortOnVars(mdbObjs, varsToSelect);
+
+    // Parse list of selcting vars (could be simply expId or expId,replicate,view)
+    selCount = chopByChar(varsToSelect,',',NULL,0);
+    if(selCount <= 0)
+        errAbort("mdbObjPrintUpdateLines is missing experiment defining variables.\n");
+    selVars = needMem(sizeof(char *) * selCount);
+    selCount = chopByChar(varsToSelect,',',selVars,selCount);
+    }
+
+// Parse variables that will be updated in selected mdb objects
+// varsToUpdate is comma delimited string of var names.  Vals are discovered in each obj
+int updCount = chopByChar(varsToUpdate,',',NULL,0);
+if (updCount <= 0)
+    errAbort("mdbObjPrintUpdateLines is missing variables to set.\n");
+char **updVars = needMem(sizeof(char *) * updCount);
+updCount = chopByChar(varsToUpdate,',',updVars,updCount);
+int ix=0;
+
+// Special case when varsToUpdate contains ONLY expId={startingId}
+boolean updExpId = (updCount == 1 && startsWithWordByDelimiter("expId",'=',updVars[0]));
+int startingId=0;
+if (updExpId)
+    {
+    startingId = sqlSigned(skipBeyondDelimit(updVars[0],'='));
+    updVars[0][strlen("expId")] = '\0';
+    }
+
+// For each passed in obj, write an mdbUpdate statement
+struct mdbObj *mdbObj = NULL;
+struct dyString *thisSelection = newDyString(256);
+char *lastSelection = NULL;
+for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
+    {
+    if (mdbObj->obj == NULL || mdbObj->deleteThis)
+        continue;
+
+    // Build this selection string e.g. -vars="cell=GM23878 antibody=CTCF"
+    dyStringClear(thisSelection);
+    if (sameWord(varsToSelect,"obj"))
+        {
+        dyStringPrintf(thisSelection,"-obj=%s",mdbObj->obj);
+        }
+    else
+        {
+        dyStringAppend(thisSelection,"-vars=\"");
+        for (ix = 0; ix < selCount; ix++)
+            {
+            char *val = mdbObjFindValue(mdbObj,selVars[ix]);
+            if (val != NULL) // TODO what to do for NULLS?
+                {
+                if (strchr(val, ' ') != NULL) // Has blanks
+                    dyStringPrintf(thisSelection,"%s='%s' ",selVars[ix],val);// FIXME: Need to make single quotes work since already within double quotes!
+                else
+                    dyStringPrintf(thisSelection,"%s=%s ",selVars[ix],val);
+                }
+            }
+        dyStringAppend(thisSelection,"\"");
+        }
+
+    // Don't bother making another mdpUpdate line if selection is the same.
+    if (lastSelection != NULL && sameString(lastSelection,dyStringContents(thisSelection)))
+        continue;
+    lastSelection = cloneString(dyStringContents(thisSelection));
+
+    printf("mdbUpdate %s table=%s %s",dbToUpdate,tableToUpdate,dyStringContents(thisSelection));
+
+    // build the update string e.g. -setVars="dateSubmitted=2009-09-14 dateUnrestricted=2010-06-13"
+    printf(" -setVars=\"");
+    for (ix = 0; ix < updCount; ix++)
+        {
+        if(updExpId)
+            printf("expId=%u",startingId++); // Special case expId is incrementing
+        else
+            {
+            char *val = mdbObjFindValue(mdbObj,updVars[ix]);
+            if(val != NULL) // What to do for NULLS? Ignore
+                {
+                printf("%s=",updVars[ix]);
+                if(strchr(val, ' ') != NULL) // Has blanks
+                    printf("'%s' ",val);
+                else
+                    printf("%s ",val);
+                }
+            }
+        }
+    printf("\" -test\n"); // Always test first
+    }
+dyStringFree(&thisSelection);
+if(lastSelection != NULL)
+    freeMem(lastSelection);
+}
+
+void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars)
+// prints insert statements for the experiments table to backfill experiments submitted before the experiments table existed
+// Specialty prints for limited puropse
+{
+if (expTableName == NULL || expDefiningVars == NULL)
+    errAbort("mdbObjPrintInsertToExpTbl is missing important parameter.\n");
+
+int varCount = 0;
+char **expVars = NULL;
+if (sameWord(expDefiningVars,"obj"))
+    errAbort("mdbObjPrintInsertToExpTbl 'obj' is an invalid experiment defining variable.\n");
+
+// Sort objs to avoid duplicate mdbUpdate statements
+mdbObjsSortOnVars(mdbObjs, expDefiningVars);
+
+// Parse variables that are experiment defining
+// expDefiningVars is comma delimited string of var names.  Vals are discovered in each obj
+varCount = chopByChar(expDefiningVars,',',NULL,0);
+if (varCount <= 0)
+    errAbort("mdbObjPrintInsertToExpTbl is missing experiment defining variables.\n");
+expVars = needMem(sizeof(char *) * varCount);
+varCount = chopByChar(expDefiningVars,',',expVars,varCount);
+int ix=0;
+
+// For each passed in obj, write an insert into expTable statement
+struct mdbObj *mdbObj = NULL;
+struct dyString *varNames = newDyString(256);
+struct dyString *varVals = newDyString(256);
+char *lastVals = NULL;
+for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
+    {
+    if (mdbObj->obj == NULL || mdbObj->deleteThis)
+        continue;
+
+    // Build this selection string
+    dyStringClear(varNames);
+    dyStringClear(varVals);
+
+    boolean first=TRUE;
+    // "insert into expTable (cell,antibody) values ('GM12878','CTCF');
+    for (ix = 0;ix < varCount; ix++)
+        {
+        char *val = mdbObjFindValue(mdbObj,expVars[ix]);
+        if (val != NULL) // TODO what to do for NULLS?
+            {
+            if (first)
+                first=FALSE;
+            else
+                {
+                dyStringAppendC(varNames,',');
+                dyStringAppendC(varVals,',');
+                }
+            dyStringPrintf(varNames,"%s", expVars[ix]);
+            if(countLeadingDigits(val) == strlen(val))
+                dyStringPrintf(varVals,"%s",val);
+            else
+                dyStringPrintf(varVals,"'%s'",val);
+            }
+        }
+
+    // Don't bother making another insert statment if selection is the same.
+    if (lastVals != NULL && sameString(lastVals,dyStringContents(varVals)))
+        continue;
+    lastVals = cloneString(dyStringContents(varVals));
+
+    printf("INSERT INTO %s (%s) VALUES (%s);\n",expTableName,dyStringContents(varNames),dyStringContents(varVals));
+
+    }
+dyStringFree(&varNames);
+dyStringFree(&varVals);
+if(lastVals != NULL)
+    freeMem(lastVals);
 }
 
 int main(int argc, char *argv[])

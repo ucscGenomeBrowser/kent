@@ -1463,7 +1463,10 @@ if (fileSize < 65536)    /* special case small file */
     numConnections = 1;
 
 if (numConnections > 50)    /* ignore high values for numConnections */
+    {
+    warn("Currently maximum number of connections is 50. You requested %d. Will proceed with 50 on %s", numConnections, url);
     numConnections = 50;
+    }
 
 verbose(2,"debug numConnections=%d\n", numConnections); //debug
 
