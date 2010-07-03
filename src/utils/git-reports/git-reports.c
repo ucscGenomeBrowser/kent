@@ -187,7 +187,9 @@ while (lineFileNext(lf, &line, &lineSize))
 
     commit->files = files;
 
-    slAddHead(&commits, commit);
+    
+    if (!isMerge)  /* for now, default to filtering out the records for automatic-merges */
+	slAddHead(&commits, commit);
 
     verbose(2, 
  "commitId: %s\n"

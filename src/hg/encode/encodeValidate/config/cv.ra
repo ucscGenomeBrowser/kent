@@ -2685,13 +2685,24 @@ validation missing
 term ERRA
 tag ERRA
 type Antibody
-antibodyDescription Rabbit polyclonal IgG
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. 
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-66882
 lab Snyder
 validation missing
+
+term ETS1
+tag ETS1
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription ETS transcriptions factors, such as ETS1, regulate numerous genes and are involved in stem cell development, cell senescence and death, and tumorigenesis
+vendorName Santa Cruz Biotech
+vendorId sc-350
+orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
+lab Myers
+validation Myers_ETS1: ETS1_validation.pdf
 
 term FOSL2
 tag FOSL2
@@ -3180,6 +3191,19 @@ targetId GeneCard:GC14M064542
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
 validation missing
 
+term MEF2A
+tag MEF2A
+type Antibody
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin. 
+targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes. 
+vendorName Santa Cruz Biotech
+vendorId sc-313
+orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
+lab Myers
+targetId GeneCard:GC15P100107
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A&search=mef2a
+validation Myers_MEF2A: MEF2A_validation.pdf
+
 term NELFe
 tag NELFE
 type Antibody
@@ -3388,6 +3412,19 @@ vendorId ab5408
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
 lab Myers
 targetId GeneCard:GC17P007329
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
+validation missing
+
+term Pol2(phosphoS2)
+tag POL2S2
+type Antibody
+antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2
+targetDescription RNA polymerase II, large subunit- specific for phosphorylated C-terminal domain.
+vendorName Abcam
+vendorId ab5095
+orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-antibody-ChIP-Grade-ab5095.html
+lab Snyder
+targetId GeneCard:GC17P007387
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
 
@@ -4512,6 +4549,16 @@ tag BMETH
 description 1h,100nM Betamethasone (Myers)
 type treatment
 
+term BPA_100nM
+tag BPA1h
+description 1h,100nM Bisphenol A  (Myers)
+type treatment
+
+term BPA_100nM_4hr
+tag BPA14h
+description 4h,100nM Bisphenol A (Myers)
+type treatment
+
 term DEX_100nM
 tag DEXa
 description 1h,100nM DEX (Myers)
@@ -4537,6 +4584,21 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
+term Estradiol_10nM
+tag ESTRADIa1h
+description  1h,10nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_1nM 
+tag ESTRADIb1h
+description  1h,1nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_4hr 
+tag ESTRADIa4h
+description  4h,10nM Estradiol (Myers)
+type treatment
+
 term estrogen
 tag ESTRO
 description 100 nM treatment for 45 minutes (Crawford)
@@ -4550,6 +4612,16 @@ type treatment
 term forskolin
 tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
+type treatment
+
+term Genistein_100nM
+tag GEN1h
+description  1h,100nM Genistein   (Myers)
+type treatment
+
+term Genistein_100nM_4hr
+tag GEN4h
+description  4h,100nM Genistein   (Myers)
 type treatment
 
 term IFNa30

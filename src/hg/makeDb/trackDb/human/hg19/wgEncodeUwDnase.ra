@@ -8,7 +8,7 @@ superTrack wgEncodeDNAseSuper
 shortLabel UW DNaseI HS
 longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
 group regulation
-subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRaw=Raw_Signal
+subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
 subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i>&nbsp;(Epiderm_kerat) AG04449=AG04449&nbsp;(f-thigh_fib) AG04450=AG04450&nbsp;(f-lung_fib) AG09309=AG09309&nbsp;(Ad-toe_skin_fib) AG09319=AG09319&nbsp;(Ad-Gum_fib) AG10803=AG10803&nbsp;(Ad-abdom_fib) BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC&nbsp;(amniot_epith) HCF=HCF&nbsp;(cardiac_fib) HCM=HCM&nbsp;(cardiomyo) HCPE=HCPEpiC&nbsp;(chor_plex_epi) HEE=HEEpiC&nbsp;(Esopha_epi) HGF=HGF&nbsp;(Ging_Fib) HIPE=HIPEpiC&nbsp;(Iris_pigm_epi) HL60=HL-60 HMEC=HMEC&nbsp;(Mammar_epi) HNPCE=HNPCEpiC&nbsp;(non-pigm_cil_epi) HRCE=HRCEpiC&nbsp;(Renal_cortical_epi) HRE=HRE&nbsp;(Renal_epi) HRPE=HRPEpiC&nbsp;(Ret_pigm_epi) Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo&nbsp;(Dermal_fib) NHLF=NHLF&nbsp;(Lung_Fib) PANC1=PANC-1 SAEC=SAEC&nbsp;(small_airway_epi) SKMC=SKMC&nbsp;(skel_musc) SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
 subGroup3 rank Rank 1st=1st 2nd=2nd
 dimensions dimensionY=cellType dimensionX=rank
@@ -1507,7 +1507,7 @@ wgEncode 1
 
     track wgEncodeUwDnaseViewzRaw
     shortLabel Raw Signal
-    view zRawSig
+    view zRSig
     visibility full
     parent wgEncodeUwDnase
     viewLimits 1:100
@@ -1522,7 +1522,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04450 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG04450 cells)
-        subGroups view=zRaw cellType=AG04450 rank=1st
+        subGroups view=zRSig cellType=AG04450 rank=1st
         type bigWig 1.000000 23646.000000
         origAssembly hg18
         # subId=1550 dateSubmitted=2010-06-17
@@ -1532,7 +1532,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09309 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG09309 cells)
-        subGroups view=zRaw cellType=AG09309 rank=1st
+        subGroups view=zRSig cellType=AG09309 rank=1st
         type bigWig 1.000000 55288.000000
         origAssembly hg18
         # subId=1551 dateSubmitted=2010-06-17
@@ -1542,7 +1542,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09319 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG09319 cells)
-        subGroups view=zRaw cellType=AG09319 rank=1st
+        subGroups view=zRSig cellType=AG09319 rank=1st
         type bigWig 1.000000 47177.000000
         origAssembly hg18
         # subId=1554 dateSubmitted=2010-06-17
@@ -1552,7 +1552,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SAEC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in SAEC cells)
-        subGroups view=zRaw cellType=SAEC rank=1st
+        subGroups view=zRSig cellType=SAEC rank=1st
         type bigWig 1.000000 9812.000000
         origAssembly hg18
         # subId=1557 dateSubmitted=2010-06-17
@@ -1562,7 +1562,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NB4 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NB4 cells)
-        subGroups view=zRaw cellType=NB4 rank=1st
+        subGroups view=zRSig cellType=NB4 rank=1st
         type bigWig 1.000000 24532.000000
         origAssembly hg18
         # subId=1559 dateSubmitted=2010-06-17
@@ -1572,7 +1572,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHLF S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHLF cells)
-        subGroups view=zRaw cellType=NHLF rank=1st
+        subGroups view=zRSig cellType=NHLF rank=1st
         type bigWig 1.000000 39720.000000
         origAssembly hg18
         # subId=1560 dateSubmitted=2010-06-17
@@ -1582,7 +1582,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HGF S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HGF cells)
-        subGroups view=zRaw cellType=HGF rank=1st
+        subGroups view=zRSig cellType=HGF rank=1st
         type bigWig 1.000000 27318.000000
         origAssembly hg18
         # subId=1563 dateSubmitted=2010-06-17
@@ -1592,7 +1592,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM12865 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in GM12865 cells)
-        subGroups view=zRaw cellType=GM12865 rank=1st
+        subGroups view=zRSig cellType=GM12865 rank=1st
         type bigWig 1.000000 22282.000000
         origAssembly hg18
         # subId=1564 dateSubmitted=2010-06-17
@@ -1602,7 +1602,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HAEpiC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HAEpiC cells)
-        subGroups view=zRaw cellType=HAE rank=1st
+        subGroups view=zRSig cellType=HAE rank=1st
         type bigWig 1.000000 10900.000000
         origAssembly hg18
         # subId=1565 dateSubmitted=2010-06-17
@@ -1612,7 +1612,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HL-60 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HL-60 cells)
-        subGroups view=zRaw cellType=HL60 rank=1st
+        subGroups view=zRSig cellType=HL60 rank=1st
         type bigWig 1.000000 14390.000000
         origAssembly hg18
         # subId=1571 dateSubmitted=2010-06-17
@@ -1622,7 +1622,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMEC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMEC cells)
-        subGroups view=zRaw cellType=HMEC rank=1st
+        subGroups view=zRSig cellType=HMEC rank=1st
         type bigWig 1.000000 44157.000000
         origAssembly hg18
         # subId=1572 dateSubmitted=2010-06-17
@@ -1632,7 +1632,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKMC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in SKMC cells)
-        subGroups view=zRaw cellType=SKMC rank=1st
+        subGroups view=zRSig cellType=SKMC rank=1st
         type bigWig 1.000000 9371.000000
         origAssembly hg18
         # subId=1573 dateSubmitted=2010-06-17
@@ -1642,7 +1642,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG10803 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG10803 cells)
-        subGroups view=zRaw cellType=AG10803 rank=1st
+        subGroups view=zRSig cellType=AG10803 rank=1st
         type bigWig 1.000000 41633.000000
         origAssembly hg18
         # subId=1576 dateSubmitted=2010-06-17
@@ -1652,7 +1652,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRCEpiC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HRCEpiC cells)
-        subGroups view=zRaw cellType=HRCE rank=1st
+        subGroups view=zRSig cellType=HRCE rank=1st
         type bigWig 1.000000 10959.000000
         origAssembly hg18
         # subId=1577 dateSubmitted=2010-06-17
@@ -1662,7 +1662,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRE S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HRE cells)
-        subGroups view=zRaw cellType=HRE rank=1st
+        subGroups view=zRSig cellType=HRE rank=1st
         type bigWig 1.000000 16747.000000
         origAssembly hg18
         # subId=1578 dateSubmitted=2010-06-17
@@ -1672,7 +1672,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CMK S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in CMK cells)
-        subGroups view=zRaw cellType=CMK rank=1st
+        subGroups view=zRSig cellType=CMK rank=1st
         type bigWig 1.000000 66926.000000
         origAssembly hg18
         # subId=1586 dateSubmitted=2010-06-17
@@ -1682,7 +1682,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw
         shortLabel GM12878 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in GM12878 cells)
-        subGroups view=zRaw cellType=1GM12878 rank=1st
+        subGroups view=zRSig cellType=1GM12878 rank=1st
         type bigWig 1.000000 19102.000000
         origAssembly hg18
         color 153,38,0
@@ -1693,7 +1693,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H1-hESC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in H1-hESC cells)
-        subGroups view=zRaw cellType=2H1 rank=1st
+        subGroups view=zRSig cellType=2H1 rank=1st
         type bigWig 1.000000 12096.000000
         origAssembly hg18
         color 0,107,27
@@ -1704,7 +1704,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCF S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCF cells)
-        subGroups view=zRaw cellType=HCF rank=1st
+        subGroups view=zRSig cellType=HCF rank=1st
         type bigWig 1.000000 38516.000000
         origAssembly hg18
         # subId=1591 dateSubmitted=2010-06-18
@@ -1714,7 +1714,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in H7-hESC cells)
-        subGroups view=zRaw cellType=H7es rank=1st
+        subGroups view=zRSig cellType=H7es rank=1st
         type bigWig 1.000000 33541.000000
         origAssembly hg18
         # subId=1592 dateSubmitted=2010-06-18
@@ -1724,7 +1724,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCPEpiC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCPEpiC cells)
-        subGroups view=zRaw cellType=HCPE rank=1st
+        subGroups view=zRSig cellType=HCPE rank=1st
         type bigWig 1.000000 10919.000000
         origAssembly hg18
         # subId=1598 dateSubmitted=2010-06-18
@@ -1734,7 +1734,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCM S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCM cells)
-        subGroups view=zRaw cellType=HCM rank=1st
+        subGroups view=zRSig cellType=HCM rank=1st
         type bigWig 1.000000 45088.000000
         origAssembly hg18
         # subId=1600 dateSubmitted=2010-06-18
@@ -1744,7 +1744,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HEEpiC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HEEpiC cells)
-        subGroups view=zRaw cellType=HEE rank=1st
+        subGroups view=zRSig cellType=HEE rank=1st
         type bigWig 1.000000 48631.000000
         origAssembly hg18
         # subId=1601 dateSubmitted=2010-06-18
@@ -1754,7 +1754,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HeLa-S3 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HeLa-S3 cells)
-        subGroups view=zRaw cellType=2HELA rank=1st
+        subGroups view=zRSig cellType=2HELA rank=1st
         type bigWig 1.000000 47453.000000
         origAssembly hg18
         color 0,119,158
@@ -1765,7 +1765,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM06990 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in GM06990 cells)
-        subGroups view=zRaw cellType=GM06990 rank=1st
+        subGroups view=zRSig cellType=GM06990 rank=1st
         type bigWig 1.000000 12670.000000
         origAssembly hg18
         # subId=1616 dateSubmitted=2010-06-18
@@ -1775,7 +1775,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HepG2 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HepG2 cells)
-        subGroups view=zRaw cellType=2HEPG2 rank=1st
+        subGroups view=zRSig cellType=2HEPG2 rank=1st
         type bigWig 1.000000 11297.000000
         origAssembly hg18
         color 189,0,157
@@ -1786,7 +1786,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HNPCEpiC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HNPCEpiC cells)
-        subGroups view=zRaw cellType=HNPCE rank=1st
+        subGroups view=zRSig cellType=HNPCE rank=1st
         type bigWig 1.000000 57165.000000
         origAssembly hg18
         # subId=1619 dateSubmitted=2010-06-18
@@ -1796,7 +1796,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRPEpiC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HRPEpiC cells)
-        subGroups view=zRaw cellType=HRPE rank=1st
+        subGroups view=zRSig cellType=HRPE rank=1st
         type bigWig 1.000000 67353.000000
         origAssembly hg18
         # subId=1622 dateSubmitted=2010-06-18
@@ -1806,7 +1806,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HUVEC S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HUVEC cells)
-        subGroups view=zRaw cellType=2HUVEC rank=1st
+        subGroups view=zRSig cellType=2HUVEC rank=1st
         type bigWig 1.000000 12042.000000
         origAssembly hg18
         color 224,75,0
@@ -1817,7 +1817,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel PANC-1 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in PANC-1 cells)
-        subGroups view=zRaw cellType=PANC1 rank=1st
+        subGroups view=zRSig cellType=PANC1 rank=1st
         type bigWig 1.000000 49187.000000
         origAssembly hg18
         # subId=1627 dateSubmitted=2010-06-19
@@ -1827,7 +1827,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in MCF-7 cells)
-        subGroups view=zRaw cellType=MCF7 rank=1st
+        subGroups view=zRSig cellType=MCF7 rank=1st
         type bigWig 1.000000 33810.000000
         origAssembly hg18
         # subId=1628 dateSubmitted=2010-06-19
@@ -1837,7 +1837,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHDF-neo S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHDF-neo cells)
-        subGroups view=zRaw cellType=NHDFneo rank=1st
+        subGroups view=zRSig cellType=NHDFneo rank=1st
         type bigWig 1.000000 36954.000000
         origAssembly hg18
         # subId=1629 dateSubmitted=2010-06-19
@@ -1847,7 +1847,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHEK S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHEK cells)
-        subGroups view=zRaw cellType=2NHEK rank=1st
+        subGroups view=zRSig cellType=2NHEK rank=1st
         type bigWig 1.000000 20593.000000
         origAssembly hg18
         color 179,0,134
@@ -1858,7 +1858,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SK-N-SH_RA S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in SK-N-SH_RA cells)
-        subGroups view=zRaw cellType=SKNSHRA rank=1st
+        subGroups view=zRSig cellType=SKNSHRA rank=1st
         type bigWig 1.000000 4202.000000
         origAssembly hg18
         # subId=1640 dateSubmitted=2010-06-19
@@ -1868,7 +1868,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in Th1 cells)
-        subGroups view=zRaw cellType=Th1 rank=1st
+        subGroups view=zRSig cellType=Th1 rank=1st
         type bigWig 1.000000 10572.000000
         origAssembly hg18
         # subId=1641 dateSubmitted=2010-06-19
@@ -1878,7 +1878,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Caco-2 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in Caco-2 cells)
-        subGroups view=zRaw cellType=CACO2 rank=1st
+        subGroups view=zRSig cellType=CACO2 rank=1st
         type bigWig 1.000000 9694.000000
         origAssembly hg18
         # subId=1644 dateSubmitted=2010-06-19
@@ -1888,7 +1888,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel BJ S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in BJ cells)
-        subGroups view=zRaw cellType=BJ rank=1st
+        subGroups view=zRSig cellType=BJ rank=1st
         type bigWig 1.000000 76204.000000
         origAssembly hg18
         # subId=1648 dateSubmitted=2010-06-19
@@ -1898,7 +1898,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw
         shortLabel K562 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in K562 cells)
-        subGroups view=zRaw cellType=1K562 rank=1st
+        subGroups view=zRSig cellType=1K562 rank=1st
         type bigWig 1.000000 66237.000000
         origAssembly hg18
         color 46,0,184
@@ -1909,7 +1909,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th2 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in Th2 cells)
-        subGroups view=zRaw cellType=Th2 rank=1st
+        subGroups view=zRSig cellType=Th2 rank=1st
         type bigWig 1.000000 11480.000000
         origAssembly hg18
         # subId=1677 dateSubmitted=2010-06-19
@@ -1919,7 +1919,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04449 S1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG04449 cells)
-        subGroups view=zRaw cellType=AG04449 rank=1st
+        subGroups view=zRSig cellType=AG04449 rank=1st
         type bigWig 1.000000 31758.000000
         origAssembly hg18
         # subId=1257 dateSubmitted=2010-06-07
@@ -1929,7 +1929,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04449 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG04449 cells)
-        subGroups view=zRaw cellType=AG04449 rank=2nd
+        subGroups view=zRSig cellType=AG04449 rank=2nd
         type bigWig 1.000000 35692.000000
         origAssembly hg18
         # subId=1548 dateSubmitted=2010-06-17
@@ -1939,7 +1939,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04450 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG04450 cells)
-        subGroups view=zRaw cellType=AG04450 rank=2nd
+        subGroups view=zRSig cellType=AG04450 rank=2nd
         type bigWig 1.000000 43642.000000
         origAssembly hg18
         # subId=1549 dateSubmitted=2010-06-17
@@ -1949,7 +1949,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09309 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG09309 cells)
-        subGroups view=zRaw cellType=AG09309 rank=2nd
+        subGroups view=zRSig cellType=AG09309 rank=2nd
         type bigWig 1.000000 51881.000000
         origAssembly hg18
         # subId=1552 dateSubmitted=2010-06-17
@@ -1959,7 +1959,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09319 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG09319 cells)
-        subGroups view=zRaw cellType=AG09319 rank=2nd
+        subGroups view=zRSig cellType=AG09319 rank=2nd
         type bigWig 1.000000 50184.000000
         origAssembly hg18
         # subId=1553 dateSubmitted=2010-06-17
@@ -1969,7 +1969,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG10803 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG10803 cells)
-        subGroups view=zRaw cellType=AG10803 rank=2nd
+        subGroups view=zRSig cellType=AG10803 rank=2nd
         type bigWig 1.000000 44945.000000
         origAssembly hg18
         # subId=1555 dateSubmitted=2010-06-17
@@ -1979,7 +1979,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SAEC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in SAEC cells)
-        subGroups view=zRaw cellType=SAEC rank=2nd
+        subGroups view=zRSig cellType=SAEC rank=2nd
         type bigWig 1.000000 8779.000000
         origAssembly hg18
         # subId=1556 dateSubmitted=2010-06-17
@@ -1989,7 +1989,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NB4 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NB4 cells)
-        subGroups view=zRaw cellType=NB4 rank=2nd
+        subGroups view=zRSig cellType=NB4 rank=2nd
         type bigWig 1.000000 25204.000000
         origAssembly hg18
         # subId=1558 dateSubmitted=2010-06-17
@@ -1999,7 +1999,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHLF S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NHLF cells)
-        subGroups view=zRaw cellType=NHLF rank=2nd
+        subGroups view=zRSig cellType=NHLF rank=2nd
         type bigWig 1.000000 18936.000000
         origAssembly hg18
         # subId=1561 dateSubmitted=2010-06-17
@@ -2009,7 +2009,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in MCF-7 cells)
-        subGroups view=zRaw cellType=MCF7 rank=2nd
+        subGroups view=zRSig cellType=MCF7 rank=2nd
         type bigWig 1.000000 69705.000000
         origAssembly hg18
         # subId=1562 dateSubmitted=2010-06-17
@@ -2019,7 +2019,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRCEpiC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HRCEpiC cells)
-        subGroups view=zRaw cellType=HRCE rank=2nd
+        subGroups view=zRSig cellType=HRCE rank=2nd
         type bigWig 1.000000 9826.000000
         origAssembly hg18
         # subId=1566 dateSubmitted=2010-06-17
@@ -2029,7 +2029,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRE S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HRE cells)
-        subGroups view=zRaw cellType=HRE rank=2nd
+        subGroups view=zRSig cellType=HRE rank=2nd
         type bigWig 1.000000 12621.000000
         origAssembly hg18
         # subId=1567 dateSubmitted=2010-06-17
@@ -2039,7 +2039,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHDF-neo S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NHDF-neo cells)
-        subGroups view=zRaw cellType=NHDFneo rank=2nd
+        subGroups view=zRSig cellType=NHDFneo rank=2nd
         type bigWig 1.000000 42501.000000
         origAssembly hg18
         # subId=1568 dateSubmitted=2010-06-17
@@ -2049,7 +2049,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel PANC-1 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in PANC-1 cells)
-        subGroups view=zRaw cellType=PANC1 rank=2nd
+        subGroups view=zRSig cellType=PANC1 rank=2nd
         type bigWig 1.000000 52600.000000
         origAssembly hg18
         # subId=1569 dateSubmitted=2010-06-17
@@ -2059,7 +2059,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HL-60 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HL-60 cells)
-        subGroups view=zRaw cellType=HL60 rank=2nd
+        subGroups view=zRSig cellType=HL60 rank=2nd
         type bigWig 1.000000 16883.000000
         origAssembly hg18
         # subId=1570 dateSubmitted=2010-06-17
@@ -2069,7 +2069,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HAEpiC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HAEpiC cells)
-        subGroups view=zRaw cellType=HAE rank=2nd
+        subGroups view=zRSig cellType=HAE rank=2nd
         type bigWig 1.000000 22758.000000
         origAssembly hg18
         # subId=1579 dateSubmitted=2010-06-17
@@ -2079,7 +2079,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM12865 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in GM12865 cells)
-        subGroups view=zRaw cellType=GM12865 rank=2nd
+        subGroups view=zRSig cellType=GM12865 rank=2nd
         type bigWig 1.000000 18347.000000
         origAssembly hg18
         # subId=1589 dateSubmitted=2010-06-17
@@ -2089,7 +2089,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Caco-2 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in Caco-2 cells)
-        subGroups view=zRaw cellType=CACO2 rank=2nd
+        subGroups view=zRSig cellType=CACO2 rank=2nd
         type bigWig 1.000000 13808.000000
         origAssembly hg18
         # subId=1590 dateSubmitted=2010-06-18
@@ -2099,7 +2099,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCF S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCF cells)
-        subGroups view=zRaw cellType=HCF rank=2nd
+        subGroups view=zRSig cellType=HCF rank=2nd
         type bigWig 1.000000 40946.000000
         origAssembly hg18
         # subId=1593 dateSubmitted=2010-06-18
@@ -2109,7 +2109,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCM S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCM cells)
-        subGroups view=zRaw cellType=HCM rank=2nd
+        subGroups view=zRSig cellType=HCM rank=2nd
         type bigWig 1.000000 22002.000000
         origAssembly hg18
         # subId=1595 dateSubmitted=2010-06-18
@@ -2119,7 +2119,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCPEpiC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCPEpiC cells)
-        subGroups view=zRaw cellType=HCPE rank=2nd
+        subGroups view=zRSig cellType=HCPE rank=2nd
         type bigWig 1.000000 39423.000000
         origAssembly hg18
         # subId=1599 dateSubmitted=2010-06-18
@@ -2129,7 +2129,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HEEpiC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HEEpiC cells)
-        subGroups view=zRaw cellType=HEE rank=2nd
+        subGroups view=zRSig cellType=HEE rank=2nd
         type bigWig 1.000000 41063.000000
         origAssembly hg18
         # subId=1602 dateSubmitted=2010-06-18
@@ -2139,7 +2139,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HGF S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HGF cells)
-        subGroups view=zRaw cellType=HGF rank=2nd
+        subGroups view=zRSig cellType=HGF rank=2nd
         type bigWig 1.000000 19584.000000
         origAssembly hg18
         # subId=1603 dateSubmitted=2010-06-18
@@ -2149,7 +2149,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HeLa-S3 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HeLa-S3 cells)
-        subGroups view=zRaw cellType=2HELA rank=2nd
+        subGroups view=zRSig cellType=2HELA rank=2nd
         type bigWig 1.000000 48046.000000
         origAssembly hg18
         color 0,119,158
@@ -2160,7 +2160,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM06990 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in GM06990 cells)
-        subGroups view=zRaw cellType=GM06990 rank=2nd
+        subGroups view=zRSig cellType=GM06990 rank=2nd
         type bigWig 1.000000 13706.000000
         origAssembly hg18
         # subId=1614 dateSubmitted=2010-06-18
@@ -2170,7 +2170,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HepG2 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HepG2 cells)
-        subGroups view=zRaw cellType=2HEPG2 rank=2nd
+        subGroups view=zRSig cellType=2HEPG2 rank=2nd
         type bigWig 1.000000 11649.000000
         origAssembly hg18
         color 189,0,157
@@ -2181,7 +2181,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HNPCEpiC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HNPCEpiC cells)
-        subGroups view=zRaw cellType=HNPCE rank=2nd
+        subGroups view=zRSig cellType=HNPCE rank=2nd
         type bigWig 1.000000 47149.000000
         origAssembly hg18
         # subId=1620 dateSubmitted=2010-06-18
@@ -2191,7 +2191,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRPEpiC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HRPEpiC cells)
-        subGroups view=zRaw cellType=HRPE rank=2nd
+        subGroups view=zRSig cellType=HRPE rank=2nd
         type bigWig 1.000000 41590.000000
         origAssembly hg18
         # subId=1621 dateSubmitted=2010-06-18
@@ -2201,7 +2201,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKMC S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in SKMC cells)
-        subGroups view=zRaw cellType=SKMC rank=2nd
+        subGroups view=zRSig cellType=SKMC rank=2nd
         type bigWig 1.000000 12057.000000
         origAssembly hg18
         # subId=1642 dateSubmitted=2010-06-19
@@ -2211,7 +2211,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SK-N-SH_RA S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in SK-N-SH_RA cells)
-        subGroups view=zRaw cellType=SKNSHRA rank=2nd
+        subGroups view=zRSig cellType=SKNSHRA rank=2nd
         type bigWig 1.000000 12022.000000
         origAssembly hg18
         # subId=1643 dateSubmitted=2010-06-19
@@ -2221,7 +2221,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw
         shortLabel GM12878 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in GM12878 cells)
-        subGroups view=zRaw cellType=1GM12878 rank=2nd
+        subGroups view=zRSig cellType=1GM12878 rank=2nd
         type bigWig 1.000000 18952.000000
         origAssembly hg18
         color 153,38,0
@@ -2232,7 +2232,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw
         shortLabel K562 S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in K562 cells)
-        subGroups view=zRaw cellType=1K562 rank=2nd
+        subGroups view=zRSig cellType=1K562 rank=2nd
         type bigWig 1.000000 47721.000000
         origAssembly hg18
         color 46,0,184
@@ -2243,7 +2243,7 @@ wgEncode 1
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel BJ S2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in BJ cells)
-        subGroups view=zRaw cellType=BJ rank=2nd
+        subGroups view=zRSig cellType=BJ rank=2nd
         type bigWig 1.000000 25429.000000
         origAssembly hg18
         # subId=1249 dateSubmitted=2010-06-06

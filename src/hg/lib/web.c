@@ -155,9 +155,7 @@ if (withHtmlHeader)
     printf("</HEAD>" "\n"
            "<BODY BGCOLOR=\"#%s\" LINK=\"#0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">",
            hgColOutside());
-    #ifdef WARNBOX_IN_USE
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
-    #endif//def WARNBOX_IN_USE
     commonCssStyles();
     }
 puts(
@@ -437,7 +435,7 @@ if(!skipSectionHeader)
 	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
 	 "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
 	 "	<TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"../images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
-	 "		<FONT SIZE=\"4\"><b>&nbsp;"
+	 "		<FONT SIZE=\"4\" id='sectTtl'><b>&nbsp;"
 	 );
     htmlTextOut(textOutBuf);
 
