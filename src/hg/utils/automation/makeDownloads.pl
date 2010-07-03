@@ -1089,7 +1089,7 @@ _EOF_
 if ($stopStep eq 'install') {
 &HgAutomate::verbose(1, <<_EOF_
  *** Please take a look at the downloads for $db using a web browser.
- *** The downloads url is: http://hgwdev.cse.ucsc.edu/goldenPath/$db. 
+ *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/$db. 
  *** Edit each README.txt to resolve any notes marked with "***":
      $topDir/goldenPath/database/README.txt
      $topDir/goldenPath/bigZips/README.txt
