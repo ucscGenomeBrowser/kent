@@ -16,6 +16,7 @@ include wgEncodeUwHistone.ra
 include wgEncodeUwDgf.ra
 include wgEncodeUwDnase.ra
 include wgEncodeHaibMethylSeq.ra
+include wgEncodeGisRnaSeq.ra
 include trackDb.wgEncodeCshlLongRnaSeq.ra
 include trackDb.wgEncodeCaltechRnaSeq.ra
 
