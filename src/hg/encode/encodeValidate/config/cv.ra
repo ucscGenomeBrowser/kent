@@ -4549,6 +4549,16 @@ tag BMETH
 description 1h,100nM Betamethasone (Myers)
 type treatment
 
+term BPA_100nM
+tag BPA1h
+description 1h,100nM Bisphenol A  (Myers)
+type treatment
+
+term BPA_100nM_4hr
+tag BPA14h
+description 4h,100nM Bisphenol A (Myers)
+type treatment
+
 term DEX_100nM
 tag DEXa
 description 1h,100nM DEX (Myers)
@@ -4574,6 +4584,21 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
+term Estradiol_10nM
+tag ESTRADIa1h
+description  1h,10nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_1nM 
+tag ESTRADIb1h
+description  1h,1nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_4hr 
+tag ESTRADIa4h
+description  4h,10nM Estradiol (Myers)
+type treatment
+
 term estrogen
 tag ESTRO
 description 100 nM treatment for 45 minutes (Crawford)
@@ -4587,6 +4612,16 @@ type treatment
 term forskolin
 tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
+type treatment
+
+term Genistein_100nM
+tag GEN1h
+description  1h,100nM Genistein   (Myers)
+type treatment
+
+term Genistein_100nM_4hr
+tag GEN4h
+description  4h,100nM Genistein   (Myers)
 type treatment
 
 term IFNa30

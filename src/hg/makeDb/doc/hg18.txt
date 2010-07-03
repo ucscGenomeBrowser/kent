@@ -16497,7 +16497,7 @@ see file: ucscGenes10.txt
       hgLoadBed hg18 wgEncodeRegTfbsClustered filtered.bed
       hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
 
-      # Create inputTrackTable - two columns: <table> <cell>
+      # Create inputTrackTable - three columns: <table> <source> <factor>
       mdbQuery "select tableName,cell,antibody from hg18 where (lab like '%Snyder%' or lab='HudsonAlpha') and dataType like 'ChipSeq' and view='Peaks' and antibody not like 'Pol2%'" -out=tab > wgEncodeRegTfbsClusteredInputs.tab
       hgLoadSqlTab hg18 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegTfbsClusteredInputs.tab
 

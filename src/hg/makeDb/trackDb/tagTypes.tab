@@ -155,8 +155,8 @@ initialPos customTracks
 inputType customTracks
 interTable encodeFiveC
 interTableKind encodeFiveC
-inputTracks bed factorSource
-inputTracksSubgroupSelect bed factorSource
+#inputTracks bed factorSource
+#inputTracksSubgroupSelect bed factorSource
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
 intronGap psl
