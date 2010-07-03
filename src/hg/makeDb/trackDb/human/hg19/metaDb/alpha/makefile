@@ -15,6 +15,7 @@ wgEncodeUwDnase.ra \
 wgEncodeCaltechRnaSeq.ra \
 wgEncodeCshlLongRnaSeq.ra \
 wgEncodeCshlShortRnaSeq.ra \
+wgEncodeRikenCage.ra \
 wgEncodeUwDgf.ra 
 
 include ../../../../makefile.metaDb
