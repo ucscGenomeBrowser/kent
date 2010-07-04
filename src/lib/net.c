@@ -1433,9 +1433,7 @@ if (startsWith("http://",url) || startsWith("https://",url))
     char *ds = hashFindValUpperCase(hash, "Last-Modified:");
     if (ds)
 	dateString = cloneString(ds);
-    fprintf(stderr, "got here before hashfree\n");fflush(stderr);
     hashFree(&hash);
-    fprintf(stderr, "got here after hashfree\n");fflush(stderr);
     }
 else if (startsWith("ftp://",url))
     {
