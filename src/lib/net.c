@@ -1460,7 +1460,8 @@ else if (startsWith("ftp://",url))
     }
 else
     {
-    errAbort("unrecognized protocol: %s", url);
+    warn("unrecognized protocol: %s", url);
+    return FALSE;
     }
 
 verbose(2,"fileSize=%lld\n", (long long) fileSize); fflush(stderr); //debug
@@ -1752,6 +1753,7 @@ if (fileSize != -1 && totalDownloaded != fileSize)
     warn("Unexpected result: Total downloaded bytes %lld is not equal to fileSize %lld"
 	, (long long) totalDownloaded
 	, (long long) fileSize);
+    return FALSE;
     }
 return TRUE;
 }
