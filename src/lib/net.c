@@ -1409,6 +1409,7 @@ off_t fileSize = 0;
 off_t totalDownloaded = 0;
 ssize_t sinceLastStatus = 0;
 char *dateString = "";
+// TODO handle case-sensitivity of protocols input
 if (startsWith("http://",url) || startsWith("https://",url))
     {
     struct hash *hash = newHash(0);
@@ -1419,23 +1420,24 @@ if (startsWith("http://",url) || startsWith("https://",url))
 	return FALSE;
 	}
     char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
-    if (sizeString == NULL)
+    if (sizeString)
 	{
-	hashFree(&hash);
+	fileSize = atoll(sizeString);
+	}
+    else
+	{
 	warn("No Content-Length: returned in header for %s, must limit to a single connection, will not know if data is complete", url);
 	numConnections = 1;
 	fileSize = -1;
 	}
-    else
-	{
-	fileSize = atoll(sizeString);
-	}
     char *ds = hashFindValUpperCase(hash, "Last-Modified:");
     if (ds)
 	dateString = cloneString(ds);
+    fprintf(stderr, "got here before hashfree\n");fflush(stderr);
     hashFree(&hash);
+    fprintf(stderr, "got here after hashfree\n");fflush(stderr);
     }
-else
+else if (startsWith("ftp://",url))
     {
     long long size = 0;
     time_t t;
@@ -1456,8 +1458,12 @@ else
     dateString = cloneString(ftpTime);
 
     }
+else
+    {
+    errAbort("unrecognized protocol: %s", url);
+    }
 
-verbose(2,"debug fileSize=%llu\n", (unsigned long long) fileSize); //debug
+verbose(2,"fileSize=%lld\n", (long long) fileSize); fflush(stderr); //debug
 
 if (fileSize < 65536)    /* special case small file */
     numConnections = 1;
@@ -1468,7 +1474,7 @@ if (numConnections > 50)    /* ignore high values for numConnections */
     numConnections = 50;
     }
 
-verbose(2,"debug numConnections=%d\n", numConnections); //debug
+verbose(2,"numConnections=%d\n", numConnections); //debug
 
 if (numConnections < 1)
     {
@@ -1483,7 +1489,7 @@ if (fileSize == -1)
 off_t base = 0;
 int c;
 
-verbose(2,"debug partSize=%llu\n", (unsigned long long) partSize); //debug
+verbose(2,"partSize=%lld\n", (long long) partSize); //debug
 
 
 /* n is the highest-numbered descriptor */
@@ -1498,6 +1504,8 @@ off_t restartFileSize = 0;
 char *restartDateString = "";
 off_t restartTotalDownloaded = 0;
 boolean restartable = readParaFetchStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString, &restartTotalDownloaded);
+if (fileSize == -1)
+    restartable = FALSE;
 
 struct parallelConn *pcList = NULL, *pc;
 
@@ -1541,9 +1549,6 @@ fd_set rfds;
 struct timeval tv;
 int retval;
 
-verbose(2,"debug: connOpen = %d\n", connOpen); //debug
-verbose(2,"debug: n+1 = %d (select)\n", n+1); //debug
-
 ssize_t readCount = 0;
 #define BUFSIZE 65536 * 4
 char buf[BUFSIZE];
@@ -1576,7 +1581,6 @@ while (TRUE)
 	    , (unsigned long long) pc->rangeStart + pc->received
 	    , (unsigned long long) pc->rangeStart + pc->partSize - 1 );
 
-	    verbose(2,"debug opening url %s\n", urlExt); //debug
 
 	    int oldSd = pc->sd;  /* in case we need to remember where we were */
 	    if (oldSd != -4)      /* decrement whether we succeed or not */
@@ -1584,9 +1588,15 @@ while (TRUE)
 	    if (oldSd == -4) 
 		oldSd = -3;       /* ok this one just changes */
 	    if (fileSize == -1)
+		{
+		verbose(2,"opening url %s\n", url);
 		pc->sd = netUrlOpen(url);
+		}
 	    else
+		{
 		pc->sd = netUrlOpen(urlExt);
+		verbose(2,"opening url %s\n", urlExt);
+		}
 	    if (pc->sd < 0)
 		{
 		pc->sd = oldSd;  /* failed to open, can retry later */
@@ -1651,24 +1661,24 @@ while (TRUE)
     else if (retval)
 	{
 
-	verbose(2,"returned from select, retval=%d\n", retval); //debug
+	verbose(2,"returned from select, retval=%d\n", retval);
 
 	for(pc = pcList; pc; pc = pc->next)
 	    {
 	    if ((pc->sd != -1) && FD_ISSET(pc->sd, &rfds))
 		{
 
-		verbose(2,"debug found a descriptor with data: %d\n", pc->sd); //debug
+		verbose(2,"found a descriptor with data: %d\n", pc->sd);
 
 		readCount = read(pc->sd, buf, BUFSIZE);
 
-		verbose(2,"debug readCount = %lld\n", (long long) readCount); //debug
+		verbose(2,"readCount = %lld\n", (long long) readCount);
 
 		if (readCount == 0)
 		    {
 		    close(pc->sd);
 
-		    verbose(2,"debug closing descriptor: %d\n", pc->sd); //debug
+		    verbose(2,"closing descriptor: %d\n", pc->sd);
 		    pc->sd = -1;
 
 		    if (fileSize != -1 && pc->received != pc->partSize)	
@@ -1692,7 +1702,7 @@ while (TRUE)
 			, (unsigned long long) pc->rangeStart
 			, (unsigned long long) pc->received );
 
-		verbose(2,"debug seeking to %llu\n", (unsigned long long) pc->rangeStart + pc->received); //debug
+		verbose(2,"seeking to %llu\n", (unsigned long long) pc->rangeStart + pc->received);
 
 		if (lseek(out, pc->rangeStart + pc->received, SEEK_SET) == -1)
 		    {
