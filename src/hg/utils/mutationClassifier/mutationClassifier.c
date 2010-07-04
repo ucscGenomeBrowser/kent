@@ -725,7 +725,7 @@ while(!done)
                 // XXXX && motifTableExists)
                 if(snp)
                     {
-                    struct dnaSeq *seq;
+                    struct dnaSeq *seq = NULL;
                     char beforeDna[256], afterDna[256];
                     int pos;
                     float delta, before, after, maxDelta = 0;
@@ -767,6 +767,7 @@ while(!done)
                             code = REGULATORY;
                             // XXXX record (somehow) that we have used this record.
                         }
+                    freeDnaSeq(&seq);
                     }
                 if(code != NULL)
                     {
