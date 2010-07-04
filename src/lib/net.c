@@ -1556,6 +1556,8 @@ char buf[BUFSIZE];
 while (TRUE)
     {
 
+    verbose(2,"Top of big loop\n");
+
     /* are we done? */
     if (connOpen == 0)
 	{
@@ -1593,8 +1595,8 @@ while (TRUE)
 		}
 	    else
 		{
-		pc->sd = netUrlOpen(urlExt);
 		verbose(2,"opening url %s\n", urlExt);
+		pc->sd = netUrlOpen(urlExt);
 		}
 	    if (pc->sd < 0)
 		{
@@ -1664,7 +1666,7 @@ while (TRUE)
 
 	for(pc = pcList; pc; pc = pc->next)
 	    {
-	    if ((pc->sd != -1) && FD_ISSET(pc->sd, &rfds))
+	    if ((pc->sd >= 0) && FD_ISSET(pc->sd, &rfds))
 		{
 
 		verbose(2,"found a descriptor with data: %d\n", pc->sd);
