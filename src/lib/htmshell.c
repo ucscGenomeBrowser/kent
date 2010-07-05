@@ -199,13 +199,9 @@ char *htmlWarnEndPattern()
 return "<!-- HGERROR-END -->\n";
 }
 
-#define WARNBOX_IN_USE
-#ifdef WARNBOX_IN_USE
-static void htmlWarnBoxSetup(FILE *f)
+void htmlWarnBoxSetup(FILE *f)
 /* Creates an invisible, empty warning box than can be filled with errors
- * and then made visible.  dirDepth is the number of levels beneath apache
- * root that caller's HTML will appear to the web client.  E.g. if writing
- * HTML from cgi-bin, dirDepth is 1; if trash/body/, 2. */
+ * and then made visible. */
 {
 // Only set this up once per page
 static boolean htmlWarnBoxSetUpAlready=FALSE;
@@ -244,14 +240,12 @@ fprintf(f,"function hideWarnBox() {"
           "}\n"); // Note that the OK button goes to prev page when this page is interrupted by the error.
 fprintf(f,"</script>\n");
 }
-#endif//ifdef WARNBOX_IN_USE
 
 void htmlVaWarn(char *format, va_list args)
 /* Write an error message. */
 {
 va_list argscp;
 va_copy(argscp, args);
-#ifdef WARNBOX_IN_USE
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
@@ -263,15 +257,6 @@ if( strSwapStrs(warning, sizeof(warning),"\n","<BR>") == -1) // new lines also b
 printf("<script type='text/javascript'>{showWarnBox();"
         "var warnList=document.getElementById('warnList');"
         "warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n",warning); // NOTE that "--ERROR --" is needed at the end of this print!!
-#else//ifndef WARNBOX_IN_USE
-
-htmlHorizontalLine();
-printf("%s", htmlWarnStartPattern());
-htmlVaParagraph(format,args);
-printf("%s", htmlWarnEndPattern());
-htmlHorizontalLine();
-
-#endif//def WARNBOX_IN_USE
 
 /* Log useful CGI info to stderr */
 logCgiToStderr();
@@ -415,9 +400,7 @@ if (gotBgColor)
     fprintf(f, " BGCOLOR=\"%X\"", htmlBgColor);
 fputs(">\n",f);
 
-#ifdef WARNBOX_IN_USE
 htmlWarnBoxSetup(f);
-#endif//def WARNBOX_IN_USE
 }
 
 
@@ -551,9 +534,7 @@ if (htmlBackground == NULL)
 else
     printf("<BODY BACKGROUND=\"%s\">\n", htmlBackground);
 
-#ifdef WARNBOX_IN_USE
 htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
-#endif//def WARNBOX_IN_USE
 
 /* Call wrapper for error handling. */
 htmEmptyShell(doMiddle, method);

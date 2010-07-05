@@ -1082,7 +1082,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol Yale_TFSB:HCT-116_protocol.pdf
+protocol Yale_TFSB:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -1938,6 +1938,34 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+term BoneMarrow
+tag BoneMarrow
+type Cell Line
+organism Mouse
+tissue Bone
+category T
+description Bone Marrow
+vendorName LICR lab
+termId 6943
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
+color 153,38,0
+sex U
+protocol BoneMarrow_Ren_protocol.pdf
+
+term Cerebellum
+tag Cerebellum
+type Cell Line
+organism Mouse
+tissue Cerebellum
+category T
+description Cerebellum
+vendorName LICR lab
+termId 7012
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
+color 153,38,0
+sex U
+protocol Cerebellum_Ren_protocol.pdf
+
 term CH12
 tag CH12
 type Cell Line
@@ -1954,6 +1982,149 @@ color 153,38,0
 sex U
 protocol CH12_Weissman_protocol.pdf
 
+term Colon
+tag Colon
+type Cell Line
+organism Mouse
+tissue Colon
+category T
+description Colon
+vendorName LICR lab
+termId 6984
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
+color 153,38,0
+sex U
+protocol Colon_Ren_protocol.pdf
+
+term Cortex
+tag Cortex
+type Cell Line
+organism Mouse
+tissue Cortex
+category T
+description Cortex
+vendorName LICR lab
+termId 4465
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
+color 153,38,0
+sex U
+protocol Cortex_Ren_protocol.pdf
+
+term G1E
+tag G1E
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Gata1- erythroid progenitor
+vendorName Mitch Weiss lab
+orderUrl weissmi@email.chop.edu
+termId 7079
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+color 153,38,0
+sex U
+protocol G1E_Hardison_protocol.pdf
+
+term G1E
+tag G1E_E4_E2
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
+vendorName Mitch Weiss lab
+orderUrl weissmi@email.chop.edu
+termId 7079
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
+color 153,38,0
+sex U
+protocol G1E_E4_E2_Hardison_protocol.pdf
+
+term Heart
+tag Heart
+type Cell Line
+organism Mouse
+tissue Heart
+category T
+description Heart
+vendorName LICR lab
+termId 7103
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
+color 153,38,0
+sex U
+protocol Heart_Ren_protocol.pdf
+
+term Limb
+tag Limb
+type Cell Line
+organism Mouse
+tissue Limb
+category T
+description Limb
+vendorName LICR lab
+termId 7127
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
+color 153,38,0
+sex U
+protocol Limb_Ren_protocol.pdf
+
+term Liver
+tag Liver
+type Cell Line
+organism Mouse
+tissue Liver
+category T
+description Liver
+vendorName LICR lab
+termId 6963
+ermUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+color 153,38,0
+sex U
+protocol Liver_Ren_protocol.pdf
+
+term Lung
+tag Lung
+type Cell Line
+organism Mouse
+tissue Lung
+category T
+description Lung
+vendorName LICR lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol Lung_Ren_protocol.pdf
+
+term MEF
+tag MEF
+type Cell Line
+organism Mouse
+tissue MEF
+category T
+description MEF
+vendorName LICR lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol MEF_Ren_protocol.pdf
+
+term Megakaryocyte
+tag Megakaryocyte
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Megakaryocyte
+vendorName Mitch Weiss lab
+orderUrl weissmi@email.chop.edu
+termId 7054
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+color 153,38,0
+sex U
+protocol Megakaryocyte_Hardison_protocol.pdf
+
 term MEL
 tag MEL
 type Cell Line
@@ -1961,6 +2132,134 @@ organism Mouse
 description leukemia (K562 analog)
 tissue Blood
 color 46,0,184
+sex U
+
+term Myocyte
+tag Myocyte
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Myocyte
+vendorName 
+orderUrl 
+color 153,38,0
+sex U
+protocol Myocyte_Hardison_protocol.pdf
+
+term Muscle
+tag Muscle
+type Cell Line
+organism Mouse
+tissue Blood
+category L
+description Muscle
+vendorName 
+orderUrl 
+termId 7054
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
+color 153,38,0
+sex U
+protocol Muscle_Hardison_protocol.pdf
+
+term OlfactoryBulb
+tag OlfactoryBulb
+type Cell Line
+organism Mouse
+tissue OlfactoryBulb
+category T
+description OlfactoryBulb
+vendorName LICR lab
+termId 7015
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+color 153,38,0
+sex U
+protocol OlfactoryBulb_Ren_protocol.pdf
+
+term Pancreas
+tag Pancreas
+type Cell Line
+organism Mouse
+tissue Pancreas
+category T
+description Pancreas
+vendorName LICR lab
+termId 7015
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
+color 153,38,0
+sex U
+protocol Pancreas_Ren_protocol.pdf
+
+term Placenta
+tag Placenta
+type Cell Line
+organism Mouse
+tissue Placenta
+category T
+description Placenta
+vendorName LICR lab
+termId 6957
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
+color 153,38,0
+sex U
+protocol Placenta_Ren_protocol.pdf
+
+term SmallIntestine
+tag SmallIntestine
+type Cell Line
+organism Mouse
+tissue SmallIntestine
+category T
+description SmallIntestine
+vendorName LICR lab
+termId 6978
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
+color 153,38,0
+sex U
+protocol SmallIntestine_Ren_protocol.pdf
+
+term Spleen
+tag Spleen
+type Cell Line
+organism Mouse
+tissue Spleen
+category T
+description Spleen
+vendorName LICR lab
+termId 7038
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
+color 153,38,0
+sex U
+protocol Spleen_Ren_protocol.pdf
+
+term Testis
+tag Testis
+type Cell Line
+organism Mouse
+tissue Testis
+category T
+description Testis
+vendorName LICR lab
+termId 9201
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
+color 153,38,0
+sex U
+protocol Testis_Ren_protocol.pdf
+
+term Thymus
+tag Thymus
+type Cell Line
+organism Mouse
+tissue Thymus
+category T
+description Thymus
+vendorName LICR lab
+termId 7037
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
+color 153,38,0
+sex U
+protocol Thymus_Ren_protocol.pdf
+
 
 # Gene types
 # term (human-readable cell type name)
@@ -2386,13 +2685,24 @@ validation missing
 term ERRA
 tag ERRA
 type Antibody
-antibodyDescription Rabbit polyclonal IgG
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. 
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-66882
 lab Snyder
 validation missing
+
+term ETS1
+tag ETS1
+type Antibody
+antibodyDescription Rabbit polyclonal IgG
+targetDescription ETS transcriptions factors, such as ETS1, regulate numerous genes and are involved in stem cell development, cell senescence and death, and tumorigenesis
+vendorName Santa Cruz Biotech
+vendorId sc-350
+orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
+lab Myers
+validation Myers_ETS1: ETS1_validation.pdf
 
 term FOSL2
 tag FOSL2
@@ -2881,6 +3191,19 @@ targetId GeneCard:GC14M064542
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Max
 validation missing
 
+term MEF2A
+tag MEF2A
+type Antibody
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin. 
+targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes. 
+vendorName Santa Cruz Biotech
+vendorId sc-313
+orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
+lab Myers
+targetId GeneCard:GC15P100107
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A&search=mef2a
+validation Myers_MEF2A: MEF2A_validation.pdf
+
 term NELFe
 tag NELFE
 type Antibody
@@ -3089,6 +3412,19 @@ vendorId ab5408
 orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-antibody-4H8-ChIP-Grade-ab5408.html
 lab Myers
 targetId GeneCard:GC17P007329
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
+validation missing
+
+term Pol2(phosphoS2)
+tag POL2S2
+type Antibody
+antibodyDescription Rabbit polyclonal against peptide conjugated to KLH derived from within residues 1600 - 1700 of S. cerevisiae RNA polymerase II CTD repeat YSPTSPS, phosphorylated at S2
+targetDescription RNA polymerase II, large subunit- specific for phosphorylated C-terminal domain.
+vendorName Abcam
+vendorId ab5095
+orderUrl http://www.abcam.com/RNA-polymerase-II-CTD-repeat-YSPTSPS-phospho-S2-antibody-ChIP-Grade-ab5095.html
+lab Snyder
+targetId GeneCard:GC17P007387
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=POLR2A
 validation missing
 
@@ -3738,7 +4074,7 @@ type ripAntibody
 antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein (PABP). Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
 targetDescription PABP
 vendorName Millipore
-vendorId 04-1466
+vendorId 04-1467
 orderUrl http://www.millipore.com/catalogue/item/04-1467
 
 term phospho-4E-BP1/2/3_Thr45
@@ -3891,17 +4227,17 @@ description Single 25 n.t. reads
 term 1x32
 tag r1x32
 type readType
-description Single 32 n.t. read
+description Single 32 n.t. reads
 
 term 1x36
 tag r1x36
 type readType
-description Single 36 n.t. read
+description Single 36 n.t. reads
 
 term 1x50
 tag r1x50
 type readType
-description Single 50 n.t. read
+description Single 50 n.t. reads
 
 term 1x75
 tag r1x75
@@ -4213,6 +4549,16 @@ tag BMETH
 description 1h,100nM Betamethasone (Myers)
 type treatment
 
+term BPA_100nM
+tag BPA1h
+description 1h,100nM Bisphenol A  (Myers)
+type treatment
+
+term BPA_100nM_4hr
+tag BPA14h
+description 4h,100nM Bisphenol A (Myers)
+type treatment
+
 term DEX_100nM
 tag DEXa
 description 1h,100nM DEX (Myers)
@@ -4238,6 +4584,21 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
+term Estradiol_10nM
+tag ESTRADIa1h
+description  1h,10nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_1nM 
+tag ESTRADIb1h
+description  1h,1nM Estradiol  (Myers)
+type treatment
+
+term Estradiol_10nM_4hr 
+tag ESTRADIa4h
+description  4h,10nM Estradiol (Myers)
+type treatment
+
 term estrogen
 tag ESTRO
 description 100 nM treatment for 45 minutes (Crawford)
@@ -4251,6 +4612,16 @@ type treatment
 term forskolin
 tag FORSKLN
 description low-glucose DMEM with 0.5% BSA supplemented with 1uM forskolin and 1mM pyruvate for 6h. (Snyder)
+type treatment
+
+term Genistein_100nM
+tag GEN1h
+description  1h,100nM Genistein   (Myers)
+type treatment
+
+term Genistein_100nM_4hr
+tag GEN4h
+description  4h,100nM Genistein   (Myers)
 type treatment
 
 term IFNa30
@@ -4487,44 +4858,44 @@ description Strain 129, has widely available embryonic stem cells
 # term (human-readable name)
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be age)
-# Stage (either embryonic or adult.  cannot say how/where this is used)
+# stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
 
 term E11.5
-tag E11_5
+tag E11half
 type age
-Stage Embryonic
-Description Embryonic day 11.5
+stage Embryonic
+description Embryonic day 11.5
 
 term E13.5
-tag E13_5
+tag E13half
 type age
-Stage Embryonic
-Description Embryonic day 13.5
+stage Embryonic
+description Embryonic day 13.5
 
 term E14
 tag E14
 type age
-Stage Embryonic
-Description Embryonic day 14
+stage Embryonic
+description Embryonic day 14
 
 term E14.5
-tag E14_5
+tag E14half
 type age
-Stage Embryonic
-Description Embryonic day 14.5
+stage Embryonic
+description Embryonic day 14.5
 
 term E18
-tag E118
+tag E18
 type age
-Stage Embryonic
-Description Embryonic day 18
+stage Embryonic
+description Embryonic day 18
 
 term adult-8wks
-tag adult_8wks
+tag adult8wks
 type age
 Stage Adult
-Description Adult 8 weeks
+description Adult 8 weeks
 
 ### Sex
 # Expected fields:

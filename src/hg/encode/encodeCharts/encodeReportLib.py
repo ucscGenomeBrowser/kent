@@ -29,15 +29,31 @@ def getRecentReport (reportDir = "/hive/groups/encode/dcc/reports"):
     print >> sys.stderr, "Error: Can't open dir '%s'" % reportDir
     sys.exit(-1)
 
-  for f in dirList:
-    m = pattern.match(f)
+  # Try to use the file 'latest' rather than doing the linear file scan
+  # Note: The 'latest' file is often one day off
+  try:
+    latestFile = os.path.join(reportDir, 'latest')
+    realFile = os.readlink(latestFile)
+    baseName = os.path.basename(realFile)
+    m = pattern.match(baseName)
     if m:
-      # Convert date into an int
       date = int(m.group(1)) * 10000 + int(m.group(2)) * 100 + int(m.group(3))
-      if date > currentDate:
-        # Update the current latest date
-        currentDate = date
-        currentFile = f
+      currentFile = realFile
+      currentDate = date
+  except:
+    currentFile = 'NULL'
+
+  # Perform linear scan for most recent filename
+  if currentFile == 'NULL':
+    for f in dirList:
+      m = pattern.match(f)
+      if m:
+        # Convert date into an int
+        date = int(m.group(1)) * 10000 + int(m.group(2)) * 100 + int(m.group(3))
+        if date > currentDate:
+          # Update the current latest date
+          currentDate = date
+          currentFile = f
 
   if currentFile == "NULL":
     print >> sys.stderr, "Error: Can't find a report file in dir '%s'" % reportDir
@@ -158,7 +174,7 @@ def renderHtml(template_vars, mouseover, clickable):
             var selection = viz.getSelection();
             var item = selection[0];
  
-            var urlString = "http://hgwdev-bsuh.cse.ucsc.edu/cgi-bin/encodeReportFilter.py?" 
+            var urlString = "http://genecats.cse.ucsc.edu/cgi-bin/ENCODE/encodeReportFilter.py?" 
               + "key=%s"
               + "&value=" + jscode_data.getValue(item.row, 0)
               + "&status=" + jscode_data.getColumnLabel(item.column)
@@ -229,4 +245,31 @@ def orderFreezeDateLabels (dateList):
     sortList.append(dateHash[i])
 
   return sortList
+
+# Convert freeze to standard format if non-standard
+#  standard is Month-Year (Jun-2010)
+#  non-standard example is "post ENCODE June 2010"
+def parseFreezeLabel (freeze):
+  pattern = re.compile("post ENCODE (.+) (\d{4}) Freeze")
+  m = pattern.match(freeze)
+  if m:
+    return "post %.3s-%s" % (m.group(1), m.group(2))
+  else:
+    return freeze
+
+def getColorArray (size):
+  # Can't specify "orange" since IE8 doesn't support CSS2.1
+  colors = ['red', '#ffa500', 'yellow', 'green', 'blue', 'purple', 'fuchsia']
+  colors_len = len(colors)
+  i = 0
+  new = []
+  while (i<size):
+    leftover = size - i
+    if (leftover > colors_len):
+      new.extend(colors)
+      i += colors_len
+    else:
+      new.extend(colors[0:leftover])
+      break
+  return new
 

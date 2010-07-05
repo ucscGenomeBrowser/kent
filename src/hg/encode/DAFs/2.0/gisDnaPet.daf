@@ -4,8 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header of the associated ddf file should look like this:
-#
-
+# files	view	cell	fragSize	accession	labVersion	replicate
 
 dafVersion        2.0
 
@@ -17,47 +16,15 @@ compositeSuffix   GisDnaPet
 group             variation
 variables         cell, fragSize
 assembly          hg19
+noAutoCreate      yes
 
 validationSettings validateFiles.bam:mmCheckOneInN=10000,mismatches=6,mmPerPair;validateFiles.fastQ:quick=1000
+
 noAutoCreate     yes
-
-
-# Track/view definition
-view             Tags
-longLabelPrefix  GIS DNA PET Tags
-type             gappedPeak
-hasReplicates    no
-required         no
-
-view             RawSignal
-longLabelPrefix  GIS DNA PET Raw Signal
-type             wig
-hasReplicates    no
-required         no
 
 view             Alignments
 longLabelPrefix  GIS DNA PET Alignments
-type             pairedTagAlign
-hasReplicates    no
-required         no
-
-# Discordant alignments have pairs on opposite strands of the same chrom, or on different chroms.
-# File formats:- 
-#  - a bed 6 file for the chrom/start/end/name/score/strand for the left & right tags
-#  - a pairedInteraction file for the relationship between left & right tags
-# Note:-
-# We cant capture the sequence of the tag in this format because we need unique names in the name column
-# to specify the relationship between the left & right tags in the pairedInteraction file.
-
-view             DiscordAlign
-longLabelPrefix  GIS DNA PET Discordant Tag Alignments
-type             bed
-hasReplicates    no
-required         no
-
-view             DiscordRel
-longLabelPrefix  GIS DNA PET Discordant Tag Relations
-type             pairedInteraction
+type             bam
 hasReplicates    no
 required         no
 
@@ -79,28 +46,28 @@ required         no
 downloadOnly	yes
 
 # SOLiD:-5'
-view             Fasta5p
-type             csfasta
-required         no
-hasReplicates    no
-downloadOnly	yes
+#view             Fasta5p
+#type             csfasta
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
 
-view             Qual5p
-type             csqual
-required         no
-hasReplicates    no
-downloadOnly	yes
+#view             Qual5p
+#type             csqual
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
 
 # SOLiD:-3'
-view             Fasta3p
-type             csfasta
-required         no
-hasReplicates    no
-downloadOnly	yes
+#view             Fasta3p
+#type             csfasta
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
 
-view             Qual3p
-type             csqual
-required         no
-hasReplicates    no
-downloadOnly	yes
+#view             Qual3p
+#type             csqual
+#required         no
+#hasReplicates    no
+#downloadOnly	yes
 

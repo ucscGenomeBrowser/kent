@@ -4225,6 +4225,9 @@ if(count)
 dyStringPrintf(trackDbJson, "\t%s: {", track->track);
 if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
     dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
+dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
+if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }

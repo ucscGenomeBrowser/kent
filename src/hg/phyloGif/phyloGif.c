@@ -718,15 +718,29 @@ if (phyloTree)
     }
 
 
+#ifndef USE_PNG
 if (onWeb)
     {
     printf("Content-type: image/gif\r\n");
     printf("\r\n");
     }
+
 if (!mgSaveToGif(stdout, mg, FALSE))
     {
     errAbort("Couldn't save gif to stdout");
     }
+#else
+if (onWeb)
+    {
+    printf("Content-type: image/png\r\n");
+    printf("\r\n");
+    }
+
+if (!mgSaveToPng(stdout, mg, FALSE))
+    {
+    errAbort("Couldn't save png to stdout");
+    }
+#endif
 
 if (cgiOptionalString("phyloGif_submit"))
     cartCheckout(&cart);

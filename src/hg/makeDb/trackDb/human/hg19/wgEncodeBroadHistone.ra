@@ -4,6 +4,7 @@
 
 track wgEncodeBroadHistone
 compositeTrack on
+superTrack wgEncodeHistoneSuper
 shortLabel Broad Histone
 longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
 group regulation

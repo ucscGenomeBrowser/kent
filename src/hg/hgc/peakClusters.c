@@ -154,15 +154,13 @@ return result;
 static struct slName *findMatchingSubtracks(struct trackDb *tdb)
 /* Find subtracks that match inputTracks tags. */
 {
-/* Get list of tracks we'll look through for input. */
-char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
-struct slName *inTrackList = stringToSlNames(inputTracks);
-
-/* Get list of subgroups to select on */
-char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
-struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
-
-struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
+/* Just list look up tableName in inputTrackTable and return the list. */
+char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
+struct sqlConnection *conn = hAllocConn(database);
+char query[256];
+safef(query, sizeof(query), "select tableName from %s order by source", inputTrackTable);
+struct slName *matchTrackList = sqlQuickList(conn, query);
+hFreeConn(&conn);
 return matchTrackList;
 }
 
@@ -293,25 +291,14 @@ if (cluster != NULL)
     printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
 
     /* Get list of tracks we'll look through for input. */
-    char *inputTracks = trackDbRequiredSetting(tdb, "inputTracks");
-    struct slName *inTrackList = stringToSlNames(inputTracks);
-
-    /* Get list of subgroups to select on */
-    char *inputTracksSubgroupSelect = trackDbRequiredSetting(tdb, "inputTracksSubgroupSelect");
-    struct slPair *selGroupList = slPairFromString(inputTracksSubgroupSelect);
+    char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
+    safef(query, sizeof(query), "select tableName from %s where factor='%s' order by source", inputTrackTable, cluster->name);
+    struct slName *matchTrackList = sqlQuickList(conn, query);
+    struct slName *matchTrack;
 
     /* Get list of subgroups to display */
     char *inputTracksSubgroupDisplay = trackDbRequiredSetting(tdb, "inputTracksSubgroupDisplay");
     struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
-
-    /* Figure out factor ID and add it as selection criteria*/
-    char *factorId = findFactorId(inTrackList, cluster->name);
-    struct slPair *factorSel = slPairNew("factor", cloneString(factorId));
-    slAddHead(&selGroupList, factorSel);
-
-    /* Get list of tracks that match criteria. */
-    struct slName *matchTrackList = encodeFindMatchingSubtracks(inTrackList, selGroupList);
-    struct slName *matchTrack;
 
     /* In a new section put up list of hits. */
     webNewSection("List of %s Items in Cluster", cluster->name);
@@ -357,7 +344,6 @@ if (cluster != NULL)
 	}
     sqlFreeResult(&sr);
     webPrintLinkTableEnd();
-
     }
 }
 

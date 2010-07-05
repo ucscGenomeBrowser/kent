@@ -1,4 +1,9 @@
-# Data Agreement File for Ren Lab ChIP-seq experiments  $Revision: 1.1 $
+# Data Agreement File for LICR Lab ChIP-seq (Histone) experiments for mm9
+
+$Revision: 1.2 $
+
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
 
 # Lab and general info
 grant             Ren 

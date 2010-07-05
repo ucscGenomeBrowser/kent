@@ -245,9 +245,6 @@ int mdbObjCount(struct mdbObj *mdbObjs, boolean objs);
 int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
-void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *expDefiningVars,char *varsToSet);
-// prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
-
 // ----------------- Utilities -----------------
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL

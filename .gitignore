@@ -1,3 +1,10 @@
 *.o
 *.a
 .gitignore
+*~
+foo
+*.foo
+*.exe
+*.bak
+core
+core.*

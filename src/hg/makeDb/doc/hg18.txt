@@ -16412,63 +16412,95 @@ see file: ucscGenes10.txt
 # ENCODE Regulation track  (In progress May 2010, very rough instructions
 # as am still defining how to build track...)
 
+      #make root dir
+      mkdir -p /cluster/data/hg18/bed/wgEncodeReg
+      cd /cluster/data/hg18/bed/wgEncodeReg
+
       # Create the DNAse peak clusters subtrack.
       # Get all of the narrowPeak format files for the wgEncodeUwDnaseSeq
       # unzipped in directory /hive/users/kent/regulate/dnase/peaks
-      cd /hive/users/kent/regulate/dnase
+      mkdir dnase
+      cd dnase
       ls -1 peaks/*.narrowPeak > peak.lst
       regClusterMakeTableOfTables peak.lst peak.table
       regCluster peak.table /dev/null peak.bed
       awk '$4 > 1 || $5 >= 100' peak.bed > wgEncodeRegDnaseClustered.bed
       hgLoadBed hg18 wgEncodeRegDnaseClustered wgEncodeRegDnaseClustered.bed
 
-      # Create the Transcription Factor Binding Site subtrack
-      # Get all of the narrowPeak file for wgEncodeYaleChIPseq into tfbs/yale
-      # directory and create all.lst by cutting and pasting 
-      # the file list from
-      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPSeq/
-      cd /hive/users/kent/regulate/tfbs/yale
-      grep narrowPeak all. > peak.lst
-      cut -f 2 peak.lst > file.lst
-      foreach i (`cat file.lst`)
-          wget http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeYaleChIPSeq/$i
+      # Create inputTrackTable - two columns: <table> <cell>
+      tdbQuery "select track,subGroups from hg18 where parent[0]='wgEncodeUwDnaseSeqViewaPeaks'" -noCompSub | awk '/track/ {printf("%s\t", $2);} /subGroups/ {printf("%s\tNone\n", $3);}' | sed s/cellType=// > wgEncodeRegDnaseClusteredInputs.tab 
+
+      # Next time around might do this to fetch from metaDb instead of
+      # trackDb:
+      #   mdbQuery "select tableName,cell from hg18 where dataType like 'dnase%' and lab='Uw' and view = 'Peaks'" out=tab > wgEncodeRegDnaseClusteredInputs.tab
+
+      # Load table
+      hgLoadSqlTab hg18 wgEncodeRegDnaseClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegDnaseClusteredInputs.tab
+
+      # Create the Transcription Factor Binding Site subtrack.  This is a bit
+      # complex because it is merging data from the Snyder lab (yale) and from
+      # HudsonAlpha (hud),  and the hud data has replicates while the yale
+      # data does not.
+
+      # Create hud/replicates directory full of gzipped narrow peak files,
+      # converting broad peak files as needed.
+      mkdir -p /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates
+      cd /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq
+      foreach i (*.narrowPeak*.gz)
+           cp $i /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates 
       end
-
-      # Get the narrow and broad peak files into the tfbs/hudsonAlpha dir
-      # For this one I checked that the files in 
-      # /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq
-      # were the same for *Peak.gz as those at
-      # http://hgdownload.cse.ucsc.edu/goldenPath/hg18/encodeDCC/wgEncodeHudsonalphaChipSeq/
-      # and then did a symbolic link for easy access
-      mkdir /hive/users/kent/regulate/tfbs/hudsonAlpha
-      cd /hive/users/kent/regulate/tfbs/hudsonAlpha
-      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeHudsonalphaChipSeq ftpDir
-      ls ftpDir/*Peak.gz > inFiles
-
-      # Make files that merge replicates.  I'll describe what I did rather
-      # than make a script for it because it's likely to change.  I looked
-      # through and noted that there was a single file lacking a replicate:
-      #     wgEncodeHudsonalphaChipSeqPeaksRep1Hepg2Srf.broadPeak.gz
-      # and excluded that.  I made a batch file that then called
-      # encodeMergeReplicates on all replicate pairs with the following
-      # options:
-      #      -add -maxMin -uniqueName
-      # which resulted in a "merged" directory full of 70 files in the form
-      #     wgEncodeHudsonalphaChipSeqPeaksHepg2Pol2.*Peak
-
-      # Clean this up a bit to make all a uniform narrowPeak format by doing
-      cd merged
-      foreach i (*.broadPeak)
-         awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' $i > $i:r.narrowPeak
+      foreach i (*.broadPeak*.gz)
+            zcat $i | awk '{printf("%s\t%d\n", $0, ($3-$2)/2);}' > \
+	    /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates/$i:r:r.narrowPeak
       end
-      rm *.broadPeak
+      cd /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/replicates
+      gzip *.narrowPeak
 
-      regClusterBedExpCfg peak.lst -encodeList peak.cfg
-      # Then edit peak.cfg to make sure all cell lines have uniq letters
-      hgBedsToBedExps peak.cfg peak.bed peak.exps
+      # Get ra file that includes the file name and other info we need for hud
+      cd /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud
+      mkdir hud
+      cd hud
+      mdbQuery "select fileName,antibody,cell,replicate,treatment from hg18 \
+	where view='Peaks' and lab='HudsonAlpha' and dataType='ChipSeq'" \
+	-out=ra | sed s/broadPeak/narrowPeak/ >  hud.ra
+
+      # Generate merged dir full of merged replicates.
+      mkdir merged
+      encodeMergeReplicatesBatch hud.ra replicates merge.sh merged.ra merged
+      chmod a+x merge.sh
+      merge.sh
+
+      # Generate symbolic links to directories containing pooled peak files
+      # for yale and for hud
+      cd /cluster/data/hg18/bed/wgEncodeReg/tfbs
+      ln -s /cluster/data/hg18/bed/wgEncodeReg/tfbs/hud/merged hudPeaks
+      ln -s /hive/groups/encode/dcc/analysis/ftp/pipeline/hg18/wgEncodeYaleChIPseq yalePeaks
+
+      # Get ra file that includes the file name and other info we need for yale
+      mdbQuery "select fileName,antibody,cell,treatment from hg18 where lab like '%Snyder%' and dataType like 'ChipSeq' and view='Peaks'" out=ra | sed 's/wgEncode/yalePeaks\/wgEncode/' > yale.ra
+
+      # Get ra file for hud
+      cat hud/merged.ra | sed 's/wgEncode/hudPeaks\/wgEncode/' > hud.ra
+
+      # Combine both ra files and convert to three column tab-separated
+      cat yale.ra hud.ra | raToTab stdin bothLabs.tab -cols=fileName,cell,antibody
+
+      # Set up config file for clustering job.  This includes calculating some
+      # normalization factors for the score.  The cellLetter.tab assigns
+      # letters to cell lines, and is created by hand in the source tree.
+      cp ~/kent/src/hg/regulate/regClusterBedExpCfg/cellLetter.tab .
+      regClusterBedExpCfg -tabList bothLabs.tab bothLabs.cfg -cellLetter=cellLetter.tab
+
+      # Do the actual clustering and load results into database
+      hgBedsToBedExps -dupeLetterOk bothLabs.cfg peak.bed peak.exps
       awk '$2 != $3' peak.bed > filtered.bed
       hgLoadBed hg18 wgEncodeRegTfbsClustered filtered.bed
       hgLoadSqlTab hg18 wgEncodeRegTfbsCells ~/kent/src/hg/lib/expRecord.sql peak.exps
+
+      # Create inputTrackTable - three columns: <table> <source> <factor>
+      mdbQuery "select tableName,cell,antibody from hg18 where (lab like '%Snyder%' or lab='HudsonAlpha') and dataType like 'ChipSeq' and view='Peaks' and antibody not like 'Pol2%'" -out=tab > wgEncodeRegTfbsClusteredInputs.tab
+      hgLoadSqlTab hg18 wgEncodeRegTfbsClusteredInputs ~/kent/src/hg/lib/clusterInputTrackTable.sql wgEncodeRegTfbsClusteredInputs.tab
+
 
 #######################################################################
 # CGAP SAGE (DONE 2007-04-17 Andy)
@@ -24784,7 +24816,6 @@ echo "update grp set label='Regulation' where name='regulation'" | hgsql hg18
     # expect those.  Make sure there aren't any other types of errors:
     foreach f (*.gz)
       set track = `echo $f:r:r:r \
-        | perl -wpe 's/^([AG])(\w+)$/kiddEichlerDisc$1\L$2/ || die;'`
       checkTableCoords hg18 $track |& egrep -v 'overlapping|!= end'
     end
     # No output, good.

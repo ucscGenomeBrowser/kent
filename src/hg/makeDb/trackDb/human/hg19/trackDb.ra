@@ -1573,3 +1573,61 @@ type bigWig 0 100
 minLimit 0
 maxLimit 100
 html gc5Base
+
+track affyExonArray
+compositeTrack on
+shortLabel Affy Exon
+longLabel Affymetrix $Organism Exon Array
+group expression
+priority 103.29
+visibility hide
+type bed 12
+noInherit on
+    
+    track affyExonArrayExons 
+    subTrack affyExonArray 
+    shortLabel Af Ex Exons
+    longLabel Exons interrogated on the Affymetrix $Organism Exon Array
+    visibility dense
+    type bed 12
+    
+    track affyExonArrayProbesets
+    subTrack affyExonArray
+    shortLabel Af Ex Probesets
+    longLabel Probesets on the Affymetrix $Organism Exon Array 
+    visibility dense
+    type bed 12
+    
+    track affyExonArrayProbes 
+    subTrack affyExonArray
+    shortLabel Af Ex Probes
+    longLabel Probes from the Affymetrix $Organism Exon Array
+    visibility dense
+    type bed 10
+
+    track affyExonArrayGeneProbesets
+    subTrack affyExonArray 
+    shortLabel Af Ex GProbesets
+    longLabel Gene probesets on the Affymetrix $Organism Exon Array
+    visibility dense
+    type bed 12
+    
+track haplotypeLocations
+shortLabel HapsLocate
+longLabel Haplotype locations on reference sequence
+visibility hide
+type bed 4
+group map
+priority 25
+color 0,0,0
+url http:/cgi-bin/hgTracks?position=$$
+urlLabel Haplotype sequence:
+chromosomes  chr4,chr6,chr17
+
+track rfamHuman
+shortLabel RfamConsensus
+longLabel Strong genomic alignments of Rfam consensus sequences with $organism annotations
+visibility hide
+group genes
+type psl mRNA
+
