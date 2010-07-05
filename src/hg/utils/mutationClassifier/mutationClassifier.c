@@ -13,6 +13,24 @@
 static int debug = 0;
 static struct hash *geneHash = NULL;
 
+#ifdef TCGA_CODES
+
+#define SPLICE_SITE "Splice_Site_SNP"
+#define MISSENSE "Missense_Mutation"
+#define READ_THROUGH "Read_Through"
+#define NONSENSE "Nonsense_Mutation"
+#define NONSENSE_LAST_EXON "Nonsense_Mutation(Last_Exon)"
+#define SYNONYMOUS "Silent"
+#define IN_FRAME_DEL "In_Frame_Del"
+#define IN_FRAME_INS "In_Frame_Ins"
+#define FRAME_SHIFT_DEL "Frame_Shift_Del"
+#define FRAME_SHIFT_INS "Frame_Shift_Ins"
+#define THREE_PRIME_UTR "3'UTR"
+#define FIVE_PRIME_UTR "5'UTR"
+#define INTRON "Intron"
+
+#else
+
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
 #define READ_THROUGH "readThrough"
@@ -25,10 +43,17 @@ static struct hash *geneHash = NULL;
 #define FRAME_SHIFT_INS "frameShiftIns"
 #define THREE_PRIME_UTR "threePrimeUtr"
 #define FIVE_PRIME_UTR "fivePrimeUtr"
+#define INTRON "intron"
+
+#endif
+
 
 static struct optionSpec optionSpecs[] = {
+    {"oneBased", OPTION_BOOLEAN},
     {NULL, 0}
 };
+
+boolean oneBased = FALSE;
 
 struct bed6
 /* A five field bed. */
@@ -59,7 +84,7 @@ void usage()
 errAbort(
   "mutationClassifier - classify mutations \n"
   "usage:\n"
-  "   mutationClassifier database snp.bed\n"
+  "   mutationClassifier [options] database snp.bed\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
@@ -77,15 +102,18 @@ errAbort(
   "%s\n"
   "%s\n"
   "%s\n"
+  "%s\n"
   "\n"
   "snp.bed should be bed4 (with SNP base in the name field).\n"
   "SNPs are assumed to be on positive strand, unless snp.bed is bed6 with\n"
   "explicit strand field (score field is ignored). SNPs should be\n"
   "zero-length bed entries; all entries are assumed to be indels.\n"
   "\n"
+  "options:\n"
+  "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
-  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS
+  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, INTRON
   );
 }
 
@@ -267,6 +295,11 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     bed->chrom = cloneString(chrom);
     bed->start = start;
     bed->end = end;
+    if (oneBased)
+	{
+	bed->start -= 1;
+	bed->end   -= 1;
+	}
     bed->name = cloneString(row[3]);
     if (wordCount >= 5)
         bed->score = lineFileNeedNum(lf, row, 4);
@@ -338,7 +371,7 @@ if (gp->name2 == NULL)
     }
 for (i=0;i<gp->exonCount;i++)
     {
-    if (pos <= gp->exonStarts[i])
+    if (pos < gp->exonStarts[i])
         {
         return -1;
         }
@@ -453,7 +486,18 @@ for (;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
                 }
             if (debug)
                 fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
+
+#ifdef TCGA_CODES
+	    int aaPos = codonStart / 3 + 1;
+            safef(additional, sizeof(additional), "g.%s:%d%c>%c\tc.%d%c>%c\tc.(%d-%d)%s>%s\tp.%c%d%c", 
+		  gp->chrom + 3, overlapA->chromStart + 1, original[pos % 3], new[pos % 3], 
+		  pos + 1, original[pos % 3], new[pos % 3],
+		  codonStart + 1, codonStart + 3, original, new,
+		  originalAA, aaPos, newAA);
+#else
             safef(additional, sizeof(additional), "%c>%c", originalAA, newAA);
+#endif
+
             if (debug)
                 fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
             }
@@ -490,6 +534,8 @@ for (;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
                     }
                 else if ((start == 1 || start == 2) || (end == 1 || end == 2))
                     code = SPLICE_SITE;
+		else
+		    code = INTRON;
                 }
             }
         }
@@ -501,7 +547,15 @@ for (;overlapA != NULL; overlapA = overlapA->next, overlapB = overlapB->next)
             {
             geneSymbol = (char *) el->val;
             }
-        printf("%s\t%d\t%d\t%s\t%s\t%s\n", overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, geneSymbol, code, additional);
+	int start = overlapA->chromStart;
+	int end   = overlapA->chromEnd;
+	if (oneBased)
+	    {
+	    start += 1;
+	    end   += 1;
+	    }
+        printf("%s\t%d\t%d\t%s\t%s\t%s\n", 
+	       overlapA->chrom, start, end, geneSymbol, code, additional);
         }
     }
 }
@@ -511,6 +565,10 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 if (argc < 3)
     usage();
+
+if (optionExists("oneBased"))
+    oneBased = TRUE;
+
 mutationClassifier(argv[1], argv[2]);
 return 0;
 }
