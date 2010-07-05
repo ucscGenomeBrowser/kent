@@ -231,7 +231,10 @@ module PipelineBackground
     
     unless upurl.blank?
 
-      cmd = "wget -v -O #{pf} #{autoResume} '#{upurl}' &> #{projectDir}/upload_error" 
+      #OLD WGET: cmd = "wget -v -O #{pf} #{autoResume} '#{upurl}' &> #{projectDir}/upload_error" 
+      # Use new paraFetch multiple parallel connection downloader
+      #  Speeds up downloads from distant sites.
+      cmd = "paraFetch 30 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
 
       #yell "\n\nGALT! cmd=[#{cmd}]\n\n"   # DEBUG remove
 
@@ -716,7 +719,8 @@ private
     if File.exists?(projectDir)
       Dir.entries(projectDir).each { 
         |f| 
-        if f.ends_with?("." + ext.downcase) or
+        if f.ends_with?("." + ext) or
+	   f.ends_with?("." + ext.downcase) or
            f.ends_with?("." + ext.upcase)
           ftime = File.mtime(path_to_file(project_id, f))
 	  if newest == "" or (ftime > newestDate)
@@ -743,6 +747,24 @@ private
   def getDdfText(project)
     return getNewestFileByExtensionIgnoringCase(project.id, "ddf")
   end
+
+  def goGreek(size)
+    newsize = size * 1.0
+    if size > 1024 * 1024 * 1024
+	newsize /= 1024 * 1024 * 1024
+	suffix = "G"
+    elsif size > 1024 * 1024
+	newsize /= 1024 * 1024
+	suffix = "M"
+    elsif size > 1024
+	newsize /= 1024
+	suffix = "K"
+    else 
+	suffix = ""
+    end
+    return ("%.2f" % newsize) + suffix
+  end
+
 
   def queue_job(project_id, source)
     job = QueuedJob.new
