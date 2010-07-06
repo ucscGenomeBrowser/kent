@@ -9,7 +9,6 @@ db rn4
 
 name zebrafish
 db danRer5
-otherUrl http://www.ensembl.org/Danio_rerio/transview?transcript=%s
 
 name drosophila
 db dm3
