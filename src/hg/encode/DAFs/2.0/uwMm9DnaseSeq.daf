@@ -13,7 +13,7 @@ lab               UW-Mouse
 dataType          DNase-seq
 compositeSuffix   UwDnase
 group             regulation
-variables         cell,strain,sex
+variables         cell,strain,sex,age
 assembly          mm9
 
 validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:quick=1000
