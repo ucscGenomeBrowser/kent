@@ -16,12 +16,14 @@
 #include "dnaMotifSql.h"
 #include "genomeRangeTree.h"
 #include "dnaMarkov.h"
+#include "dnaMarkovSql.h"
 
 int debug = 0;
 char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 float minDelta = -1;
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
+char *markovTable = "markovModels";
 static int maxNearestGene = 10000;
 boolean skipGeneModel = FALSE;
 
@@ -545,6 +547,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect(database);
 boolean done = FALSE;
 boolean motifTableExists = sqlTableExists(conn, clusterTable);
+boolean markovTableExists = sqlTableExists(conn, markovTable);
 long time;
 struct genePred *genes = NULL;
 
@@ -765,19 +768,15 @@ while(!done)
                     char beforeDna[256], afterDna[256];
                     int pos;
                     float delta, before, after, maxDelta = 0;
-                    int rowOffset;
                     boolean cacheHit;
+                    double mark2[5][5][5];
                     struct dnaMotif *motif = loadMotif(database, motifName, &cacheHit);
                     if(!cacheHit)
                         dnaMotifMakeLog2(motif);
 
-                    // cache markov models (we should be processing them in manner where we can use the same one repeatedly).
-                    struct sqlResult *sr = hRangeQuery(conn2, "markovModels", bed->chrom, bed->chromStart,
-                                                       bed->chromStart + 1, NULL, &rowOffset);
-                    if((row = sqlNextRow(sr)) != NULL)
+                    // XXXX cache markov models? (we should be processing them in manner where we can use the same one repeatedly).
+                    if(markovTableExists && loadMark2(conn2, markovTable, bed->chrom, bed->chromStart, bed->chromStart + 1, mark2))
                         {
-                        double mark2[5][5][5];
-                        dnaMark2Deserialize(row[rowOffset + 3], mark2);
                         dnaMarkMakeLog2(mark2);
 
                         seq = hDnaFromSeq(database, bed->chrom, motifStart - 2, motifEnd + 2, dnaUpper);
@@ -822,7 +821,6 @@ while(!done)
                         afterDna[seq->size] = 0;
                         delta = after - before;
                         }
-                    sqlFreeResult(&sr);
                     if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
                         {
                             maxDelta = delta;
