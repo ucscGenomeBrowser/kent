@@ -596,7 +596,7 @@ if(!skipGeneModel)
     {
     time = clock1000();
     genes = readGenes(database, conn);
-    fprintf(stderr, "readGenes took: %ld ms\n", clock1000() - time);
+    verbose(2, "readGenes took: %ld ms\n", clock1000() - time);
     verbose(2, "%d canonical known genes\n", slCount(genes));
     }
 
@@ -644,7 +644,7 @@ while(!done)
         {
         time = clock1000();
         int count = intersectBeds(snps, genes, &overlapA, &overlapB, &unusedA);
-        fprintf(stderr, "intersectBeds took: %ld ms\n", clock1000() - time);
+        verbose(2, "intersectBeds took: %ld ms\n", clock1000() - time);
         verbose(2, "number of intersects: %d\n", count);
         }
 
@@ -778,14 +778,14 @@ while(!done)
             }
         }
 
-    fprintf(stderr, "gene model took: %ld ms\n", clock1000() - time);
+    verbose(2, "gene model took: %ld ms\n", clock1000() - time);
     
     used = newHash(0);
     time = clock1000();
     struct genomeRangeTree *tree = genomeRangeTreeNew();
     for(bed = unusedA; bed != NULL; bed = bed->next)
         genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
-    fprintf(stderr, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
+    verbose(2, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
 
     if(motifTableExists)
         {
@@ -917,7 +917,7 @@ while(!done)
             }
         }
     
-    fprintf(stderr, "regulation model took: %ld ms\n", clock1000() - time);
+    verbose(2, "regulation model took: %ld ms\n", clock1000() - time);
     if(outputExtension != NULL)
         fclose(output);
     slFreeList(&overlapA);
