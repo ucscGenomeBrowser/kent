@@ -234,7 +234,9 @@ module PipelineBackground
       #OLD WGET: cmd = "wget -v -O #{pf} #{autoResume} '#{upurl}' &> #{projectDir}/upload_error" 
       # Use new paraFetch multiple parallel connection downloader
       #  Speeds up downloads from distant sites.
-      cmd = "paraFetch 30 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
+      #  Tries 30 simultaneous connections.
+      #  Performs up to 10 retries with sleeps in between of currently 30 seconds between retries.
+      cmd = "paraFetch 30 10 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
 
       #yell "\n\nGALT! cmd=[#{cmd}]\n\n"   # DEBUG remove
 
