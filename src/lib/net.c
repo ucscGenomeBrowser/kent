@@ -1761,7 +1761,8 @@ while (TRUE)
 		    close(pc->sd);
 		    verbose(2,"closing descriptor: %d\n", pc->sd);
 		    }
-		pc->sd = -4;
+		if (pc->sd != -1) 
+		    pc->sd = -4;
 		}
 	    connOpen = 0;
 	    reOpen = 0;
