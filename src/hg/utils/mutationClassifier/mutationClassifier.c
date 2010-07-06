@@ -26,6 +26,7 @@ char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 char *markovTable = "markovModels";
 static int maxNearestGene = 10000;
 boolean skipGeneModel = FALSE;
+boolean oneBased = FALSE;
 
 #ifdef TCGA_CODES
 
@@ -79,8 +80,6 @@ static struct optionSpec optionSpecs[] = {
     {NULL, 0}
 };
 
-boolean oneBased = FALSE;
-
 struct bed7
 /* A seven field bed. */
     {
@@ -105,7 +104,6 @@ struct genePredStub
     struct genePred *genePred;
 };
 
-
 void usage()
 /* Explain usage and exit. */
 {
@@ -121,7 +119,6 @@ errAbort(
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
   "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
-  "   mutationClassifier [options] database snp.bed\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
