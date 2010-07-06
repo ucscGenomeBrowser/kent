@@ -21,6 +21,27 @@ static struct hash *geneHash = NULL;
 static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 static char *mapability = NULL;
 
+#ifdef TCGA_CODES
+
+#define SPLICE_SITE "Splice_Site_SNP"
+#define MISSENSE "Missense_Mutation"
+#define READ_THROUGH "Read_Through"
+#define NONSENSE "Nonsense_Mutation"
+#define NONSENSE_LAST_EXON "Nonsense_Mutation(Last_Exon)"
+#define SYNONYMOUS "Silent"
+#define IN_FRAME_DEL "In_Frame_Del"
+#define IN_FRAME_INS "In_Frame_Ins"
+#define FRAME_SHIFT_DEL "Frame_Shift_Del"
+#define FRAME_SHIFT_INS "Frame_Shift_Ins"
+#define THREE_PRIME_UTR "3'UTR"
+#define FIVE_PRIME_UTR "5'UTR"
+#define INTRON "Intron"
+#define INTERGENIC "Intergenic"
+#define REGULATORY "Regulatory"
+#define NONCODING "Non_Coding"
+
+#else
+
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
 #define READ_THROUGH "readThrough"
@@ -36,13 +57,20 @@ static char *mapability = NULL;
 #define INTERGENIC "intergenic"
 #define REGULATORY "regulatory"
 #define NONCODING "nonCoding"
+#define INTRON "intron"
+
+#endif
+
 
 static struct optionSpec optionSpecs[] = {
     {"lazyLoading", OPTION_BOOLEAN},
     {"mapability", OPTION_STRING},
     {"outputExtension", OPTION_STRING},
+    {"oneBased", OPTION_BOOLEAN},
     {NULL, 0}
 };
+
+boolean oneBased = FALSE;
 
 struct bed7
 /* A seven field bed. */
@@ -79,6 +107,8 @@ errAbort(
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
+  "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
+  "   mutationClassifier [options] database snp.bed\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
@@ -86,6 +116,7 @@ errAbort(
   "output is bed4+ with classification code in the name field, and additonal\n"
   "annotations in subsequent fields.\n\n"
   "Mutations are classified with the following codes:\n"
+  "%s\n"
   "%s\n"
   "%s\n"
   "%s\n"
@@ -105,7 +136,7 @@ errAbort(
   "\n"
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
-  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY
+  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY, INTRON
   );
 }
 
@@ -294,6 +325,11 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     bed->chrom = cloneString(chrom);
     bed->chromStart = start;
     bed->chromEnd = end;
+    if (oneBased)
+	{
+	bed->chromStart -= 1;
+	bed->chromEnd   -= 1;
+	}
     bed->name = cloneString(row[3]);
     if (wordCount >= 5)
         bed->score = lineFileNeedNum(lf, row, 4);
@@ -375,7 +411,7 @@ if (gp->name2 == NULL)
     }
 for (i=0;i<gp->exonCount;i++)
     {
-    if (pos <= gp->exonStarts[i])
+    if (pos < gp->exonStarts[i])
         {
         return -1;
         }
@@ -560,7 +596,7 @@ while(!done)
                 else
                     code = IN_FRAME_INS;
                 }
-            else if(snp)
+            else if (snp)
                 {
                 unsigned codonStart;
                 unsigned aaIndex = (pos / 3) + 1;
@@ -591,13 +627,19 @@ while(!done)
                     newAA = '*';
                     code = lastExon ? NONSENSE_LAST_EXON : NONSENSE;
                     }
+#ifdef TCGA_CODES
+		safef(additional, sizeof(additional), "g.%s:%d%c>%c\tc.%d%c>%c\tc.(%d-%d)%s>%s\tp.%c%d%c", 
+		      gp->chrom + 3, overlapA->chromStart + 1, original[pos % 3], new[pos % 3], 
+		      pos + 1, original[pos % 3], new[pos % 3],
+		      codonStart + 1, codonStart + 3, original, new,
+		      originalAA, aaIndex, newAA);
+#else
+		safef(additional, sizeof(additional), "%c%d%c", originalAA, aaIndex, newAA);
+#endif
                 if (debug)
                     fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
-                safef(additional, sizeof(additional), "%c%d%c", originalAA, aaIndex, newAA);
-                if (debug)
-                    fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
-                }
-            else
+		}
+	    else
                 code = SYNONYMOUS;
             }
         else
@@ -633,9 +675,12 @@ while(!done)
                         }
                     else if ((start == 1 || start == 2) || (end == 1 || end == 2))
                         code = SPLICE_SITE;
+		    else
+			code = INTRON;		     
                     }
                 }
             }
+
         if (code)
             {
             char *geneSymbol = gp->name;
@@ -644,11 +689,18 @@ while(!done)
                 {
                 geneSymbol = (char *) el->val;
                 }
-            printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, geneSymbol, code, additional, overlapA->key);
+	    int start = overlapA->chromStart;
+	    int end   = overlapA->chromEnd;
+	    if (oneBased)
+		{
+		start += 1;
+		end   += 1;
+		}
+	    printLine(output, overlapA->chrom, start, end, geneSymbol, code, additional, overlapA->key);
             }
         }
     fprintf(stderr, "gene model took: %ld ms\n", clock1000() - time);
-
+    
     used = newHash(0);
     time = clock1000();
     struct genomeRangeTree *tree = genomeRangeTreeNew();
@@ -739,7 +791,7 @@ while(!done)
                 }
             }
         }
-
+    
     for(bed = unusedA; bed != NULL; bed = bed->next)
         {
         char key[256];
@@ -748,10 +800,12 @@ while(!done)
         if (hashLookup(used, key) == NULL)
             printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
         }
+    
     fprintf(stderr, "regulation model took: %ld ms\n", clock1000() - time);
     if(outputExtension != NULL)
         fclose(output);
     }
+
 sqlDisconnect(&conn);
 }
 
@@ -760,7 +814,9 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 outputExtension = optionVal("outputExtension", NULL);
 lazyLoading = optionExists("lazyLoading");
+oneBased = optionExists("oneBased");
 mapability = optionVal("mapability", NULL);
+
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);
