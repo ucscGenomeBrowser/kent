@@ -1,6 +1,6 @@
 # Data Agreement File for PSU DNase-Seq (Duke) experiments for mm9
 
-$Revision: 1.1 $
+$Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -13,10 +13,10 @@ lab              Duke-Mouse
 dataType         DNase-seq
 compositeSuffix  PsuDnase
 group            regulation
-variables        cell
+variables        cell,strain
 assembly         mm9
 
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=32;
+validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=3,matchFirst=32;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks

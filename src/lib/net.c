@@ -1397,7 +1397,7 @@ return TRUE;
 }
 
 
-boolean parallelFetch(char *url, int numConnections, char *outPath)
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries)
 /* Open multiple parallel connections to URL to speed downloading */
 {
 char *origPath = outPath;
@@ -1481,6 +1481,9 @@ if (numConnections < 1)
     return FALSE;
     }
 
+if (numRetries < 0)
+    numRetries = 0;
+
 /* what is the size of each part */
 off_t partSize = (fileSize + numConnections -1) / numConnections;
 if (fileSize == -1) 
@@ -1555,7 +1558,11 @@ char buf[BUFSIZE];
 /* create paraFetchStatus right away for monitoring programs */
 writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
 sinceLastStatus = 0;
+
+int retryCount = 0;
+
 #define SELTIMEOUT 5
+#define RETRYSLEEPTIME 30    
 while (TRUE)
     {
 
@@ -1738,7 +1745,30 @@ while (TRUE)
     else
 	{
 	warn("No data within %d seconds for %s", SELTIMEOUT, url);
-	return FALSE;
+	/* Retry ? */
+	if (retryCount >= numRetries)
+	    {
+    	    return FALSE;
+	    }
+	else
+	    {
+	    ++retryCount;
+	    /* close any open connections */
+	    for(pc = pcList; pc; pc = pc->next)
+		{
+		if (pc->sd >= 0) 
+		    {
+		    close(pc->sd);
+		    verbose(2,"closing descriptor: %d\n", pc->sd);
+		    }
+		if (pc->sd != -1) 
+		    pc->sd = -4;
+		}
+	    connOpen = 0;
+	    reOpen = 0;
+	    /* sleep for a while, maybe the server will recover */
+	    sleep(RETRYSLEEPTIME);
+	    }
 	}
 
     }
