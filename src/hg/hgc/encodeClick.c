@@ -45,22 +45,6 @@ for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
     rAddMatching(sub, selGroupList, pList);
 }
 
-struct slName *encodeFindMatchingSubtracks(struct slName *inTrackList, struct slPair *selGroupList)
-/* Look at a list of tracks, and their descendents for tracks with groups that match all 
- * name/value pairs in selGroupList */
-{
-struct slName *matchList = NULL;
-struct slName *inTrack;
-for (inTrack = inTrackList; inTrack != NULL; inTrack = inTrack->next)
-    {
-    struct trackDb *tdb = hashFindVal(trackHash, inTrack->name);
-    if (tdb == NULL)
-        errAbort("Can't find track %s which is in inputTracks", inTrack->name);
-    rAddMatching(tdb,  selGroupList, &matchList);
-    }
-return matchList;
-}
-
 void doEncodePeak(struct trackDb *tdb, struct customTrack *ct)
 /*  details for encodePeak type tracks. */
 {

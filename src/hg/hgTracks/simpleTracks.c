@@ -10736,6 +10736,41 @@ track->mapsSelf = TRUE;
 }
 #endif /* GBROWSE */
 
+static void remoteDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->height, MG_BLACK, font, "loading...");
+}
+
+static void remoteLoadItems(struct track *tg)
+{
+tg->items = newSlName("remote");
+}
+
+static void remoteFreeItems(struct track *tg)
+{
+}
+
+char *remoteName(struct track *tg, void *item)
+{
+return tg->track;
+}
+
+void remoteMethods(struct track *tg)
+{
+tg->freeItems = remoteFreeItems;
+tg->loadItems = remoteLoadItems;
+tg->drawItems = remoteDrawItems;
+tg->itemName = remoteName;
+tg->lineHeight = 10;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
+tg->mapItemName = remoteName;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -10877,6 +10912,10 @@ else if (sameWord(type, "ld2"))
 else if (sameWord(type, "factorSource"))
     {
     factorSourceMethods(track);
+    }
+else if (sameWord(type, "remote"))
+    {
+    remoteMethods(track);
     }
 #endif /* GBROWSE */
 }
