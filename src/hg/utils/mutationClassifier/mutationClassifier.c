@@ -61,7 +61,8 @@ struct bed7
     char *name;	/* Name of item */
     int score; /* Score - 0-1000 */
     char strand;
-    char *key;
+    char *key; // user provided stuff
+    char *code; // used internally
     };
 
 struct genePredStub
@@ -709,7 +710,15 @@ while(!done)
             }
         if (code)
             {
-            printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, gp->name, code, additional, overlapA->key);
+            if(sameString(code, NONCODING))
+                {
+                // we want to look for regulatory mutations in this item before classifying it simply as non-coding
+                struct bed7 *tmp = shallowBedCopy(overlapA);
+                tmp->code = gp->name;
+                slAddHead(&unusedA, tmp);
+                }
+            else
+                printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, gp->name, code, additional, overlapA->key);
             }
         }
     fprintf(stderr, "gene model took: %ld ms\n", clock1000() - time);
@@ -728,7 +737,7 @@ while(!done)
         char **row;
         char query[256];
         struct sqlResult *sr;
-        safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s order by chrom", clusterTable);
+        safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s order by chrom, chromStart", clusterTable);
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             {
@@ -761,6 +770,8 @@ while(!done)
                     struct dnaMotif *motif = loadMotif(database, motifName, &cacheHit);
                     if(!cacheHit)
                         dnaMotifMakeLog2(motif);
+
+                    // cache markov models (we should be processing them in manner where we can use the same one repeatedly).
                     struct sqlResult *sr = hRangeQuery(conn2, "markovModels", bed->chrom, bed->chromStart,
                                                        bed->chromStart + 1, NULL, &rowOffset);
                     if((row = sqlNextRow(sr)) != NULL)
@@ -848,7 +859,12 @@ while(!done)
         safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
         genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
         if (hashLookup(used, key) == NULL)
-            printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
+            {
+            if(bed->code == NULL)
+                printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
+            else
+                printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, bed->code, NONCODING, ".", bed->key);
+            }
         }
     fprintf(stderr, "regulation model took: %ld ms\n", clock1000() - time);
     if(outputExtension != NULL)
