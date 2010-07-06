@@ -53,6 +53,13 @@ char dnaMotifBestStrand(struct dnaMotif *motif, DNA *dna);
 double dnaMotifBitScore(struct dnaMotif *motif, DNA *dna);
 /* Return logBase2-odds score of dna given a probabalistic motif. */
 
+double dnaMotifBitScoreWithMarkovBg(struct dnaMotif *motif, DNA *dna, double mark2[5][5][5]);
+/* Return logBase2-odds score of dna given a probabalistic motif using a 2nd-order markov model for the background.
+   motif and markd2 must be in log2 format.
+   Seq must contain an extra two bases at the front (i.e. we start scoring from dna + 2). */
+
+void dnaMotifMakeLog2(struct dnaMotif *motif);
+
 void dnaMotifNormalize(struct dnaMotif *motif);
 /* Make all columns of motif sum to one. */
 
