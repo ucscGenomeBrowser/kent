@@ -1,11 +1,11 @@
 # Data Agreement File for PSU ChIP-seq (Transcription Factor Binding Sites) experiments for mm9
 
-$Revision: 1.1 $
+$Revision: 1.2 $
 
 # Lab and general info
 grant             Hardison
 lab               PSU-Mouse
-dataType          ChipSeq
+dataType          ChIP-seq
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   PsuTfbs
 assembly          mm9

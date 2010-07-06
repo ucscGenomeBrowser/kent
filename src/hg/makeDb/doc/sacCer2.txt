@@ -1393,3 +1393,41 @@ done
     #	real    3m42.700s
 
 #############################################################################
+# Update BlastTab tables of sacCer2	(DONE, 2010-06-28, Fan)
+    cd /hive/data/genomes/sacCer2/bed/hgNearBlastp
+    mkdir 100628
+    cd    100628
+
+    pepPredToFa sacCer2 sgdPep sgdPep.faa
+
+    pepPredToFa hg19 knownGenePep hg19.known.faa
+    pepPredToFa mm9 knownGenePep mm9.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer5 ensPep danRer5.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce6 sangerPep ce6.sangerPep.faa
+
+    # sanity check, number of lines in each faa file
+
+    cat << '_EOF_' > config.ra
+# Latest Yeast vs. other Gene Sorter orgs:
+# human, mouse, rat, zebrafish, fly, worm
+
+targetGenesetPrefix known
+targetDb sacCer2
+queryDbs hg19 mm9 rn4 danRer5 dm3 ce6
+
+sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/sgdPep.faa
+hg19Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/hg19.known.faa
+mm9Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/mm9.known.faa
+rn4Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/rn4.known.faa
+danRer5Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/danRer5.ensPep.faa
+dm3Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/dm3.flyBasePep.faa
+ce6Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/ce6.sangerPep.faa
+
+buildDir /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628
+scratchDir /hive/data/genomes/sacCer2/bed/hgNearBlastp/100628/tmp
+'_EOF_'
+
+doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+#########################################################################
