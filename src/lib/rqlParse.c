@@ -662,7 +662,9 @@ if (from != NULL)
 	    }
 	}
     else
-        tokenizerReuse(tkz);
+	{
+	errAbort("missing 'from' clause in %s\n", rql->command);
+	}
     }
 
 /* Parse where clause. */
