@@ -27,6 +27,27 @@ char *markovTable = "markovModels";
 static int maxNearestGene = 10000;
 boolean skipGeneModel = FALSE;
 
+#ifdef TCGA_CODES
+
+#define SPLICE_SITE "Splice_Site_SNP"
+#define MISSENSE "Missense_Mutation"
+#define READ_THROUGH "Read_Through"
+#define NONSENSE "Nonsense_Mutation"
+#define NONSENSE_LAST_EXON "Nonsense_Mutation(Last_Exon)"
+#define SYNONYMOUS "Silent"
+#define IN_FRAME_DEL "In_Frame_Del"
+#define IN_FRAME_INS "In_Frame_Ins"
+#define FRAME_SHIFT_DEL "Frame_Shift_Del"
+#define FRAME_SHIFT_INS "Frame_Shift_Ins"
+#define THREE_PRIME_UTR "3'UTR"
+#define FIVE_PRIME_UTR "5'UTR"
+#define INTRON "Intron"
+#define INTERGENIC "Intergenic"
+#define REGULATORY "Regulatory"
+#define NONCODING "Non_Coding"
+
+#else
+
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
 #define READ_THROUGH "readThrough"
@@ -42,6 +63,10 @@ boolean skipGeneModel = FALSE;
 #define INTERGENIC "intergenic"
 #define REGULATORY "regulatory"
 #define NONCODING "nonCoding"
+#define INTRON "intron"
+
+#endif
+
 
 static struct optionSpec optionSpecs[] = {
     {"clusterTable", OPTION_STRING},
@@ -50,8 +75,11 @@ static struct optionSpec optionSpecs[] = {
     {"maxNearestGene", OPTION_INT},
     {"outputExtension", OPTION_STRING},
     {"skipGeneModel", OPTION_BOOLEAN},
+    {"oneBased", OPTION_BOOLEAN},
     {NULL, 0}
 };
+
+boolean oneBased = FALSE;
 
 struct bed7
 /* A seven field bed. */
@@ -92,6 +120,8 @@ errAbort(
   "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > minDelta.)\n"
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
+  "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
+  "   mutationClassifier [options] database snp.bed\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
@@ -110,6 +140,7 @@ errAbort(
   "%s\n"
   "%s\n"
   "%s\toutput includes factor name, score change, and nearest gene (within %d bases)\n"
+  "%s\n"
   "\n"
   "snp.bed should be bed4 (with SNP base in the name field).\n"
   "SNPs are assumed to be on positive strand, unless snp.bed is bed7 with\n"
@@ -119,7 +150,7 @@ errAbort(
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
   maxNearestGene, minDelta,
-  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY, maxNearestGene
+  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY, maxNearestGene, INTRON
   );
 }
 
@@ -308,6 +339,11 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     bed->chrom = cloneString(chrom);
     bed->chromStart = start;
     bed->chromEnd = end;
+    if (oneBased)
+	{
+	bed->chromStart -= 1;
+	bed->chromEnd   -= 1;
+	}
     bed->name = cloneString(row[3]);
     if (wordCount >= 5)
         bed->score = lineFileNeedNum(lf, row, 4);
@@ -327,6 +363,11 @@ lineFileClose(&lf);
 
 static void printLine(FILE *stream, char *chrom, int chromStart, int chromEnd, char *name, char *code, char *additional, char *key)
 {
+if(oneBased)
+    {
+    chromStart++;
+    chromEnd++;
+    }
 fprintf(stream, "%s\t%d\t%d\t%s\t%s\t%s", chrom, chromStart, chromEnd, name, code, additional);
 if(key == NULL)
     fprintf(stream, "\n");
@@ -389,7 +430,7 @@ if (gp->name2 == NULL)
     }
 for (i=0;i<gp->exonCount;i++)
     {
-    if (pos <= gp->exonStarts[i])
+    if (pos < gp->exonStarts[i])
         {
         return -1;
         }
@@ -667,13 +708,22 @@ while(!done)
                         }
                     if (debug)
                         fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
+
+#ifdef TCGA_CODES
+                    safef(additional, sizeof(additional), "g.%s:%d%c>%c\tc.%d%c>%c\tc.(%d-%d)%s>%s\tp.%c%d%c", 
+                          gp->chrom + 3, overlapA->chromStart + 1, original[pos % 3], new[pos % 3], 
+                          pos + 1, original[pos % 3], new[pos % 3],
+                          codonStart + 1, codonStart + 3, original, new,
+                          originalAA, aaIndex, newAA);
+#else
                     safef(additional, sizeof(additional), "%c%d%c", originalAA, aaIndex, newAA);
+#endif
                     if (debug)
                         fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
                     }
                 else
                     code = SYNONYMOUS;
-                }
+		}
             }
         else
             {
@@ -708,9 +758,12 @@ while(!done)
                         }
                     else if ((start == 1 || start == 2) || (end == 1 || end == 2))
                         code = SPLICE_SITE;
+		    else
+			code = INTRON;		     
                     }
                 }
             }
+
         if (code)
             {
             if(sameString(code, NONCODING))
@@ -724,10 +777,9 @@ while(!done)
                 printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, gp->name, code, additional, overlapA->key);
             }
         }
+
     fprintf(stderr, "gene model took: %ld ms\n", clock1000() - time);
-
-    // XXXX look for regulatory genes in NONCODING hits.
-
+    
     used = newHash(0);
     time = clock1000();
     struct genomeRangeTree *tree = genomeRangeTreeNew();
@@ -850,7 +902,7 @@ while(!done)
                 }
             }
         }
-
+    
     for(bed = unusedA; bed != NULL; bed = bed->next)
         {
         char key[256];
@@ -864,6 +916,7 @@ while(!done)
                 printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, bed->code, NONCODING, ".", bed->key);
             }
         }
+    
     fprintf(stderr, "regulation model took: %ld ms\n", clock1000() - time);
     if(outputExtension != NULL)
         fclose(output);
@@ -873,6 +926,7 @@ while(!done)
     slFreeList(&unusedA);
     freeHash(&used);
     }
+
 sqlDisconnect(&conn);
 sqlDisconnect(&conn2);
 }
@@ -886,6 +940,8 @@ maxNearestGene = optionInt("maxNearestGene", maxNearestGene);
 minDelta = optionFloat("minDelta", minDelta);
 outputExtension = optionVal("outputExtension", NULL);
 skipGeneModel = optionExists("skipGeneModel");
+oneBased = optionExists("oneBased");
+
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);

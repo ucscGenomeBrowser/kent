@@ -1552,6 +1552,9 @@ ssize_t readCount = 0;
 #define BUFSIZE 65536 * 4
 char buf[BUFSIZE];
 
+/* create paraFetchStatus right away for monitoring programs */
+writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
+sinceLastStatus = 0;
 #define SELTIMEOUT 5
 while (TRUE)
     {
