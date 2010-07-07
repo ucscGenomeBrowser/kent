@@ -348,10 +348,6 @@ void doEncodePeak(struct trackDb *tdb, struct customTrack *ct);
 void doEncodeFiveC(struct sqlConnection *conn, struct trackDb *tdb);
 /* Print details for 5C track */
 
-struct slName *encodeFindMatchingSubtracks(struct slName *inTrackList, struct slPair *selGroupList);
-/* Look at a list of tracks, and their descendents for tracks with groups that match all 
- * name/value pairs in selGroupList */
-
 void doHgdpGeo(struct trackDb *tdb, char *item);
 /* Show details page for HGDP SNP with population allele frequencies
  * plotted on a world map. */

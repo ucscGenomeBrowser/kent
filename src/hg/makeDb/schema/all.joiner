@@ -28,7 +28,7 @@ set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droG
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set equCab equCab1,equCab2
-set felCat felCat3,felCatV17e
+set felCat felCat3,felCat4,felCatV17e
 set fr fr1,fr2
 set galGal galGal2,galGal3
 set gasAcu gasAcu1
@@ -89,7 +89,7 @@ set zooDb zooBaboon3,zooCat3,zooChicken3,zooChimp3,zooCow3,zooDog3,zooFugu3,zooH
 
 # Define transMap databases
 # transMapDb not public: dasNov1,echTel1,loxAfr1,oryCun1,otoGar1,loxAfr3
-set transMapDb anoCar1,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,loxAfr3
+set transMapDb anoCar1,bosTau4,calJac1,calJac3,canFam2,cavPor3,danRer5,danRer6,equCab2,felCat3,felCat4,felCatV17e,fr2,galGal3,gasAcu1,hg18,hg19,mm9,monDom4,monDom5,ornAna1,oryCun2,oryLat2,panTro2,petMar1,ponAbe2,rheMac2,rn4,taeGut1,tetNig1,tetNig2,xenTro2,loxAfr3
 
 # Set up list of databases we ignore and those we check.  Program
 # will complain about other databases.
@@ -1337,6 +1337,7 @@ identifier kgOldId
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
+    $kgDb.knownToKeggEntrez.name
     hg16.hg17Kg.name minCheck=.30
     $kgDb2.knownExpDistance.query
     $kgDb2.knownExpDistance.target
@@ -2038,6 +2039,7 @@ identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
     $gbd.keggMapDesc.mapID dupeOk
     $gbd.keggPathway.mapID
+    $gbd.knownToKeggEntrez.value
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"

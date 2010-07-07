@@ -73,6 +73,7 @@ png_set_PLTE(png, info,
              (png_color *)(mg->colorMap), // png_color is same as struct rgbColor!
              mg->colorsUsed);
 #endif
+#ifndef COLOR32
 if (useTransparency)
     {
     // First palette color is assumed to be background/transparent, so
@@ -82,6 +83,7 @@ if (useTransparency)
     png_color_16p nonPalette_opacities_values = NULL; // n/a for us, we're using palette
     png_set_tRNS(png, info, opacities, num_opacities, nonPalette_opacities_values);
     }
+#endif
 
 // Write header/params, write pixels, close and clean up.
 // PNG wants a 2D array of pointers to byte offsets into palette/colorMap.

@@ -101,10 +101,12 @@ while ( $#list > 0 )
 	    exit 1
 	endif
 
-	# log the cherry-pick
-	echo "logging the cherry-pick to $BUILDDIR/v${BRANCHNN}_branch/cherryPicks.log"
-	date +%Y-%m-%d >> $BUILDDIR/v${BRANCHNN}_branch/cherryPicks.log
-	echo "$c"      >> $BUILDDIR/v${BRANCHNN}_branch/cherryPicks.log
+	if (-d $BUILDDIR/v${BRANCHNN}_branch) then
+    	    # log the cherry-pick
+    	    echo "logging the cherry-pick to $BUILDDIR/v${BRANCHNN}_branch/cherryPicks.log"
+    	    date +%Y-%m-%d >> $BUILDDIR/v${BRANCHNN}_branch/cherryPicks.log
+    	    echo "$c"      >> $BUILDDIR/v${BRANCHNN}_branch/cherryPicks.log
+	endif
 
 	# email the cherry-pick
 	echo "emailing the cherry-pick"
@@ -112,15 +114,17 @@ while ( $#list > 0 )
 	set subject = '"'"Cherry-Pick complete."'"'
 	echo "$mailMsg" | mail -s "$subject" $USER galt browser-qa
 
-	# do git pull in 64-bit build repo	
-	echo "doing git pull in 64-bit build repo"
-	pushd "${BUILDDIR}/v${BRANCHNN}_branch/kent/src"
-	git pull
-	if ($status) then
-	    echo "failed running: git pull (in 64-bit build repo ${BUILDDIR}/v${BRANCHNN}_branch/kent/src)"
-	    set errpull64 = "1"
+	if (-d $BUILDDIR/v${BRANCHNN}_branch) then
+	    # do git pull in 64-bit build repo	
+    	    echo "doing git pull in 64-bit build repo"
+    	    pushd "${BUILDDIR}/v${BRANCHNN}_branch/kent/src"
+	    git pull
+	    if ($status) then
+		echo "failed running: git pull (in 64-bit build repo ${BUILDDIR}/v${BRANCHNN}_branch/kent/src)"
+    		set errpull64 = "1"
+    	    endif
+    	    popd 
 	endif
-	popd 
 
 	# do git pull in 32-bit build repo	
 	echo "doing git pull in 32-bit build repo"

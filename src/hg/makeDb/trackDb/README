@@ -546,19 +546,12 @@ Some settings used by various tracks:
     o bedFilter - If the hgTrackUi call is using bedUi to support it and bedFilter
       is set then the bed names will be filtered based on the settings entered by
       the user on the hgTrackUi page.
-    o inputTrackTable - for tracks that are cluster or other processed data that is
-      in other tracks.   This should be in two column format with the first the input
-      track name, and the second the cell line.
-    o inputTracks - for tracks that are clusters or other processed data that is
-      in other tracks, a list of the track names (typically composite parent tracks)
-      that this track uses for source data.  Used in the details display of 
-      factorSource tracks, and also the DNAse hypersensitivity cluster tracks.
-    o inputTracksSubgroupSelect - used with inputTracks.  A list of var=val pairs
-      that selects which subtracks of the input tracks to use, matching on the
-      subGroup/subGroups tags.  Example
-           inputTracksSubgroupSelect view=aPeaks
-    o inputTracksSubgroupDisplay - used with inputTracks.  A list of group types
-      (just the left size of the var=val pairs in the subGroupN line of the parent)
+    o inputTrackTable - for tracks that are type factorSource or otherwise created
+      by clustering or aggregating data found in other tracks.  This names a table
+      that is in three column format - first the input track name, then the source
+      name (cell line etc) if any, then the factor name if any.
+    o inputTracksSubgroupDisplay - used with inputTrackTable.  This contains a list 
+      of group types (just the left size of the var=val pairs in the subGroupN line of the parent)
       to display as columns in the details display table.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color

@@ -1397,7 +1397,7 @@ return TRUE;
 }
 
 
-boolean parallelFetch(char *url, int numConnections, char *outPath)
+boolean parallelFetch(char *url, char *outPath, int numConnections, int numRetries)
 /* Open multiple parallel connections to URL to speed downloading */
 {
 char *origPath = outPath;
@@ -1409,6 +1409,7 @@ off_t fileSize = 0;
 off_t totalDownloaded = 0;
 ssize_t sinceLastStatus = 0;
 char *dateString = "";
+// TODO handle case-sensitivity of protocols input
 if (startsWith("http://",url) || startsWith("https://",url))
     {
     struct hash *hash = newHash(0);
@@ -1419,23 +1420,22 @@ if (startsWith("http://",url) || startsWith("https://",url))
 	return FALSE;
 	}
     char *sizeString = hashFindValUpperCase(hash, "Content-Length:");
-    if (sizeString == NULL)
+    if (sizeString)
 	{
-	hashFree(&hash);
-	warn("No Content-Length: returned in header for %s, must limit to a single connection, will not know if data is complete", url);
-	numConnections = 1;
-	fileSize = -1;
+	fileSize = atoll(sizeString);
 	}
     else
 	{
-	fileSize = atoll(sizeString);
+	warn("No Content-Length: returned in header for %s, must limit to a single connection, will not know if data is complete", url);
+	numConnections = 1;
+	fileSize = -1;
 	}
     char *ds = hashFindValUpperCase(hash, "Last-Modified:");
     if (ds)
 	dateString = cloneString(ds);
     hashFree(&hash);
     }
-else
+else if (startsWith("ftp://",url))
     {
     long long size = 0;
     time_t t;
@@ -1456,22 +1456,33 @@ else
     dateString = cloneString(ftpTime);
 
     }
+else
+    {
+    warn("unrecognized protocol: %s", url);
+    return FALSE;
+    }
 
-verbose(2,"debug fileSize=%llu\n", (unsigned long long) fileSize); //debug
+verbose(2,"fileSize=%lld\n", (long long) fileSize); fflush(stderr); //debug
 
 if (fileSize < 65536)    /* special case small file */
     numConnections = 1;
 
 if (numConnections > 50)    /* ignore high values for numConnections */
+    {
+    warn("Currently maximum number of connections is 50. You requested %d. Will proceed with 50 on %s", numConnections, url);
     numConnections = 50;
+    }
 
-verbose(2,"debug numConnections=%d\n", numConnections); //debug
+verbose(2,"numConnections=%d\n", numConnections); //debug
 
 if (numConnections < 1)
     {
     warn("number of connections must be greater than 0 for %s, can't proceed, sorry", url);
     return FALSE;
     }
+
+if (numRetries < 0)
+    numRetries = 0;
 
 /* what is the size of each part */
 off_t partSize = (fileSize + numConnections -1) / numConnections;
@@ -1480,7 +1491,7 @@ if (fileSize == -1)
 off_t base = 0;
 int c;
 
-verbose(2,"debug partSize=%llu\n", (unsigned long long) partSize); //debug
+verbose(2,"partSize=%lld\n", (long long) partSize); //debug
 
 
 /* n is the highest-numbered descriptor */
@@ -1495,6 +1506,8 @@ off_t restartFileSize = 0;
 char *restartDateString = "";
 off_t restartTotalDownloaded = 0;
 boolean restartable = readParaFetchStatus(origPath, &restartPcList, &restartUrl, &restartFileSize, &restartDateString, &restartTotalDownloaded);
+if (fileSize == -1)
+    restartable = FALSE;
 
 struct parallelConn *pcList = NULL, *pc;
 
@@ -1538,16 +1551,22 @@ fd_set rfds;
 struct timeval tv;
 int retval;
 
-verbose(2,"debug: connOpen = %d\n", connOpen); //debug
-verbose(2,"debug: n+1 = %d (select)\n", n+1); //debug
-
 ssize_t readCount = 0;
 #define BUFSIZE 65536 * 4
 char buf[BUFSIZE];
 
+/* create paraFetchStatus right away for monitoring programs */
+writeParaFetchStatus(origPath, pcList, url, fileSize, dateString, FALSE);
+sinceLastStatus = 0;
+
+int retryCount = 0;
+
 #define SELTIMEOUT 5
+#define RETRYSLEEPTIME 30    
 while (TRUE)
     {
+
+    verbose(2,"Top of big loop\n");
 
     /* are we done? */
     if (connOpen == 0)
@@ -1573,7 +1592,6 @@ while (TRUE)
 	    , (unsigned long long) pc->rangeStart + pc->received
 	    , (unsigned long long) pc->rangeStart + pc->partSize - 1 );
 
-	    verbose(2,"debug opening url %s\n", urlExt); //debug
 
 	    int oldSd = pc->sd;  /* in case we need to remember where we were */
 	    if (oldSd != -4)      /* decrement whether we succeed or not */
@@ -1581,9 +1599,15 @@ while (TRUE)
 	    if (oldSd == -4) 
 		oldSd = -3;       /* ok this one just changes */
 	    if (fileSize == -1)
+		{
+		verbose(2,"opening url %s\n", url);
 		pc->sd = netUrlOpen(url);
+		}
 	    else
+		{
+		verbose(2,"opening url %s\n", urlExt);
 		pc->sd = netUrlOpen(urlExt);
+		}
 	    if (pc->sd < 0)
 		{
 		pc->sd = oldSd;  /* failed to open, can retry later */
@@ -1648,24 +1672,24 @@ while (TRUE)
     else if (retval)
 	{
 
-	verbose(2,"returned from select, retval=%d\n", retval); //debug
+	verbose(2,"returned from select, retval=%d\n", retval);
 
 	for(pc = pcList; pc; pc = pc->next)
 	    {
-	    if ((pc->sd != -1) && FD_ISSET(pc->sd, &rfds))
+	    if ((pc->sd >= 0) && FD_ISSET(pc->sd, &rfds))
 		{
 
-		verbose(2,"debug found a descriptor with data: %d\n", pc->sd); //debug
+		verbose(2,"found a descriptor with data: %d\n", pc->sd);
 
 		readCount = read(pc->sd, buf, BUFSIZE);
 
-		verbose(2,"debug readCount = %lld\n", (long long) readCount); //debug
+		verbose(2,"readCount = %lld\n", (long long) readCount);
 
 		if (readCount == 0)
 		    {
 		    close(pc->sd);
 
-		    verbose(2,"debug closing descriptor: %d\n", pc->sd); //debug
+		    verbose(2,"closing descriptor: %d\n", pc->sd);
 		    pc->sd = -1;
 
 		    if (fileSize != -1 && pc->received != pc->partSize)	
@@ -1689,7 +1713,7 @@ while (TRUE)
 			, (unsigned long long) pc->rangeStart
 			, (unsigned long long) pc->received );
 
-		verbose(2,"debug seeking to %llu\n", (unsigned long long) pc->rangeStart + pc->received); //debug
+		verbose(2,"seeking to %llu\n", (unsigned long long) pc->rangeStart + pc->received);
 
 		if (lseek(out, pc->rangeStart + pc->received, SEEK_SET) == -1)
 		    {
@@ -1721,7 +1745,30 @@ while (TRUE)
     else
 	{
 	warn("No data within %d seconds for %s", SELTIMEOUT, url);
-	return FALSE;
+	/* Retry ? */
+	if (retryCount >= numRetries)
+	    {
+    	    return FALSE;
+	    }
+	else
+	    {
+	    ++retryCount;
+	    /* close any open connections */
+	    for(pc = pcList; pc; pc = pc->next)
+		{
+		if (pc->sd >= 0) 
+		    {
+		    close(pc->sd);
+		    verbose(2,"closing descriptor: %d\n", pc->sd);
+		    }
+		if (pc->sd != -1) 
+		    pc->sd = -4;
+		}
+	    connOpen = 0;
+	    reOpen = 0;
+	    /* sleep for a while, maybe the server will recover */
+	    sleep(RETRYSLEEPTIME);
+	    }
 	}
 
     }
@@ -1739,6 +1786,7 @@ if (fileSize != -1 && totalDownloaded != fileSize)
     warn("Unexpected result: Total downloaded bytes %lld is not equal to fileSize %lld"
 	, (long long) totalDownloaded
 	, (long long) fileSize);
+    return FALSE;
     }
 return TRUE;
 }

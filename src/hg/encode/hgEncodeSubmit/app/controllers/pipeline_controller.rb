@@ -89,16 +89,36 @@ class PipelineController < ApplicationController
       when "upload failed"
 	@errText = getUploadErrText(@project)
       when "uploading"
-	upText = getUploadErrText(@project)
+	# old wget method
+	#upText = getUploadErrText(@project)
+        #unless upText.blank?
+	#  upText = upText.split("\n")
+	#  if upText.last
+	#    upText = upText.last.split(" ").first
+	#    if upText.last(1) == "K"
+	#      @uploadText = upText
+	#    end
+        #  end
+        #end
+
+	# new paraFetch method
+	upText = getNewestFileByExtensionIgnoringCase(@project.id, "paraFetchStatus")
+
         unless upText.blank?
 	  upText = upText.split("\n")
-	  if upText.last
-	    upText = upText.last.split(" ").first
-	    if upText.last(1) == "K"
-	      @uploadText = upText
+	  unless upText.length < 4
+	    url = upText.shift
+	    size = upText.shift.to_i
+	    fdate = upText.shift
+	    downloaded = 0
+	    while not upText.empty?
+	      l = upText.shift
+	      downloaded += l.split(" ").last.to_i
 	    end
-          end
+	    @uploadText = "#{goGreek(downloaded)} of #{goGreek(size)} #{url}"
+	  end
         end
+
     end 
     @dafText = getDafText(@project)
     @ddfText = getDdfText(@project)

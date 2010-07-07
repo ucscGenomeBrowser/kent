@@ -175,3 +175,66 @@ dnaMarkTriple(seqList, mark0, slogMark0, mark1, slogMark1,
 	mark2, slogMark2, 0, 1, 0);
 }
 
+#define SIG 10
+
+char *dnaMark2Serialize(double mark2[5][5][5])
+// serialize a 2nd order markov model
+{
+int i, j, k;
+int offset = 0;
+char *buf = NULL;
+int bufLen = 5*5*5 * (SIG + 3) + 1;
+buf = needMem(bufLen);
+for(i = 0; i < 5; i++)
+    for(j = 0; j < 5; j++)
+        for(k = 0; k < 5; k++)
+            {
+            if(offset)
+                {
+                sprintf(buf + offset, ";%1.*f", SIG, mark2[i][j][k]);
+                offset += (SIG + 3);
+                }
+            else
+                {
+                sprintf(buf + offset, "%1.*f", SIG, mark2[i][j][k]);
+                offset += (SIG + 2);
+                }
+            }
+buf[offset] = 0;
+return buf;
+}
+
+void dnaMark2Deserialize(char *buf, double mark2[5][5][5])
+// deserialize a 2nd order markov model
+{
+int i, j, k;
+int offset = 0;
+for(i = 0; i < 5; i++)
+    for(j = 0; j < 5; j++)
+        for(k = 0; k < 5; k++)
+            {
+            float f;
+            if(offset)
+                {
+                sscanf(buf + offset, ";%f", &f);
+                mark2[i][j][k] = f;
+                offset += (SIG + 3);
+                }
+            else
+                {
+                sscanf(buf + offset, "%f", &f);
+                mark2[i][j][k] = f;
+                offset += (SIG + 2);
+                }
+            }
+}
+
+void dnaMarkMakeLog2(double mark2[5][5][5])
+// convert a 2nd-order markov array to log2
+{
+int i, j, k;
+for(i = 0; i < 5; i++)
+    for(j = 0; j < 5; j++)
+        for(k = 0; k < 5; k++)
+            mark2[i][j][k] = logBase2(mark2[i][j][k]);
+}
