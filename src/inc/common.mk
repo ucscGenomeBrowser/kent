@@ -39,10 +39,13 @@ ifeq (${PNGLIB},)
   ifneq ($(wildcard /usr/lib64/libpng.a),)
       PNGLIB=/usr/lib64/libpng.a
   endif
+endif
+ifeq (${PNGLIB},)
   ifneq ($(wildcard /usr/lib/libpng.a),)
       PNGLIB=/usr/lib/libpng.a
   endif
-else
+endif
+ifneq (${PNGLIB},)
   ifeq (${USE_PNG},)
     USE_PNG=1
   endif
