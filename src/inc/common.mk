@@ -36,7 +36,12 @@ ifeq (${USE_PNG},)
 endif
 
 ifeq (${PNGLIB},)
-  PNGLIB=/usr/lib64/libpng.a
+  ifneq ($(wildcard /usr/lib64/libpng.a),)
+      PNGLIB=/usr/lib64/libpng.a
+  endif
+  ifneq ($(wildcard /usr/lib/libpng.a),)
+      PNGLIB=/usr/lib/libpng.a
+  endif
 else
   ifeq (${USE_PNG},)
     USE_PNG=1
