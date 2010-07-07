@@ -10656,3 +10656,30 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 # *** Check these tables in mm9:
 # *** knownBlastTab hgBlastTab rnBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
 #########################################################################
+# BUILD CGAP PATHWAY TABLES, DONE, Fan 7/6/2010
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/mm9/bed/cgap/100706
+    cd /hive/data/genomes/mm9/bed/cgap/100706
+    
+# get data file from data source
+    wget --timestamping -O Mm_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Mm_GeneData.dat"
+
+# parse the data file
+    hgCGAP Mm_GeneData.dat
+    
+    hgsql mm9 -e "drop table cgapBiocPathway"
+    hgsql mm9 -e "drop table cgapBiocDesc"
+    hgsql mm9 -e "drop table cgapAlias"
+
+    hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapBiocPathway.sql
+    hgsql mm9 -e 'LOAD DATA local INFILE "cgapBIOCARTA.tab" into table cgapBiocPathway;'
+   
+    hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapBiocDesc.sql
+    cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
+    hgsql mm9 -e 'LOAD DATA local INFILE "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc;'
+    
+    hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapAlias.sql
+    cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
+    hgsql mm9 -e 'LOAD DATA local INFILE "cgapAlias.tab" into table cgapAlias'
+#########################################################################
