@@ -11,8 +11,9 @@ void usage()
 errAbort(
     "paraFetch - try to fetch url with multiple connections\n"
     "usage:\n"
-    "   paraFetch N URL outPath\n"
+    "   paraFetch N R URL outPath\n"
     "   where N is the number of connections to use\n"
+    "         R is the number of retries\n"
     );
 }
 
@@ -20,19 +21,19 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-boolean paraFetch(int numConnections, char *url, char *outPath)
+boolean paraFetch(int numConnections, int numRetries, char *url, char *outPath)
 /* Fetch given URL, send to stdout. */
 {
-return parallelFetch(url, numConnections, outPath);
+return parallelFetch(url, outPath, numConnections, numRetries);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 4)
+if (argc != 5)
     usage();
-if (!paraFetch(atoi(argv[1]), argv[2], argv[3]))
+if (!paraFetch(atoi(argv[1]), atoi(argv[2]), argv[3], argv[4]))
     exit(1);
 return 0;
 }

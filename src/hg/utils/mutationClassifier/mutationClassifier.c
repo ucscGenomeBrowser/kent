@@ -1,3 +1,5 @@
+/* Classify mutations as missense etc. */
+
 #include <math.h>
 #include "common.h"
 #include "memalloc.h"
@@ -13,13 +15,38 @@
 #include "dnaMotif.h"
 #include "dnaMotifSql.h"
 #include "genomeRangeTree.h"
+#include "dnaMarkov.h"
+#include "dnaMarkovSql.h"
 
-static int debug = 0;
+int debug = 0;
 char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
-static struct hash *geneHash = NULL;
-static char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
-static char *mapability = NULL;
+float minDelta = -1;
+char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
+char *markovTable = "markovModels";
+static int maxNearestGene = 10000;
+boolean skipGeneModel = FALSE;
+
+#ifdef TCGA_CODES
+
+#define SPLICE_SITE "Splice_Site_SNP"
+#define MISSENSE "Missense_Mutation"
+#define READ_THROUGH "Read_Through"
+#define NONSENSE "Nonsense_Mutation"
+#define NONSENSE_LAST_EXON "Nonsense_Mutation(Last_Exon)"
+#define SYNONYMOUS "Silent"
+#define IN_FRAME_DEL "In_Frame_Del"
+#define IN_FRAME_INS "In_Frame_Ins"
+#define FRAME_SHIFT_DEL "Frame_Shift_Del"
+#define FRAME_SHIFT_INS "Frame_Shift_Ins"
+#define THREE_PRIME_UTR "3'UTR"
+#define FIVE_PRIME_UTR "5'UTR"
+#define INTRON "Intron"
+#define INTERGENIC "Intergenic"
+#define REGULATORY "Regulatory"
+#define NONCODING "Non_Coding"
+
+#else
 
 #define SPLICE_SITE "spliceSite"
 #define MISSENSE "missense"
@@ -36,13 +63,23 @@ static char *mapability = NULL;
 #define INTERGENIC "intergenic"
 #define REGULATORY "regulatory"
 #define NONCODING "nonCoding"
+#define INTRON "intron"
+
+#endif
+
 
 static struct optionSpec optionSpecs[] = {
+    {"clusterTable", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
-    {"mapability", OPTION_STRING},
+    {"minDelta", OPTION_FLOAT},
+    {"maxNearestGene", OPTION_INT},
     {"outputExtension", OPTION_STRING},
+    {"skipGeneModel", OPTION_BOOLEAN},
+    {"oneBased", OPTION_BOOLEAN},
     {NULL, 0}
 };
+
+boolean oneBased = FALSE;
 
 struct bed7
 /* A seven field bed. */
@@ -54,7 +91,8 @@ struct bed7
     char *name;	/* Name of item */
     int score; /* Score - 0-1000 */
     char strand;
-    char *key;
+    char *key; // user provided stuff
+    char *code; // used internally
     };
 
 struct genePredStub
@@ -76,9 +114,14 @@ errAbort(
   "usage:\n"
   "   mutationClassifier database snp.bed(s)\n"
   "options:\n"
-  "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
+  "   -maxNearestGene\tMaximum distance used when computing nearest gene (default: %d).\n"
+  "   -minDelta\t\tLook for regulatory sites with score(after) - score(before) < minDelta (default: %.1f).\n"
+  "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > minDelta.)\n"
+  "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
+  "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
+  "   mutationClassifier [options] database snp.bed\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
@@ -96,6 +139,7 @@ errAbort(
   "%s\n"
   "%s\n"
   "%s\n"
+  "%s\toutput includes factor name, score change, and nearest gene (within %d bases)\n"
   "%s\n"
   "\n"
   "snp.bed should be bed4 (with SNP base in the name field).\n"
@@ -105,7 +149,8 @@ errAbort(
   "\n"
   "example:\n"
   "     mutationClassifier hg19 snp.bed\n",
-  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY
+  maxNearestGene, minDelta,
+  SPLICE_SITE, MISSENSE, READ_THROUGH, NONSENSE, NONSENSE_LAST_EXON, SYNONYMOUS, IN_FRAME_DEL, IN_FRAME_INS, FRAME_SHIFT_DEL, FRAME_SHIFT_INS, REGULATORY, maxNearestGene, INTRON
   );
 }
 
@@ -294,6 +339,11 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     bed->chrom = cloneString(chrom);
     bed->chromStart = start;
     bed->chromEnd = end;
+    if (oneBased)
+	{
+	bed->chromStart -= 1;
+	bed->chromEnd   -= 1;
+	}
     bed->name = cloneString(row[3]);
     if (wordCount >= 5)
         bed->score = lineFileNeedNum(lf, row, 4);
@@ -313,6 +363,11 @@ lineFileClose(&lf);
 
 static void printLine(FILE *stream, char *chrom, int chromStart, int chromEnd, char *name, char *code, char *additional, char *key)
 {
+if(oneBased)
+    {
+    chromStart++;
+    chromEnd++;
+    }
 fprintf(stream, "%s\t%d\t%d\t%s\t%s\t%s", chrom, chromStart, chromEnd, name, code, additional);
 if(key == NULL)
     fprintf(stream, "\n");
@@ -375,7 +430,7 @@ if (gp->name2 == NULL)
     }
 for (i=0;i<gp->exonCount;i++)
     {
-    if (pos <= gp->exonStarts[i])
+    if (pos < gp->exonStarts[i])
         {
         return -1;
         }
@@ -399,26 +454,31 @@ struct genePred *el, *retVal = NULL;
 char query[256];
 struct sqlResult *sr;
 char **row;
-safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript order by k.chrom");
+struct hash *geneHash = newHash(16);
+
+// get geneSymbols for output purposes
+safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    hashAdd(geneHash, row[0], (void *) cloneString(row[1]));
+sqlFreeResult(&sr);
+
+safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
+    struct hashEl *el;
     struct genePred *gp = genePredLoad(row);
+    if ((el = hashLookup(geneHash, gp->name)))
+        {
+        freeMem(gp->name);
+        gp->name = cloneString((char *) el->val);
+        }
     gp->name2 = NULL;
     slAddHead(&retVal, gp);
     }
 sqlFreeResult(&sr);
 
-// get geneSymbol for output purposes (we use a hash b/c it doesn't fit into struct genePred
-geneHash = newHash(16);
-safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    char *geneSymbol = cloneString(row[1]);
-    hashAdd(geneHash, row[0], (void *) geneSymbol);
-    }
-sqlFreeResult(&sr);
 slSort(&retVal, genePredCmp);
 if(!lazyLoading)
     {
@@ -427,6 +487,7 @@ if(!lazyLoading)
         clipGenPred(database, el);
         }
     }
+freeHash(&geneHash);
 return(retVal);
 }
 
@@ -459,7 +520,7 @@ else
 return 0;
 }
 
-struct dnaMotif *loadMotif(char *database, char *name)
+static struct dnaMotif *loadMotif(char *database, char *name, boolean *cacheHit)
 // cached front-end to dnaMotifLoadWhere
 {
 static struct hash *motifHash = NULL;
@@ -469,6 +530,8 @@ if(motifHash == NULL)
 
 if ((el = hashLookup(motifHash, name)))
     {
+    if(cacheHit)
+        *cacheHit = TRUE;
     return (struct dnaMotif *) el->val;
     }
 else
@@ -479,28 +542,70 @@ else
     struct dnaMotif *motif = dnaMotifLoadWhere(conn, "transRegCodeMotifPseudoCounts", where);
     hashAdd(motifHash, name, (void *) motif);
     sqlDisconnect(&conn);
+    if(cacheHit)
+        *cacheHit = FALSE;
     return motif;
     }
 }
 
+static struct genePred *findNearestGene(struct bed *bed, struct genePred *genes, int maxDistance)
+// return nearest gene (or NULL if none found)
+// Currently inefficient (O(length genes)).
+{
+struct genePred *retVal = NULL;
+int minDistance = 0;
+for(; genes != NULL; genes = genes->next)
+    {
+    if(sameString(bed->chrom, genes->chrom))
+        {
+        if(bedItemsOverlap(bed, genes))
+            {
+            retVal = genes;
+            minDistance = 0;
+            }
+        else
+            {
+            int diff;
+            if(bed->chromStart < genes->txStart)
+                diff = genes->txStart - bed->chromStart;
+            else
+                diff = bed->chromStart - genes->txEnd;
+            if(diff < maxDistance && (retVal == NULL || diff < minDistance))
+                {
+                retVal = genes;
+                minDistance = diff;
+                }
+            }
+        }
+    }
+    return retVal;
+}
+
 static void mutationClassifier(char *database, char **files, int fileCount)
 {
-struct bed7 *overlapA = NULL;
-struct bed7 *bed, *unusedA = NULL;
-struct genePredStub *overlapB = NULL;
-struct bed7 *snps = NULL;
 int i, fileIndex = 0;
 struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn2 = sqlConnect(database);
 boolean done = FALSE;
 boolean motifTableExists = sqlTableExists(conn, clusterTable);
+boolean markovTableExists = sqlTableExists(conn, markovTable);
+long time;
+struct genePred *genes = NULL;
 
-long time = clock1000();
-struct genePred *genes = readGenes(database, conn);
-fprintf(stderr, "readGenes took: %ld ms\n", clock1000() - time);
-verbose(2, "%d canonical known genes\n", slCount(genes));
+if(!skipGeneModel)
+    {
+    time = clock1000();
+    genes = readGenes(database, conn);
+    verbose(2, "readGenes took: %ld ms\n", clock1000() - time);
+    verbose(2, "%d canonical known genes\n", slCount(genes));
+    }
 
 while(!done)
     {
+    struct bed7 *overlapA = NULL;
+    struct bed7 *bed, *unusedA = NULL;
+    struct genePredStub *overlapB = NULL;
+    struct bed7 *snps = NULL;
     FILE *output;
     static struct hash *used = NULL;
 
@@ -519,7 +624,6 @@ while(!done)
         splitPath(files[fileIndex], dir, name, extension);
         sprintf(path, "%s%s.%s", dir, name, outputExtension);
         verbose(2, "writing to output file: %s\n", path);
-        slFreeList(&snps);
         readBedFile(&snps, files[fileIndex]);
         fileIndex++;
         done = fileIndex == fileCount;
@@ -530,10 +634,19 @@ while(!done)
 
     verbose(2, "read %d mutations\n", slCount(snps));
 
-    time = clock1000();
-    int count = intersectBeds(snps, genes, &overlapA, &overlapB, &unusedA);
-    fprintf(stderr, "intersectBeds took: %ld ms\n", clock1000() - time);
-    verbose(2, "number of intersects: %d\n", count);
+    if(skipGeneModel)
+        {
+        unusedA = snps;
+        snps = NULL;
+        overlapA = NULL;
+        }
+    else
+        {
+        time = clock1000();
+        int count = intersectBeds(snps, genes, &overlapA, &overlapB, &unusedA);
+        verbose(2, "intersectBeds took: %ld ms\n", clock1000() - time);
+        verbose(2, "number of intersects: %d\n", count);
+        }
 
     // reading unmasked file is much faster - why?
     // sprintf(retNibName, "/hive/data/genomes/hg19/hg19.2bit");
@@ -551,8 +664,7 @@ while(!done)
         if (pos >= 0)
             {
             int len = strlen(overlapA->name);
-            DNA snp = parseSnp(overlapA->name, NULL);
-            if (overlapA->chromEnd - overlapA->chromStart)
+            if (overlapA->chromEnd > overlapA->chromStart)
                 {
                 int delta = len - (overlapA->chromEnd - overlapA->chromStart);
                 if (delta % 3)
@@ -560,45 +672,58 @@ while(!done)
                 else
                     code = IN_FRAME_INS;
                 }
-            else if(snp)
-                {
-                unsigned codonStart;
-                unsigned aaIndex = (pos / 3) + 1;
-                if ((pos % 3) == 0)
-                    codonStart = pos;
-                else if ((pos % 3) == 1)
-                    codonStart = pos - 1;
-                else
-                    codonStart = pos - 2;
-                char original[4];
-                char new[4];
-                strncpy(original, gp->name2 + codonStart, 3);
-                strncpy(new, gp->name2 + codonStart, 3);
-                original[3] = new[3] = 0;
-                new[pos % 3] = snp;
-                if (gp->strand[0] == '-')
-                    complement(new + (pos % 3), 1);
-                AA originalAA = lookupCodon(original);
-                AA newAA = lookupCodon(new);
-                if (!originalAA)
-                    originalAA = '*';
-                if (newAA)
-                    {
-                    code = originalAA == newAA ? SYNONYMOUS : originalAA == '*' ? READ_THROUGH : MISSENSE;
-                    }
-                else
-                    {
-                    newAA = '*';
-                    code = lastExon ? NONSENSE_LAST_EXON : NONSENSE;
-                    }
-                if (debug)
-                    fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
-                safef(additional, sizeof(additional), "%c%d%c", originalAA, aaIndex, newAA);
-                if (debug)
-                    fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
-                }
             else
-                code = SYNONYMOUS;
+                {
+                DNA snp = parseSnp(overlapA->name, NULL);
+                if(snp)
+                    {
+                    unsigned codonStart;
+                    unsigned aaIndex = (pos / 3) + 1;
+                    if ((pos % 3) == 0)
+                        codonStart = pos;
+                    else if ((pos % 3) == 1)
+                        codonStart = pos - 1;
+                    else
+                        codonStart = pos - 2;
+                    char original[4];
+                    char new[4];
+                    strncpy(original, gp->name2 + codonStart, 3);
+                    strncpy(new, gp->name2 + codonStart, 3);
+                    original[3] = new[3] = 0;
+                    new[pos % 3] = snp;
+                    if (gp->strand[0] == '-')
+                        complement(new + (pos % 3), 1);
+                    AA originalAA = lookupCodon(original);
+                    AA newAA = lookupCodon(new);
+                    if (!originalAA)
+                        originalAA = '*';
+                    if (newAA)
+                        {
+                        code = originalAA == newAA ? SYNONYMOUS : originalAA == '*' ? READ_THROUGH : MISSENSE;
+                        }
+                    else
+                        {
+                        newAA = '*';
+                        code = lastExon ? NONSENSE_LAST_EXON : NONSENSE;
+                        }
+                    if (debug)
+                        fprintf(stderr, "original: %s:%c; new: %s:%c\n", original, originalAA, new, newAA);
+
+#ifdef TCGA_CODES
+                    safef(additional, sizeof(additional), "g.%s:%d%c>%c\tc.%d%c>%c\tc.(%d-%d)%s>%s\tp.%c%d%c", 
+                          gp->chrom + 3, overlapA->chromStart + 1, original[pos % 3], new[pos % 3], 
+                          pos + 1, original[pos % 3], new[pos % 3],
+                          codonStart + 1, codonStart + 3, original, new,
+                          originalAA, aaIndex, newAA);
+#else
+                    safef(additional, sizeof(additional), "%c%d%c", originalAA, aaIndex, newAA);
+#endif
+                    if (debug)
+                        fprintf(stderr, "mismatch at %s:%d; %d; %c => %c\n", overlapA->chrom, overlapA->chromStart, pos, originalAA, newAA);
+                    }
+                else
+                    code = SYNONYMOUS;
+		}
             }
         else
             {
@@ -633,42 +758,48 @@ while(!done)
                         }
                     else if ((start == 1 || start == 2) || (end == 1 || end == 2))
                         code = SPLICE_SITE;
+		    else
+			code = INTRON;		     
                     }
                 }
             }
+
         if (code)
             {
-            char *geneSymbol = gp->name;
-            struct hashEl *el;
-            if ((el = hashLookup(geneHash, geneSymbol)))
+            if(sameString(code, NONCODING))
                 {
-                geneSymbol = (char *) el->val;
+                // we want to look for regulatory mutations in this item before classifying it simply as non-coding
+                struct bed7 *tmp = shallowBedCopy(overlapA);
+                tmp->code = gp->name;
+                slAddHead(&unusedA, tmp);
                 }
-            printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, geneSymbol, code, additional, overlapA->key);
+            else
+                printLine(output, overlapA->chrom, overlapA->chromStart, overlapA->chromEnd, gp->name, code, additional, overlapA->key);
             }
         }
-    fprintf(stderr, "gene model took: %ld ms\n", clock1000() - time);
 
+    verbose(2, "gene model took: %ld ms\n", clock1000() - time);
+    
     used = newHash(0);
     time = clock1000();
     struct genomeRangeTree *tree = genomeRangeTreeNew();
     for(bed = unusedA; bed != NULL; bed = bed->next)
         genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
-    fprintf(stderr, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
+    verbose(2, "cluster genomeRangeTreeAddVal took: %ld ms\n", clock1000() - time);
 
     if(motifTableExists)
         {
         char **row;
         char query[256];
         struct sqlResult *sr;
-        safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s order by chrom", clusterTable);
+        safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s order by chrom, chromStart", clusterTable);
         sr = sqlGetResult(conn, query);
         while ((row = sqlNextRow(sr)) != NULL)
             {
             char motifStrand[2];
             int motifStart = sqlUnsigned(row[1]);
             int motifEnd = sqlUnsigned(row[2]);
-            // float score = sqlFloat(row[4]);
+            float motifScore = sqlFloat(row[4]);
             char *motifName = cloneString(row[3]);
             safef(motifStrand, sizeof(motifStrand), row[5]);
             struct range *range = genomeRangeTreeAllOverlapping(tree, row[0], motifStart, motifEnd);
@@ -685,48 +816,80 @@ while(!done)
                 // XXXX && motifTableExists)
                 if(snp)
                     {
-                    struct dnaSeq *seq;
+                    struct dnaSeq *seq = NULL;
                     char beforeDna[256], afterDna[256];
-                    int maxDelta = 0;
-                    int delta, pos;
-                    float before, after;
+                    int pos;
+                    float delta, before, after, maxDelta = 0;
+                    boolean cacheHit;
+                    double mark2[5][5][5];
+                    struct dnaMotif *motif = loadMotif(database, motifName, &cacheHit);
+                    if(!cacheHit)
+                        dnaMotifMakeLog2(motif);
 
-                    seq = hDnaFromSeq(database, bed->chrom, motifStart, motifEnd, dnaUpper);
-                    if(refCall && seq->dna[bed->chromStart-motifStart] != refCall)
-                        errAbort("Actual reference doesn't match what is reported in input file");
-                    struct dnaMotif *motif = loadMotif(database, motifName);
-                    if(*motifStrand == '-')
+                    // XXXX cache markov models? (we should be processing them in manner where we can use the same one repeatedly).
+                    if(markovTableExists && loadMark2(conn2, markovTable, bed->chrom, bed->chromStart, bed->chromStart + 1, mark2))
                         {
-                        reverseComplement(seq->dna, seq->size);
-                        reverseComplement(&snp, 1);
-                        // XXXX is the following correct?
-                        pos = motifEnd - (bed->chromStart + 1);
+                        dnaMarkMakeLog2(mark2);
+
+                        seq = hDnaFromSeq(database, bed->chrom, motifStart - 2, motifEnd + 2, dnaUpper);
+                        if(refCall && seq->dna[bed->chromStart - motifStart + 2] != refCall)
+                            errAbort("Actual reference doesn't match what is reported in input file");
+                        if(*motifStrand == '-')
+                            {
+                            reverseComplement(seq->dna, seq->size);
+                            reverseComplement(&snp, 1);
+                            // XXXX is the following correct?
+                            pos = motifEnd - (bed->chromStart + 1);
+                            }
+                        else
+                            pos = bed->chromStart - motifStart;
+                        before = dnaMotifBitScoreWithMarkovBg(motif, seq->dna, mark2);
+                        seq->dna[pos + 2] = snp;
+                        after = dnaMotifBitScoreWithMarkovBg(motif, seq->dna, mark2);
+                        delta = after - before;
+                        verbose(2, "markov before/after: %.2f>%.2f (%.2f)\n", before, after, motifScore);
                         }
                     else
-                        pos = bed->chromStart-motifStart;
-                    before = dnaMotifBitScore(motif, seq->dna);
-                    strncpy(beforeDna, seq->dna, seq->size);
-                    beforeDna[seq->size] = 0;
-                    seq->dna[pos] = snp;
-                    after = dnaMotifBitScore(motif, seq->dna);
-                    strncpy(afterDna, seq->dna, seq->size);
-                    afterDna[seq->size] = 0;
-                    delta = before - after;
-                    if(delta >= 1)
                         {
-                        if(delta > maxDelta)
+                        seq = hDnaFromSeq(database, bed->chrom, motifStart - 2, motifEnd + 2, dnaUpper);
+                        if(refCall && seq->dna[bed->chromStart - motifStart] != refCall)
+                            errAbort("Actual reference doesn't match what is reported in input file");
+                        if(*motifStrand == '-')
                             {
+                            reverseComplement(seq->dna, seq->size);
+                            reverseComplement(&snp, 1);
+                            // XXXX is the following correct?
+                            pos = motifEnd - (bed->chromStart + 1);
+                            }
+                        else
+                            pos = bed->chromStart - motifStart;
+
+                        before = dnaMotifBitScore(motif, seq->dna);
+                        strncpy(beforeDna, seq->dna, seq->size);
+                        beforeDna[seq->size] = 0;
+                        seq->dna[pos] = snp;
+                        after = dnaMotifBitScore(motif, seq->dna);
+                        strncpy(afterDna, seq->dna, seq->size);
+                        afterDna[seq->size] = 0;
+                        delta = after - before;
+                        }
+                    if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
+                        {
                             maxDelta = delta;
                             if(debug)
                                 fprintf(stderr, "%s:%d-%d: %s\t%c-%c: %d == %d ?; %.2f -> %.2f\n\t%s\t%s\n",
                                         bed->chrom, bed->chromStart, bed->chromEnd,
                                         bed->name, seq->dna[pos], snp,
                                         seq->size, motif->columnCount, before, after, beforeDna, afterDna);
-                            safef(line, sizeof(line), "%s %.2f>%.2f", motifName, before, after);
+                            struct genePred *nearestGene = findNearestGene((struct bed *) bed, genes, maxNearestGene);
+                            if(nearestGene == NULL)
+                                safef(line, sizeof(line), "%s;%.2f>%.2f", motifName, before, after);
+                            else
+                                safef(line, sizeof(line), "%s;%.2f>%.2f;%s", motifName, before, after, nearestGene->name);
                             code = REGULATORY;
                             // XXXX record (somehow) that we have used this record.
-                            }
                         }
+                    freeDnaSeq(&seq);
                     }
                 if(code != NULL)
                     {
@@ -739,28 +902,46 @@ while(!done)
                 }
             }
         }
-
+    
     for(bed = unusedA; bed != NULL; bed = bed->next)
         {
         char key[256];
         safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
         genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
         if (hashLookup(used, key) == NULL)
-            printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
+            {
+            if(bed->code == NULL)
+                printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
+            else
+                printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, bed->code, NONCODING, ".", bed->key);
+            }
         }
-    fprintf(stderr, "regulation model took: %ld ms\n", clock1000() - time);
+    
+    verbose(2, "regulation model took: %ld ms\n", clock1000() - time);
     if(outputExtension != NULL)
         fclose(output);
+    slFreeList(&overlapA);
+    slFreeList(&overlapB);
+    slFreeList(&snps);
+    slFreeList(&unusedA);
+    freeHash(&used);
     }
+
 sqlDisconnect(&conn);
+sqlDisconnect(&conn2);
 }
 
 int main(int argc, char** argv)
 {
 optionInit(&argc, argv, optionSpecs);
-outputExtension = optionVal("outputExtension", NULL);
+clusterTable = optionVal("clusterTable", clusterTable);
 lazyLoading = optionExists("lazyLoading");
-mapability = optionVal("mapability", NULL);
+maxNearestGene = optionInt("maxNearestGene", maxNearestGene);
+minDelta = optionFloat("minDelta", minDelta);
+outputExtension = optionVal("outputExtension", NULL);
+skipGeneModel = optionExists("skipGeneModel");
+oneBased = optionExists("oneBased");
+
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);

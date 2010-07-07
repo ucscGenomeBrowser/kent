@@ -1337,6 +1337,7 @@ identifier kgOldId
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
+    $kgDb.knownToKeggEntrez.name
     hg16.hg17Kg.name minCheck=.30
     $kgDb2.knownExpDistance.query
     $kgDb2.knownExpDistance.target
@@ -2038,6 +2039,7 @@ identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
     $gbd.keggMapDesc.mapID dupeOk
     $gbd.keggPathway.mapID
+    $gbd.knownToKeggEntrez.value
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"

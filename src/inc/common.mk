@@ -16,8 +16,8 @@ ifeq (${USE_SSL},1)
     HG_DEFS+=-DUSE_SSL
 endif
 
-# libpng: enabled by default
-ifneq (${USE_PNG},0)
+# libpng: disabled by default
+ifeq (${USE_PNG},1)
     ifeq (${PNGLIB},)
 	PNGLIB=-lpng
     endif

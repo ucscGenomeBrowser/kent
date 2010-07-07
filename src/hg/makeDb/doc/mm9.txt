@@ -10616,3 +10616,70 @@ hgsql mm9 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql mm9 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
+#  Update BLASTTAB blast tables 	(DONE - 2010-06-28 - Fan)
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/mm9/bed/hgNearBlastp/100628
+    cd /hive/data/genomes/mm9/bed/hgNearBlastp/100628
+    # Get the proteins used by all hgNear organisms:
+    pepPredToFa hg19 knownGenePep hg19.known.faa
+    pepPredToFa mm9 knownGenePep mm9.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer5 ensPep danRer5.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce6 sangerPep ce6.sangerPep.faa
+    pepPredToFa sacCer2 sgdPep sacCer2.sgdPep.faa
+
+    cat << '_EOF_' > config.ra
+# Latest mouse vs. other Gene Sorter orgs:
+# human, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb mm9
+queryDbs hg19 rn4 danRer5 dm3 ce6 sacCer2
+recipBest         danRer5 dm3 ce6 sacCer2
+
+mm9Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100628/mm9.known.faa
+hg19Fa    /hive/data/genomes/mm9/bed/hgNearBlastp/100628/hg19.known.faa
+rn4Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100628/rn4.known.faa
+danRer5Fa /hive/data/genomes/mm9/bed/hgNearBlastp/100628/danRer5.ensPep.faa
+dm3Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100628/dm3.flyBasePep.faa
+ce6Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100628/ce6.sangerPep.faa
+sacCer2Fa /hive/data/genomes/mm9/bed/hgNearBlastp/100628/sacCer2.sgdPep.faa
+
+buildDir /hive/data/genomes/mm9/bed/hgNearBlastp/100628
+scratchDir /hive/data/genomes/mm9/bed/hgNearBlastp/100628/tmp
+'_EOF_'
+
+doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+
+# *** All done!
+# *** Check these tables in mm9:
+# *** knownBlastTab hgBlastTab rnBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
+#########################################################################
+# BUILD CGAP PATHWAY TABLES, DONE, Fan 7/6/2010
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/mm9/bed/cgap/100706
+    cd /hive/data/genomes/mm9/bed/cgap/100706
+    
+# get data file from data source
+    wget --timestamping -O Mm_GeneData.dat "ftp://ftp1.nci.nih.gov/pub/CGAP/Mm_GeneData.dat"
+
+# parse the data file
+    hgCGAP Mm_GeneData.dat
+    
+    hgsql mm9 -e "drop table cgapBiocPathway"
+    hgsql mm9 -e "drop table cgapBiocDesc"
+    hgsql mm9 -e "drop table cgapAlias"
+
+    hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapBiocPathway.sql
+    hgsql mm9 -e 'LOAD DATA local INFILE "cgapBIOCARTA.tab" into table cgapBiocPathway;'
+   
+    hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapBiocDesc.sql
+    cat cgapBIOCARTAdesc.tab|sort -u > cgapBIOCARTAdescSorted.tab
+    hgsql mm9 -e 'LOAD DATA local INFILE "cgapBIOCARTAdescSorted.tab" into table cgapBiocDesc;'
+    
+    hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapAlias.sql
+    cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
+    hgsql mm9 -e 'LOAD DATA local INFILE "cgapAlias.tab" into table cgapAlias'
+#########################################################################

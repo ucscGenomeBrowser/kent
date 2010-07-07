@@ -130,6 +130,26 @@ pi	Wold
 grant	Hardison
 project	PSU
 
+lab	UMass-Mouse
+pi	Dekker
+grant	Hardison
+project	PSU
+
+lab 	Duke-Mouse
+pi 	Crawford
+grant 	Hardison
+project PSU
+
+lab 	PSU-Mouse
+pi 	Wold
+grant 	Hardison
+project PSU
+
+lab 	UW-Mouse
+pi 	Stam
+grant 	Stam
+project UW
+
 lab	UNC-Giddings
 pi	Giddings
 grant	Giddings
