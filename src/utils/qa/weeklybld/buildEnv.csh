@@ -19,10 +19,6 @@ else
     setenv MYSQLLIBS '/usr/lib/mysql/libmysqlclient.a -lz'
 endif
 
-setenv USE_SSL 1
-setenv USE_BAM 1
-setenv USE_PNG 1
-
 if ( "$HOST" == "$BOX32" ) then
     setenv BUILDDIR /scratch/releaseBuild
 endif
