@@ -5,7 +5,8 @@
 //   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 //   CONTEXT_MENU to allow right-click funtionality
 //   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
-//   FLAT_TRACK_LIST to allow reordering of subtracks
+//   FLAT_TRACK_LIST (depends on IMAGEv2_DRAG_REORDER) to allow reordering of subtracks
+//   SUBTRACKS_HAVE_VIS (depends on FLAT_TRACK_LIST) to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
 
 //#define IMAGEv2_DRAG_REORDER
 //#define USE_NAVIGATION_LINKS
@@ -17,7 +18,7 @@
 //  NOTE: dragScroll not working in SZ=1 (1x) yet, because haven't done ajax fetch when dragged beyond image dimansions.
 //        Still, set IMAGEv2_DRAG_SCROLL_SZ > 1 (3=3x) to get limited dragScroll functionality
 //#define IMAGEv2_DRAG_SCROLL
-//#define IMAGEv2_DRAG_SCROLL_SZ 2
+//#define IMAGEv2_DRAG_SCROLL_SZ 3
 
 #if defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
     #define IMAGEv2_SHORT_MAPITEMS
@@ -26,7 +27,13 @@
 // UNCOMMENT FLAT_TRACK_LIST to allow reordering of subtracks
 #ifdef IMAGEv2_DRAG_REORDER
     #define FLAT_TRACK_LIST
+    #define SUBTRACKS_HAVE_VIS
 #endif//def IMAGEv2_DRAG_REORDER
+
+// UNCOMMENT SUBTRACKS_HAVE_VIS to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
+#ifdef FLAT_TRACK_LIST
+    #define SUBTRACKS_HAVE_VIS
+#endif//def FLAT_TRACK_LIST
 
 // Support for guidelines as separate bg image (allowing dragScroll to move guidelines through centerLabels)
 #if defined(IMAGEv2_DRAG_REORDER) || defined(IMAGEv2_DRAG_SCROLL)
