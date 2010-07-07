@@ -10,32 +10,82 @@ HG_INC=-I../inc -I../../inc -I../../../inc -I../../../../inc -I../../../../../in
 #global external libraries 
 L=
 
+# autodetect if openssl is installed
+ifeq (${SSLDIR},)
+  SSLDIR = /usr/include/openssl
+endif
+ifeq (${USE_SSL},)
+  ifneq ($(wildcard ${SSLDIR}),)
+     USE_SSL=1
+  endif
+endif
+
+
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
     L+=-lssl
     HG_DEFS+=-DUSE_SSL
 endif
 
-# libpng: disabled by default
-ifeq (${USE_PNG},1)
-    ifeq (${PNGLIB},)
-	PNGLIB=-lpng
-    endif
-    L+=${PNGLIB}
-    HG_DEFS+=-DUSE_PNG
-    HG_INC+=${PNGINCL}
 
-    # 32-bit color enabled by default
-    ifneq (${COLOR32},0)
-        HG_DEFS+=-DCOLOR32
+# autodetect if png is installed
+ifeq (${USE_PNG},)
+  ifneq ($(wildcard /usr/include/png.h),)
+    USE_PNG=1
+  endif
+endif
+
+ifeq (${PNGLIB},)
+  ifneq ($(wildcard /usr/lib64/libpng.a),)
+      PNGLIB=/usr/lib64/libpng.a
+  endif
+endif
+ifeq (${PNGLIB},)
+  ifneq ($(wildcard /usr/lib/libpng.a),)
+      PNGLIB=/usr/lib/libpng.a
+  endif
+endif
+ifneq (${PNGLIB},)
+  ifeq (${USE_PNG},)
+    USE_PNG=1
+  endif
+endif
+ifeq (${USE_PNG},)
+  ifneq (${PNGLIB},)
+    ifneq ($(wildcard ${PNGLIB}),)
+      USE_PNG=1
     endif
+  endif
+endif
+
+# libpng: disabled by default
+#  for dynamic linking PNGLIB=-lpng
+ifeq (${USE_PNG},1)
+  L+=${PNGLIB}
+  HG_DEFS+=-DUSE_PNG
+  HG_INC+=${PNGINCL}
+
+  # 32-bit color enabled by default
+  ifneq (${COLOR32},0)
+    HG_DEFS+=-DCOLOR32
+  endif
+endif
+
+# autodetect if bam is installed
+ifeq (${SAMDIR},)
+  SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
+  ifneq ($(wildcard ${SAMDIR}),)
+     KNETFILE_HOOK=1
+  endif
+endif
+ifeq (${USE_BAM},)
+  ifneq ($(wildcard ${SAMDIR}),)
+     USE_BAM=1
+  endif
 endif
 
 # libbam (samtools, and Angie's KNETFILE_HOOKS extension to it): disabled by default
 ifeq (${USE_BAM},1)
-    ifeq (${SAMDIR},)
-      SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
-    endif
     ifeq (${SAMINC},)
         SAMINC = ${SAMDIR}
     endif
