@@ -18,6 +18,7 @@ noInherit on
 visibilityViewDefaults  PlusSignal=hide Aligns=hide Splices=hide MinusSignal=hide
 priority 0
 type bed 3
+noInherit on
 wgEncode 1
 
 

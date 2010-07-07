@@ -204,6 +204,7 @@ end
 # Make compressed archive files of per-chrom .agp, .out, TRF .bed,
 # soft- and hard-masked .fa:
 cd $topDir
+ln -s $topDir/$db.2bit $runDir/bigZips/$db.2bit
 
 tar cvzf $runDir/bigZips/chromAgp.tar.gz @chromAgpFiles
 _EOF_
@@ -954,7 +955,6 @@ sub doCompress {
   $bossScript->add(<<_EOF_
 rm -rf bigZips database
 mkdir bigZips database
-ln -s $topDir/$db.2bit bigZips
 mkdir -p liftOver
 
 _EOF_
@@ -1089,7 +1089,7 @@ _EOF_
 if ($stopStep eq 'install') {
 &HgAutomate::verbose(1, <<_EOF_
  *** Please take a look at the downloads for $db using a web browser.
- *** The downloads url is: http://hgwdev.cse.ucsc.edu/goldenPath/$db. 
+ *** The downloads url is: http://hgdownload-test.cse.ucsc.edu/goldenPath/$db. 
  *** Edit each README.txt to resolve any notes marked with "***":
      $topDir/goldenPath/database/README.txt
      $topDir/goldenPath/bigZips/README.txt

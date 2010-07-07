@@ -24,7 +24,9 @@ ifeq (${USE_PNG},1)
     L+=${PNGLIB}
     HG_DEFS+=-DUSE_PNG
     HG_INC+=${PNGINCL}
-    ifeq (${COLOR32},1)
+
+    # 32-bit color enabled by default
+    ifneq (${COLOR32},0)
         HG_DEFS+=-DCOLOR32
     endif
 endif

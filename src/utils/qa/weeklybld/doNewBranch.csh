@@ -58,8 +58,8 @@ echo "Now beginning to build new branch $BRANCHNN [${0}: `date`]"
 echo
 
 #echo debug: disabled ok cleanup
-if ( -e CvsReports.ok ) then
-    rm CvsReports.ok
+if ( -e GitReports.ok ) then
+    rm GitReports.ok
 endif
 if (-e 32bitUtils.ok) then
     rm 32bitUtils.ok
