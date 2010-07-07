@@ -82,6 +82,46 @@ subId 1247
 treatment None
 view Alignments
 
+metaObject wgEncodeHaibMethylSeqGm12878RegionsRep1
+objType table
+cell GM12878
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-06
+dateUnrestricted 2011-04-06
+fileName wgEncodeHaibMethylSeqGm12878RegionsRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 1
+restrictionEnzyme None
+subId 1247
+tableName wgEncodeHaibMethylSeqGm12878RegionsRep1
+treatment None
+view Regions
+
+metaObject wgEncodeHaibMethylSeqGm12878RegionsRep2
+objType table
+cell GM12878
+composite wgEncodeHaibMethylSeq
+dataType MethylSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-06
+dateUnrestricted 2011-04-06
+fileName wgEncodeHaibMethylSeqGm12878RegionsRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol PCR2x
+replicate 2
+restrictionEnzyme None
+subId 1247
+tableName wgEncodeHaibMethylSeqGm12878RegionsRep2
+treatment None
+view Regions
+
 metaObject wgEncodeHaibMethylSeqGm12891HpaAlnRep1
 objType file
 cell GM12891
@@ -826,4 +866,4 @@ tableName wgEncodeHaibMethylSeqK562RegionsRep2
 treatment None
 view Regions
 
-# MAGIC: -1690316092
+# MAGIC: 1286800423
