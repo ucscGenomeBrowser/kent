@@ -90,7 +90,7 @@ echo
 echo  "NOW STARTING Git-Reports ON HGWDEV IN PARALLEL [${0}: `date`]"
 echo
 rm -f doNewGit.log
-#echo debug: disabled buildCvsReports
+#echo debug: disabled buildGitReports
 ssh -n hgwdev $WEEKLYBLD/buildGitReports.csh branch real >& doNewGit.log &
 # note - we are now running it in the background on hgwdev
 
@@ -150,7 +150,7 @@ wait
 echo "Wait complete, checking results. [${0}: `date`]"
 if ( -e GitReports.ok ) then
     echo "Git Reports finished ok. [${0}: `date`]"
-    echo "buildCvsReports.csh done on hgwdev, sending email... [${0}: `date`]"
+    echo "buildGitReports.csh done on hgwdev, sending email... [${0}: `date`]"
     echo "Ready for pairings, day 9, Git reports completed for v${BRANCHNN} branch http://genecats.cse.ucsc.edu/git-reports/ (history at http://genecats.cse.ucsc.edu/git-reports-history/)." | mail -s "Ready for pairings (day 9, v${BRANCHNN} review)." $USER donnak kuhn ann pauline
 else
     echo "Git Reports had some error, no ok file found. [${0}: `date`]"
