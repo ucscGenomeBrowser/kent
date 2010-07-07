@@ -1582,7 +1582,6 @@ if (var)
             subtrack->loadItems(subtrack);
 
         limitVisibility(subtrack);
-        //warnWithBackTrace("overrideComposite: %s - %s limit:%s  height:%d",subtrack->track,var,hStringFromTv(subtrack->limitedVis),subtrack->height);
         }
 
     return hTvFromString(var);
@@ -2046,8 +2045,6 @@ for (track = trackList; track != NULL; track = track->next)
                     subtrack->hasUi = track->hasUi;
                     flatTracksAdd(&flatTracks,subtrack,cart);
                     pixHeight += trackPlusLabelHeight(subtrack, fontHeight);
-                    //if(sameString("wgEncodeOpenChromChipGm12878CmycPk",subtrack->track))
-                    //    warn("subtrack:%s  hasUi:%s  pixHeight:%d  total:%d",subtrack->track, subtrack->hasUi?"true":"false", trackPlusLabelHeight(subtrack, fontHeight),pixHeight);
                     }
                 #endif//def FLAT_TRACK_LIST
                 }
