@@ -110,9 +110,8 @@ while ( $#list > 0 )
 
 	# email the cherry-pick
 	echo "emailing the cherry-pick"
-	set mailMsg = "The following commit has been cherry-picked onto v${BRANCHNN} branch:\n$c"
-	set subject = '"'"Cherry-Pick complete."'"'
-	echo "$mailMsg" | mail -s "$subject" $USER galt browser-qa
+	set mailMsg = "Commit $c has been cherry-picked onto v${BRANCHNN} branch:\n$c"
+	git show --stat $c | mail -s "$mailMsg" $USER galt browser-qa
 
 	if (-d $BUILDDIR/v${BRANCHNN}_branch) then
 	    # do git pull in 64-bit build repo	
