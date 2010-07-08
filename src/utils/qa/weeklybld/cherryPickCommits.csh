@@ -16,6 +16,12 @@ endif
 echo
 echo "BRANCHNN=$BRANCHNN"
 
+#make sure origin/* is up to date
+git fetch
+if ($status) then
+    echo "unexpected error running git fetch."
+    exit 1
+endif
 
 #see if branch exists
 set x=`git branch | grep "^. v${BRANCHNN}_branch"`
@@ -94,12 +100,12 @@ while ( $#list > 0 )
 
 	# push to world
 	echo "pushing v${BRANCHNN}_branch to origin"
-	git push
+	git push origin v${BRANCHNN}_branch
 	if ($status) then
-	    echo "! ! ! failed running: git push (on beta branch)"
-	    echo "This is an unexpected error you may need to investigate who has been messing with the beta branch."
+	    echo "! ! ! failed running: git push (from v${BRANCHNN}_branch)"
+	    echo "This is an unexpected error you may need to investigate who has been messing with v${BRANCHNN}_branch."
 	    exit 1
-	endif
+	endif	
 
 	if (-d $BUILDDIR/v${BRANCHNN}_branch) then
     	    # log the cherry-pick
