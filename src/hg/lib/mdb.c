@@ -877,38 +877,33 @@ return mdbObjs;
 }
 
 // ------ Table name and creation ------
-#define MDB_SPEC_LOCATION "/cluster/bin/sqlCreate/metaDb.sql"
 
 void mdbReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly)
 // Creates ore Recreates the named mdb.
 {
+char *sqlCreate =
+"# Contains metadata for a table, file or other objects.\n"
+"CREATE TABLE %s (\n"
+"    obj varchar(255) not null,      # Object name or ID.\n"
+"    var varchar(255) not null,      # Metadata variable name.\n"
+"    varType enum ('txt','binary')   # Most vars are txt\n"
+"            not null default 'txt',\n"
+"    val longblob not null,          # Metadata value.\n"
+"  #Indices\n"
+"    PRIMARY KEY(obj,var),\n"
+"    UNIQUE(var,val(32),obj)\n"
+")";
+
 if(sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
 
-char *sql = NULL;
-readInGulp(MDB_SPEC_LOCATION, &sql, NULL);
-char *pos = strchr(sql, ';');
-if ( pos != NULL)
-    *pos = 0;
-char *oldSql = cloneString(sql);
-pos = stringIn("CREATE TABLE ", oldSql);
-if (pos == NULL)
-    errAbort("Can't find CREATE TABLE in %s\n", MDB_SPEC_LOCATION);
-nextWord(&pos);
-nextWord(&pos);
-char *oldName = nextWord(&pos);
-if(differentWord(oldName, tblName))
-    {
-    char *saveSql = cloneString(sql);
-    freeMem(sql);
-    sql = replaceChars(saveSql, oldName, tblName);
-    freeMem(saveSql);
-    }
-freeMem(oldSql);
-verbose(2, "Requesting table creation:\n\t%s;\n", sql);
+struct dyString *dy = newDyString(512);
+dyStringPrintf(dy, sqlCreate, tblName);
+verbose(2, "Requesting table creation:\n%s;\n", dyStringContents(dy));
 if(!testOnly)
-    sqlRemakeTable(conn,tblName, sql);
-freeMem(sql);
+    sqlRemakeTable(conn, tblName, dyStringContents(dy));
+
+dyStringFree(&dy);
 }
 
 char*mdbTableName(struct sqlConnection *conn,boolean mySandBox)
