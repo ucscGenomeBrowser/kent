@@ -4924,3 +4924,57 @@ term U
 tag U
 type sex
 description UnknownD
+
+#Venkat: Trial to add seqPlatform for use for GEO submissions
+#Uses the GEO terms to be conistent and help with GEO submissions
+### Seq Platform
+# Expected fields:
+# ---------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters
+# type (informs pipeline code of stanza type, should be seqPlatform)
+# description
+
+term Illumina_Genome_Analyzer
+tag IlluminaGA
+type seqPlatform
+description ? TBD
+# Matches GA that Kate initially indicated as the term
+
+term Illumina_Genome_Analyzer_II
+tag IlluminaGA2
+type seqPlatform
+description ? TBD
+# Matches GA2 that Kate initially indicated as the term
+
+term Illumina_Genome_Analyzer_IIx
+tag IlluminaGAx
+type seqPlatform
+description ? TBD
+# Matches GA2x that Kate initally indicated as the term
+
+term 454_GS
+tag 454GS
+type seqPlatform
+description ? TBD
+
+term 454_GS_20
+tag 454GS20
+type seqPlatform
+description ? TBD
+
+term 454_GS_FLX
+tag 454GSFLX
+type seqPlatform
+description ? TBD
+
+term AB_SOLiD_System
+tag ABSOLiD
+type seqPlatform
+description ? TBD
+
+term AB_SOLiD_System_2.0
+tag ABSOLiD2
+type seqPlatform
+description ? TBD
+
