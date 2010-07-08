@@ -816,7 +816,7 @@ function tableSortUsingSortColumns(table)
     tableSortByColumns(tbody,columns);
 }
 
-function tableSortAtButtonPress(anchor,tagId)
+function _tableSortAtButtonPressEncapsulated(anchor,tagId)
 {// Updates the sortColumns struct and sorts the table when a column header has been pressed
  // If the current primary sort column is pressed, its direction is toggled then the table is sorted
  // If a secondary sort column is pressed, it is moved to the primary spot and sorted in fwd direction
@@ -872,6 +872,12 @@ function tableSortAtButtonPress(anchor,tagId)
     return;
 
 }
+
+function tableSortAtButtonPress(anchor,tagId)
+{
+    waitOnFunction( _tableSortAtButtonPressEncapsulated, anchor, tagId);
+}
+
 function tableSortAtStartup()
 {
     //alert("tableSortAtStartup() called");

@@ -5,6 +5,7 @@ var debug = false;
 var originalPosition;
 var originalSize;
 var originalCursor;
+var originalMouseOffset = {x:0, y:0};
 var clickClipHeight;
 var revCmplDisp;
 var insideX;
@@ -1046,9 +1047,41 @@ this.each(function(){
 
 /////////////////////////////////////////////////////
 
+function saveMouseOffset(ev)
+{   // Save the mouse offset associated with this event
+    originalMouseOffset = {x: ev.clientX, y: ev.clientY};
+}
+
+function mouseHasMoved(ev)
+{   // return true if mouse has moved a significant amount
+    var minPixels = 10;
+    var movedX = ev.clientX - originalMouseOffset.x;
+    var movedY = ev.clientY - originalMouseOffset.y;
+    if ( arguments.length == 2) {
+        var num = Number(arguments[1]);
+        if(isNaN(num)) {
+            if ( arguments[1].toLowerCase() == "x" )
+                return (movedX > minPixels || movedX < (minPixels * -1));
+            if ( arguments[1].toLowerCase() == "y" )
+                return (movedY > minPixels || movedY < (minPixels * -1));
+        }
+        else
+            minPixels = num;
+    }
+    return (   movedX > minPixels || movedX < (minPixels * -1)
+            || movedY > minPixels || movedY < (minPixels * -1));
+}
+
 function blockTheMap(e)
 {
     blockUseMap=true;
+}
+
+function blockTheMapOnMouseMove(ev)
+{
+    if (!blockUseMap && mouseHasMoved(ev)) {
+        blockUseMap=true;
+    }
 }
 
 // wait for jStore to prepare the storage engine (this token reload code is experimental and currently dead).
@@ -1157,8 +1190,9 @@ $(document).ready(function()
             $(imgTable).tableDnD({
                 onDragClass: "trDrag",
                 dragHandle: "dragHandle",
-                onDragStart: function(table, row) {
-                    $(document).bind('mousemove',blockTheMap);
+                onDragStart: function(ev, table, row) {
+                    saveMouseOffset(ev);
+                    $(document).bind('mousemove',blockTheMapOnMouseMove);
                 },
                 onDrop: function(table, row, dragStartIndex) {
                     if($(row).attr('rowIndex') != dragStartIndex) {
@@ -1167,7 +1201,7 @@ $(document).ready(function()
                         }
                         imgTblZipButtons( table );
                     }
-                    $(document).unbind('mousemove',blockTheMap);
+                    $(document).unbind('mousemove',blockTheMapOnMouseMove);
                     setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
                 }
             });
@@ -1221,7 +1255,7 @@ $(document).ready(function()
                 var pos = parsePosition(getPosition());
                 script.setAttribute('src', rec.url + "?track=" + id + "&jsonp=remoteTrackCallback&c=" + pos.chrom +
                                     "&s=" + pos.start + "&e=" + pos.end);
-                document.getElementsByTagName('head')[0].appendChild(script); 
+                document.getElementsByTagName('head')[0].appendChild(script);
             }
         }
     }
@@ -1838,7 +1872,7 @@ function handleNewMetadataVar(response, status)
 // Handle ajax response (repopulate a metadata select)
 {
     var list = eval(response);
-    var ele = $('select[name=' + this.cmd + ']'); 
+    var ele = $('select[name=' + this.cmd + ']');
     ele.empty();
     ele.append("<option>Any</option>");
     for (var i = 0; i < list.length; i++) {

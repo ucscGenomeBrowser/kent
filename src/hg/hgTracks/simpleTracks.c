@@ -4937,8 +4937,8 @@ char *diseaseClassCode;
 int i=0;
 conn = hAllocConn(database);
 
-safef(query, sizeof(query), 
-"select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", 
+safef(query, sizeof(query),
+"select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode",
 item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -5168,10 +5168,10 @@ if (decipherId != NULL)
 		}
 	    }
 	sqlFreeResult(&sr);
-    	/* add more logic here to check for mean_ratio = 0 
+    	/* add more logic here to check for mean_ratio = 0
 	   (which is a problem to be fixed by DECIPHER */
 
-	safef(query, sizeof(query), 
+	safef(query, sizeof(query),
 	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
@@ -9043,6 +9043,9 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
+#ifdef SUBTRACKS_HAVE_VIS
+boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
+#endif///def SUBTRACKS_HAVE_VIS
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
@@ -9056,6 +9059,10 @@ if (enabled == enabledInTdb)
     if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
         cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
     }
+#ifdef SUBTRACKS_HAVE_VIS
+if(overrideComposite)
+    enabled = TRUE;
+#endif///def SUBTRACKS_HAVE_VIS
 return enabled;
 }
 
@@ -11135,6 +11142,7 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
+tdbExtrasAddOrUpdate(tdb,"track",track); // Be able to find track struct from tdb
 
 /* Handle remote database settings - just a JK experiment at the moment. */
 track->remoteSqlHost = trackDbSetting(tdb, "sqlHost");
