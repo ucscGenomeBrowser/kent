@@ -902,6 +902,7 @@ for (col = table->columnList; col != NULL; col = col->next)
 	{
 	case t_char:
 	case t_string:
+	case t_lstring:
     	    sprintf(colInsertBuff, " el->%s", colName);
 	    break;
 	default:
