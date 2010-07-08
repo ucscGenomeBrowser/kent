@@ -17,6 +17,7 @@ echo
 echo "BRANCHNN=$BRANCHNN"
 
 #make sure origin/* is up to date
+echo "git fetch to be sure origin/* is up-to-date"
 git fetch
 if ($status) then
     echo "unexpected error running git fetch."
@@ -116,7 +117,7 @@ while ( $#list > 0 )
 
 	# email the cherry-pick
 	echo "emailing the cherry-pick"
-	set mailMsg = "Commit $c has been cherry-picked onto v${BRANCHNN} branch:\n$c"
+	set mailMsg = "Commit $c has been cherry-picked onto v${BRANCHNN} branch"
 	git show --stat $c | mail -s "$mailMsg" $USER galt browser-qa
 
 	if (-d $BUILDDIR/v${BRANCHNN}_branch) then
