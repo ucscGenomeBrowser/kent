@@ -778,8 +778,8 @@ sub validateBam
 	# don't show end-user pipe error(s)
 	return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
     }
-	#Venkat: Changed $sex to $sextype to accomadate the sex being passed from the DDF
-    my $sextype = $terms{'Cell Line'}->{$cell}->{'sex'};
+	#Venkat: Changed $sex to $cellLineSex to accomadate the sex being passed from the DDF
+    my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
    
 	# Venkat: For category= Tissues change sex to one defined by the DFF
 	# The reason that I did not just pass sex is because I will be using the
@@ -793,14 +793,14 @@ sub validateBam
     
 	#Venkat: Can be a better design, but need to flesh out design more.
 	if ($category eq "T") {
-	$sextype=$sex;
+	$cellLineSex=$sex;
     }
 
     my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
     my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
     my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
-	# Venkat: Changed $sex to $sextype to accomade the above changes to pass sex from ddf
-    if ($sextype ne "F")  {
+	# Venkat: Changed $sex to $cellLineSex to accomade the above changes to pass sex from ddf
+    if ($cellLineSex ne "F")  {
         $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
         $twoBitFile =  "$downloadDir/male.$assembly.2bit";
     }
