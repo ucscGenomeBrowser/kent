@@ -93,6 +93,11 @@ file ddf
 type string
 required no
 
+field seqPlatform
+file ddf
+type string
+required no
+
 # required DAF header fields
 
 field dafVersion
