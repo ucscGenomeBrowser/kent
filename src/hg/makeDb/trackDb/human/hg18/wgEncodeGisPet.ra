@@ -9,7 +9,7 @@ group expression
 subGroup1 view Views 0-PlusRawSignal=Plus_Raw_Signal 1-MinusRawSignal=Minus_Raw_Signal 2-Alignments=Alignments 3-Clusters=Clusters
 subGroup2 cellType Cell_Line GM12878=GM12878 H1-hESC=H1-hESC HeLaS3=HeLaS3 HepG2=HepG2 HUVEC=HUVEC K562=K562 NHEK=NHEK prostate=Prostate
 subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
-subGroup4 rnaExtract RNA_Extract longPolyA=long_PolyA+ total=Total
+subGroup4 rnaExtract RNA_Extract longPolyA=PolyA+ total=Total
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longPolyA,total
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+
