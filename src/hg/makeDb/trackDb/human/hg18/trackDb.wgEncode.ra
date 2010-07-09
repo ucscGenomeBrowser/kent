@@ -3388,6 +3388,7 @@ autoScale off
 windowingFunction mean
 maxHeightPixels 100:32:16
 dataVersion ENCODE Feb 2009 Freeze
+canPack On
 wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalGm12878
