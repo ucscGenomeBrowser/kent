@@ -8807,7 +8807,7 @@ printf("<H3>Patient %s </H3>", itemName);
 
 /* print phenotypes */
 safef(query, sizeof(query),
-      "select distinct phenotype from decipherRaw where id ='%s'", itemName);
+      "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
