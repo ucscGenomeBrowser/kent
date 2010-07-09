@@ -4589,8 +4589,8 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
-term DMS0_2.0pct
-tag DMS020
+term DMSO_2.0pct
+tag DMSO20
 description 5d,2% DMSO (Weissman)
 type treatment
 
