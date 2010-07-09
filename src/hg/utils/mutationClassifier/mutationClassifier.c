@@ -545,12 +545,12 @@ else
     }
 }
 
-static struct genePred *findNearestGene(struct bed *bed, struct genePred *genes, int maxDistance)
-// return nearest gene (or NULL if none found)
+static struct genePred *findNearestGene(struct bed *bed, struct genePred *genes, int maxDistance, int *minDistance)
+// return nearest gene (or NULL if none found).
+// minDistance is set to 0 if item is within returned gene, otherwise the distance to txStart or txEnd.
 // Currently inefficient (O(length genes)).
 {
 struct genePred *retVal = NULL;
-int minDistance = 0;
 for(; genes != NULL; genes = genes->next)
     {
     if(sameString(bed->chrom, genes->chrom))
@@ -558,7 +558,7 @@ for(; genes != NULL; genes = genes->next)
         if(bedItemsOverlap(bed, genes))
             {
             retVal = genes;
-            minDistance = 0;
+            *minDistance = 0;
             }
         else
             {
@@ -567,10 +567,10 @@ for(; genes != NULL; genes = genes->next)
                 diff = genes->txStart - bed->chromStart;
             else
                 diff = bed->chromStart - genes->txEnd;
-            if(diff < maxDistance && (retVal == NULL || diff < minDistance))
+            if(diff < maxDistance && (retVal == NULL || diff < *minDistance))
                 {
                 retVal = genes;
-                minDistance = diff;
+                *minDistance = diff;
                 }
             }
         }
@@ -872,19 +872,20 @@ while(!done)
                         }
                     if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
                         {
-                            maxDelta = delta;
-                            if(debug)
-                                fprintf(stderr, "%s:%d-%d: %s\t%c-%c: %d == %d ?; %.2f -> %.2f\n\t%s\t%s\n",
-                                        bed->chrom, bed->chromStart, bed->chromEnd,
-                                        bed->name, seq->dna[pos], snp,
-                                        seq->size, motif->columnCount, before, after, beforeDna, afterDna);
-                            struct genePred *nearestGene = findNearestGene((struct bed *) bed, genes, maxNearestGene);
-                            if(nearestGene == NULL)
-                                safef(line, sizeof(line), "%s;%.2f>%.2f", motifName, before, after);
-                            else
-                                safef(line, sizeof(line), "%s;%.2f>%.2f;%s", motifName, before, after, nearestGene->name);
-                            code = REGULATORY;
-                            // XXXX record (somehow) that we have used this record.
+                        int minDistance = 0;
+                        maxDelta = delta;
+                        if(debug)
+                            fprintf(stderr, "%s:%d-%d: %s\t%c-%c: %d == %d ?; %.2f -> %.2f\n\t%s\t%s\n",
+                                    bed->chrom, bed->chromStart, bed->chromEnd,
+                                    bed->name, seq->dna[pos], snp,
+                                    seq->size, motif->columnCount, before, after, beforeDna, afterDna);
+                        struct genePred *nearestGene = findNearestGene((struct bed *) bed, genes, maxNearestGene, &minDistance);
+                        if(nearestGene == NULL)
+                            safef(line, sizeof(line), "%s;%.2f>%.2f;%s%d", motifName, before, after, motifStrand, pos + 1);
+                        else
+                            safef(line, sizeof(line), "%s;%.2f>%.2f;%s%d;%s;%d", motifName, before, after, motifStrand, pos + 1, nearestGene->name, minDistance);
+                        code = REGULATORY;
+                        // XXXX record (somehow) that we have used this record?
                         }
                     freeDnaSeq(&seq);
                     }
