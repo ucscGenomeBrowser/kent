@@ -8807,7 +8807,7 @@ printf("<H3>Patient %s </H3>", itemName);
 
 /* print phenotypes */
 safef(query, sizeof(query),
-      "select distinct phenotype from decipherRaw where id ='%s'", itemName);
+      "select distinct phenotype from decipherRaw where id ='%s' order by phenotype", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
@@ -21660,6 +21660,93 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
+void doHgIkmc(struct trackDb *tdb, char *item)
+/* Human Genome Map of KnockOut Mouse Project */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[512];
+struct sqlResult *sr;
+char **row;
+genericHeader(tdb, item);
+char defaultExtra[HDB_MAX_TABLE_STRING];
+safef(defaultExtra, sizeof(defaultExtra), "%sExtra", tdb->table);
+char *extraTable = trackDbSettingOrDefault(tdb, "xrefTable", defaultExtra);
+boolean gotExtra = sqlTableExists(conn, extraTable);
+if (gotExtra)
+    {
+    char mgiId[256];
+    char *designId;
+
+    safef(query, sizeof(query), "select alias from %s where name = '%s'",
+	  extraTable, item);
+    sqlQuickQuery(conn, query, mgiId, sizeof(mgiId));
+    char *ptr = strchr(mgiId, ',');
+    if (!startsWith("MGI:", mgiId) || ptr == NULL)
+	errAbort("Where is the MGI ID?: '%s'", mgiId);
+    else
+	*ptr = '\0';
+    ptr++;
+    designId = ptr;
+    ptr = strchr(ptr, ',');
+    *ptr = '\0';
+
+    // Use the MGI ID to show all centers that are working on this gene:
+    safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%s%%'",
+	  extraTable, mgiId, designId);
+    sr = sqlGetResult(conn, query);
+    char lastMgiId[16];
+    lastMgiId[0] = '\0';
+    puts("<TABLE BORDERWIDTH=0 CELLPADDING=0>");
+    while ((row = sqlNextRow(sr)) != NULL)
+	{
+	char *words[4];
+	int wordCount = chopCommas(row[1], words);
+	if (wordCount >= 3)
+	    {
+	    char *mgiId = words[0], *center = words[2], *status = words[3];
+	    if (!sameString(mgiId, lastMgiId))
+		{
+		printf("<TR><TD colspan=2>");
+		printCustomUrl(tdb, mgiId, FALSE);
+		printf("</TD></TR>\n<TR><TD colspan=2>");
+		printOtherCustomUrl(tdb, mgiId, "mgiUrl", FALSE);
+		printf("</TD></TR>\n");
+		safecpy(lastMgiId, sizeof(lastMgiId), mgiId);
+		}
+	    printf("<TR><TD><B>Center: </B>%s</TD>\n", center);
+	    ptr = strrchr(row[0], '_');
+	    if (ptr != NULL)
+		printf("<TD><B>Design ID: </B>%s</TD>\n", ptr+1);
+	    printf("<TD><B>Status: </B>%s</TD></TR>\n", status);
+	    }
+	}
+    puts("<TR><TD colspan=2>");
+    sqlFreeResult(&sr);
+    }
+safef(query, sizeof(query), "select chrom,chromStart,chromEnd from %s "
+      "where name = '%s'", tdb->table, item);
+sr = sqlGetResult(conn, query);
+char lastChr[32];
+int lastStart = -1;
+int lastEnd = -1;
+lastChr[0] = '\0';
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    char *chr = row[0];
+    int start = atoi(row[1]), end = atoi(row[2]);
+    if (!sameString(chr, lastChr) || start != lastStart || end != lastEnd)
+	printPos(chr, start, end, NULL, TRUE, item);
+    safecpy(lastChr, sizeof(lastChr), chr);
+    lastStart = start;
+    lastEnd = end;
+    }
+sqlFreeResult(&sr);
+if (gotExtra)
+    puts("</TD></TR></TABLE>");
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
+
 void doUCSFDemo(struct trackDb *tdb, char *item)
 {
 genericHeader(tdb, item);
@@ -23142,6 +23229,10 @@ else if (sameString("igtc", table))
 else if (startsWith("komp", table) || startsWith("ikmc", table))
     {
     doKomp(tdb, item);
+    }
+else if (sameString("hgIkmc", table))
+    {
+    doHgIkmc(tdb, item);
     }
 else if (startsWith("dbRIP", table))
     {

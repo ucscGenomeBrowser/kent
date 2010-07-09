@@ -69,6 +69,7 @@ use vars qw/
     $opt_configDir
     $opt_verbose
     $opt_instance
+    $opt_geoUser
     /;
 
 sub usage {
@@ -155,7 +156,8 @@ my $now = time();
 my $wd = cwd();
 my $ok = GetOptions("instance=s",
                     "configDir=s",
-                    "verbose=i"
+                    "verbose=i",
+                    "geoUser=s"
                     );
 # parse options
 usage() if (!$ok);
@@ -163,6 +165,9 @@ usage() if (scalar(@ARGV) < 3);
 # get options or set defaults
 if (not defined $opt_instance) {
     $opt_instance = "prod";
+}
+if (not defined $opt_geoUser) {
+    $opt_geoUser = "ucsc_encode_dcc";
 }
 my $configPath;
 if (defined $opt_configDir) {
@@ -243,8 +248,24 @@ for $i (@expVars) {
     print STDERR "\t", $i, "\n";
 }
 
+# set up the package directory
+my $packageName = $opt_geoUser . "_" . $compositeName;
+# check to see if the package name already exists
+if (-e $packageName) {
+    print STDERR "Cannot make package: $packageName already exists in the current directory\n\tremove it and try again.\n";
+    exit(10);
+}
+system("mkdir $packageName");
+open MANIFEST, ">$packageName/manifest.soft";
+
+# the list of sample ids
+my @sampleIds;
+
 # while there are objects left
+my $count = 0;
 while(scalar(keys %objsSet) > 0) {
+    $count += 1;
+    last if $count > 2;
     # get the 1st object
     my $firstObject = (keys(%objsSet))[0];
     my @currentObjects = ($firstObject);
@@ -255,7 +276,6 @@ while(scalar(keys %objsSet) > 0) {
     %metadata = getObjMetadata($dbHandle, $firstObject);
     my @currentMetadata = {%metadata};
     my @currentExpVars;
-    print $firstObject, "\n";
     for $i (@expVars) {
         defined $metadata{$i} or die "can't find field for experimental variable " . $i;
         push @currentExpVars, $metadata{$i};
@@ -294,8 +314,10 @@ while(scalar(keys %objsSet) > 0) {
     #}
 
     my $grant = getSameMetadata("grant", @currentMetadata);
-    my $sample_identifier = $grant . "_" . join "_", @currentExpVars;
-    my $sample_title = $sample_identifier;
+    my $sampleIdentifier = $grant . "_" . join "_", @currentExpVars;
+    my $sampleTitle = $sampleIdentifier;
+
+    push @sampleIds, $sampleIdentifier;
 
     # read the organism for this cell line
     my $cell = getSameMetadata("cell", @currentMetadata);
@@ -320,17 +342,18 @@ while(scalar(keys %objsSet) > 0) {
     my $ibrarySelection = $dataTypeLibrarySelection{$dataType};
 
     # generate the POST
-    print "^SAMPLE=$sample_identifier" . "\n";
-    print "!Sample_title = $sample_title" . "\n";
-    print "!Sample_source_name = $cell" . "\n";
-    print "!Sample_organism = $organism" . "\n";
+    print MANIFEST "^SAMPLE=$sampleIdentifier" . "\n";
+    print MANIFEST "!Sample_title = $sampleTitle" . "\n";
+    print MANIFEST "!Sample_source_name = $cell" . "\n";
+    print MANIFEST "!Sample_organism = $organism" . "\n";
     # iterate over exp vars
     for ($i = 0; $i < scalar(@expVars); ++$i) {
         my $e = getSameMetadata($expVars[$i], @currentMetadata);
         # output the base exp var value
-        print "!Sample_characteristics = $expVars[$i]: $e" . "\n";
+        print MANIFEST "!Sample_characteristics = $expVars[$i]: $e" . "\n";
         # if the currnet exp var is none
-        if ($currentExpVars[$i] eq "None" or
+        if (not defined $currentExpVars[$i] or
+            $currentExpVars[$i] eq "None" or
             $currentExpVars[$i] eq "none" or
             ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Input")) {
             # do nothing more
@@ -341,22 +364,22 @@ while(scalar(keys %objsSet) > 0) {
             for $j (@{$expVarDetails{$expVars[$i]}}) {
                 # if there's a better label for this term use it
                 if (defined $detailsCleaner{$j}) {
-                    print "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
+                    print MANIFEST "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
                 } else {
-                    print "!Sample_characteristics = $expVars[$i] $j: ",  $cvData{$j}, "\n";
+                    print MANIFEST "!Sample_characteristics = $expVars[$i] $j: ",  $cvData{$j}, "\n";
                 }
             }
         }
     }
-    print "!Sample_biomaterial_provider = $provider" . "\n";
-    print "!Sample_growth_protocol = $growthProtocol" . "\n";
-    print "!Sample_molecule = $molecule" . "\n";
-    print "!Sample_extract_protocol = $extractProtocol" . "\n";
-    print "!Sample_data_processing = $dataProcessing" . "\n";
-    print "!Sample_library_strategy = $libraryStrategy" . "\n";
-    print "!Sample_library_source = $ibrarySource" . "\n";
-    print "!Sample_library_selection = $ibrarySelection" . "\n";
-    print "!Sample_instrument_model = $instrument" . "\n";
+    print MANIFEST "!Sample_biomaterial_provider = $provider" . "\n";
+    print MANIFEST "!Sample_growth_protocol = $growthProtocol" . "\n";
+    print MANIFEST "!Sample_molecule = $molecule" . "\n";
+    print MANIFEST "!Sample_extract_protocol = $extractProtocol" . "\n";
+    print MANIFEST "!Sample_data_processing = $dataProcessing" . "\n";
+    print MANIFEST "!Sample_library_strategy = $libraryStrategy" . "\n";
+    print MANIFEST "!Sample_library_source = $ibrarySource" . "\n";
+    print MANIFEST "!Sample_library_selection = $ibrarySelection" . "\n";
+    print MANIFEST "!Sample_instrument_model = $instrument" . "\n";
     my $rawCount = 1;
     for $i (@currentMetadata) {
         my %metadata = %{$i};
@@ -364,9 +387,10 @@ while(scalar(keys %objsSet) > 0) {
         if ($metadata{"view"} eq "RawData") {
             my ($name, $type, $compression) = split(/\./, $filename);
             my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
-            print "!Sample_raw_file_$rawCount = $filename" . "\n";
-            print "!Sample_raw_file_type_$rawCount = $type" . "\n";
-            print "!Sample_raw_file_checksum_$rawCount = $checksum" . "\n";
+            print MANIFEST "!Sample_raw_file_$rawCount = $filename" . "\n";
+            print MANIFEST "!Sample_raw_file_type_$rawCount = $type" . "\n";
+            print MANIFEST "!Sample_raw_file_checksum_$rawCount = $checksum" . "\n";
+            system("cp $compositeDir/$filename $packageName/$filename");
             ++$rawCount;
         }
     }
@@ -376,11 +400,26 @@ while(scalar(keys %objsSet) > 0) {
         my $filename = $metadata{"fileName"};
         if ($metadata{"view"} ne "RawData") {
             my $checksum = (split/\W+/, `md5sum $compositeDir/$filename`)[0];
-            print "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
-            print "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
-            print "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
+            print MANIFEST "!Sample_supplementary_file_$supplementCount = $filename" . "\n";
+            print MANIFEST "!Sample_supplementary_file_checksum_$supplementCount = $checksum" . "\n";
+            print MANIFEST "!Sample_supplementary_file_build_$supplementCount = $database" . "\n";
+            system("cp $compositeDir/$filename $packageName/$filename");
             ++$supplementCount;
         }
     }
-    print "\n";
+    print MANIFEST "\n";
 }
+
+my $webLink = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
+
+print MANIFEST "^SERIES=$compositeName" . "\n";
+print MANIFEST "!Series_title = [required]" . "\n";
+print MANIFEST "!Series_summary = [required]" . "\n";
+print MANIFEST "!Series_overall_design = [required]" . "\n";
+print MANIFEST "!Series_contributor = [optional; 1 per author; use 'firstname,lastname' or 'firstname,middleinitial,lastname]" . "\n";
+print MANIFEST "!Series_web_link = $webLink" . "\n";
+for $i (@sampleIds) {
+    print MANIFEST "!Series_sample_id = $i" . "\n";
+}
+
+close MANIFEST;
