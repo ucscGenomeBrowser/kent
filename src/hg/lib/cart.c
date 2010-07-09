@@ -324,8 +324,6 @@ for (el = list; el != NULL; el = el->next)
             }
         }
     }
-
-// subtrack settings overridden by more recent view or composite level settings (HOW?)
 }
 
 static void loadCgiOverHash(struct cart *cart, struct hash *oldVars)
@@ -1245,7 +1243,7 @@ cartExclude(cart, sessionVar);
 if (sameOk(cfgOption("signalsHandler"), "on"))  /* most cgis call this routine */
     initSigHandlers(hDumpStackEnabled());
 char *httpProxy = cfgOption("httpProxy");  /* most cgis call this routine */
-if (httpProxy) 
+if (httpProxy)
     setenv("http_proxy", httpProxy, TRUE);   /* net.c cannot see the cart, pass the value through env var */
 return cart;
 }
@@ -1910,4 +1908,38 @@ if (a == NULL)
 else
     return atof(a);
 }
+
+
+boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved)
+/* Returns TRUE if new cart setting has changed from old cart setting */
+{
+char *newValue = cartOptionalString(newCart,setting);
+char *oldValue = hashFindVal(oldVars,setting);
+
+if (newValue == NULL)
+    return (!ignoreRemoved && oldValue != NULL);
+if (oldValue == NULL)
+    return FALSE;  // FIXME: This seems strange but it is what works in practice.
+return (differentString(newValue,oldValue));
+}
+
+
+void cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent)
+/* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
+   If suffix NULL then removes 'trackName' which holds visibility */
+{
+struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?tdb->subtracks:tdb);
+for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
+    {
+    struct trackDb *descendentTdb = tdbRef->val;
+    char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+    if (suffix != NULL)
+        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
+    else
+        safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+    cartRemove(cart,settingName);
+    }
+}
+
+
 

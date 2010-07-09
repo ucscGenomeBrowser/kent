@@ -4313,6 +4313,40 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
+void subtrackVisCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view vis changes, remove subtrack specific vis */
+{
+struct track *track = trackList;
+for (;track != NULL; track = track->next)
+    {
+    if(!tdbIsComposite(track->tdb))
+        continue;
+    boolean compositeWide = cartValueHasChanged(newCart,oldVars,track->track,TRUE);
+
+    boolean hasViews = FALSE;
+    struct trackDb *tdbView = track->tdb->subtracks;
+    for (;tdbView != NULL; tdbView = tdbView->next)
+        {
+        char * view = NULL;
+        if (!tdbIsView(tdbView,&view))
+            break;
+
+        hasViews = TRUE;
+        boolean viewLevel = FALSE;
+        if(!compositeWide)
+            {
+            char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+            safef(settingName,sizeof(settingName),"%s.%s.vis",track->track,view);
+            viewLevel = cartValueHasChanged(newCart,oldVars,settingName,TRUE);
+            }
+        if(compositeWide || viewLevel)
+            cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE); // clean up children, skipping view
+        }
+    if (compositeWide && !hasViews)
+        cartRemoveFromTdbTree(newCart,track->tdb,NULL,TRUE); // clean up children, skipping composite
+    }
+}
+
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
  * image.  If the ideoTn parameter is not NULL, it is filled in if the
@@ -4380,7 +4414,11 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
     }
-#endif//def IMAGEv2_DRAG_REORDER
+#endif///def IMAGEv2_DRAG_REORDER
+#ifdef SUBTRACKS_HAVE_VIS
+// Here is where subtrack vis override must be removed when composite vis is updated
+subtrackVisCartCleanup(trackList,cart,oldVars);
+#endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
 if (hideAll || defaultTracks)

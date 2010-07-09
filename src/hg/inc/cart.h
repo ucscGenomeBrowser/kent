@@ -509,5 +509,12 @@ int cartOrTdbInt(struct cart *cart, struct trackDb *tdb, char *var, int defaultV
 double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double defaultVal);
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
 
+boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved);
+/* Returns TRUE if new cart setting has changed from old cart setting */
+
+void cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent);
+/* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
+   If suffix NULL then removes 'trackName' which holds visibility */
+
 #endif /* CART_H */
 

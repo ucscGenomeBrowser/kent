@@ -15,28 +15,28 @@ dataType          ChIP-seq
 compositeSuffix   SydhTfbs
 dataAgreementSuffix Stanf
 group             regulation
-variables         cell, antibody, treatment, input
+variables         cell,strain, antibody, treatment, input
 assembly          mm9
 
 medianFragmentLength 200
-validationSettings validateFiles.tagAlign:mmCheckOneInN=1000,mismatches=3,nMatch,matchFirst=32;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks
+longLabelPrefix  ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Peaks
 type             narrowPeak
 hasReplicates    no
 required         no
 
 view             Signal
-longLabelPrefix  TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal
+longLabelPrefix  ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Signal
 type             bigWig
 hasReplicates    no
 required         yes
 
 view             Alignments
-longLabelPrefix  TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Alignments
-type             tagAlign
+longLabelPrefix  ENCODE TFBS, Stanford/Yale/UCD/Harvard ChIP-seq Alignments
+type             bam
 hasReplicates    yes
 required         yes
 
