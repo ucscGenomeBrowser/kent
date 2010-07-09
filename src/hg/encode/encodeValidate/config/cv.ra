@@ -296,6 +296,7 @@ vendorId CC-2571
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001685
 sex U
+tier 3
 termId BTO:0001685
 protocol Open_Chromatin:AoSMC_Crawford_protocol.pdf
 
@@ -536,6 +537,7 @@ vendorName Paul Tesar (Case Western)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
 sex U
+tier 3
 protocol Open_Chromatin:FibroP_Crawford_protocol.pdf
 
 term Gliobla
@@ -1487,6 +1489,7 @@ vendorId 2200
 orderUrl http://www.sciencellonline.com/site/products/2200.php
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 sex U
+tier 3
 termId BTO:0000847
 protocol Open_Chromatin:Melano_Crawford_protocol.pdf
 
@@ -1500,6 +1503,7 @@ vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, P
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
+tier 3
 protocol Open_Chromatin:Myometr_Crawford_protocol.pdf
 
 term NB4
@@ -1532,6 +1536,7 @@ vendorId CC-2541
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
 sex U
+tier 3
 termId BTO:0002022
 protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
 
@@ -2129,6 +2134,7 @@ term MEL
 tag MEL
 type Cell Line
 organism Mouse
+category L
 description leukemia (K562 analog)
 tissue Blood
 color 46,0,184
@@ -2576,7 +2582,7 @@ vendorId 612044
 lab Farnham
 targetId GeneCard:GC10M126666
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
-validation missing
+validation Farnham_CtBP2:Farnham_CtBP2_validation.pdf
 
 term E2F1
 tag E2F1
@@ -2615,7 +2621,7 @@ orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
 lab Farnham
 targetId GeneCard:GC02M011536
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M011536
-validation missing
+validation Farnham_E2F6:Farnham_E2F6_validation.pdf
 
 term EBF
 tag EBF
@@ -2702,7 +2708,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
 lab Myers
-validation Myers_ETS1: ETS1_validation.pdf
+validation Myers_ETS1:Myers_ETS1_validation.pdf
 
 term FOSL2
 tag FOSL2
@@ -2880,7 +2886,7 @@ lab Farnham
 lots 1,2
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation Farnham_H3K4me3B:Farnham_H3K4me3B_validation.pdf
 
 term H3K9ac
 tag H3K9ac
@@ -2979,7 +2985,7 @@ lab Farnham
 lots 1
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation Farnham_H3K27me3B:Farnham_H3K27me3B_validation.pdf
 
 term H3K36me3
 tag H3K36me3
@@ -3008,7 +3014,7 @@ lab Farnham
 lots
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation Farnham_H3K36me3B:Farnham_H3K36me3B_validation.pdf
 
 term H3K79me2
 tag H3K79me2
@@ -3137,7 +3143,7 @@ orderUrl http://www.scbt.com/datasheet-9082-irf-3-fl-425-antibody.html
 lab Snyder
 targetId GeneCard:IRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
-validation missing
+validation Snyder_IRF3:Snyder_IRF3_validation.pdf
 
 term IRF4
 tag IRF4
@@ -3176,7 +3182,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=10483
 lab Farnham
 targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
-validation missing
+validation Farnham_KAP1:Farnham_KAP1_validation.pdf
 
 term Max
 tag MAX
@@ -3202,7 +3208,7 @@ orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
 lab Myers
 targetId GeneCard:GC15P100107
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A&search=mef2a
-validation Myers_MEF2A: MEF2A_validation.pdf
+validation Myers_MEF2A:Myers_MEF2A_validation.pdf
 
 term NELFe
 tag NELFE
@@ -3388,7 +3394,7 @@ vendorId MMS-126R
 orderUrl http://store.crpinc.com/datasheet.aspx?UpProd=&catalogno=MMS-126R
 lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
-validation missing
+validation Snyder_Pol2:Snyder_Pol2_validation.pdf
 
 term Pol2(b)
 tag POL2B
@@ -3689,7 +3695,7 @@ orderUrl http://www.abcam.com/TATA-binding-protein-TBP-antibody-mAbcam-62126-Nuc
 lab Snyder
 targetId GeneCard:TBP
 targetUrl hhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation missing
+validation Snyder_TBP:Snyder_TBP_validation.pdf
 
 term TCF12
 tag TCF12
@@ -3805,7 +3811,7 @@ orderUrl http://www.abcam.com/USF2-antibody-ab60931.html
 lab Snyder
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
-validation missing
+validation Snyder_USF2:Snyder_USF2_validation.pdf
 
 term WHIP
 tag WHIP
@@ -3831,7 +3837,7 @@ vendorId ab145
 lab Snyder
 targetId GeneCard:GC05P082409
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P082409
-validation missing
+validation Snyder_XRCC4:Snyder_XRCC4_validation.pdf
 
 term YY1
 tag YY1
@@ -3884,7 +3890,7 @@ lab Farnham
 lots 060729QCS1
 targetId GeneCard:GC19P063386
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
-validation missing
+validation Farnham_ZN274:Farnham_ZNF274_validation.pdf
 
 term ZZZ3
 tag ZZZ3
@@ -4584,6 +4590,11 @@ tag DMSO2
 description 1h,0.02% DMSO (Myers)
 type treatment
 
+term DMSO_2.0pct
+tag DMSO20
+description 5d,2% DMSO (Weissman)
+type treatment
+
 term Estradiol_10nM
 tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
@@ -4923,7 +4934,58 @@ description Both
 term U
 tag U
 type sex
-description Unknown
+description UnknownD
 
+#Venkat: Trial to add seqPlatform for use for GEO submissions
+#Uses the GEO terms to be conistent and help with GEO submissions
+### Seq Platform
+# Expected fields:
+# ---------------
+# term (human-readable name)
+# tag (machine-readable name, no special characters
+# type (informs pipeline code of stanza type, should be seqPlatform)
+# description
 
+term Illumina_Genome_Analyzer
+tag IlluminaGA
+type seqPlatform
+description ? TBD
+# Matches GA that Kate initially indicated as the term
+
+term Illumina_Genome_Analyzer_II
+tag IlluminaGA2
+type seqPlatform
+description ? TBD
+# Matches GA2 that Kate initially indicated as the term
+
+term Illumina_Genome_Analyzer_IIx
+tag IlluminaGAx
+type seqPlatform
+description ? TBD
+# Matches GA2x that Kate initally indicated as the term
+
+term 454_GS
+tag 454GS
+type seqPlatform
+description ? TBD
+
+term 454_GS_20
+tag 454GS20
+type seqPlatform
+description ? TBD
+
+term 454_GS_FLX
+tag 454GSFLX
+type seqPlatform
+description ? TBD
+
+term AB_SOLiD_System
+tag ABSOLiD
+type seqPlatform
+description ? TBD
+
+term AB_SOLiD_System_2.0
+tag ABSOLiD2
+type seqPlatform
+description ? TBD
 

@@ -1,6 +1,4 @@
-# Data Agreement File for Stanford/Yale ChIP-seq project for Histone Modification Experiments for mm9  
-
-$Revision: 1.5 $
+# Data Agreement File for Yale ChipSeq project  $Revision: 1.1 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -10,31 +8,31 @@ dafVersion        2.0
 # Lab and general info
 grant             Snyder
 lab               Stanford
-#Alternative labs: lab Yale
-dataType          ChIP-seq
-compositeSuffix   SydhHist
+dataType          Nucleosome
+compositeSuffix   Nsome
+dataAgreementSuffix Stanf
 group             regulation
-variables         cell,strain, antibody, treatment, input
-assembly          mm9
+variables         cell
+assembly          hg19
 
 medianFragmentLength 200
-validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:quick=1000
+validationSettings validateFiles.fastq:quick=10;validateFiles.bam:quick=100,mmCheckOneInN=100,mismatches=2,matchFirst=32,nMatch
 
 # Track/view definition
 view             Peaks
-longLabelPrefix  ENCODE Histone by ChIP-seq at Stanford/Yale Peaks
+longLabelPrefix  Stanford Nucleosome Peaks
 type             narrowPeak
 hasReplicates    no
 required         no
 
 view             Signal
-longLabelPrefix  ENCODE Histone by ChIP-seq at Stanford/Yale Signal
+longLabelPrefix  Stanford Nucleosome Peaks
 type             bigWig
 hasReplicates    no
 required         yes
 
 view             Alignments
-longLabelPrefix  ENCODE Histone by ChIP-seq at Stanford/Yale Alignments
+longLabelPrefix  Stanford Nucleosome Alignments
 type             bam
 hasReplicates    yes
 required         yes

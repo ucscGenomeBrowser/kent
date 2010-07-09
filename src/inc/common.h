@@ -279,6 +279,13 @@ __attribute__((format(printf, 1, 2)))
 #endif
 ;
 
+void warnWithBackTrace(char *format, ...)
+/* Issue a warning message and append backtrace. */
+#if defined(__GNUC__)
+__attribute__((format(printf, 1, 2)))
+#endif
+;
+
 void verbose(int verbosity, char *format, ...)
 /* Write printf formatted message to log (which by
  * default is stdout) if global verbose variable

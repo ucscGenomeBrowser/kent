@@ -1264,21 +1264,36 @@ static void doLabelNextItemButtons(struct track *track, struct track *parentTrac
 /* signal the browser to find the next thing on the track before it */
 /* does anything else. */
 {
+int portWidth = insideWidth;
+int portX = insideX;
+#ifdef IMAGEv2_DRAG_SCROLL
+// If a portal was established, then set the portal dimensions
+int portalStart,chromStart;
+double basesPerPixel;
+if (imgBoxPortalDimensions(theImgBox,&chromStart,NULL,NULL,NULL,&portalStart,NULL,&portWidth,&basesPerPixel))
+    {
+    portX = (int)((portalStart - chromStart) / basesPerPixel);
+    portX += gfxBorder;
+    if (withLeftLabels)
+        portX += tl.leftLabelWidth + gfxBorder;
+    portWidth = portWidth-gfxBorder-insideX;
+    }
+#endif//def IMAGEv2_DRAG_SCROLL
 int arrowWidth = insideHeight;
 int arrowButtonWidth = arrowWidth + 2 * NEXT_ITEM_ARROW_BUFFER;
-int rightButtonX = insideX + insideWidth - arrowButtonWidth - 1;
+int rightButtonX = portX + portWidth - arrowButtonWidth - 1;
 char buttonText[256];
 Color fillColor = lightGrayIndex();
 labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
-hvGfxNextItemButton(hvg, insideX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
+hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, insideX, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
-mapBoxToggleVis(hvg, insideX + arrowButtonWidth, y + 1, insideWidth - (2 * arrowButtonWidth),
+mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, insideX + insideWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1553,6 +1568,26 @@ return scaleBases;
 enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
+#ifdef SUBTRACKS_HAVE_VIS
+char *var = cartOptionalString(cart, subtrack->track);
+if (var)
+    {
+    subtrack->visibility = hTvFromString(var);
+
+    if (subtrack->limitedVisSet)
+        subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
+    else
+        {
+        if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
+            subtrack->loadItems(subtrack);
+
+        limitVisibility(subtrack);
+        }
+
+    return hTvFromString(var);
+    }
+#endif///def SUBTRACKS_HAVE_VIS
+
 enum trackVisibility vis = subtrack->limitedVis == tvHide ?
                            subtrack->visibility :
                            tvMin(subtrack->visibility,subtrack->limitedVis);
@@ -1967,7 +2002,9 @@ for (track = trackList; track != NULL; track = track->next)
         track->limitedVisSet = TRUE;
         continue;
         }
+#ifndef SUBTRACKS_HAVE_VIS
     if (track->limitedVis != tvHide)
+#endif///ndef SUBTRACKS_HAVE_VIS
         {
         if (tdbIsComposite(track->tdb))
             {
@@ -1977,12 +2014,7 @@ for (track = trackList; track != NULL; track = track->next)
                 {
                 if (!isSubtrackVisible(subtrack))
                     continue;
-                if (!subtrack->limitedVisSet)
-                    {
-                    subtrack->visibility = track->visibility;
-                    subtrack->limitedVis = track->limitedVis;
-                    subtrack->limitedVisSet = TRUE;
-                    }
+
                 // If the composite track has "view" based drop downs, set visibility based upon those
                 enum trackVisibility vis = limitedVisFromComposite(subtrack);
                 if(subtrack->visibility != vis)
@@ -1998,16 +2030,31 @@ for (track = trackList; track != NULL; track = track->next)
                         subtrack->limitedVisSet = (subtrack->limitedVis != tvHide && subtrack->visibility != subtrack->limitedVis);
                         }
                     }
+                if (!subtrack->limitedVisSet && track->limitedVisSet)
+                    {
+                    subtrack->visibility = track->visibility;
+                    subtrack->limitedVis = track->limitedVis;
+                    subtrack->limitedVisSet = track->limitedVisSet;
+                    }
+
                 #ifdef FLAT_TRACK_LIST
-                subtrack->hasUi = track->hasUi;
-                flatTracksAdd(&flatTracks,subtrack,cart);
-                pixHeight += trackPlusLabelHeight(subtrack, fontHeight);
+                #ifdef SUBTRACKS_HAVE_VIS
+                if (subtrack->limitedVis != tvHide)
+                #endif///def SUBTRACKS_HAVE_VIS
+                    {
+                    subtrack->hasUi = track->hasUi;
+                    flatTracksAdd(&flatTracks,subtrack,cart);
+                    pixHeight += trackPlusLabelHeight(subtrack, fontHeight);
+                    }
                 #endif//def FLAT_TRACK_LIST
                 }
             }
         #ifdef FLAT_TRACK_LIST
         else
-            flatTracksAdd(&flatTracks,track,cart);
+            #ifdef SUBTRACKS_HAVE_VIS
+            if (track->limitedVis != tvHide)
+            #endif///def SUBTRACKS_HAVE_VIS
+                flatTracksAdd(&flatTracks,track,cart);
         #endif//def FLAT_TRACK_LIST
         if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
             {
@@ -2103,6 +2150,10 @@ if(theImgBox)
 #endif//ndef FLAT_TRACK_LIST
         if (track->limitedVis != tvHide)
             {
+            #ifdef SUBTRACKS_HAVE_VIS
+            if(track->labelColor == track->ixColor && track->ixColor == 0)
+                track->ixColor = hvGfxFindRgb(hvg, &track->color);
+            #endif//def SUBTRACKS_HAVE_VIS
             #ifdef FLAT_TRACK_LIST
             int order = flatTrack->order;
             #else//ifndef FLAT_TRACK_LIST
@@ -4252,7 +4303,7 @@ hPrintf("</script>\n");
 }
 
 void jsCommandDispatch(char *command, struct track *trackList)
-/* Dispatch a command sent to us from some javaScript event.  
+/* Dispatch a command sent to us from some javaScript event.
  * This gets executed after the track list is built, but before
  * the track->loadItems methods are called.  */
 {
@@ -4260,6 +4311,40 @@ if (startsWithWord("makeItems", command))
     makeItemsJsCommand(command, trackList, trackHash);
 else
     warn("Unrecognized jsCommand %s", command);
+}
+
+void subtrackVisCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view vis changes, remove subtrack specific vis */
+{
+struct track *track = trackList;
+for (;track != NULL; track = track->next)
+    {
+    if(!tdbIsComposite(track->tdb))
+        continue;
+    boolean compositeWide = cartValueHasChanged(newCart,oldVars,track->track,TRUE);
+
+    boolean hasViews = FALSE;
+    struct trackDb *tdbView = track->tdb->subtracks;
+    for (;tdbView != NULL; tdbView = tdbView->next)
+        {
+        char * view = NULL;
+        if (!tdbIsView(tdbView,&view))
+            break;
+
+        hasViews = TRUE;
+        boolean viewLevel = FALSE;
+        if(!compositeWide)
+            {
+            char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
+            safef(settingName,sizeof(settingName),"%s.%s.vis",track->track,view);
+            viewLevel = cartValueHasChanged(newCart,oldVars,settingName,TRUE);
+            }
+        if(compositeWide || viewLevel)
+            cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE); // clean up children, skipping view
+        }
+    if (compositeWide && !hasViews)
+        cartRemoveFromTdbTree(newCart,track->tdb,NULL,TRUE); // clean up children, skipping composite
+    }
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4329,7 +4414,11 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
     }
-#endif//def IMAGEv2_DRAG_REORDER
+#endif///def IMAGEv2_DRAG_REORDER
+#ifdef SUBTRACKS_HAVE_VIS
+// Here is where subtrack vis override must be removed when composite vis is updated
+subtrackVisCartCleanup(trackList,cart,oldVars);
+#endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
 if (hideAll || defaultTracks)
@@ -4592,10 +4681,10 @@ makeChromIdeoImage(&trackList, psOutput, ideoTn);
         hPrintf("<td width='20' align='left'><a href='?hgt.left1=1' title='move 10&#37; to the left'>&lt;</a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
-    hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom in 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
-    hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom in 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
     hPrintf("<td width='40' align='left'><a href='?hgt.in1=1' title='zoom in 1.5x'>&gt;&nbsp;&lt;</a>\n");
-    hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'><i>base</i></a>\n");
+    hPrintf("<td width='60' align='left'><a href='?hgt.in2=1' title='zoom in 3x'>&gt;&gt;&nbsp;&lt;&lt;</a>\n");
+    hPrintf("<td width='80' align='left'><a href='?hgt.in3=1' title='zoom in 10x'>&gt;&gt;&gt;&nbsp;&lt;&lt;&lt;</a>\n");
+    hPrintf("<td width='40' align='left'><a href='?hgt.inBase=1' title='zoom in to base range'>&gt;<i>base</i>&lt;</a>\n");
 
     hPrintf("<td>&nbsp;</td>\n"); // Without 'width=' this cell expand to table with, forcing other cells to the sides.
     hPrintf("<td width='40' align='right'><a href='?hgt.out1=1' title='zoom out 1.5x'>&lt;&nbsp;&gt;</a>\n");
@@ -4628,19 +4717,15 @@ if (!hideControls)
      * go along with this trick */
     hPrintf("<TABLE BORDER=0 CELLSPACING=1 CELLPADDING=1 WIDTH=%d COLS=%d><TR>\n",
         tl.picWidth, 27);
+#ifndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=6 ALIGN=left NOWRAP>");
     hPrintf("move start<BR>");
-#ifdef USE_NAVIGATION_LINKS
-    hPrintf("<a href='?hgt.dinkLL=1' title='move window start position to the left'>&lt;</a>\n");
-    hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
-    hPrintf("<a href='?hgt.dinkLR=1' title='move window start position to the right'>&gt;</a>\n");
-#else//ifndef USE_NAVIGATION_LINKS
     hButton("hgt.dinkLL", " < ");
     hTextVar("dinkL", cartUsualString(cart, "dinkL", "2.0"), 3);
     hButton("hgt.dinkLR", " > ");
-#endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TD>");
     hPrintf("<td width='30'>&nbsp;</td>\n");
+#endif//ndef USE_NAVIGATION_LINKS
     hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
     hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
@@ -4655,19 +4740,15 @@ if (!hideControls)
 #endif//def IMAGEv2_DRAG_SCROLL
 //#if !defined(IMAGEv2_DRAG_SCROLL) && !defined(USE_NAVIGATION_LINKS)
     hPrintf("</TD>");
+#ifndef USE_NAVIGATION_LINKS
     hPrintf("<td width='30'>&nbsp;</td>\n");
     hPrintf("<TD COLSPAN=6 ALIGN=right NOWRAP>");
     hPrintf("move end<BR>");
-#ifdef USE_NAVIGATION_LINKS
-    hPrintf("<a href='?hgt.dinkRL=1' title='move window end position to the left'>&lt;</a>\n");
-    hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hPrintf("<a href='?hgt.dinkRR=1' title='move window end position to the right'>&gt;</a>\n");
-#else//ifndef USE_NAVIGATION_LINKS
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButton("hgt.dinkRR", " > ");
+    hButton("hgt.dinkRR", " ></TD> ");
 #endif//ndef USE_NAVIGATION_LINKS
-    hPrintf("</TD></TR></TABLE>\n");
+    hPrintf("</TR></TABLE>\n");
     // smallBreak();
 
     /* Display bottom control panel. */

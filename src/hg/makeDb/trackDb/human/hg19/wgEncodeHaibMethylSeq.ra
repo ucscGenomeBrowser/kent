@@ -133,3 +133,24 @@ release alpha
         color 46,0,184
         # subId=1247 dateSubmitted=2010-06-22
 
+
+        track wgEncodeHaibMethylSeqGm12878RegionsRep1
+        release alpha
+        parent wgEncodeHaibMethylSeq
+        shortLabel GM12878 1
+        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in GM12878 cells)
+        subGroups cellType=GM12878 restrictionEnzyme=None rep=rep1
+        type bed 9
+        color 153,38,0
+        # subId=1247 dateSubmitted=2010-07-06
+
+        track wgEncodeHaibMethylSeqGm12878RegionsRep2
+        release alpha
+        parent wgEncodeHaibMethylSeq
+        shortLabel GM12878 2
+        longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in GM12878 cells)
+        subGroups cellType=GM12878 restrictionEnzyme=None rep=rep2
+        type bed 9
+        color 153,38,0
+        # subId=1247 dateSubmitted=2010-07-06
+
