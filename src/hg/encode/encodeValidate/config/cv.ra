@@ -296,6 +296,7 @@ vendorId CC-2571
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001685
 sex U
+tier 3
 termId BTO:0001685
 protocol Open_Chromatin:AoSMC_Crawford_protocol.pdf
 
@@ -536,6 +537,7 @@ vendorName Paul Tesar (Case Western)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452
 termId BTO:0000452
 sex U
+tier 3
 protocol Open_Chromatin:FibroP_Crawford_protocol.pdf
 
 term Gliobla
@@ -1487,6 +1489,7 @@ vendorId 2200
 orderUrl http://www.sciencellonline.com/site/products/2200.php
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000847
 sex U
+tier 3
 termId BTO:0000847
 protocol Open_Chromatin:Melano_Crawford_protocol.pdf
 
@@ -1500,6 +1503,7 @@ vendorName Dr. Jennifer Condon of Magee Women's Research Institute (Pittsburg, P
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000907
 termId BTO:0000907
 sex F
+tier 3
 protocol Open_Chromatin:Myometr_Crawford_protocol.pdf
 
 term NB4
@@ -1532,6 +1536,7 @@ vendorId CC-2541
 orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA2047E78C9FF18C7C001A4B525E10&cpgnum=1&layout=5.1-6_1_71_61_7_10&uiarea=2)/.do
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002022
 sex U
+tier 3
 termId BTO:0002022
 protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
 
