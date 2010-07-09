@@ -1994,8 +1994,8 @@ group regulation
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
-    inputTracks wgEncodeUwDnaseSeq
-    inputTracksSubgroupSelect view=aPeaks
+    #inputTracks wgEncodeUwDnaseSeq
+    #inputTracksSubgroupSelect view=aPeaks
     inputTracksSubgroupDisplay cellType rank
     visibility dense
     useScore 1
@@ -2009,8 +2009,8 @@ group regulation
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
     inputTrackTable wgEncodeRegTfbsClusteredInputs
-    inputTracks wgEncodeYaleChIPseq wgEncodeHudsonalphaChipSeq
-    inputTracksSubgroupSelect view=Peaks
+    #inputTracks wgEncodeYaleChIPseq wgEncodeHudsonalphaChipSeq
+    #inputTracksSubgroupSelect view=Peaks
     inputTracksSubgroupDisplay cellType factor
     visibility dense
     useScore 1
@@ -3388,6 +3388,7 @@ autoScale off
 windowingFunction mean
 maxHeightPixels 100:32:16
 dataVersion ENCODE Feb 2009 Freeze
+canPack On
 wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalGm12878

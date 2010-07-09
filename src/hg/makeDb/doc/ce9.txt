@@ -1,0 +1,106 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis elegans
+# Washington University School of Medicine GSC and Sanger Institute WS210
+
+#  $Id: ce9.txt,v 1.3 2009/09/24 20:54:24 hiram Exp $
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2010-07-08 - Hiram)
+    mkdir /hive/data/genomes/ce9
+    cd /hive/data/genomes/ce9
+    mkdir ws210
+    cd ws210
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/c_elegans/
+    #	about 11 minutes
+
+#########################################################################
+# NORMALIZE SEQUENCE NAMES TO BEGIN WITH chr (DONE - 2010-07-08 - Hiram)
+    mkdir /hive/data/genomes/ce9/sanger
+    cd /hive/data/genomes/ce9/sanger
+    # Fix fasta names:
+    zcat ../ws210/sequences/dna/CHR*[XVAI].dna.gz \
+    | sed -e '/^$/ d;  s/^>CHROMOSOME_MtDNA/>chrM/;  s/^>CHROMOSOME_/>chr/;' \
+    | gzip -c > UCSC.fa.gz
+    faCount UCSC.fa.gz 
+#seq    len     A       C       G       T       N       cpg
+chrI    15072421        4835939 2695879 2692150 4848453 0       503521
+chrII   15279323        4878195 2769216 2762198 4869714 0       492149
+chrIII  13783685        4444652 2449141 2466322 4423570 0       459669
+chrIV   17493784        5711040 3034767 3017008 5730969 0       522372
+chrM    13794   4335    1225    2055    6179    0       110
+chrV    20924143        6750393 3712058 3701397 6760295 0       638983
+chrX    17718854        5747199 3119702 3117868 5734085 0       514715
+total   100286004       32371753        17781988        17758998 323732650       3131519
+
+    # Make sure we get the same sizes from this command:
+    zcat ../ws210/sequences/dna/CHR*[XVAI].dna.gz | sed -e '/^$/ d;' \
+	| faCount stdin
+
+#seq    len     A       C       G       T       N       cpg
+CHROMOSOME_I    15072421        4835939 2695879 2692150 4848453 0       503521
+CHROMOSOME_II   15279323        4878195 2769216 2762198 4869714 0       492149
+CHROMOSOME_III  13783685        4444652 2449141 2466322 4423570 0       459669
+CHROMOSOME_IV   17493784        5711040 3034767 3017008 5730969 0       522372
+CHROMOSOME_MtDNA        13794   4335    1225    2055    6179    0       110
+CHROMOSOME_V    20924143        6750393 3712058 3701397 6760295 0       638983
+CHROMOSOME_X    17718854        5747199 3119702 3117868 5734085 0       514715
+total   100286004       32371753        17781988        17758998 323732650       3131519
+
+    #	Compare to WS200: +1 in chrII, -3 in chrIII
+faCount ../../ce7/sanger/UCSC.fa.gz
+#seq    len     A       C       G       T       N       cpg
+chrI    15072421        4835939 2695879 2692150 4848453 0       503521
+chrII   15279324        4878196 2769216 2762198 4869714 0       492149
+chrIII  13783682        4444652 2449139 2466321 4423570 0       459669
+chrIV   17493784        5711040 3034767 3017008 5730969 0       522372
+chrM    13794   4335    1225    2055    6179    0       110
+chrV    20924143        6750393 3712058 3701397 6760295 0       638983
+chrX    17718854        5747199 3119702 3117868 5734085 0       514715
+total   100286002       32371754        17781986        17758997 323732650       3131519
+
+    # Fix AGP names:
+    sed -e 's/^/chr/' ../ws210/sequences/dna/CHR*.agp > UCSC.agp
+    # And add a fake mitochondrial AGP entry for the sake of downstream
+    # tools (make sure the GenBank sequence is identical to given):
+    echo -e "chrM\t1\t13794\t1\tF\tNC_001328.1\t1\t13794\t+" >> UCSC.agp
+
+#########################################################################
+# run the makeGenomeDb procedure to create the db and unmasked sequence
+#	(DONE - 2010-07-08 - Hiram)
+    cd /hive/data/genomes/ce9
+    cat << '_EOF_' > ce9.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ce9
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Jan 2010
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WS210
+assemblyShortLabel WS210
+orderKey 823
+# mito sequence included in fasta and AGP file
+mitoAcc none
+fastaFiles /hive/data/genomes/ce9/sanger/UCSC.fa.gz
+agpFiles   /hive/data/genomes/ce9/sanger/UCSC.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+taxId 6239
+'_EOF_'
+    # << emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    nice -n +19 makeGenomeDb.pl ce9.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl ce9.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m37.013s
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+
+#########################################################################

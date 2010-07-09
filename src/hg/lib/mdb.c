@@ -662,45 +662,65 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
     varHash = hashNew(0);
 
     // All words are expected to be var=val pairs!
-    for(thisWord=0;thisWord<count;thisWord++)
+    for (thisWord=0; thisWord<count; thisWord++)
         {
-        if(strchr(words[thisWord], '=') == NULL)
-            {
+        if (strchr(words[thisWord], '=') == NULL)
             errAbort("Expected 'var=val' but found '%s'.  This is not properly formatted metadata:\n\t%s\n",words[thisWord],line);
-            //mdbObjsFree(&mdbObj);
-            //return NULL;
-            }
+
+        // Set up var struct from 1st half of pair
         AllocVar(rootVar);
         rootVar->var = cloneNextWordByDelimiter(&(words[thisWord]),'=');
         rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
-        if(rootVar->notEqual)
+        if (rootVar->notEqual)
             rootVar->var[strlen(rootVar->var)-1] = 0;
-        char *val = cloneString(words[thisWord]);
-        if(sameWord(val,"?"))  // "var=?" or "var=" will query by var name only
-            freez(&val);
+        char *val = NULL;
+        if (words[thisWord][0] != '\0' && words[thisWord][0] != '?') // "var=?" or "var=" will query by var name only
+            val = cloneString(words[thisWord]);
 
+        // Make sure this isn't a repeat
         struct mdbByVar *oldVar = (struct mdbByVar *)hashFindVal(varHash, rootVar->var);
-        if(oldVar)
-            {  // FIXME: Could build this for 'or' queries!
-            verbose(1, "The same variable appears twice: %s=%s and %s=%s.  Ignoring second value.\n",
-                oldVar->var,oldVar->vals->val,rootVar->var,val);
-            freeMem(rootVar->var);
-            freeMem(rootVar);
-            freeMem(val);
+        if (oldVar && (oldVar->notEqual == rootVar->notEqual))
+            {   // This is very powerful: "cell=GM% cell!=GM12878"
+            if (val != NULL)
+                {
+                verbose(2, "The same variable appears twice: %s=%s and %s=%s.  Adding second value.\n",
+                    oldVar->var,oldVar->vals->val,rootVar->var,val);
+                AllocVar(limbVal);
+                limbVal->val = val;
+                slAddTail(&oldVar->vals,limbVal);
+                }
+            mdbByVarsFree(&rootVar);
+            continue;
             }
-        else
+
+        // Fill in the val(s) from second half of pair
+        if (val != NULL)
             {
-            AllocVar(limbVal);
-            limbVal->val = val;
-            rootVar->vals = limbVal;
-            hashAdd(varHash, rootVar->var, rootVar);
-            slAddHead(&mdbByVars,rootVar);
+            // handle comma separated list of vals (if unquoted)
+            if (val[0] != '\'' && val[0] != '"' && strchr(val,',') != NULL)
+                {
+                char * aVal = NULL;
+                while((aVal = cloneNextWordByDelimiter(&val,',')) != NULL)
+                    {
+                    AllocVar(limbVal);
+                    limbVal->val = aVal;
+                    slAddTail(&rootVar->vals,limbVal);
+                    }
+                }
+            else
+                {
+                AllocVar(limbVal);
+                limbVal->val = val;
+                rootVar->vals = limbVal;
+                }
             }
+        hashAdd(varHash, rootVar->var, rootVar);
+        slAddHead(&mdbByVars,rootVar);
         }
     freeMem(words);
     slReverse(&mdbByVars);
     verbose(3, "mdbByVarsLineParse() parsed:%d first: %s%s='%s'.\n",
-        slCount(mdbByVars->vals),mdbByVars->var,(mdbByVars->notEqual?"!":""),mdbByVars->vals->val);
+        slCount(mdbByVars),mdbByVars->var,(mdbByVars->notEqual?"!":""),(mdbByVars->vals?mdbByVars->vals->val:""));
 return mdbByVars;
 }
 
@@ -857,38 +877,33 @@ return mdbObjs;
 }
 
 // ------ Table name and creation ------
-#define MDB_SPEC_LOCATION "/cluster/bin/sqlCreate/metaDb.sql"
 
 void mdbReCreate(struct sqlConnection *conn,char *tblName,boolean testOnly)
 // Creates ore Recreates the named mdb.
 {
+char *sqlCreate =
+"# Contains metadata for a table, file or other objects.\n"
+"CREATE TABLE %s (\n"
+"    obj varchar(255) not null,      # Object name or ID.\n"
+"    var varchar(255) not null,      # Metadata variable name.\n"
+"    varType enum ('txt','binary')   # Most vars are txt\n"
+"            not null default 'txt',\n"
+"    val longblob not null,          # Metadata value.\n"
+"  #Indices\n"
+"    PRIMARY KEY(obj,var),\n"
+"    UNIQUE(var,val(32),obj)\n"
+")";
+
 if(sqlTableExists(conn,tblName))
     verbose(2, "Table '%s' already exists.  It will be recreated.\n",tblName);
 
-char *sql = NULL;
-readInGulp(MDB_SPEC_LOCATION, &sql, NULL);
-char *pos = strchr(sql, ';');
-if ( pos != NULL)
-    *pos = 0;
-char *oldSql = cloneString(sql);
-pos = stringIn("CREATE TABLE ", oldSql);
-if (pos == NULL)
-    errAbort("Can't find CREATE TABLE in %s\n", MDB_SPEC_LOCATION);
-nextWord(&pos);
-nextWord(&pos);
-char *oldName = nextWord(&pos);
-if(differentWord(oldName, tblName))
-    {
-    char *saveSql = cloneString(sql);
-    freeMem(sql);
-    sql = replaceChars(saveSql, oldName, tblName);
-    freeMem(saveSql);
-    }
-freeMem(oldSql);
-verbose(2, "Requesting table creation:\n\t%s;\n", sql);
+struct dyString *dy = newDyString(512);
+dyStringPrintf(dy, sqlCreate, tblName);
+verbose(2, "Requesting table creation:\n%s;\n", dyStringContents(dy));
 if(!testOnly)
-    sqlRemakeTable(conn,tblName, sql);
-freeMem(sql);
+    sqlRemakeTable(conn, tblName, dyStringContents(dy));
+
+dyStringFree(&dy);
 }
 
 char*mdbTableName(struct sqlConnection *conn,boolean mySandBox)
@@ -1233,7 +1248,22 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 // Query the metadata table by one or more var=val pairs to find the distinct set of objs that satisfy ALL conditions.
 // Returns new mdbObj struct fully populated and sorted in obj,var order.
 {
-//  select obj,var,val where (var= [and val in (val1,val2)]) or (var= [and val in (val1,val2)]) order by obj,var
+// MOST POPULAR WAY TO QUERY MDB.  Building example queries like:
+// "cell=GM12878" or "cell!=GM12878"
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val = 'GM12878') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val != 'GM12878') ORDER BY T1.obj, T1.var;
+// "cell=GM%" or "cell!=GM%"
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT LIKE 'GM%') ORDER BY T1.obj, T1.var;
+// "cell=" or "cell!="
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE NOT EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell') ORDER BY T1.obj, T1.var;
+// "cell=GM12878,K562" or "cell!=GM12878,K562"
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val IN ('GM12878','K562')) ORDER BY T1.obj, T1.var;
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val NOT IN ('K562','GM12878')) ORDER BY T1.obj, T1.var;
+// "cell=GM% cell!=GM12878"  (very powerful)
+//   SELECT T1.obj,T1.var,T1.varType,T1.val FROM metaDb T1 WHERE EXISTS (SELECT T2.obj FROM metaDb T2 WHERE T2.obj = T1.obj AND T2.var = 'cell' AND T2.val LIKE 'GM%')
+//                                                           AND EXISTS (SELECT T3.obj FROM metaDb T3 WHERE T3.obj = T1.obj AND T3.var = 'cell' AND T3.val != 'GM12878') ORDER BY T1.obj, T1.var;
 
     if(table == NULL)
         table = MDB_DEFAULT_NAME;
@@ -1248,8 +1278,8 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
     int tix;
     for(rootVar=mdbByVars,tix=2;rootVar!=NULL;rootVar=rootVar->next,tix++)
         {
-///////////////
-        boolean hasVal = (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0);
+        boolean hasVal = (rootVar->vals != NULL);
+        //boolean hasVal = (rootVar->vals != NULL && rootVar->vals->val != NULL && strlen(rootVar->vals->val) > 0);
         if(!gotVar)
             {
             dyStringPrintf(dy, " WHERE ");
@@ -1270,21 +1300,6 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 
         dyStringPrintf(dy, "%s '%s'",
             (strchr(rootVar->var,'%')?"LIKE":"="), rootVar->var);
-///////////////
-//        if(!gotVar)
-//            {
-//            dyStringPrintf(dy, " where t1.obj in ");
-//            gotVar=TRUE;
-//            }
-//        else
-//            dyStringPrintf(dy, " AND t1.obj in ");
-//        dyStringPrintf(dy, "(select t%d.obj from %s t%d where t%d.obj = t1.obj and t%d.var ",tix,table,tix,tix,tix);
-//
-//        if(rootVar->notEqual && rootVar->vals == NULL)
-//            dyStringPrintf(dy, "%s",strchr(rootVar->var,'%')?"NOT ":"!");
-//
-//        dyStringPrintf(dy, "%s '%s'",
-//            (strchr(rootVar->var,'%')?"like":"="), rootVar->var);
 
         struct mdbLimbVal *limbVal;
         boolean multiVals = FALSE;
@@ -1297,7 +1312,7 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
                 {
                 dyStringPrintf(dy, " AND T%d.val ",tix);
                 if(rootVar->notEqual)
-                    dyStringPrintf(dy, "%s",strchr(limbVal->val,'%')?"NOT ":"!");
+                    dyStringPrintf(dy, "%s",(strchr(limbVal->val,'%') || limbVal->next)?"NOT ":"!");
                 if(limbVal->next == NULL) // only one val
                     {
                     dyStringPrintf(dy, "%s '%s'",
@@ -1503,176 +1518,6 @@ for(rootVar=mdbByVars;rootVar!=NULL;rootVar=rootVar->next)
         }
     }
 return count;
-}
-
-void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *varsToSelect,char *varsToSet)
-// prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
-{
-if(dbToUpdate == NULL || tableToUpdate == NULL || varsToSelect == NULL || varsToSet == NULL)
-    errAbort("mdbObjPrintUpdateLines is missing important parameter.\n");
-
-int selCount = 0;
-char **selectVars = NULL;
-if(differentWord(varsToSelect,"obj"))
-    {
-    // Sort objs to avoid duplicate mdbUpdate statements
-    mdbObjsSortOnVars(mdbObjs, varsToSelect);
-
-    // Parse list of selcting vars (could be simply expId or expId,replicate,view)
-    selCount = chopByChar(varsToSelect,',',NULL,0);
-    if(selCount <= 0)
-        errAbort("mdbObjPrintUpdateLines is missing experiment defining variables.\n");
-    selectVars = needMem(sizeof(char *) * selCount);
-    selCount = chopByChar(varsToSelect,',',selectVars,selCount);
-    }
-// Parse list of vars to update
-int updCount = chopByChar(varsToSet,',',NULL,0);
-if(updCount <= 0)
-    errAbort("mdbObjPrintUpdateLines is missing variables to set.\n");
-char **updateVars = needMem(sizeof(char *) * updCount);
-updCount = chopByChar(varsToSet,',',updateVars,updCount);
-int ix=0;
-boolean updExpId = (updCount == 1 && startsWithWordByDelimiter("expId",'=',updateVars[0]));
-int startingId=0;
-if(updExpId)
-    {
-    startingId = sqlSigned(skipBeyondDelimit(updateVars[0],'='));
-    updateVars[0][strlen("expId")] = '\0';
-    }
-
-struct mdbObj *mdbObj = NULL;
-struct dyString *thisSelection = newDyString(256);
-struct dyString *lastSelection = newDyString(256);
-for(mdbObj=*mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
-    {
-    if(mdbObj->obj == NULL || mdbObj->deleteThis)
-        continue;
-
-    // Build this selection string
-    dyStringClear(thisSelection);
-    if(sameWord(varsToSelect,"obj"))
-        {
-        dyStringPrintf(thisSelection,"-obj=%s",mdbObj->obj);
-        }
-    else
-        {
-        dyStringPrintf(thisSelection,"-vars=\"");
-        for(ix = 0;ix < selCount; ix++)
-            {
-            char *val = mdbObjFindValue(mdbObj,selectVars[ix]);
-            if(val != NULL) // TODO what to do for NULLS?
-                {
-                if(strchr(val, ' ') != NULL) // Has blanks
-                    dyStringPrintf(thisSelection,"%s='%s' ",selectVars[ix],val);// FIXME: Need to make single quotes work since already within double quotes!
-                else
-                    dyStringPrintf(thisSelection,"%s=%s ",selectVars[ix],val);
-                }
-            }
-        dyStringPrintf(thisSelection,"\"");
-        }
-
-    // Don't bother making another mdpUpdate line if selection is the same.
-    if(sameString(dyStringContents(lastSelection),dyStringContents(thisSelection)))
-        continue;
-    dyStringClear(lastSelection);
-    dyStringAppend(lastSelection,dyStringContents(thisSelection));
-
-    printf("mdbUpdate %s table=%s %s",dbToUpdate,tableToUpdate,dyStringContents(thisSelection));
-
-    // Now look up the value of each var to update
-    printf(" -setVars=\"");
-    for(ix = 0;ix < updCount; ix++)
-        {
-        if(updExpId)
-            printf("expId=%u",startingId++);// FIXME: Need to make single quotes work since already within double quotes!
-        else
-            {
-            char *val = mdbObjFindValue(mdbObj,updateVars[ix]);
-            if(val != NULL) // What to do for NULLS? Ignore
-                {
-                printf("%s=",updateVars[ix]);
-                if(strchr(val, ' ') != NULL) // Has blanks
-                    printf("'%s' ",val);// FIXME: Need to make single quotes work since already within double quotes!
-                else
-                    printf("%s ",val);
-                }
-            }
-        }
-    printf("\" -test\n"); // Always test first
-    }
-dyStringFree(&thisSelection);
-dyStringFree(&lastSelection);
-}
-
-void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars)
-// prints insert statments for the experiments taable to backfile experiments submitted before the experiments table existed
-{
-if(expTableName == NULL || expDefiningVars == NULL)
-    errAbort("mdbObjPrintInsertToExpTbl is missing important parameter.\n");
-
-int varCount = 0;
-char **expVars = NULL;
-if(sameWord(expDefiningVars,"obj"))
-    errAbort("mdbObjPrintInsertToExpTbl 'obj' is an invalid experiment defining variable.\n");
-
-// Sort objs to avoid duplicate mdbUpdate statements
-mdbObjsSortOnVars(mdbObjs, expDefiningVars);
-
-// Parse list of selcting vars (could be simply expId or expId,replicate,view)
-varCount = chopByChar(expDefiningVars,',',NULL,0);
-if(varCount <= 0)
-    errAbort("mdbObjPrintInsertToExpTbl is missing experiment defining variables.\n");
-expVars = needMem(sizeof(char *) * varCount);
-varCount = chopByChar(expDefiningVars,',',expVars,varCount);
-int ix=0;
-
-struct mdbObj *mdbObj = NULL;
-struct dyString *varNames = newDyString(256);
-struct dyString *varVals = newDyString(256);
-struct dyString *lastVals = newDyString(256);
-for(mdbObj=*mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
-    {
-    if(mdbObj->obj == NULL || mdbObj->deleteThis)
-        continue;
-
-    // Build this selection string
-    dyStringClear(varNames);
-    dyStringClear(varVals);
-
-    boolean first=TRUE;
-    // "insert into expTable (cell,antibody) values ('GM12878','CTCF');
-    for(ix = 0;ix < varCount; ix++)
-        {
-        char *val = mdbObjFindValue(mdbObj,expVars[ix]);
-        if(val != NULL) // TODO what to do for NULLS?
-            {
-            if(first)
-                first=FALSE;
-            else
-                {
-                dyStringPrintf(varNames,",");
-                dyStringPrintf(varVals,",");
-                }
-            dyStringPrintf(varNames,"%s", expVars[ix]);
-            if(countLeadingDigits(val) == strlen(val))
-                dyStringPrintf(varVals,"%s",val);
-            else
-                dyStringPrintf(varVals,"'%s'",val);
-            }
-        }
-
-    // Don't bother making another mdpUpdate line if selection is the same.
-    if(sameString(dyStringContents(lastVals),dyStringContents(varVals)))
-        continue;
-    dyStringClear(lastVals);
-    dyStringAppend(lastVals,dyStringContents(varVals));
-
-    printf("INSERT INTO %s (%s) VALUES (%s);\n",expTableName,dyStringContents(varNames),dyStringContents(varVals));
-
-    }
-dyStringFree(&varNames);
-dyStringFree(&varVals);
-dyStringFree(&lastVals);
 }
 
 // ----------------- Utilities -----------------

@@ -684,8 +684,8 @@ _EOF_
 mkdir -p $bedDir/gc5Base
 cd $bedDir/gc5Base
 hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 $db \\
-  $topDir/$db.unmasked.2bit \\
-| wigEncode stdin gc5Base.{wig,wib}
+  $topDir/$db.unmasked.2bit | gzip -c > $db.gc5Base.wigVarStep.gz 
+wigToBigWig $db.gc5Base.wigVarStep.gz ../../chrom.sizes ce9.gc5Base.bw
 _EOF_
   );
 
@@ -774,11 +774,12 @@ _EOF_
   $bossScript->add(<<_EOF_
 
 # Load gc5base
-mkdir -p $HgAutomate::gbdb/$db/wib
-rm -f $HgAutomate::gbdb/$db/wib/gc5Base.wib
-ln -s $bedDir/gc5Base/gc5Base.wib $HgAutomate::gbdb/$db/wib
-hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
-  $db gc5Base $bedDir/gc5Base/gc5Base.wig
+mkdir -p $HgAutomate::gbdb/$db/bbi
+rm -f $HgAutomate::gbdb/$db/bbi/gc5Base.bw
+ln -s $bedDir/gc5Base/$db.gc5Base.bw $HgAutomate::gbdb/$db/bbi/gc5Base.bw
+hgsql $db -e 'drop table if exists gc5BaseBw; \\
+            create table gc5BaseBw (fileName varchar(255) not null); \\
+            insert into gc5BaseBw values ("$HgAutomate::gbdb/$db/bbi/gc5Base.bw");'
 _EOF_
   );
   if (defined $qualFiles) {
@@ -793,12 +794,6 @@ hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
 _EOF_
     );
   }
-
-  $bossScript->add(<<_EOF_
-rm -f wiggle.tab
-
-_EOF_
-  );
   $horseScript->execute();
   $bossScript->execute();
 } # makeDb
@@ -1299,8 +1294,15 @@ _EOF_
 
   $bossScript->add(<<_EOF_
 # These directories are necessary for running make in trackDb:
-$HgAutomate::cvs -Q co -P \\
-  kent/src/inc kent/src/hg/lib kent/src/hg/makeDb/trackDb
+$HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
+  --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
+src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
+src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/trackDb.nt.ra \\
+src/hg/makeDb/trackDb/tagTypes.tab \\
+src/hg/lib/trackDb.sql \\
+src/hg/lib/hgFindSpec.sql \\
+src/hg/makeDb/trackDb/trackDb.ra | tar xf -
 
 cd kent/src/hg/makeDb/trackDb
 
@@ -1320,7 +1322,7 @@ rm -f $HgAutomate::gbdb/$db/html/description.html
 ln -s $topDir/html/description.html $HgAutomate::gbdb/$db/html/
 
 # Do a test run with the generated files:
-make update DBS=$db
+./loadTracks trackDb_\${USER} hgFindSpec_\${USER} $db
 _EOF_
   );
 
@@ -1336,17 +1338,15 @@ Search for '***' notes in each file in and make corrections (sometimes the
 files used for a previous assembly might make a better template):
   description.html $localFiles
 
-Then cd ../.. (to trackDb/) and
+Then copy these files to your ~/kent/src/hg/makeDb/trackDb/$dbDbSpeciesDir/$db
+ - cd ~/kent/src/hg/makeDb/trackDb
  - edit makefile to add $db to DBS.
- - (if necessary) cvs add $dbDbSpeciesDir
- - cvs add $dbDbSpeciesDir/$db
- - cvs add $dbDbSpeciesDir/$db/*.{ra,html}
- - cvs ci -m "Added $db to DBS." makefile
- - cvs ci -m "Initial descriptions for $db." $dbDbSpeciesDir/$db
- - (if necessary) cvs ci $dbDbSpeciesDir
+ - git add $dbDbSpeciesDir/$db/*.{ra,html}
+ - git commit -m "Added $db to DBS." makefile
+ - git commit -m "Initial descriptions for $db." $dbDbSpeciesDir/$db/*.{ra.html}
+ - git pull; git push
  - Run make update DBS=$db and make alpha when done.
  - (optional) Clean up $runDir
- - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
 
 _EOF_
   ;

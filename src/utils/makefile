@@ -109,6 +109,7 @@ DIRS = \
 	nibFrag \
 	nibSize \
 	nt4Frag \
+	paraFetch \
 	pslLiftSubrangeBlat \
 	pslToPslx \
 	pslToXa \

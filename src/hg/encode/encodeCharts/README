@@ -6,7 +6,12 @@ found in: /hive/groups/encode/dcc/reports
 The Visualization API used is the Google Visualization API:
   http://code.google.com/apis/visualization/interactive_charts.html
 
-File structure when properly installed:
+To install type: 
+
+	"make install" 
+
+which will install the various files in their appropriate location. The 
+file structure when properly installed is as follows:
 
 In the "/hive/groups/encode/dcc/charts" dir:
 	important.dates.tab
@@ -17,7 +22,7 @@ In the "/hive/groups/encode/dcc/charts" dir:
 	encodeReportLib.py
 		Python module of shared functions for ENCODE Report charts
 
-Installed in CGI-BIN directory:
+In the "" directory:
 	encodeReport.py
 		Outputs the report file as raw text or as a spreadsheet
 	encodeTimeline.py
@@ -30,6 +35,14 @@ Installed in CGI-BIN directory:
 		Outputs the amount of time until release
 	encodeDistUnrelease.py
 		Outputs the amount of time since submission
+	encodeJune2010-Freeze.py
+		Outputs June2010 data from report file as JSON
+
+In the "/usr/local/apache/htdocs-genecats/ENCODE" dir:
+	June2010-Freeze.html
+		Status progress viz for June 2010 Freeze
+
+A "make clean" will remove the appropriate files.
 
 *) The charts are all linked from the ENCODE wiki page here:
 

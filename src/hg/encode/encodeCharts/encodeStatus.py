@@ -41,8 +41,8 @@ def processReportFile (reportFile, statusLabel, keyIndex, norelease, species):
       continue
     if norelease == 1 and status == 'released':
       continue
-    if keyIndex == 5 and keyLabel == "post ENCODE Jan 2010 Freeze":
-      keyLabel="post Jan-2010"
+    if keyIndex == 5: 
+      keyLabel=encodeReportLib.parseFreezeLabel(keyLabel)
     if species == 'all':
       pass
     else:
@@ -153,9 +153,7 @@ def main():
   chart_config['titleY'] = "# of Submissions"
   chart_config['tooltipFontSize'] = 16
   chart_config['enableTooltip'] = 'true'
-  # Can't specify 'orange' since IE8 doesn't support CSS 2.1
-  colors = ['red', '#ffa500', 'yellow', 'green', 'blue', 'purple']
-  colors = colors[0:len(statusLabel)]
+  colors = encodeReportLib.getColorArray(len(statusLabel))
   colors.reverse()
   chart_config['colors'] = colors
 

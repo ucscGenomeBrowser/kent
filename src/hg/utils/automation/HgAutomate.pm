@@ -35,7 +35,7 @@ use File::Basename;
 	makeGsub mustMkdir mustOpen nfsNoodge run verbose
       ),
     # Hardcoded paths/commands/constants:
-    qw( $gensub2 $para $paraRun $centralDbSql $cvs
+    qw( $gensub2 $para $paraRun $centralDbSql $git
 	$clusterData $trackBuild $goldenPath $images $gbdb
 	$splitThreshold $runSSH $setMachtype
       ),
@@ -481,7 +481,7 @@ sub processCommonOptions {
 #	These items should come from a configuration file so this
 #	business can be easily set up in other environments.
 # Hardcoded paths/command sequences:
-use vars qw( 	$gensub2 $para $paraRun $centralDbSql $cvs
+use vars qw( 	$gensub2 $para $paraRun $centralDbSql $git
 		$clusterData $trackBuild $goldenPath $images $gbdb
 		$splitThreshold $runSSH $setMachtype
 	   );
@@ -494,7 +494,7 @@ $paraRun = ("$para make jobList\n" .
 	    "$para time > run.time\n" .
 	    'cat run.time');
 $centralDbSql = "hgsql -h genome-testdb -A -N hgcentraltest";
-$cvs = "/usr/bin/cvs";
+$git = "/usr/bin/git";
 
 $clusterData = '/hive/data/genomes';
 $trackBuild = 'bed';

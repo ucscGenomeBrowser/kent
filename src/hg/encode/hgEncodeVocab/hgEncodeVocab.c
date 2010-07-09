@@ -168,9 +168,9 @@ if (sameString(type,"Antibody"))
     s = hashFindVal(ra, "lab");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
 
-    // add links to protocol doc if it exists
+    // add links to validation doc if it exists
     printf("  <TD>");
-    documentLink(ra,term,"validation","/ENCODE/protocols/antibody/",NULL,FALSE);
+    documentLink(ra,term,"validation","/ENCODE/validation/antibodies/",NULL,FALSE);
     printf("  &nbsp;</TD>\n");
 
     s = hashFindVal(ra, "lots");

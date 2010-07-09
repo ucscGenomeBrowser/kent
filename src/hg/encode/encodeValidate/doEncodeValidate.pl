@@ -183,7 +183,9 @@ our %validators = (
 sub validateFiles {
     # Validate array of filenames, ordered by part
     # Check files exist and are of correct data format
-    my ($files, $type, $track, $daf, $cell) = @_;
+	# Venkat: Added $sex to pass sex from ddf to validate bam files for
+	#		  mouse tissues.
+    my ($files, $type, $track, $daf, $cell,$sex) = @_;
     my @newFiles;
     my @errors;
     my $regex = "\`\|\\\|\|\"\|\'";
@@ -215,7 +217,8 @@ sub validateFiles {
         } elsif(!(-r $file)) {
             pushError(\@errors, "File \'$file\' is un-readable");
         } else {
-            pushError(\@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file, $cell));
+			#Venkat: Added $sex to pass sex from ddf to bam validate mouse tissues
+            pushError(\@errors, checkDataFormat($daf->{TRACKS}{$track}{type}, $file, $cell,$sex));
         }
     }
     $files = \@newFiles;
@@ -765,7 +768,8 @@ sub validateSAM
 
 sub validateBam
 {
-    my ($path, $file, $type, $cell) = @_;
+	# Venkat: Added $sex to validate tissue samples for mouse
+    my ($path, $file, $type, $cell,$sex) = @_;
     doTime("beginning validateBam") if $opt_timing;
     HgAutomate::verbose(2, "validateBam($path,$file,$type)\n");
     my $paramList = validationSettings("validateFiles","bam");
@@ -774,11 +778,29 @@ sub validateBam
 	# don't show end-user pipe error(s)
 	return ("Controlled Vocabulary \'Cell Line\' value \'$cell\' is not known");
     }
-    my $sex = $terms{'Cell Line'}->{$cell}->{'sex'};
+	#Venkat: Changed $sex to $cellLineSex to accomadate the sex being passed from the DDF
+    my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
+   
+	# Venkat: For category= Tissues change sex to one defined by the DFF
+	# The reason that I did not just pass sex is because I will be using the
+	# same DAF with required fields for mouse tissue and cell samples
+
+	#Venkat: Category is defined in cv.ra for 
+	# T= Tissue
+	# L= Cell Line
+	# P= Primary Cells
+    my $category = $terms{'Cell Line'}->{$cell}->{'category'};
+    
+	#Venkat: Can be a better design, but need to flesh out design more.
+	if ($category eq "T") {
+	$cellLineSex=$sex;
+    }
+
     my $downloadDir = "/hive/groups/encode/dcc/pipeline/downloads/$assembly/referenceSequences";
     my $infoFile =  "$downloadDir/female.$assembly.chrom.sizes";
     my $twoBitFile =  "$downloadDir/female.$assembly.2bit";
-    if ($sex ne "F")  {
+	# Venkat: Changed $sex to $cellLineSex to accomade the above changes to pass sex from ddf
+    if ($cellLineSex ne "F")  {
         $infoFile =  "$downloadDir/male.$assembly.chrom.sizes";
         $twoBitFile =  "$downloadDir/male.$assembly.2bit";
     }
@@ -979,11 +1001,13 @@ sub validatePsl
 
 sub validateDdfField {
     # validate value for type of field
-    my ($type, $val, $track, $daf, $cell) = @_;
+	# Venkat: Added $sex to accomadate tissues for mouse 
+    my ($type, $val, $track, $daf, $cell,$sex) = @_;
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
     if($validators{$type}) {
-        return $validators{$type}->($val, $type, $track, $daf, $cell);
+		# Venkat: Added the return $sex to accomadate tissues for mouse
+        return $validators{$type}->($val, $type, $track, $daf, $cell,$sex);
     } else {
         return $validators{'default'}->($val, $type, $track, $daf); # Considers the term controlled vocab
     }
@@ -991,7 +1015,8 @@ sub validateDdfField {
 
 sub checkDataFormat {
     # validate file type
-    my ($format, $file, $cell) = @_;
+	# Venkat: Added $sex to accomadate tissues for mouse
+    my ($format, $file, $cell,$sex) = @_;
     HgAutomate::verbose(3, "Checking data format for $file: $format\n");
     my $type = $format;
     if ($format =~ m/(bed) (\d+)/) {
@@ -1001,7 +1026,7 @@ sub checkDataFormat {
         $format = $1;
     }
     $formatCheckers{$format} || return "Data format \'$format\' is unknown\n";
-    return $formatCheckers{$format}->($submitPath, $file, $type, $cell);
+    return $formatCheckers{$format}->($submitPath, $file, $type, $cell,$sex);
     HgAutomate::verbose(3, "Done checking data format for $file: $format\n");
 }
 
@@ -1496,7 +1521,8 @@ while (@{$lines}) {
         my @metadataErrors;
         for my $field (keys %line) {
             my $cell = $line{cell};
-            push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf, $cell));
+			my $sex = $line{sex};
+            push(@metadataErrors, validateDdfField($field, $line{$field}, $view, $daf, $cell,$sex));
         }
         if(@metadataErrors) {
             pushError(\@errors, @metadataErrors);

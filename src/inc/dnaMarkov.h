@@ -30,5 +30,14 @@ void dnaMarkTriple(struct dnaSeq *seqList,
  * Depending on offset and advance parameters this could either be a straight 2nd order
  * Markov model, or a model for a particular coding frame. */
 
+char *dnaMark2Serialize(double mark2[5][5][5]);
+// serialize a 2nd order markov model
+
+void dnaMark2Deserialize(char *buf, double mark2[5][5][5]);
+// deserialize a 2nd order markov model from buf which was serialized with dnaMark2Serialize
+
+void dnaMarkMakeLog2(double mark2[5][5][5]);
+// convert a 2nd-order markov array to log2
+
 #endif /* DNAMARKOV_H */
 

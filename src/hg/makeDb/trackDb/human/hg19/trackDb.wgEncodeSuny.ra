@@ -1,6 +1,7 @@
 
 track wgEncodeSunyAlbanyGeneST
 compositeTrack on
+release alpha
 shortLabel SunyAlbany Gene ST 
 longLabel ENCODE SUNY Albany (Tenenbaum Lab) RBP Associated RNA by GeneST
 group regulation
@@ -172,4 +173,74 @@ origAssembly hg19
     	type broadPeak
     	color 189,0,157
     	# subId=1237 dateSubmitted=2010-06-01
+
+            track wgEncodeSunyAlbanyGeneSTK562Celf1RbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView
+            shortLabel K562
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
+            subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=CELF1
+            type broadPeak
+            color 46,0,184
+            # subId=1613 dateSubmitted=2010-06-18
+
+            track wgEncodeSunyAlbanyGeneSTHelas3T7tagRbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView off
+            shortLabel HeLa-S3
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HeLa-S3 cells)
+            subGroups view=RbpAssocRna cellType=HeLaS3 ripTgtProtein=T7Tag
+            type broadPeak
+            color 0,119,158
+            # subId=1613 dateSubmitted=2010-06-18
+
+            track wgEncodeSunyAlbanyGeneSTHelas3Pabpc1RbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView off
+            shortLabel HeLa-S3
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HeLa-S3 cells)
+            subGroups view=RbpAssocRna cellType=HeLaS3 ripTgtProtein=PABPC1
+            type broadPeak
+            color 0,119,158
+            # subId=1613 dateSubmitted=2010-06-18
+
+            track wgEncodeSunyAlbanyGeneSTHelas3Elavl1RbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView off
+            shortLabel HeLa-S3
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HeLa-S3 cells)
+            subGroups view=RbpAssocRna cellType=HeLaS3 ripTgtProtein=ELAVL1
+            type broadPeak
+            color 0,119,158
+            # subId=1613 dateSubmitted=2010-06-18
+
+            track wgEncodeSunyAlbanyGeneSTHepg2T7tagRbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView off
+            shortLabel HepG2
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HepG2 cells)
+            subGroups view=RbpAssocRna cellType=HepG2 ripTgtProtein=T7Tag
+            type broadPeak
+            color 189,0,157
+            # subId=1613 dateSubmitted=2010-06-18
+
+            track wgEncodeSunyAlbanyGeneSTHepg2Pabpc1RbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView off
+            shortLabel HepG2
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HepG2 cells)
+            subGroups view=RbpAssocRna cellType=HepG2 ripTgtProtein=PABPC1
+            type broadPeak
+            color 189,0,157
+            # subId=1613 dateSubmitted=2010-06-18
+
+            track wgEncodeSunyAlbanyGeneSTHepg2Elavl1RbpAssocRna
+            release alpha
+            parent wgEncodeSunyAlbanyRipChipView off
+            shortLabel HepG2
+            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HepG2 cells)
+            subGroups view=RbpAssocRna cellType=HepG2 ripTgtProtein=ELAVL1
+            type broadPeak
+            color 189,0,157
+            # subId=1613 dateSubmitted=2010-06-18
 
