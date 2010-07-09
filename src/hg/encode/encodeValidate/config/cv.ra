@@ -2134,6 +2134,7 @@ term MEL
 tag MEL
 type Cell Line
 organism Mouse
+category L
 description leukemia (K562 analog)
 tissue Blood
 color 46,0,184
