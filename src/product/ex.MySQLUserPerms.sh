@@ -65,7 +65,7 @@ done
 #
 for DB in cb1 hgFixed hg17 proteins040315
 do
-    ${MYSQL} -e "GRANT SELECT on \
+    ${MYSQL} -e "GRANT SELECT, CREATE TEMPORARY TABLES on \
 	${DB}.* TO readonly@localhost IDENTIFIED BY 'access';" mysql
 done
 

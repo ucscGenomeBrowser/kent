@@ -684,8 +684,8 @@ _EOF_
 mkdir -p $bedDir/gc5Base
 cd $bedDir/gc5Base
 hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 $db \\
-  $topDir/$db.unmasked.2bit \\
-| wigEncode stdin gc5Base.{wig,wib}
+  $topDir/$db.unmasked.2bit | gzip -c > $db.gc5Base.wigVarStep.gz 
+wigToBigWig $db.gc5Base.wigVarStep.gz ../../chrom.sizes ce9.gc5Base.bw
 _EOF_
   );
 
@@ -774,11 +774,12 @@ _EOF_
   $bossScript->add(<<_EOF_
 
 # Load gc5base
-mkdir -p $HgAutomate::gbdb/$db/wib
-rm -f $HgAutomate::gbdb/$db/wib/gc5Base.wib
-ln -s $bedDir/gc5Base/gc5Base.wib $HgAutomate::gbdb/$db/wib
-hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
-  $db gc5Base $bedDir/gc5Base/gc5Base.wig
+mkdir -p $HgAutomate::gbdb/$db/bbi
+rm -f $HgAutomate::gbdb/$db/bbi/gc5Base.bw
+ln -s $bedDir/gc5Base/$db.gc5Base.bw $HgAutomate::gbdb/$db/bbi/gc5Base.bw
+hgsql $db -e 'drop table if exists gc5BaseBw; \\
+            create table gc5BaseBw (fileName varchar(255) not null); \\
+            insert into gc5BaseBw values ("$HgAutomate::gbdb/$db/bbi/gc5Base.bw");'
 _EOF_
   );
   if (defined $qualFiles) {
@@ -793,12 +794,6 @@ hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
 _EOF_
     );
   }
-
-  $bossScript->add(<<_EOF_
-rm -f wiggle.tab
-
-_EOF_
-  );
   $horseScript->execute();
   $bossScript->execute();
 } # makeDb
