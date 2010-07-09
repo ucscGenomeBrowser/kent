@@ -10,7 +10,7 @@ subGroup2 cellType Cell_Line  GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=Hep
 subGroup3 antibody Antibody CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
 dimensions dimensionX=cellType dimensionY=antibody
 sortOrder cellType=+ antibody=+ 
-controlledVocabulary encode/cv.ra cellType=cell antibody=antibody
+controlledVocabulary encode/cv.ra cellType=cell antibody=Antibody
 dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide 
 useScore 1
