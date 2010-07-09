@@ -1294,8 +1294,15 @@ _EOF_
 
   $bossScript->add(<<_EOF_
 # These directories are necessary for running make in trackDb:
-$HgAutomate::cvs -Q co -P \\
-  kent/src/inc kent/src/hg/lib kent/src/hg/makeDb/trackDb
+$HgAutomate::git archive --remote=git://genome-source.cse.ucsc.edu/kent.git \\
+  --prefix=kent/ HEAD src/hg/makeDb/trackDb/loadTracks \\
+src/hg/makeDb/trackDb/$dbDbSpeciesDir \\
+src/hg/makeDb/trackDb/trackDb.chainNet.ra \\
+src/hg/makeDb/trackDb/trackDb.nt.ra \\
+src/hg/makeDb/trackDb/tagTypes.tab \\
+src/hg/lib/trackDb.sql \\
+src/hg/lib/hgFindSpec.sql \\
+src/hg/makeDb/trackDb/trackDb.ra | tar xf -
 
 cd kent/src/hg/makeDb/trackDb
 
@@ -1315,7 +1322,8 @@ rm -f $HgAutomate::gbdb/$db/html/description.html
 ln -s $topDir/html/description.html $HgAutomate::gbdb/$db/html/
 
 # Do a test run with the generated files:
-make update DBS=$db
+echo ./loadTracks trackDb_\${USER} hgFindSpec_\${USER} $db
+./loadTracks trackDb_\${USER} hgFindSpec_\${USER} $db
 _EOF_
   );
 
@@ -1331,17 +1339,15 @@ Search for '***' notes in each file in and make corrections (sometimes the
 files used for a previous assembly might make a better template):
   description.html $localFiles
 
-Then cd ../.. (to trackDb/) and
+Then copy these files to your ~/kent/src/hg/makeDb/trackDb/$dbDbSpeciesDir/$db
+ - cd ~/kent/src/hg/makeDb/trackDb
  - edit makefile to add $db to DBS.
- - (if necessary) cvs add $dbDbSpeciesDir
- - cvs add $dbDbSpeciesDir/$db
- - cvs add $dbDbSpeciesDir/$db/*.{ra,html}
- - cvs ci -m "Added $db to DBS." makefile
- - cvs ci -m "Initial descriptions for $db." $dbDbSpeciesDir/$db
- - (if necessary) cvs ci $dbDbSpeciesDir
+ - git add $dbDbSpeciesDir/$db/*.{ra,html}
+ - git commit -m "Added $db to DBS." makefile
+ - git commit -m "Initial descriptions for $db." $dbDbSpeciesDir/$db/*.{ra.html}
+ - git pull; git push
  - Run make update DBS=$db and make alpha when done.
  - (optional) Clean up $runDir
- - cvsup your ~/kent/src/hg/makeDb/trackDb and make future edits there.
 
 _EOF_
   ;
