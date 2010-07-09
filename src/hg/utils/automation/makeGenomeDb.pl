@@ -1322,7 +1322,6 @@ rm -f $HgAutomate::gbdb/$db/html/description.html
 ln -s $topDir/html/description.html $HgAutomate::gbdb/$db/html/
 
 # Do a test run with the generated files:
-echo ./loadTracks trackDb_\${USER} hgFindSpec_\${USER} $db
 ./loadTracks trackDb_\${USER} hgFindSpec_\${USER} $db
 _EOF_
   );
