@@ -14,11 +14,11 @@ lab               Stanford
 dataType          ChIP-seq
 compositeSuffix   SydhHist
 group             regulation
-variables         cell, antibody, treatment, control
+variables         cell,strain, antibody, treatment, control
 assembly          mm9
 
 medianFragmentLength 200
-validationSettings validateFiles.tagAlign:mmCheckOneInN=1000,mismatches=3,nMatch,matchFirst=32;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks
@@ -35,7 +35,7 @@ required         yes
 
 view             Alignments
 longLabelPrefix  ENCODE Histone by ChIP-seq at Stanford/Yale Alignments
-type             tagAlign
+type             bam
 hasReplicates    yes
 required         yes
 
