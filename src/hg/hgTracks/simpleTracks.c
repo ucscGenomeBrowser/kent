@@ -2352,7 +2352,7 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
         struct hvGfx *hvg, Color *retColor, Color *retBarbColor)
 /* Figure out color to draw linked feature in. */
 {
-if (lf->filterColor > 0)
+if (!((lf->filterColor == 0) || (lf->filterColor == -1)))
     {
     if (lf->extra == (void *)USE_ITEM_RGB)
 	{
