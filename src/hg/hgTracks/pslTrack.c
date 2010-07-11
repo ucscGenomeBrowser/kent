@@ -49,7 +49,7 @@ struct mrnaUiData *mud = tg->extraUiData;
 struct mrnaFilter *fil;
 char *type;
 boolean anyFilter = FALSE;
-boolean colorIx = 0;
+unsigned colorIx = 0;
 boolean isExclude = FALSE;
 boolean andLogic = TRUE;
 char query[256];
@@ -182,7 +182,7 @@ for (lf = *pLfList; lf != NULL; lf = next)
     if (passed ^ isExclude)
 	{
 	slAddHead(&newList, lf);
-	if (colorIx > 0)
+	if (colorIx != 0)
 	    lf->filterColor = colorIx;
 	}
     else
