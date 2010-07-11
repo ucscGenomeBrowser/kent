@@ -1,6 +1,7 @@
 /* motifFinder - find largest scoring motif in bed items. */
 
 #include "common.h"
+#include "bed6FloatScore.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
@@ -12,10 +13,11 @@
 #include "hdb.h"
 #include "chromInfo.h"
 
-static float minScoreCutoff = 0;
+static float minScoreCutoff;
 static char *motifTable = "transRegCodeMotifPseudoCounts";
 static char *markovTable = "markovModels";
 static boolean originalCoordinates = FALSE;
+static int topOnly = 0;
 struct chromInfo *chromInfo;
 
 void usage()
@@ -35,6 +37,7 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"originalCoordinates", OPTION_BOOLEAN},
+    {"topOnly", OPTION_INT},
     {NULL, 0},
 };
 
@@ -48,6 +51,14 @@ for(; ci != NULL; ci = ci->next)
     }
 errAbort("couldn't find getChromSize for chrom '%s'", chrom);
 return 0;
+}
+
+static int bed6FloatCmpDesc(const void *va, const void *vb)
+/* Compare two floats (remember that we have to return an int) */
+{
+const struct bed6FloatScore *a = *((struct bed6FloatScore **)va);
+const struct bed6FloatScore *b = *((struct bed6FloatScore **)vb);
+return (int) (1000 * (b->score - a->score));
 }
 
 void motifFinder(char *database, char *name, int fileCount, char *files[])
@@ -70,10 +81,7 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
     while (lineFileNextReal(lf, &line))
         {
 	int dnaLength, i, j, rowOffset, length, wordCount = chopTabs(line, words);
-        unsigned chromSize, maxStart = 0;
-        float maxScore = 0;
-        char maxStrand = 0;
-        boolean maxScoreInited = FALSE;
+        unsigned chromSize;
         boolean markovFound = FALSE;
         double mark2[5][5][5];
         struct dnaSeq *seq = NULL;
@@ -110,6 +118,7 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
         else
             errAbort("markov table '%s' is missing; non-markov analysis is current not supported", markovTable);
         sqlFreeResult(&sr);
+        struct bed6FloatScore *hits = NULL;
         for (i = 0; i < 2; i++)
             {
             char strand = i == 0 ? '+' : '-';
@@ -119,22 +128,35 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
                 // tricky b/c j includes the two bytes on either side of actual sequence.
                 {
                 double score = dnaMotifBitScoreWithMarkovBg(motif, seq->dna + j, mark2);
-                if(!maxScoreInited || score > maxScore)
+                if(score >= minScoreCutoff)
                     {
-                    maxScoreInited = TRUE;
-                    maxScore = score;
-                    maxStrand = strand;
+                    int start;
+                    struct bed6FloatScore *hit;
+                    AllocVar(hit);
                     if(strand == '-')
-                        maxStart = (chromEnd - j) - motif->columnCount;
+                        start = (chromEnd - j) - motif->columnCount;
                     else
-                        maxStart = chromStart + j;
+                        start = chromStart + j;
+                    hit->chrom = cloneString(chrom);
+                    hit->chromStart = originalCoordinates ? chromStart : start;
+                    hit->chromEnd = originalCoordinates ? chromEnd : start + motif->columnCount;
+                    hit->score = score;
+                    hit->strand[0] = strand;
+                    slAddHead(&hits, hit);
                     }
                 verbose(3, "j: %d; score: %.2f\n", j, score);
                 }
             }
-        if(maxScoreInited && maxScore > minScoreCutoff)
-            printf("%s\t%d\t%d\t%s\t%.2f\t%c\n", chrom, originalCoordinates ? chromStart : maxStart, 
-                   originalCoordinates ? chromEnd : maxStart + motif->columnCount, name, maxScore, maxStrand);
+        if(topOnly)
+            slSort(&hits, bed6FloatCmpDesc);
+        int count;
+        for(count = 1; hits != NULL; count++, hits = hits->next)
+            {
+            if(topOnly && count > topOnly)
+                break;
+            printf("%s\t%d\t%d\t%s\t%.2f\t%c\n", chrom, originalCoordinates ? chromStart : hits->chromStart, 
+                   originalCoordinates ? chromEnd : hits->chromStart + motif->columnCount, name, hits->score, hits->strand[0]);
+            }
         freeDnaSeq(&seq);
         freeMem(dupe);
         }
@@ -148,6 +170,8 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 originalCoordinates = optionExists("originalCoordinates");
+minScoreCutoff = optionFloat("minScoreCutoff", log2(99/1));
+topOnly = optionInt("topOnly", topOnly);
 if (argc < 4)
     usage();
 motifFinder(argv[1], argv[2], argc-3, argv+3);
