@@ -19,6 +19,8 @@ static char *markovTable = "markovModels";
 static boolean originalCoordinates = FALSE;
 static int topOnly = 0;
 struct chromInfo *chromInfo;
+#define PRIOR 0.5
+#define PRIORBACKOFF 0.01
 
 void usage()
 /* Explain usage and exit. */
@@ -128,7 +130,7 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
                 // tricky b/c j includes the two bytes on either side of actual sequence.
                 {
                 double score = dnaMotifBitScoreWithMarkovBg(motif, seq->dna + j, mark2);
-                if(score >= minScoreCutoff)
+                if(score >= 0)
                     {
                     int start;
                     struct bed6FloatScore *hit;
@@ -147,15 +149,25 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
                 verbose(3, "j: %d; score: %.2f\n", j, score);
                 }
             }
-        if(topOnly)
-            slSort(&hits, bed6FloatCmpDesc);
+        slSort(&hits, bed6FloatCmpDesc);
         int count;
+        float prior = PRIOR;
         for(count = 1; hits != NULL; count++, hits = hits->next)
             {
             if(topOnly && count > topOnly)
                 break;
-            printf("%s\t%d\t%d\t%s\t%.2f\t%c\n", chrom, originalCoordinates ? chromStart : hits->chromStart, 
-                   originalCoordinates ? chromEnd : hits->chromStart + motif->columnCount, name, hits->score, hits->strand[0]);
+            // Use a progressively weaker prior for hits with lower scores
+            verbose(3, "count: %d; score: %.2f; prior: %.2f; log2(prior / (1 - prior)): %.2f\n", count, hits->score, prior, log2(prior / (1 - prior)));
+            if(hits->score >= minScoreCutoff - log2(prior / (1 - prior)))
+                {
+                printf("%s\t%d\t%d\t%s\t%.2f\t%c\n", chrom, originalCoordinates ? chromStart : hits->chromStart, 
+                       originalCoordinates ? chromEnd : hits->chromStart + motif->columnCount, name, hits->score, hits->strand[0]);
+                prior = count == 1 ? PRIORBACKOFF : prior * PRIORBACKOFF;
+                if(count > 2)
+                    verbose(3, "hit for count: %d at %s:%d-%d\n", count, chrom, hits->chromStart, hits->chromStart + motif->columnCount);
+                }
+            else
+                break;
             }
         freeDnaSeq(&seq);
         freeMem(dupe);
@@ -170,7 +182,7 @@ int main(int argc, char *argv[])
 {
 optionInit(&argc, argv, options);
 originalCoordinates = optionExists("originalCoordinates");
-minScoreCutoff = optionFloat("minScoreCutoff", log2(99/1));
+minScoreCutoff = optionFloat("minScoreCutoff", 0);
 topOnly = optionInt("topOnly", topOnly);
 if (argc < 4)
     usage();
