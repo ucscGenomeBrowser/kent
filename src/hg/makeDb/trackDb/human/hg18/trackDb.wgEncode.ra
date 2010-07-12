@@ -3366,7 +3366,7 @@ wgEncode 1
 track wgEncodeYaleRNAseq
 compositeTrack on
 shortLabel Yale RNA-seq
-longLabel ENCODE Poly-A Tail Expression by RNA-seq from Yale/UC-Davis/Harvard
+longLabel ENCODE RNA-seq from Yale/UC-Davis/Harvard
 group expression
 priority 0
 origAssembly hg18
