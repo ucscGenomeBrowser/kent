@@ -1462,7 +1462,7 @@ else
     return FALSE;
     }
 
-verbose(2,"fileSize=%lld\n", (long long) fileSize); fflush(stderr); //debug
+verbose(2,"fileSize=%lld\n", (long long) fileSize);
 
 if (fileSize < 65536)    /* special case small file */
     numConnections = 1;

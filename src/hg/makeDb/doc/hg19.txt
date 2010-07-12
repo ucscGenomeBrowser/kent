@@ -6178,7 +6178,7 @@ endif
 popd > /dev/null
 date >> $2
 rm -f $2.running
-'EOF'
+'_EOF_'
 # << happy emacs
 
     ls -1S -r ../../splitRun/maf | sed -e "s/.maf//; s/hg19_//" > maf.list
