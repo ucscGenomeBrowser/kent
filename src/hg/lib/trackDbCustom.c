@@ -10,6 +10,7 @@
 #include "hui.h"
 #include "ra.h"
 #include "hash.h"
+#include "net.h"
 #include "sqlNum.h"
 #include "obscure.h"
 #include "hgMaf.h"
@@ -249,7 +250,7 @@ else
 struct trackDb *trackDbFromRa(char *raFile)
 /* Load track info from ra file into list. */
 {
-struct lineFile *lf = lineFileOpen(raFile, TRUE);
+struct lineFile *lf = netLineFileOpen(raFile);
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;

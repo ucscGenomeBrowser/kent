@@ -2723,17 +2723,13 @@ else
     }
 }
 
-void loadFromTrackDb(struct track **pTrackList)
-/* Load tracks from database, consulting handler list. */
+void addTdbListToTrackList(struct trackDb *tdbList, char *trackNameFilter,
+	struct track **pTrackList)
+/* Convert a list of trackDb's to tracks, and append these to trackList. */
 {
-struct trackDb *tdb, *next, *tdbList = NULL;
+struct trackDb *tdb, *next;
 struct track *track;
 TrackHandler handler;
-char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
-if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database, chromName);
-else
-    tdbList = hTrackDbForTrack(database, trackNameFilter);
 tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
@@ -2766,6 +2762,18 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     else
         slAddHead(pTrackList, track);
     }
+}
+
+void loadFromTrackDb(struct track **pTrackList)
+/* Load tracks from database, consulting handler list. */
+{
+char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
+struct trackDb *tdbList;
+if(trackNameFilter == NULL)
+    tdbList = hTrackDb(database, chromName);
+else
+    tdbList = hTrackDbForTrack(database, trackNameFilter);
+addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
 }
 
 static int getScoreFilter(char *trackName)
@@ -3257,7 +3265,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 return pos;
 }
 
-void loadCustomTracks(struct track **pGroupList)
+void loadCustomTracks(struct track **pTrackList)
 /* Load up custom tracks and append to list. */
 {
 struct customTrack *ct;
@@ -3309,7 +3317,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    char *s = words[i];
 		    struct track *tg;
 		    boolean toAll = sameWord(s, "all");
-		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
+		    for (tg = *pTrackList; tg != NULL; tg = tg->next)
 			{
 			if (toAll || sameString(s, tg->track))
 			    {
@@ -3359,7 +3367,42 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     hasCustomTracks = TRUE;
     tg = newCustomTrack(ct);
-    slAddHead(pGroupList, tg);
+    slAddHead(pTrackList, tg);
+    }
+}
+
+void addTracksFromDataHub(char *hubUrl, struct track **pTrackList)
+/* Load up stuff from data hub and append to list. The hubUrl points to
+ * a trackDb.ra format file.  */
+{
+/* Squirrel away hub directory for later. */
+char hubDir[PATH_LEN];
+splitPath(hubUrl, hubDir, NULL, NULL);
+
+/* Load trackDb.ra file and make it into proper trackDb tree */
+struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl);
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+     {
+     trackDbFieldsFromSettings(tdb);
+     trackDbPolish(tdb);
+     }
+trackDbLinkUpGenerations(tdbList);
+addTdbListToTrackList(tdbList, NULL, pTrackList);
+}
+
+void loadDataHubs(struct track **pTrackList)
+/* Load up stuff from data hubs and append to list. */
+{
+char *dataHubs = cloneString(cartUsualString(cart, "dataHubs", NULL));
+if (dataHubs == NULL)
+    return;
+int hubCount = chopByWhite(dataHubs, NULL, 10);
+char *hubArrays[hubCount];
+chopByWhite(dataHubs, hubArrays, hubCount);
+int i;
+for (i = 0; i<hubCount; ++i)
+    {
+    addTracksFromDataHub(hubArrays[i], pTrackList);
     }
 }
 
@@ -4013,6 +4056,9 @@ if (restrictionEnzymesOk())
     }
 if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
+#ifdef SOON
+loadDataHubs(&trackList);
+#endif /* SOON */
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
