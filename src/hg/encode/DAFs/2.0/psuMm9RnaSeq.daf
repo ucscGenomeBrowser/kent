@@ -1,6 +1,6 @@
 # Data Agreement File for PSU RNA-Seq (Caltech) experiments for mm9
 
-$Revision: 1.1 $
+$Revision: 1.3 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -10,10 +10,10 @@ dafVersion        2.0
 # Lab and general info
 grant             Hardison
 lab               Caltech-Mouse
-dataType          RnaSeq
+dataType          RNA-seq
 compositeSuffix   PsuRnaSeq
 group             expression
-variables         cell,readType,mapAlgorithm,insertLength
+variables         cell,strain,readType,mapAlgorithm,insertLength
 assembly          mm9
 
 validationSettings validateFiles.fastq:mmCheckOneInN=100 

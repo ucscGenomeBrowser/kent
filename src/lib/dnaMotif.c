@@ -170,6 +170,42 @@ for (i=0; i<motif->columnCount; ++i)
 return p;
 }
 
+static float dnaMotifSequenceProbLog(struct dnaMotif *motif, DNA *dna)
+{
+float p = 0;
+int i;
+for (i=0; i<motif->columnCount; ++i)
+    {
+    switch (dna[i])
+        {
+	case 'a':
+	case 'A':
+	    p += motif->aProb[i];
+	    break;
+	case 'c':
+	case 'C':
+	    p += motif->cProb[i];
+	    break;
+	case 'g':
+	case 'G':
+	    p += motif->gProb[i];
+	    break;
+	case 't':
+	case 'T':
+	    p += motif->tProb[i];
+	    break;
+	case 0:
+	    warn("dna shorter than motif");
+	    internalErr();
+	    break;
+	default:
+	    p += logBase2(0.25);
+	    break;
+	}
+    }
+return p;
+}
+
 char dnaMotifBestStrand(struct dnaMotif *motif, DNA *dna)
 /* Figure out which strand of DNA is better for probabalistic motif. */
 {
@@ -193,6 +229,41 @@ double odds = p/q;
 return logBase2(odds);
 }
 
+double dnaMotifBitScoreWithMarkovBg(struct dnaMotif *motif, DNA *dna, double mark2[5][5][5])
+/* Return logBase2-odds score of dna given a probabalistic motif using a 2nd-order markov model for the background.
+   motif and markd2 must be in log2 format.
+   Seq must contain an extra two bases at the front (i.e. we start scoring from dna + 2). */
+{
+double p = dnaMotifSequenceProbLog(motif, dna + 2);
+double q = 0;
+int i, index;
+// XXXX assert somehow that length(dna) == motif->columnCount + 2?
+dnaUtilOpen();
+for(i = 0, index = 2; i < motif->columnCount; i++, index++)
+    {
+    double tmp = mark2[ntVal5[(int) dna[index - 2]] + 1][ntVal5[(int) dna[index - 1]] + 1][ntVal5[(int) dna[index]] + 1];
+#if 0
+    char buf[4];
+    safencpy(buf, sizeof(buf), dna + index - 2, 3);
+    fprintf(stderr, "%s: tmp: %.6f\n", buf, tmp);
+#endif
+    q += tmp;
+    }
+return p - q;
+}
+
+
+void dnaMotifMakeLog2(struct dnaMotif *motif)
+{
+int i;
+for (i = 0; i < motif->columnCount; i++)
+    {
+    motif->aProb[i] = logBase2(motif->aProb[i]);
+    motif->cProb[i] = logBase2(motif->cProb[i]);
+    motif->gProb[i] = logBase2(motif->gProb[i]);
+    motif->tProb[i] = logBase2(motif->tProb[i]);
+    }
+}
 
 void dnaMotifNormalize(struct dnaMotif *motif)
 /* Make all columns of motif sum to one. */

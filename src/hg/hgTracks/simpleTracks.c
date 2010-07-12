@@ -2352,7 +2352,7 @@ static void lfColors(struct track *tg, struct linkedFeatures *lf,
         struct hvGfx *hvg, Color *retColor, Color *retBarbColor)
 /* Figure out color to draw linked feature in. */
 {
-if (lf->filterColor > 0)
+if (!((lf->filterColor == 0) || (lf->filterColor == -1)))
     {
     if (lf->extra == (void *)USE_ITEM_RGB)
 	{
@@ -4937,8 +4937,8 @@ char *diseaseClassCode;
 int i=0;
 conn = hAllocConn(database);
 
-safef(query, sizeof(query), 
-"select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode", 
+safef(query, sizeof(query),
+"select distinct diseaseClassCode from gadAll where geneSymbol='%s' and association = 'Y' order by diseaseClassCode",
 item->name);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
@@ -5168,10 +5168,10 @@ if (decipherId != NULL)
 		}
 	    }
 	sqlFreeResult(&sr);
-    	/* add more logic here to check for mean_ratio = 0 
+    	/* add more logic here to check for mean_ratio = 0
 	   (which is a problem to be fixed by DECIPHER */
 
-	safef(query, sizeof(query), 
+	safef(query, sizeof(query),
 	       "select mean_ratio = 0 from decipherRaw where id = '%s'", decipherId);
     	sr = sqlGetResult(conn, query);
     	if ((row = sqlNextRow(sr)) != NULL)
@@ -9043,6 +9043,9 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
+#ifdef SUBTRACKS_HAVE_VIS
+boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
+#endif///def SUBTRACKS_HAVE_VIS
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
@@ -9056,6 +9059,10 @@ if (enabled == enabledInTdb)
     if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
         cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
     }
+#ifdef SUBTRACKS_HAVE_VIS
+if(overrideComposite)
+    enabled = TRUE;
+#endif///def SUBTRACKS_HAVE_VIS
 return enabled;
 }
 
@@ -10736,6 +10743,41 @@ track->mapsSelf = TRUE;
 }
 #endif /* GBROWSE */
 
+static void remoteDrawItems(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+hvGfxTextCentered(hvg, xOff, yOff, width, tg->height, MG_BLACK, font, "loading...");
+}
+
+static void remoteLoadItems(struct track *tg)
+{
+tg->items = newSlName("remote");
+}
+
+static void remoteFreeItems(struct track *tg)
+{
+}
+
+char *remoteName(struct track *tg, void *item)
+{
+return tg->track;
+}
+
+void remoteMethods(struct track *tg)
+{
+tg->freeItems = remoteFreeItems;
+tg->loadItems = remoteLoadItems;
+tg->drawItems = remoteDrawItems;
+tg->itemName = remoteName;
+tg->lineHeight = 10;
+tg->totalHeight = tgFixedTotalHeightNoOverflow;
+tg->itemHeight = tgFixedItemHeight;
+tg->itemStart = tgItemNoStart;
+tg->itemEnd = tgItemNoEnd;
+tg->mapItemName = remoteName;
+}
+
 void fillInFromType(struct track *track, struct trackDb *tdb)
 /* Fill in various function pointers in track from type field of tdb. */
 {
@@ -10877,6 +10919,10 @@ else if (sameWord(type, "ld2"))
 else if (sameWord(type, "factorSource"))
     {
     factorSourceMethods(track);
+    }
+else if (sameWord(type, "remote"))
+    {
+    remoteMethods(track);
     }
 #endif /* GBROWSE */
 }
@@ -11096,6 +11142,7 @@ if (tdb->useScore)
 	track->colorShades = shadesOfGray;
     }
 track->tdb = tdb;
+tdbExtrasAddOrUpdate(tdb,"track",track); // Be able to find track struct from tdb
 
 /* Handle remote database settings - just a JK experiment at the moment. */
 track->remoteSqlHost = trackDbSetting(tdb, "sqlHost");

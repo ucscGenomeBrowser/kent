@@ -3364,10 +3364,9 @@ wgEncode 1
 
 # Yale RNA-seq (wrangler: tdreszer)
 track wgEncodeYaleRNAseq
-release alpha,beta
 compositeTrack on
 shortLabel Yale RNA-seq
-longLabel ENCODE Poly-A Tail Expression by RNA-seq from Yale/UC-Davis/Harvard
+longLabel ENCODE RNA-seq from Yale/UC-Davis/Harvard
 group expression
 priority 0
 origAssembly hg18
@@ -3388,10 +3387,10 @@ autoScale off
 windowingFunction mean
 maxHeightPixels 100:32:16
 dataVersion ENCODE Feb 2009 Freeze
+canPack On
 wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalGm12878
-    release alpha,beta
     subTrack wgEncodeYaleRNAseq
     shortLabel GM12878 PolyA Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in GM12878 cells)
@@ -3401,7 +3400,6 @@ wgEncode 1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=GM12878 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=539 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalGm12878 fileName=wgEncodeYaleRnaSeqPolyaSignalGm12878.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaSignalK562
-    release alpha,beta
     subTrack wgEncodeYaleRNAseq
     shortLabel K562 PolyA Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562 cells)
@@ -3411,7 +3409,6 @@ wgEncode 1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
-    release alpha,beta
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 PolyA Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa30m cells)
@@ -3421,7 +3418,6 @@ wgEncode 1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=540 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
-    release alpha,beta
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 PolyA Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa6h cells)
@@ -3431,7 +3427,6 @@ wgEncode 1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=541 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
-    release alpha,beta
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 PolyA Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg30m cells)
@@ -3441,7 +3436,6 @@ wgEncode 1
     metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=542 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m.bedGraph4.gz
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
-    release alpha,beta
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 PolyA Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg6h cells)

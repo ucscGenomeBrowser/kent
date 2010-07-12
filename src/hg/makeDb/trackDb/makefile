@@ -89,7 +89,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
 	strPur1 strPur2 \
     nemVec1 \
 	aplCal1 \
-	ce2 ce3 ce4 ce5 ce6 ce7 ce8 \
+	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 \
 	cb1 cb2 cb3 \
 	caeRem1 caeRem2 caeRem3 \
 	caeJap1 caeJap2 \

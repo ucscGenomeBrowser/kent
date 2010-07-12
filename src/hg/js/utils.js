@@ -544,12 +544,27 @@ function commify (str) {
     }
 }
 
+function parsePosition(position)
+{
+// Parse chr:start-end string into a chrom, start, end object
+    position = position.replace(/,/g, "");
+    var a = /(\S+):(\d+)-(\d+)/.exec(position);
+    if(a != null && a.length == 4) {
+        var o = new Object();
+        o.chrom = a[1];
+        o.start = parseInt(a[2])
+        o.end = parseInt(a[3]);
+        return o;
+    }
+    return null;
+}
+
 function getSizeFromCoordinates(position)
 {
 // Parse size out of a chr:start-end string
-    var a = /(\d+)-(\d+)/.exec(position);
-    if(a && a[1] && a[2]) {
-        return a[2] - a[1] + 1;
+    var o = parsePosition(position);
+    if(o != null) {
+        return o.end - o.start + 1;
     }
     return null;
 }

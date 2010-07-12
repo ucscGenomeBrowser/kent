@@ -1,4 +1,4 @@
-/* ErrAbort.c - our error handler. 
+/* ErrAbort.c - our error handler.
  *
  * This maintains two stacks - a warning message printer
  * stack, and a "abort handler" stack.
@@ -12,7 +12,9 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+#include <execinfo.h>
 #include "common.h"
+#include "dystring.h"
 #include "errabort.h"
 
 static char const rcsid[] = "$Id: errabort.c,v 1.16 2010/01/12 18:16:27 markd Exp $";
@@ -50,6 +52,35 @@ va_start(args, format);
 vaWarn(format, args);
 va_end(args);
 }
+
+void warnWithBackTrace(char *format, ...)
+/* Issue a warning message and append backtrace. */
+{
+va_list args;
+va_start(args, format);
+struct dyString *dy = newDyString(255);
+dyStringAppend(dy, format);
+
+#define STACK_LIMIT 20
+void *buffer[STACK_LIMIT];
+char **strings;
+int count = backtrace(buffer, STACK_LIMIT);
+strings = backtrace_symbols(buffer, count);
+if (strings == NULL)
+    dyStringAppend(dy,"\nno backtrace_symbols.");
+else
+    {
+    dyStringAppend(dy,"\nBACKTRACE [can use 'addr2line -Cfise {exe} addr addr ...']:");
+    int ix;
+    for (ix = 1; ix < count && strings[ix] != NULL; ix++)
+        dyStringPrintf(dy,"\n%s", strings[ix]);
+
+    free(strings);
+    }
+vaWarn(dyStringCannibalize(&dy), args);
+va_end(args);
+}
+
 
 void errnoWarn(char *format, ...)
 /* Prints error message from UNIX errno first, then does rest of warning. */
@@ -104,7 +135,7 @@ void noWarnAbort()
 /* Abort without message. */
 {
 abortArray[abortIx]();
-exit(-1);		/* This is just to make compiler happy. 
+exit(-1);		/* This is just to make compiler happy.
                          * We have already exited or longjmped by now. */
 }
 
@@ -114,7 +145,7 @@ void vaErrAbort(char *format, va_list args)
 /* flag is needed because both errAbort and warn generate message
  * using the warn handler, however sometimes one needed to know
  * (like when logging), if it's an error or a warning.  This is far from
- * perfect, as this isn't cleared if the error handler continues, 
+ * perfect, as this isn't cleared if the error handler continues,
  * as with an exception mechanism. */
 errAbortInProgress = TRUE;
 vaWarn(format, args);
@@ -197,3 +228,4 @@ void errAbortDebugnPushPopErr()
 {
 debugPushPopErr = TRUE;
 }
+
