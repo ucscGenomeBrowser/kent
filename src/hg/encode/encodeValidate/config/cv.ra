@@ -75,7 +75,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 46,0,184
 sex F
 tier 1
-protocol Yale_TFSB(Farnham):K562_protocol.pdf
+protocol Yale_TFBS(Farnham):K562_protocol.pdf
 
 term HepG2
 tag HepG2
@@ -583,7 +583,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM12801
 tag GM12801
@@ -743,7 +743,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex U
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18505
 tag GM18505
@@ -758,7 +758,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18507
 tag GM18507
@@ -790,7 +790,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18951
 tag GM18951
@@ -805,7 +805,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19099
 tag GM19099
@@ -820,7 +820,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19193
 tag GM19193
@@ -835,7 +835,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19238
 tag GM19238
@@ -1084,7 +1084,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol Yale_TFSB:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
+protocol Yale_TFBS:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -1131,7 +1131,7 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 sex U
 tier 3
-protocol Yale_TFSB:HEK293b_Snyder_protocol.pdf
+protocol Yale_TFBS:HEK293b_Snyder_protocol.pdf
 
 term HFL11W
 tag HFL11W
@@ -1394,7 +1394,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 0,119,158
 sex M
 tier 3
-protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFSB(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
+protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -1411,7 +1411,7 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 sex F
 tier 3
-protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
+protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
 #tag MCF10A
@@ -1523,7 +1523,7 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 sex U
 tier 3
-protocol Yale_TFSB:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
+protocol Yale_TFBS:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
 
 term NH-A
 tag NHA
@@ -1600,7 +1600,7 @@ termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
 sex M
 tier 3
-protocol Yale_TFSB:NT2-D1_protocol.pdf
+protocol Yale_TFBS:NT2-D1_protocol.pdf
 
 term Osteobl
 tag Osteobl
@@ -4888,17 +4888,23 @@ type protocol
 
 term UW_Stam
 tag uwStamGrowProt
-description Cells grown using the UW_Stam growth protocol
+description Cells grown using the UW_Stam growth protocol.
 type protocol
 
 term Open_Chromatin
 tag openChromGrowProt
-description Cells grown using the Open_Chromatin growth protocol
+description Cells grown using the Open_Chromatin growth protocol.
 type protocol
 
 term HudsonAlpha
 tag hudsonAlphaGrowProt
-description Cells grown using the HudsonAlpha growth protocol
+description Cells grown using the HudsonAlpha growth protocol.
+type protocol
+
+
+term Yale_TFBS  
+tag YaleGrowProt        
+description Cells grown using the Yale TFBS growth protocol.
 type protocol
 
 
