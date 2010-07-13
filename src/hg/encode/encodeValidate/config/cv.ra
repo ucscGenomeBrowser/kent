@@ -1525,6 +1525,21 @@ sex U
 tier 3
 protocol Yale_TFSB:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
 
+term NH-A
+tag NHA
+type Cell Line
+organism Human
+tissue Nervous
+description (Provisional) normal human astrocytes
+vendorName Lonza
+vendorId CC-2565
+orderUrl https://shop.lonza.com/shop/prd/normal-human-astrocytes/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699D16C95C8F18852001A4B525E10/
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099&termName=astrocyte
+sex U
+tier 3
+termId BTO:0000099
+#protocol Broad:NH-A_Bernstein_protocol.pdf
+
 term NHBE
 tag NHBE
 type Cell Line
@@ -2036,7 +2051,7 @@ type Cell Line
 organism Mouse
 tissue Blood
 category L
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
 vendorName Mitch Weiss lab
 orderUrl weissmi@email.chop.edu
 termId 7079
@@ -2147,8 +2162,8 @@ organism Mouse
 tissue Blood
 category L
 description Myocyte
-vendorName 
-orderUrl 
+vendorName
+orderUrl
 color 153,38,0
 sex U
 protocol Myocyte_Hardison_protocol.pdf
@@ -2160,8 +2175,8 @@ organism Mouse
 tissue Blood
 category L
 description Muscle
-vendorName 
-orderUrl 
+vendorName
+orderUrl
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
@@ -2691,7 +2706,7 @@ validation missing
 term ERRA
 tag ERRA
 type Antibody
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin.
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
@@ -3200,8 +3215,8 @@ validation missing
 term MEF2A
 tag MEF2A
 type Antibody
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin. 
-targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes. 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin.
+targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes.
 vendorName Santa Cruz Biotech
 vendorId sc-313
 orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
@@ -3941,7 +3956,7 @@ type Antibody
 targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
 antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
 vendorName Santa Cruz Biotech
-vendorId SC-5261 
+vendorId SC-5261
 orderUrl
 lab Tenebaum
 lots B2508(Nov2008)
@@ -3963,7 +3978,7 @@ targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation
 
-term PABPC1 
+term PABPC1
 tag PABPC1
 type Antibody
 targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC
@@ -3983,7 +3998,7 @@ tag SLBP
 type Antibody
 targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
 antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
-at origin. 
+at origin.
 vendorName Millipore; Santa Cruz Biotech
 vendorId Mil 06-1376; SC-26522
 orderUrl
@@ -3995,7 +4010,7 @@ validation
 
 term CELF1
 tag CELF1
-type Antibody 
+type Antibody
 targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
 antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
 tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
@@ -4703,12 +4718,12 @@ tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
 type treatment
 
-term Estradiol_1nM 
+term Estradiol_1nM
 tag ESTRADIb1h
 description  1h,1nM Estradiol  (Myers)
 type treatment
 
-term Estradiol_10nM_4hr 
+term Estradiol_10nM_4hr
 tag ESTRADIa4h
 description  4h,10nM Estradiol (Myers)
 type treatment
