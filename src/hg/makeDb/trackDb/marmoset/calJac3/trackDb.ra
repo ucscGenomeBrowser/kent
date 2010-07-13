@@ -108,6 +108,7 @@ group map
 priority 61
 visibility hide
 type bed 4
+html bacEnds
 
 searchTable bacEnds
 searchType bed
