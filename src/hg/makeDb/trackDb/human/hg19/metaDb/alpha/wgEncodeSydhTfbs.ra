@@ -12381,6 +12381,140 @@ subId 1388
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsK562Pol2s2StdAlnRep1
+objType file
+antibody Pol2(phosphoS2)
+cell K562
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep1.bam.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Stanford
+parentTable wgEncodeSydhTfbsK562Pol2s2StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1623
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Pol2s2StdAlnRep2
+objType file
+antibody Pol2(phosphoS2)
+cell K562
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep2.bam.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Stanford
+parentTable wgEncodeSydhTfbsK562Pol2s2StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1623
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Pol2s2StdPk
+objType table
+antibody Pol2(phosphoS2)
+cell K562
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeSydhTfbsK562Pol2s2StdPk.narrowPeak.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1623
+tableName wgEncodeSydhTfbsK562Pol2s2StdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562Pol2s2StdRawDataRep1
+objType file
+antibody Pol2(phosphoS2)
+cell K562
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep1.fastq.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Stanford
+labVersion Early pipeline version.  Low quality reads excluded.
+parentTable wgEncodeSydhTfbsK562Pol2s2StdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1623
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Pol2s2StdRawDataRep2
+objType file
+antibody Pol2(phosphoS2)
+cell K562
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep2.fastq.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Stanford
+labVersion Early pipeline version.  Low quality reads excluded.
+parentTable wgEncodeSydhTfbsK562Pol2s2StdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1623
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Pol2s2StdSig
+objType table
+antibody Pol2(phosphoS2)
+cell K562
+composite wgEncodeSydhTfbs
+control std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeSydhTfbsK562Pol2s2StdSig.bigWig.gz
+grant Snyder
+inputType K562/None/Input/std
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1623
+tableName wgEncodeSydhTfbsK562Pol2s2StdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsK562Pol2StdAlnRep1
 objType file
 antibody Pol2
@@ -13907,4 +14041,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: -1063446040
+# MAGIC: 430521668
