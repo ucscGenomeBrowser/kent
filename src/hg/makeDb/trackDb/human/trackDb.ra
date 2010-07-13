@@ -228,6 +228,20 @@ chromosomes chr22,
 color 30,130,210
 type genePred
 
+track hgIkmc
+shortLabel IKMC Genes Mapped
+longLabel International Knockout Mouse Consortium Genes Mapped to Human Genome
+group genes 
+priority 64.1
+visibility hide
+type bed 12
+noScoreFilter .
+itemRgb on
+urlLabel KOMP Data Coordination Center: 
+url http://www.knockoutmouse.org/search?criteria=$$
+mgiUrlLabel MGI Report: 
+mgiUrl http://www.informatics.jax.org/searches/accession_report.cgi?id=$$
+
 track acembly
 shortLabel AceView Genes
 longLabel AceView Gene Models With Alt-Splicing
@@ -1521,6 +1535,20 @@ color 0,0,0
 altColor 0,0,0
 spectrum on
 type bed 12 .
+
+searchTable hgIkmc
+searchType bed
+searchMethod exact
+searchPriority 5
+termRegex [a-z0-9.-]+(_[a-z0-9]+)?
+
+searchName hgIkmcPrefix
+searchTable hgIkmc
+searchType bed
+searchMethod prefix
+searchPriority 5
+termRegex [a-z0-9.-]+
+dontCheck [a-z0-9.-]+_[a-z0-9]+
 
 track affy500K
 shortLabel Affy 500K
@@ -3455,6 +3483,15 @@ type bed 4 +
     priority 58
     color 128,64,0
 
+track darned
+shortLabel Human RNA Editing
+longLabel Human RNA Editing from the DAtabase of RNa-EDiting
+group varRep
+priority 200
+visibility hide
+itemRgb on
+noScoreFilter .
+type bed 9
 
 #Overrides from priority.ra
 

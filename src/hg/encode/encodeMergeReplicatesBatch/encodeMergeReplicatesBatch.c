@@ -115,7 +115,7 @@ return bundleList;
 
 
 struct dyString *unrepFileName(char *fileName, boolean isSingle)
-/* Return string with Rep# in fileName replaces with "Merged" */
+/* Return string with Rep# in fileName replaced with "Merged" */
 {
 char *s = strstr(fileName, "Rep");
 struct dyString *dy = dyStringNew(0);

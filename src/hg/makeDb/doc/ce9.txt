@@ -1,0 +1,176 @@
+# for emacs: -*- mode: sh; -*-
+
+# Caenorhabditis elegans
+# Washington University School of Medicine GSC and Sanger Institute WS210
+
+#  $Id: ce9.txt,v 1.3 2009/09/24 20:54:24 hiram Exp $
+
+#########################################################################
+# DOWNLOAD SEQUENCE (DONE - 2010-07-08 - Hiram)
+    mkdir /hive/data/genomes/ce9
+    cd /hive/data/genomes/ce9
+    mkdir ws210
+    cd ws210
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/c_elegans/
+    #	about 11 minutes
+
+#########################################################################
+# NORMALIZE SEQUENCE NAMES TO BEGIN WITH chr (DONE - 2010-07-08 - Hiram)
+    mkdir /hive/data/genomes/ce9/sanger
+    cd /hive/data/genomes/ce9/sanger
+    # Fix fasta names:
+    zcat ../ws210/sequences/dna/CHR*[XVAI].dna.gz \
+    | sed -e '/^$/ d;  s/^>CHROMOSOME_MtDNA/>chrM/;  s/^>CHROMOSOME_/>chr/;' \
+    | gzip -c > UCSC.fa.gz
+    faCount UCSC.fa.gz 
+#seq    len     A       C       G       T       N       cpg
+chrI    15072421        4835939 2695879 2692150 4848453 0       503521
+chrII   15279323        4878195 2769216 2762198 4869714 0       492149
+chrIII  13783685        4444652 2449141 2466322 4423570 0       459669
+chrIV   17493784        5711040 3034767 3017008 5730969 0       522372
+chrM    13794   4335    1225    2055    6179    0       110
+chrV    20924143        6750393 3712058 3701397 6760295 0       638983
+chrX    17718854        5747199 3119702 3117868 5734085 0       514715
+total   100286004       32371753        17781988        17758998 323732650       3131519
+
+    # Make sure we get the same sizes from this command:
+    zcat ../ws210/sequences/dna/CHR*[XVAI].dna.gz | sed -e '/^$/ d;' \
+	| faCount stdin
+
+#seq    len     A       C       G       T       N       cpg
+CHROMOSOME_I    15072421        4835939 2695879 2692150 4848453 0       503521
+CHROMOSOME_II   15279323        4878195 2769216 2762198 4869714 0       492149
+CHROMOSOME_III  13783685        4444652 2449141 2466322 4423570 0       459669
+CHROMOSOME_IV   17493784        5711040 3034767 3017008 5730969 0       522372
+CHROMOSOME_MtDNA        13794   4335    1225    2055    6179    0       110
+CHROMOSOME_V    20924143        6750393 3712058 3701397 6760295 0       638983
+CHROMOSOME_X    17718854        5747199 3119702 3117868 5734085 0       514715
+total   100286004       32371753        17781988        17758998 323732650       3131519
+
+    #	Compare to WS200: +1 in chrII, -3 in chrIII
+faCount ../../ce7/sanger/UCSC.fa.gz
+#seq    len     A       C       G       T       N       cpg
+chrI    15072421        4835939 2695879 2692150 4848453 0       503521
+chrII   15279324        4878196 2769216 2762198 4869714 0       492149
+chrIII  13783682        4444652 2449139 2466321 4423570 0       459669
+chrIV   17493784        5711040 3034767 3017008 5730969 0       522372
+chrM    13794   4335    1225    2055    6179    0       110
+chrV    20924143        6750393 3712058 3701397 6760295 0       638983
+chrX    17718854        5747199 3119702 3117868 5734085 0       514715
+total   100286002       32371754        17781986        17758997 323732650       3131519
+
+    # Fix AGP names:
+    sed -e 's/^/chr/' ../ws210/sequences/dna/CHR*.agp > UCSC.agp
+    # And add a fake mitochondrial AGP entry for the sake of downstream
+    # tools (make sure the GenBank sequence is identical to given):
+    echo -e "chrM\t1\t13794\t1\tF\tNC_001328.1\t1\t13794\t+" >> UCSC.agp
+
+#########################################################################
+# run the makeGenomeDb procedure to create the db and unmasked sequence
+#	(DONE - 2010-07-08 - Hiram)
+    cd /hive/data/genomes/ce9
+    cat << '_EOF_' > ce9.config.ra
+# Config parameters for makeGenomeDb.pl:
+db ce9
+clade worm
+genomeCladePriority 10
+scientificName Caenorhabditis elegans
+commonName C. elegans
+assemblyDate Jan 2010
+assemblyLabel Washington University School of Medicine GSC and Sanger Institute WS210
+assemblyShortLabel WS210
+orderKey 823
+# mito sequence included in fasta and AGP file
+mitoAcc none
+fastaFiles /hive/data/genomes/ce9/sanger/UCSC.fa.gz
+agpFiles   /hive/data/genomes/ce9/sanger/UCSC.agp
+# qualFiles /dev/null
+dbDbSpeciesDir worm
+taxId 6239
+'_EOF_'
+    # << emacs
+
+    mkdir jkStuff
+    #	run just to AGP to make sure things are sane first
+    nice -n +19 makeGenomeDb.pl ce9.config.ra -stop=agp \
+      > jkStuff/makeGenomeDb.agp.log 2>&1
+    #	now, continuing to make the Db and all
+    time nice -n +19 makeGenomeDb.pl ce9.config.ra -continue=db \
+      > jkStuff/makeGenomeDb.db.log 2>&1
+    #	real    1m37.013s
+    #	take the trackDb business there and check it into the source tree
+    #	fixup the description, gap and gold html page descriptions
+
+
+#########################################################################
+# REPEATMASKER (DONE - 2010-07-08 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce9/bed/repeatMasker
+    cd /hive/data/genomes/ce9/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -bigClusterHub=pk \
+	-buildDir=/hive/data/genomes/ce9/bed/repeatMasker ce9 > do.log 2>&1 &
+    #	about 103 minutes
+
+    #	from the do.log:
+    #	RepeatMasker version development-$Id:
+    #	RepeatMasker,v 1.24 2009/06/08 18:07:05 angie Exp $
+    #	CC   RELEASE 20090604;                                            *
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2010-07-09 - Hiram)
+    ssh kkstore06
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce9/bed/simpleRepeat
+    cd /hive/data/genomes/ce9/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-buildDir=/hive/data/genomes/ce9/bed/simpleRepeat ce9 > do.log 2>&1 &
+    #	about 30 minutes
+
+#########################################################################
+# MASK SEQUENCE WITH RM+TRF (DONE - 2010-07-09 - Hiram)
+    # Since both doRepeatMasker.pl and doSimpleRepeats.pl have completed,
+    # now it's time to combine the masking into the final ce9.2bit,
+    # following the instructions at the end of doSimpleRepeat's output.
+    ssh kolossus
+    cd /hive/data/genomes/ce9
+    twoBitMask ce9.rmsk.2bit -add bed/simpleRepeat/trfMask.bed ce9.2bit
+    # You can safely ignore the warning about extra BED columns
+    twoBitToFa ce9.2bit stdout | faSize stdin
+# 100286004 bases (0 N's 100286004 real 86863769 upper 13422235 lower)
+#	in 7 sequences in 1 files
+# %13.38 masked total, %13.38 masked real
+    #	set the symlink on hgwdev to /gbdb/ce9
+    cd /gbdb/ce9
+    ln -s /hive/data/genomes/ce9/ce9.2bit .
+
+#########################################################################
+# MAKE 11.OOC FILE FOR BLAT (DONE - 2010-07-09 - Hiram)
+    # Use -repMatch=100 (based on size -- for human we use 1024, and 
+    # worm size is ~3.4% of human judging by gapless ce4 vs. hg18 genome 
+    # size from featureBits. So we would use 34, but that yields a very
+    # high number of tiles to ignore, especially for a small more compact 
+    # genome.  Bump that up a bit to be more conservative.
+    cd /hive/data/genomes/ce9
+    blat ce9.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=jkStuff/ce9.11.ooc -repMatch=100
+    #	Wrote 8514 overused 11-mers to jkStuff/11.ooc
+    mkdir /hive/data/staging/data/ce9
+    cd  /hive/data/genomes/ce9
+    cp -p ce9.2bit jkStuff/ce9.11.ooc chrom.sizes /hive/data/staging/data/ce9
+
+    #	request rsync to cluster nodes
+
+#########################################################################
+#  BLATSERVERS ENTRY (DONE - 2010-07-09 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce9", "blat9", "17778", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce9", "blat9", "17779", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################

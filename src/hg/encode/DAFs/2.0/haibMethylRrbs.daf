@@ -1,6 +1,4 @@
 # Data Agreement File for Myers/HudsonAlpha Methyl-seq experiments $Revision: 1.4 $
-
-
 # The header for the associated ddf file should look like this:
 # files	view	cell	treatment	replicate	growthProtocol
 

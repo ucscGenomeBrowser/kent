@@ -47,3 +47,11 @@ ldHgGene -exon=polyA_site -genePredExt -noncoding -oldTable hg19 wgEncodeGencode
 
 
 
+###  2010-07-02 Download update V4 files from FelixK (braney)
+cd /hive/groups/encode/dcc/data/gencodeV4
+wget "ftp://ftp.sanger.ac.uk/pub/gencode/other_data/gencode_v4fixed.tgz"
+tar tvfz gencode_v4fixed.tgz
+# -rw-r--r-- fsk/ensembl 247107660 2010-07-02 08:26:21 gencode_v4fix.annotation.GRCh37.level_3.gtf
+# -rw-r--r-- fsk/ensembl 486686715 2010-07-02 08:26:39 gencode_v4fix.annotation.GRCh37.level_1_2.gtf
+
+mkdir old

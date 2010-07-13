@@ -5,7 +5,8 @@
  * Licensed like jQuery, see http://docs.jquery.com/License.
  *
  * NOTE for Browser staff: Tim Dreszer has modified this from original:
- *      dragStartIndex is returned as third param in onDrop() callback.
+ *      onDrop() callback changed: dragStartIndex is returned as third param.
+ *      onDragStart() callback changed: the event is returned as first param.
  *
  * Configuration options:
  *
@@ -137,7 +138,7 @@ jQuery.tableDnD = {
                     config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
                     if (config.onDragStart) {
                         // Call the onDrop method if there is one
-                        config.onDragStart(table, this);
+                        config.onDragStart(ev, table, this);
                     }
                     return false;
                 });
@@ -157,7 +158,7 @@ jQuery.tableDnD = {
                             config.dragStartIndex = $(jQuery.tableDnD.dragObject).attr('rowIndex');
 	                        if (config.onDragStart) {
 	                            // Call the onDrop method if there is one
-	                            config.onDragStart(table, this);
+	                            config.onDragStart(ev, table, this);
 	                        }
 	                        return false;
 	                    }

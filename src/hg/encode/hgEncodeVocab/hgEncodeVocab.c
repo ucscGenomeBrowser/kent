@@ -32,7 +32,7 @@ static char *termOpt = NULL;
 static char *tagOpt = NULL;
 static char *typeOpt = NULL;
 static char *organismOpt = "Human"; // default, uses naming convention from dbDb table
-
+static char *organismOptLower; //  version of above used for path names
 static char *cv_file()
 {
 /* return default location of cv.ra (can specify as cgi var: ra=cv.ra) */
@@ -108,8 +108,16 @@ return (strcasecmp(termA, termB));
 void doTypeHeader(char *type)
 {
 if (sameString(type,"Cell Line"))
-    {
-    printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>",type);
+   {
+    /* Venkat: To differentiate between the print statments of Mouse and Human Cell Lines */
+    if(sameString(organismOpt,"Human"))
+         {
+   	 printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>",type);
+   	 }
+      else 
+	 {
+    	  printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type);
+         }
     }
 else if (sameString(type,"Antibody"))
     {
@@ -168,9 +176,9 @@ if (sameString(type,"Antibody"))
     s = hashFindVal(ra, "lab");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
 
-    // add links to protocol doc if it exists
+    // add links to validation doc if it exists
     printf("  <TD>");
-    documentLink(ra,term,"validation","/ENCODE/protocols/antibody/",NULL,FALSE);
+    documentLink(ra,term,"validation","/ENCODE/validation/antibodies/",NULL,FALSE);
     printf("  &nbsp;</TD>\n");
 
     s = hashFindVal(ra, "lots");
@@ -247,73 +255,126 @@ else if (sameString(type,"Cell Line"))
     s = hashFindVal(ra, "organism");
     if (s && differentString(s, organismOpt))
         return FALSE;
-    if (cgiOptionalInt("tier",0))
-        {
-        if (hashFindVal(ra,"tier") == NULL)
-            return FALSE;
-        if (atoi(hashFindVal(ra,"tier"))!=cgiOptionalInt("tier",0))
-            return FALSE;
-        }
-    if (cgiOptionalString("tiers"))
-        {
-        if (hashFindVal(ra,"tier") == NULL)
-            return FALSE;
-        boolean found=FALSE;
-        char *tiers=cloneString(cgiOptionalString("tiers"));
-        char *tier;
-        (void)strSwapChar(tiers,',',' ');
-        while((tier=nextWord(&tiers)))
-            {
-            if (atoi(hashFindVal(ra,"tier"))==atoi(tier))
-                {
-                found=TRUE;
-                break;
-                }
-            }
-        if(!found)
-            return FALSE;
-        }
-    puts("<TR>");
+    // pathBuffer for new protocols not in human    
+    char pathBuffer[PATH_LEN];
+    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/", organismOptLower);
 
-    printf("  <TD>%s</TD>\n", term);
+    if (s && sameString(organismOpt, "Human"))
+	{
 
-    s = hashFindVal(ra, "tier");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-    s = hashFindVal(ra, "description");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-    s = hashFindVal(ra, "lineage");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-    s = hashFindVal(ra, "karyotype");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-    s = hashFindVal(ra, "sex");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	if (cgiOptionalInt("tier",0))
+	    {
+	    if (hashFindVal(ra,"tier") == NULL)
+		return FALSE;
+	    if (atoi(hashFindVal(ra,"tier"))!=cgiOptionalInt("tier",0))
+		return FALSE;
+	    }
+	if (cgiOptionalString("tiers"))
+	    {
+	    if (hashFindVal(ra,"tier") == NULL)
+		return FALSE;
+	    boolean found=FALSE;
+	    char *tiers=cloneString(cgiOptionalString("tiers"));
+	    char *tier;
+	    (void)strSwapChar(tiers,',',' ');
+	    while((tier=nextWord(&tiers)))
+		{
+		if (atoi(hashFindVal(ra,"tier"))==atoi(tier))
+		    {
+		    found=TRUE;
+		    break;
+		    }
+		}
+	    if(!found)
+		return FALSE;
+	    }
+	puts("<TR>");
 
-    // add links to protocol doc if it exists
-    printf("  <TD>");
-    documentLink(ra,term,"protocol","/ENCODE/protocols/cell/",NULL,TRUE);
-    printf("  &nbsp;</TD>\n");
+	printf("  <TD>%s</TD>\n", term);
 
-    s = hashFindVal(ra, "vendorName");
-    t = hashFindVal(ra, "vendorId");
-    u = hashFindVal(ra, "orderUrl");
-    printf("  <TD>");
-    if (u)
-        printf("<A TARGET=_BLANK HREF=%s>", u);
-    printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
-    if (u)
-        printf("</A>");
-    puts("</TD>");
+	s = hashFindVal(ra, "tier");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, "description");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, "lineage");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, "karyotype");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, "sex");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 
-    s = hashFindVal(ra, "termId");
-    u = hashFindVal(ra, "termUrl");
-    printf("  <TD>");
-    if (u)
-        printf("<A TARGET=_BLANK HREF=%s>", u);
-    printf("%s", s ? s : "&nbsp;");
-    if (u)
-        printf("</A>");
-    puts("</TD>");
-    puts("</TR>");
+	// add links to protocol doc if it exists
+	printf("  <TD>");
+	documentLink(ra,term,"protocol",pathBuffer,NULL,TRUE);
+	printf("  &nbsp;</TD>\n");
+
+	s = hashFindVal(ra, "vendorName");
+	t = hashFindVal(ra, "vendorId");
+	u = hashFindVal(ra, "orderUrl");
+	printf("  <TD>");
+	if (u)
+	    printf("<A TARGET=_BLANK HREF=%s>", u);
+	printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
+	if (u)
+	    printf("</A>");
+	puts("</TD>");
+
+	s = hashFindVal(ra, "termId");
+	u = hashFindVal(ra, "termUrl");
+	printf("  <TD>");
+	if (u)
+	    printf("<A TARGET=_BLANK HREF=%s>", u);
+	printf("%s", s ? s : "&nbsp;");
+	if (u)
+	    printf("</A>");
+	puts("</TD>");
+	puts("</TR>");
+	}
+    else	// non-human cell type
+	{
+	puts("<TR>");
+
+	printf("  <TD>%s</TD>\n", term);
+
+	s = hashFindVal(ra, "description");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, "category");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, "sex");
+	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	//s = hashFindVal(ra, "karyotype");
+	//printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	//s = hashFindVal(ra, "sex");
+	//printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+
+	// add links to protocol doc if it exists
+	printf("  <TD>");
+	documentLink(ra,term,"protocol",pathBuffer,NULL,TRUE);
+	printf("  &nbsp;</TD>\n");
+
+	s = hashFindVal(ra, "vendorName");
+	t = hashFindVal(ra, "vendorId");
+	u = hashFindVal(ra, "orderUrl");
+	printf("  <TD>");
+	if (u)
+	    printf("<A TARGET=_BLANK HREF=%s>", u);
+	printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
+	if (u)
+	    printf("</A>");
+	puts("</TD>");
+
+	s = hashFindVal(ra, "termId");
+	u = hashFindVal(ra, "termUrl");
+	printf("  <TD>");
+	if (u)
+	    printf("<A TARGET=_BLANK HREF=%s>", u);
+	printf("%s", s ? s : "&nbsp;");
+	if (u)
+	    printf("</A>");
+	puts("</TD>");
+	puts("</TR>");
+
+	}
     }
 else
     {
@@ -446,6 +507,8 @@ termOpt = cgiOptionalString("term");
 tagOpt = cgiOptionalString("tag");
 typeOpt = cgiOptionalString("type");
 organismOpt = cgiUsualString("organism", organismOpt);
+organismOptLower=cloneString(organismOpt);
+strLower(organismOptLower);
 char *bgColor = cgiOptionalString("bgcolor");
 if (bgColor)
     htmlSetBgColor(strtol(bgColor, 0, 16));

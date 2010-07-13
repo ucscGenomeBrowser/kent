@@ -103,6 +103,25 @@ sub quickQuery
     return @row ? $row[0] : undef;
 }
 
+sub update
+{
+    my ($db, $query, @params) = (@_);
+    my $count = $db->{DBH}->do($query, {}, @params);
+    return $count;
+}
+
+sub insert
+{
+    my ($db, $table, $fields, $values) = (@_);
+    my $placeholders = join(",", (("?") x @{$fields}));
+    my $query = "insert into $table (" . join(",", @{$fields}) . ") VALUE ($placeholders)";
+    my $sth = $db->{DBH}->prepare($query) or die "prepare for query '$query' failed; error: " . $db->{DBH}->errstr;
+    if(!$sth->execute(@{$values})) {
+        die "execute for query '$query' failed; error: " . $db->{DBH}->errstr;
+    }
+}
+
+
 sub tableExist
 {
     my ($db, $tableName) = @_;

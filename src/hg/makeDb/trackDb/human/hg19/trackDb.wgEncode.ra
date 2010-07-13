@@ -15,6 +15,10 @@ include wgEncodeOpenChromFaire.ra
 include wgEncodeUwHistone.ra
 include wgEncodeUwDgf.ra
 include wgEncodeUwDnase.ra
+include wgEncodeHaibMethylSeq.ra
+include wgEncodeHaibMethyl27.ra
+include wgEncodeGisRnaSeq.ra
+include wgEncodeAffyRnaChip.ra
 include trackDb.wgEncodeCshlLongRnaSeq.ra
 include trackDb.wgEncodeCaltechRnaSeq.ra
 
@@ -519,4 +523,4 @@ query select chrom, txStart, txEnd, name2 from %s where name2 like '%s'
 include wgEncodeRikenCage.ra
 
 # CSHL Small RNA (wrangler: cricket)
-####include wgEncodeCshlShortRnaSeq.ra
+include wgEncodeCshlShortRnaSeq.ra

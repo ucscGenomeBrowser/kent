@@ -58,7 +58,7 @@ echo
 echo "Building src utils. on $HOST [${0}: `date`]"
 cd $base/kent/src
 echo "Before make utils on $HOST [${0}: `date`]"
-if ( "$HOST" != "$BOX32" ) then
+if ( "$HOST" == "$BOX32" ) then
     # -j is having a side-effect?
     make $MAKEPARAMS utils >& make.utils.log
 else

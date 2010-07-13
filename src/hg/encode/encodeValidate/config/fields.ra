@@ -18,6 +18,11 @@ file ddf
 type string
 required no
 
+field growthProtocol
+file ddf
+type string
+required no
+
 field accession
 file ddf
 type string
@@ -89,6 +94,11 @@ type string
 required no
 
 field insLength
+file ddf
+type string
+required no
+
+field seqPlatform
 file ddf
 type string
 required no

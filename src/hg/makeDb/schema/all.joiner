@@ -28,7 +28,7 @@ set droMult droAna1,droAna2,droMoj1,droMoj2,droVir1,droVir2,droEre1,droSim1,droG
 set droVir droVir1,droVir2
 set droYak droYak1,droYak2
 set equCab equCab1,equCab2
-set felCat felCat3,felCatV17e
+set felCat felCat3,felCat4,felCatV17e
 set fr fr1,fr2
 set galGal galGal2,galGal3
 set gasAcu gasAcu1
@@ -564,6 +564,16 @@ identifier encodePseudogeneUcsc dependency
 "Link together Ucsc Retrogenes and class"
     $hg.encodePseudogeneUcsc.name dupeOk
     $hg.encodePseudogeneClass.name minCheck=0.22 unique
+
+identifier refGeneRetro dependency
+"Link refGene to ucscRetroInfo"
+    $hg,mm9.refGene.name dupeOk
+    $hg,mm9.ucscRetroInfo.refSeq minCheck=0.96
+
+identifier retroRefGene dependency
+"Link ucscRetroInfo to refGene"
+    $hg,mm9.ucscRetroInfo.refSeq dupeOk
+    $hg,mm9.refGene.name minCheck=0.11
 
 identifier ucscRetroInfo dependency
 "Link together Ucsc Retrogenes and ucsc retroGene alignments"
@@ -1327,6 +1337,7 @@ identifier kgOldId
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
+    $kgDb.knownToKeggEntrez.name
     hg16.hg17Kg.name minCheck=.30
     $kgDb2.knownExpDistance.query
     $kgDb2.knownExpDistance.target
@@ -1668,6 +1679,10 @@ identifier ikmcName
     $mm.ikmc.name dupeOk
     $mm.ikmcExtra.name
 
+identifier hgIkmcName
+"IKMC (knockoutmouse.org) mapped gene name"
+    $mm.hgIkmc.name dupeOk
+    $mm.hgIkmcExtra.name
 
 # "Biological" Gene Names
 
@@ -2028,6 +2043,7 @@ identifier keggMapId external=KEGG
 "KEGG Pathway Map ID"
     $gbd.keggMapDesc.mapID dupeOk
     $gbd.keggPathway.mapID
+    $gbd.knownToKeggEntrez.value
 
 identifier cgapId
 "NCI Cancer Genome Annotation Project Gene ID"

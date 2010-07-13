@@ -98,6 +98,8 @@ DIRS = \
 	fixCr \
 	gapSplit \
 	gffPeek \
+	git-reports \
+	gitTools \
 	headRest \
 	htmlPics \
 	htmlCheck \
@@ -107,6 +109,7 @@ DIRS = \
 	nibFrag \
 	nibSize \
 	nt4Frag \
+	paraFetch \
 	pslLiftSubrangeBlat \
 	pslToPslx \
 	pslToXa \
