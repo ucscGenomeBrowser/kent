@@ -19,9 +19,9 @@ errAbort(
   "Output file has the columns::\n"
   "   seqName size\n"
   "\n"
-  "In the 2bit file is in the form path:seq or path:seq:start-end: or path:seq1,seq2,seqN...\n"
-  "the information is returned only on the requested sequence (start-end\n"
-  "is ignored).\n"
+  "The 2bit file may be specified in the form path:seq or path:seq1,seq2,seqN...\n"
+  "so that information is returned only on the requested sequence(s).\n"
+  "If the form path:seq:start-end is used, start-end is ignored.\n"
   );
 }
 

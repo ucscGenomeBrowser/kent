@@ -101,6 +101,14 @@ priority 60
 visibility hide
 type bed 12
 
+track bacEndCalJac3Singles
+shortLabel Bac End Singletons
+longLabel Marmoset BAC End singletons, without end pair
+group map
+priority 61
+visibility hide
+type bed 4
+
 searchTable bacEnds
 searchType bed
 searchMethod exact

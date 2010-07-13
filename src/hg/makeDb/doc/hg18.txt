@@ -30308,3 +30308,19 @@ hgsql hg18 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql hg18 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
+# Add Human RNA-editing track hg18 (Done, galt, 7/12/2010)
+
+# DARNED=DAtabase of RNa EDiting
+#http://darned.ucc.ie/
+#University College Cork
+
+mkdir -p /hive/data/genomes/hg18/bed/darned
+cd /hive/data/genomes/hg18/bed/darned
+# create go.csh to download and compose allChroms.bed
+./go.csh
+hgLoadBed hg18 darned allChroms.bed
+# at human, level
+# added darned.html
+# added trackDb.ra entry
+
+#############################################################################

@@ -324,6 +324,7 @@ class PipelineController < ApplicationController
         end
       end
     end
+    @ftpList.sort!
 
     return unless request.post?
     if params[:commit] == "Cancel"

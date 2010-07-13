@@ -3905,57 +3905,160 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
 
 
-### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
-
+###  These Antibodies are from the Rip Target Protien Table and are being intigrated into this table ####
 term ripInput
 tag ripInput
-type ripTgtProtein
-alternativeSymbols None
-description Total input for comparison
-url
+type Antibody
+targetDescription RIP CHIP Total input for comparison for RIP experiments
+antibodyDescription
+vendorName
+vendorId
+orderUrl
+lab Tenebaum
+lots
+targetId
+targetUrl
+validation
+
 
 term T7Tag
 tag T7Tag
-type ripTgtProtein
-alternativeSymbols Novagen T7 Tag Cat# 69522
-description Negative Control Ab (T7 Tag Mouse Monoclonal)
-url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+type Antibody
+targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
+antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+vendorName Millipore; Novagen
+vendorId Mil_AB3790; Nov_69522
+orderUrl
+lab Tenebaum
+lots
+targetId
+targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+validation
 
 term ELAVL1
 tag ELAVL1
-type ripTgtProtein
-alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
-description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/1994
+type Antibody
+targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
+antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
+vendorName Santa Cruz Biotech
+vendorId SC-5261 
+orderUrl
+lab Tenebaum
+lots B2508(Nov2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+validation
 
 term IGF2BP1
 tag IGF2BP1
-type ripTgtProtein
-alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/10642
+type Antibody
+targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+vendorName Santa Cruz Biotech
+vendorId SC-21027
+orderUrl
+lab Tenebaum
+lots I0607(Nov2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+validation
 
-term PABPC1
+term PABPC1 
 tag PABPC1
-type ripTgtProtein
-alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
-description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/26986
+type Antibody
+targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC
+antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+lab Tenebaum
+vendorName Sigma Chemical Co.
+vendorId Sig_P6246
+orderUrl
+lab Tenebaum
+lots 044K4810 (Nov 2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+validation
 
 term SLBP
 tag SLBP
-type ripTgtProtein
-alternativeSymbols HBP; SLBP
-description stem-loop binding protein (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/7884
+type Antibody
+targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
+at origin. 
+vendorName Millipore; Santa Cruz Biotech
+vendorId Mil 06-1376; SC-26522
+orderUrl
+lab Tenebaum
+lots
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+validation
 
 term CELF1
 tag CELF1
-type ripTgtProtein
-alternativeSymbols CUG-BP1; BRUNOL2
-description Embryo deadenylation element-binding protein homolog (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/10658
+type Antibody 
+targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
+tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
+vendorName Millipore
+vendorId Mil-05621
+orderUrl
+lab Tenebaum
+lots
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+validation
 
+### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
+### We will be replacing this.
+
+#term ripInput
+#tag ripInput
+#type ripTgtProtein
+#alternativeSymbols None
+#description Total input for comparison
+#url
+
+#term T7Tag
+#tag T7Tag
+#type ripTgtProtein
+#alternativeSymbols Novagen T7 Tag Cat# 69522
+#description Negative Control Ab (T7 Tag Mouse Monoclonal)
+#url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+
+#term ELAVL1
+#tag ELAVL1
+#type ripTgtProtein
+#alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
+#description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/1994
+
+#term IGF2BP1
+#tag IGF2BP1
+#type ripTgtProtein
+#alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+#description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/10642
+
+#term PABPC1
+#tag PABPC1
+#type ripTgtProtein
+#alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
+#description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/26986
+
+#term SLBP
+#tag SLBP
+#type ripTgtProtein
+#alternativeSymbols HBP; SLBP
+#description stem-loop binding protein (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/7884
+
+#term CELF1
+#tag CELF1
+#type ripTgtProtein
+#alternativeSymbols CUG-BP1; BRUNOL2
+#description Embryo deadenylation element-binding protein homolog (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/10658
 # ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
 tag AUF1
@@ -4946,46 +5049,54 @@ description UnknownD
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description
 
-term Illumina_Genome_Analyzer
+term Illumina_GA
 tag IlluminaGA
+geo Illumina Genome Analyzer
 type seqPlatform
 description ? TBD
 # Matches GA that Kate initially indicated as the term
 
-term Illumina_Genome_Analyzer_II
+term Illumina_GA2
 tag IlluminaGA2
+geo Illumina Genome Analyzer II
 type seqPlatform
 description ? TBD
 # Matches GA2 that Kate initially indicated as the term
 
-term Illumina_Genome_Analyzer_IIx
-tag IlluminaGAx
+term Illumina_GA2x
+tag IlluminaGA2x
+geo Illumina Genome Analyzer II
 type seqPlatform
 description ? TBD
 # Matches GA2x that Kate initally indicated as the term
 
 term 454_GS
 tag 454GS
+geo 454 GS
 type seqPlatform
 description ? TBD
 
 term 454_GS_20
 tag 454GS20
+geo 454 GS 20
 type seqPlatform
 description ? TBD
 
 term 454_GS_FLX
 tag 454GSFLX
+geo 454 GS FLX
 type seqPlatform
 description ? TBD
 
-term AB_SOLiD_System
+term AB_SOLiD
 tag ABSOLiD
+geo AB SOLiD System
 type seqPlatform
 description ? TBD
 
-term AB_SOLiD_System_2.0
+term AB_SOLiD_2.0
 tag ABSOLiD2
+geo AB_SOLiD System 2.0
 type seqPlatform
 description ? TBD
 
