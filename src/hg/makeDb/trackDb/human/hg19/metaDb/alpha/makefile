@@ -18,6 +18,7 @@ wgEncodeCshlShortRnaSeq.ra \
 wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
 wgEncodeGisRnaSeq.ra \
+wgEncodeGisDnaPet.ra \
 wgEncodeUwDgf.ra 
 
 include ../../../../makefile.metaDb

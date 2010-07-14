@@ -108,8 +108,14 @@ group map
 priority 61
 visibility hide
 type bed 4
+html bacEnds
 
 searchTable bacEnds
 searchType bed
 searchMethod exact
 searchPriority 50
+
+searchTable bacEndCalJac3Singles
+searchType bed
+searchMethod exact
+searchPriority 55
