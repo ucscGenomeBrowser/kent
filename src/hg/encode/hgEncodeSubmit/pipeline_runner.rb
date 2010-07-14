@@ -121,7 +121,7 @@ while true
   project_id = 0
   queued_at = ""
 
-  jobs = QueuedJob.find(:all)
+  jobs = QueuedJob.find(:all, :order => 'id')
 
   doSleep = true
     
