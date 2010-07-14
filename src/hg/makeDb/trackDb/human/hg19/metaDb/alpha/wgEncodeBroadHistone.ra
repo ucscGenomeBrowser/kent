@@ -1,3 +1,683 @@
+metaObject wgEncodeBroadHistoneGm12878ControlStdAlnRep1
+objType file
+antibody Control
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878ControlStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1879
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878ControlStdAlnRep2
+objType file
+antibody Control
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878ControlStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1879
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878ControlStdSig
+objType table
+antibody Control
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneGm12878ControlStdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1879
+tableName wgEncodeBroadHistoneGm12878ControlStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878CtcfStdAlnRep1
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878CtcfStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1878
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878CtcfStdAlnRep2
+objType file
+antibody CTCF
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878CtcfStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1878
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878CtcfStdSig
+objType table
+antibody CTCF
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878CtcfStdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1878
+tableName wgEncodeBroadHistoneGm12878CtcfStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1
+objType file
+antibody H3K27ac
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1880
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2
+objType file
+antibody H3K27ac
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1880
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k27acStdSig
+objType table
+antibody H3K27ac
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k27acStdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1880
+tableName wgEncodeBroadHistoneGm12878H3k27acStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1
+objType file
+antibody H3K27me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1881
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2
+objType file
+antibody H3K27me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1881
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k27me3StdSig
+objType table
+antibody H3K27me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k27me3StdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1881
+tableName wgEncodeBroadHistoneGm12878H3k27me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1
+objType file
+antibody H3K36me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1882
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2
+objType file
+antibody H3K36me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1882
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k36me3StdSig
+objType table
+antibody H3K36me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k36me3StdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1882
+tableName wgEncodeBroadHistoneGm12878H3k36me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1
+objType file
+antibody H3K4me1
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1883
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2
+objType file
+antibody H3K4me1
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1883
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me1StdSig
+objType table
+antibody H3K4me1
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k4me1StdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1883
+tableName wgEncodeBroadHistoneGm12878H3k4me1StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1
+objType file
+antibody H3K4me2
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1884
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2
+objType file
+antibody H3K4me2
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1884
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me2StdSig
+objType table
+antibody H3K4me2
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k4me2StdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1884
+tableName wgEncodeBroadHistoneGm12878H3k4me2StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-04
+dateUnrestricted 2009-10-04
+fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1885
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-04
+dateUnrestricted 2009-10-04
+fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1885
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k4me3StdSig
+objType table
+antibody H3K4me3
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-04
+dateUnrestricted 2009-10-04
+fileName wgEncodeBroadHistoneGm12878H3k4me3StdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1885
+tableName wgEncodeBroadHistoneGm12878H3k4me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1
+objType file
+antibody H3K9ac
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1886
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2
+objType file
+antibody H3K9ac
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1886
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H3k9acStdSig
+objType table
+antibody H3K9ac
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H3k9acStdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1886
+tableName wgEncodeBroadHistoneGm12878H3k9acStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1
+objType file
+antibody H4K20me1
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1887
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2
+objType file
+antibody H4K20me1
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+parentTable wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1887
+view Alignments
+
+metaObject wgEncodeBroadHistoneGm12878H4k20me1StdSig
+objType table
+antibody H4K20me1
+cell GM12878
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
+dateSubmitted 2009-01-05
+dateUnrestricted 2009-10-05
+fileName wgEncodeBroadHistoneGm12878H4k20me1StdSig.bigWig.gz
+grant Bernstein
+inputType GM12878/Input/std
+lab Broad
+origAssembly hg18
+project wgEncode
+setType exp
+subId 1887
+tableName wgEncodeBroadHistoneGm12878H4k20me1StdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneH1hescControlStdAlnRep1
 objType file
 antibody Control
@@ -6,6 +686,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam.gz
@@ -17,7 +698,7 @@ parentTable wgEncodeBroadHistoneH1hescControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1760
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescControlStdAlnRep2
@@ -28,6 +709,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam.gz
@@ -39,7 +721,7 @@ parentTable wgEncodeBroadHistoneH1hescControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1760
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescControlStdSig
@@ -71,7 +753,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam.gz
@@ -83,7 +765,7 @@ parentTable wgEncodeBroadHistoneH1hescCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1781
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescCtcfStdAlnRep2
@@ -94,7 +776,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam.gz
@@ -106,7 +788,7 @@ parentTable wgEncodeBroadHistoneH1hescCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1781
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescCtcfStdSig
@@ -139,6 +821,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam.gz
@@ -150,7 +833,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1753
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2
@@ -161,6 +844,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam.gz
@@ -172,7 +856,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1753
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k27acStdSig
@@ -204,7 +888,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam.gz
@@ -216,7 +900,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1721
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2
@@ -227,7 +911,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam.gz
@@ -239,7 +923,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1721
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k27me3StdSig
@@ -272,7 +956,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam.gz
@@ -284,7 +968,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1734
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2
@@ -295,7 +979,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam.gz
@@ -307,7 +991,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1734
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k36me3StdSig
@@ -340,7 +1024,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam.gz
@@ -352,7 +1036,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1783
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2
@@ -363,7 +1047,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam.gz
@@ -375,7 +1059,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1783
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k4me1StdSig
@@ -408,7 +1092,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam.gz
@@ -420,7 +1104,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1777
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2
@@ -431,7 +1115,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam.gz
@@ -443,7 +1127,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1777
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k4me2StdSig
@@ -476,7 +1160,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam.gz
@@ -488,7 +1172,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1745
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2
@@ -499,7 +1183,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam.gz
@@ -511,7 +1195,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1745
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k4me3StdSig
@@ -544,7 +1228,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam.gz
@@ -556,7 +1240,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1705
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2
@@ -567,7 +1251,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam.gz
@@ -579,7 +1263,7 @@ parentTable wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1705
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH3k9acStdSig
@@ -612,7 +1296,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam.gz
@@ -624,7 +1308,7 @@ parentTable wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1774
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2
@@ -635,7 +1319,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam.gz
@@ -647,7 +1331,7 @@ parentTable wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1774
+subId 1895
 view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescH4k20me1StdSig
@@ -680,6 +1364,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam.gz
@@ -691,7 +1376,7 @@ parentTable wgEncodeBroadHistoneHelas3ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1771
+subId 1922
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdAlnRep2
@@ -702,6 +1387,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam.gz
@@ -713,7 +1399,7 @@ parentTable wgEncodeBroadHistoneHelas3ControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1771
+subId 1922
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3ControlStdSig
@@ -724,6 +1410,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3ControlStdSig.bigWig.gz
@@ -733,7 +1420,7 @@ lab Broad
 origAssembly hg19
 project wgEncode
 setType exp
-subId 1771
+subId 1922
 tableName wgEncodeBroadHistoneHelas3ControlStdSig
 view Signal
 
@@ -745,6 +1432,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam.gz
@@ -756,7 +1444,7 @@ parentTable wgEncodeBroadHistoneHelas3CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1709
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3CtcfStdAlnRep2
@@ -767,6 +1455,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam.gz
@@ -778,7 +1467,7 @@ parentTable wgEncodeBroadHistoneHelas3CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1709
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3CtcfStdSig
@@ -810,6 +1499,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam.gz
@@ -821,7 +1511,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1694
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2
@@ -832,6 +1522,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam.gz
@@ -843,7 +1534,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1694
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k27acStdSig
@@ -875,6 +1566,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam.gz
@@ -886,7 +1578,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1780
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2
@@ -897,6 +1589,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam.gz
@@ -908,7 +1601,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1780
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k36me3StdSig
@@ -940,6 +1633,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam.gz
@@ -951,7 +1645,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1755
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2
@@ -962,6 +1656,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam.gz
@@ -973,7 +1668,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1755
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k4me2StdSig
@@ -1005,6 +1700,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam.gz
@@ -1016,7 +1712,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1751
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2
@@ -1027,6 +1723,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam.gz
@@ -1038,7 +1735,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1751
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k4me3StdSig
@@ -1070,6 +1767,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam.gz
@@ -1081,7 +1779,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1744
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2
@@ -1092,6 +1790,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam.gz
@@ -1103,7 +1802,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1744
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k79me2StdSig
@@ -1135,6 +1834,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam.gz
@@ -1146,7 +1846,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1791
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2
@@ -1157,6 +1857,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam.gz
@@ -1168,7 +1869,7 @@ parentTable wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1791
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H3k9acStdSig
@@ -1200,6 +1901,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam.gz
@@ -1211,7 +1913,7 @@ parentTable wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1711
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2
@@ -1222,6 +1924,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam.gz
@@ -1233,7 +1936,7 @@ parentTable wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1711
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3H4k20me1StdSig
@@ -1265,6 +1968,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam.gz
@@ -1276,7 +1980,7 @@ parentTable wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1743
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2
@@ -1287,6 +1991,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam.gz
@@ -1298,7 +2003,7 @@ parentTable wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1743
+subId 1898
 view Alignments
 
 metaObject wgEncodeBroadHistoneHelas3Pol2bStdSig
@@ -1330,6 +2035,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam.gz
@@ -1341,7 +2047,7 @@ parentTable wgEncodeBroadHistoneHepg2ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1719
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdAlnRep2
@@ -1352,6 +2058,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam.gz
@@ -1363,7 +2070,7 @@ parentTable wgEncodeBroadHistoneHepg2ControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1719
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdSig
@@ -1395,7 +2102,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam.gz
@@ -1407,7 +2114,7 @@ parentTable wgEncodeBroadHistoneHepg2CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1787
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2CtcfStdAlnRep2
@@ -1418,7 +2125,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam.gz
@@ -1430,7 +2137,7 @@ parentTable wgEncodeBroadHistoneHepg2CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1787
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2CtcfStdSig
@@ -1463,6 +2170,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam.gz
@@ -1474,7 +2182,7 @@ parentTable wgEncodeBroadHistoneHepg2H2azStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1792
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H2azStdAlnRep2
@@ -1485,6 +2193,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam.gz
@@ -1496,7 +2205,7 @@ parentTable wgEncodeBroadHistoneHepg2H2azStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1792
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H2azStdSig
@@ -1528,7 +2237,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam.gz
@@ -1540,7 +2249,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1741
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2
@@ -1551,7 +2260,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam.gz
@@ -1563,7 +2272,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1741
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k27acStdSig
@@ -1596,6 +2305,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam.gz
@@ -1607,7 +2317,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1788
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2
@@ -1618,6 +2328,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam.gz
@@ -1629,7 +2340,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1788
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k27me3StdSig
@@ -1661,7 +2372,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam.gz
@@ -1673,7 +2384,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1684
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2
@@ -1684,7 +2395,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam.gz
@@ -1696,7 +2407,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1684
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k36me3StdSig
@@ -1729,7 +2440,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam.gz
@@ -1741,7 +2452,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1761
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2
@@ -1752,7 +2463,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam.gz
@@ -1764,7 +2475,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1761
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k4me2StdSig
@@ -1797,7 +2508,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam.gz
@@ -1809,7 +2520,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1706
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2
@@ -1820,7 +2531,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam.gz
@@ -1832,7 +2543,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1706
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k4me3StdSig
@@ -1865,6 +2576,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam.gz
@@ -1876,7 +2588,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1747
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2
@@ -1887,6 +2599,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam.gz
@@ -1898,7 +2611,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1747
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k79me2StdSig
@@ -1930,7 +2643,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam.gz
@@ -1942,7 +2655,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1765
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2
@@ -1953,7 +2666,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam.gz
@@ -1965,7 +2678,7 @@ parentTable wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1765
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H3k9acStdSig
@@ -1998,7 +2711,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam.gz
@@ -2010,7 +2723,7 @@ parentTable wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1758
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2
@@ -2021,7 +2734,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam.gz
@@ -2033,7 +2746,7 @@ parentTable wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1758
+subId 1899
 view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2H4k20me1StdSig
@@ -2066,6 +2779,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam.gz
@@ -2077,7 +2791,7 @@ parentTable wgEncodeBroadHistoneHmecControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1786
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecControlStdAlnRep2
@@ -2088,6 +2802,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam.gz
@@ -2099,7 +2814,7 @@ parentTable wgEncodeBroadHistoneHmecControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1786
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecControlStdSig
@@ -2131,7 +2846,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
 fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam.gz
@@ -2143,7 +2858,7 @@ parentTable wgEncodeBroadHistoneHmecCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1742
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecCtcfStdAlnRep2
@@ -2154,7 +2869,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
 fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam.gz
@@ -2166,7 +2881,7 @@ parentTable wgEncodeBroadHistoneHmecCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1742
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecCtcfStdSig
@@ -2199,7 +2914,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam.gz
@@ -2211,7 +2926,7 @@ parentTable wgEncodeBroadHistoneHmecH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1776
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k27acStdAlnRep2
@@ -2222,7 +2937,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam.gz
@@ -2234,7 +2949,7 @@ parentTable wgEncodeBroadHistoneHmecH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1776
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k27acStdSig
@@ -2267,7 +2982,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam.gz
@@ -2279,7 +2994,7 @@ parentTable wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1770
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2
@@ -2290,7 +3005,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam.gz
@@ -2302,7 +3017,7 @@ parentTable wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1770
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k27me3StdSig
@@ -2335,7 +3050,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam.gz
@@ -2347,7 +3062,7 @@ parentTable wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1690
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2
@@ -2358,7 +3073,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam.gz
@@ -2370,7 +3085,7 @@ parentTable wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1690
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k36me3StdSig
@@ -2403,7 +3118,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam.gz
@@ -2415,7 +3130,7 @@ parentTable wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1759
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2
@@ -2426,7 +3141,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam.gz
@@ -2438,7 +3153,7 @@ parentTable wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1759
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k4me1StdSig
@@ -2471,7 +3186,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam.gz
@@ -2483,7 +3198,7 @@ parentTable wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1757
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2
@@ -2494,7 +3209,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam.gz
@@ -2506,7 +3221,7 @@ parentTable wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1757
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k4me2StdSig
@@ -2539,7 +3254,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam.gz
@@ -2551,7 +3266,7 @@ parentTable wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1793
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2
@@ -2562,7 +3277,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam.gz
@@ -2574,7 +3289,7 @@ parentTable wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1793
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k4me3StdSig
@@ -2607,7 +3322,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam.gz
@@ -2619,7 +3334,7 @@ parentTable wgEncodeBroadHistoneHmecH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1702
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k9acStdAlnRep2
@@ -2630,7 +3345,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam.gz
@@ -2642,7 +3357,7 @@ parentTable wgEncodeBroadHistoneHmecH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1702
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH3k9acStdSig
@@ -2675,7 +3390,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam.gz
@@ -2687,7 +3402,7 @@ parentTable wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1785
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2
@@ -2698,7 +3413,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam.gz
@@ -2710,7 +3425,7 @@ parentTable wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1785
+subId 1900
 view Alignments
 
 metaObject wgEncodeBroadHistoneHmecH4k20me1StdSig
@@ -2743,6 +3458,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam.gz
@@ -2754,7 +3470,7 @@ parentTable wgEncodeBroadHistoneHsmmControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1773
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmControlStdAlnRep2
@@ -2765,6 +3481,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam.gz
@@ -2776,7 +3493,7 @@ parentTable wgEncodeBroadHistoneHsmmControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1773
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmControlStdSig
@@ -2808,7 +3525,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam.gz
@@ -2820,7 +3537,7 @@ parentTable wgEncodeBroadHistoneHsmmCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1693
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmCtcfStdAlnRep2
@@ -2831,7 +3548,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam.gz
@@ -2843,7 +3560,7 @@ parentTable wgEncodeBroadHistoneHsmmCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1693
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmCtcfStdSig
@@ -2876,7 +3593,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam.gz
@@ -2888,7 +3605,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1718
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2
@@ -2899,7 +3616,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam.gz
@@ -2911,7 +3628,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1718
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k27acStdSig
@@ -2944,7 +3661,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam.gz
@@ -2956,7 +3673,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1691
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2
@@ -2967,7 +3684,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam.gz
@@ -2979,7 +3696,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1691
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k27me3StdSig
@@ -3012,7 +3729,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam.gz
@@ -3024,7 +3741,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1762
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2
@@ -3035,7 +3752,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam.gz
@@ -3047,7 +3764,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1762
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k36me3StdSig
@@ -3080,7 +3797,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam.gz
@@ -3092,7 +3809,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1713
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2
@@ -3103,7 +3820,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam.gz
@@ -3115,7 +3832,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1713
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k4me1StdSig
@@ -3148,7 +3865,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam.gz
@@ -3160,7 +3877,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1687
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2
@@ -3171,7 +3888,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam.gz
@@ -3183,7 +3900,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1687
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k4me2StdSig
@@ -3216,7 +3933,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam.gz
@@ -3228,7 +3945,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1756
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2
@@ -3239,7 +3956,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam.gz
@@ -3251,7 +3968,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1756
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k4me3StdSig
@@ -3284,6 +4001,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam.gz
@@ -3295,7 +4013,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1730
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2
@@ -3306,6 +4024,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam.gz
@@ -3317,7 +4036,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1730
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k79me2StdSig
@@ -3349,7 +4068,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam.gz
@@ -3361,7 +4080,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1782
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2
@@ -3372,7 +4091,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam.gz
@@ -3384,7 +4103,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1782
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k9acStdSig
@@ -3417,6 +4136,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam.gz
@@ -3428,7 +4148,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1717
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2
@@ -3439,6 +4159,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam.gz
@@ -3450,7 +4171,7 @@ parentTable wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1717
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH3k9me3StdSig
@@ -3482,7 +4203,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam.gz
@@ -3494,7 +4215,7 @@ parentTable wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1715
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2
@@ -3505,7 +4226,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam.gz
@@ -3517,7 +4238,7 @@ parentTable wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1715
+subId 1901
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmH4k20me1StdSig
@@ -3550,6 +4271,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam.gz
@@ -3561,7 +4283,7 @@ parentTable wgEncodeBroadHistoneHsmmtControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1686
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdAlnRep2
@@ -3572,6 +4294,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam.gz
@@ -3583,7 +4306,7 @@ parentTable wgEncodeBroadHistoneHsmmtControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1686
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtControlStdSig
@@ -3615,6 +4338,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam.gz
@@ -3626,7 +4350,7 @@ parentTable wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1767
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2
@@ -3637,6 +4361,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam.gz
@@ -3648,7 +4373,7 @@ parentTable wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1767
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtCtcfStdSig
@@ -3680,6 +4405,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam.gz
@@ -3691,7 +4417,7 @@ parentTable wgEncodeBroadHistoneHsmmtH2azStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1704
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH2azStdAlnRep2
@@ -3702,6 +4428,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam.gz
@@ -3713,7 +4440,7 @@ parentTable wgEncodeBroadHistoneHsmmtH2azStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1704
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH2azStdSig
@@ -3745,6 +4472,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam.gz
@@ -3756,7 +4484,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1749
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2
@@ -3767,6 +4495,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam.gz
@@ -3778,7 +4507,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1749
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k27acStdSig
@@ -3810,6 +4539,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam.gz
@@ -3821,7 +4551,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1683
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2
@@ -3832,6 +4562,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam.gz
@@ -3843,7 +4574,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1683
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k36me3StdSig
@@ -3875,6 +4606,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam.gz
@@ -3886,7 +4618,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1764
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2
@@ -3897,6 +4629,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam.gz
@@ -3908,7 +4641,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1764
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k4me1StdSig
@@ -3940,6 +4673,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam.gz
@@ -3951,7 +4685,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1766
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2
@@ -3962,6 +4696,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam.gz
@@ -3973,7 +4708,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1766
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k4me2StdSig
@@ -4005,6 +4740,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam.gz
@@ -4016,7 +4752,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1716
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2
@@ -4027,6 +4763,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam.gz
@@ -4038,7 +4775,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1716
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k4me3StdSig
@@ -4070,6 +4807,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam.gz
@@ -4081,7 +4819,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1724
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2
@@ -4092,6 +4830,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam.gz
@@ -4103,7 +4842,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1724
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k79me2StdSig
@@ -4135,6 +4874,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam.gz
@@ -4146,7 +4886,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1746
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2
@@ -4157,6 +4897,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam.gz
@@ -4168,7 +4909,7 @@ parentTable wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1746
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH3k9acStdSig
@@ -4200,6 +4941,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam.gz
@@ -4211,7 +4953,7 @@ parentTable wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1728
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2
@@ -4222,6 +4964,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam.gz
@@ -4233,7 +4976,7 @@ parentTable wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1728
+subId 1902
 view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmtH4k20me1StdSig
@@ -4265,6 +5008,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam.gz
@@ -4276,7 +5020,7 @@ parentTable wgEncodeBroadHistoneHuvecControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1698
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecControlStdAlnRep2
@@ -4287,6 +5031,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam.gz
@@ -4298,7 +5043,7 @@ parentTable wgEncodeBroadHistoneHuvecControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1698
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecControlStdAlnRep3
@@ -4309,6 +5054,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam.gz
@@ -4320,7 +5066,7 @@ parentTable wgEncodeBroadHistoneHuvecControlStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1698
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecControlStdSig
@@ -4352,7 +5098,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam.gz
@@ -4364,7 +5110,7 @@ parentTable wgEncodeBroadHistoneHuvecCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1790
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecCtcfStdAlnRep2
@@ -4375,7 +5121,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam.gz
@@ -4387,7 +5133,7 @@ parentTable wgEncodeBroadHistoneHuvecCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1790
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecCtcfStdAlnRep3
@@ -4398,6 +5144,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam.gz
@@ -4409,7 +5156,7 @@ parentTable wgEncodeBroadHistoneHuvecCtcfStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1790
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecCtcfStdSig
@@ -4442,7 +5189,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam.gz
@@ -4454,7 +5201,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1731
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2
@@ -4465,7 +5212,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam.gz
@@ -4477,7 +5224,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1731
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3
@@ -4488,6 +5235,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam.gz
@@ -4499,7 +5247,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1731
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k27acStdSig
@@ -4532,7 +5280,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam.gz
@@ -4544,7 +5292,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1689
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2
@@ -4555,7 +5303,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam.gz
@@ -4567,7 +5315,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1689
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k27me3StdSig
@@ -4600,7 +5348,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam.gz
@@ -4612,7 +5360,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1722
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2
@@ -4623,7 +5371,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam.gz
@@ -4635,7 +5383,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1722
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3
@@ -4646,6 +5394,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam.gz
@@ -4657,7 +5406,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1722
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k36me3StdSig
@@ -4690,7 +5439,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam.gz
@@ -4702,7 +5451,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1778
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2
@@ -4713,7 +5462,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam.gz
@@ -4725,7 +5474,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1778
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3
@@ -4736,6 +5485,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam.gz
@@ -4747,7 +5497,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1778
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me1StdSig
@@ -4780,7 +5530,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam.gz
@@ -4792,7 +5542,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1732
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2
@@ -4803,7 +5553,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam.gz
@@ -4815,7 +5565,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1732
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me2StdSig
@@ -4848,7 +5598,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam.gz
@@ -4860,7 +5610,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1695
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2
@@ -4871,7 +5621,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam.gz
@@ -4883,7 +5633,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1695
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3
@@ -4894,6 +5644,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam.gz
@@ -4905,7 +5656,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1695
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k4me3StdSig
@@ -4938,7 +5689,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam.gz
@@ -4950,7 +5701,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1692
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2
@@ -4961,7 +5712,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam.gz
@@ -4973,7 +5724,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1692
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3
@@ -4984,6 +5735,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam.gz
@@ -4995,7 +5747,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1692
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k9acStdSig
@@ -5028,7 +5780,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam.gz
@@ -5040,7 +5792,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1729
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2
@@ -5051,7 +5803,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam.gz
@@ -5063,7 +5815,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1729
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3
@@ -5074,6 +5826,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam.gz
@@ -5085,7 +5838,7 @@ parentTable wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1729
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH3k9me1StdSig
@@ -5118,7 +5871,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam.gz
@@ -5130,7 +5883,7 @@ parentTable wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1763
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2
@@ -5141,7 +5894,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam.gz
@@ -5153,7 +5906,7 @@ parentTable wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1763
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3
@@ -5164,6 +5917,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam.gz
@@ -5175,7 +5929,7 @@ parentTable wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1763
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecH4k20me1StdSig
@@ -5208,7 +5962,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam.gz
@@ -5220,7 +5974,7 @@ parentTable wgEncodeBroadHistoneHuvecPol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1727
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecPol2bStdAlnRep2
@@ -5231,7 +5985,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam.gz
@@ -5243,7 +5997,7 @@ parentTable wgEncodeBroadHistoneHuvecPol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1727
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecPol2bStdAlnRep3
@@ -5254,6 +6008,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam.gz
@@ -5265,7 +6020,7 @@ parentTable wgEncodeBroadHistoneHuvecPol2bStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1727
+subId 1897
 view Alignments
 
 metaObject wgEncodeBroadHistoneHuvecPol2bStdSig
@@ -5298,6 +6053,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam.gz
@@ -5309,7 +6065,7 @@ parentTable wgEncodeBroadHistoneK562ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1752
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562ControlStdSig
@@ -5341,7 +6097,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam.gz
@@ -5353,7 +6109,7 @@ parentTable wgEncodeBroadHistoneK562CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1769
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562CtcfStdAlnRep2
@@ -5364,7 +6120,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam.gz
@@ -5376,7 +6132,7 @@ parentTable wgEncodeBroadHistoneK562CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1769
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562CtcfStdSig
@@ -5409,7 +6165,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam.gz
@@ -5421,7 +6177,7 @@ parentTable wgEncodeBroadHistoneK562H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1701
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k27acStdAlnRep2
@@ -5432,7 +6188,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam.gz
@@ -5444,7 +6200,7 @@ parentTable wgEncodeBroadHistoneK562H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1701
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k27acStdSig
@@ -5477,7 +6233,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam.gz
@@ -5489,7 +6245,7 @@ parentTable wgEncodeBroadHistoneK562H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1712
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k27me3StdAlnRep2
@@ -5500,7 +6256,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam.gz
@@ -5512,7 +6268,7 @@ parentTable wgEncodeBroadHistoneK562H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1712
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k27me3StdSig
@@ -5545,7 +6301,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam.gz
@@ -5557,7 +6313,7 @@ parentTable wgEncodeBroadHistoneK562H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1726
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k36me3StdAlnRep2
@@ -5568,7 +6324,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam.gz
@@ -5580,7 +6336,7 @@ parentTable wgEncodeBroadHistoneK562H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1726
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k36me3StdSig
@@ -5613,7 +6369,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam.gz
@@ -5625,7 +6381,7 @@ parentTable wgEncodeBroadHistoneK562H3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1735
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k4me1StdAlnRep2
@@ -5636,7 +6392,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam.gz
@@ -5648,7 +6404,7 @@ parentTable wgEncodeBroadHistoneK562H3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1735
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k4me1StdSig
@@ -5681,7 +6437,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam.gz
@@ -5693,7 +6449,7 @@ parentTable wgEncodeBroadHistoneK562H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1714
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k4me2StdAlnRep2
@@ -5704,7 +6460,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam.gz
@@ -5716,7 +6472,7 @@ parentTable wgEncodeBroadHistoneK562H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1714
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k4me2StdSig
@@ -5749,7 +6505,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam.gz
@@ -5761,7 +6517,7 @@ parentTable wgEncodeBroadHistoneK562H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1696
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k4me3StdAlnRep2
@@ -5772,7 +6528,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam.gz
@@ -5784,7 +6540,7 @@ parentTable wgEncodeBroadHistoneK562H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1696
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k4me3StdSig
@@ -5817,7 +6573,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam.gz
@@ -5829,7 +6585,7 @@ parentTable wgEncodeBroadHistoneK562H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1748
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k9acStdAlnRep2
@@ -5840,7 +6596,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam.gz
@@ -5852,7 +6608,7 @@ parentTable wgEncodeBroadHistoneK562H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1748
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k9acStdSig
@@ -5885,7 +6641,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam.gz
@@ -5897,7 +6653,7 @@ parentTable wgEncodeBroadHistoneK562H3k9me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1720
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H3k9me1StdSig
@@ -5930,7 +6686,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam.gz
@@ -5942,7 +6698,7 @@ parentTable wgEncodeBroadHistoneK562H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1700
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H4k20me1StdAlnRep2
@@ -5953,7 +6709,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam.gz
@@ -5965,7 +6721,7 @@ parentTable wgEncodeBroadHistoneK562H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1700
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562H4k20me1StdSig
@@ -5998,7 +6754,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam.gz
@@ -6010,7 +6766,7 @@ parentTable wgEncodeBroadHistoneK562Pol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1789
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562Pol2bStdAlnRep2
@@ -6021,7 +6777,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam.gz
@@ -6033,7 +6789,7 @@ parentTable wgEncodeBroadHistoneK562Pol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1789
+subId 1896
 view Alignments
 
 metaObject wgEncodeBroadHistoneK562Pol2bStdSig
@@ -6058,6 +6814,461 @@ subId 1789
 tableName wgEncodeBroadHistoneK562Pol2bStdSig
 view Signal
 
+metaObject wgEncodeBroadHistoneNhaControlStdAlnRep1
+objType file
+antibody Control
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaControlStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1889
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaControlStdAlnRep2
+objType file
+antibody Control
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaControlStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1889
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaControlStdSig
+objType table
+antibody Control
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaControlStdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1889
+tableName wgEncodeBroadHistoneNhaControlStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhaCtcfStdAlnRep1
+objType file
+antibody CTCF
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaCtcfStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1888
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaCtcfStdAlnRep2
+objType file
+antibody CTCF
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaCtcfStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1888
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaCtcfStdSig
+objType table
+antibody CTCF
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaCtcfStdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1888
+tableName wgEncodeBroadHistoneNhaCtcfStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhaH3k27acStdAlnRep1
+objType file
+antibody H3K27ac
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k27acStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1890
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k27acStdAlnRep2
+objType file
+antibody H3K27ac
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k27acStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1890
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k27acStdSig
+objType table
+antibody H3K27ac
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k27acStdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1890
+tableName wgEncodeBroadHistoneNhaH3k27acStdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1
+objType file
+antibody H3K27me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1891
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2
+objType file
+antibody H3K27me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1891
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k27me3StdSig
+objType table
+antibody H3K27me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k27me3StdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1891
+tableName wgEncodeBroadHistoneNhaH3k27me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1
+objType file
+antibody H3K36me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1892
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2
+objType file
+antibody H3K36me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1892
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k36me3StdSig
+objType table
+antibody H3K36me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k36me3StdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1892
+tableName wgEncodeBroadHistoneNhaH3k36me3StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1
+objType file
+antibody H3K4me1
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1893
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2
+objType file
+antibody H3K4me1
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1893
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k4me1StdSig
+objType table
+antibody H3K4me1
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k4me1StdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1893
+tableName wgEncodeBroadHistoneNhaH3k4me1StdSig
+view Signal
+
+metaObject wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1
+objType file
+antibody H3K4me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1894
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2
+objType file
+antibody H3K4me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+parentTable wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1894
+view Alignments
+
+metaObject wgEncodeBroadHistoneNhaH3k4me3StdSig
+objType table
+antibody H3K4me3
+cell NH-A
+composite wgEncodeBroadHistone
+control std
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-12
+dateUnrestricted 2011-04-12
+fileName wgEncodeBroadHistoneNhaH3k4me3StdSig.bigWig.gz
+grant Bernstein
+inputType NH-A/Input/std
+lab Broad
+origAssembly hg19
+project wgEncode
+setType exp
+subId 1894
+tableName wgEncodeBroadHistoneNhaH3k4me3StdSig
+view Signal
+
 metaObject wgEncodeBroadHistoneNhekControlStdAlnRep1
 objType file
 antibody Control
@@ -6066,6 +7277,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam.gz
@@ -6077,7 +7289,7 @@ parentTable wgEncodeBroadHistoneNhekControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1775
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekControlStdAlnRep2
@@ -6088,6 +7300,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam.gz
@@ -6099,7 +7312,7 @@ parentTable wgEncodeBroadHistoneNhekControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1775
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekControlStdSig
@@ -6131,7 +7344,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam.gz
@@ -6143,7 +7356,7 @@ parentTable wgEncodeBroadHistoneNhekCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1680
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekCtcfStdAlnRep2
@@ -6154,7 +7367,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam.gz
@@ -6166,7 +7379,7 @@ parentTable wgEncodeBroadHistoneNhekCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1680
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekCtcfStdAlnRep3
@@ -6177,6 +7390,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-20
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam.gz
@@ -6188,7 +7402,7 @@ parentTable wgEncodeBroadHistoneNhekCtcfStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1680
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekCtcfStdSig
@@ -6221,7 +7435,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam.gz
@@ -6233,7 +7447,7 @@ parentTable wgEncodeBroadHistoneNhekH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1772
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k27acStdAlnRep2
@@ -6244,7 +7458,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam.gz
@@ -6256,7 +7470,7 @@ parentTable wgEncodeBroadHistoneNhekH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1772
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k27acStdAlnRep3
@@ -6267,6 +7481,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam.gz
@@ -6278,7 +7493,7 @@ parentTable wgEncodeBroadHistoneNhekH3k27acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1772
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k27acStdSig
@@ -6311,7 +7526,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam.gz
@@ -6323,7 +7538,7 @@ parentTable wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1733
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2
@@ -6334,7 +7549,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam.gz
@@ -6346,7 +7561,7 @@ parentTable wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1733
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3
@@ -6357,6 +7572,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam.gz
@@ -6368,7 +7584,7 @@ parentTable wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1733
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k27me3StdSig
@@ -6401,7 +7617,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam.gz
@@ -6413,7 +7629,7 @@ parentTable wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1754
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2
@@ -6424,7 +7640,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam.gz
@@ -6436,7 +7652,7 @@ parentTable wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1754
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3
@@ -6447,6 +7663,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam.gz
@@ -6458,7 +7675,7 @@ parentTable wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1754
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k36me3StdSig
@@ -6491,7 +7708,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam.gz
@@ -6503,7 +7720,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1725
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2
@@ -6514,7 +7731,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam.gz
@@ -6526,7 +7743,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1725
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3
@@ -6537,6 +7754,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam.gz
@@ -6548,7 +7766,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1725
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me1StdSig
@@ -6581,7 +7799,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam.gz
@@ -6593,7 +7811,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1697
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2
@@ -6604,7 +7822,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam.gz
@@ -6616,7 +7834,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1697
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3
@@ -6627,6 +7845,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam.gz
@@ -6638,7 +7857,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1697
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me2StdSig
@@ -6671,7 +7890,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam.gz
@@ -6683,7 +7902,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1723
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2
@@ -6694,7 +7913,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam.gz
@@ -6706,7 +7925,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1723
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3
@@ -6717,6 +7936,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam.gz
@@ -6728,7 +7948,7 @@ parentTable wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1723
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k4me3StdSig
@@ -6761,7 +7981,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam.gz
@@ -6773,7 +7993,7 @@ parentTable wgEncodeBroadHistoneNhekH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1794
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k9acStdAlnRep2
@@ -6784,7 +8004,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam.gz
@@ -6796,7 +8016,7 @@ parentTable wgEncodeBroadHistoneNhekH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1794
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k9acStdAlnRep3
@@ -6807,6 +8027,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam.gz
@@ -6818,7 +8039,7 @@ parentTable wgEncodeBroadHistoneNhekH3k9acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1794
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k9acStdSig
@@ -6851,7 +8072,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam.gz
@@ -6863,7 +8084,7 @@ parentTable wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1688
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2
@@ -6874,7 +8095,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam.gz
@@ -6886,7 +8107,7 @@ parentTable wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1688
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3
@@ -6897,6 +8118,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam.gz
@@ -6908,7 +8130,7 @@ parentTable wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1688
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH3k9me1StdSig
@@ -6941,7 +8163,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam.gz
@@ -6953,7 +8175,7 @@ parentTable wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1784
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2
@@ -6964,7 +8186,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam.gz
@@ -6976,7 +8198,7 @@ parentTable wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1784
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3
@@ -6987,6 +8209,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam.gz
@@ -6998,7 +8221,7 @@ parentTable wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
-subId 1784
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekH4k20me1StdSig
@@ -7031,7 +8254,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam.gz
@@ -7043,7 +8266,7 @@ parentTable wgEncodeBroadHistoneNhekPol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1737
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekPol2bStdAlnRep2
@@ -7054,7 +8277,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam.gz
@@ -7066,7 +8289,7 @@ parentTable wgEncodeBroadHistoneNhekPol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1737
+subId 1903
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhekPol2bStdSig
@@ -7099,6 +8322,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam.gz
@@ -7110,7 +8334,7 @@ parentTable wgEncodeBroadHistoneNhlfControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1710
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfControlStdAlnRep2
@@ -7121,6 +8345,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
+dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam.gz
@@ -7132,7 +8357,7 @@ parentTable wgEncodeBroadHistoneNhlfControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1710
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfControlStdSig
@@ -7164,7 +8389,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam.gz
@@ -7176,7 +8401,7 @@ parentTable wgEncodeBroadHistoneNhlfCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1707
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfCtcfStdAlnRep2
@@ -7187,7 +8412,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam.gz
@@ -7199,7 +8424,7 @@ parentTable wgEncodeBroadHistoneNhlfCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1707
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfCtcfStdSig
@@ -7232,7 +8457,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam.gz
@@ -7244,7 +8469,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1738
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2
@@ -7255,7 +8480,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam.gz
@@ -7267,7 +8492,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1738
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k27acStdSig
@@ -7300,7 +8525,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam.gz
@@ -7312,7 +8537,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1685
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2
@@ -7323,7 +8548,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam.gz
@@ -7335,7 +8560,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1685
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k27me3StdSig
@@ -7368,7 +8593,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam.gz
@@ -7380,7 +8605,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1750
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2
@@ -7391,7 +8616,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam.gz
@@ -7403,7 +8628,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1750
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k36me3StdSig
@@ -7436,7 +8661,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam.gz
@@ -7448,7 +8673,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1703
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2
@@ -7459,7 +8684,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam.gz
@@ -7471,7 +8696,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1703
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k4me1StdSig
@@ -7504,7 +8729,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam.gz
@@ -7516,7 +8741,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1739
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2
@@ -7527,7 +8752,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam.gz
@@ -7539,7 +8764,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1739
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k4me2StdSig
@@ -7572,7 +8797,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam.gz
@@ -7584,7 +8809,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1779
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2
@@ -7595,7 +8820,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam.gz
@@ -7607,7 +8832,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1779
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k4me3StdSig
@@ -7640,7 +8865,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam.gz
@@ -7652,7 +8877,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1708
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2
@@ -7663,7 +8888,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam.gz
@@ -7675,7 +8900,7 @@ parentTable wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1708
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH3k9acStdSig
@@ -7708,7 +8933,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam.gz
@@ -7720,7 +8945,7 @@ parentTable wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
-subId 1699
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2
@@ -7731,7 +8956,7 @@ composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-21
+dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam.gz
@@ -7743,7 +8968,7 @@ parentTable wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
-subId 1699
+subId 1877
 view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfH4k20me1StdSig
@@ -7768,4 +8993,4 @@ subId 1699
 tableName wgEncodeBroadHistoneNhlfH4k20me1StdSig
 view Signal
 
-# MAGIC: -354568253
+# MAGIC: -682943027

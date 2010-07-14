@@ -102,9 +102,10 @@ return motif;
 }
 
 
-void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
-/* Print out section about motif. */
+void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *motif)
+/* Print out section about motif, possibly with mutliple occurrences. */
 {
+
 webNewSection("Motif:");
 printf("<PRE>\n");
 printf("<table>\n");
@@ -114,16 +115,25 @@ if (motif != NULL)
     dnaMotifMakeProbabalistic(motif);
     makeTempName(&pngTn, "logo", ".png");
     dnaMotifToLogoPng(motif, 47, 140, NULL, "../trash", pngTn.forCgi);
-    printf("<tr><td></td><td colspan='%d'>", seq->size);
+    printf("<tr><td></td><td colspan='%d'>", motif->columnCount);
     printf("<IMG SRC=\"%s\" BORDER=1>", pngTn.forHtml);
     printf("</td><td></td></tr>\n");
     }
-if (seq != NULL)
+if (count > 0)
     {
-    printf("<tr><td></td>");
-    touppers(seq->dna);
-    printDnaCells(seq->dna, seq->size);
-    printf("<td>this occurrence</td></tr>\n");
+    int i;
+    for (i = 0; i < count; i++)
+        {
+        struct dnaSeq *seq = seqs[i];
+        printf("<tr><td></td>");
+        touppers(seq->dna);
+        printDnaCells(seq->dna, seq->size);
+        if(count == 1)
+            printf("<td>this occurrence</td></tr>\n");
+        else
+            // is there a library routine to get 1st, 2nd ...?
+            printf("<td>occurrence #%d</td></tr>\n", i + 1);
+        }
     }
 if (motif != NULL)
     {
@@ -134,6 +144,15 @@ if (motif != NULL)
     }
 printf("</table>\n");
 printf("</PRE>");
+}
+
+void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif)
+/* Print out section about motif. */
+{
+if(seq == NULL)
+    motifMultipleHitsSection(NULL, 0, motif);
+else
+    motifMultipleHitsSection(&seq, 1, motif);
 }
 
 void doTriangle(struct trackDb *tdb, char *item, char *motifTable)
