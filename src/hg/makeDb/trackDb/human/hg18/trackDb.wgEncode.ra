@@ -3279,7 +3279,7 @@ subGroup3 ripAntibody RIP_Antibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_52
 subGroup4 ripTgtProtein RIP_Target_Protein PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 zCTL_T7Tag=T7Tag_Control
 dimensions dimensionX=cellType dimensionY=ripTgtProtein
 sortOrder cellType=+ ripTgtProtein=+
-controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=ripTgtProtein
+controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=Antibody
 dragAndDrop subTracks
 useScore 1
 noInherit on
@@ -3366,7 +3366,7 @@ wgEncode 1
 track wgEncodeYaleRNAseq
 compositeTrack on
 shortLabel Yale RNA-seq
-longLabel ENCODE Poly-A Tail Expression by RNA-seq from Yale/UC-Davis/Harvard
+longLabel ENCODE RNA-seq from Yale/UC-Davis/Harvard
 group expression
 priority 0
 origAssembly hg18

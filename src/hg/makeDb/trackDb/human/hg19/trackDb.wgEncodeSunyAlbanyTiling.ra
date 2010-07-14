@@ -8,7 +8,7 @@ subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup3 ripTgtProtein RipTgtProtein ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input  
 dimensions dimensionX=cellType dimensionY=ripTgtProtein
 sortOrder cellType=+ ripTgtProtein=+ 
-controlledVocabulary encode/cv.ra cellType=cell ripTgtProtein=ripTgtProtein
+controlledVocabulary encode/cv.ra cellType=cell ripTgtProtein=Antibody
 dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide
 priority 0

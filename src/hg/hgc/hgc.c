@@ -8825,10 +8825,10 @@ sqlFreeResult(&sr);
 
 /* link to Ensembl DECIPHER Patient View page */
 printf("<B>Patient View: </B>\n");
-printf("For more details of patient %s, click ", itemName);
+printf("More details on patient %s at ", itemName);
 printf("<A HREF=\"%s%s\" target=_blank>",
        "https://decipher.sanger.ac.uk/application/patient/", itemName);
-printf("here</A>.<BR><BR>");
+printf("DECIPHER</A>.<BR><BR>");
 
 /* print position info */
 safef(query, sizeof(query),
@@ -8843,12 +8843,12 @@ sqlFreeResult(&sr);
 
 /* print UCSC Genes in the reported region */
 safef(query, sizeof(query),
-      "select distinct t.name from knownToDecipher t where value ='%s'", itemName);
+      "select distinct t.name from knownCanonToDecipher t, kgXref x  where value ='%s' and x.kgId=t.name order by geneSymbol", itemName);
 sr = sqlMustGetResult(conn, query);
 row = sqlNextRow(sr);
 if (row != NULL)
     {
-    printf("<BR><B>UCSC Gene(s) in this genomic region: </B><UL>");
+    printf("<BR><B>UCSC Canonical Gene(s) in this genomic region: </B><UL>");
     while (row != NULL)
     	{
 	safef(query2, sizeof(query2),

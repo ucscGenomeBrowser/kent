@@ -138,7 +138,11 @@ sub validateValueList {
                 }
             } elsif($type eq 'int') {
                 if($val !~ /^\d+$/) {
-                    push(@errors, "invalid integer; field '$field', value '$val'");
+                    if($field eq 'replicate') {
+                        $values->{$field} = 1;
+                    } else {
+                        push(@errors, "invalid integer; field '$field', value '$val'");
+                    }
                 }
             }
         }

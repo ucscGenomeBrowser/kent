@@ -792,7 +792,7 @@ sub validateBam
     my $category = $terms{'Cell Line'}->{$cell}->{'category'};
     
 	#Venkat: Can be a better design, but need to flesh out design more.
-	if ($category eq "T") {
+	if (defined $category && $category eq "T") {
 	$cellLineSex=$sex;
     }
 

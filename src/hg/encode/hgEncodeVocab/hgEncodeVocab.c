@@ -110,14 +110,15 @@ void doTypeHeader(char *type)
 if (sameString(type,"Cell Line"))
    {
     /* Venkat: To differentiate between the print statments of Mouse and Human Cell Lines */
-    if(sameString("organism","Human"))
+    if(sameString(organismOpt,"Human"))
          {
    	 printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>",type);
    	 }
       else 
 	 {
-    	  printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type);
-         }
+    	  printf("  <TH>Source</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>");
+         // printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type)
+	 }
     }
 else if (sameString(type,"Antibody"))
     {

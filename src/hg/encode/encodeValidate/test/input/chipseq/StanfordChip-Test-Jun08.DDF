@@ -1,5 +1,5 @@
-files	view	cell	antibody	replicate	accession	labVersion
-FoxP2_SL167.align_25.hg18.?.txt.BED	Alignments	K562	FOXP2	1
-#FoxP2_SL167.align_25.wig	Signal	K562	FOXP2	
-SL_167_peak_caller.ChIP.peaks	Peaks	K562	FOXP2	1
-FoxP2_SL167.fastq	RawData	K562	FOXP2	1
+files	view	cell	antibody	sex	age	strain	control	replicate	seqPlatform	accession	labVersion
+mfLiver-DS10369.mm9.bam	Alignments	HTB-11	CTCF	M	E14.5	C57BL/6	None	1	454_GS
+
+
+
