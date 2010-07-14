@@ -14,7 +14,7 @@ compile: $O ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/${A} $O ${MYLIBS} ${L}
 
 dotest:
-	( cd test  ; make )
+	( cd test  ; ${MAKE} )
 
 clean::
 	rm -f ${O}

@@ -673,27 +673,12 @@ struct hash* varHash;     // There must not be multiple occurrances of the same 
         rootVar->notEqual = (rootVar->var[strlen(rootVar->var)-1] == '!'); // requested not equal
         if (rootVar->notEqual)
             rootVar->var[strlen(rootVar->var)-1] = 0;
+        // Do not try to combine repeated vars because "foo=a foo=b" is 'AND' while "foo=a,b" is 'OR'.
+
+        // Fill in the val(s) from second half of pair
         char *val = NULL;
         if (words[thisWord][0] != '\0' && words[thisWord][0] != '?') // "var=?" or "var=" will query by var name only
             val = cloneString(words[thisWord]);
-
-        // Make sure this isn't a repeat
-        struct mdbByVar *oldVar = (struct mdbByVar *)hashFindVal(varHash, rootVar->var);
-        if (oldVar && (oldVar->notEqual == rootVar->notEqual))
-            {   // This is very powerful: "cell=GM% cell!=GM12878"
-            if (val != NULL)
-                {
-                verbose(2, "The same variable appears twice: %s=%s and %s=%s.  Adding second value.\n",
-                    oldVar->var,oldVar->vals->val,rootVar->var,val);
-                AllocVar(limbVal);
-                limbVal->val = val;
-                slAddTail(&oldVar->vals,limbVal);
-                }
-            mdbByVarsFree(&rootVar);
-            continue;
-            }
-
-        // Fill in the val(s) from second half of pair
         if (val != NULL)
             {
             // handle comma separated list of vals (if unquoted)
@@ -906,67 +891,84 @@ if(!testOnly)
 dyStringFree(&dy);
 }
 
-char*mdbTableName(struct sqlConnection *conn,boolean mySandBox)
+static char*mdbTableNamePreferSandbox()
 // returns the mdb table name or NULL if conn supplied but the table doesn't exist
 {
-char *tblName = NULL;
+char *table = cfgOption("db.metaDb");
+if(table != NULL)
+    return cloneString(table);
+
+// Look for trackDb name to model
+char *name = cfgOption("db.trackDb");
+if(name == NULL)
+    return cloneString(MDB_DEFAULT_NAME);
+
+// Only take the last table of a list of tables!
+char delimit = ',';
+for (table = name; (name = skipBeyondDelimit(name,delimit)) != NULL;)
+    table = name;
+name = skipLeadingSpaces(table);
+
+// Divide name into root and sandbox portion
 char *root = NULL;
 char *sand = NULL;
-char *name = cfgOption("db.metaDb");
-if(name == NULL)
+delimit = '_';
+if ((sand = strchr(name,delimit)) == NULL)
     {
-    name = cfgOption("db.trackDb");
-    if(name == NULL)
-        root = cloneString(MDB_DEFAULT_NAME);
+    delimit = '-';
+    sand = strchr(name,delimit);
     }
+if (sand == NULL) // No sandbox portion
+    return cloneString(MDB_DEFAULT_NAME);
 
-// Divide name into root and sand
-if(root == NULL)
-    {
-    char delimit = '_';
-    if((sand = strchr(name,delimit)) == NULL)
-        {
-        delimit = '-';
-        if((sand = strchr(name,delimit)) == NULL)
-            root = cloneString(name);  // No sandBox portion
-        }
-
-    if(root == NULL)  // There should be a sandbox portion
-        {
-        root = cloneNextWordByDelimiter(&name,delimit);
-        if(mySandBox && *name != 0)
-            sand = name;
-        }
-    }
+root = cloneNextWordByDelimiter(&name,delimit);
+sand = name;
 
 // Since db.trackDb was used, make sure to swap it
-if(sameWord("trackDb",root))
+if (startsWith("trackDb",root))
     {
     freeMem(root);
     root = cloneString(MDB_DEFAULT_NAME);
     }
+else // If discovered anything other than trackDb then give up as too obscure
+    return cloneString(MDB_DEFAULT_NAME);
 
-if(!mySandBox || sand == NULL)
-    tblName = root;
-else
-    {
-    int size = strlen(root) + strlen(sand) + 2;
-    tblName = needMem(size);
-    safef(tblName,size,"%s_%s",root,sand);
-    }
+// Finally ready to put it together
+int size = strlen(root) + strlen(sand) + 2;
+table = needMem(size);
+safef(table,size,"%s%c%s",root,delimit,sand);
+freeMem(root);
+
+return table;
+}
+
+char*mdbTableName(struct sqlConnection *conn,boolean mySandBox)
+// returns the mdb table name or NULL if conn supplied but the table doesn't exist
+{
+char *table = NULL;
+if (mySandBox)
+    table = mdbTableNamePreferSandbox();
+if (table == NULL)
+    table = cloneString(MDB_DEFAULT_NAME);
 
 // Test for table
-if(conn != NULL && !sqlTableExists(conn,tblName))
+if (conn != NULL && !sqlTableExists(conn,table))
     {
-    if(sand == NULL || sameWord(tblName,root)) // Then try the root
+    if (!mySandBox || sameWord(table,MDB_DEFAULT_NAME)) // Then try the root
+        {
+        freeMem(table);
         return NULL;
-    freeMem(tblName);
-    tblName = root;
-    if(!sqlTableExists(conn,tblName))
+        }
+    freeMem(table);
+    table = cloneString(MDB_DEFAULT_NAME);
+    if (!sqlTableExists(conn,table))
+        {
+        freeMem(table);
         return NULL;
+        }
     }
 
-return tblName;
+return table;
 }
 
 // -------------- Updating the DB --------------
