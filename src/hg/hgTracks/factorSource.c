@@ -41,6 +41,7 @@ struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char where[256];
 char **row;
+char *motifTable = "wgEncodeRegTfbsClusteredMotifs";
 for (i=0; i<track->sourceCount; ++i)
     {
     float score = bed->expScores[i];
@@ -61,22 +62,25 @@ hvGfxBox(hvg, x1, y, w, heightPer, color);
 
 // Draw region with highest motif score
 
-safef(where, sizeof(where), "name = '%s'", bed->name);
-sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
-                 bed->chromEnd, where, &rowOffset);
-while((row = sqlNextRow(sr)) != NULL)
+if(sqlTableExists(conn, motifTable))
     {
-    Color color = hvGfxFindColorIx(hvg, 28, 226, 40);
-    int start = sqlUnsigned(row[rowOffset+1]);
-    int end = sqlUnsigned(row[rowOffset+2]);
-    int x1 = round((double)((int)start-winStart)*scale) + xOff;
-    int x2 = round((double)((int)end-winStart)*scale) + xOff;
-    int w = x2-x1;
-    if (w < 1)
-        w = 1;
-    hvGfxBox(hvg, x1, y, w, heightPer, color);
+    safef(where, sizeof(where), "name = '%s'", bed->name);
+    sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
+                     bed->chromEnd, where, &rowOffset);
+    while((row = sqlNextRow(sr)) != NULL)
+        {
+        Color color = hvGfxFindColorIx(hvg, 28, 226, 40);
+        int start = sqlUnsigned(row[rowOffset+1]);
+        int end = sqlUnsigned(row[rowOffset+2]);
+        int x1 = round((double)((int)start-winStart)*scale) + xOff;
+        int x2 = round((double)((int)end-winStart)*scale) + xOff;
+        int w = x2-x1;
+        if (w < 1)
+            w = 1;
+        hvGfxBox(hvg, x1, y, w, heightPer, color);
+        }
+    sqlFreeResult(&sr);
     }
-sqlFreeResult(&sr);
 hFreeConn(&conn);
 
 /* Draw text to the right */
