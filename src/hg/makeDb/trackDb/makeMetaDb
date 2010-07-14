@@ -44,7 +44,7 @@ loadMetaDb() {
     echo $cmd
     eval $cmd 
 
-    local cmd="rm allRas metaDb"
+    local cmd="rm allRas"
     echo $cmd
     eval $cmd 
 
