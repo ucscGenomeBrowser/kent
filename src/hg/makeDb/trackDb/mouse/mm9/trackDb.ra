@@ -242,67 +242,208 @@ track miRNA override
 type bed 6 .
 dataVersion Release 13.0 (March 2009)
 
-track multiz30way
+track cons30way
+compositeTrack on
 shortLabel Conservation
 longLabel 30-Way Multiz Alignment & Conservation
+subGroup1 view Views align=Multiz_Alignments phyloP=Basewise_Conservation_(phyloP) phastcons=Element_Conservation_(phastCons) elements=Conserved_Elements
+subGroup2 clade Clade glires=Euarchontoglires mammal=Mammal vert=Vertebrate
+dragAndDrop subTracks
+dimensions dimensionX=clade
+visibility full
+type bed 4
 group compGeno
 priority 103.2
-visibility pack
-color 0, 10, 100
-altColor 0,90,10
-type wigMaf 0.0 1.0
-maxHeightPixels 100:40:11
-wiggle phastCons30wayPlacental Mammal Placental_Mammal phastCons30wayEuarch Euarch Euarchontoglires phastCons30way Vertebrate Vertebrate
-spanList 1
-pairwiseHeight 12
-yLineOnOff Off
-frames multiz30wayFrames
-irows on
-autoScale Off
-windowingFunction mean
-summary multiz30waySummary
-speciesCodonDefault mm9
-speciesGroups Glires Primates Placental_Mammal Vertebrate
-sGroup_Glires rn4 cavPor2 oryCun1
-sGroup_Primates hg18 panTro2 rheMac2 ponAbe2 calJac1 otoGar1
-sGroup_Placental_Mammal tupBel1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
-sGroup_Vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 gasAcu1 danRer5 tetNig1 fr2 oryLat1
-speciesDefaultOff rheMac2 calJac1 panTro2 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 loxAfr1 bosTau3 eriEur1 sorAra1 echTel1 ornAna1 anoCar1 xenTro2 danRer5 tetNig1 fr2 oryLat1
-itemFirstCharCase noChange
-treeImage phylo/mm9_30way.gif
 
-track mostConserved30way
-compositeTrack on
-shortLabel Most Conserved
-longLabel PhastCons Conserved Elements, 30-way Vertebrate Multiz Alignment
-group compGeno
-priority 103.4
-visibility hide
-exonArrows off
-showTopScorers 200
-type bed 5 .
+    track cons30wayViewalign
+    shortLabel Multiz Alignments
+    view align
+    visibility pack
+    viewUi on
+    subTrack cons30way
 
-    track phastConsElements30wayPlacental
-    parent mostConserved30way
-    shortLabel Mammal
-    longLabel PhastCons Placental Mammal Conserved Elements, 30-way Multiz Alignment
-    color 100,50,170
-    priority 1
+	track multiz30way
+	subTrack cons30wayViewalign on
+	shortLabel Multiz Align
+	longLabel Multiz Alignments of 30 Vertebrates
+	subGroups view=align clade=vert
+	noInherit on
+	irows on
+	summary multiz30waySummary
+	frames multiz30wayFrames
+	group compGeno
+	color 0, 10, 100
+	altColor 0,90,10
+	type wigMaf 0.0 1.0
+	speciesCodonDefault mm9
+	speciesGroups Glires Primates Placental_Mammal Vertebrate
+	sGroup_Glires rn4 cavPor2 oryCun1
+	sGroup_Primates hg18 panTro2 rheMac2 ponAbe2 calJac1 otoGar1
+	sGroup_Placental_Mammal tupBel1 sorAra1 eriEur1 canFam2 felCat3 equCab1 bosTau3 dasNov1 loxAfr1 echTel1
+	sGroup_Vertebrate monDom4 ornAna1 galGal3 anoCar1 xenTro2 gasAcu1 danRer5 tetNig1 fr2 oryLat1
+	speciesDefaultOff rheMac2 calJac1 panTro2 cavPor2 tupBel1 otoGar1 dasNov1 oryCun1 felCat3 loxAfr1 bosTau3 eriEur1 sorAra1 echTel1 ornAna1 anoCar1 xenTro2 danRer5 tetNig1 fr2 oryLat1
+	itemFirstCharCase noChange
+	treeImage phylo/mm9_30way.gif
+	priority 100
+	pairwiseHeight 12
 
-    track phastConsElements30wayEuarch
-    parent mostConserved30way
-    shortLabel Euarch
-    longLabel PhastCons Euarchontoglires Conserved Elements, 30-way Multiz Alignment
-    color 100,50,170
-    priority 2
+    track cons30wayViewphyloP
+    shortLabel Basewise Conservation (phyloP)
+    view phyloP
+    visibility full
+    subTrack cons30way
+    viewLimits -3.7:4.0
+    viewLimitsMax -10.12:5.04
 
-    track phastConsElements30way
-    #replaces record phastConsElements30way in parent dir missing/extra group,visibility,exonArrows,showTopScorers,type
-    parent mostConserved30way
-    shortLabel Vertebrate
-    longLabel PhastCons Vertebrate Conserved Elements, 30-way Multiz Alignment
-    color 170,100,50
-    priority 3
+	# PhyloP conservation
+	track phyloP30wayEuarch
+	subTrack cons30wayViewphyloP off
+	subGroups view=phyloP clade=glires
+	shortLabel Euarch Cons
+	longLabel Euarchontoglires Basewise Conservation by PhyloP
+	noInherit on
+	configurable on
+	type wig -7.49 1.13
+	maxHeightPixels 100:50:11
+	viewLimits -3:1.2
+	autoScale off
+	spanList 1
+	windowingFunction mean
+	color 10,10,70
+	altColor 70,10,10
+	priority 1
+
+	track phyloP30wayPlacental
+	subTrack cons30wayViewphyloP on
+	subGroups view=phyloP clade=mammal
+	shortLabel Mammal Cons
+	longLabel Placental Mammal Basewise Conservation by PhyloP
+	noInherit on
+	configurable on
+	type wig -9.46 2.06
+	viewLimits -3.3:2.1
+	maxHeightPixels 100:50:11
+	autoScale off
+	spanList 1
+	windowingFunction mean
+	color 25,25,95
+	altColor 95,25,25
+	priority 2
+
+	track phyloP30wayAll
+	subTrack cons30wayViewphyloP on
+	subGroups view=phyloP clade=vert
+	shortLabel Vertebrate Cons
+	longLabel Vertebrate Basewise Conservation by PhyloP
+	noInherit on
+	configurable on
+	type wig -10.12 5.04
+	viewLimits -4:4
+	maxHeightPixels 100:50:11
+	autoScale off
+	spanList 1
+	windowingFunction mean
+	color 25,25,95
+	altColor 95,25,25
+	priority 3
+
+    track cons30wayViewphastcons
+    shortLabel Element Conservation (phastCons)
+    view phastcons
+    visibility hide
+    subTrack cons30way
+
+	# phastCons conservation
+        track phastCons30wayEuarch
+        subTrack cons30wayViewphastcons off
+        subGroups view=phastcons clade=glires
+        shortLabel Euarch Cons
+        longLabel Euarchontoglires Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 10
+
+        track phastCons30wayPlacental
+        subTrack cons30wayViewphastcons off
+        subGroups view=phastcons clade=mammal
+        shortLabel Mammal Cons
+        longLabel Placental Mammal Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 11
+
+        track phastCons30way
+        subTrack cons30wayViewphastcons off
+        subGroups view=phastcons clade=vert
+        shortLabel Vertebrate Cons
+        longLabel Vertebrate Conservation by PhastCons
+        noInherit on
+        configurable on
+        type wig 0 1
+        maxHeightPixels 100:40:11
+        autoScale off
+        spanList 1
+        windowingFunction mean
+        color 10,70,10
+        altColor 70,10,10
+        priority 12
+
+    track cons30wayViewelements
+    shortLabel Conserved Elements
+    view elements
+    visibility hide
+    subTrack cons30way
+
+	# Conserved Elements (Most Conserved)
+	track phastConsElements30wayEuarch
+	subTrack cons30wayViewelements on
+	subGroups view=elements clade=glires
+	shortLabel Euarch El
+	longLabel PhastCons Euarchontoglires Conserved Elements, 30-way Multiz Alignment
+	showTopScorers 200
+	exonArrows off
+	noInherit on
+	type bed 5 .
+	color 100,50,170
+	priority 20
+
+	track phastConsElements30wayPlacental
+	subTrack cons30wayViewelements off
+	subGroups view=elements clade=mammal
+	shortLabel Mammal El
+	longLabel PhastCons Placental Mammal Conserved Elements, 30-way Multiz Alignment
+	showTopScorers 200
+	exonArrows off
+	noInherit on
+	type bed 5 .
+	color 100,50,170
+	priority 22
+
+	track phastConsElements30way
+	subTrack cons30wayViewelements off
+	subGroups view=elements clade=vert
+	shortLabel Vertebrate El
+	longLabel PhastCons Vertebrate Conserved Elements, 30-way Multiz Alignment
+	showTopScorers 200
+	exonArrows off
+	noInherit on
+	type bed 5 .
+	color 170,100,50
+	priority 23
 
 track transcriptome
 shortLabel Transcriptome
