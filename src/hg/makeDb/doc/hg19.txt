@@ -10326,9 +10326,11 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 # recieve  ucschuman.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
     gzip -d ucschuman.gff.gz
 
-# build hgIkmc table from raw data file ucschuman.gff (remove some records mapped to 'chrUn')
+# build hgIkmc table from raw data file ucschuman.gff (substitue some
+# troublesome chroms in raw data file and remove some records mapped to 'chrUn')
 
     cat ucschuman.gff |sort -u \
+    |sed -e 's/chr9|NT_113911.1/chr9/' \
     |grep -v 'chrUn' \
     | perl -we \
       'while (<>) { \
