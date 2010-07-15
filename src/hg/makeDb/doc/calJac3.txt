@@ -2386,3 +2386,144 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 
 #############################################################################
+# Quality track (DONE - 2010-07-14 - Hiram)
+    mkdir -p /hive/data/genomes/calJac3/bed/qual/genbank
+    cd /hive/data/genomes/calJac3/bed/qual/genbank
+    cd /hive/data/genomes/calJac3/bed/qual
+    grep "^chr" ../../calJac3.agp \
+	| egrep -v "contig|fragment|telo|centrom|clone" \
+	| awk '{print $6}' | sort -u > contig.name.list
+    cd genbank
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/genbank/wgs/wgs.ACFV.*.qscore.gz
+    zcat wgs.ACFV.*.qscore.gz | grep "^>" | sed -e "s/^>gb|//; s/|.*//" \
+	sort -u > contig.list
+    wc -l ../contig.name.list contig.list
+    #	201514 ../contig.name.list
+    #	202483 contig.list
+    #	not all the contigs have quality scores here, but almost all:
+    comm -12 ../contig.name.list contig.list | wc -l
+    #	201433
+    cat << '_EOF_' > extractContigs.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: ./ctContigs.pl ../contig.name.list > calJac3.qual.fa\n";
+    printf STDERR "after collecting the contig names from the given list\n";
+    printf STDERR "this is going to read wgs.ACFV.*.qscore.gz\n";
+    printf STDERR "and output any fasta elements that match the name list\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) { usage; exit 255; }
+
+my $file = shift;
+my %ctgNames;
+my $readNames = 0;
+
+open (FH, "<$file") or die "can not open $file";
+while (my $line = <FH>) {
+    chomp $line;
+    $ctgNames{$line} = 1;
+    ++$readNames;
+}
+
+close (FH);
+printf STDERR "read $readNames from $file\n";
+
+my $ctgCount = 0;
+foreach my $key (keys %ctgNames) {
+    ++$ctgCount;
+}
+printf STDERR "found $ctgCount contig names in $file\n";
+open (NF,">not.found.list") or die "can not write to not.found.list";
+my $notFound = 0;
+
+my $ctgsDone = 0;
+for (my $i = 1; $i < 15; ++$i) {
+    my $fname = sprintf("wgs.ACFV.%d.qscore.gz", $i);
+    my $goodElement = 0;
+    open (FH, "zcat $fname|") or die "can not read $fname";
+    while (my $line = <FH>) {
+	if ($line =~ m/^>/) {
+	    chomp $line;
+	    my $name = $line;
+	    $name =~ s/^>gb\|//;
+	    $name =~ s/\|.*//;
+#	    printf STDERR "name: %s\n", $name;
+	    if (exists($ctgNames{$name})) {
+		$goodElement = 1;
+		printf ">%s\n", $name;
+		++$ctgsDone;
+	    } else {
+		printf NF "%s:%s\n", $name, $line;
+		++$notFound;
+		$goodElement = 0;
+	    }
+	} elsif ($goodElement > 0) {
+	    $line =~ s/^\s+//;
+	    printf "%s", $line;
+	}
+	
+    }
+    close (FH);
+}
+
+close(NF);
+
+printf STDERR "found $ctgsDone during processing\n";
+printf STDERR "not found $notFound during processing\n";
+'_EOF_'
+    # << happy emacs
+    chmod +x ./extractContigs.pl
+    time ./extractContigs.pl ../contig.name.list \
+	| gzip -c > ../calJac3.contigs.qual.fa.gz
+# read 201514 from ../contig.name.list
+# found 201514 contig names in ../contig.name.list
+# found 201433 during processing
+# not found 1050 during processing
+    cd ..
+    time qaToQac calJac3.contigs.qual.fa.gz calJac3.contigs.qual.qac
+# real    1m28.846s
+    time qacAgpLift -mScore=0 ../../calJac3.agp \
+	calJac3.contigs.qual.qac calJac3.qual.qac
+# real    1m16.994s
+    time qacToWig -fixed calJac3.qual.qac stdout | gzip -c \
+	> calJac3.qual.wigFix.gz
+# real    7m21.203s
+    #	avoid memory size problem
+sizeG=50000000
+export sizeG
+ulimit -d $sizeG
+ulimit -v $sizeG
+    time wigToBigWig calJac3.qual.wigFix.gz ../../chrom.sizes calJac3.qual.bw
+    #	real    29m7.143s
+    bigWigInfo -minMax calJac3.qual.bw
+    #	0.000000 97.000000
+    bigWigInfo calJac3.qual.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 587,271,637
+# primaryIndexSize: 91,661,572
+# zoomLevels: 10
+# chromCount: 14205
+# basesCovered: 2,914,958,544
+# mean: 87.707709
+# min: 0.000000
+# max: 97.000000
+# std: 25.751106
+
+    mkdir /gbdb/calJac3/bbi
+    ln -s `pwd`/calJac3.qual.bw /gbdb/calJac3/bbi
+    hgsql calJac3 -e 'drop table if exists qualityBw; \
+            create table qualityBw \
+		(fileName varchar(255) not null); \
+            insert into qualityBw values
+	("/gbdb/calJac3/bbi/calJac3.qual.bw");'
+
+#############################################################################
