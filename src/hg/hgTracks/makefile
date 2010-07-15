@@ -47,7 +47,13 @@ compileMain: $O
 
 ${RENDERA}: ${RENDERO}
 	${CC} -o ${RENDERA} ${RENDERO} ${MYLIBS} ${L}
-#	mv ${RENDERA} ${CGI_BIN}/
+
+# install of RENDERA is not enabled yet.
+#	When it is desired, would need three different targets:
+#	my:: - for personal browser into ${CGI_BIN}-${USER}
+#	alpha:: - for browser into ${CGI_BIN}
+#	beta:: - for browser into ${CGI_BIN}-beta
+#	install:: - into DESTDIR/CGI_BIN
 
 wigTrack.o:	wigCommon.h
 bedGraph.o:	wigCommon.h
@@ -59,3 +65,4 @@ pslTrack.o:	cds.h
 
 clean::
 	rm -f ct_hgwdev_*.bed hgtIdeo_*.gif hgt_*.gif
+	rm -f ${RENDERA} ${RENDERO}

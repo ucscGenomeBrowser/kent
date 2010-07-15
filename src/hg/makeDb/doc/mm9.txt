@@ -10682,4 +10682,431 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
     hgsql mm9 < ~/kent/src/hg/hgCGAP/cgapAlias.sql
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
     hgsql mm9 -e 'LOAD DATA local INFILE "cgapAlias.tab" into table cgapAlias'
+
+# XXXX
 #########################################################################
+# phyloP conservation for 30-way (DONE - 2009-10-21,2009-11-10 - Hiram)
+#
+# Vertebrate, Placental, Euarchontoglires
+#
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    ssh swarm
+    mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP
+    mkdir ss run.split
+    cd run.split
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/mm9/bed/multiz30way/maf.split/$c.maf
+set WINDOWS = /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.split/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+# << happy emacs
+    chmod +x doSplit.csh
+
+    ls -1S -r ../../maf.split | sed -e "s/.maf//" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(path1) {check out exists+ done/$(path1).done}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    mkdir ss done
+    ssh memk
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.split
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+# Completed: 75 of 75 jobs
+# CPU time in finished jobs:       9843s     164.05m     2.73h    0.11d  0.000 y
+# IO & Wait Time:                  2938s      48.97m     0.82h    0.03d  0.000 y
+# Average job time:                 170s       2.84m     0.05h    0.00d
+# Longest finished job:             393s       6.55m     0.11h    0.00d
+# Submission to last job:           678s      11.30m     0.19h    0.01d
+
+    # run phyloP with --method LRT 
+    ssh swarm
+    mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.phyloP
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.phyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.410
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
+	../../cons/all/all.mod 0.410 > all.mod
+    grep BACKGROUND ../../cons/euarchontoglires/euarchontoglires.mod \
+	| awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.410
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
+	../../cons/euarchontoglires/euarchontoglires.mod 0.410 \
+	> euarchontoglires.mod
+    grep BACKGROUND ../../cons/placental/placental.mod \
+	| awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.410
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
+	../../cons/placental/placental.mod 0.410 > placental.mod
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set f = $1
+set out = $2
+set cName = $f:r:r
+set chrDir = $f:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/mm9/bed/multiz30way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "$cons/run.split/ss/$chrDir/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $f.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$f.wigFix $out
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../run.split/ss -type f | sed -e "s/.ss$//; s#^../run.split/ss/##" \
+	> ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(file1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/all
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 2685 of 2685 jobs
+# CPU time in finished jobs:     641900s   10698.34m   178.31h    7.43d  0.020 y
+# IO & Wait Time:                 19012s     316.86m     5.28h    0.22d  0.001 y
+# Average job time:                 246s       4.10m     0.07h    0.00d
+# Longest finished job:             484s       8.07m     0.13h    0.01d
+# Submission to last job:         31192s     519.87m     8.66h    0.36d
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg18/bed/multiz30way/consPhyloP/run.phyloP/all
+    find ./wigFix -type f \
+	| sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
+	| sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigEncode stdin phyloP30way.wig \
+		phyloP30way.wib  > wigEncode.log 2>&1 &
+    #	Converted stdin, upper limit 5.04, lower limit -10.12
+
+    #	good test to make sure no overlapping coordinates, bigWig:
+    #	consumes massive amount of memory, in bash raise your memory limits:
+    ulimit -d 188743680
+    ulimit -v 188743680
+    time cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP30way.bw &
+XXX - running Thu Jul 15 11:13:02 PDT 2010
+
+    #	if you wanted to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phyloP30way.bw /gbdb/mm9/bbi
+    hgsql mm9 -e 'drop table if exists phyloP30wayAll; \
+            create table phyloP30wayAll \
+		(fileName varchar(255) not null); \
+            insert into phyloP30wayAll values
+	("/gbdb/mm9/bbi/phyloP30way.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP30way.wib /gbdb/mm9/multiz30way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
+	phyloP30wayAll phyloP30way.wig
+
+    #	create download files:
+    cat << '_EOF_' > mkDown.csh
+#!/bin/csh -fe
+foreach F (`cat wigFile.list`)
+    set C = $F:h:t:r
+    cat $F >> downloads/${C}.wigFix
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkDown.csh
+    mkdir downloads
+    time ./mkDown.csh
+    #	real    16m19.683s
+
+    time gzip downloads/chr*.wigFix
+    #	real    47m11.017s
+
+    wigTableStats.sh mm9 phyloP30wayAll
+# db.table      min max mean count sumData
+# mm9.phyloP30wayAll     -14.08 6.424 0.0896064 2845303719 2.54957e+08
+#	stdDev viewLimits
+#	0.833186 viewLimits=-4.07632:4.25553
+    #	that range is: 14.08+6.424 = 20.504
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.020504 -hBinCount=1000 -hMinVal=-14.08 -verbose=2 \
+	    -db=mm9 phyloP30wayAll > histogram.data 2>&1
+    #	real    8m15.623s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP30way track, all 30 vertebrates"
+set xlabel " phyloP30way score, all 30 vertebrates"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.04]
+set xrange [-2:2]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+    ######################   Running the euarchontoglires  #######################
+    mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/euarchontoglires
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/euarchontoglires
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 2685 of 2685 jobs
+# CPU time in finished jobs:     127142s    2119.04m    35.32h    1.47d  0.004 y
+# IO & Wait Time:                 53995s     899.91m    15.00h    0.62d  0.002 y
+# Average job time:                  67s       1.12m     0.02h    0.00d
+# Longest finished job:             125s       2.08m     0.03h    0.00d
+# Submission to last job:           277s       4.62m     0.08h    0.00d
+
+
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/euarchontoglires
+    #	the sed | sort | sed
+    #	trick gets the files sorted so that coordinates and chromosomes
+    #	are in chrom and chromStart order and thus wigEncode sees a proper
+    #	incoming data stream sorted by coordinates.
+    find ./wigFix -type f \
+	| sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
+	| sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigEncode stdin phyloP30wayEuarchontogliers.wig \
+		phyloP30wayEuarchontogliers.wib  > wigEncode.log 2>&1 &
+    cat wigEncode.log
+    #	Converted stdin, upper limit 1.13, lower limit -7.49
+
+    #	good test to make sure no overlapping coordinates, bigWig:
+    #	consumes massive amount of memory, in bash raise your memory limits:
+    ulimit -d 188743680
+    ulimit -v 188743680
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigToBigWig stdin ../../../../chrom.sizes \
+	    phyloP30wayEuarchontogliers.bw
+# XXX running Fri Jul  9 14:33:29 PDT 2010
+    #	if you wanted to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phyloP30wayEuarchontogliers.bw /gbdb/mm9/bbi
+    hgsql mm9 -e 'drop table if exists phyloP30wayEuarchontogliers; \
+            create table phyloP30wayEuarchontogliers \
+		(fileName varchar(255) not null); \
+            insert into phyloP30wayEuarchontogliers values
+	("/gbdb/mm9/bbi/phyloP30wayEuarchontogliers.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP30wayEuarchontogliers.wib /gbdb/mm9/multiz30way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
+	phyloP30wayEuarchontogliers phyloP30wayEuarchontogliers.wig
+    #	real    0m39.041s
+    #	clean garbage:
+    rm -f wiggle.tab
+
+    #	create download files:
+    mkdir downloads
+    time ../all/mkDown.csh
+    #	real    18m44.186s
+    time gzip downloads/chr*.wigFix
+    #	real    32m11.301s
+
+    wigTableStats.sh mm9 phyloP30wayEuarchontogliers
+# db.table      min max mean count
+# mm9.phyloP30wayEuarchontogliers -7.486 1.126 0.0662017 1914580285
+#	1.26749e+08 0.594433 viewLimits=-2.90596:1.126
+#	that range is: 7.486+1.126 = 8.612
+
+    #  Create histogram to get an overview of all the data, using the
+    #	numbers from wigTableStats above:
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.008612 -hBinCount=1000 -hMinVal=-7.486 -verbose=2 \
+	    -db=mm9 phyloP30wayEuarchontogliers > histogram.data 2>&1
+    #	real    8m15.623s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small size 1000,600 x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP30wayEuarchontogliers track"
+set xlabel " phyloP30wayEuarchontogliers score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0.0:0.07]
+set xrange [-2.0:1.13]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+
+######################   Running the placental  #######################
+    mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/placental
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/placental
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 2685 of 2685 jobs
+# CPU time in finished jobs:     237516s    3958.60m    65.98h    2.75d  0.008 y
+# IO & Wait Time:                 45828s     763.80m    12.73h    0.53d  0.001 y
+# Average job time:                 106s       1.76m     0.03h    0.00d
+# Longest finished job:             196s       3.27m     0.05h    0.00d
+# Submission to last job:           426s       7.10m     0.12h    0.00d
+
+    cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/placental
+    find ./wigFix -type f \
+	| sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
+	| sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigEncode stdin phyloP30wayPlacental.wig phyloP30wayPlacental.wib \
+	    > wigEncode.log 2>&1 &
+    #	Converted stdin, upper limit 2.06, lower limit -9.46
+
+
+    #	good test to make sure no overlapping coordinates, bigWig:
+    #	consumes massive amount of memory, in bash raise your memory limits:
+    ulimit -d 188743680
+    ulimit -v 188743680
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP30wayPlacental.bw \
+	    > bigEncode.log 2>&1 &
+
+    #	loading bigWig table:
+    ln -s `pwd`/phyloP30wayPlacental.bw /gbdb/mm9/bbi
+    hgsql mm9 -e 'drop table if exists phyloP30wayPlacental; \
+            create table phyloP30wayPlacental \
+		(fileName varchar(255) not null); \
+            insert into phyloP30wayPlacental values
+	("/gbdb/mm9/bbi/phyloP30wayPlacental.bw");'
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP30wayPlacental.wib /gbdb/mm9/multiz30way
+    time hgLoadWiggle
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
+	phyloP30wayPlacental phyloP30wayPlacental.wig
+    #	real    0m35.726s
+
+    #	create download files:
+    mkdir downloads
+    time ../all/mkDown.csh
+    #	real    18m52.778s
+    time gzip downloads/chr*.wigFix
+    #	real    30m55.550s
+
+    wigTableStats.sh mm9 phyloP30wayPlacental
+# db.table      min max mean count sumData stdDev viewLimits
+# mm9.phyloP30wayPlacental        -9.46 2.058 0.07797 1914580285 1.4928e+08
+#	stdDev viewLimits
+#	 0.668819 viewLimits=-3.26613:2.058
+    #	that range is: 9.46+2.058 = 11.518
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+	-hBinSize=0.011518 -hBinCount=1000 -hMinVal=-9.46 -verbose=2 \
+	    -db=mm9 phyloP30wayPlacental > histogram.data 2>&1
+    #	real    8m15.623s
+
+    #	create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP30wayPlacental track"
+set xlabel " phyloP30wayPlacental score"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.03]
+set xrange [-2.5:2.5]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #	<< happy emacs
+
+    display histo.png &
+

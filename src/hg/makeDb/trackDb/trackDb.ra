@@ -1875,6 +1875,23 @@ altColor 255,128,0
 spanList 1,1024
 type wig 0 100 
 
+# when quality is a bigWig file
+track qualityBw
+shortLabel Quality Scores
+longLabel $Organism Sequencing Quality Scores
+group map
+priority 23.6
+visibility hide
+autoScale Off
+maxHeightPixels 128:36:16
+graphTypeDefault Bar
+windowingFunction Mean
+gridDefault OFF
+color 0,128,255
+altColor 255,128,0
+type bigWig 0 100 
+html quality
+
 track gc5Base
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
@@ -1892,6 +1909,7 @@ viewLimits 30:70
 spanList 5
 type wig 0 100 
 
+# when gc5Base is a bigWig file
 track gc5BaseBw
 shortLabel GC Percent
 longLabel GC Percent in 5-Base Windows
@@ -1906,7 +1924,6 @@ windowingFunction Mean
 color 0,0,0
 altColor 128,128,128
 viewLimits 30:70
-spanList 5
 type bigWig 0 100 
 html gc5Base
 
