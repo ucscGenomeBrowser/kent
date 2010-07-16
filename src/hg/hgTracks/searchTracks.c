@@ -237,7 +237,7 @@ for (group = groupList; group != NULL; group = group->next)
 
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
-webStartWrapperDetailedNoArgs(cart, database, "", "Track Search (prototype!)", FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
@@ -486,12 +486,14 @@ if(doSearch)
 
 if(tracksFound)
     {
-    hPrintf("<p>%d tracks found:</p>\n", tracksFound);
-    hPrintf("<form action='%s' name='SearchTracks' method='post'>\n\n", hgTracksName());
-    hButton("submit", "save");
-    hButtonWithOnClick("hgt.ignoreme", "show all", "show all found tracks", "alert('show all not yet implemented'); return false;");
-    hPrintf("<table>\n");
-    hPrintf("<tr bgcolor='#666666'><td><br /></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
+    hPrintf("<h3><b>%d tracks found:</b></h3>\n", tracksFound);
+    hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
+    hPrintf("<table><tr><td colspan='2'>\n");
+    hButton("submit", "View in Browser");
+    hPrintf("</td><td align='right'>\n");
+    hButtonWithOnClick("hgt.ignoreme", "Select All", "show all found tracks", "changeSearchVisibilityPopups('full'); return false;");
+    hButtonWithOnClick("hgt.ignoreme", "Unselect All", "show all found tracks", "changeSearchVisibilityPopups('hide'); return false;");
+    hPrintf("</td></tr><tr bgcolor='#666666'><td><br /></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
     struct slRef *ptr;
     while((ptr = slPopHead(&tracks)))
         {
@@ -519,7 +521,7 @@ if(tracksFound)
         hPrintf("</tr>\n");
         }
     hPrintf("</table>\n");
-    hButton("submit", "save");
+    hButton("submit", "View in Browser");
     hPrintf("\n</form>\n");
     } 
 else
@@ -527,5 +529,10 @@ else
     if(doSearch)
         hPrintf("<p>No tracks found</p>\n");
     }
+
+hPrintf("<p><b>Known Problems</b></p><ul><li>Menu bar up top doesn't work (clicks are ignored)</li>\n"
+        "<li>subtracks often come up with the wrong visibility (but saving visibility for subtracks does work</li>"
+        "</ul>\n");
+
 webEndSectionTables();
 }

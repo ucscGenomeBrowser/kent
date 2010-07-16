@@ -1,0 +1,24 @@
+
+track wgEncodeGisDnaPet
+compositeTrack on
+shortLabel GIS DNA PET
+longLabel ENCODE Genome Institute of Singapore DNA Paired-End Ditags
+group varRep
+subGroup1 view Views Alignments=Alignments
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup3 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
+dimensions dimensionX=cellType dimensionY=fragSize
+sortOrder cellType=+ fragSize=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
+dragAndDrop subTracks
+priority 0
+type bed 3
+noInherit on
+wgEncode 1
+
+    track wgEncodeGisDnaPetViewAlignments
+    shortLabel Alignments
+    view Alignments
+    visibility dense
+    subTrack wgEncodeGisDnaPet
+

@@ -1914,3 +1914,11 @@ function remoteTrackCallback(rec)
         $('#p_btn_' + track).attr('style', style);
     }
 }
+
+function changeSearchVisibilityPopups(cmd)
+{
+    $("#searchResultsForm select").each(function(i) {
+                                                                 $(this).val(cmd);
+                                                             });
+    return false;
+}

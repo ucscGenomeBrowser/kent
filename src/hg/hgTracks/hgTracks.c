@@ -4746,7 +4746,8 @@ if (!hideControls)
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButton("hgt.dinkRR", " ></TD> ");
+    hButton("hgt.dinkRR", " > ");
+    hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
     // smallBreak();

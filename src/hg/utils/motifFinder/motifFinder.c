@@ -19,8 +19,8 @@ static char *markovTable = "markovModels";
 static boolean originalCoordinates = FALSE;
 static int topOnly = 0;
 struct chromInfo *chromInfo;
-#define PRIOR 0.5
-#define PRIORBACKOFF 0.01
+#define PRIOR 0.5                 // our prior belief that there is at least one binding site in a peak
+#define PRIORBACKOFF 0.01         // our prior belief that there are > 1 binding sites in a given peak = PRIOR * PRIORBACKOFF^n)
 
 void usage()
 /* Explain usage and exit. */
@@ -133,18 +133,36 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
                 if(score >= 0)
                     {
                     int start;
-                    struct bed6FloatScore *hit;
-                    AllocVar(hit);
                     if(strand == '-')
                         start = (chromEnd - j) - motif->columnCount;
                     else
                         start = chromStart + j;
-                    hit->chrom = cloneString(chrom);
-                    hit->chromStart = originalCoordinates ? chromStart : start;
-                    hit->chromEnd = originalCoordinates ? chromEnd : start + motif->columnCount;
-                    hit->score = score;
-                    hit->strand[0] = strand;
-                    slAddHead(&hits, hit);
+                    struct bed6FloatScore *hit = NULL;
+
+                    // Watch out for overlapping hits (on either strand; yes, I've seen that happen);
+                    // we report only the highest scoring hit in this case.
+                    // O(n^2) where n == number of motifs in a peak, but I expect n to be almost always very small.
+                    for (hit = hits; hit != NULL; hit = hit->next)
+                        {
+                        if(hit->chromEnd > start && hit->chromStart <= (start + motif->columnCount))
+                            {
+                            verbose(3, "found overlapping hits: %d-%d overlaps with %d-%d\n", start, start + motif->columnCount, hit->chromStart, hit->chromEnd);
+                            break;
+                            }
+                        }
+                    if(hit == NULL || hit->score < score)
+                        {
+                        if(hit == NULL)
+                            {
+                            AllocVar(hit);
+                            slAddHead(&hits, hit);
+                            hit->chrom = cloneString(chrom);
+                            }
+                        hit->chromStart = originalCoordinates ? chromStart : start;
+                        hit->chromEnd = originalCoordinates ? chromEnd : start + motif->columnCount;
+                        hit->score = score;
+                        hit->strand[0] = strand;
+                        }
                     }
                 verbose(3, "j: %d; score: %.2f\n", j, score);
                 }
