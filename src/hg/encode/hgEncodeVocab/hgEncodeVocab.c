@@ -116,8 +116,9 @@ if (sameString(type,"Cell Line"))
    	 }
       else 
 	 {
-    	  printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type);
-         }
+    	  printf("  <TH>Source</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>");
+         // printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type)
+	 }
     }
 else if (sameString(type,"Antibody"))
     {

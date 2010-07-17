@@ -30322,5 +30322,23 @@ hgLoadBed hg18 darned allChroms.bed
 # at human, level
 # added darned.html
 # added trackDb.ra entry
+#############################################################################
+# REFINE DECIPHER DETAILS PAGE (DONE, Fan, 7/13/10) 
+# 
+
+ssh hgwdev
+cd /hive/data/genomes/gs.19/build36/bed/decipher
+
+hgsql hg18 -N -e \
+'select d.* from knownToDecipher d, knownCanonical c where
+c.transcript=d.name' >knownCanonToDecipher.tab
+
+hgsql hg18 -e "drop table knownCanonToDecipher"
+
+hgsql hg18 < ~/src/hg/lib/knownCanonToDecipher.sql
+
+hgsql hg18 -e 'load data local infile "knownCanonToDecipher.tab" into table
+knownCanonToDecipher'
 
 #############################################################################
+

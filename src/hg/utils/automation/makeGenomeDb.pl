@@ -685,7 +685,7 @@ mkdir -p $bedDir/gc5Base
 cd $bedDir/gc5Base
 hgGcPercent -wigOut -doGaps -file=stdout -win=5 -verbose=0 $db \\
   $topDir/$db.unmasked.2bit | gzip -c > $db.gc5Base.wigVarStep.gz 
-wigToBigWig $db.gc5Base.wigVarStep.gz ../../chrom.sizes ce9.gc5Base.bw
+wigToBigWig $db.gc5Base.wigVarStep.gz ../../chrom.sizes $db.gc5Base.bw
 _EOF_
   );
 

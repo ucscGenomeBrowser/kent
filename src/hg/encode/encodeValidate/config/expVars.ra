@@ -7,3 +7,6 @@ expVar2 antibody
 expVar3 treatment
 expVar4 control
 
+composite wgEncodeYaleRNAseq
+expVar1 cell
+expVar2 treatment

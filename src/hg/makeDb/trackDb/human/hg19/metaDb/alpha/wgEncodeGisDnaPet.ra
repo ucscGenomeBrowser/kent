@@ -1,0 +1,103 @@
+metaObject wgEncodeGisDnaPetGm12878F10kAln
+objType table
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
+fileName wgEncodeGisDnaPetGm12878F10kAln.bam.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+project wgEncode
+subId 1852
+tableName wgEncodeGisDnaPetGm12878F10kAln
+view Alignments
+
+metaObject wgEncodeGisDnaPetGm12878F1kAln
+objType table
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-16
+dateUnrestricted 2011-03-16
+fileName wgEncodeGisDnaPetGm12878F1kAln.bam.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+project wgEncode
+subId 1520
+tableName wgEncodeGisDnaPetGm12878F1kAln
+view Alignments
+
+metaObject wgEncodeGisDnaPetGm12878F5kAln
+objType table
+cell GM12878
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-16
+dateUnrestricted 2011-03-16
+fileName wgEncodeGisDnaPetGm12878F5kAln.bam.gz
+fragSize 5k
+grant Gingeras
+lab GIS
+project wgEncode
+subId 1521
+tableName wgEncodeGisDnaPetGm12878F5kAln
+view Alignments
+
+metaObject wgEncodeGisDnaPetK562F10kAln
+objType table
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
+fileName wgEncodeGisDnaPetK562F10kAln.bam.gz
+fragSize 10k
+grant Gingeras
+lab GIS
+project wgEncode
+subId 1853
+tableName wgEncodeGisDnaPetK562F10kAln
+view Alignments
+
+metaObject wgEncodeGisDnaPetK562F1kAln
+objType table
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
+fileName wgEncodeGisDnaPetK562F1kAln.bam.gz
+fragSize 1k
+grant Gingeras
+lab GIS
+project wgEncode
+subId 1854
+tableName wgEncodeGisDnaPetK562F1kAln
+view Alignments
+
+metaObject wgEncodeGisDnaPetK562F20kAln
+objType table
+cell K562
+composite wgEncodeGisDnaPet
+dataType DnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-16
+dateUnrestricted 2011-03-16
+fileName wgEncodeGisDnaPetK562F20kAln.bam.gz
+fragSize 20k
+grant Gingeras
+lab GIS
+project wgEncode
+subId 1524
+tableName wgEncodeGisDnaPetK562F20kAln
+view Alignments
+
+# MAGIC: -2101369292

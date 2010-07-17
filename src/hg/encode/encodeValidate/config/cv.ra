@@ -75,7 +75,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 46,0,184
 sex F
 tier 1
-protocol Yale_TFSB(Farnham):K562_protocol.pdf
+protocol Yale_TFBS(Farnham):K562_protocol.pdf
 
 term HepG2
 tag HepG2
@@ -583,7 +583,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM12801
 tag GM12801
@@ -743,7 +743,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex U
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18505
 tag GM18505
@@ -758,7 +758,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18507
 tag GM18507
@@ -790,7 +790,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18951
 tag GM18951
@@ -805,7 +805,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19099
 tag GM19099
@@ -820,7 +820,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19193
 tag GM19193
@@ -835,7 +835,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19238
 tag GM19238
@@ -1084,7 +1084,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol Yale_TFSB:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
+protocol Yale_TFBS:HCT-116_protocol.pdf UW_Stam:HCT116_Stam_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -1131,7 +1131,7 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 sex U
 tier 3
-protocol Yale_TFSB:HEK293b_Snyder_protocol.pdf
+protocol Yale_TFBS:HEK293b_Snyder_protocol.pdf
 
 term HFL11W
 tag HFL11W
@@ -1394,7 +1394,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 0,119,158
 sex M
 tier 3
-protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFSB(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
+protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -1411,7 +1411,7 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 sex F
 tier 3
-protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
+protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
 #tag MCF10A
@@ -1523,7 +1523,22 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 sex U
 tier 3
-protocol Yale_TFSB:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
+protocol Yale_TFBS:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
+
+term NH-A
+tag NHA
+type Cell Line
+organism Human
+tissue Nervous
+description normal human astrocytes
+vendorName Lonza
+vendorId CC-2565
+orderUrl https://shop.lonza.com/shop/prd/normal-human-astrocytes/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699D16C95C8F18852001A4B525E10/
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099&termName=astrocyte
+sex U
+tier 3
+termId BTO:0000099
+protocol Broad:NH-A_Bernstein_protocol.pdf
 
 term NHBE
 tag NHBE
@@ -1585,7 +1600,7 @@ termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
 sex M
 tier 3
-protocol Yale_TFSB:NT2-D1_protocol.pdf
+protocol Yale_TFBS:NT2-D1_protocol.pdf
 
 term Osteobl
 tag Osteobl
@@ -1948,323 +1963,365 @@ tag BoneMarrow
 type Cell Line
 organism Mouse
 tissue Bone
-category T
+category Tissue
+#category T
 description Bone Marrow
 vendorName LICR lab
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 153,38,0
 sex U
-protocol BoneMarrow_Ren_protocol.pdf
+protocol LICR:BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
 tag Cerebellum
 type Cell Line
 organism Mouse
 tissue Cerebellum
-category T
+category Tissue
+#category T
 description Cerebellum
 vendorName LICR lab
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-protocol Cerebellum_Ren_protocol.pdf
+protocol LICR:Cerebellum_Ren_protocol.pdf
 
 term CH12
 tag CH12
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
+#category L
 description B-cell lymphoma
 vendorName Weissman lab
 vendorId
-orderUrl (Contact Sherman Weissman)
+orderUrl
+# Not an OrderUrl need to talk to confirm what goes here.
+#orderUrl (Contact Sherman Weissman)
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-protocol CH12_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term Colon
 tag Colon
 type Cell Line
 organism Mouse
 tissue Colon
-category T
+category Tissue
+#category T
 description Colon
 vendorName LICR lab
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
 sex U
-protocol Colon_Ren_protocol.pdf
+protocol LICR:Colon_Ren_protocol.pdf
 
 term Cortex
 tag Cortex
 type Cell Line
 organism Mouse
 tissue Cortex
-category T
+category Tissue
+#category T
 description Cortex
 vendorName LICR lab
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
 sex U
-protocol Cortex_Ren_protocol.pdf
+protocol LICR:Cortex_Ren_protocol.pdf
 
 term G1E
 tag G1E
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
+#category L
 description Gata1- erythroid progenitor
 vendorName Mitch Weiss lab
-orderUrl weissmi@email.chop.edu
+orderUrl
+# This is an email address how do we want these links displayed
+#orderUrl weissmi@email.chop.edu
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol G1E_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
-term G1E
+term G1E_E4_E2
 tag G1E_E4_E2
 type Cell Line
 organism Mouse
 tissue Blood
-category L
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
+category Cell Line
+#category L
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
+>>>>>>> Stashed changes:src/hg/encode/encodeValidate/config/cv.ra
 vendorName Mitch Weiss lab
-orderUrl weissmi@email.chop.edu
+orderUrl
+# This is an email address how do we want these links displayed
+#orderUrl weissmi@email.chop.edu
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol G1E_E4_E2_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
 
 term Heart
 tag Heart
 type Cell Line
 organism Mouse
 tissue Heart
-category T
+category Tissue
+#category T
 description Heart
 vendorName LICR lab
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-protocol Heart_Ren_protocol.pdf
+protocol LICR:Heart_Ren_protocol.pdf
 
 term Limb
 tag Limb
 type Cell Line
 organism Mouse
 tissue Limb
-category T
+category Tissue
+#category T
 description Limb
 vendorName LICR lab
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 153,38,0
 sex U
-protocol Limb_Ren_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol LICR:Limb_Ren_protocol.pdf
 
 term Liver
 tag Liver
 type Cell Line
 organism Mouse
 tissue Liver
-category T
+category Tissue
+#category T
 description Liver
 vendorName LICR lab
 termId 6963
 ermUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-protocol Liver_Ren_protocol.pdf
+protocol LICR:Liver_Ren_protocol.pdf
 
 term Lung
 tag Lung
 type Cell Line
 organism Mouse
 tissue Lung
-category T
+category Tissue
+#category T
 description Lung
 vendorName LICR lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol Lung_Ren_protocol.pdf
+protocol LICR:Lung_Ren_protocol.pdf
 
 term MEF
 tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
-category T
+category Tissue
+#category T
 description MEF
 vendorName LICR lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol MEF_Ren_protocol.pdf
+protocol LICR:MEF_Ren_protocol.pdf
 
 term Megakaryocyte
 tag Megakaryocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
+#category L
 description Megakaryocyte
 vendorName Mitch Weiss lab
-orderUrl weissmi@email.chop.edu
+orderUrl
+# This is an email address how do we want these links displayed
+#orderUrl weissmi@email.chop.edu
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
-protocol Megakaryocyte_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
 
+#Needs protocol, VendorName and Term Id
 term MEL
 tag MEL
 type Cell Line
 organism Mouse
-category L
+category Cell Line
+#category L
 description leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
+protocol missing
 
+#Missing VendorName and termId
 term Myocyte
 tag Myocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
+#category L
 description Myocyte
-vendorName 
-orderUrl 
+vendorName
+orderUrl
 color 153,38,0
 sex U
-protocol Myocyte_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
 
+#missing VendorId
 term Muscle
 tag Muscle
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
+#category L
 description Muscle
-vendorName 
-orderUrl 
+vendorName
+orderUrl
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
-protocol Muscle_Hardison_protocol.pdf
+protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
 term OlfactoryBulb
 tag OlfactoryBulb
 type Cell Line
 organism Mouse
 tissue OlfactoryBulb
-category T
+category Tissue
+#category T
 description OlfactoryBulb
 vendorName LICR lab
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-protocol OlfactoryBulb_Ren_protocol.pdf
+protocol LICR:OlfactoryBulb_Ren_protocol.pdf
 
 term Pancreas
 tag Pancreas
 type Cell Line
 organism Mouse
 tissue Pancreas
-category T
+category Tissue
+#category T
 description Pancreas
 vendorName LICR lab
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-protocol Pancreas_Ren_protocol.pdf
+protocol LICR:Pancreas_Ren_protocol.pdf
 
 term Placenta
 tag Placenta
 type Cell Line
 organism Mouse
 tissue Placenta
-category T
+category Tissue
+#category T
 description Placenta
 vendorName LICR lab
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
-protocol Placenta_Ren_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol LICR:Placenta_Ren_protocol.pdf
 
 term SmallIntestine
 tag SmallIntestine
 type Cell Line
 organism Mouse
 tissue SmallIntestine
-category T
+category Tissue
+#category T
 description SmallIntestine
 vendorName LICR lab
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
 sex U
-protocol SmallIntestine_Ren_protocol.pdf
+protocol LICR:SmallIntestine_Ren_protocol.pdf
 
 term Spleen
 tag Spleen
 type Cell Line
 organism Mouse
 tissue Spleen
-category T
+category Tissue
+#category T
 description Spleen
 vendorName LICR lab
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
 sex U
-protocol Spleen_Ren_protocol.pdf
+protocol LICR:Spleen_Ren_protocol.pdf
 
 term Testis
 tag Testis
 type Cell Line
 organism Mouse
 tissue Testis
-category T
+category Tissue
+#category T
 description Testis
 vendorName LICR lab
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
 sex U
-protocol Testis_Ren_protocol.pdf
+protocol LICR:Testis_Ren_protocol.pdf
 
 term Thymus
 tag Thymus
 type Cell Line
 organism Mouse
 tissue Thymus
-category T
+category Tissue
+#category T
 description Thymus
 vendorName LICR lab
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
-protocol Thymus_Ren_protocol.pdf
+protocol LICR:Thymus_Ren_protocol.pdf
 
 
 # Gene types
@@ -2691,7 +2748,7 @@ validation missing
 term ERRA
 tag ERRA
 type Antibody
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin.
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
@@ -3200,8 +3257,8 @@ validation missing
 term MEF2A
 tag MEF2A
 type Antibody
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin. 
-targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes. 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin.
+targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes.
 vendorName Santa Cruz Biotech
 vendorId sc-313
 orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
@@ -3906,160 +3963,164 @@ validation missing
 
 
 ###  These Antibodies are from the Rip Target Protien Table and are being intigrated into this table ####
-term ripInput
-tag ripInput
-type Antibody
-targetDescription RIP CHIP Total input for comparison for RIP experiments
-antibodyDescription
-vendorName
-vendorId
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl
-validation
+### They will be commented out until we are ready to get rid of the original Table
+#term ripInput
+#tag ripInput
+#tag ripInput
+#type Antibody
+#targetDescription RIP CHIP Total input for comparison for RIP experiments
+#antibodyDescription
+#vendorName
+#vendorId
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl
+#validation
 
 
-term T7Tag
-tag T7Tag
-type Antibody
-targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
-antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
-vendorName Millipore; Novagen
-vendorId Mil_AB3790; Nov_69522
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
-validation
+#term T7Tag
+#tag T7Tag
+#type Antibody
+#targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
+#antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+#vendorName Millipore; Novagen
+#vendorId Mil_AB3790; Nov_69522
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+#validation
 
-term ELAVL1
-tag ELAVL1
-type Antibody
-targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
-antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
-vendorName Santa Cruz Biotech
-vendorId SC-5261 
-orderUrl
-lab Tenebaum
-lots B2508(Nov2008)
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation
+#term ELAVL1
+#tag ELAVL1
+#type Antibody
+#targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); #Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
+#antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
+#vendorName Santa Cruz Biotech
+#vendorId SC-5261
+#orderUrl
+#lab Tenebaum
+#lots B2508(Nov2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+#validation
 
-term IGF2BP1
-tag IGF2BP1
-type Antibody
-targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
-vendorName Santa Cruz Biotech
-vendorId SC-21027
-orderUrl
-lab Tenebaum
-lots I0607(Nov2008)
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-validation
+#term IGF2BP1
+#tag IGF2BP1
+#type Antibody
+#targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; #ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+#antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+#vendorName Santa Cruz Biotech
+#vendorId SC-21027
+#orderUrl
+#lab Tenebaum
+#lots I0607(Nov2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+#validation
 
-term PABPC1 
-tag PABPC1
-type Antibody
-targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC
-antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
-lab Tenebaum
-vendorName Sigma Chemical Co.
-vendorId Sig_P6246
-orderUrl
-lab Tenebaum
-lots 044K4810 (Nov 2008)
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-validation
+#term PABPC1
+#tag PABPC1
+#type Antibody
+#targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; #PABPC2; PABPL1; PABPC
+#antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+#lab Tenebaum
+#vendorName Sigma Chemical Co.
+#vendorId Sig_P6246
+#orderUrl
+#lab Tenebaum
+#lots 044K4810 (Nov 2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+#validation
 
-term SLBP
-tag SLBP
-type Antibody
-targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
-at origin. 
-vendorName Millipore; Santa Cruz Biotech
-vendorId Mil 06-1376; SC-26522
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-validation
+#term SLBP
+#tag SLBP
+#type Antibody
+#targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
+#antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   #2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
+#at origin.
+#vendorName Millipore; Santa Cruz Biotech
+#vendorId Mil 06-1376; SC-26522
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+#validation
 
-term CELF1
-tag CELF1
-type Antibody 
-targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
-antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
-tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
-vendorName Millipore
-vendorId Mil-05621
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
-validation
+#term CELF1
+#tag CELF1
+#type Antibody
+#targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
+#antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also #known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
+#tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
+#vendorName Millipore
+#vendorId Mil-05621
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+#validation
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 ### We will be replacing this.
 
-#term ripInput
-#tag ripInput
-#type ripTgtProtein
-#alternativeSymbols None
-#description Total input for comparison
-#url
+term ripInput
+tag ripInput
+type ripTgtProtein
+alternativeSymbols None
+description Total input for comparison
+url
 
-#term T7Tag
-#tag T7Tag
-#type ripTgtProtein
-#alternativeSymbols Novagen T7 Tag Cat# 69522
-#description Negative Control Ab (T7 Tag Mouse Monoclonal)
-#url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+term T7Tag
+tag T7Tag
+type ripTgtProtein
+alternativeSymbols Novagen T7 Tag Cat# 69522
+description Negative Control Ab (T7 Tag Mouse Monoclonal)
+url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
 
-#term ELAVL1
-#tag ELAVL1
-#type ripTgtProtein
-#alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
-#description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/1994
+term ELAVL1
+tag ELAVL1
+type ripTgtProtein
+alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
+description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/1994
 
-#term IGF2BP1
-#tag IGF2BP1
-#type ripTgtProtein
-#alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-#description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/10642
+term IGF2BP1
+tag IGF2BP1
+type ripTgtProtein
+alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/10642
 
-#term PABPC1
-#tag PABPC1
-#type ripTgtProtein
-#alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
-#description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/26986
+term PABPC1
+tag PABPC1
+type ripTgtProtein
+alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
+description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/26986
 
-#term SLBP
-#tag SLBP
-#type ripTgtProtein
-#alternativeSymbols HBP; SLBP
-#description stem-loop binding protein (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/7884
+term SLBP
+tag SLBP
+type ripTgtProtein
+alternativeSymbols HBP; SLBP
+description stem-loop binding protein (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/7884
 
-#term CELF1
-#tag CELF1
-#type ripTgtProtein
-#alternativeSymbols CUG-BP1; BRUNOL2
-#description Embryo deadenylation element-binding protein homolog (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/10658
-# ripAntibody - Tenenbaum RIP-chip / RIP-seq project
+term CELF1
+tag CELF1
+type ripTgtProtein
+alternativeSymbols CUG-BP1; BRUNOL2
+description Embryo deadenylation element-binding protein homolog (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/10658
+
+
+#### ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
 tag AUF1
 type ripAntibody
@@ -4703,12 +4764,12 @@ tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
 type treatment
 
-term Estradiol_1nM 
+term Estradiol_1nM
 tag ESTRADIb1h
 description  1h,1nM Estradiol  (Myers)
 type treatment
 
-term Estradiol_10nM_4hr 
+term Estradiol_10nM_4hr
 tag ESTRADIa4h
 description  4h,10nM Estradiol (Myers)
 type treatment
@@ -4823,6 +4884,31 @@ type protocol
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
+type protocol
+
+##### Growth Protocols used, still of type protocol
+##### This is being used by Hudson Alpha and possibly CSHL.  They would like the cell type and the term to be able to link to the correct protocol
+
+
+term UW_Stam
+tag uwStamGrowProt
+description Cells grown using the UW_Stam growth protocol.
+type protocol
+
+term Open_Chromatin
+tag openChromGrowProt
+description Cells grown using the Open_Chromatin growth protocol.
+type protocol
+
+term HudsonAlpha
+tag hudsonAlphaGrowProt
+description Cells grown using the HudsonAlpha growth protocol.
+type protocol
+
+
+term Yale_TFBS
+tag YaleGrowProt
+description Cells grown using the Yale TFBS growth protocol.
 type protocol
 
 

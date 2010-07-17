@@ -10742,7 +10742,6 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
     cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.split
     gensub2 maf.list single template jobList
     para -ram=8g create jobList
-XXX - running Fri Jul  9 11:22:50 PDT 2010
 # Completed: 75 of 75 jobs
 # CPU time in finished jobs:       9843s     164.05m     2.73h    0.11d  0.000 y
 # IO & Wait Time:                  2938s      48.97m     0.82h    0.03d  0.000 y
@@ -10750,7 +10749,7 @@ XXX - running Fri Jul  9 11:22:50 PDT 2010
 # Longest finished job:             393s       6.55m     0.11h    0.00d
 # Submission to last job:           678s      11.30m     0.19h    0.01d
 
-    # run phyloP with score=LRT 
+    # run phyloP with --method LRT 
     ssh swarm
     mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.phyloP
     cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.phyloP
@@ -10824,26 +10823,32 @@ rm -fr $tmp
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     para create jobList
     para try ... check ... push ... etc ...
-XXX - running Fri Jul  9 11:55:19 PDT 2010
-
     para time
-# Completed: 3186 of 3186 jobs
-# CPU time in finished jobs:    1306874s   21781.23m   363.02h   15.13d  0.041 y
-# IO & Wait Time:                105488s    1758.14m    29.30h    1.22d  0.003 y
-# Average job time:                 443s       7.39m     0.12h    0.01d
-# Longest finished job:             678s      11.30m     0.19h    0.01d
-# Submission to last job:          7789s     129.82m     2.16h    0.09d
+# Completed: 2685 of 2685 jobs
+# CPU time in finished jobs:     641900s   10698.34m   178.31h    7.43d  0.020 y
+# IO & Wait Time:                 19012s     316.86m     5.28h    0.22d  0.001 y
+# Average job time:                 246s       4.10m     0.07h    0.00d
+# Longest finished job:             484s       8.07m     0.13h    0.01d
+# Submission to last job:         31192s     519.87m     8.66h    0.36d
 
     ssh hgwdev
     cd /hive/data/genomes/hg18/bed/multiz30way/consPhyloP/run.phyloP/all
     find ./wigFix -type f \
 	| sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
-	| sort -k1,1 -k3,3n -k4,4n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
-    cat wigFile.list | xargs cat \
-	| wigEncode stdin phyloP30way.wig phyloP30way.wib > wigEncode.log 2>&1 &
-    #	Converted stdin, upper limit 6.39, lower limit -13.27
-    cat wigFile.list | xargs cat \
-	| wigToBigWig stdin ../../../../chrom.sizes phyloP30way.bw
+	| sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigEncode stdin phyloP30way.wig \
+		phyloP30way.wib  > wigEncode.log 2>&1 &
+    #	Converted stdin, upper limit 5.04, lower limit -10.12
+
+    #	good test to make sure no overlapping coordinates, bigWig:
+    #	consumes massive amount of memory, in bash raise your memory limits:
+    ulimit -d 188743680
+    ulimit -v 188743680
+    time cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP30way.bw &
+XXX - running Thu Jul 15 11:13:02 PDT 2010
+
     #	if you wanted to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phyloP30way.bw /gbdb/mm9/bbi
     hgsql mm9 -e 'drop table if exists phyloP30wayAll; \
