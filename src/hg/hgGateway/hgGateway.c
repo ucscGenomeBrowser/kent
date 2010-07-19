@@ -17,6 +17,7 @@
 #include "jsHelper.h"
 #include "hPrint.h"
 #include "suggest.h"
+#include "searchTracks.h"
 
 static char const rcsid[] = "$Id: hgGateway.c,v 1.117 2010/04/29 02:54:35 larrym Exp $";
 
@@ -196,6 +197,8 @@ puts("<TD VALIGN=\"TOP\">");
 puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
+if(isSearchTracksSupported(db))
+    cgiMakeButton(searchTracks, "find tracks");
 puts("</FORM></TD>");
 
 // clear possition button
