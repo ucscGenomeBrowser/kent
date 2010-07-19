@@ -51,7 +51,8 @@
 #define MAXPIXELS 14000
 #endif
 
-// #define TRACK_SEARCH
+// UNCOMMENT TRACK_SEARCH to turn on 'find tracks' functionality
+#define TRACK_SEARCH
 
 struct track
 /* Structure that displays of tracks. The central data structure
@@ -1053,7 +1054,6 @@ void setRulerMode();
 #define configShowEncodeGroups "hgt_doConfigShowEncodeGroups"
 #define configGroupTarget "hgt_configGroupTarget"
 #define configPriorityOverride "hgt_priorityOverride"
-#define searchTracks "hgt_searchTracks"
 #define hgtJsCommand "hgt_doJsCommand"
 
 void doMiddle(struct cart *theCart);
