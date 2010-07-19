@@ -473,6 +473,128 @@ function warn(msg)
     }
 }
 
+function popupBox(popit, content, popTitle)
+{
+// Kicks off a Modal Dialog for the provided content.
+// Requires jquery-ui.js
+// NEEDS SOME WORK
+
+    warn(content);
+
+    // Set up the popit div if necessary
+    if(popit == undefined) {
+        popit = $('#popit');
+
+        if(popit == undefined) {
+            $('body').prepend("<div id='popit' style='display: none'></div>");
+            popit = $('#popit');
+        }
+    }
+
+    // Set up the modal dialog
+    $(popit).html("<div style='font-size:80%'>" + content + "</div>");
+    $(popit).dialog({
+                               ajaxOptions: {
+                                   // This doesn't work
+                                   cache: true
+                               },
+                               resizable: true,
+                               bgiframe: true,
+                               height: 'auto',
+                               width: 'auto',
+                               minHeight: 200,
+                               minWidth: 400,
+                               modal: true,
+                               closeOnEscape: true,
+                               autoOpen: false,
+                               close: function() {
+                                   // clear out html after close to prevent problems caused by duplicate html elements
+                                   $(popDiv).empty();
+                               }
+                           });
+    // Apparently the options above to dialog take only once, so we set title explicitly.
+    if(popTitle != undefined && popTitle.length > 0)
+        $(popit).dialog('option' , 'title' , popTitle );
+    else
+        $(popit).dialog('option' , 'title' , "Please Respond");
+    jQuery('body').css('cursor', '');
+    $(popit).dialog('open');
+}
+
+function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
+{
+// embeds a box for the provided content.
+// This box has 1 button (close) by default and 2 buttons if the name of an applyFunc is provided (apply, cancel)
+// If there is no apply function, the box may be reentrent, meaning subsequent calls do not need to provide content
+
+    // Define extra params now
+    var boxWidth = "80%";
+    var boxTitle = "";
+    var applyFunc = "";
+    var applyName = "Apply";
+    if (arguments.length > 3 && arguments[3].length > 0) // FIXME: could check type
+        boxWidth = arguments[3];
+    if (arguments.length > 4 && arguments[4].length > 0)
+        boxTitle = arguments[4];
+    if (arguments.length > 5 && arguments[5].length > 0)
+        applyFunc = arguments[5];
+    if (arguments.length > 6 && arguments[6].length > 0)
+        applyName = arguments[6];
+
+    // Set up the popit div if necessary
+    if (boxit == undefined) {
+        boxit = $('div#boxit');
+
+        if (boxit == undefined) {
+            $('body').prepend("<div id='boxit'></div>");
+            //$('body').prepend("<div id='boxit' style='display: none'></div>");
+            boxit = $('div#boxit');
+        }
+    }
+    if (!reenterable || (content.length > 0)) { // Can reenter without changing content!
+
+        var buildHtml = "<center>";
+        if (boxTitle.length > 0)
+            buildHtml += "<div style='background-color:#D9E4F8;'><B>" +  boxTitle + "</B></div>";
+
+        buildHtml += "<div>" + content + "</div>";
+
+        // Set up closing code
+        var closeButton = "Close";
+        var closeHtml = "embedBoxClose($(\"#"+ $(boxit).attr('id') + "\"),";
+        if (reenterable && applyFunc.length == 0)
+            closeHtml += "true);"
+        else
+            closeHtml += "false);";
+
+        // Buttons
+        buildHtml += "<div>";
+        if (applyFunc.length > 0) { // "Apply" button and "Cancel" button.  Apply also closes!
+            buildHtml += "&nbsp;<INPUT TYPE='button' value='" + applyName + "' onClick='"+ applyFunc + "(" + $(boxit).attr('id') + "); " + closeHtml + "'>&nbsp;";
+            closeButton = "Cancel"; // If apply button then close is cancel
+        }
+        buildHtml += "&nbsp;<INPUT TYPE='button' value='" + closeButton + "' onClick='" + closeHtml + "'>&nbsp;";
+        buildHtml += "</div>";
+
+        $(boxit).html("<div class='blueBox' style='width:" + boxWidth + "; background-color:#FFF9D2;'>" + buildHtml + "</div>");  // Make it boxed
+    }
+
+    if ($(boxit).html() == null || $(boxit).html().length == 0)
+        warn("embedHtmlBox() called without content");
+    else
+        $(boxit).show();
+}
+
+function embedBoxClose(boxit, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
+{
+// Close an embedded box
+    if (boxit != undefined) {
+        $(boxit).hide();
+        if(!reenterable)
+            $(boxit).empty();
+    }
+}
+
 function startTiming()
 {
     var now = new Date();
