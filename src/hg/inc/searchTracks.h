@@ -7,6 +7,8 @@
 
 #include "common.h"
 
+#define searchTracks "hgt_searchTracks"
+
 void getSearchTrixFile(char *database, char *buf, int len);
 // Fill-in the name of the track search trix file
 
