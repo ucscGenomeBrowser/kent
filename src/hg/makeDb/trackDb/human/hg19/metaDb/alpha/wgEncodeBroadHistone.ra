@@ -685,7 +685,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -708,7 +708,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -752,7 +752,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -775,7 +775,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -820,7 +820,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -843,7 +843,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -887,7 +887,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -910,7 +910,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -955,7 +955,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -978,7 +978,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1023,7 +1023,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -1046,7 +1046,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -1091,7 +1091,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1114,7 +1114,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1159,7 +1159,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -1182,7 +1182,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -1227,7 +1227,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1250,7 +1250,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1295,7 +1295,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -1318,7 +1318,7 @@ cell H1-hESC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -1363,7 +1363,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1386,7 +1386,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1409,7 +1409,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1431,7 +1431,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1454,7 +1454,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1498,7 +1498,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1521,7 +1521,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1565,7 +1565,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1588,7 +1588,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1632,7 +1632,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1655,7 +1655,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1699,7 +1699,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1722,7 +1722,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1766,7 +1766,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1789,7 +1789,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1833,7 +1833,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1856,7 +1856,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1900,7 +1900,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1923,7 +1923,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1967,7 +1967,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -1990,7 +1990,7 @@ cell HeLa-S3
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2034,7 +2034,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2057,7 +2057,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2101,7 +2101,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2124,7 +2124,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2169,7 +2169,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2192,7 +2192,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2236,7 +2236,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -2259,7 +2259,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -2304,7 +2304,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2327,7 +2327,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2371,7 +2371,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2394,7 +2394,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2439,7 +2439,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2462,7 +2462,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2507,7 +2507,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -2530,7 +2530,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -2575,7 +2575,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2598,7 +2598,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2642,7 +2642,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2665,7 +2665,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2710,7 +2710,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -2733,7 +2733,7 @@ cell HepG2
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -2778,7 +2778,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2801,7 +2801,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -2845,7 +2845,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
@@ -2868,7 +2868,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
@@ -2913,7 +2913,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2936,7 +2936,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -2981,7 +2981,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -3004,7 +3004,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -3049,7 +3049,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -3072,7 +3072,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -3117,7 +3117,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -3140,7 +3140,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -3185,7 +3185,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -3208,7 +3208,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -3253,7 +3253,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -3276,7 +3276,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -3321,7 +3321,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -3344,7 +3344,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -3389,7 +3389,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -3412,7 +3412,7 @@ cell HMEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -3457,7 +3457,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -3480,7 +3480,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -3524,7 +3524,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3547,7 +3547,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3592,7 +3592,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3615,7 +3615,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3660,7 +3660,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3683,7 +3683,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3728,7 +3728,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3751,7 +3751,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3796,7 +3796,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3819,7 +3819,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3864,7 +3864,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3887,7 +3887,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3932,7 +3932,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3955,7 +3955,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -4000,7 +4000,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4023,7 +4023,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4067,7 +4067,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -4090,7 +4090,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -4135,7 +4135,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4158,7 +4158,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4202,7 +4202,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -4225,7 +4225,7 @@ cell HSMM
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -4270,7 +4270,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4293,7 +4293,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4337,7 +4337,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4360,7 +4360,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4404,7 +4404,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4427,7 +4427,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4471,7 +4471,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4494,7 +4494,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4538,7 +4538,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4561,7 +4561,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4605,7 +4605,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4628,7 +4628,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4672,7 +4672,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4695,7 +4695,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4739,7 +4739,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4762,7 +4762,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4806,7 +4806,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4829,7 +4829,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4873,7 +4873,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4896,7 +4896,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4940,7 +4940,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -4963,7 +4963,7 @@ cell HSMMtube
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5007,7 +5007,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5030,7 +5030,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5053,7 +5053,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5097,7 +5097,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5120,7 +5120,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5143,7 +5143,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5188,7 +5188,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5211,7 +5211,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5234,7 +5234,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5279,7 +5279,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5302,7 +5302,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5347,7 +5347,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5370,7 +5370,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5393,7 +5393,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5438,7 +5438,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5461,7 +5461,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5484,7 +5484,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5529,7 +5529,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5552,7 +5552,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5597,7 +5597,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5620,7 +5620,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5643,7 +5643,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5688,7 +5688,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5711,7 +5711,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5734,7 +5734,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5779,7 +5779,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5802,7 +5802,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5825,7 +5825,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5870,7 +5870,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5893,7 +5893,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5916,7 +5916,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -5961,7 +5961,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -5984,7 +5984,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
@@ -6007,7 +6007,7 @@ cell HUVEC
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -6052,7 +6052,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -6096,7 +6096,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6119,7 +6119,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6164,7 +6164,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6187,7 +6187,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6232,7 +6232,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6255,7 +6255,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6300,7 +6300,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6323,7 +6323,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6368,7 +6368,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6391,7 +6391,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6436,7 +6436,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6459,7 +6459,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6504,7 +6504,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6527,7 +6527,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6572,7 +6572,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6595,7 +6595,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6640,7 +6640,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6685,7 +6685,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6708,7 +6708,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6753,7 +6753,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -6776,7 +6776,7 @@ cell K562
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
@@ -7276,7 +7276,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7299,7 +7299,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7343,7 +7343,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7366,7 +7366,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7389,7 +7389,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-20
@@ -7434,7 +7434,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7457,7 +7457,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7480,7 +7480,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7525,7 +7525,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7548,7 +7548,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7571,7 +7571,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7616,7 +7616,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7639,7 +7639,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7662,7 +7662,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7707,7 +7707,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7730,7 +7730,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7753,7 +7753,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7798,7 +7798,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7821,7 +7821,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7844,7 +7844,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7889,7 +7889,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7912,7 +7912,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -7935,7 +7935,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -7980,7 +7980,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8003,7 +8003,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8026,7 +8026,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -8071,7 +8071,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8094,7 +8094,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8117,7 +8117,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -8162,7 +8162,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8185,7 +8185,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8208,7 +8208,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -8253,7 +8253,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8276,7 +8276,7 @@ cell NHEK
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
@@ -8321,7 +8321,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -8344,7 +8344,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -8388,7 +8388,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -8411,7 +8411,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -8456,7 +8456,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8479,7 +8479,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8524,7 +8524,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -8547,7 +8547,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -8592,7 +8592,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8615,7 +8615,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8660,7 +8660,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8683,7 +8683,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8728,7 +8728,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8751,7 +8751,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8796,7 +8796,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8819,7 +8819,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8864,7 +8864,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8887,7 +8887,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8932,7 +8932,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8955,7 +8955,7 @@ cell NHLF
 composite wgEncodeBroadHistone
 control std
 dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
+dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
@@ -8993,4 +8993,4 @@ subId 1699
 tableName wgEncodeBroadHistoneNhlfH4k20me1StdSig
 view Signal
 
-# MAGIC: -682943027
+# MAGIC: -682826873
