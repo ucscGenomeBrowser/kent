@@ -197,9 +197,16 @@ puts("<TD VALIGN=\"TOP\">");
 puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
-if(isSearchTracksSupported(db))
-    cgiMakeButton(searchTracks, "find tracks");
 puts("</FORM></TD>");
+
+if(isSearchTracksSupported(db))
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    cgiMakeButton(searchTracks, "find tracks");
+    puts("</FORM></TD>");
+    }
 
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
