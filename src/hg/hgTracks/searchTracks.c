@@ -1,6 +1,7 @@
 /* Track search code used by hgTracks CGI */
 
 #include "common.h"
+#include "searchTracks.h"
 #include "hCommon.h"
 #include "memalloc.h"
 #include "obscure.h"
@@ -201,8 +202,8 @@ char **metadataName;
 char **metadataValue;
 struct hash *parents = newHash(4);
 boolean simpleSearch;
-struct trix *ix;
-char ixFile[HDB_MAX_PATH_STRING];
+struct trix *trix;
+char trixFile[HDB_MAX_PATH_STRING];
 char **descWords = NULL;
 int descWordCount = 0;
 
@@ -219,8 +220,8 @@ else
     simpleSearch = FALSE;
     }
 
-safef(ixFile, sizeof(ixFile), "/gbdb/%s/trackDb.ix", database);
-ix = trixOpen(ixFile);
+getSearchTrixFile(database, trixFile, sizeof(trixFile));
+trix = trixOpen(trixFile);
 getTrackList(&groupList, -2);
 slSort(&groupList, gCmpGroup);
 for (group = groupList; group != NULL; group = group->next)
@@ -397,7 +398,7 @@ if(doSearch)
                     hashAdd(trackHash, subTrack->track, subTrack);
                 }
             }
-        for(tsList = trixSearch(ix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
+        for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
             refAdd(&tracks, track);
