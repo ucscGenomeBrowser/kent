@@ -15,7 +15,7 @@
 
 static float minScoreCutoff;
 static char *motifTable = "transRegCodeMotifPseudoCounts";
-static char *markovTable = "markovModels";
+static char *markovTable;
 static boolean originalCoordinates = FALSE;
 static int topOnly = 0;
 struct chromInfo *chromInfo;
@@ -27,17 +27,18 @@ void usage()
 {
 errAbort(
   "motifFinder - find largest scoring motif in bed items\n"
-  "Uses 2nd-markov model for background if table '%s' is available in this assembly.\n"
   "factorName is loaded from table '%s'.\n"
   "usage:\n"
   "   motifFinder assembly factorName file(s)\n"
   "options:\n"
-  "   -originalCoordinates\tprint original coordinates, rather than just the coordinates of the highest scoring motif.\n",
-  markovTable, motifTable
+  "   -markovTable\t\tUse given 2nd-markov model for background\n"
+  "   -originalCoordinates\tPrint original coordinates, rather than just the coordinates of the highest scoring motif\n",
+  motifTable
   );
 }
 
 static struct optionSpec options[] = {
+    {"markovTable", OPTION_STRING},
     {"originalCoordinates", OPTION_BOOLEAN},
     {"topOnly", OPTION_INT},
     {NULL, 0},
@@ -72,7 +73,8 @@ char where[256];
 struct chromInfo *ci  = createChromInfoList(NULL, database);
 safef(where, sizeof(where), "name = '%s'", name);
 struct dnaMotif *motif = dnaMotifLoadWhere(conn, motifTable, where);
-dnaMotifMakeLog2(motif);
+if(markovTable != NULL)
+    dnaMotifMakeLog2(motif);
 if(motif == NULL)
     errAbort("couldn't find motif '%s'", name);
 for (fileNum = 0; fileNum < fileCount; fileNum++)
@@ -85,6 +87,7 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
 	int dnaLength, i, j, rowOffset, length, wordCount = chopTabs(line, words);
         unsigned chromSize;
         boolean markovFound = FALSE;
+        double mark0[5];
         double mark2[5][5][5];
         struct dnaSeq *seq = NULL;
         char *dupe = NULL;
@@ -94,7 +97,8 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
         dupe = cloneString(line);
         char *chrom = words[0];
         int chromStart = lineFileNeedNum(lf, words, 1);
-        chromStart = max(2, chromStart);
+        if(markovTable != NULL)
+            chromStart = max(2, chromStart);
         unsigned chromEnd = lineFileNeedNum(lf, words, 2);
         if (chromEnd < 1)
             errAbort("ERROR: line %d:'%s'\nchromEnd is less than 1\n",
@@ -103,33 +107,59 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
             errAbort("ERROR: line %d:'%s'\nchromStart after chromEnd (%d > %d)\n",
                      lf->lineIx, dupe, chromStart, chromEnd);
         length = chromEnd - chromStart;
-        dnaLength = length + 4;
         chromSize = getChromSize(ci, chrom);
-        if(chromStart - 2 + dnaLength > chromSize)
-            // can't do analysis for potential peak hanging off the end of the chrom
-            continue;
-        seq = hDnaFromSeq(database, chrom, chromStart - 2, chromEnd + 2, dnaUpper);
-        struct sqlResult *sr = hRangeQuery(conn, markovTable, chrom, chromStart,
-                                           chromStart + 1, NULL, &rowOffset);
-        if((row = sqlNextRow(sr)) != NULL)
+        if(markovTable == NULL)
             {
-            dnaMark2Deserialize(row[rowOffset + 3], mark2);
-            dnaMarkMakeLog2(mark2);
-            markovFound = TRUE;
+            dnaLength = length;
+            seq = hDnaFromSeq(database, chrom, chromStart, chromEnd, dnaUpper);
+            dnaMark0(seq, mark0, NULL);
             }
         else
-            errAbort("markov table '%s' is missing; non-markov analysis is current not supported", markovTable);
-        sqlFreeResult(&sr);
+            {
+            dnaLength = length + 4;
+            if(chromStart - 2 + dnaLength > chromSize)
+                // can't do analysis for potential peak hanging off the end of the chrom
+                continue;
+            seq = hDnaFromSeq(database, chrom, chromStart - 2, chromEnd + 2, dnaUpper);
+            struct sqlResult *sr = hRangeQuery(conn, markovTable, chrom, chromStart,
+                                               chromStart + 1, NULL, &rowOffset);
+            if((row = sqlNextRow(sr)) != NULL)
+                {
+                dnaMark2Deserialize(row[rowOffset + 3], mark2);
+                dnaMarkMakeLog2(mark2);
+                markovFound = TRUE;
+                }
+            else
+                errAbort("markov table '%s' is missing; non-markov analysis is current not supported", markovTable);
+            sqlFreeResult(&sr);
+            }
         struct bed6FloatScore *hits = NULL;
         for (i = 0; i < 2; i++)
             {
+            double mark0Copy[5];
             char strand = i == 0 ? '+' : '-';
+            for (j = 0; j <= 4; j++)
+                mark0Copy[j] = mark0[j];
             if(strand == '-')
-                reverseComplement(seq->dna, dnaLength);
-            for (j = 0; j < length - motif->columnCount + 1; j++)
-                // tricky b/c j includes the two bytes on either side of actual sequence.
                 {
-                double score = dnaMotifBitScoreWithMarkovBg(motif, seq->dna + j, mark2);
+                // reverse markov table too!
+                double tmp;
+                reverseComplement(seq->dna, dnaLength);
+                tmp = mark0Copy[1];
+                mark0Copy[1] = mark0Copy[3];
+                mark0Copy[3] = tmp;
+                tmp = mark0Copy[2];
+                mark0Copy[2] = mark0Copy[4];
+                mark0Copy[4] = tmp;
+                }
+            for (j = 0; j < length - motif->columnCount + 1; j++)
+                // tricky b/c if(markovFound) then seq includes the two bytes on either side of actual sequence.
+                {
+                double score;
+                if(markovFound)
+                    score = dnaMotifBitScoreWithMarkovBg(motif, seq->dna + j, mark2);
+                else
+                    score = dnaMotifBitScoreWithMark0Bg(motif, seq->dna + j, mark0Copy);
                 if(score >= 0)
                     {
                     int start;
@@ -199,6 +229,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
+markovTable = optionVal("markovTable", NULL);
 originalCoordinates = optionExists("originalCoordinates");
 minScoreCutoff = optionFloat("minScoreCutoff", 0);
 topOnly = optionInt("topOnly", topOnly);

@@ -2406,6 +2406,7 @@ typedef struct _membersForAll {
     dimensions_t *dimensions;
     members_t* members[27];
     char* checkedTags[27];  // FIXME: Should move checkedTags into membersForAll->members[ix]->selected;
+    char letters[27];
 } membersForAll_t;
 
 static char* abcMembersChecked(struct trackDb *parentTdb, struct cart *cart, members_t* members, char letter)
@@ -2442,10 +2443,7 @@ for(mIx=0;mIx<members->count;mIx++)
         if(currentlyCheckedTags == NULL)
             currentlyCheckedTags = dyStringCreate(members->tags[mIx]);
         else
-            {
-            dyStringAppendC(currentlyCheckedTags,',');
-            dyStringAppend(currentlyCheckedTags,members->tags[mIx]);
-            }
+            dyStringPrintf(currentlyCheckedTags,",%s",members->tags[mIx]);
         }
     }
 if(currentlyCheckedTags)
@@ -2480,6 +2478,7 @@ for(ixIn=ixOut;ixIn<membersForAll->dimMax;ixIn++)
             { // NOTE: Don't I wish I had made these as an slList ages ago! (tim)
             membersForAll->members[ixOut]     = membersForAll->members[ixIn];
             membersForAll->checkedTags[ixOut] = membersForAll->checkedTags[ixIn];
+            membersForAll->letters[ixOut]     = membersForAll->letters[ixIn];
             }
         ixOut++;
         }
@@ -2501,6 +2500,7 @@ if(membersForAll != NULL)
 int ix;
 membersForAll = needMem(sizeof(membersForAll_t));
 membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
+membersForAll->letters[dimV]='V';
 membersForAll->dimMax=dimA;  // This can expand, depending upon ABC dimensions
 membersForAll->dimensions = dimensionSettingsGet(parentTdb);
 if(membersForAll->dimensions != NULL)
@@ -2511,14 +2511,21 @@ if(membersForAll->dimensions != NULL)
         if(letter != 'X' && letter != 'Y')
             {
             membersForAll->members[membersForAll->dimMax]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            membersForAll->letters[membersForAll->dimMax]=letter;
             if(cart != NULL)
                 membersForAll->checkedTags[membersForAll->dimMax] = abcMembersChecked(parentTdb,cart,membersForAll->members[membersForAll->dimMax],letter);
             membersForAll->dimMax++;
             }
         else if(letter == 'X')
+            {
             membersForAll->members[dimX]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            membersForAll->letters[dimX]=letter;
+            }
         else
+            {
             membersForAll->members[dimY]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            membersForAll->letters[dimY]=letter;
+            }
         }
     }
 membersForAll->abcCount = membersForAll->dimMax - dimA;
@@ -2549,10 +2556,14 @@ if(filtering && !sameWord(filtering,"off"))
         for(ix=0;ix<count;ix++)
             {
             char *dim = cloneNextWordByDelimiter(&filterGroups[ix],'=');
-            int abcIx = dimA + lastChar(dim) - 'A';
-            if(sameWord(filterGroups[ix],"one"))
+            char letter = lastChar(dim);
+            int abcIx = dimA;
+            for (;abcIx < membersForAll->dimMax && membersForAll->letters[abcIx] != letter;abcIx++) ; // Advance to correct letter
+            if (abcIx >= membersForAll->dimMax)
+                errAbort("Invalid 'filterComposite' trackDb setting. Dimension '%s' not found.",dim);
+            if (sameWord(filterGroups[ix],"one"))
                 membersForAll->members[abcIx]->fcType = fctOne;
-            else if(sameWord(filterGroups[ix],"onlyOne") || sameWord(filterGroups[ix],"oneOnly"))
+            else if (sameWord(filterGroups[ix],"onlyOne") || sameWord(filterGroups[ix],"oneOnly"))
                 membersForAll->members[abcIx]->fcType = fctOneOnly;
             }
         }
@@ -5661,9 +5672,9 @@ if(dimensionX)
     {
     int ixX,cntX=0;
     if(dimensionY)
-        printf("<TH align=RIGHT><EM><B>%s</EM></B></TH>", dimensionX->groupTitle);
+        printf("<TH align=RIGHT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
     else
-        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<EM><B>%s</EM></B></TH>",(top?"TOP":"BOTTOM"), dimensionX->groupTitle);
+        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<B><EM>%s</EM></B></TH>",(top?"TOP":"BOTTOM"), dimensionX->groupTitle);
 
     for (ixX = 0; ixX < dimensionX->count; ixX++)
         {
@@ -5680,19 +5691,19 @@ if(dimensionX)
         {
         if(dimensionY)
             {
-            printf("<TH align=LEFT><EM><B>%s</B></EM></TH>", dimensionX->groupTitle);
+            printf("<TH align=LEFT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
             buttonsForAll();
             puts("</TH>");
             }
         else
-            printf("<TH ALIGN=LEFT valign=%s><EM><B>%s</EM></B>&nbsp;&nbsp;</TH>",top?"TOP":"BOTTOM", dimensionX->groupTitle);
+            printf("<TH ALIGN=LEFT valign=%s><B><EM>%s</EM></B>&nbsp;&nbsp;</TH>",top?"TOP":"BOTTOM", dimensionX->groupTitle);
         }
     }
 else if(dimensionY)
     {
     printf("<TH ALIGN=RIGHT WIDTH=100 nowrap>");
-    printf("<EM><B>%s</EM></B>", dimensionY->groupTitle);
+    printf("<B><EM>%s</EM></B>", dimensionY->groupTitle);
     printf("</TH><TH ALIGN=CENTER WIDTH=60>");
     buttonsForAll();
     puts("</TH>");
@@ -5710,7 +5721,7 @@ members_t *dimensionY = membersForAll->members[dimY];
 if(dimensionX && dimensionY)
     {
     int ixX,cntX=0;
-    printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
+    printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
@@ -5725,7 +5736,7 @@ if(dimensionX && dimensionY)
         }
     // If dimension is big enough, then add Y buttons to right as well
     if(cntX>MATRIX_RIGHT_BUTTONS_AFTER)
-        printf("<TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>", dimensionY->groupTitle);
+        printf("<TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>", dimensionY->groupTitle);
     puts("</TR>\n");
     }
 }
@@ -5802,7 +5813,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
             boolean alreadySet=FALSE;
             if(membersForAll->members[ix]->selected != NULL)
                 alreadySet = membersForAll->members[ix]->selected[aIx];
-            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,membersForAll->members[ix]->tags[aIx], 'A' + (ix - dimA));
+            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,membersForAll->members[ix]->tags[aIx],membersForAll->letters[ix]);
             safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",membersForAll->members[ix]->tags[aIx]);
             // TODO Set classes properly (if needed!!!)  The class abc works but what about a b or c?
             cgiMakeCheckBoxJS(objName,alreadySet,javascript);
@@ -6110,7 +6121,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     }
                 if(cells[ixX][ixY] > 0)
                     {
-                    boolean halfChecked = (chked[ixX][ixY] > 0 && chked[ixX][ixY] != enabd[ixX][ixY]);
+                    boolean halfChecked = (chked[ixX][ixY] > 0 && chked[ixX][ixY] < enabd[ixX][ixY]);
 
                     struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
                     if(dimensionX && dimensionY)
@@ -6212,7 +6223,7 @@ puts ("<TABLE>");
 if (hasSubgroups)
     {
     puts("<TR><B>Select subtracks:</B></TR>");
-    puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
+    puts("<TR><TD><B><EM>&nbsp; &nbsp; All</EM></B>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
     }
 else
     {
@@ -6274,7 +6285,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     if(sameWord(subGroup,"view"))
         continue;  // Multi-view should have taken care of "view" subgroup already
     puts ("<TABLE>");
-    printf("<TR><TD><EM><B>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
+    printf("<TR><TD><B><EM>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
     for (j = 2; j < wordCnt; j++)
         {
         if (!parseAssignment(words[j], &name, &value))
