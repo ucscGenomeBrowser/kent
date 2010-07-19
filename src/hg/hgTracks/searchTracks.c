@@ -531,8 +531,11 @@ else
         hPrintf("<p>No tracks found</p>\n");
     }
 
-hPrintf("<p><b>Known Problems</b></p><ul><li>Menu bar up top doesn't work (clicks are ignored)</li>\n"
-        "<li>subtracks often come up with the wrong visibility (but saving visibility for subtracks does work</li>"
+hPrintf("<p><b>Recently Done</b></p><ul>\n"
+        "<li>Full descriptions of metadata items are indexed in simple search index (e.g. cell descriptions)</li>"
+        "</ul>"
+        "<p><b>Known Problems</b></p><ul><li>Menu bar up top doesn't work (clicks are ignored)</li>\n"
+        "<li>subtracks often come up with the wrong visibility (but saving visibility for subtracks does work)</li>"
         "</ul>\n");
 
 webEndSectionTables();
