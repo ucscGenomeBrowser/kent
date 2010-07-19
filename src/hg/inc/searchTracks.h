@@ -7,6 +7,9 @@
 
 #include "common.h"
 
+// UNCOMMENT TRACK_SEARCH to turn on 'find tracks' functionality
+// #define TRACK_SEARCH
+
 #define searchTracks "hgt_searchTracks"
 
 void getSearchTrixFile(char *database, char *buf, int len);
