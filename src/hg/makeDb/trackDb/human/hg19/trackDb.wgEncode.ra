@@ -5,6 +5,7 @@ include wgEncodeSuper.ra
 #Encode Composite tracks
 include trackDb.wgEncodeSuny.ra
 include trackDb.wgEncodeSunyAlbanyTiling.ra
+include trackDb.wgEncodeHaibRrbs.ra
 include trackDb.wgEncodeHaibTfbs.ra
 include trackDb.wgEncodeSydhTfbs.ra
 include trackDb.wgEncodeSydhHistone.ra
