@@ -51,6 +51,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 #include "suggest.h"
+#include "searchTracks.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
@@ -4753,6 +4754,14 @@ if (!hideControls)
     // smallBreak();
 
     /* Display bottom control panel. */
+
+#ifdef TRACK_SEARCH
+    if(isSearchTracksSupported(database))
+        {
+        hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
+        hPrintf(" ");
+        }
+#endif
     hButton("hgt.reset", "default tracks");
 #ifdef IMAGEv2_DRAG_REORDER
 	hPrintf("&nbsp;");
@@ -4778,11 +4787,6 @@ if (!hideControls)
         hButton("hgt.toggleRevCmplDisp", "reverse");
         hPrintf(" ");
 	}
-
-#ifdef TRACK_SEARCH
-    hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
-    hPrintf(" ");
-#endif
 
     hButton("hgt.refresh", "refresh");
 
