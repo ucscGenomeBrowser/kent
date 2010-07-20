@@ -13,7 +13,11 @@ safef(buf, len, "/gbdb/%s/trackDb.ix", database);
 boolean isSearchTracksSupported(char *database)
 // Return TRUE if searchTracks is supported for this database
 {
+#ifdef TRACK_SEARCH
 char trixFile[HDB_MAX_PATH_STRING];
 getSearchTrixFile(database, trixFile, sizeof(trixFile));
 return fileExists(trixFile);
+#else
+return FALSE;
+#endif
 }
