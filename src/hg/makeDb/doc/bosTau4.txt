@@ -1941,4 +1941,19 @@ limit vmemoryuse 163840m
     cat fb.bosTau4.chainSusScr2Link.txt
     #	1383557633 bases of 2731830700 (50.646%) in intersection
 
+
+#############################################################################
+# LIFTOVER TO bosTau5 (Btau_4.2) (DONE - 2010-07-19 - Chin)
+    ssh hgwdev
+    cd /hive/data/genomes/bosTau4
+    ln -s bosTau4.11.ooc 11.ooc
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+         bosTau4 bosTau5 > doLiftOverToBosTau5.log 2>&1 &
+    #   real    245m42.802s
+
+    pushd /usr/local/apache/htdocs-hgdownload/goldenPath/bosTau4/liftOver/
+    md5sum bosTau4ToBosTau5.over.chain.gz >> md5sum.txt
+    popd
+
 #########################################################################
