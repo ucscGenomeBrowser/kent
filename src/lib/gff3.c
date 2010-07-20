@@ -786,6 +786,11 @@ else if (startsWithWord("##species", line))
     parseSpecies(g3f, line);
 else if (startsWithWord("##genome-build", line))
     parseGenomeBuild(g3f, line);
+else if (startsWithWord("##gff-spec-version", line) ||
+         startsWithWord("##source-version", line) ||
+         startsWithWord("##date", line) ||
+         startsWithWord("##Type", line))
+    ;  /* FIXME: silently ignore these.  Mark says. */
 else
     gff3FileErr(g3f, "invalid meta line: %s", line);
 }
