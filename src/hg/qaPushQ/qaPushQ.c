@@ -508,6 +508,22 @@ freeDyString(&s);
 
 /* -------------------- Push Queue ----------------------- */
 
+void showSizesJavascript()
+/* set showSizes for cross-posting to support file sizes */
+{
+char sizesButton[1024];
+safef(sizesButton, sizeof(sizesButton), 
+    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\""
+    " ONCLICK=\"if (document.forms[0].currLoc.value!='%s') {"
+		" document.forms[0]._action.value='xpost';"
+		" document.forms[0].action='http://%s.cse.ucsc.edu/cgi-bin/qaPushQ';"
+		"};return true;\">"
+    , utsName.nodename
+    , sameString(utsName.nodename, "hgwdev") ? "hgwbeta" : "hgwdev" 
+    ); 
+replaceInStr(html, sizeof(html), "<!sizesbutton>", sizesButton);
+}
+
 void replacePushQFields(struct pushQ *ki, bool isNew)
 /* fill in dummy html tags with values from the sql pushQ record */
 {
@@ -569,12 +585,13 @@ if (isNew)
     replaceInStr(html, sizeof(html), "<!clonebutton>", ""); 
     replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
     replaceInStr(html, sizeof(html), "<!lockbutton>", ""); 
-    replaceInStr(html, sizeof(html), "<!sizesbutton>", "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\">"); 
     replaceInStr(html, sizeof(html), "<!refreshlink>", ""); 
     replaceInStr(html, sizeof(html), "<!transferbutton>", ""); 
     
     safef(tempLink, sizeof(tempLink), "<a href=\"/cgi-bin/qaPushQ?cb=%s\">CANCEL</a>&nbsp;&nbsp;",newRandState); 
     replaceInStr(html, sizeof(html), "<!cancellink>", tempLink ); 
+
+    showSizesJavascript();
 	
     }
 else
@@ -612,7 +629,6 @@ else
 	    }
 	else
 	    {
-	    //replaceInStr(html, sizeof(html), "<!bouncebutton>", ""); 
 	    replaceInStr(html, sizeof(html), 
 		"<!bouncebutton>", 
 		"<input TYPE=SUBMIT NAME=\"bouncebutton\" VALUE=\"unbounce\">&nbsp;&nbsp;"
@@ -630,17 +646,7 @@ else
 	    "<!transferbutton>", 
 	    "<input TYPE=SUBMIT NAME=\"transfer\" VALUE=\"Transfer\">&nbsp;&nbsp;"); 
 	
-	char sizesButton[1024];
-	safef(sizesButton, sizeof(sizesButton), 
-	    "&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input TYPE=SUBMIT NAME=\"showSizes\" VALUE=\"Show Sizes\""
-	    " ONCLICK=\"if (document.forms[0].currLoc.value!='%s') {"
-			" document.forms[0]._action.value='xpost';"
-			" document.forms[0].action='http://%s.cse.ucsc.edu/cgi-bin/qaPushQ';"
-			"};return true;\">"
-	    , utsName.nodename
-	    , sameString(utsName.nodename, "hgwdev") ? "hgwbeta" : "hgwdev" 
-	    ); 
-	replaceInStr(html, sizeof(html), "<!sizesbutton>", sizesButton);
+	showSizesJavascript();
 	}
     else 
 	{ /* we don't have a lock yet, disable and readonly */
