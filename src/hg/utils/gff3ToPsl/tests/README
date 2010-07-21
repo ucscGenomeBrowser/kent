@@ -1,5 +1,3 @@
-Finished gff3ToPsl in kent/src/hg/utils/gff3ToPsl.  See tests directory for usage case.
-
 To build the patch 2bit file, I used the following script:
 wget "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/PATCHES/patch_release_1/FASTA/alt.scaf.fa.gz"
 zcat  alt.scaf.fa.gz | sed 's/>gi.*gb|/>/' | sed 's/|.*//' | faToTwoBit stdin GL339449.2bit
