@@ -38,6 +38,12 @@ static int maxParseErrs = 50;  // maximum number of errors during parse
 static int maxConvertErrs = 50;  // maximum number of errors during conversion
 static int convertErrCnt = 0;  // number of convert errors
 
+struct nameAndSize
+{
+char *name;
+int size;
+};
+
 
 static void cnvError(char *format, ...)
 /* print a GFF3 to gene conversion error.  This will return.  Code must check
@@ -109,21 +115,29 @@ else
 return TRUE;
 }
 
+static struct nameAndSize *getNameAndSize(struct hash *hash, char *name)
+/* Find size of name in hash or die trying. */
+{
+struct hashEl *hel = hashLookup(hash, name);
+if (hel == NULL)
+    errAbort("couldn't find %s in locus file", name);
+return hel->val;
+}
+
 static void processMatchLine(FILE *pslF, struct gff3Ann *node,
     struct hash *chromHash)
 {
-int blocksAlloced = 20;
+int blocksAlloced = 100;
 struct gff3Attr *attr = gff3AnnFindAttr(node, "Gap");
 
 if ((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL))
     errAbort("match record without Gap attribute");
 
-// should look up targetId in chromHash to find chrom and size
-printf("id %s %d %d: Gap %s\n", node->targetId, node->targetStart, node->targetEnd, attr->vals->name);
+struct nameAndSize *ns = getNameAndSize(chromHash, node->targetId);
 
 struct psl *psl = pslNew(node->seqid, node->end - node->start, node->start, 
-    node->end, node->targetId, node->targetEnd - node->targetStart,
-    node->targetStart, node->targetEnd, node->strand, blocksAlloced, 0);
+    node->end, ns->name, ns->size,  node->targetStart, node->targetEnd, 
+    node->strand, blocksAlloced, 0);
 char *ptr = attr->vals->name;
 char op;
 int size;
@@ -132,12 +146,14 @@ int qStart = node->start;
 
 while(getNextCigarOp(&ptr, &op, &size))
     {
-    printf("%c %d\n",op,size);
     switch (op)
         {
         case 'M': // match or mismatch (gapless aligned block)
             if (psl->blockCount == blocksAlloced)
+                {
+                printf("grow\n");
                 pslGrow(psl, &blocksAlloced);
+                }
 
             psl->blockSizes[psl->blockCount] = size;
             psl->qStarts[psl->blockCount] = qStart;
@@ -147,19 +163,19 @@ while(getNextCigarOp(&ptr, &op, &size))
             qStart += size;
             break;
 
-        case 'I': // inserted in query
-        case 'S': // skipped query bases at beginning or end ("soft clipping")
-            qStart += size;
-            break;
-        case 'D': // deleted from query
-        case 'N': // long deletion from query (intron as opposed to small del)
+        case 'I': // inserted in target
             tStart += size;
+            break;
+        case 'D': // deleted from target
+            qStart += size;
             break;
         
         default:
             errAbort("bamToFfAli: unrecognized CIGAR op %c -- update me", op);
         }
     }
+assert (tStart ==  node->targetEnd);
+assert(qStart ==  node->end);
 pslOutput(psl, pslF, '\t' , '\n');
 pslFree(&psl);
 }
@@ -178,15 +194,35 @@ else
     cnvError("no support for type %s\n", node->type);
 }
 
-struct hash *readChromMap(char *mapFile)
+
+struct hash *readSizes(char *fileName)
+/* Read tab-separated file into hash with
+ * name key size value. */
 {
-return (struct hash *)0;
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *hash = newHash(0);
+char *row[3];
+while (lineFileRow(lf, row))
+    {
+    struct nameAndSize *ns;
+
+    char *name = row[0];
+    if (hashLookup(hash, name) != NULL)
+        errAbort("Duplicate %s in size file %s\n", name, fileName);
+
+    AllocVar(ns);
+    ns->name = cloneString(row[1]);
+    ns->size = atoi(row[2]);
+    hashAdd(hash, name, ns);
+    }
+lineFileClose(&lf);
+return hash;
 }
 
 static void gff3ToPsl(char *mapFile, char *inGff3File, char *outPSL)
 /* gff3ToPsl - convert a GFF3 file to a genePred file. */
 {
-struct hash *chromHash = readChromMap(mapFile);
+struct hash *chromHash = readSizes(mapFile);
 struct hash *processed = hashNew(12);
 struct gff3File *gff3File = loadGff3(inGff3File);
 FILE *pslF = mustOpen(outPSL, "w");
