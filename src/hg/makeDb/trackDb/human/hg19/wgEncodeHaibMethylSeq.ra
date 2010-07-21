@@ -3,7 +3,7 @@ compositeTrack on
 shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
-subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 GM12891=GM12891 GM12892=GM12892 H1hESC=H1-hESC H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HepG2=HepG2 HeLaS3=HeLa-S3 HFL11W=HFL11W HFL24W=HFL24W K562=K562 BG02ESEBD=BG02ESEBD HCT116=HCT116 H9ESCM=H9ESCM H9ESAFPPlus=H9ESAFPPlus H9ESE=H9ESE H9ESEBD=H9ESEBD
+subGroup1 cellType Cell_Line  BG02ES-EBD=BG02ES-EBD BG02ES=BG02ES GM12878=GM12878 GM12891=GM12891 GM12892=GM12892 H1hESC=H1-hESC H9ES-AFPP=H9ES-AFP+ H9ES-AFP-=H9ES-AFP- H9ES-CM=H9ES-CM H9ES-E=H9ES-E H9ES-EB=H9ES-EB H9ES-EBD=H9ES-EBD H9ES=H9ES HAL=HAL HCT-116=HCT-116 HepG2=HepG2 HeLaS3=HeLa-S3 HFL11W=HFL11W HFL24W=HFL24W K562=K562 
 subGroup2 rep Replicate rep1=1 rep2=2
 subGroup3 restrictionEnzyme restrictionEnzyme None=None
 dimensions dimensionX=rep dimensionY=cellType
@@ -159,7 +159,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel BG02ES-EBD 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in BG02ES-EBD cells)
-        subGroups  cellType=BG02ESEBD restrictionEnzyme=None rep=rep1
+        subGroups  cellType=BG02ES-EBD restrictionEnzyme=None rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
@@ -168,7 +168,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel BG02ES-EBD 2
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 2 (in BG02ES-EBD cells)
-        subGroups  cellType=BG02ESEBD restrictionEnzyme=None rep=rep2
+        subGroups  cellType=BG02ES-EBD restrictionEnzyme=None rep=rep2
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
@@ -197,7 +197,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel H9ES-E 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-E cells)
-        subGroups  cellType=H9ESE restrictionEnzyme=None rep=rep1
+        subGroups  cellType=H9ES-E restrictionEnzyme=None rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
@@ -215,7 +215,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel HCT-116 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in HCT-116 cells)
-        subGroups  cellType=HCT116 restrictionEnzyme=None rep=rep1
+        subGroups  cellType=HCT-116 restrictionEnzyme=None rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
@@ -234,7 +234,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel H9ES-AFP+ 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-AFP+ cells)
-        subGroups  cellType=H9ESAFPPlus restrictionEnzyme=None rep=rep1
+        subGroups  cellType=H9ES-AFPP restrictionEnzyme=None rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
@@ -243,7 +243,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel H9ES-CM 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-CM cells)
-        subGroups  cellType=H9ESCM restrictionEnzyme=None rep=rep1
+        subGroups  cellType=H9ES-CM restrictionEnzyme=None rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
@@ -261,7 +261,7 @@ release alpha
         parent wgEncodeHaibMethylSeq off
         shortLabel H9ES-EBD 1
         longLabel ENCODE HudsonAlpha Methyl-Seq Regions Replicate 1 (in H9ES-EBD cells)
-        subGroups  cellType=H9ESEBD restrictionEnzyme=None rep=rep1
+        subGroups  cellType=H9ES-EBD restrictionEnzyme=None rep=rep1
         type bed 9
         # subId=1875 dateSubmitted=2010-07-16
 
