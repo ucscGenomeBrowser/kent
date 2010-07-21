@@ -30,3 +30,28 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track multiz6way
+shortLabel Conservation
+longLabel 6-Way Multiz Alignment & Conservation
+group compGeno
+priority 103.4
+visibility pack
+color 0, 10, 100
+altColor 0,90,10
+type wigMaf 0.0 1.0
+maxHeightPixels 100:40:11
+# wiggle phastCons6way
+spanList 1
+autoScale Off
+windowingFunction mean
+pairwiseHeight 12
+yLineOnOff Off
+frames multiz6wayFrames
+irows on
+summary multiz6waySummary
+speciesCodonDefault felCat4
+speciesGroups Vertebrate
+sGroup_Vertebrate mm9 canFam2 monDom5 equCab2 ailMel1
+itemFirstCharCase noChange
+treeImage phylo/felCat4_6way.gif
+
