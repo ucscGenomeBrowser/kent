@@ -93,10 +93,10 @@ taxId 6239
 
     mkdir jkStuff
     #	run just to AGP to make sure things are sane first
-    nice -n +19 makeGenomeDb.pl ce9.config.ra -stop=agp \
+    nice -n +19 makeGenomeDb.pl -noGoldGapSplit ce9.config.ra -stop=agp \
       > jkStuff/makeGenomeDb.agp.log 2>&1
     #	now, continuing to make the Db and all
-    time nice -n +19 makeGenomeDb.pl ce9.config.ra -continue=db \
+    time nice -n +19 makeGenomeDb.pl -noGoldGapSplit ce9.config.ra -continue=db \
       > jkStuff/makeGenomeDb.db.log 2>&1
     #	real    1m37.013s
     #	take the trackDb business there and check it into the source tree
@@ -108,7 +108,7 @@ taxId 6239
     screen 	#	use screen to control the job
     mkdir /hive/data/genomes/ce9/bed/repeatMasker
     cd /hive/data/genomes/ce9/bed/repeatMasker
-    time nice -n +19 doRepeatMasker.pl -bigClusterHub=pk \
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=pk \
 	-buildDir=/hive/data/genomes/ce9/bed/repeatMasker ce9 > do.log 2>&1 &
     #	about 103 minutes
 
@@ -172,5 +172,11 @@ taxId 6239
 	VALUES ("ce9", "blat9", "17779", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+
+############################################################################
+# reset default position, same as ce4 on the ZC101 / unc-52 locus
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="chrII:14646344-14667746"
+	where name="ce9";' hgcentraltest
 
 ############################################################################
