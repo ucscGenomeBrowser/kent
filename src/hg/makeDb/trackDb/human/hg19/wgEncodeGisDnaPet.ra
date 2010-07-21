@@ -22,3 +22,68 @@ wgEncode 1
     visibility dense
     subTrack wgEncodeGisDnaPet
 
+        track wgEncodeGisDnaPetK562F10kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments
+        shortLabel K562 Aln
+        longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=2-10k
+        type bam
+        color 46,0,184
+        # subId=1853 dateSubmitted=2010-07-07
+
+
+        track wgEncodeGisDnaPetK562F1kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments
+        shortLabel K562 Aln
+        longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=0-1k
+        type bam
+        color 46,0,184
+        # subId=1854 dateSubmitted=2010-07-07
+
+
+        track wgEncodeGisDnaPetGm12878F10kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments
+        shortLabel GM12878 Aln
+        longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=2-10k
+        type bam
+        color 153,38,0
+        # subId=1852 dateSubmitted=2010-07-07
+
+
+        track wgEncodeGisDnaPetK562F20kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments
+        shortLabel K562 Aln
+        longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=3-f20k
+        type bam
+        color 46,0,184
+        # subId=1524 dateSubmitted=2010-06-16
+
+
+        track wgEncodeGisDnaPetGm12878F5kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments
+        shortLabel GM12878 Aln
+        longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=1-5k
+        type bam
+        color 153,38,0
+        # subId=1521 dateSubmitted=2010-06-16
+
+
+        track wgEncodeGisDnaPetGm12878F1kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments
+        shortLabel GM12878 Aln
+        longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=0-1k
+        type bam
+        color 153,38,0
+        # subId=1520 dateSubmitted=2010-06-16
+
