@@ -194,7 +194,8 @@ taxId 9685
     # double check with featureBits
     featureBits -countGaps felCat4 gap
     #  1169658726 bases of 3160303948 (37.011%) in intersection
-    #  1169668943 bases of 3160303948 (37.011%) in intersection (felCatV17e
+    #  1169668943 bases of 3160303948 (37.011%) in intersection
+    #  (felCatV17e???)
     #  ???)
 
     rm /gbdb/felCat4/felCat4.2bit
@@ -527,6 +528,8 @@ XXXX 06-07 TODO add tracks
 
     cat fb.canFam2.chainFelCat4Link.txt
     #  1481040604 bases of 2384996543 (62.098%) in intersection
+    cd /hive/data/genomes/canFam2/bed/lastzFelCat4.2010-06-01
+    ln -s lastzFelCat4.2010-06-01 lastz.felCat4
 
     mkdir /hive/data/genomes/felCat4/bed/blastz.canFam2.swap
     cd /hive/data/genomes/felCat4/bed/blastz.canFam2.swap
@@ -744,7 +747,7 @@ close (FH);
     # << happy emacs
 
 chmod 775 agpToCtgPos2.pl 
-
+# use the other gap coordinates - chrXX.agp.gz this time
 export S=../../genbank/Primary_Assembly/assembled_chromosomes
 cut -f2 ${S}/chr2acc |  while read ACC
 do
@@ -753,11 +756,14 @@ do
         | sed -e "s/^${ACC}/chr${C}/"
 done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
-    hgLoadSqlTab felCat4 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql \ 
-     ctgPos2.tab
+    # edit ctgPos2.html with:
+    # hgsql -e "select type from ctgPos2;" felCat4 | sort | uniq  
+    # W
+
+    hgLoadSqlTab felCat4 ctgPos2 $HOME/kent/src/hg/lib/ctgPos2.sql ctgPos2.tab
 
     # add the track ctgPos2 to src/hg/makeDb/trackDb/cat/felCat4/trackDb.ra
-    # at src/makeDb/trackdb do "make update" or/and "make alpha"
+    # at src/makeDb/trackdb do "make update DBS=felCat4" or/and "make alpha"
 
 #########################################################################
 # all.joiner update, downloads and in pushQ - (working 2010-06-28 Chin)
@@ -806,7 +812,7 @@ done | ./agpToCtgPos2.pl /dev/stdin > ctgPos2.tab
 
 
 #####################################################################
-## 6-Way Multiz (working 2010-07-01 - Chin)
+## 6-Way Multiz (DONE  2010-07-01 - Chin)
 ##  (????Redo mafSplit and all steps followed working 2010-05-23 - Chin)
  
 # use /cluster/home/chinhli/kent/src/hg/utils/phyloTrees/49way.nh 
@@ -885,7 +891,7 @@ while (my $line = <FH>) {
     chomp $chainLinkMeasure;
     $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
     $chainLinkMeasure =~ s/\%//;
-    my $swapFile="/hive/data/genomes/${D}/bed/lastz.felCat4/fb.${D}.chainFelCatV17eLink.txt";
+    my $swapFile="/hive/data/genomes/${D}/bed/lastz.felCat4/fb.${D}.chainFelCat4Link.txt";
     my $swapMeasure = "N/A";
     if ( -s $swapFile ) {
         $swapMeasure =
@@ -915,13 +921,6 @@ close (FH);
     # << happy emacs
     chmod +x ./sizeStats.pl
     ./sizeStats.pl
-XXXX 07-01# 02  0.1986 - Panda ailMel1    (% 75.536) (N/A)
-# 04  0.2011 - Dog canFam2      (% 73.720) (N/A)
-# 06  0.3567 - Human hg19       (% 60.870) (N/A)
-# 08  0.5692 - Mouse mm9        (% 30.972) (N/A)
-# 10  0.7913 - Opossum monDom5  (% 8.364) (N/A)
-
-
 
 #
 #       If you can fill in all the numbers in this table, you are ready for
@@ -944,7 +943,7 @@ XXXX 07-01# 02  0.1986 - Panda ailMel1    (% 75.536) (N/A)
     sed 's/[()]//g; s/,/ /g' tree.nh > species.list
 
     #   collect the single whole mafs into one place for splitting:
-    mkdir singleMaf
+    mkdir singleMafs
     cd singleMafs
     ln -s ../../lastz.hg19/axtChain/felCat4.hg19.synNet.maf.gz .
     ln -s ../../lastz.mm9/axtChain/felCat4.mm9.synNet.maf.gz .
@@ -953,21 +952,20 @@ XXXX 07-01# 02  0.1986 - Panda ailMel1    (% 75.536) (N/A)
     # N50 for ailMel1 is 1281781 (less than 10 ~ 20 MB) use rbest
     ln -s ../../lastz.ailMel1/mafRBestNet/felCat4.ailMel1.rbest.maf.gz .
 
-XXXX 05-24 mafSplit new option mafSplit -byTarget -useFullSequenceName
     # to use rbest or net, use n50.pl chrom.size to tell
     mkdir /hive/data/genomes/felCat4/bed/multiz6way/splitMaf
     cd /hive/data/genomes/felCat4/bed/multiz6way/splitMaf
     for D in ailMel1
 do
     mkdir ${D}
-    mafSplit -useFullSequenceName -byTarget /dev/null ${D}/ \
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
         ../singleMafs/felCat4.${D}.rbest.maf.gz
 done
 
 for D in hg19 mm9 canFam2 monDom5
 do
     mkdir ${D}
-    mafSplit -useFullSequenceName -byTarget /dev/null ${D}/ \
+    mafSplit -useHashedName=8 -byTarget /dev/null ${D}/ \
         ../singleMafs/felCat4.${D}.synNet.maf.gz
 done
 
@@ -975,7 +973,6 @@ done
     cd /hive/data/genomes/felCat4/bed/multiz6way
     mkdir penn
     cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn
-    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn
     cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn
     cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn
 
@@ -1037,7 +1034,8 @@ popd > /dev/null
         | xargs -L 1 basename | sort -u > chr.part.list
     gensub2 chr.part.list single template jobList
     para -ram=8g create jobList
-
+    # para push, para cehck, para time etc..
+    ssh hgwdev
 XXXX TODO: 05-14 Chin: a script to check the integrity of the maf file
       (i.e. hearde, size existence etc
 
@@ -1052,7 +1050,6 @@ done
 
     # load tables for a look
     mkdir -p /gbdb/felCat4/multiz6way/maf
-    # cd /hive/data/genomes/felCat4/bed/multiz6way/maf
     cd /hive/data/genomes/felCat4/bed/multiz6way/run
 
     ln -s `pwd`/felCat4.6way.maf \
@@ -1065,17 +1062,20 @@ done
         -pathPrefix=/gbdb/felCat4/multiz6way/maf felCat4 multiz6way
     # Indexing and tabulating /gbdb/felCat4/multiz6way/maf/multiz6way.maf
     # Loading multiz6way into database
-    # Loaded 5500990 mafs in 1 files from /gbdb/felCat4/multiz6way/maf
+    # Loaded 5501001 mafs in 1 files from /gbdb/felCat4/multiz6way/maf
     # 
-    # real    5m56.770s
+    # real    4m34.514s
 
     # load summary table
     time nice -n +19 cat /gbdb/felCat4/multiz6way/maf/*.maf \
         | hgLoadMafSummary felCat4 -minSize=30000 -verbose=2 \
                 -mergeGap=1500 -maxSize=200000  multiz6waySummary stdin
-    # Created 1029626 summary blocks from 15177161 components and 
-    #      5500990 mafs from stdin
-    # real    9m46.074s
+    # Indexing and tabulating stdin
+    # Created 1029636 summary blocks from 15177243 components and 5501001 mafs
+    # from stdin
+    # Loading into felCat4 table multiz6waySummary...
+    # Loading complete
+    # real    3m8.890s
 
     # Gap Annotation
     # prepare bed files with gap info
@@ -1140,11 +1140,12 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
     #   
 # para time
 # Completed: 256 of 256 jobs
-# CPU time in finished jobs:       3735s      62.25m     1.04h    0.04d  0.000 y
-# IO & Wait Time:                  2382s      39.70m     0.66h    0.03d  0.000 y
-# Average job time:                  24s       0.40m     0.01h    0.00d
-# Longest finished job:             600s      10.00m     0.17h    0.01d
-# Submission to last job:           787s      13.12m     0.22h    0.01d
+# CPU time in finished jobs:       3634s      60.56m     1.01h    0.04d  0.000 y
+# IO & Wait Time:                   996s      16.60m     0.28h    0.01d  0.000 y
+# Average job time:                  18s       0.30m     0.01h    0.00d
+# Longest finished job:             529s       8.82m     0.15h    0.01d
+# Submission to last job:          4385s      73.08m     1.22h    0.05d
+
 
     ssh hgwdev
     rm -fr /gbdb/felCat4/multiz6way/maf
@@ -1155,31 +1156,34 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
     #   previously loaded table with the unannotated mafs
     #   huge temp files are made, do them on local disk
     cd /data/tmp
+
     time nice -n +19 hgLoadMaf \
         -pathPrefix=/gbdb/felCat4/multiz6way/maf felCat4 multiz6way
-    #   real    93m33.812s
-    #   Loading multiz6way into database
-    #   Loaded 6501831 mafs in 256 files from /gbdb/felCat4/multiz6way/maf
+    #  real    9m37.428s
+    #  Loading multiz6way into database
+    #  Loaded 6509883 mafs in 256 files from /gbdb/felCat4/multiz6way/maf
 
     time nice -n +19 cat /gbdb/felCat4/multiz6way/maf/*.maf \
         | hgLoadMafSummary felCat4 -minSize=30000 -mergeGap=1500 \
                  -maxSize=200000  multiz6waySummary stdin
-    #   Created 1029626 summary blocks from 15177161 components \
-    #   and 6501831 mafs from stdin
-    #   Loading into felCat4 table multiz6waySummary...
-    #   Loading complete
-    #   real    72m12.808s
+    # Indexing and tabulating stdin
+    # Created 1029636 summary blocks from 15177243 components and 6509883 mafs from stdin
+    # Loading into felCat4 table multiz6waySummary...
+    # Loading complete
+    # real    25m27.648s
 
     #   by loading this into the table multiz6waySummary, it will
     #   replace
     #   the previously loaded table with the unannotated mafs
     #   remove the multiz6way*.tab files in this /data/tmp directory
-# -rw-rw-r-- 1 338738590 May  6 15:49 multiz6way.tab
-# -rw-rw-r-- 1  49960609 May  6 17:04 multiz6waySummary.tab
+    ##-rw-rw-r-- 1 338458171 Jul 15 16:27 multiz6way.tab
+    ##-rw-rw-r-- 1  49961076 Jul 19 08:56 multiz6waySummary.tab
+
     wc -l multiz6way*.tab
-  #  6501831 multiz6way.tab
-  #  1029626 multiz6waySummary.tab
-  #  7531457 total
+    #  6509883 multiz6way.tab
+    #  1029636 multiz6waySummary.tab
+    #  7539519 total
+
     rm multiz6way*.tab
 
     # create some downloads
@@ -1189,15 +1193,14 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
     time cp -p ../../anno/maf/*.maf .
     #   real    6m55.315s
     time gzip --rsyncable *.maf
-    #   real    30m37.474s
+    #   real    113m32.738s
     time md5sum *.gz > md5sum.txt
-    #   real    1m36.814s
-    #   user    0m13.210s
-    #   sys     0m2.212s
+    #   real    2m44.689s
 
 
 ####################################################################
-# HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-05-05)
+# HUMAN (hg18) PROTEINS TRACK (DONE braney 2010-05-05) 
+XXXX need to redo !!!
     # bash  if not using bash shell already
 
     cd /cluster/data/felCat4
@@ -1367,7 +1370,7 @@ chainOne $(path1)
 
 ############################################################################
 ## Annotate 6-way multiple alignment with gene annotations
-##              (DONE 2010-05-07 - Chin)
+##              (DONE 2010-07-19  - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ## Rules to decide which genes to use in order:
@@ -1413,16 +1416,15 @@ end
     # << happy emacs
     chmod +x ./showGenes.csh
     ./showGenes.csh
+    # felCat4: refGene: 352, xenoRefGene: 217276, Mrnas: 2167
+    # canFam2: ensGene: 30914, refGene: 1046, xenoRefGene: 216304, Mrnas: 3234
+    # ailMel1: xenoRefGene: 206132, Mrnas: 54
+    # hg19: ensGene: 151222, knownGene: 77614, mgcGenes: 31354,
+    #        refGene: 36546, xenoRefGene: 130677, Mrnas: 288220
+    # mm9: ensGene: 84869, knownGene: 54042, mgcGenes: 26582, 
+    #         refGene: 27366, xenoRefGene: 126459, Mrnas: 259259
+    # monDom5: ensGene: 35113, refGene: 394, xenoRefGene: 219166, Mrnas: 1628
 
-    # felCat4: refGene: 351, xenoRefGene: 210753, Mrnas: 2163
-    # canFam2: ensGene: 30299, refGene: 1039, xenoRefGene: 210152, Mrnas: 3211
-    # ailMel1: xenoRefGene: 200505, Mrnas: 51
-    # hg19: ensGene: 143123, knownGene: 77614, mgcGenes: 31354, 
-    #       refGene: 35655, xenoRefGene: 126675, Mrnas: 287241
-    # mm9: ensGene: 83124, knownGene: 54042, mgcGenes: 26582, 
-    #      refGene: 27122, xenoRefGene: 122159, Mrnas: 258055
-    # monDom5: ensGene: 34745, refGene: 392, xenoRefGene: 213164, Mrnas: 1605
-    #
     #   Based on this, use
     #    1. knownGenes for hg19, mm9
     #    2. ensGene for monDom5, canFam2
@@ -1499,14 +1501,12 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     para try ... check ... push
 
     para time
-# Completed: 1280 of 1280 jobs
-# CPU time in finished jobs:        653s      10.88m     0.18h    0.01d  0.000 y
-# IO & Wait Time:                 11158s     185.97m     3.10h    0.13d  0.000 y
-# Average job time:                   9s       0.15m     0.00h    0.00d
-# Longest finished job:              63s       1.05m     0.02h    0.00d
-# Submission to last job:           138s       2.30m     0.04h    0.00d
-# Estimated complete:                 0s       0.00m     0.00h    0.00d
-
+    # Completed: 1280 of 1280 jobs
+    # CPU time in finished jobs:        652s      10.87m     0.18h    0.01d  0.000 y
+    # IO & Wait Time:                  4743s      79.05m     1.32h    0.05d  0.000 y
+    # Average job time:                   4s       0.07m     0.00h    0.00d
+    # Longest finished job:              30s       0.50m     0.01h    0.00d
+    # Submission to last job:            82s       1.37m     0.02h    0.00d
 
     # see what it looks like in terms of number of annotations per DB:
     find ./parts -type f | while read F
@@ -1515,11 +1515,11 @@ do
 done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
 
    cat annotation.survey.txt
-   #   157202 monDom5
-   #   180207 mm9
-   #   188394 hg19
-   #   189876 canFam2
-   #   201403 ailMel1
+   # 157198 monDom5
+   # 180207 mm9
+   # 188389 hg19
+   # 189876 canFam2
+   # 201762 ailMel1
 
 
     #   load the resulting file
@@ -1530,10 +1530,10 @@ do
     zcat ${F}
 done | sort -k1,1 -k2,2n > multiz6wayFrames.bed
 
-    hgLoadMafFrames felCat4 multiz6wayFrames stdin
+    hgLoadMafFrames felCat4 multiz6wayFrames  multiz6wayFrames.bed
 
     featureBits -countGaps felCat4 multiz6wayFrames.bed
-    #   30677403 bases of 3160303948 (0.971%) in intersection
+    #   30701916 bases of 3160303948 (0.971%) in intersection
 
     #   enable the trackDb entries:
 # frames multiz6wayFrames
@@ -1556,6 +1556,13 @@ do
         | gzip -c > upstream${S}.maf.gz
     echo "done upstream${S}.maf.gz"
 done
+
+    #   making upstream1000.maf
+    #   done upstream1000.maf.gz
+    #   making upstream2000.maf
+    #   done upstream2000.maf.gz
+    #   making upstream5000.maf
+    #   done upstream5000.maf.gz
 
     mkdir -p /usr/local/apache/htdocs-hgdownload/goldenPath/felCat4/multiz6way/maf
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/felCat4/multiz6way/maf
