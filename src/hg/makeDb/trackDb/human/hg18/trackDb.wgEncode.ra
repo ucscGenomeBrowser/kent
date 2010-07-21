@@ -1904,6 +1904,7 @@ group regulation
     showSubtrackColorOnUi on
     windowingFunction mean
     priority 4
+    html wgEncodeRegMarkEnhH3k4me3
 
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
