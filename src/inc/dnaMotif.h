@@ -53,6 +53,9 @@ char dnaMotifBestStrand(struct dnaMotif *motif, DNA *dna);
 double dnaMotifBitScore(struct dnaMotif *motif, DNA *dna);
 /* Return logBase2-odds score of dna given a probabalistic motif. */
 
+double dnaMotifBitScoreWithMark0Bg(struct dnaMotif *motif, DNA *dna, double mark0[5]);
+/* Return logBase2-odds score of dna given a probabalistic motif and using a 0-order markov model for the background. */
+
 double dnaMotifBitScoreWithMarkovBg(struct dnaMotif *motif, DNA *dna, double mark2[5][5][5]);
 /* Return logBase2-odds score of dna given a probabalistic motif using a 2nd-order markov model for the background.
    motif and markd2 must be in log2 format.

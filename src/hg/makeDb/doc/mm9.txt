@@ -6410,7 +6410,7 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
     #	there are going to be several different phastCons runs using
     #	this same script.  They trigger off of the current working directory
     #	$cwd:t which is the "grp" in this script.  It is one of:
-    #	all gliers placentals
+    #	all glires placentals
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
@@ -10683,9 +10683,8 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
     cat cgapSEQUENCE.tab cgapSYMBOL.tab cgapALIAS.tab|sort -u > cgapAlias.tab
     hgsql mm9 -e 'LOAD DATA local INFILE "cgapAlias.tab" into table cgapAlias'
 
-# XXXX
 #########################################################################
-# phyloP conservation for 30-way (DONE - 2009-10-21,2009-11-10 - Hiram)
+# phyloP conservation for 30-way (DONE - 2010-07-15 - Hiram)
 #
 # Vertebrate, Placental, Euarchontoglires
 #
@@ -10742,7 +10741,6 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
     cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.split
     gensub2 maf.list single template jobList
     para -ram=8g create jobList
-XXX - running Fri Jul  9 11:22:50 PDT 2010
 # Completed: 75 of 75 jobs
 # CPU time in finished jobs:       9843s     164.05m     2.73h    0.11d  0.000 y
 # IO & Wait Time:                  2938s      48.97m     0.82h    0.03d  0.000 y
@@ -10750,7 +10748,7 @@ XXX - running Fri Jul  9 11:22:50 PDT 2010
 # Longest finished job:             393s       6.55m     0.11h    0.00d
 # Submission to last job:           678s      11.30m     0.19h    0.01d
 
-    # run phyloP with score=LRT 
+    # run phyloP with --method LRT 
     ssh swarm
     mkdir /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.phyloP
     cd /hive/data/genomes/mm9/bed/multiz30way/consPhyloP/run.phyloP
@@ -10824,26 +10822,31 @@ rm -fr $tmp
     gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
     para create jobList
     para try ... check ... push ... etc ...
-XXX - running Fri Jul  9 11:55:19 PDT 2010
-
     para time
-# Completed: 3186 of 3186 jobs
-# CPU time in finished jobs:    1306874s   21781.23m   363.02h   15.13d  0.041 y
-# IO & Wait Time:                105488s    1758.14m    29.30h    1.22d  0.003 y
-# Average job time:                 443s       7.39m     0.12h    0.01d
-# Longest finished job:             678s      11.30m     0.19h    0.01d
-# Submission to last job:          7789s     129.82m     2.16h    0.09d
+# Completed: 2685 of 2685 jobs
+# CPU time in finished jobs:     641900s   10698.34m   178.31h    7.43d  0.020 y
+# IO & Wait Time:                 19012s     316.86m     5.28h    0.22d  0.001 y
+# Average job time:                 246s       4.10m     0.07h    0.00d
+# Longest finished job:             484s       8.07m     0.13h    0.01d
+# Submission to last job:         31192s     519.87m     8.66h    0.36d
 
     ssh hgwdev
     cd /hive/data/genomes/hg18/bed/multiz30way/consPhyloP/run.phyloP/all
     find ./wigFix -type f \
 	| sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
-	| sort -k1,1 -k3,3n -k4,4n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
-    cat wigFile.list | xargs cat \
-	| wigEncode stdin phyloP30way.wig phyloP30way.wib > wigEncode.log 2>&1 &
-    #	Converted stdin, upper limit 6.39, lower limit -13.27
-    cat wigFile.list | xargs cat \
-	| wigToBigWig stdin ../../../../chrom.sizes phyloP30way.bw
+	| sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigEncode stdin phyloP30way.wig \
+		phyloP30way.wib  > wigEncode.log 2>&1 &
+    #	Converted stdin, upper limit 5.04, lower limit -10.12
+
+    #	good test to make sure no overlapping coordinates, bigWig:
+    #	consumes massive amount of memory, in bash raise your memory limits:
+    ulimit -d 188743680
+    ulimit -v 188743680
+    time cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+	| wigToBigWig stdin ../../../../chrom.sizes phyloP30way.bw &
+
     #	if you wanted to use the bigWig file, loading bigWig table:
     ln -s `pwd`/phyloP30way.bw /gbdb/mm9/bbi
     hgsql mm9 -e 'drop table if exists phyloP30wayAll; \
@@ -10856,13 +10859,14 @@ XXX - running Fri Jul  9 11:55:19 PDT 2010
     ln -s `pwd`/phyloP30way.wib /gbdb/mm9/multiz30way
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
 	phyloP30wayAll phyloP30way.wig
+    #	real    0m32.778s
 
     #	create download files:
     cat << '_EOF_' > mkDown.csh
 #!/bin/csh -fe
 foreach F (`cat wigFile.list`)
     set C = $F:h:t:r
-    cat $F >> downloads/${C}.wigFix
+    cat $F | sed -e "s/__[0-9]//" >> downloads/${C}.wigFix
 end
 '_EOF_'
     # << happy emacs
@@ -10876,14 +10880,14 @@ end
 
     wigTableStats.sh mm9 phyloP30wayAll
 # db.table      min max mean count sumData
-# mm9.phyloP30wayAll     -14.08 6.424 0.0896064 2845303719 2.54957e+08
+# mm9.phyloP30wayAll      -10.116 5.038 0.119587 1914580285 2.28959e+08
 #	stdDev viewLimits
-#	0.833186 viewLimits=-4.07632:4.25553
-    #	that range is: 14.08+6.424 = 20.504
+#	0.760605 viewLimits=-3.68344:3.92261
+    #	that range is: 10.116+5.039 = 15.154
 
     #  Create histogram to get an overview of all the data
     time nice -n +19 hgWiggle -doHistogram \
-	-hBinSize=0.020504 -hBinCount=1000 -hMinVal=-14.08 -verbose=2 \
+	-hBinSize=0.015154 -hBinCount=1000 -hMinVal=-10.116 -verbose=2 \
 	    -db=mm9 phyloP30wayAll > histogram.data 2>&1
     #	real    8m15.623s
 
@@ -10938,8 +10942,8 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 	| sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
 	| sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
     cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
-	| wigEncode stdin phyloP30wayEuarchontogliers.wig \
-		phyloP30wayEuarchontogliers.wib  > wigEncode.log 2>&1 &
+	| wigEncode stdin phyloP30wayEuarchontoglires.wig \
+		phyloP30wayEuarchontoglires.wib  > wigEncode.log 2>&1 &
     cat wigEncode.log
     #	Converted stdin, upper limit 1.13, lower limit -7.49
 
@@ -10949,20 +10953,20 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     ulimit -v 188743680
     cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
 	| wigToBigWig stdin ../../../../chrom.sizes \
-	    phyloP30wayEuarchontogliers.bw
+	    phyloP30wayEuarchontoglires.bw
 # XXX running Fri Jul  9 14:33:29 PDT 2010
     #	if you wanted to use the bigWig file, loading bigWig table:
-    ln -s `pwd`/phyloP30wayEuarchontogliers.bw /gbdb/mm9/bbi
-    hgsql mm9 -e 'drop table if exists phyloP30wayEuarchontogliers; \
-            create table phyloP30wayEuarchontogliers \
+    ln -s `pwd`/phyloP30wayEuarchontoglires.bw /gbdb/mm9/bbi
+    hgsql mm9 -e 'drop table if exists phyloP30wayEuarchontoglires; \
+            create table phyloP30wayEuarchontoglires \
 		(fileName varchar(255) not null); \
-            insert into phyloP30wayEuarchontogliers values
-	("/gbdb/mm9/bbi/phyloP30wayEuarchontogliers.bw");'
+            insert into phyloP30wayEuarchontoglires values
+	("/gbdb/mm9/bbi/phyloP30wayEuarchontoglires.bw");'
 
     #	loading the wiggle table:
-    ln -s `pwd`/phyloP30wayEuarchontogliers.wib /gbdb/mm9/multiz30way
+    ln -s `pwd`/phyloP30wayEuarchontoglires.wib /gbdb/mm9/multiz30way
     time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/mm9/multiz30way mm9 \
-	phyloP30wayEuarchontogliers phyloP30wayEuarchontogliers.wig
+	phyloP30wayEuarch phyloP30wayEuarchontoglires.wig
     #	real    0m39.041s
     #	clean garbage:
     rm -f wiggle.tab
@@ -10974,9 +10978,9 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     time gzip downloads/chr*.wigFix
     #	real    32m11.301s
 
-    wigTableStats.sh mm9 phyloP30wayEuarchontogliers
+    wigTableStats.sh mm9 phyloP30wayEuarchontoglires
 # db.table      min max mean count
-# mm9.phyloP30wayEuarchontogliers -7.486 1.126 0.0662017 1914580285
+# mm9.phyloP30wayEuarchontoglires -7.486 1.126 0.0662017 1914580285
 #	1.26749e+08 0.594433 viewLimits=-2.90596:1.126
 #	that range is: 7.486+1.126 = 8.612
 
@@ -10984,7 +10988,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     #	numbers from wigTableStats above:
     time nice -n +19 hgWiggle -doHistogram \
 	-hBinSize=0.008612 -hBinCount=1000 -hMinVal=-7.486 -verbose=2 \
-	    -db=mm9 phyloP30wayEuarchontogliers > histogram.data 2>&1
+	    -db=mm9 phyloP30wayEuarchontoglires > histogram.data 2>&1
     #	real    8m15.623s
 
     #	create plot of histogram:
@@ -10995,8 +10999,8 @@ set size 1.4, 0.8
 set key left box
 set grid noxtics
 set grid ytics
-set title " Human Hg19 Histogram phyloP30wayEuarchontogliers track"
-set xlabel " phyloP30wayEuarchontogliers score"
+set title " Human Hg19 Histogram phyloP30wayEuarchontoglires track"
+set xlabel " phyloP30wayEuarchontoglires score"
 set ylabel " Relative Frequency"
 set y2label " Cumulative Relative Frequency (CRF)"
 set y2range [0:1]

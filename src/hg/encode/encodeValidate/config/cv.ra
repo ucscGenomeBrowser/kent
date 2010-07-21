@@ -1084,7 +1084,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol Yale_TFBS:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
+protocol Yale_TFBS:HCT-116_protocol.pdf UW_Stam:HCT116_Stam_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -1995,7 +1995,7 @@ organism Mouse
 tissue Blood
 category Cell Line
 #category L
-description B-cell lymphoma
+description B-cell lymphoma (GM12878 analog)
 vendorName Weissman lab
 vendorId
 orderUrl
@@ -2056,15 +2056,14 @@ sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
-term G1E_E4_E2
+term G1E_E4+E2
 tag G1E_E4_E2
 type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
 #category L
-description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)
->>>>>>> Stashed changes:src/hg/encode/encodeValidate/config/cv.ra
+description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
 vendorName Mitch Weiss lab
 orderUrl
 # This is an email address how do we want these links displayed
@@ -2142,8 +2141,8 @@ tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
-category Tissue
-#category T
+category Primary Cells
+#category P
 description MEF
 vendorName LICR lab
 termId 6948
@@ -2152,13 +2151,14 @@ color 153,38,0
 sex U
 protocol LICR:MEF_Ren_protocol.pdf
 
-term Megakaryocyte
+#Shortened Tem
+term Megakaryo
 tag Megakaryocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
-#category L
+category Primary Cells
+#category P
 description Megakaryocyte
 vendorName Mitch Weiss lab
 orderUrl
@@ -2178,7 +2178,7 @@ type Cell Line
 organism Mouse
 category Cell Line
 #category L
-description leukemia (K562 analog)
+description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
@@ -2206,8 +2206,8 @@ tag Muscle
 type Cell Line
 organism Mouse
 tissue Blood
-category Cell Line
-#category L
+category Tissue
+#category T
 description Muscle
 vendorName
 orderUrl
@@ -2215,16 +2215,17 @@ termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
-protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
+#protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
-term OlfactoryBulb
+# shortened term
+term OlfactBulb
 tag OlfactoryBulb
 type Cell Line
 organism Mouse
 tissue OlfactoryBulb
 category Tissue
 #category T
-description OlfactoryBulb
+description Olfactory Bulb
 vendorName LICR lab
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
@@ -2263,14 +2264,15 @@ sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
 #protocol LICR:Placenta_Ren_protocol.pdf
 
-term SmallIntestine
+#Shortened term
+term SmIntestine
 tag SmallIntestine
 type Cell Line
 organism Mouse
 tissue SmallIntestine
 category Tissue
 #category T
-description SmallIntestine
+description Small Intestine
 vendorName LICR lab
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
@@ -3258,7 +3260,7 @@ term MEF2A
 tag MEF2A
 type Antibody
 antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin.
-targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes.
+targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscme-specific, growth factor-induced, and stress-induced genes.
 vendorName Santa Cruz Biotech
 vendorId sc-313
 orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
@@ -3963,160 +3965,164 @@ validation missing
 
 
 ###  These Antibodies are from the Rip Target Protien Table and are being intigrated into this table ####
-term ripInput
-tag ripInput
-type Antibody
-targetDescription RIP CHIP Total input for comparison for RIP experiments
-antibodyDescription
-vendorName
-vendorId
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl
-validation
+### They will be commented out until we are ready to get rid of the original Table
+#term ripInput
+#tag ripInput
+#tag ripInput
+#type Antibody
+#targetDescription RIP CHIP Total input for comparison for RIP experiments
+#antibodyDescription
+#vendorName
+#vendorId
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl
+#validation
 
 
-term T7Tag
-tag T7Tag
-type Antibody
-targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
-antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
-vendorName Millipore; Novagen
-vendorId Mil_AB3790; Nov_69522
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
-validation
+#term T7Tag
+#tag T7Tag
+#type Antibody
+#targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
+#antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+#vendorName Millipore; Novagen
+#vendorId Mil_AB3790; Nov_69522
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+#validation
 
-term ELAVL1
-tag ELAVL1
-type Antibody
-targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
-antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
-vendorName Santa Cruz Biotech
-vendorId SC-5261
-orderUrl
-lab Tenebaum
-lots B2508(Nov2008)
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation
+#term ELAVL1
+#tag ELAVL1
+#type Antibody
+#targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); #Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
+#antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
+#vendorName Santa Cruz Biotech
+#vendorId SC-5261
+#orderUrl
+#lab Tenebaum
+#lots B2508(Nov2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+#validation
 
-term IGF2BP1
-tag IGF2BP1
-type Antibody
-targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
-vendorName Santa Cruz Biotech
-vendorId SC-21027
-orderUrl
-lab Tenebaum
-lots I0607(Nov2008)
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-validation
+#term IGF2BP1
+#tag IGF2BP1
+#type Antibody
+#targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; #ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+#antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+#vendorName Santa Cruz Biotech
+#vendorId SC-21027
+#orderUrl
+#lab Tenebaum
+#lots I0607(Nov2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+#validation
 
-term PABPC1
-tag PABPC1
-type Antibody
-targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC
-antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
-lab Tenebaum
-vendorName Sigma Chemical Co.
-vendorId Sig_P6246
-orderUrl
-lab Tenebaum
-lots 044K4810 (Nov 2008)
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-validation
+#term PABPC1
+#tag PABPC1
+#type Antibody
+#targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; #PABPC2; PABPL1; PABPC
+#antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+#lab Tenebaum
+#vendorName Sigma Chemical Co.
+#vendorId Sig_P6246
+#orderUrl
+#lab Tenebaum
+#lots 044K4810 (Nov 2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+#validation
 
-term SLBP
-tag SLBP
-type Antibody
-targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
-at origin.
-vendorName Millipore; Santa Cruz Biotech
-vendorId Mil 06-1376; SC-26522
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-validation
+#term SLBP
+#tag SLBP
+#type Antibody
+#targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
+#antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   #2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
+#at origin.
+#vendorName Millipore; Santa Cruz Biotech
+#vendorId Mil 06-1376; SC-26522
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+#validation
 
-term CELF1
-tag CELF1
-type Antibody
-targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
-antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
-tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
-vendorName Millipore
-vendorId Mil-05621
-orderUrl
-lab Tenebaum
-lots
-targetId
-targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
-validation
+#term CELF1
+#tag CELF1
+#type Antibody
+#targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
+#antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also #known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
+#tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
+#vendorName Millipore
+#vendorId Mil-05621
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+#validation
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 ### We will be replacing this.
 
-#term ripInput
-#tag ripInput
-#type ripTgtProtein
-#alternativeSymbols None
-#description Total input for comparison
-#url
+term ripInput
+tag ripInput
+type ripTgtProtein
+alternativeSymbols None
+description Total input for comparison
+url
 
-#term T7Tag
-#tag T7Tag
-#type ripTgtProtein
-#alternativeSymbols Novagen T7 Tag Cat# 69522
-#description Negative Control Ab (T7 Tag Mouse Monoclonal)
-#url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+term T7Tag
+tag T7Tag
+type ripTgtProtein
+alternativeSymbols Novagen T7 Tag Cat# 69522
+description Negative Control Ab (T7 Tag Mouse Monoclonal)
+url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
 
-#term ELAVL1
-#tag ELAVL1
-#type ripTgtProtein
-#alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
-#description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/1994
+term ELAVL1
+tag ELAVL1
+type ripTgtProtein
+alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
+description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/1994
 
-#term IGF2BP1
-#tag IGF2BP1
-#type ripTgtProtein
-#alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-#description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/10642
+term IGF2BP1
+tag IGF2BP1
+type ripTgtProtein
+alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/10642
 
-#term PABPC1
-#tag PABPC1
-#type ripTgtProtein
-#alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
-#description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/26986
+term PABPC1
+tag PABPC1
+type ripTgtProtein
+alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
+description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/26986
 
-#term SLBP
-#tag SLBP
-#type ripTgtProtein
-#alternativeSymbols HBP; SLBP
-#description stem-loop binding protein (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/7884
+term SLBP
+tag SLBP
+type ripTgtProtein
+alternativeSymbols HBP; SLBP
+description stem-loop binding protein (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/7884
 
-#term CELF1
-#tag CELF1
-#type ripTgtProtein
-#alternativeSymbols CUG-BP1; BRUNOL2
-#description Embryo deadenylation element-binding protein homolog (Homo sapiens)
-#url http://view.ncbi.nlm.nih.gov/gene/10658
-# ripAntibody - Tenenbaum RIP-chip / RIP-seq project
+term CELF1
+tag CELF1
+type ripTgtProtein
+alternativeSymbols CUG-BP1; BRUNOL2
+description Embryo deadenylation element-binding protein homolog (Homo sapiens)
+url http://view.ncbi.nlm.nih.gov/gene/10658
+
+
+#### ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
 tag AUF1
 type ripAntibody

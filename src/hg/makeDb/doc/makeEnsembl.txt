@@ -8,6 +8,23 @@
 ############################################################################
 # ensembl 58 update (WORKING - 2010-05-27 - Hiram)
 
+#############################################################################
+#  calJac3 - Marmoset - Ensembl Genes version 58  (DONE - 2010-07-20 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3
+    cat << '_EOF_' > calJac3.ensGene.ra
+# required db variable
+db calJac3
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=58 calJac3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/ensGene.58
+    featureBits calJac3 ensGene
+    # 50565085 bases of 2752505800 (1.837%) in intersection
+
 ############################################################################
 #  susScr2 - Pig - lifted susScr1 v58 genes to susScr2 (DONE - 2010-05-28 - Hiram)
     mkdir /hive/data/genomes/susScr2/bed/ensGene.58

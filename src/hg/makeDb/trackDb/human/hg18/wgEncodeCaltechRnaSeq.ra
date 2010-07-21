@@ -16,8 +16,8 @@ subGroup7 insertLength Insert_Length il400=400 ilunk=ilunk
 subGroup8 rep Replicate 1=1 2=2 3=3 4=4
 #dimensions dimensionX=cellType dimensionY=mapAlgorithm dimensionZ=readType
 #dimensionZchecked 1x32,2x75
-dimensionZchecked 1,2,3,4
-dimensions dimensionY=cellType dimensionX=readType dimensionZ=rep
+dimensionAchecked 1,2,3,4
+dimensions dimensionY=cellType dimensionX=readType dimA=rep
 # sortOrder cellType=+ readType=+ view=+ mapAlgorithm=+ 
 sortOrder cellType=+ readType=+ rep=+ view=+ 
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract mapAlgorithm=mapAlgorithm

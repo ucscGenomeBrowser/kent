@@ -1427,10 +1427,14 @@ void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
+printf("<SELECT NAME=\"%s\"", name);
+if (class)
+    printf(" class=\"%s\"", class);
 if (style)
-    printf("<SELECT NAME=\"%s\" class='%s' style=\"%s\" %s>\n", name, class, style, javascript);
-else
-    printf("<SELECT NAME=\"%s\" class='%s'>\n", name, class);
+    printf(" style=\"%s\"", style);
+if (javascript)
+    printf(" %s", javascript);
+printf(">\n");
 for (i=0; i<menuSize; ++i)
     {
     if (sameWord(menu[i], checked))

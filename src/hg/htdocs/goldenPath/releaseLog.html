@@ -7,19 +7,26 @@
 	<META http-equiv="Content-Script-Type" content="text/javascript">
 	<META HTTP-EQUIV="Pragma" CONTENT="no-cache">
 	<META HTTP-EQUIV="Expires" CONTENT="-1">
-	<TITLE>
-Track and Table Releases	</TITLE>
+	<TITLE>Track and Table Releases	</TITLE>
 	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css" TYPE="text/css">
 
 </HEAD>
-<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF">
+<BODY BGCOLOR="#FFF9D2" LINK="#0000CC" VLINK="#330066" ALINK="#6600FF"><script type='text/javascript'>
+document.write("<center><div id='warnBox' style='display:none; background-color:Beige; border: 3px ridge DarkRed; width:640px; padding:10px; margin:10px; text-align:left;'><CENTER><B id='warnHead' style='color:DarkRed;'></B></CENTER><UL id='warnList'></UL><CENTER><button id='warnOK' onclick='hideWarnBox();return false;'></button></CENTER></div></center>");
+function showWarnBox() {document.getElementById('warnOK').innerHTML='&nbsp;OK&nbsp;';var warnBox=document.getElementById('warnBox');warnBox.style.display=''; warnBox.style.width='65%';document.getElementById('warnHead').innerHTML='Error(s):';}
+function hideWarnBox() {var warnBox=document.getElementById('warnBox');warnBox.style.display='none';warnBox.innerHTML='';var endOfPage = document.body.innerHTML.substr(document.body.innerHTML.length-20);if(endOfPage.lastIndexOf('-- ERROR --') > 0) { history.back(); }}
+</script>
+
 <style type='text/css'>
 .trDrag {background-color:#EEEEEE;} .pale {background-color:#F8F8F8;}
 .inputBox {border: 2px inset #CCCCCC;}
 .greenRoof {border-top: 3px groove #008800;}
 .greenBox {border: 5px outset #008800;}
 .blueBox {border: 4px inset #000088;}
-</style>
+.hintCol {font-size:70%; line-height:80%; border-style: hidden; background-color:#FFF9D2;}
+.hintRow {font-size:70%; line-height:80%; border-style: hidden; background-color:#FFF9D2;}
+.inOutButton {height:24px; width:24px; border-style: outset;}
+.waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%; width: 100%; background-color: #fff; opacity: 0;}</style>
 <A NAME="TOP"></A>
 
 <TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
@@ -66,7 +73,7 @@ Track and Table Releases	</TITLE>
   	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1"><TR><TD>	
     <TABLE BGCOLOR="#FFFEE8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0"><TR><TD>	
 	<TABLE BGCOLOR="#D9E4F8" BACKGROUND="../images/hr.gif" WIDTH="100%"><TR><TD>
-		<FONT SIZE="4"><b>&nbsp;
+		<FONT SIZE="4" id='sectTtl'><b>&nbsp;
 Track and Table Releases</b></FONT></TD></TR></TABLE>
 	<TABLE BGCOLOR="#FFFEE8" WIDTH="100%" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>
 	<TR><TD WIDTH=10>&nbsp;</TD><TD>
@@ -166,7 +173,7 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 </ul>
 <p>
  For more information about the tracks and tables listed on this page, refer to the <a href=/goldenPath/help/hgTracksHelp.html#IndivTracks>User's Guide</a>.<p>
-<em>Last updated 14 Jul 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
+<em>Last updated 21 Jul 2010. <a HREF="/contacts.html">Inquiries and feedback welcome</a>.</em>
 
 	</TD><TD WIDTH=15></TD></TR></TABLE>
 	</TD></TR></TABLE>
@@ -191,6 +198,16 @@ Track and Table Releases</b></FONT></TD></TR></TABLE>
 <TD nowrap><FONT color="#006666"><B>Assembly</B></FONT></TD>
 <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT></TD>
 </TR>
+<TR valign=top><TD align=left>
+Conservation, Most Conserved</td>
+<td>danRer6</td>
+<td>19 Jul 2010</td>
+</tr>
+<TR valign=top><TD align=left>
+DECIPHER data</td>
+<td>hg18</td>
+<td>13 Jul 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeYaleRNAseq" target=_blank>ENCODE RNA-seq from Yale/UC-Davis/Harvard</a></td>
 <td>hg18</td>
@@ -230,16 +247,6 @@ Ensembl gene update, version 58</td>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeHudsonalphaChipSeq" target=_blank>ENCODE HAIB TFBS (release 2)</a></td>
 <td>hg18</td>
 <td>11 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeCaltechRnaSeq" target=_blank>ENCODE Caltech RNA-seq (Release 2)</a></td>
-<td>hg18</td>
-<td>10 Jun 2010</td>
-</tr>
-<TR valign=top><TD align=left>
-<a href="../../cgi-bin/hgTrackUi?db=hg19&g=snp131" target=_blank>Simple Nucleotide Polymorphisms (dbSNP build 131)</a></td>
-<td>hg19</td>
-<td>04 Jun 2010</td>
 </tr>
 </table>
 
@@ -464,6 +471,10 @@ Initial hg19 release (using GRCh37 Genome Reference Consortium Human Reference 3
 <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
     <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
 </TD></TR>
+<TR valign=top><TD align=left>
+DECIPHER data</td>
+<td>13 Jul 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 <a href="../../cgi-bin/hgTrackUi?db=hg18&g=wgEncodeYaleRNAseq" target=_blank>ENCODE RNA-seq from Yale/UC-Davis/Harvard</a></td>
 <td>09 Jul 2010</td>
@@ -7448,6 +7459,10 @@ Frog Browser Initial Release (using JGI version 3.0): Assembly, Gap, GC Percent,
 <TR><TD nowrap><FONT color="#006666"><B>Track/Table Name</B></FONT></TD>
     <TD nowrap><FONT color="#006666"><B>Release Date</B></FONT>
 </TD></TR>
+<TR valign=top><TD align=left>
+Conservation, Most Conserved</td>
+<td>19 Jul 2010</td>
+</tr>
 <TR valign=top><TD align=left>
 Ensembl gene update, version 58</td>
 <td>21 Jun 2010</td>

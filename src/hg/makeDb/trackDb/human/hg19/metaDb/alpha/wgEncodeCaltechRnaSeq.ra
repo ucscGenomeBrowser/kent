@@ -288,9 +288,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -301,7 +301,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view FastqRd1
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1
@@ -330,9 +330,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
@@ -343,7 +343,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2
@@ -416,9 +416,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
 grant Myers
 insertLength 200
@@ -429,7 +429,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view GeneDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep1
@@ -458,9 +458,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
 grant Myers
 insertLength 200
@@ -471,7 +471,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view GeneFPKM
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep1
@@ -500,9 +500,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2.gtf.gz
 grant Myers
 insertLength 200
@@ -513,7 +513,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view GeneModel
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep1
@@ -542,9 +542,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep2.insDistrib.gz
 grant Myers
 insertLength 200
@@ -555,7 +555,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view InsLength
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep1
@@ -584,9 +584,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep2.junction.gz
 grant Myers
 insertLength 200
@@ -597,7 +597,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view Junctions
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1
@@ -626,9 +626,9 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam.gz
 grant Myers
 insertLength 200
@@ -638,7 +638,7 @@ origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2
 view Paired
 
@@ -668,9 +668,9 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig.gz
 grant Myers
 insertLength 200
@@ -680,7 +680,7 @@ origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
 view Signal
 
@@ -710,9 +710,9 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam.gz
 grant Myers
 insertLength 200
@@ -722,7 +722,7 @@ origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 tableName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2
 view Splices
 
@@ -752,9 +752,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
 grant Myers
 insertLength 200
@@ -765,7 +765,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view TranscriptDeNovo
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep1
@@ -794,9 +794,9 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-21
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-07
+dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
 grant Myers
 insertLength 200
@@ -807,7 +807,7 @@ parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
-subId 1671
+subId 1856
 view TranscriptFPKM
 
 metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneDeNovoRep2
@@ -4198,6 +4198,446 @@ replicate 2
 subId 1660
 view TranscriptFPKM
 
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep1.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view GeneFPKM
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view GeneFPKM
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view GeneModel
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view GeneModel
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1.junction.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2.junction.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2
+objType table
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+tableName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep1
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep1.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1907
+view TranscriptFPKM
+
+metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep2
+objType file
+cell HSMM
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1908
+view TranscriptFPKM
+
 metaObject wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1
 objType file
 cell HUVEC
@@ -5758,6 +6198,226 @@ replicate 2
 subId 1658
 view TranscriptFPKM
 
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneFPKMRep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view GeneFPKM
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view GeneModel
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2.junction.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2
+objType table
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+tableName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptFPKMRep2
+objType file
+cell MCF-7
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1904
+view TranscriptFPKM
+
 metaObject wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1
 objType file
 cell NHEK
@@ -5912,6 +6572,26 @@ replicate 1
 subId 1493
 view FastqRd1
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+view FastqRd1
+
 metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1
 objType file
 cell NHEK
@@ -5932,6 +6612,26 @@ project wgEncode
 readType 2x75
 replicate 1
 subId 1493
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
 view FastqRd2
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep1
@@ -5956,6 +6656,26 @@ replicate 1
 subId 1493
 view GeneDeNovo
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+view GeneDeNovo
+
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep1
 objType file
 cell NHEK
@@ -5978,6 +6698,26 @@ replicate 1
 subId 1493
 view GeneFPKM
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+view GeneFPKM
+
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep1
 objType file
 cell NHEK
@@ -5998,6 +6738,26 @@ project wgEncode
 readType 2x75
 replicate 1
 subId 1493
+view GeneModel
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
 view GeneModel
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200InsLengthRep1
@@ -6044,6 +6804,26 @@ replicate 1
 subId 1493
 view Junctions
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2.junction.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+view Junctions
+
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1
 objType table
 cell NHEK
@@ -6064,6 +6844,26 @@ readType 2x75
 replicate 1
 subId 1493
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2
 view Paired
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
@@ -6088,6 +6888,26 @@ subId 1493
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
 view Signal
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
+view Signal
+
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1
 objType table
 cell NHEK
@@ -6108,6 +6928,26 @@ readType 2x75
 replicate 1
 subId 1493
 tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2
+objType table
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+tableName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2
 view Splices
 
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep1
@@ -6132,6 +6972,26 @@ replicate 1
 subId 1493
 view TranscriptDeNovo
 
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+view TranscriptDeNovo
+
 metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell NHEK
@@ -6154,4 +7014,424 @@ replicate 1
 subId 1493
 view TranscriptFPKM
 
-# MAGIC: -1392989594
+metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep2
+objType file
+cell NHEK
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1909
+view TranscriptFPKM
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view FastqRd1
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm NA
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view FastqRd2
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view GeneDeNovo
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneFPKMRep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view GeneFPKM
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+view GeneModel
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2.gtf.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view GeneModel
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1.junction.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2.junction.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view Junctions
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2
+view Paired
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
+view Signal
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2
+objType table
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+tableName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2
+view Splices
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1
+project wgEncode
+readType 2x75
+replicate 1
+subId 1906
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view TranscriptDeNovo
+
+metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptFPKMRep2
+objType file
+cell NHLF
+composite wgEncodeCaltechRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-13
+dateUnrestricted 2011-04-12
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
+grant Myers
+insertLength 200
+lab Caltech(Wold)
+mapAlgorithm TH1014
+parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptFPKMRep2
+project wgEncode
+readType 2x75
+replicate 2
+subId 1905
+view TranscriptFPKM
+
+# MAGIC: 1869789256

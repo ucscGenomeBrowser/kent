@@ -47,7 +47,7 @@ checkMetaDb() {
 
     # makefile will call makeMetaDb if file list is newer than table
     (cd $metaDir; make DB=$db TABLE=$metaDb)
-    rm $metaDir/metaDb
+    rm -f $metaDir/metaDb
 }
 
 # load for all specified databases
