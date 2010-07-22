@@ -3393,7 +3393,7 @@ wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalGm12878
     subTrack wgEncodeYaleRNAseq
-    shortLabel GM12878 PolyA Sig
+    shortLabel GM12878 PolyA- Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA- Signal (in GM12878 cells)
     subGroups cellType=t1GM12878
     type bedGraph 4
@@ -3402,7 +3402,7 @@ wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalK562
     subTrack wgEncodeYaleRNAseq
-    shortLabel K562 PolyA Sig
+    shortLabel K562 PolyA- Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA- Signal (in K562 cells)
     subGroups cellType=t1K562
     type bedGraph 4
@@ -3411,7 +3411,7 @@ wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
     subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
+    shortLabel K562 PolyA- Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA- Signal (in K562/IFNa30m cells)
     subGroups cellType=uK562Ia30
     type bedGraph 4
@@ -3420,7 +3420,7 @@ wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
     subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
+    shortLabel K562 PolyA- Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA- Signal (in K562/IFNa6h cells)
     subGroups cellType=uK562Ia6
     type bedGraph 4
@@ -3429,7 +3429,7 @@ wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
     subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
+    shortLabel K562 PolyA- Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA- Signal (in K562/IFNg30m cells)
     subGroups cellType=uK562Ig30
     type bedGraph 4
@@ -3438,7 +3438,7 @@ wgEncode 1
 
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
     subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
+    shortLabel K562 PolyA- Sig
     longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA- Signal (in K562/IFNg6h cells)
     subGroups cellType=uK562Ig6
     type bedGraph 4
