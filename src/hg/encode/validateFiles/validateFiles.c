@@ -48,6 +48,7 @@ struct twoBitFile *genome = NULL;
 int mismatches;
 int matchFirst=0;
 int mmCheckOneInN;
+int allowErrors = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -85,8 +86,6 @@ errAbort(
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
   "                                  with formats such as tagAlign and pairedTagAlign)\n"
-  "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
-  "                                  stopping (default %d)\n"
   "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
   "                                  otherwise require strictly start < end\n"
   "   -genome=path/to/hg18.2bit    Validate tagAlign or pairedTagAlign sequences match genome\n"
@@ -108,6 +107,9 @@ errAbort(
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
   "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
   "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
+  "   -allowErrors=N               number of errors allowed to still pass (default 0)\n"
+  "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
+  "                                  stopping (default %d)\n"
   , MAX_ERRORS);
 }
 
@@ -133,6 +135,7 @@ static struct optionSpec options[] = {
    {"version", OPTION_BOOLEAN},
    {"allowOther", OPTION_BOOLEAN},
    {"allowBadLength", OPTION_BOOLEAN},
+   {"allowErrors", OPTION_INT},
    {"complementMinus", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -1150,7 +1153,8 @@ if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
     int size =  twoBitSeqSize(genome, chrom);
     cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
     strcpy(cacheChrom, chrom);
-    verbose(2, "read in chrom %s size %d\n",cacheChrom, size);
+    verbose(2, "read in chrom %s size %d: aligns to this point %d\n",
+        cacheChrom, size, line);
     }
 
 
@@ -1326,7 +1330,7 @@ for(ii=0; ii < head->n_targets; ii++)
 	}
     }
 
-if (errs)
+if (errs > allowErrors)
     errAbort("Aborting... %d errors found in BAM file\n", errs);
 
 if (!genome)
@@ -1374,8 +1378,11 @@ for (i = 0; i < numFiles ; ++i)
     lineFileClose(&lf);
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
-if (errs > 0)
+if (errs > allowErrors)
     errAbort("Aborting ... found %d errors in total\n", errs);
+else
+    verbose(2, "Error count %d\n",errs);
+
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
 
 }
@@ -1439,6 +1446,7 @@ type = optionVal("type", "");
 if (strlen(type) == 0)
     errAbort("please specify type");
 maxErrors      = optionInt("maxErrors", MAX_ERRORS);
+allowErrors    = optionInt("allowErrors", allowErrors);
 zeroSizeOk     = optionExists("zeroSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
