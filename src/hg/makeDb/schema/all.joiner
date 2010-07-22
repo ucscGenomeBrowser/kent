@@ -735,6 +735,7 @@ identifier decipherId
 $hg.decipher.name dupeOk
 $hg.decipherRaw.id
 $hg.knownToDecipher.value
+$hg.knownCanonToDecipher.value
 
 # Microarray stuff.
 
@@ -1337,6 +1338,8 @@ identifier kgOldId
 identifier knownGeneId dependency
 "Known Gene ID - the genbank accession of the representative mRNA"
     $kgDb.knownGene.name dupeOk
+    $kgDb.knownCanonToDecipher.name
+    $kgDb.knownToDecipher.name
     $kgDb.knownToKeggEntrez.name
     hg16.hg17Kg.name minCheck=.30
     $kgDb2.knownExpDistance.query
