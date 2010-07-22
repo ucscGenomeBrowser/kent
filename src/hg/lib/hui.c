@@ -5534,7 +5534,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         enum trackVisibility tv =
             hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
 
-        safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", viewName);
+        safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\" onfocus='this.lastIndex=this.selectedIndex;'", viewName);
 
         printf("<TD>");
         safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->tags[ix]);
