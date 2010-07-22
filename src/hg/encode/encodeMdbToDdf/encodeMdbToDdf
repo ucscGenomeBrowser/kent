@@ -138,8 +138,12 @@ for my $obj (@objects) {
     # if it's a file,
     if (defined $metadata{"fileName"}) {
         my $filename = $metadata{"fileName"};
-        #if ($filename[
+        # if the filename ends in .gz, remove it
+        if (substr($filename, length($filename) - 3) eq ".gz") {
+            $filename = substr($filename, 0, length($filename) - 3);
+        }
         print $filename;
+        # print the selected vars for this file
         for my $v (@selectedVars) {
             if (defined $metadata{$v}) {
                 print "\t", $metadata{$v};
