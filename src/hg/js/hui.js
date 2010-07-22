@@ -14,60 +14,83 @@ var compositeName = "";
 
 // The 'mat*' functions are especially designed to support subtrack configuration by 2D matrix of controls
 
-function matSelectViewForSubTracks(obj,view)
+function _matSelectViewForSubTracks(obj,view)
 {
 // viewDD:onchange Handle any necessary changes to subtrack checkboxes when the view changes
 // views are "select" drop downs on a subtrack configuration page
+    var classesHidden = ""; // Needed for later
+
     if( obj.selectedIndex == 0) { // hide
         matSubCBsEnable(false,view);
         hideConfigControls(view);
 
-        // fix 3-way matCBs if necessary
-        var matCBs = matCBsWhichAreComplete(false);
-        if(matCBs.length > 0) {
-            if($("select.viewDD[selectedIndex]").length == 0) {// No views visible so nothing is inconsistent
-                $( matCBs ).each( function (i) { matCbComplete( this, true ); });
-            } else {
-                var classes = matViewClasses('hidden');
-                classes = classes.concat( matAbcCBclasses('unchecked') );
-                $( matCBs ).each( function (i) { matChkBoxNormalize( this, classes ); });
-            }
-        }
+        // Needed for later
+        classesHidden = matViewClasses('hidden');
+        classesHidden = classesHidden.concat( matAbcCBclasses('unchecked') );
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
         exposeComposite(compositeName);
-        // if matrix used then: essentially reclick all 'checked' matrix checkboxes
-        var CBs = $("input.matCB").filter(":checked");
-        if(CBs.length > 0) {
-            var classSets = new Array();
-            CBs.each( function (i) { classSets.push( $(this).attr("class") ); } );
-            if(classSets.length > 0) {
-                // Now it would be good to create a list of all subtrack CBs that match view,unchecked, and a class set (pair or triplet!)
-                CBs = $("input.subCB").filter("."+view).not(":checked");
-                if(CBs.length > 0) {
-                    while(classSets.length > 0) {
-                        var OneOrMoreClasses = classSets.pop();
-                        var JustTheseCBs = CBs;
-                        if(OneOrMoreClasses.length > 0) {
-                            OneOrMoreClasses = OneOrMoreClasses.replace("matCB ",""); // "matCB K562 CTCF" to "K562 CTCF"
-                            var classes = OneOrMoreClasses.split(" ");
-                            while(classes.length > 0) {
-                                JustTheseCBs = JustTheseCBs.filter("."+classes.pop());
-                            }
-                            JustTheseCBs.each( function (i) {
-                                this.checked = true;
-                                matSubCBsetShadow(this);
-                                hideOrShowSubtrack(this);
-                            });
+        matSubCBsEnable(true,view);
+
+        // Needed for later
+        classesHidden = matViewClasses('hidden');
+        classesHidden = classesHidden.concat( matAbcCBclasses('unchecked') );
+
+        // If hide => show then check all subCBs matching view and matCBs
+        // If show => show than just enable subCBs for the view.
+        if (obj.lastIndex == 0) { // From hide to show
+            // If there are matCBs then we will check some subCBs if we just went from hide to show
+            var matCBs = $("input.matCB:checked");
+            if (matCBs.length > 0) {
+                // Get list of all checked abc classes first
+                var classesAbcChecked = new Array();
+                matCBs.filter(".abc").each( function (i) {
+                    var classList = $( this ).attr("class").split(" ");
+                    classesAbcChecked.push( aryRemove(classList,"matCB","halfVis","abc") );
+                });
+
+                // Walk through checked non-ABC matCBs and sheck related subCBs
+                var subCBs = $("input.subCB").filter("."+view).not(":checked");
+                matCBs.not(".abc").each( function (i) {
+                    var classList = $( this ).attr("class").split(" ");
+                    classList = aryRemove(classList,"matCB","halfVis");
+                    var subCBsMatching = objsFilterByClasses(subCBs,"and",classList);
+                    if (classesAbcChecked.length>0)
+                        subCBsMatching = objsFilterByClasses(subCBsMatching,"or",classesAbcChecked);
+                    // Check the subCBs that belong to this view and checked matCBs
+                    subCBsMatching.each( function (i) {
+                        this.checked = true;
+                        matSubCBsetShadow(this);
+                        hideOrShowSubtrack(this);
+                    });
+                });
+            } // If no matrix, then enabling is all that was needed.
+
+            // fix 3-way which may need to go from unchecked to .halfVis
+            var matCBs = $("input.matCB").not(".abc").not(".halfVis").not(":checked");
+            if(matCBs.length > 0) {
+                $( matCBs ).each( function (i) { matChkBoxNormalize( this, classesHidden ); });
                         }
                     }
                 }
+    // fix 3-way matCBs which may need to go from halfVis to checked or unchecked depending
+    var matCBs = $("input.matCB").not(":checked").not(".halfVis");
+    var matCBs = matCBsWhichAreComplete(false);
+    if(matCBs.length > 0) {
+        if($("select.viewDD").not("[selectedIndex=0]").length = 0) { // No views visible so nothing is inconsistent
+            $( matCBs ).each( function (i) { matCbComplete( this, true ); });
+        } else {
+            $( matCBs ).each( function (i) { matChkBoxNormalize( this, classesHidden ); });
             }
         }
-        matSubCBsEnable(true,view);
-    }
     matSubCBsSelected();
+    obj.lastIndex = obj.selectedIndex;
+}
+
+function matSelectViewForSubTracks(obj,view)
+{
+    waitOnFunction( _matSelectViewForSubTracks, obj,view);
 }
 
 function exposeComposite(compositeName)
@@ -116,7 +139,7 @@ function matCbClick(matCB)
     else if(classList.length == 2 )
        matSubCBsCheck(matCB.checked,classList[0],classList[1]);  // dimX and dimY
     else
-        alert("ASSERT in matCbClick(): There should be no more than 2 entries in list:"+classList)
+        warn("ASSERT in matCbClick(): There should be no more than 2 entries in list:"+classList)
 
     if(!isABC)
         matCbComplete(matCB,true); // No longer partially checked
@@ -431,9 +454,9 @@ function matViewClasses(limitTo)
     var classes = new Array;
     var viewDDs = $("select.viewDD");//.filter("[selectedIndex='0']");
     if(limitTo == 'hidden') {
-        viewDDs = $(viewDDs).not("[selectedIndex]");
+        viewDDs = $(viewDDs).filter("[selectedIndex=0]");
     } else if(limitTo == 'visible') {
-        viewDDs = $(viewDDs).filter("[selectedIndex]");
+        viewDDs = $(viewDDs).not("[selectedIndex=0]");
     }
     $(viewDDs).each( function (i) {
         var classList = $( this ).attr("class").split(" ");

@@ -1190,6 +1190,7 @@ $(document).ready(function()
             $(imgTable).tableDnD({
                 onDragClass: "trDrag",
                 dragHandle: "dragHandle",
+                scrollAmount: 40,
                 onDragStart: function(ev, table, row) {
                     saveMouseOffset(ev);
                     $(document).bind('mousemove',blockTheMapOnMouseMove);
@@ -1202,7 +1203,7 @@ $(document).ready(function()
                         imgTblZipButtons( table );
                     }
                     $(document).unbind('mousemove',blockTheMapOnMouseMove);
-                    setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+                    setTimeout('blockUseMap=false;',50); // Necessary incase the onDrop was over a map item. onDrop takes precedence.
                 }
             });
         }
