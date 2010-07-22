@@ -5,6 +5,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "jsHelper.h"
+#include "htmshell.h"
 #include "imageV2.h"
 #include "hgTracks.h"
 #include "hgConfig.h"
@@ -1382,21 +1383,6 @@ if(pImgBox != NULL && *pImgBox != NULL)
 
 /////////////////////// imageV2 UI API
 
-static char *clenseQuotes( char * quote )
-{
-int size = strlen(quote) + 100;
-char *cleanQuote = needMem(size);
-safecpy(cleanQuote,size,quote);
-// NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
-if (strSwapStrs(cleanQuote, size,"\"","&#34;") == -1) // Shield double quotes
-    strSwapChar(cleanQuote,'"','`');  // ran out of memory, replacing them with (`)
-if (strSwapStrs(cleanQuote, size,"'","&#39;") == -1) // Shield single quotes
-    strSwapChar(cleanQuote,'\'','`');  // ran out of memory, replacing them with (`)
-if (strSwapStrs(cleanQuote, size,"\n","<BR>") == -1) // new lines also break the code
-    strSwapChar(cleanQuote,'\n',' ');  // ran out of memory, replacing them with ( )
-return cleanQuote;
-}
-
 static boolean imageMapDraw(struct mapSet *map,char *name)
 /* writes an image map as HTML */
 {
@@ -1431,7 +1417,7 @@ for(;item!=NULL;item=item->next)
         warn("map item has no url!");
 
     if(item->title != NULL && strlen(item->title) > 0)
-        hPrintf(" TITLE='%s'", clenseQuotes( item->title ) );
+        hPrintf(" TITLE='%s'", htmlEncode(item->title) );
     if(item->id != NULL)
         hPrintf(" id='%s'", item->id);
     hPrintf(">" );
@@ -1467,9 +1453,9 @@ if(slice->parentImg && slice->parentImg->file != NULL)
     else
         hPrintf("'");
     if(slice->title != NULL)
-        hPrintf(" title='%s'", clenseQuotes( slice->title ) );           // Adds slice wide title
+        hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
-        hPrintf("' title='%s'", clenseQuotes( slice->parentImg->title ) );// Adds image wide title
+        hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
     hPrintf(">");
     }
 else
@@ -1530,7 +1516,7 @@ else if(slice->link != NULL)
     else
         hPrintf("  <A HREF='%s'",slice->link);
     if(slice->title != NULL)
-        hPrintf(" TITLE='Click for %s'", clenseQuotes( slice->title ) );
+        hPrintf(" TITLE='Click for %s'", htmlEncode(slice->title) );
     hPrintf(">\n" );
     }
 
