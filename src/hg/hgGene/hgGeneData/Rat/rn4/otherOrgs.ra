@@ -5,13 +5,13 @@ name mouse
 db mm9
 
 name zebrafish
-db danRer5
+db danRer3
 
 name drosophila
 db dm3
 
 name cElegans
-db ce6
+db ce2
 
 name yeast
 db sacCer2
