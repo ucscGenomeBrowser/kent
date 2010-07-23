@@ -27,7 +27,7 @@ track wgEncodeOpenChromFaire
 compositeTrack on
 superTrack wgEncodeDNAseSuper
 shortLabel Open Chrom FAIRE
-longLabel ENCODE Open Chromatin, UNC FAIRE-seq
+longLabel ENCODE FAIRE-seq from Open Chromatin (UNC)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
 subGroup2 cellType Cell_Line K562=K562&nbsp(Tier_1) GM12878=GM12878&nbsp(Tier_1) H1=H1-hESC&nbsp(Tier_2) HELA=HeLa-S3&nbsp(Tier_2) HEPG2=HepG2&nbsp(Tier_2) HUVEC=HUVEC&nbsp(Tier_2) NHEK=NHEK&nbsp(Tier_2) AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE  PANI=PanIslets PROG=ProgFib
