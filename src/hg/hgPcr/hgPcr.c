@@ -557,7 +557,7 @@ printf("<B>Reverse:</B> %4.1f C %s<BR>\n", oligoTm(rPrimer, 50.0, 50.0), rPrimer
 printf("</TT>");
 printf("The temperature calculations are done assuming 50 mM salt and 50 nM annealing "
        "oligo concentration.  The code to calculate the melting temp comes from "
-       "<A HREF=\"http://frodo.wi.mit.edu/cgi-bin/primer3/primer3_www.cgi\" target=_blank>"
+       "<A HREF=\"http://frodo.wi.mit.edu/primer3/input.htm\" target=_blank>"
        "Primer3</A>.");
 return ok;
 }
