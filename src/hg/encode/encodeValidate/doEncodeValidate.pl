@@ -780,17 +780,17 @@ sub validateBam
     }
 	#Venkat: Changed $sex to $cellLineSex to accomadate the sex being passed from the DDF
     my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
-   
+
 	# Venkat: For category= Tissues change sex to one defined by the DFF
 	# The reason that I did not just pass sex is because I will be using the
 	# same DAF with required fields for mouse tissue and cell samples
 
-	#Venkat: Category is defined in cv.ra for 
+	#Venkat: Category is defined in cv.ra for
 	# T= Tissue
 	# L= Cell Line
 	# P= Primary Cells
     my $category = $terms{'Cell Line'}->{$cell}->{'category'};
-    
+
 	#Venkat: Can be a better design, but need to flesh out design more.
 	if (defined $category && $category eq "T") {
 	$cellLineSex=$sex;
@@ -1001,7 +1001,7 @@ sub validatePsl
 
 sub validateDdfField {
     # validate value for type of field
-	# Venkat: Added $sex to accomadate tissues for mouse 
+	# Venkat: Added $sex to accomadate tissues for mouse
     my ($type, $val, $track, $daf, $cell,$sex) = @_;
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
@@ -1444,6 +1444,18 @@ while(@{$lines}) {
 }
 
 my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+
+# Special cases to handle conditionally required fields
+if(!defined($ddfHeader{inputType})) {
+    if($db == "hg19") {
+        if($daf->{compositeSuffix} == "HaibTfbs"
+        || $daf->{compositeSuffix} == "SydhTfbs"
+        || $daf->{compositeSuffix} == "SydhHistone") {
+            push(@errors, "field 'inputType' not defined");
+        }
+    }
+}
+
 if(@errors) {
     die "ERROR in DDF '$ddfFile':\n" . join("\n", @errors) . "\n";
 }
