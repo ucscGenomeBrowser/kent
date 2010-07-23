@@ -1,4 +1,23 @@
 # Stanford/Yale/UCD/Harvard Histone ChIP-seq (wrangler: vsmalladi)
+# UW Histone (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Short Labels: 5 charactesr for cell type, 8 characters for antibody, 2 characters  for View
+#       - Views: For consistency sake view will be two letters
+#               - Peaks = Pk
+#               - Signal = Sg
+#	- factor Order: Ordering is based on Histone Histone then numerically and alphabetaclly. Numerically 09 before 12.
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks.
+#       - Display matrix: 
+#		- Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct from cell names.
+#		- Dimension X - Treatment
+#		- Dimension Y - Cell Type
+#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
+#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in $cell) under 80 characterss
+#       - View Displays: Deafult view filters:
+#               - Peaks- ??
+#               - Signal- ??
+
 track wgEncodeSydhHistone
 compositeTrack on
 superTrack wgEncodeHistoneSuper
@@ -7,11 +26,11 @@ type bed 3
 origAssembly hg19
 nextItemButton on
 shortLabel SYDH Histone
-longLabel ENCODE Histone Modifications by ChIP-seq from Stanford/Yale/UC-Davis/Harvard
+longLabel ENCODE Histone Modifications by ChIP-Seq from Stanford/Yale/UC-Davis/Harvard
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line  NT2D1=NT2-D1 K562=K562
-subGroup3 factor Factor H3K27me3=H3K27me3 H3K36me3B=H3K36me3B H3K4me3=H3K4me3 H3K4me1=H3K4me1 H3K9ac=H3K9ac H3K9acB=H3K9acB H3K9me3=H3K9me3 Input=Input
+subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1) NT2D1=NT2-D1
+subGroup3 factor Factor H3K4me3=H3K4me3 H3K4me1=H3K4me1 H3K9ac=H3K9ac H3K9acB=H3K9acB H3K9me3=H3K9me3 H3K27me3=H3K27me3 H3K36me3B=H3K36me3B Input=Input
 		# Display names for H3K36me3B and H3K9acB might be better used consult TIM (found in cv.ra)
 subGroup4 control Control std=Standard UCD=UC_Davis
 subGroup5 treatment Treatment None=None
@@ -44,7 +63,7 @@ wgEncode 1
 	    track wgEncodeSydhHistoneNt2d1H3k27me3StdPk
 	    release alpha
 	    subTrack wgEncodeSydhHistoneViewPeaks on
-	    shortLabel NT2D1 H3K27me3 Pk
+	    shortLabel NT2D1 H3K27me3 Pk 
 	    longLabel ENCODE Histone, Stanford/Yale/UCD/Harvard ChIP-seq Peaks (H3K27me3 in NT2-D1 cells)
 	    subGroups view=Peaks factor=H3K27me3 cellType=NT2D1 control=std treatment=None
 	    type narrowPeak
