@@ -10386,4 +10386,274 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 
     hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
     checkTableCoords  -verbose=2  hg19 hgIkmc
+
+#############################################################################
+# adding patches to the sequence (DONE - 2010-07-23)
+    #	fetch the "official" chrM sequence
+    mkdir -p /hive/data/genomes/hg19/bed/additionalSequence/chrM
+    cd /hive/data/genomes/hg19/bed/additionalSequence/chrM
+    wget --timestamping -O NC_012920.1.fa \
+"http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=NC_012920.1.fa"
+    echo ">chrM_NC_012920" > chrM_NC_012920.fa
+    grep -v "^>" NC_012920.1.fa | sed -e "/^$/d" >> chrM_NC_012920.fa
+
+    #	fetch the first two patches:
+    mkdir -p /hive/data/genomes/hg19/bed/additionalSequence/patches
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patches
+    wget --cut-dirs=7 --no-parent --timestamping --no-remove-listing -m \
+        -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/PATCHES/"
+
+    #	take a look through the downloaded files to find the name
+    #	correspondence.  The fasta names are in:
+    zcat patch_release_1/FASTA/alt.scaf.fa.gz | grep "^>" 
+    # the other names are in:
+    cat patch_release_1/alt_scaffold_placement.txt
+    #	Decide on UCSC chrom names
+    #	Create a file with these different names to use later:
+# fasta string             alt_scaf_name  parent_name  UCSC chrom name
+    cat << '_EOF_' > ucscNames.txt
+gi|289436847|gb|GL339449.1 HSCHR5_1_CTG1 CM000667.1 chr5_ctg1_hap1
+gi|289436846|gb|GL339450.1 HG79_PATCH CM000671.1 chr9_gl339450
+chrM_NC_012920 unknown unknown chrM_NC_012920
+'_EOF_'
+    # << happy emacs
+
+
+    #	construct the files for UCSC:
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1
+
+    #	add these sequences to existing hg19.2bit to make a new one:
+    cat ../chrM/chrM_NC_012920.fa > patch1.ucsc.fa
+    zcat ../patches/patch_release_1/FASTA/alt.scaf.fa.gz \
+        | sed -e "s/^>.*GL339449.1.*/>chr5_ctg1_hap1/;" \
+-e "s/^>.*GL339450.1.*/>chr9_gl339450/" >> patch1.ucsc.fa
+
+    twoBitToFa /gbdb/hg19/hg19.2bit hg19.existing.fa
+    faToTwoBit hg19.existing.fa patch1.ucsc.fa hg19.patch1.2bit
+    rm -f /gbdb/hg19/hg19.unmasked.patch1.2bit
+    #	temporarily use this unmasked sequence
+    ln -s `pwd`/hg19.unmasked.patch1.2bit /gbdb/hg19/hg19.patch1.2bit
+    twoBitInfo hg19.patch1.2bit stdout | sort -k2nr > patch1.chrom.sizes
+
+    cat << '_EOF_' > mkTables.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: mkTables.pl patches.chrom.sizes \\\n";
+    printf STDERR " ../patches/ucscNames.txt ../patches/patch_release_1/AGP/alt.scaf.agp.gz\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 3) {
+    usage;
+    exit 255;
+}
+
+my $sizes = shift;      # patches.chrom.sizes
+my $names = shift;      # patches/ucscNames.txt
+my $agpFile = shift;    # alt.scaf.agp.gz
+
+my %glToChr;
+my %chrToCtg;
+my %fastaToChr;
+my %chrToSize;
+
+open(FH, "<$sizes") or die "can not read $sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrToSize{$chr} = $size;
+}
+close (FH);
+
+open(CI, ">chromInfo.txt") or die "can not write to chromInfo.txt";
+open(CT, ">ctgPos.txt") or die "can not write to ctgPos.txt";
+open(FH, "<$names");
+while (my $line = <FH>) {
+    chomp $line;
+    my ($faName, $ctg, $cmName, $chr) = split('\s+', $line);
+    $faName =~ s/.*gb.GL/GL/;
+    my $size = $chrToSize{$chr};
+    if (exists($glToChr{$faName})) {
+        if ($glToChr{$faName} ne $chr) {
+            printf STDERR "ERROR: contig name: $faName was chr name: $glToChr{$faName}\n";
+            printf STDERR " now claiming to be chr name: $chr\n";
+            exit 255;
+        }
+    } else {
+        $glToChr{$faName} = $chr;
+    }
+    printf CT "%s\t%d\t%s\t0\t%d\n", $faName, $size, $chr, $size;
+    printf CI "%s\t%d\t/gbdb/hg19/hg19.patches.2bit\n", $chr, $size;
+}
+close (FH);
+close (CT);
+close (CI);
+
+my $prevObj = "";
+my $newIx = 1;
+open (GP,">gap.txt") or die "can not write to gap.txt";
+open (GL,">gold.txt") or die "can not write to gold.txt";
+open (FH,"zcat $agpFile|") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^\s*#/);
+    chomp $line;
+    my ($object, $objStart, $objEnd, $ix, $type, $frag, $fragStart, $fragEnd, $strand) = split('\s+', $line);
+    die "ERROR: can not find contig $object to chr name"
+        if (!exists($glToChr{$object}));
+    $newIx = 1 if ($prevObj ne $object);
+    my $chr = $glToChr{$object};
+    if ($type eq "N") {
+        # frag is size, fragStart is type of gap, and fragEnd is bridged y/n
+        printf GP "%s\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+            $chr, $objStart-1, $objEnd, $newIx, $type, $frag, $fragStart,
+            $fragEnd;
+    } else {
+        printf GL "%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+            $chr, $objStart-1, $objEnd, $newIx, $type, $frag, $fragStart-1,
+            $fragEnd, $strand;
+    }
+    ++$newIx;
+    $prevObj = $object;
+    printf "%s\n", $line;
+}
+close (FH);
+close (GL);
+close (GP);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkTables.pl
+    ./mkTables.pl  patch1.chrom.sizes ../patches/ucscNames.txt \
+	../patches/patch_release_1/AGP/alt.scaf.agp.gz
+    echo 'chrM_NC_012920  16569   /gbdb/hg19/hg19.patches.2bit' \
+	>> chromInfo.txt
+
+    #	create tab files
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=/cluster/home/hiram/kent/src/hg/lib/agpFrag.sql \
+        hg19 tGold gold.txt
+    rm -f gold.tab
+    mv bed.tab gold.tab
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=/cluster/home/hiram/kent/src/hg/lib/gap.sql \
+        hg19 tGap gap.txt
+    rm -f gap.tab
+    mv bed.tab gap.tab
+
+    # these table inserts are performed carefully to make sure they are
+    # sane, for example, count the rows before and after load:
+    hgsql -e 'load data local infile "gold.tab" into table gold;' hg19
+    hgsql -e 'load data local infile "gap.tab" into table gap;' hg19
+    hgsql -e 'load data local infile "ctgPos.txt" into table ctgPos;' hg19
+    hgsql -e 'load data local infile "chromInfo.txt" into table chromInfo;' hg19
+
+    hgsql -e 'update chromInfo set fileName="/gbdb/hg19/hg19.patch1.2bit";' hg19
+
+    cat << '_EOF_' > ctgPos2.txt
+HSCHR5_1_CTG1   1620324 chr5_ctg1_hap1  0       1620324 F
+HG79_PATCH      330164  chrUn_gl339450  0       330164  F
+NC_012920.1     16569   chrM_NC_012920  0       16569   F
+NC_001807.4     16571   chrM    0       16571   O
+'_EOF_'
+    # << happy emacs
+
+    hgsql -e 'load data local infile "ctgPos2.txt" into table ctgPos2;' hg19
+
+    #	RepeatMasking and SimpleRepeats
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1/RMRun
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1/RMRun
+    ln -s ../patch1.ucsc.fa .
+    time /scratch/data/RepeatMasker/RepeatMasker -align -s \
+	-species 'Homo sapiens' patch1.ucsc.fa
+    # took about 6 hours.  Probably should have broken up the large chr5 bit
+    #	sort it:
+
+    head -3 patch1.ucsc.fa.out | sed -e "s/  *$//" > patch1.ucsc.sort.out
+    headRest 3 patch1.ucsc.fa.out | sort -k5,5 -k6,6n \
+	| sed -e "s/  *$//" >> patch1.ucsc.sort.out
+    #	create a .tab file to load
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql \
+        hg19 tRmsk patch1.ucsc.sort.out
+    mv bed.tab patch1.rmsk.tab
+    hgsql -e 'load data local infile "patch1.rmsk.tab" into table rmsk;' hg19
+    #	create nestedRepeats
+    /cluster/bin/scripts/extractNestedRepeats.pl patch1.ucsc.sort.out
+    #	create a .tab file to load
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql \
+        hg19 tNest patch1.nestedRepeats.bed
+    rm -f patch1.nestedRepeats.tab
+    mv bed.tab patch1.nestedRepeats.tab
+    hgsql -e 'load data local infile "patch1.nestedRepeats.tab" into table nestedRepeats;' hg19
+
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1/simpleRepeat
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1/simpleRepeat
+    ln -s ../patch1.ucsc.fa .
+    /cluster/bin/$MACHTYPE/trfBig -trf=/cluster/bin/$MACHTYPE/trf \
+	patch1.ucsc.fa /dev/null -bedAt=patch1.ucsc.bed -tempDir=.
+    awk '$5 <= 12' patch1.ucsc.bed > trfMask.bed
+    mkdir trfMaskChrom
+    splitFileByColumn trfMask.bed trfMaskChrom/
+    hgLoadBed -oldTable hg19 simpleRepeat patch1.ucsc.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    #	add these masks
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1
+    twoBitMask -add hg19.unmasked.patch1.2bit RMRun/patch1.ucsc.sort.out \
+	hg19.rmsk.2bit
+    ln -s `pwd`/hg19.unmasked.patch1.2bit /gbdb/hg19/hg19.patch1.2bit
+    twoBitMask -add hg19.rmsk.2bit simpleRepeat/trfMask.bed hg19.patch1.t.2bit
+    #	safe to ignore errors about >= 13 fields
+    twoBitToFa hg19.patch1.t.2bit stdout | faSize stdin \
+	> hg19.patch1.2bit.faSize 2>&1
+    # 3139128321 bases (239950803 N's 2899177518 real 1431272440 upper
+    # 1467905078 lower) in 96 sequences in 1 files
+    # %46.76 masked total, %50.63 masked real
+    #	update the unmasked sequence from earlier:
+    rm -f hg19.patch1.2bit; mv hg19.patch1.t.2bit hg19.patch1.2bit
+
+    time blat hg19.patch1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=hg19.patch1.11.ooc \
+	-repMatch=1024
+    #	Wrote 30723 overused 11-mers to hg19.patch1.11.ooc
+    cp -p hg19.patch1.2bit hg19.patch1.11.ooc /hive/data/staging/data/hg19
+    mkdir nib
+    twoBitToFa -seq=chrM_NC_012920 hg19.patch1.2bit stdout \
+	| faToNib -softMask stdin nib/chrM_NC_012920.nib
+    twoBitToFa -seq=chr5_ctg1_hap1 hg19.patch1.2bit stdout \
+	| faToNib -softMask stdin nib/chr5_ctg1_hap1.nib
+    twoBitToFa -seq=chr9_gl339450 hg19.patch1.2bit stdout \
+	| faToNib -softMask stdin nib/chr9_gl339450.nib
+
+
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1/linSpecRep
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1/linSpecRep
+for C in chr9_gl339450 chrM_NC_012920 chr5_ctg1_hap1
+do
+    head -3 ../RMRun/patch1.ucsc.sort.out > ${C}.out
+    grep "${C} " ../RMRun/patch1.ucsc.sort.out >> ${C}.out
+    rm -f ${C}.out_mus*
+    /scratch/data/RepeatMasker/DateRepeats ${C}.out -query human -comp mouse
+    /cluster/bin/scripts/extractRepeats 1 ${C}.out_mus* > ${C}.out.spec
+    rm -f ${C}.out_mus*
+done
+
+    # copy new files to /hive/data/staging/data/hg19/ and request rsync
+    #	to kluster nodes
+-rw-rw-r-- 1      2036 Jul 21 15:39 patch1.chrom.sizes
+-rw-rw-r-- 1 816756572 Jul 23 15:32 hg19.patch1.2bit
+-rw-rw-r-- 1    122900 Jul 23 15:56 hg19.patch1.11.ooc
+-rw-rw-r-- 1      8293 Jul 23 15:59 nib/chrM_NC_012920.nib
+-rw-rw-r-- 1    810170 Jul 23 16:01 nib/chr5_ctg1_hap1.nib
+-rw-rw-r-- 1    165090 Jul 23 16:01 nib/chr9_gl339450.nib
+-rw-rw-r-- 1   34676 Jul 23 16:27 lineageSpecificRepeats/chr9_gl339450.out.spec
+-rw-rw-r-- 1     386 Jul 23 16:27 lineageSpecificRepeats/chrM_NC_012920.out.spec
+-rw-rw-r-- 1  221381 Jul 23 16:27 lineageSpecificRepeats/chr5_ctg1_hap1.out.spec 
 #############################################################################
