@@ -249,7 +249,7 @@ track nscanGene override
 visibility dense
 
 track mrna override
-visibility pack
+visibility dense
 
 track intronEst override
 visibility dense
