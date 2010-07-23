@@ -5270,7 +5270,7 @@ hgsql rn4 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql rn4 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
-# RE-BUILD HGNEAR PROTEIN BLAST TABLES -- TARGET (DONE 6/25/10, Fan)
+# RE-BUILD HGNEAR PROTEIN BLAST TABLES -- TARGET (DONE 7/22/10, Fan)
     ssh hgwdev
     mv /hive/data/genomes/rn4/bed/hgNearBlastp /hive/data/genomes/rn4/bed/hgNearBlastpOld
     mkdir /hive/data/genomes/rn4/bed/hgNearBlastp
@@ -5281,18 +5281,18 @@ hgsql rn4 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToK
 
 targetGenesetPrefix known
 targetDb rn4
-queryDbs hg19 mm9 danRer5 dm3 ce6 sacCer2
+queryDbs hg19 mm9 danRer6 dm3 ce6 sacCer2
 
 rn4Fa /hive/data/genomes/rn4/bed/blastp/known.faa
 hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
 mm9Fa  /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
-danRer5Fa /hive/data/genomes/danRer5/bed/blastp/ensembl.faa
+danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
 dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
-ce6Fa /cluster/data/ce6/bed/hgNearBlastp/080711/ce6.sangerPep.faa
+ce6Fa /hive/data/genomes/ce6/bed/hgNearBlastp/080711/ce6.sangerPep.faa
 sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
 
-buildDir /hive/data/genomes/rn4/bed/hgNearBlastp
-scratchDir  /hive/data/genomes/rn4/bed/hgNearBlastp/tmp
+buildDir /hive/data/genomes/rn4/bed/hgNearBlastp/100722
+scratchDir  /hive/data/genomes/rn4/bed/hgNearBlastp/100722/tmp
 _EOF_
     doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 # *** All done!

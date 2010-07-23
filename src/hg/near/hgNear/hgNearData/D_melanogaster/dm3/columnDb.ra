@@ -78,9 +78,6 @@ invQueryOne select acc from proteome.pdbSP,uniProt.displayId where val=sp and pd
 name go
 goaIdColumn dbObjectId
 
-name zebrafishOrthologs
-itemUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
-
 name p2p
 type distance flyP2P query target distance
 visibility off

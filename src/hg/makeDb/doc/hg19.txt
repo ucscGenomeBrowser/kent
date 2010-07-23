@@ -10387,3 +10387,39 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
     hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
     checkTableCoords  -verbose=2  hg19 hgIkmc
 #############################################################################
+# Update BlastTab tables for hg19 (Done, Fan, 7/22/2010)
+    ssh hgwdev
+    mkdir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
+    cd /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
+    mkdir 100722
+    cd 100722
+    # Get the proteins used by the other hgNear organisms:
+    pepPredToFa hg19 knownGenePep hg19.known.faa
+    pepPredToFa mm9 knownGenePep mm9.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer6 ensPep danRer6.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce6 sangerPep ce6.sangerPep.faa
+    pepPredToFa sacCer2 sgdPep sacCer2.sgdPep.faa
+
+    cat << _EOF_ > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb hg19
+queryDbs mm9 rn4 danRer6 dm3 ce6 sacCer2
+
+hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
+mm9Fa /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
+rn4Fa /hive/data/genomes/rn4/bed/blastp/known.faa
+danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
+dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
+ce6Fa /hive/data/genomes/ce6/bed/blastp/wormPep190.faa
+sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
+
+buildDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100722
+scratchDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100722/tmp
+_EOF_
+doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+#########################################################################
