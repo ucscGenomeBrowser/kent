@@ -1,16 +1,38 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeChromatinMap.ra,v 1.1 2010/05/27 21:34:43 tdreszer Exp $
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Short Labels: 7 charactesr for cell type, 2 characters for view, 6 characters (other information, rank or maybe treatment)
+#       - Views: For consistency sake view will be two letters
+#               - Peaks = Pk
+#               - Signal(F-Seq Density)  = Sf
+#               - Signal (Base_Overlap) = Sb
+#	- Treatments: For consitensity the word treatment will be placed in the short labels and be abbreviated tx:
+#		- None = Non
+#		- Androgen = And
+#		- IFNa4h = Ia4
+#		- IFNg4h = Ig4
+#		- Serum Free = Sfm
+#       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
+#       - Default Tracks on: 
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
+#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
+#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
+#       - View Displays: Deafult view filters:
+#               - Peaks-??
+#               - Signal_(F-Seq-Density)-??
+#               - Signal_(Base_OverLap)-??
 
 track wgEncodeOpenChromDnase
 compositeTrack on
 superTrack wgEncodeDNAseSuper
 shortLabel Open Chrom DNase
-longLabel ENCODE Open Chromatin, Duke DNase-seq
+longLabel ENCODE DNase-seq from Open Chromatin (Duke)
 group regulation
 subGroup1 view Views Peaks=Peaks SIG=Signal_(F-Seq_Density) SIGBO=Signal_(Base_Overlap)
-subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
-subGroup3 treatment Treatment AANONE=None ANDRO=Androgen ESTRO=Estrogen IFNa4h=IFN&alpha; IFNa4h=IFN&gamma; SERUMFREE=Serum_Free
+subGroup2 cellType Cell_Line K562=K562&nbsp(Tier_1) GM12878=GM12878&nbsp(Tier_1) H1=H1-hESC&nbsp(Tier_2) HELA=HeLa-S3&nbsp(Tier_2) HEPG2=HepG2&nbsp(Tier_2) HUVEC=HUVEC&nbsp(Tier_2) NHEK=NHEK&nbsp(Tier_2) AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H9=H9-hESC  HSMM=HSMM HSMMt=HSMMtube LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE  PANI=PanIslets PROG=ProgFib
+#subGroup2 cellType Cell_Line AOSMC=AoSMC CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier2</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK_<i>Tier2</i> PANI=PanIslets PROG=ProgFib
+subGroup3 treatment Treatment AANONE=None ANDRO=Androgen ESTRO=Estrogen IFNa4h=IFN&alpha4h IFNg4h=IFN&gamma4h   SERUMFREE=Serum_Free
 sortOrder cellType=+ treatment=+ view=+
 dimensions dimensionY=cellType dimensionX=treatment
 dragAndDrop subTracks
@@ -36,7 +58,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseChorionPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Chorion Pk
+        shortLabel Chorion Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Chorion cells)
         subGroups view=Peaks cellType=CHORN treatment=AANONE
         type narrowPeak
@@ -46,7 +68,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMedulloPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Medullo Pk
+        shortLabel Medullo Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Medullo cells)
         subGroups view=Peaks cellType=MEDULLO treatment=AANONE
         type narrowPeak
@@ -56,7 +78,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12891Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel GM12891 Pk
+        shortLabel GM12891 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12891 cells)
         subGroups view=Peaks cellType=GM12891 treatment=AANONE
         type narrowPeak
@@ -66,7 +88,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12892Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel GM12892 Pk
+        shortLabel GM12892 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12892 cells)
         subGroups view=Peaks cellType=GM12892 treatment=AANONE
         type narrowPeak
@@ -76,7 +98,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19238Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel GM19238 Pk
+        shortLabel GM19238 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19238 cells)
         subGroups view=Peaks cellType=GM19238 treatment=AANONE
         type narrowPeak
@@ -86,7 +108,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12878Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
-        shortLabel GM12878 Pk
+        shortLabel GM12878 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM12878 cells)
         subGroups view=Peaks cellType=GM12878 treatment=AANONE
         type narrowPeak
@@ -97,7 +119,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseH1hescPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel H1-hESC Pk
+        shortLabel H1-hESC Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in H1-hESC cells)
         subGroups view=Peaks cellType=H1 treatment=AANONE
         type narrowPeak
@@ -108,7 +130,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHelas3Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel HeLa-S3 Pk
+        shortLabel HeLa-S3 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HeLa-S3 cells)
         subGroups view=Peaks cellType=HELA treatment=AANONE
         type narrowPeak
@@ -119,7 +141,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19239Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel GM19239 Pk
+        shortLabel GM19239 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19239 cells)
         subGroups view=Peaks cellType=GM19239 treatment=AANONE
         type narrowPeak
@@ -129,7 +151,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm18507Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel GM18507 Pk
+        shortLabel GM18507 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM18507 cells)
         subGroups view=Peaks cellType=GM18507 treatment=AANONE
         type narrowPeak
@@ -139,7 +161,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19240Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel GM19240 Pk
+        shortLabel GM19240 Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in GM19240 cells)
         subGroups view=Peaks cellType=GM19240 treatment=AANONE
         type narrowPeak
@@ -149,8 +171,8 @@ wgEncode 1
         track wgEncodeOpenChromDnaseH9esPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel H9ES Pk
-        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in H9ES cells)
+        shortLabel H9-hESC Pk tx:Non
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in H9-hESC cells)
         subGroups view=Peaks cellType=H9 treatment=AANONE
         type narrowPeak
         origAssembly hg18
@@ -159,7 +181,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHepg2Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel HepG2 Pk
+        shortLabel HepG2   Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HepG2 cells)
         subGroups view=Peaks cellType=HEPG2 treatment=AANONE
         type narrowPeak
@@ -170,7 +192,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHuvecPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel HUVEC Pk
+        shortLabel HUVEC   Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HUVEC cells)
         subGroups view=Peaks cellType=HUVEC treatment=AANONE
         type narrowPeak
@@ -181,7 +203,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseNhekPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel NHEK Pk
+        shortLabel NHEK    Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in NHEK cells)
         subGroups view=Peaks cellType=NHEK treatment=AANONE
         type narrowPeak
@@ -192,7 +214,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseK562Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks
-        shortLabel K562 Pk
+        shortLabel K562    Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in K562 cells)
         subGroups view=Peaks cellType=K562 treatment=AANONE
         type narrowPeak
@@ -203,7 +225,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseLhsrAndroPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LHSR Pk
+        shortLabel LHSR    Pk tx:And
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in LHSR cells)
         subGroups view=Peaks cellType=LHSR treatment=ANDRO
         type narrowPeak
@@ -213,7 +235,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHelas3Ifna4hPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel HeLa-S3 Pk
+        shortLabel HeLa-S3 Pk tx:Ia4
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HeLa-S3 cells)
         subGroups view=Peaks cellType=HELA treatment=IFNa4h
         type narrowPeak
@@ -224,7 +246,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMcf7Pk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel MCF-7 Pk
+        shortLabel MCF-7   Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in MCF-7 cells)
         subGroups view=Peaks cellType=MCF7 treatment=AANONE
         type narrowPeak
@@ -234,7 +256,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseLhsrPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel LHSR Pk
+        shortLabel LHSR    Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in LHSR cells)
         subGroups view=Peaks cellType=LHSR treatment=AANONE
         type narrowPeak
@@ -244,7 +266,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseProgfibPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel ProgFib Pk
+        shortLabel ProgFib Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in ProgFib cells)
         subGroups view=Peaks cellType=PROG treatment=AANONE
         type narrowPeak
@@ -254,7 +276,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseFibropPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel FibroP Pk
+        shortLabel FibroP  Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in FibroP cells)
         subGroups view=Peaks cellType=FIBROP treatment=AANONE
         type narrowPeak
@@ -264,7 +286,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseFibroblPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Fibrobl Pk
+        shortLabel Fibrobl Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Fibrobl cells)
         subGroups view=Peaks cellType=FIBRO treatment=AANONE
         type narrowPeak
@@ -274,7 +296,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHsmmPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel HSMM Pk
+        shortLabel HSMM    Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HSMM cells)
         subGroups view=Peaks cellType=HSMM treatment=AANONE
         type narrowPeak
@@ -284,7 +306,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMyometrPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel Myometr Pk
+        shortLabel Myometr Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Myometr cells)
         subGroups view=Peaks cellType=MYOMETR treatment=AANONE
         type narrowPeak
@@ -294,7 +316,7 @@ wgEncode 1
         track wgEncodeOpenChromDnasePanisletsPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel PanIslets Pk
+        shortLabel PanIsle Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in PanIslets cells)
         subGroups view=Peaks cellType=PANI treatment=AANONE
         type narrowPeak
@@ -304,7 +326,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseAosmcSerumfreePk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel AoSMC Pk
+        shortLabel AoSMC   Pk tx:Sfm
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in AoSMC cells)
         subGroups view=Peaks cellType=AOSMC treatment=SERUMFREE
         type narrowPeak
@@ -314,7 +336,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHsmmtPk
         release alpha
         parent wgEncodeOpenChromDnaseViewPeaks off
-        shortLabel HSMMtube Pk
+        shortLabel HSMMtub Pk tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HSMMtube cells)
         subGroups view=Peaks cellType=HSMMt treatment=AANONE
         type narrowPeak
@@ -337,7 +359,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseChorionSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Chorion Sig
+        shortLabel Chorion Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Chorion cells)
         subGroups view=SIG cellType=CHORN treatment=AANONE
         type bigWig 0.000000 1.413200
@@ -347,7 +369,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMedulloSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Medullo Sig
+        shortLabel Medullo Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Medullo cells)
         subGroups view=SIG cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 1.186600
@@ -357,7 +379,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12891Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel GM12891 Sig
+        shortLabel GM12891 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM12891 cells)
         subGroups view=SIG cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 1.893100
@@ -367,7 +389,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12892Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel GM12892 Sig
+        shortLabel GM12892 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM12892 cells)
         subGroups view=SIG cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 1.880000
@@ -377,7 +399,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19238Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel GM19238 Sig
+        shortLabel GM19238 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19238 cells)
         subGroups view=SIG cellType=GM19238 treatment=AANONE
         type bigWig 0.000000 2.042500
@@ -387,7 +409,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12878Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
-        shortLabel GM12878 Sig
+        shortLabel GM12878 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM12878 cells)
         subGroups view=SIG cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 1.097700
@@ -398,7 +420,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseH1hescSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel H1-hESC Sig
+        shortLabel H1-hESC Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in H1-hESC cells)
         subGroups view=SIG cellType=H1 treatment=AANONE
         type bigWig 0.000000 2.243700
@@ -409,7 +431,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHelas3Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel HeLa-S3 Sig
+        shortLabel HeLa-S3 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HeLa-S3 cells)
         subGroups view=SIG cellType=HELA treatment=AANONE
         type bigWig 0.000000 2.024200
@@ -420,7 +442,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19239Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel GM19239 Sig
+        shortLabel GM19239 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19239 cells)
         subGroups view=SIG cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 1.811800
@@ -430,7 +452,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm18507Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel GM18507 Sig
+        shortLabel GM18507 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM18507 cells)
         subGroups view=SIG cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 1.676800
@@ -440,7 +462,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19240Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel GM19240 Sig
+        shortLabel GM19240 Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in GM19240 cells)
         subGroups view=SIG cellType=GM19240 treatment=AANONE
         type bigWig 0.000000 1.867200
@@ -450,7 +472,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseH9esSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel H9ES Sig
+        shortLabel H9-hESC Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in H9ES cells)
         subGroups view=SIG cellType=H9 treatment=AANONE
         type bigWig 0.000000 1.603000
@@ -460,7 +482,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHepg2Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel HepG2 Sig
+        shortLabel HepG2   Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HepG2 cells)
         subGroups view=SIG cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 2.203900
@@ -471,7 +493,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHuvecSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel HUVEC Sig
+        shortLabel HUVEC   Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HUVEC cells)
         subGroups view=SIG cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 2.605700
@@ -482,7 +504,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseNhekSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel NHEK Sig
+        shortLabel NHEK    Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in NHEK cells)
         subGroups view=SIG cellType=NHEK treatment=AANONE
         type bigWig 0.000000 1.748600
@@ -493,7 +515,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseK562Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal
-        shortLabel K562 Sig
+        shortLabel K562    Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in K562 cells)
         subGroups view=SIG cellType=K562 treatment=AANONE
         type bigWig 0.000000 3.111200
@@ -504,7 +526,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseLhsrAndroSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LHSR Sig
+        shortLabel LHSR    Sf tx:And
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in LHSR cells)
         subGroups view=SIG cellType=LHSR treatment=ANDRO
         type bigWig 0.000000 0.863800
@@ -514,7 +536,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHelas3Ifna4hSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel HeLa-S3 Sig
+        shortLabel HeLa-S3 Sf tx:Ia4
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HeLa-S3 cells)
         subGroups view=SIG cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 0.761900
@@ -525,7 +547,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMcf7Sig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel MCF-7 Sig
+        shortLabel MCF-7   Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in MCF-7 cells)
         subGroups view=SIG cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 0.624200
@@ -535,7 +557,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseLhsrSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel LHSR Sig
+        shortLabel LHSR    Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in LHSR cells)
         subGroups view=SIG cellType=LHSR treatment=AANONE
         type bigWig 0.000000 0.897000
@@ -545,7 +567,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseProgfibSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel ProgFib Sig
+        shortLabel ProgFib Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in ProgFib cells)
         subGroups view=SIG cellType=PROG treatment=AANONE
         type bigWig 0.000000 1.924100
@@ -555,7 +577,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseFibropSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel FibroP Sig
+        shortLabel FibroP  Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in FibroP cells)
         subGroups view=SIG cellType=FIBROP treatment=AANONE
         type bigWig 0.000000 1.562600
@@ -565,7 +587,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseFibroblSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Fibrobl Sig
+        shortLabel Fibrobl Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Fibrobl cells)
         subGroups view=SIG cellType=FIBRO treatment=AANONE
         type bigWig 0.000000 1.250700
@@ -575,7 +597,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHsmmSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel HSMM Sig
+        shortLabel HSMM    Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HSMM cells)
         subGroups view=SIG cellType=HSMM treatment=AANONE
         type bigWig 0.000000 2.424300
@@ -585,7 +607,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMyometrSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel Myometr Sig
+        shortLabel Myometr Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Myometr cells)
         subGroups view=SIG cellType=MYOMETR treatment=AANONE
         type bigWig 0.000000 1.229800
@@ -595,7 +617,7 @@ wgEncode 1
         track wgEncodeOpenChromDnasePanisletsSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel PanIslets Sig
+        shortLabel PanIsle Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in PanIslets cells)
         subGroups view=SIG cellType=PANI treatment=AANONE
         type bigWig 0.000000 1.691300
@@ -605,7 +627,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseAosmcSerumfreeSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel AoSMC Sig
+        shortLabel AoSMC   Sf tx:Sfm
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in AoSMC cells)
         subGroups view=SIG cellType=AOSMC treatment=SERUMFREE
         type bigWig 0.000000 0.726900
@@ -615,7 +637,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHsmmtSig
         release alpha
         parent wgEncodeOpenChromDnaseViewSignal off
-        shortLabel HSMMtube Sig
+        shortLabel HSMMtub Sf tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HSMMtube cells)
         subGroups view=SIG cellType=HSMMt treatment=AANONE
         type bigWig 0.000000 1.594200
@@ -638,7 +660,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseChorionBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Chorion
+        shortLabel Chorion Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Chorion cells)
         subGroups view=SIGBO cellType=CHORN treatment=AANONE
         type bigWig 0.000000 286.000000
@@ -648,7 +670,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMedulloBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Medullo
+        shortLabel Medullo Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Medullo cells)
         subGroups view=SIGBO cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 242.000000
@@ -658,7 +680,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12891BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel GM12891
+        shortLabel GM12891 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12891 cells)
         subGroups view=SIGBO cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 209.000000
@@ -668,7 +690,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12892BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel GM12892
+        shortLabel GM12892 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12892 cells)
         subGroups view=SIGBO cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 220.000000
@@ -678,7 +700,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19238BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel GM19238
+        shortLabel GM19238 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19238 cells)
         subGroups view=SIGBO cellType=GM19238 treatment=AANONE
         type bigWig 0.000000 231.000000
@@ -688,7 +710,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm12878BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
-        shortLabel GM12878
+        shortLabel GM12878 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM12878 cells)
         subGroups view=SIGBO cellType=GM12878 treatment=AANONE
         type bigWig 0.000000 627.000000
@@ -699,7 +721,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseH1hescBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel H1-hESC
+        shortLabel H1-hESC Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in H1-hESC cells)
         subGroups view=SIGBO cellType=H1 treatment=AANONE
         type bigWig 0.000000 264.000000
@@ -710,7 +732,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHelas3BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel HeLa-S3
+        shortLabel HeLa-S3 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
         subGroups view=SIGBO cellType=HELA treatment=AANONE
         type bigWig 0.000000 265.000000
@@ -721,7 +743,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19239BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel GM19239
+        shortLabel GM19239 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19239 cells)
         subGroups view=SIGBO cellType=GM19239 treatment=AANONE
         type bigWig 0.000000 209.000000
@@ -731,7 +753,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm18507BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel GM18507
+        shortLabel GM18507 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM18507 cells)
         subGroups view=SIGBO cellType=GM18507 treatment=AANONE
         type bigWig 0.000000 253.000000
@@ -741,7 +763,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseGm19240BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel GM19240
+        shortLabel GM19240 Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in GM19240 cells)
         subGroups view=SIGBO cellType=GM19240 treatment=AANONE
         type bigWig 0.000000 253.000000
@@ -751,8 +773,8 @@ wgEncode 1
         track wgEncodeOpenChromDnaseH9esBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel H9ES
-        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in H9ES cells)
+        shortLabel H9-hESC Sb tx:Non
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in H9-hESC cells)
         subGroups view=SIGBO cellType=H9 treatment=AANONE
         type bigWig 0.000000 269.000000
         origAssembly hg18
@@ -761,7 +783,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHepg2BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel HepG2
+        shortLabel HepG2   Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HepG2 cells)
         subGroups view=SIGBO cellType=HEPG2 treatment=AANONE
         type bigWig 0.000000 274.000000
@@ -772,7 +794,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHuvecBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel HUVEC
+        shortLabel HUVEC   Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HUVEC cells)
         subGroups view=SIGBO cellType=HUVEC treatment=AANONE
         type bigWig 0.000000 198.000000
@@ -783,7 +805,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseNhekBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel NHEK
+        shortLabel NHEK    Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in NHEK cells)
         subGroups view=SIGBO cellType=NHEK treatment=AANONE
         type bigWig 0.000000 194.000000
@@ -794,7 +816,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseK562BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo
-        shortLabel K562
+        shortLabel K562    Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in K562 cells)
         subGroups view=SIGBO cellType=K562 treatment=AANONE
         type bigWig 0.000000 256.000000
@@ -805,7 +827,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseLhsrAndroBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LHSR
+        shortLabel LHSR    Sb tx:And
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in LHSR cells)
         subGroups view=SIGBO cellType=LHSR treatment=ANDRO
         type bigWig 0.000000 219.000000
@@ -815,7 +837,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel HeLa-S3
+        shortLabel HeLa-S3 Sb tx:Ia4
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HeLa-S3 cells)
         subGroups view=SIGBO cellType=HELA treatment=IFNa4h
         type bigWig 0.000000 224.000000
@@ -826,7 +848,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMcf7BaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel MCF-7
+        shortLabel MCF-7   Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in MCF-7 cells)
         subGroups view=SIGBO cellType=MCF7 treatment=AANONE
         type bigWig 0.000000 198.000000
@@ -836,7 +858,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseLhsrBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel LHSR
+        shortLabel LHSR    Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in LHSR cells)
         subGroups view=SIGBO cellType=LHSR treatment=AANONE
         type bigWig 0.000000 195.000000
@@ -846,7 +868,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseProgfibBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel ProgFib
+        shortLabel ProgFib Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in ProgFib cells)
         subGroups view=SIGBO cellType=PROG treatment=AANONE
         type bigWig 0.000000 231.000000
@@ -856,7 +878,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseFibropBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel FibroP
+        shortLabel FibroP  Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in FibroP cells)
         subGroups view=SIGBO cellType=FIBROP treatment=AANONE
         type bigWig 0.000000 430.000000
@@ -866,7 +888,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseFibroblBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Fibrobl
+        shortLabel Fibrobl Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Fibrobl cells)
         subGroups view=SIGBO cellType=FIBRO treatment=AANONE
         type bigWig 0.000000 318.000000
@@ -876,7 +898,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHsmmBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel HSMM
+        shortLabel HSMM    Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HSMM cells)
         subGroups view=SIGBO cellType=HSMM treatment=AANONE
         type bigWig 0.000000 341.000000
@@ -886,7 +908,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseMyometrBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel Myometr
+        shortLabel Myometr Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Myometr cells)
         subGroups view=SIGBO cellType=MYOMETR treatment=AANONE
         type bigWig 0.000000 209.000000
@@ -896,7 +918,7 @@ wgEncode 1
         track wgEncodeOpenChromDnasePanisletsBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel PanIslets
+        shortLabel PanIsle Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in PanIslets cells)
         subGroups view=SIGBO cellType=PANI treatment=AANONE
         type bigWig 0.000000 357.000000
@@ -906,7 +928,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel AoSMC
+        shortLabel AoSMC   Sb tx:Sfm
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in AoSMC cells)
         subGroups view=SIGBO cellType=AOSMC treatment=SERUMFREE
         type bigWig 0.000000 151.000000
@@ -916,7 +938,7 @@ wgEncode 1
         track wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal
         release alpha
         parent wgEncodeOpenChromDnaseViewSigBo off
-        shortLabel HSMMtube
+        shortLabel HSMMtub Sb tx:Non
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HSMMtube cells)
         subGroups view=SIGBO cellType=HSMMt treatment=AANONE
         type bigWig 0.000000 328.000000
