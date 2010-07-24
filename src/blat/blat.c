@@ -137,7 +137,7 @@ printf(
   "   -trimHardA  Remove poly-A tail from qSize as well as alignments in \n"
   "               psl output\n"
   "   -fastMap    Run for fast DNA/DNA remapping - not allowing introns, \n"
-  "               requiring high %%ID\n"
+  "               requiring high %%ID. Query sizes must not exceed %d.\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format, no sequence\n"
   "                   pslx - Tab separated format with sequence\n"
@@ -152,7 +152,7 @@ printf(
   "               terminal exons.  Not recommended for ESTs\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d\n"
   "   -extendThroughN - Allows extension of alignment through large blocks of N's\n"
-  , gfVersion, ffIntronMaxDefault
+  , gfVersion, MAXSINGLEPIECESIZE, ffIntronMaxDefault
   );
 exit(-1);
 }
