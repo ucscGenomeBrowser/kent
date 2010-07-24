@@ -95,7 +95,7 @@ view Alignments
 
 metaObject wgEncodeUwDnaseSeqAlignmentsRep1Bjtert
 objType file
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -975,7 +975,7 @@ view Alignments
 
 metaObject wgEncodeUwDnaseSeqAlignmentsRep2Bjtert
 objType file
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -1643,7 +1643,7 @@ view Hotspots
 metaObject wgEncodeUwDnaseSeqHotspotsRep1Bjtert
 objType table
 accession Hotspot-v5.0
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -2506,7 +2506,7 @@ view Hotspots
 
 metaObject wgEncodeUwDnaseSeqHotspotsRep2Bjtert
 objType table
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -3174,7 +3174,7 @@ view Peaks
 
 metaObject wgEncodeUwDnaseSeqPeaksRep1Bjtert
 objType table
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -4037,7 +4037,7 @@ view Peaks
 
 metaObject wgEncodeUwDnaseSeqPeaksRep2Bjtert
 objType table
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -4700,7 +4700,7 @@ view RawData
 
 metaObject wgEncodeUwDnaseSeqRawDataRep1Bjtert
 objType file
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -5534,7 +5534,7 @@ view RawData
 
 metaObject wgEncodeUwDnaseSeqRawDataRep2Bjtert
 objType file
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -6171,7 +6171,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnaseSeqRawSignalRep1Bjtert
 objType table
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -7034,7 +7034,7 @@ view RawSignal
 
 metaObject wgEncodeUwDnaseSeqRawSignalRep2Bjtert
 objType table
-cell BJ-tert
+cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
 dataVersion ENCODE July 2009 Freeze
@@ -7605,4 +7605,4 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: -1331265169
+# MAGIC: -1334939149

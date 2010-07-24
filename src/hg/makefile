@@ -110,6 +110,8 @@ UTIL_DIRS = \
 	hgsqldump \
 	hgsqldumpLocal \
 	hgsqlimport \
+        hgsqlSwapTables \
+        hgsqlTableDate \
 	intronEnds \
 	lib \
 	liftAcross \

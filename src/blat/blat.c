@@ -137,7 +137,7 @@ printf(
   "   -trimHardA  Remove poly-A tail from qSize as well as alignments in \n"
   "               psl output\n"
   "   -fastMap    Run for fast DNA/DNA remapping - not allowing introns, \n"
-  "               requiring high %%ID\n"
+  "               requiring high %%ID. Query sizes must not exceed %d.\n"
   "   -out=type   Controls output file format.  Type is one of:\n"
   "                   psl - Default.  Tab separated format, no sequence\n"
   "                   pslx - Tab separated format with sequence\n"
@@ -152,7 +152,7 @@ printf(
   "               terminal exons.  Not recommended for ESTs\n"
   "   -maxIntron=N  Sets maximum intron size. Default is %d\n"
   "   -extendThroughN - Allows extension of alignment through large blocks of N's\n"
-  , gfVersion, ffIntronMaxDefault
+  , gfVersion, MAXSINGLEPIECESIZE, ffIntronMaxDefault
   );
 exit(-1);
 }
@@ -197,6 +197,11 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl,
 	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
+if (fastMap && (seq->size > MAXSINGLEPIECESIZE))
+    errAbort("Maximum single piece size (%d) exceeded by query %s of size (%d). "
+	"Larger pieces will have to be split up until no larger than this limit "
+	"when the -fastMap option is used."	
+	, MAXSINGLEPIECESIZE, seq->name, seq->size);
 gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo, fastMap, optionExists("fine"));
 }
 
