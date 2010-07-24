@@ -6,7 +6,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -24,7 +24,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -42,7 +42,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -60,7 +60,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -78,7 +78,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -96,7 +96,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -114,7 +114,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -132,7 +132,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -150,7 +150,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -168,7 +168,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -186,7 +186,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562CellShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -204,7 +204,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562CellShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -222,7 +222,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -240,7 +240,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -258,7 +258,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -276,7 +276,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -294,7 +294,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -312,7 +312,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -330,7 +330,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -348,7 +348,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -366,7 +366,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -384,7 +384,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -402,7 +402,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -420,7 +420,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -438,7 +438,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -456,7 +456,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -474,7 +474,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -492,7 +492,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
 grant Gingeras
 lab CSHL
 localization polysome
@@ -510,7 +510,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization polysome
@@ -528,7 +528,7 @@ dataType ShortRnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization polysome
@@ -546,7 +546,7 @@ dataType ShortRnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-06-30
 dateUnrestricted 2011-03-30
-fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam.gz
+fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -564,7 +564,7 @@ dataType ShortRnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-06-30
 dateUnrestricted 2011-03-30
-fileName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -582,7 +582,7 @@ dataType ShortRnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-06-30
 dateUnrestricted 2011-03-30
-fileName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw.bigWig.gz
+fileName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw.bigWig
 grant Gingeras
 lab CSHL
 localization cell

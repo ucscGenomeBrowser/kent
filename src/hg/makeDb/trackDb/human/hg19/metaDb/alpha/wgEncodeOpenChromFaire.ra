@@ -7,7 +7,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -27,7 +27,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -47,7 +47,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
-fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam.gz
+fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -67,7 +67,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-fileName wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireGm12878BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -105,7 +105,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
-fileName wgEncodeOpenChromFaireGm12878Sig.bigWig.gz
+fileName wgEncodeOpenChromFaireGm12878Sig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_GM12878
@@ -124,7 +124,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -144,7 +144,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -164,7 +164,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireGm18507BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -202,7 +202,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromFaireGm18507Sig.bigWig.gz
+fileName wgEncodeOpenChromFaireGm18507Sig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male
@@ -221,7 +221,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -241,7 +241,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -261,7 +261,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireGm19239BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -299,7 +299,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromFaireGm19239Sig.bigWig.gz
+fileName wgEncodeOpenChromFaireGm19239Sig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male
@@ -318,7 +318,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -338,7 +338,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -358,7 +358,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireH1hescBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -396,7 +396,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireH1hescSig.bigWig.gz
+fileName wgEncodeOpenChromFaireH1hescSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male
@@ -415,7 +415,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -435,7 +435,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -455,7 +455,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireHelas3BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -474,7 +474,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -495,7 +495,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -516,7 +516,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireHelas3Ifna4hBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -556,7 +556,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig.gz
+fileName wgEncodeOpenChromFaireHelas3Ifna4hSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_HelaS3
@@ -576,7 +576,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -597,7 +597,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -618,7 +618,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireHelas3Ifng4hBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -658,7 +658,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig.gz
+fileName wgEncodeOpenChromFaireHelas3Ifng4hSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_HelaS3
@@ -697,7 +697,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromFaireHelas3Sig.bigWig.gz
+fileName wgEncodeOpenChromFaireHelas3Sig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_HelaS3
@@ -716,7 +716,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -736,7 +736,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -756,7 +756,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam.gz
+fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -776,7 +776,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireHepg2BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -814,7 +814,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
-fileName wgEncodeOpenChromFaireHepg2Sig.bigWig.gz
+fileName wgEncodeOpenChromFaireHepg2Sig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_HepG2
@@ -833,7 +833,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -853,7 +853,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -873,7 +873,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireHuvecBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -911,7 +911,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromFaireHuvecSig.bigWig.gz
+fileName wgEncodeOpenChromFaireHuvecSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_HUVEC
@@ -930,7 +930,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
-fileName wgEncodeOpenChromFaireK562AlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireK562AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -950,7 +950,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
-fileName wgEncodeOpenChromFaireK562AlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireK562AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -970,7 +970,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
-fileName wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireK562BaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -1008,7 +1008,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-26
 dateUnrestricted 2009-11-26
-fileName wgEncodeOpenChromFaireK562Sig.bigWig.gz
+fileName wgEncodeOpenChromFaireK562Sig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_K562
@@ -1027,7 +1027,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireLhsrAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1047,7 +1047,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireLhsrAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1067,7 +1067,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireLhsrAndroAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1088,7 +1088,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireLhsrAndroAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1109,7 +1109,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireLhsrAndroBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -1149,7 +1149,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrAndroSig.bigWig.gz
+fileName wgEncodeOpenChromFaireLhsrAndroSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male
@@ -1169,7 +1169,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireLhsrBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -1207,7 +1207,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromFaireLhsrSig.bigWig.gz
+fileName wgEncodeOpenChromFaireLhsrSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male
@@ -1226,7 +1226,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1246,7 +1246,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1266,7 +1266,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireNhbeBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -1304,7 +1304,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromFaireNhbeSig.bigWig.gz
+fileName wgEncodeOpenChromFaireNhbeSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male
@@ -1323,7 +1323,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireNhekAlnRep1.bam.gz
+fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1343,7 +1343,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireNhekAlnRep2.bam.gz
+fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1363,7 +1363,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFaireNhekBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -1401,7 +1401,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromFaireNhekSig.bigWig.gz
+fileName wgEncodeOpenChromFaireNhekSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_female
@@ -1420,7 +1420,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam.gz
+fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1440,7 +1440,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromFairePanisletsBaseOverlapSignal.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion baseAlignCounts.pl v 1
@@ -1478,7 +1478,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
-fileName wgEncodeOpenChromFairePanisletsSig.bigWig.gz
+fileName wgEncodeOpenChromFairePanisletsSig.bigWig
 grant Crawford
 lab UNC(Lieb)
 labVersion fseq v 1.84, iff_generic_male

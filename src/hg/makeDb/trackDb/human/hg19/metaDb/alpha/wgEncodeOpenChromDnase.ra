@@ -7,7 +7,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -28,7 +28,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -49,7 +49,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseAosmcSerumfreeBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -89,7 +89,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseAosmcSerumfreeSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -109,7 +109,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromDnaseChorionAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseChorionAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -130,7 +130,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromDnaseChorionAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseChorionAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -151,7 +151,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromDnaseChorionBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseChorionBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -191,7 +191,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromDnaseChorionSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseChorionSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -211,7 +211,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
-fileName wgEncodeOpenChromDnaseFibroblAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseFibroblAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -232,7 +232,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
-fileName wgEncodeOpenChromDnaseFibroblAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseFibroblAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -253,7 +253,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
-fileName wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseFibroblBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -293,7 +293,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
-fileName wgEncodeOpenChromDnaseFibroblSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseFibroblSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_FB8470
@@ -313,7 +313,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromDnaseFibropAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseFibropAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -334,7 +334,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromDnaseFibropAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseFibropAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -355,7 +355,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromDnaseFibropAlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseFibropAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -376,7 +376,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseFibropBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -416,7 +416,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
-fileName wgEncodeOpenChromDnaseFibropSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseFibropSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -436,7 +436,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm12878AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -457,7 +457,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm12878AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -478,7 +478,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseGm12878AlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseGm12878AlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -499,7 +499,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeOpenChromDnaseGm12878AlnRep4.bam.gz
+fileName wgEncodeOpenChromDnaseGm12878AlnRep4.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -520,7 +520,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeOpenChromDnaseGm12878AlnRep5.bam.gz
+fileName wgEncodeOpenChromDnaseGm12878AlnRep5.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -541,7 +541,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-fileName wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm12878BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -621,7 +621,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-fileName wgEncodeOpenChromDnaseGm12878Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm12878Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_GM12878
@@ -641,7 +641,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
-fileName wgEncodeOpenChromDnaseGm12891AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm12891AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -662,7 +662,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
-fileName wgEncodeOpenChromDnaseGm12891AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm12891AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -683,7 +683,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
-fileName wgEncodeOpenChromDnaseGm12891BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm12891BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -723,7 +723,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
-fileName wgEncodeOpenChromDnaseGm12891Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm12891Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -743,7 +743,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm12892AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm12892AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -764,7 +764,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm12892AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm12892AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -785,7 +785,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm12892BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm12892BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -825,7 +825,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm12892Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm12892Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -845,7 +845,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseGm18507AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm18507AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -866,7 +866,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseGm18507AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm18507AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -887,7 +887,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseGm18507AlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseGm18507AlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -908,7 +908,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseGm18507BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm18507BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -948,7 +948,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseGm18507Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm18507Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -968,7 +968,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19238AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm19238AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -989,7 +989,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19238AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm19238AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1010,7 +1010,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19238BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm19238BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1050,7 +1050,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19238Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm19238Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -1070,7 +1070,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19239AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm19239AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1091,7 +1091,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19239AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm19239AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1112,7 +1112,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19239BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm19239BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1152,7 +1152,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19239Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm19239Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -1172,7 +1172,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19240AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseGm19240AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1193,7 +1193,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19240AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseGm19240AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1214,7 +1214,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19240BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm19240BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1254,7 +1254,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromDnaseGm19240Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseGm19240Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -1274,7 +1274,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromDnaseH1hescAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseH1hescAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1295,7 +1295,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromDnaseH1hescAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseH1hescAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1316,7 +1316,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromDnaseH1hescBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseH1hescBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1356,7 +1356,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromDnaseH1hescSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseH1hescSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -1376,7 +1376,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromDnaseH9esAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseH9esAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1397,7 +1397,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromDnaseH9esAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseH9esAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1418,7 +1418,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromDnaseH9esBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseH9esBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1458,7 +1458,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
-fileName wgEncodeOpenChromDnaseH9esSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseH9esSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -1478,7 +1478,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseHelas3AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1499,7 +1499,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseHelas3AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1520,7 +1520,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3AlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseHelas3AlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1541,7 +1541,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseHelas3BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1561,7 +1561,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1582,7 +1582,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1603,7 +1603,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseHelas3Ifna4hBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1643,7 +1643,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3Ifna4hSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseHelas3Ifna4hSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_HelaS3
@@ -1683,7 +1683,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromDnaseHelas3Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseHelas3Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_HelaS3
@@ -1703,7 +1703,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2010-01-15
-fileName wgEncodeOpenChromDnaseHepg2AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseHepg2AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1724,7 +1724,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseHepg2AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1745,7 +1745,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2AlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseHepg2AlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1766,7 +1766,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseHepg2BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1806,7 +1806,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
-fileName wgEncodeOpenChromDnaseHepg2Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseHepg2Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_HepG2
@@ -1826,7 +1826,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseHsmmAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1847,7 +1847,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseHsmmAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1868,7 +1868,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmAlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseHsmmAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1889,7 +1889,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseHsmmBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -1929,7 +1929,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseHsmmSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -1949,7 +1949,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmtAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseHsmmtAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1970,7 +1970,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmtAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseHsmmtAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1991,7 +1991,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmtAlnRep3.bam.gz
+fileName wgEncodeOpenChromDnaseHsmmtAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2012,7 +2012,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseHsmmtBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2052,7 +2052,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
-fileName wgEncodeOpenChromDnaseHsmmtSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseHsmmtSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -2072,7 +2072,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromDnaseHuvecAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseHuvecAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2093,7 +2093,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromDnaseHuvecAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseHuvecAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2114,7 +2114,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseHuvecBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2154,7 +2154,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromDnaseHuvecSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseHuvecSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_HUVEC
@@ -2174,7 +2174,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseK562AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseK562AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2195,7 +2195,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromDnaseK562AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseK562AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2216,7 +2216,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
-fileName wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseK562BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2256,7 +2256,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-26
 dateUnrestricted 2009-11-26
-fileName wgEncodeOpenChromDnaseK562Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseK562Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_K562
@@ -2276,7 +2276,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseLhsrAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2297,7 +2297,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseLhsrAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2318,7 +2318,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrAndroAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseLhsrAndroAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2339,7 +2339,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrAndroAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseLhsrAndroAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2360,7 +2360,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrAndroBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseLhsrAndroBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2400,7 +2400,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrAndroSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseLhsrAndroSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -2420,7 +2420,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseLhsrBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2460,7 +2460,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseLhsrSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseLhsrSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -2480,7 +2480,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseMcf7AlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseMcf7AlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2501,7 +2501,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseMcf7AlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseMcf7AlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2522,7 +2522,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseMcf7BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseMcf7BaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2562,7 +2562,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
-fileName wgEncodeOpenChromDnaseMcf7Sig.bigWig.gz
+fileName wgEncodeOpenChromDnaseMcf7Sig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_MCF7
@@ -2582,7 +2582,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-fileName wgEncodeOpenChromDnaseMedulloAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseMedulloAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2603,7 +2603,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-fileName wgEncodeOpenChromDnaseMedulloAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseMedulloAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2624,7 +2624,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-fileName wgEncodeOpenChromDnaseMedulloBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseMedulloBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2664,7 +2664,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
-fileName wgEncodeOpenChromDnaseMedulloSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseMedulloSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -2684,7 +2684,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseMyometrAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseMyometrAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2705,7 +2705,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseMyometrAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseMyometrAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2726,7 +2726,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseMyometrBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2766,7 +2766,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
-fileName wgEncodeOpenChromDnaseMyometrSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseMyometrSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -2786,7 +2786,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromDnaseNhekAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseNhekAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2807,7 +2807,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromDnaseNhekAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseNhekAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2828,7 +2828,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromDnaseNhekBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseNhekBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2868,7 +2868,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromDnaseNhekSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseNhekSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_female
@@ -2888,7 +2888,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnasePanisletsAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnasePanisletsAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2909,7 +2909,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnasePanisletsAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnasePanisletsAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2930,7 +2930,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnasePanisletsAlnRep3.bam.gz
+fileName wgEncodeOpenChromDnasePanisletsAlnRep3.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2951,7 +2951,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnasePanisletsBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -2991,7 +2991,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnasePanisletsSig.bigWig.gz
+fileName wgEncodeOpenChromDnasePanisletsSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_generic_male
@@ -3011,7 +3011,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnaseProgfibAlnRep1.bam.gz
+fileName wgEncodeOpenChromDnaseProgfibAlnRep1.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -3032,7 +3032,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnaseProgfibAlnRep2.bam.gz
+fileName wgEncodeOpenChromDnaseProgfibAlnRep2.bam
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -3053,7 +3053,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromDnaseProgfibBaseOverlapSignal.bigWig
 grant Crawford
 lab Duke
 labVersion baseAlignCounts.pl v 1
@@ -3093,7 +3093,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
-fileName wgEncodeOpenChromDnaseProgfibSig.bigWig.gz
+fileName wgEncodeOpenChromDnaseProgfibSig.bigWig
 grant Crawford
 lab Duke
 labVersion fseq v 1.84, iff_FB0167P

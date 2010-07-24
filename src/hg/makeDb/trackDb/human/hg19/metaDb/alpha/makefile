@@ -1,5 +1,6 @@
 
 LIST=\
+wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
