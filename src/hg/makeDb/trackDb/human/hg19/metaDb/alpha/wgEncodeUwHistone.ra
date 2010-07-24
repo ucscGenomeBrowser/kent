@@ -9,7 +9,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneBjCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneBjCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -35,7 +35,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-fileName wgEncodeUwHistoneBjCtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneBjCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -190,7 +190,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneBjCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneBjCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -216,7 +216,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
-fileName wgEncodeUwHistoneBjCtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneBjCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -242,7 +242,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -268,7 +268,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -398,7 +398,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneBjH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneBjH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -424,7 +424,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneBjH3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneBjH3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -450,7 +450,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -476,7 +476,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -606,7 +606,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneBjH3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneBjH3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -632,7 +632,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneBjH3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneBjH3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -658,7 +658,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -684,7 +684,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -814,7 +814,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneBjH3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneBjH3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -840,7 +840,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneBjH3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneBjH3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -866,7 +866,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -892,7 +892,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneBjInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneBjInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -918,7 +918,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneCaco2CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneCaco2CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -944,7 +944,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneCaco2CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneCaco2CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1074,7 +1074,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneCaco2CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneCaco2CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1100,7 +1100,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneCaco2CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneCaco2CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1126,7 +1126,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1152,7 +1152,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1282,7 +1282,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneCaco2H3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneCaco2H3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1308,7 +1308,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneCaco2H3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneCaco2H3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1334,7 +1334,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1360,7 +1360,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1490,7 +1490,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneCaco2H3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneCaco2H3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1516,7 +1516,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneCaco2H3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneCaco2H3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1542,7 +1542,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1568,7 +1568,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1698,7 +1698,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneCaco2H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneCaco2H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1724,7 +1724,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneCaco2H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneCaco2H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1750,7 +1750,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1776,7 +1776,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneCaco2InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneCaco2InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1802,7 +1802,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm06990CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm06990CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -1828,7 +1828,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneGm06990CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm06990CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -1958,7 +1958,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm06990CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm06990CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -1984,7 +1984,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneGm06990CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm06990CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2010,7 +2010,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2036,7 +2036,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2166,7 +2166,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneGm06990H3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm06990H3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2192,7 +2192,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneGm06990H3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm06990H3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2218,7 +2218,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2244,7 +2244,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2374,7 +2374,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneGm06990H3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm06990H3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2400,7 +2400,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneGm06990H3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm06990H3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2426,7 +2426,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2452,7 +2452,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2582,7 +2582,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneGm06990H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm06990H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2608,7 +2608,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneGm06990H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm06990H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2634,7 +2634,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2660,7 +2660,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm06990InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm06990InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2686,7 +2686,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm12801CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12801CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12801/Input/std
@@ -2764,7 +2764,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm12801CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12801CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12801/Input/std
@@ -2790,7 +2790,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12801InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12801InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12801/Input/std
@@ -2816,7 +2816,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12801InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12801InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12801/Input/std
@@ -2842,7 +2842,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12864CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12864CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -2868,7 +2868,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12864CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12864CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -2998,7 +2998,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12864CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12864CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -3024,7 +3024,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12864CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12864CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -3050,7 +3050,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -3076,7 +3076,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12864InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12864InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -3102,7 +3102,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12865CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12865CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3128,7 +3128,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12865CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12865CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3258,7 +3258,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12865CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12865CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3284,7 +3284,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12865CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12865CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3310,7 +3310,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3336,7 +3336,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12865InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12865InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3362,7 +3362,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12872CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12872CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3388,7 +3388,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12872CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12872CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3518,7 +3518,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12872CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12872CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3544,7 +3544,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12872CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12872CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3570,7 +3570,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12872InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12872InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3596,7 +3596,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12872InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12872InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3622,7 +3622,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12873CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12873CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3648,7 +3648,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12873CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12873CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3778,7 +3778,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12873CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12873CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3804,7 +3804,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12873CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12873CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3830,7 +3830,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12873InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12873InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3856,7 +3856,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
-fileName wgEncodeUwHistoneGm12873InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12873InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3882,7 +3882,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12874CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12874CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -3908,7 +3908,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12874CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12874CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4038,7 +4038,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12874CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12874CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4064,7 +4064,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12874CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12874CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4090,7 +4090,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12874InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12874InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4116,7 +4116,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneGm12874InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12874InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4142,7 +4142,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12875CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12875CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4168,7 +4168,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12875CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12875CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4298,7 +4298,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12875CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12875CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4324,7 +4324,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
-fileName wgEncodeUwHistoneGm12875CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12875CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4350,7 +4350,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4376,7 +4376,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-15
-fileName wgEncodeUwHistoneGm12875InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12875InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4402,7 +4402,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm12878CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12878CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4428,7 +4428,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneGm12878CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12878CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4558,7 +4558,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm12878CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12878CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4584,7 +4584,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneGm12878CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12878CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4610,7 +4610,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4636,7 +4636,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4766,7 +4766,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneGm12878H3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12878H3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4792,7 +4792,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneGm12878H3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12878H3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4818,7 +4818,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4844,7 +4844,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4974,7 +4974,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneGm12878H3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12878H3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5000,7 +5000,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneGm12878H3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12878H3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5026,7 +5026,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5052,7 +5052,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5182,7 +5182,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneGm12878H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12878H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5208,7 +5208,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneGm12878H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneGm12878H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5234,7 +5234,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5260,7 +5260,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12878InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneGm12878InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5286,7 +5286,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneHek293CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHek293CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5312,7 +5312,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHek293CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHek293CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5442,7 +5442,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneHek293CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHek293CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5468,7 +5468,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHek293CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHek293CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5494,7 +5494,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5520,7 +5520,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneHek293InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHek293InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5546,7 +5546,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHelas3CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHelas3CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5572,7 +5572,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-fileName wgEncodeUwHistoneHelas3CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHelas3CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5702,7 +5702,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneHelas3CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHelas3CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5728,7 +5728,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
-fileName wgEncodeUwHistoneHelas3CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHelas3CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5754,7 +5754,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5780,7 +5780,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5910,7 +5910,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneHelas3H3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHelas3H3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5936,7 +5936,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneHelas3H3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHelas3H3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5962,7 +5962,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5988,7 +5988,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6118,7 +6118,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHelas3H3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHelas3H3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6144,7 +6144,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHelas3H3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHelas3H3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6170,7 +6170,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6196,7 +6196,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6326,7 +6326,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHelas3H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHelas3H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6352,7 +6352,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHelas3H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHelas3H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6378,7 +6378,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6404,7 +6404,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHelas3InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHelas3InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6430,7 +6430,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneHepg2CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHepg2CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6456,7 +6456,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneHepg2CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHepg2CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6586,7 +6586,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneHepg2CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHepg2CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6612,7 +6612,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneHepg2CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHepg2CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6638,7 +6638,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6664,7 +6664,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6794,7 +6794,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHepg2H3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHepg2H3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6820,7 +6820,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHepg2H3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHepg2H3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6846,7 +6846,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
-fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6924,7 +6924,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHepg2H3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHepg2H3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6950,7 +6950,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6976,7 +6976,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7106,7 +7106,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHepg2H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHepg2H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7132,7 +7132,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHepg2H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHepg2H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7158,7 +7158,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7184,7 +7184,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHepg2InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHepg2InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7210,7 +7210,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneHl60CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHl60CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7288,7 +7288,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneHl60CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHl60CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7314,7 +7314,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7340,7 +7340,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7470,7 +7470,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneHl60H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHl60H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7496,7 +7496,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneHl60H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHl60H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7522,7 +7522,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7548,7 +7548,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHl60InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHl60InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7574,7 +7574,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneHmecCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHmecCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7652,7 +7652,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneHmecCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHmecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7678,7 +7678,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7756,7 +7756,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHmecH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHmecH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7782,7 +7782,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7808,7 +7808,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneHmecInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHmecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7834,7 +7834,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneHreCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHreCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -7860,7 +7860,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHreCtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHreCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -7990,7 +7990,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneHreCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHreCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8016,7 +8016,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHreCtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHreCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8042,7 +8042,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8068,7 +8068,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8198,7 +8198,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHreH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHreH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8224,7 +8224,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHreH3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHreH3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8250,7 +8250,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8276,7 +8276,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8406,7 +8406,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHreH3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHreH3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8432,7 +8432,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHreH3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHreH3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8458,7 +8458,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8484,7 +8484,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8614,7 +8614,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHreH3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHreH3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8640,7 +8640,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHreH3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHreH3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8666,7 +8666,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8692,7 +8692,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneHreInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHreInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8718,7 +8718,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHuvecCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHuvecCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8744,7 +8744,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHuvecCtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHuvecCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8874,7 +8874,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHuvecCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHuvecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8900,7 +8900,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHuvecCtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHuvecCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8926,7 +8926,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8952,7 +8952,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9082,7 +9082,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHuvecH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHuvecH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9108,7 +9108,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHuvecH3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHuvecH3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9134,7 +9134,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9160,7 +9160,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9290,7 +9290,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneHuvecH3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHuvecH3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9316,7 +9316,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHuvecH3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHuvecH3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9342,7 +9342,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9368,7 +9368,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9498,7 +9498,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneHuvecH3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHuvecH3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9524,7 +9524,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneHuvecH3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneHuvecH3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9550,7 +9550,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9576,7 +9576,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneHuvecInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneHuvecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9602,7 +9602,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneK562CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneK562CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9628,7 +9628,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneK562CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneK562CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9758,7 +9758,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneK562CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneK562CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9784,7 +9784,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneK562CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneK562CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9810,7 +9810,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9836,7 +9836,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9966,7 +9966,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneK562H3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9992,7 +9992,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneK562H3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10018,7 +10018,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10044,7 +10044,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10174,7 +10174,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneK562H3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10200,7 +10200,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneK562H3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneK562H3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10226,7 +10226,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10252,7 +10252,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
-fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10382,7 +10382,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
-fileName wgEncodeUwHistoneK562H3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneK562H3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10408,7 +10408,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
-fileName wgEncodeUwHistoneK562H3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneK562H3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10434,7 +10434,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10460,7 +10460,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneK562InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneK562InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10486,7 +10486,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneNhekCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneNhekCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10512,7 +10512,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneNhekCtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneNhekCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10642,7 +10642,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
-fileName wgEncodeUwHistoneNhekCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneNhekCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10668,7 +10668,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneNhekCtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneNhekCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10694,7 +10694,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10720,7 +10720,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10850,7 +10850,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneNhekH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneNhekH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10876,7 +10876,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneNhekH3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneNhekH3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10902,7 +10902,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10928,7 +10928,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11058,7 +11058,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneNhekH3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneNhekH3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11084,7 +11084,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneNhekH3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneNhekH3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11110,7 +11110,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11136,7 +11136,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11266,7 +11266,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeUwHistoneNhekH3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneNhekH3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11292,7 +11292,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
-fileName wgEncodeUwHistoneNhekH3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneNhekH3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11318,7 +11318,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11344,7 +11344,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneNhekInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneNhekInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11370,7 +11370,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSaecCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11396,7 +11396,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecCtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSaecCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11526,7 +11526,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSaecCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11552,7 +11552,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecCtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSaecCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11578,7 +11578,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11604,7 +11604,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11734,7 +11734,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSaecH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSaecH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11760,7 +11760,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecH3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSaecH3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11786,7 +11786,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11812,7 +11812,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11942,7 +11942,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecH3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSaecH3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11968,7 +11968,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSaecH3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSaecH3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11994,7 +11994,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12020,7 +12020,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12150,7 +12150,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSaecH3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSaecH3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12176,7 +12176,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSaecH3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSaecH3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12202,7 +12202,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12228,7 +12228,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneSaecInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSaecInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12254,7 +12254,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraCtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSknshraCtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12280,7 +12280,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
-fileName wgEncodeUwHistoneSknshraCtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSknshraCtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12410,7 +12410,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraCtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSknshraCtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12436,7 +12436,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneSknshraCtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSknshraCtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12462,7 +12462,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12488,7 +12488,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12618,7 +12618,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraH3k27me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSknshraH3k27me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12644,7 +12644,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
-fileName wgEncodeUwHistoneSknshraH3k27me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSknshraH3k27me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12670,7 +12670,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12696,7 +12696,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12826,7 +12826,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraH3k36me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSknshraH3k36me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12852,7 +12852,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
-fileName wgEncodeUwHistoneSknshraH3k36me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSknshraH3k36me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12878,7 +12878,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12904,7 +12904,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13034,7 +13034,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSknshraH3k4me3StdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSknshraH3k4me3StdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13060,7 +13060,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
-fileName wgEncodeUwHistoneSknshraH3k4me3StdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneSknshraH3k4me3StdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13086,7 +13086,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13112,7 +13112,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneSknshraInputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneSknshraInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13138,7 +13138,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneWerirb1CtcfStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneWerirb1CtcfStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13164,7 +13164,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneWerirb1CtcfStdAlnRep2.bam.gz
+fileName wgEncodeUwHistoneWerirb1CtcfStdAlnRep2.bam
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13294,7 +13294,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneWerirb1CtcfStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneWerirb1CtcfStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13320,7 +13320,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
-fileName wgEncodeUwHistoneWerirb1CtcfStdRawRep2.bigWig.gz
+fileName wgEncodeUwHistoneWerirb1CtcfStdRawRep2.bigWig
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13346,7 +13346,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
-fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam.gz
+fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13372,7 +13372,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
 dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneWerirb1InputStdRawRep1.bigWig.gz
+fileName wgEncodeUwHistoneWerirb1InputStdRawRep1.bigWig
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std

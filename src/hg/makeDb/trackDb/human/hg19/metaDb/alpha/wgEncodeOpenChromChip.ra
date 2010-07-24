@@ -8,7 +8,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
-fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm12878CmycAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -29,7 +29,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
-fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm12878CmycAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -50,7 +50,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
-fileName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm12878CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -90,7 +90,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-02
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
-fileName wgEncodeOpenChromChipGm12878CmycSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm12878CmycSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_GM12878
@@ -110,7 +110,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
-fileName wgEncodeOpenChromChipGm12878InputAln.bam.gz
+fileName wgEncodeOpenChromChipGm12878InputAln.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -130,7 +130,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
-fileName wgEncodeOpenChromChipGm12878InputSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm12878InputSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84
@@ -150,7 +150,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm12878Pol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -171,7 +171,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm12878Pol2AlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -192,7 +192,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm12878Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -232,7 +232,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipGm12878Pol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipGm12878Pol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_GM12878
@@ -252,7 +252,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm12891CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -273,7 +273,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm12891CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -294,7 +294,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm12891CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -334,7 +334,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm12891CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm12891CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_male
@@ -354,7 +354,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm12892CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -375,7 +375,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm12892CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -396,7 +396,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm12892CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -436,7 +436,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipGm12892CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm12892CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_female
@@ -456,7 +456,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm19238CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -477,7 +477,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm19238CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -498,7 +498,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm19238CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -538,7 +538,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19238CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm19238CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_female
@@ -558,7 +558,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm19239CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -579,7 +579,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm19239CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -600,7 +600,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm19239CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -640,7 +640,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19239CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm19239CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_male
@@ -660,7 +660,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipGm19240CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -681,7 +681,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipGm19240CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -702,7 +702,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipGm19240CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -742,7 +742,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
-fileName wgEncodeOpenChromChipGm19240CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipGm19240CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_female
@@ -762,7 +762,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipH1hescCmycAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -783,7 +783,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipH1hescCmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -823,7 +823,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
-fileName wgEncodeOpenChromChipH1hescCmycSig.bigWig.gz
+fileName wgEncodeOpenChromChipH1hescCmycSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_male
@@ -843,7 +843,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipH1hescCtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -864,7 +864,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipH1hescCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -904,7 +904,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipH1hescCtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipH1hescCtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_male
@@ -924,7 +924,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipH1hescPol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -945,7 +945,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipH1hescPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -985,7 +985,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeOpenChromChipH1hescPol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipH1hescPol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_male
@@ -1005,7 +1005,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHelas3CmycAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1026,7 +1026,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHelas3CmycAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1047,7 +1047,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1087,7 +1087,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CmycSig.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3CmycSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HelaS3
@@ -1107,7 +1107,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHelas3CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1128,7 +1128,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHelas3CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1149,7 +1149,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1189,7 +1189,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHelas3CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HelaS3
@@ -1209,7 +1209,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
-fileName wgEncodeOpenChromChipHelas3InputAln.bam.gz
+fileName wgEncodeOpenChromChipHelas3InputAln.bam
 grant Crawford
 inputType HeLa-S3/Input
 lab UT-Austin
@@ -1231,7 +1231,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
-fileName wgEncodeOpenChromChipHelas3InputSig.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3InputSig.bigWig
 grant Crawford
 inputType HeLa-S3/Input
 lab UT-Austin
@@ -1253,7 +1253,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHelas3Pol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1274,7 +1274,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHelas3Pol2AlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1295,7 +1295,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1335,7 +1335,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipHelas3Pol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipHelas3Pol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HelaS3
@@ -1355,7 +1355,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1376,7 +1376,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1397,7 +1397,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam.gz
+fileName wgEncodeOpenChromChipHepg2CmycAlnRep3.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1418,7 +1418,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1458,7 +1458,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
-fileName wgEncodeOpenChromChipHepg2CmycSig.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2CmycSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HepG2
@@ -1478,7 +1478,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHepg2CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1499,7 +1499,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHepg2CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1520,7 +1520,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1560,7 +1560,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
-fileName wgEncodeOpenChromChipHepg2CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HepG2
@@ -1580,7 +1580,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
-fileName wgEncodeOpenChromChipHepg2InputAln.bam.gz
+fileName wgEncodeOpenChromChipHepg2InputAln.bam
 grant Crawford
 inputType HepG2/Input
 lab UT-Austin
@@ -1602,7 +1602,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
-fileName wgEncodeOpenChromChipHepg2InputSig.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2InputSig.bigWig
 grant Crawford
 inputType HepG2/Input
 lab UT-Austin
@@ -1624,7 +1624,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1645,7 +1645,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1666,7 +1666,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam.gz
+fileName wgEncodeOpenChromChipHepg2Pol2AlnRep3.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1687,7 +1687,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1727,7 +1727,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-16
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipHepg2Pol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipHepg2Pol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HepG2
@@ -1747,7 +1747,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHuvecCmycAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1768,7 +1768,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecCmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1808,7 +1808,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
-fileName wgEncodeOpenChromChipHuvecCmycSig.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecCmycSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HUVEC
@@ -1828,7 +1828,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
-fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHuvecCtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1849,7 +1849,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
-fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHuvecCtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1870,7 +1870,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
-fileName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -1910,7 +1910,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
-fileName wgEncodeOpenChromChipHuvecCtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecCtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HUVEC
@@ -1930,7 +1930,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromChipHuvecInputAln.bam.gz
+fileName wgEncodeOpenChromChipHuvecInputAln.bam
 grant Crawford
 inputType HUVEC/Input
 lab UT-Austin
@@ -1952,7 +1952,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
-fileName wgEncodeOpenChromChipHuvecInputSig.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecInputSig.bigWig
 grant Crawford
 inputType HUVEC/Input
 lab UT-Austin
@@ -1974,7 +1974,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipHuvecPol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1995,7 +1995,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam.gz
+fileName wgEncodeOpenChromChipHuvecPol2AlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2016,7 +2016,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-fileName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2056,7 +2056,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
-fileName wgEncodeOpenChromChipHuvecPol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipHuvecPol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_HUVEC
@@ -2076,7 +2076,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipK562CmycAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2097,7 +2097,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipK562CmycAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2118,7 +2118,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam.gz
+fileName wgEncodeOpenChromChipK562CmycAlnRep3.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2139,7 +2139,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-fileName wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipK562CmycBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2179,7 +2179,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-fileName wgEncodeOpenChromChipK562CmycSig.bigWig.gz
+fileName wgEncodeOpenChromChipK562CmycSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_K562
@@ -2199,7 +2199,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipK562CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2220,7 +2220,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipK562CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2241,7 +2241,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
-fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam.gz
+fileName wgEncodeOpenChromChipK562CtcfAlnRep3.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2262,7 +2262,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-fileName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipK562CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2302,7 +2302,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
-fileName wgEncodeOpenChromChipK562CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipK562CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_K562
@@ -2322,7 +2322,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
-fileName wgEncodeOpenChromChipK562InputAln.bam.gz
+fileName wgEncodeOpenChromChipK562InputAln.bam
 grant Crawford
 inputType K562/Input
 lab UT-Austin
@@ -2344,7 +2344,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
-fileName wgEncodeOpenChromChipK562InputSig.bigWig.gz
+fileName wgEncodeOpenChromChipK562InputSig.bigWig
 grant Crawford
 inputType K562/Input
 lab UT-Austin
@@ -2366,7 +2366,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipK562Pol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2387,7 +2387,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam.gz
+fileName wgEncodeOpenChromChipK562Pol2AlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2408,7 +2408,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipK562Pol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2448,7 +2448,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
-fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipK562Pol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_K562
@@ -2468,7 +2468,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipMcf7CtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2489,7 +2489,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipMcf7CtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2510,7 +2510,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipMcf7CtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2550,7 +2550,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
-fileName wgEncodeOpenChromChipMcf7CtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipMcf7CtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_MCF7
@@ -2570,7 +2570,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipMcf7InputAln.bam.gz
+fileName wgEncodeOpenChromChipMcf7InputAln.bam
 grant Crawford
 inputType MCF-7/Input
 lab UT-Austin
@@ -2592,7 +2592,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipMcf7InputSig.bigWig.gz
+fileName wgEncodeOpenChromChipMcf7InputSig.bigWig
 grant Crawford
 inputType MCF-7/Input
 lab UT-Austin
@@ -2614,7 +2614,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipNhekCtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2635,7 +2635,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipNhekCtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2656,7 +2656,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipNhekCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2696,7 +2696,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
-fileName wgEncodeOpenChromChipNhekCtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipNhekCtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_generic_female
@@ -2716,7 +2716,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
-fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam.gz
+fileName wgEncodeOpenChromChipProgfibCtcfAlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2737,7 +2737,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
-fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam.gz
+fileName wgEncodeOpenChromChipProgfibCtcfAlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2758,7 +2758,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
-fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipProgfibCtcfBaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2799,7 +2799,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
-fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig.gz
+fileName wgEncodeOpenChromChipProgfibCtcfSig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_FB0167P
@@ -2819,7 +2819,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipProgfibInputAln.bam.gz
+fileName wgEncodeOpenChromChipProgfibInputAln.bam
 grant Crawford
 inputType ProgFib/Input
 lab UT-Austin
@@ -2841,7 +2841,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
-fileName wgEncodeOpenChromChipProgfibInputSig.bigWig.gz
+fileName wgEncodeOpenChromChipProgfibInputSig.bigWig
 grant Crawford
 inputType ProgFib/Input
 lab UT-Austin
@@ -2863,7 +2863,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
-fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam.gz
+fileName wgEncodeOpenChromChipProgfibPol2AlnRep1.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2884,7 +2884,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
-fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam.gz
+fileName wgEncodeOpenChromChipProgfibPol2AlnRep2.bam
 grant Crawford
 lab UT-A(Iyer)
 labVersion align_on_cluster_bwa.pl v 1
@@ -2905,7 +2905,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
-fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig.gz
+fileName wgEncodeOpenChromChipProgfibPol2BaseOverlapSignal.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion baseAlignCounts.pl v 1
@@ -2946,7 +2946,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
-fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig.gz
+fileName wgEncodeOpenChromChipProgfibPol2Sig.bigWig
 grant Crawford
 lab UT-A(Iyer)
 labVersion fseq v 1.84, iff_FB0167P
