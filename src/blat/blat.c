@@ -197,6 +197,11 @@ void searchOneStrand(struct dnaSeq *seq, struct genoFind *gf, FILE *psl,
 	boolean isRc, struct hash *maskHash, Bits *qMaskBits)
 /* Search for seq in index, align it, and write results to psl. */
 {
+if (fastMap && (seq->size > MAXSINGLEPIECESIZE))
+    errAbort("Maximum single piece size (%d) exceeded by query %s of size (%d). "
+	"Larger pieces will have to be split up until no larger than this limit "
+	"when the -fastMap option is used."	
+	, MAXSINGLEPIECESIZE, seq->name, seq->size);
 gfLongDnaInMem(seq, gf, isRc, minScore, qMaskBits, gvo, fastMap, optionExists("fine"));
 }
 
