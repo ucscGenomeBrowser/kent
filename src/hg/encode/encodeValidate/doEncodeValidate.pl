@@ -2012,7 +2012,6 @@ foreach my $ddfLine (@ddfLines) {
     } else {
         $metadata .= " tableName=$tableName";
     }
-    $metadata .= " fileName=$tableName.$fileType.gz";
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
@@ -2030,9 +2029,20 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
-    # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
-    if($downloadOnly) {
-        print MDB_TXT sprintf("metadata %s\n", $metadata);
+    if ($type eq "bam") {  
+        # print out metadata for bam file
+        my $metaextra = " fileName=$tableName.$fileType";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+
+        # print out metadata for bai file
+        $metaextra = " fileName=$tableName.$fileType.bai";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+    } elsif ($type eq "bigWig") {  
+        my $metaextra = " fileName=$tableName.$fileType";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+    } else {
+        my $metaextra = " fileName=$tableName.$fileType.gz";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     }
 
     if($downloadOnly || ($type eq "wig" && !grep(/$Encode::autoCreatedPrefix/, @{$ddfLine->{files}}))) {
@@ -2098,9 +2108,6 @@ foreach my $ddfLine (@ddfLines) {
                         $terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'});
             }
         }
-        # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
-        # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
-        print MDB_TXT sprintf("metadata %s\n", $metadata);
         print TRACK_RA sprintf("        # subId=%s dateSubmitted=%s\n", $subId,$dateSubmitted);
         print TRACK_RA "\n";
     }

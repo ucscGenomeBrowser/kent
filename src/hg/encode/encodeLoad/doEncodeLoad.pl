@@ -615,8 +615,14 @@ for my $key (keys %ra) {
     }
     HgAutomate::verbose(2, "Done loading. Now making links and copies. hgdownload=[$hgdownload]\n");
     if(!$opt_skipDownload and $hgdownload) {
-        # soft link file(s) into download dir - gzip files as appropriate
-        my $target = "$downloadDir/$tablename.$type.gz";
+        # hard link file(s) into download dir - gzip files as appropriate
+        my $target;
+        if (($type eq "bam") || ($type eq "bigWig"))  {
+            $target = "$downloadDir/$tablename.$type";
+        }
+        else {
+            $target = "$downloadDir/$tablename.$type.gz";
+        }
         # NOTE: We are now making the RawSignals but they are put in the subdirectory "raw"
         if(@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
             $target = "$downloadDir/raw/$tablename.$type.gz";
@@ -631,14 +637,23 @@ for my $key (keys %ra) {
         if(@files == 1) {
             my $srcFile = "$submitPath/$files[0]";
             HgAutomate::verbose(2, "One file: srcFile=[$srcFile]\n");
-            if(Encode::isZipped($srcFile)) {
-                HgAutomate::verbose(2, "soft-linking $srcFile => $target\n");
+            if ($type eq "bam") {
+                HgAutomate::verbose(2, "hard-linking $srcFile => $target\n");
+                !system("/bin/ln $srcFile $target") || die "link failed: $?\n";
+                HgAutomate::verbose(2, "hard-linking $srcFile.bai => $target.bai\n");
+                !system("/bin/ln $srcFile.bai $target.bai") || die "link failed: $?\n";
+            } elsif(Encode::isZipped($srcFile) || ($type eq "bigWig") || ($type eq "bigBed")) {
+                HgAutomate::verbose(2, "hard-linking $srcFile => $target\n");
                 !system("/bin/ln $srcFile $target") || die "link failed: $?\n";
             } else {
                 HgAutomate::verbose(2, "copying/zipping $srcFile => $target\n");
                 !system("/bin/gzip -c $srcFile > $target") || die "gzip: $?\n";
             }
         } else {
+            if ($type eq "bam") {
+                die "Cannot concatenate BAM files";
+            }
+
             # make a concatenated copy of multiple files
             my $unZippedTarget = "$downloadDir/$tablename.$type";
             unlink($unZippedTarget);
