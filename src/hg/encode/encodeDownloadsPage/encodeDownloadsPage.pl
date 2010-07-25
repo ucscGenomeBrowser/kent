@@ -291,7 +291,7 @@ my $ok = GetOptions("fileType=s",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
-my $fileMask = "*.gz *.bb *.bw *.bam";
+my $fileMask = "*.gz *.bb *.bw *.bam *.bai";
    $fileMask = $opt_fileType if(defined $opt_fileType);
 
 my $preamble = "preamble.html";
