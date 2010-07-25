@@ -2046,9 +2046,10 @@ foreach my $ddfLine (@ddfLines) {
         my $metaextra = " fileName=$tableName.$fileType";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
 
-        # print out metadata for bai file
-        $metaextra = " fileName=$tableName.$fileType.bai";
-        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+        # print out metadata for bai file 
+        # turns out we probably don't need this.
+        # $metaextra = " fileName=$tableName.$fileType.bai";
+        # print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     } elsif ($type eq "bigWig") {  
         my $metaextra = " fileName=$tableName.$fileType";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
