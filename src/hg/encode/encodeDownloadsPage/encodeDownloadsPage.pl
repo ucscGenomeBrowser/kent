@@ -470,6 +470,9 @@ for my $line (@fileList) {
                     }
                     $tix++;
                 }
+                if ($fileName =~ m/bai$/) {
+                    $metaData{type} = "bai";
+                }
                 if($metaData{type}) {
                     unshift @tags, "type"; # push values onto the front
                     unshift @vals, $metaData{type};
