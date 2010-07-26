@@ -1,6 +1,6 @@
 # Yale RNA-seq (wrangler: tdreszer)
 track wgEncodeYaleRNAseq
-release beta, public 
+release beta,public 
 compositeTrack on
 shortLabel Yale RNA-seq
 longLabel ENCODE RNA-seq from Yale/UC-Davis/Harvard

@@ -3365,10 +3365,9 @@ wgEncode 1
 
 
 # Yale RNA-seq (wrangler: tdreszer)
-include trackDb.wgEncodeYaleRnaSeq.ra
-
+include trackDb.wgEncodeYaleRnaSeq.ra beta,public
 # Yale RNA-seq (wrangler: cricket)
-include trackDb.wgEncodeYaleRnaSeq.new.ra
+include trackDb.wgEncodeYaleRnaSeq.new.ra alpha
 
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
