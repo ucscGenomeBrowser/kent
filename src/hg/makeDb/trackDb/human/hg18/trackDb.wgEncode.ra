@@ -3394,7 +3394,7 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalGm12878
     subTrack wgEncodeYaleRNAseq
     shortLabel GM12878 pA- Sg
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq pA- Sgnal (in GM12878 cells)
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in GM12878 cells)
     subGroups cellType=t1GM12878
     type bedGraph 4
     color 153,38,0
@@ -3403,7 +3403,7 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalK562
     subTrack wgEncodeYaleRNAseq
     shortLabel K562 none pA- Sg
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq pA- Sgnal (in K562 cells)
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in K562 cells)
     subGroups cellType=t1K562
     type bedGraph 4
     color 46,0,184
@@ -3412,7 +3412,7 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 Na30 pA- Sg
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq pA- Sgnal (in K562/IFNa30m cells)
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in K562/IFNa30m cells)
     subGroups cellType=uK562Ia30
     type bedGraph 4
     color 46,0,184
@@ -3421,7 +3421,7 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 Na6h pA- Sg
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq pA- Sgnal (in K562/IFNa6h cells)
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in K562/IFNa6h cells)
     subGroups cellType=uK562Ia6
     type bedGraph 4
     color 46,0,184
@@ -3430,7 +3430,7 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 Ng30 pA- Sg
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq pA- Sgnal (in K562/IFNg30m cells)
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in K562/IFNg30m cells)
     subGroups cellType=uK562Ig30
     type bedGraph 4
     color 46,0,184
@@ -3439,7 +3439,7 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
     subTrack wgEncodeYaleRNAseq off
     shortLabel K562 Ng6h pA- Sg
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq pA- Sgnal (in K562/IFNg6h cells)
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in K562/IFNg6h cells)
     subGroups cellType=uK562Ig6
     type bedGraph 4
     color 46,0,184
