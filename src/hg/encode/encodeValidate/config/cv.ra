@@ -285,6 +285,21 @@ sex M
 tier 3
 protocol UW_Stam:AG10803_Stam_protocol.pdf
 
+termPAoAF
+tag AOAF
+type Cell Line
+organism Human
+description Normal Human Aortic Adventitial Fibroblast Cells
+tissue Heart
+vendorName Lonza
+vendorId CC-7014, CC-7014T75
+orderUrl https://shop.lonza.com/shop/prd/human-aortic-adventitial-fibroblasts/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36999591D0C0F18852001A4B525E10/
+termUrl 
+sex F
+tier 3
+termId 
+protocol UW_Stam:AoAF_Stam_protocol.pdf
+
 term AoSMC
 tag AOSMC
 type Cell Line
@@ -713,7 +728,7 @@ sex F
 tier 3
 protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
 
-term GM12878-34XiMat
+term GM12878-34XiPat
 tag GM1287834XiPat
 type Cell Line
 organism Human
@@ -1091,6 +1106,33 @@ orderUrl http://www.asterand.com/Asterand/
 sex U
 protocol HudsonAlpha:HAL_Myers_protocol.pdf
 
+term HBMEC
+tag HBMEC
+type Cell Line
+organism Human
+description Human Brain Microvascular Endothelial Cells
+tissue Brain
+tier 3
+lineage 
+vendorName ScienCell
+vendorId 1000
+orderUrl http://www.sciencellonline.com/site/products/1000.php
+sex U
+protocol UW_Stam:HBMEC_Myers_protocol.pdf
+
+term HCFaa
+tag HCFaa
+type Cell Line
+organism Human
+description Human Cardiac Fibroblasts-Adult Atrial
+tissue Heart
+vendorName ScienCell
+vendorId 6320
+orderUrl http://www.sciencellonline.com/site/products/6320.php
+sex F
+tier 3
+protocol UW_Stam:HCFaa_Stam_protocol.pdf
+
 term HCF
 tag HCF
 type Cell Line
@@ -1103,6 +1145,19 @@ orderUrl http://www.sciencellonline.com/site/products/6300.php
 sex U
 tier 3
 protocol UW_Stam:HCF_Stam_protocol.pdf
+
+term HConF
+tag HCONF
+type Cell Line
+organism Human
+description Human Conjunctival Fibroblast
+tissue Eyet
+vendorName ScienCell
+vendorId 6570
+orderUrl http://www.sciencellonline.com/site/products/6570.php
+sex U
+tier 3
+protocol UW_Stam:HConF_Stam_protocol.pdf
 
 term HCM
 tag HCM
@@ -1235,6 +1290,20 @@ sex U
 tier 3
 protocol UW_Stam:HGF_Stam_protocol.pdf
 
+term HHSEC
+tag HHSEC
+type Cell Line
+organism Human
+description Human Hepatic Sinusoidal Endothelial Cells
+tissue Liver
+vendorName ScienCell
+vendorId 5000
+orderUrl http://www.sciencellonline.com/site/products/5000.php
+sex U
+tier 3
+protocol UW_Stam:HHSEC_Stam_protocol.pdf
+
+
 term HIPEpiC
 tag HIPE
 type Cell Line
@@ -1282,6 +1351,110 @@ sex U
 tier 3
 protocol Broad_Histone:HMEC_Bernstein_protocol.pdf <Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
+term HMF
+tag HMF
+type Cell Line
+organism Human
+description Human Mammary Fibroblast
+tissue Heart
+vendorName ScienCell
+vendorId 7630
+orderUrl http://www.sciencellonline.com/site/products/7630.php
+sex F
+tier 3
+protocol UW_Stam:HMF_Stam_protocol.pdf
+
+term HMVEC-LLy
+tag HMVECLLy
+type Cell Line
+organism Human
+description Normal Human Lymphatic Microvascular Endothelial Cells, Lung-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2814, CC-2814T25
+orderUrl https://shop.lonza.com/shop/prd/human-lung-lymphatic-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699839AD5E2F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-LLy_Stam_protocol.pdf
+
+term HMVEC-dBl-Ad
+tag HMVECdBlAd
+type Cell Line
+organism Human
+description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2811, CC-2811T75
+orderUrl https://shop.lonza.com/shop/prd/adult-human-dermal-blood-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD7C1F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-dBl-Ad_Stam_protocol.pdf
+
+term HMVEC-dBl-Neo
+tag HMVECdBlNeo
+type Cell Line
+organism Human
+description Normal Neonatal Human Blood Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2813, CC-2813T75
+orderUrl https://shop.lonza.com/shop/prd/neo-human-dermal-blood-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD7F1F18852001A4B525E10/ 
+sex M
+tier 3
+protocol UW_Stam:HMVEC-dBl-Neo_Stam_protocol.pdf
+
+term HMVEC-dLy-Ad
+tag HMVECdLyAd
+type Cell Line
+organism Human
+description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2810, CC-2810T75
+orderUrl https://shop.lonza.com/shop/prd/adult-human-dermal-lymp-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD821F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-dLy-Ad_Stam_protocol.pdf
+
+term HMVEC-dLy-Neo
+tag HMVECdLyNeo
+type Cell Line
+organism Human
+description Normal Neonatal Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2812, CC-2812T25
+orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36997D9DD857F18852001A4B525E10%29/.do
+sex M
+tier 3
+protocol UW_Stam:HMVEC-dLy-Neo_Stam_protocol.pdf
+
+term HMVEC-dNeo
+tag HMVECdNeo
+type Cell Line
+organism Human
+description Normal Neonatal Human Microvascular Endothelial Cells (single Donnor), Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2505, CC-2505T225
+orderUrl https://shop.lonza.com/shop/prd/neo-human-dermal-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF369977A0DA71F18852001A4B525E10/
+sex M
+tier 3
+protocol UW_Stam:HMVEC-dNeo_Stam_protocol.pdf
+
+term HMVEC-LBl
+tag HMVECLbl
+type Cell Line
+organism Human
+description Normal Human Blood Microvascular Endothelial Cells, Lung-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2815, CC-2815T75
+orderUrl https://shop.lonza.com/shop/prd/human-lung-blood-mv-endothelial-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699839AD5A8F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-Lbl_Stam_protocol.pdf
+
 term HNPCEpiC
 tag HNPCE
 type Cell Line
@@ -1294,6 +1467,58 @@ orderUrl http://www.sciencellonline.com/site/products/6580.php
 sex U
 tier 3
 protocol UW_Stam:HNPCEpiC_Stam_protocol.pdf
+
+term HPAEpiC
+tag HPAE
+type Cell Line
+organism Human
+description Human Pulmonay Alevolar Epithelial Cells
+tissue Epithelium
+vendorName ScienCell
+vendorId 3200
+orderUrl http://www.sciencellonline.com/site/products/3200.php
+sex U
+tier 3
+protocol UW_Stam:HPAEpiC_Stam_protocol.pdf
+
+term HPAF
+tag HPAF
+type Cell Line
+organism Human
+description Human Pulmonary Artery Fibroblasts 
+tissue Blood
+vendorName ScienCell
+vendorId 3120
+orderUrl http://www.sciencellonline.com/site/products/3120.php
+sex U
+tier 3
+protocol UW_Stam:HPAF_Stam_protocol.pdf
+
+term HPdLF
+tag HPdLF
+type Cell Line
+organism Human
+description Normal Human Periodontal Ligament Fibroblast Cells
+tissue Epithelium
+vendorName ScienCell
+vendorId 7409
+orderUrl http://www.sciencellonline.com/site/products/7409.php
+sex M
+tier 3
+protocol UW_Stam:HPdLF_Stam_protocol.pdf
+
+term HPF
+tag HPF
+type Cell Line
+organism Human
+description Human Pulmonary Fibroblasts
+tissue Blood
+vendorName ScienCell
+vendorId 3300
+orderUrl http://www.sciencellonline.com/site/products/3300.php
+sex U
+tier 3
+protocol UW_Stam:HPF_Stam_protocol.pdf
 
 term HRCEpiC
 tag HRCE
@@ -1405,6 +1630,32 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
+
+term HVMF
+tag HVMF
+type Cell Line
+organism Human
+description Human Villous Mesenchymal Fibroblast Cells
+tissue Connective
+vendorName ScienCell
+vendorId 7130
+orderUrl http://www.sciencellonline.com/site/products/7130.php
+sex U
+tier 3
+protocol UW_Stam:HVMF_Stam_protocol.pdf
+
+term IMR90
+tag IMR90
+type Cell Line
+organism Human
+description Normal Human Lung Fibroblasts
+tissue Lung
+vendorName ATCC
+vendorId CCL-186
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
+sex U
+tier 3
+protocol UW_Stam:IMR90_Stam_protocol.pdf
 
 term Jurkat
 tag Jurkat
@@ -1599,7 +1850,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:00
 sex U
 tier 3
 termId BTO:0000099
-protocol Broad:NH-A_Bernstein_protocol.pdf
+protocol Broad:NH-A_Bernstein_protocol.pdf UW_Stam: NH-A_Stam_protocol.pdf
 
 term NHBE
 tag NHBE
@@ -1615,6 +1866,19 @@ sex U
 tier 3
 termId BTO:0002022
 protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
+
+term NHDF-Ad
+tag NHDF-Ad
+type Cell Line
+organism Human
+tissue Skin
+description Adult Normal Human Dermal Fibroblasts
+vendorName Lonza
+vendorId CC-2511, CC-2511T225
+orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36999591CFE2F18852001A4B525E10%29/.do
+sex F
+tier 3
+protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -1812,6 +2076,19 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:00
 sex M
 tier 3
 protocol SYDH_TFBS(Farnham):Raji_Farnham_protocol.pdf
+
+term RPTEC
+tag RPTEC
+type Cell Line
+organism Human
+description Renal Proximal Tubule Epithelial Cells
+tissue Epithelium
+vendorName Lonza
+vendorId CC-2553, CC-2553T225
+orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF3699B3878B6CF18852001A4B525E10%29/.do
+sex U
+tier 3
+protocol UW_Stam:RPTEC_Stam_protocol.pdf
 
 term SAEC
 tag SAEC
