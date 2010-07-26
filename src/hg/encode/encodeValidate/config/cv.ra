@@ -4918,6 +4918,11 @@ tag SERUMFREE
 description grown in serum free media (Crawford)
 type treatment
 
+term TAM_1uM_36hr
+tag TAM
+description 36h, 2uM tamoxifen (Myers)
+type treatment
+
 term TNFa
 tag TNFa
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
