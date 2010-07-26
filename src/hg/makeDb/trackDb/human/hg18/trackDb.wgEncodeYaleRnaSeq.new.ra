@@ -40,8 +40,8 @@ wgEncode 1
     track wgEncodeYaleRnaSeqPolyaSignalK562
     release alpha
     subTrack wgEncodeYaleRNAseq
-    shortLabel K562   none pA- S
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA- Signal (in K562 cells)
+    shortLabel K562   none pA+ S
+    longLabel ENCODE Yale/UCD/Harvard RNA-seq polyA+ Signal (in K562 cells)
     subGroups cellType=t1K562
     type bedGraph 4
     color 46,0,184
