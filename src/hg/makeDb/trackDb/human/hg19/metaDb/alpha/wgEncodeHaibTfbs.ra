@@ -8,6 +8,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -31,6 +32,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -54,6 +56,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549ControlPcr2xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549ControlPcr2xDexaAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -77,6 +80,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549ControlPcr2xEtoh02AlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549ControlPcr2xEtoh02AlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -101,6 +105,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549CtcfPcr1xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549CtcfPcr1xDexaAlnRep1.bam.bai
 grant Myers
 inputType SL474
 lab HudsonAlpha
@@ -126,6 +131,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeHaibTfbsA549CtcfPcr1xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549CtcfPcr1xDexaAlnRep2.bam.bai
 grant Myers
 inputType SL474
 lab HudsonAlpha
@@ -202,6 +208,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType SL475
 lab HudsonAlpha
@@ -225,6 +232,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep2.bam.bai
 grant Myers
 inputType SL475
 lab HudsonAlpha
@@ -297,6 +305,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep1.bam.bai
 grant Myers
 inputType SL878
 lab HudsonAlpha
@@ -322,6 +331,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDexbAlnRep2.bam.bai
 grant Myers
 inputType SL879
 lab HudsonAlpha
@@ -399,6 +409,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep1.bam.bai
 grant Myers
 inputType SL878
 lab HudsonAlpha
@@ -423,6 +434,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 fileName wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2.bam.bai
 grant Myers
 inputType SL879
 lab HudsonAlpha
@@ -497,6 +509,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep1.bam.bai
 grant Myers
 inputType SL878
 lab HudsonAlpha
@@ -522,6 +535,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-09
 dateUnrestricted 2010-09-09
 fileName wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xDexdAlnRep2.bam.bai
 grant Myers
 inputType SL879
 lab HudsonAlpha
@@ -599,6 +613,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
 fileName wgEncodeHaibTfbsA549GrPcr1xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -624,6 +639,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-03-01
 dateUnrestricted 2010-12-01
 fileName wgEncodeHaibTfbsA549GrPcr1xEtoh02AlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr1xEtoh02AlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -648,6 +664,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1.bam.bai
 grant Myers
 inputType Sl247
 lab HudsonAlpha
@@ -671,6 +688,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2.bam.bai
 grant Myers
 inputType SL305
 lab HudsonAlpha
@@ -742,6 +760,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -765,6 +784,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1.bam.bai
 grant Myers
 inputType SL335
 lab HudsonAlpha
@@ -788,6 +808,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2.bam.bai
 grant Myers
 inputType Sl335
 lab HudsonAlpha
@@ -859,6 +880,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType SL307
 lab HudsonAlpha
@@ -882,6 +904,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2.bam.bai
 grant Myers
 inputType SL307
 lab HudsonAlpha
@@ -954,6 +977,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep1.bam.bai
 grant Myers
 inputType SL474
 lab HudsonAlpha
@@ -979,6 +1003,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-07
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xDexaAlnRep2.bam.bai
 grant Myers
 inputType SL474
 lab HudsonAlpha
@@ -1055,6 +1080,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType SL475
 lab HudsonAlpha
@@ -1078,6 +1104,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-18
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2.bam
+fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2.bam.bai
 grant Myers
 inputType SL475
 lab HudsonAlpha
@@ -1149,6 +1176,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1172,6 +1200,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1195,6 +1224,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1218,6 +1248,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1241,6 +1272,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1.bam.bai
 grant Myers
 inputType SL1034
 lab HudsonAlpha
@@ -1264,6 +1296,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2.bam.bai
 grant Myers
 inputType SL1092
 lab HudsonAlpha
@@ -1335,6 +1368,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1.bam.bai
 grant Myers
 inputType SL1035
 lab HudsonAlpha
@@ -1358,6 +1392,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2.bam.bai
 grant Myers
 inputType SL1087
 lab HudsonAlpha
@@ -1430,6 +1465,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -1455,6 +1491,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep2.bam.bai
 grant Myers
 inputType Sl517
 lab HudsonAlpha
@@ -1532,6 +1569,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -1557,6 +1595,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Bcl11aPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -1634,6 +1673,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-10
 dateUnrestricted 2010-09-10
 fileName wgEncodeHaibTfbsGm12878Bcl3Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Bcl3Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -1659,6 +1699,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-10
 dateUnrestricted 2010-09-10
 fileName wgEncodeHaibTfbsGm12878Bcl3Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Bcl3Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -1736,6 +1777,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-08
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1760,6 +1802,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1783,6 +1826,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1806,6 +1850,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeHaibTfbsGm12878ControlV0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878ControlV0416101AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -1830,6 +1875,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -1855,6 +1901,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878EbfPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -1932,6 +1979,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
 fileName wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL217
 lab HudsonAlpha
@@ -1957,6 +2005,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
 fileName wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Egr1Pcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL218
 lab HudsonAlpha
@@ -2034,6 +2083,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL217
 lab HudsonAlpha
@@ -2059,6 +2109,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878GabpPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL218
 lab HudsonAlpha
@@ -2136,6 +2187,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
 fileName wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -2161,6 +2213,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 fileName wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Irf4Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -2238,6 +2291,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-25
 dateUnrestricted 2009-08-25
 fileName wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL218
 lab HudsonAlpha
@@ -2289,6 +2343,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -2314,6 +2369,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-11-25
 dateUnrestricted 2010-08-25
 fileName wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878P300Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -2391,6 +2447,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl678
 lab HudsonAlpha
@@ -2416,6 +2473,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pax5c20Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -2493,6 +2551,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl678
 lab HudsonAlpha
@@ -2518,6 +2577,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pax5n19Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType Sl516
 lab HudsonAlpha
@@ -2595,6 +2655,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -2620,6 +2681,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pbx3Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL678
 lab HudsonAlpha
@@ -2697,6 +2759,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -2722,6 +2785,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-08
 dateUnrestricted 2010-10-08
 fileName wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pol24h8Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -2799,6 +2863,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL217
 lab HudsonAlpha
@@ -2824,6 +2889,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pol2Pcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL218
 lab HudsonAlpha
@@ -2901,6 +2967,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-08
 dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Pou2f2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pou2f2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -2926,6 +2993,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Pou2f2Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pou2f2Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3003,6 +3071,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3028,6 +3097,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
 fileName wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Pu1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3104,6 +3174,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3127,6 +3198,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -3198,6 +3270,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsGm12878Sin3ak20Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Sin3ak20Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -3246,6 +3319,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-07-01
 dateUnrestricted 2010-04-01
 fileName wgEncodeHaibTfbsGm12878Sin3ak20Pcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Sin3ak20Pcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL217
 lab HudsonAlpha
@@ -3297,6 +3371,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3322,6 +3397,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Six5Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType Sl517
 lab HudsonAlpha
@@ -3399,6 +3475,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -3424,6 +3501,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Sp1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL678
 lab HudsonAlpha
@@ -3501,6 +3579,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep1.bam.bai
 grant Myers
 inputType Sl217
 lab HudsonAlpha
@@ -3526,6 +3605,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2008-11-20
 dateUnrestricted 2009-08-20
 fileName wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878SrfPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL218
 lab HudsonAlpha
@@ -3603,6 +3683,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-09-11
 fileName wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3628,6 +3709,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-09-11
 fileName wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Taf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3704,6 +3786,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
 fileName wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3729,6 +3812,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
 fileName wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Tcf12Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL517
 lab HudsonAlpha
@@ -3806,6 +3890,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL217
 lab HudsonAlpha
@@ -3831,6 +3916,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-01
 fileName wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Usf1Pcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL218
 lab HudsonAlpha
@@ -3908,6 +3994,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
 fileName wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL516
 lab HudsonAlpha
@@ -3933,6 +4020,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-11-30
 dateUnrestricted 2010-08-30
 fileName wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12878Zbtb33Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType Sl517
 lab HudsonAlpha
@@ -4010,6 +4098,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-01
 dateUnrestricted 2011-03-01
 fileName wgEncodeHaibTfbsGm12891ControlPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891ControlPcr1xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -4034,6 +4123,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -4057,6 +4147,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-17
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsGm12891Pax5c20Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891Pax5c20Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL1782
 lab HudsonAlpha
@@ -4104,6 +4195,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-17
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep2.bam.bai
 grant Myers
 inputType SL1782
 lab HudsonAlpha
@@ -4152,6 +4244,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl817
 lab HudsonAlpha
@@ -4177,6 +4270,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12891Pol24h8Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL817
 lab HudsonAlpha
@@ -4254,6 +4348,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl817
 lab HudsonAlpha
@@ -4279,6 +4374,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12891Pol2Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL817
 lab HudsonAlpha
@@ -4356,6 +4452,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pou2f2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891Pou2f2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL817
 lab HudsonAlpha
@@ -4381,6 +4478,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Pou2f2Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12891Pou2f2Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType Sl817
 lab HudsonAlpha
@@ -4458,6 +4556,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
 fileName wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL817
 lab HudsonAlpha
@@ -4483,6 +4582,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-10
 fileName wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12891Pu1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType Sl817
 lab HudsonAlpha
@@ -4560,6 +4660,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL817
 lab HudsonAlpha
@@ -4585,6 +4686,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12891Taf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL817
 lab HudsonAlpha
@@ -4662,6 +4764,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-05-31
 dateUnrestricted 2011-03-03
 fileName wgEncodeHaibTfbsGm12892ControlPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12892ControlPcr1xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -4686,6 +4789,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -4709,6 +4813,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-17
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsGm12892Pax5c20Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12892Pax5c20Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL1783
 lab HudsonAlpha
@@ -4756,6 +4861,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-17
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep2.bam.bai
 grant Myers
 inputType SL1783
 lab HudsonAlpha
@@ -4804,6 +4910,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol24h8Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12892Pol24h8Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL818
 lab HudsonAlpha
@@ -4829,6 +4936,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol24h8Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12892Pol24h8Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL818
 lab HudsonAlpha
@@ -4906,6 +5014,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12892Pol2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL818
 lab HudsonAlpha
@@ -4931,6 +5040,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Pol2Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12892Pol2Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL818
 lab HudsonAlpha
@@ -5008,6 +5118,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Taf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsGm12892Taf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl818
 lab HudsonAlpha
@@ -5033,6 +5144,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeHaibTfbsGm12892Taf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsGm12892Taf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL818
 lab HudsonAlpha
@@ -5109,6 +5221,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5132,6 +5245,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5203,6 +5317,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5226,6 +5341,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5298,6 +5414,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsH1hescControlPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescControlPcr1xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -5322,6 +5439,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5345,6 +5463,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
 fileName wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5416,6 +5535,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5439,6 +5559,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-29
 dateUnrestricted 2011-01-29
 fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5511,6 +5632,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescNrsfPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescNrsfPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5536,6 +5658,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescNrsfPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescNrsfPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5613,6 +5736,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 fileName wgEncodeHaibTfbsH1hescPol24h8Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescPol24h8Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5638,6 +5762,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 fileName wgEncodeHaibTfbsH1hescPol24h8Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescPol24h8Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5715,6 +5840,7 @@ dateResubmitted 2010-05-25
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
 fileName wgEncodeHaibTfbsH1hescPol2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescPol2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl969
 lab HudsonAlpha
@@ -5740,6 +5866,7 @@ dateResubmitted 2010-05-25
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-24
 fileName wgEncodeHaibTfbsH1hescPol2Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescPol2Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5816,6 +5943,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5839,6 +5967,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5910,6 +6039,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -5933,6 +6063,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6004,6 +6135,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType Sl969
 lab HudsonAlpha
@@ -6027,6 +6159,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6098,6 +6231,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6121,6 +6255,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6193,6 +6328,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescTaf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescTaf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6218,6 +6354,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsH1hescTaf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescTaf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6294,6 +6431,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6317,6 +6455,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6388,6 +6527,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6411,6 +6551,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL969
 lab HudsonAlpha
@@ -6483,6 +6624,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-02
 dateUnrestricted 2011-03-02
 fileName wgEncodeHaibTfbsHelas3ControlPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHelas3ControlPcr1xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -6508,6 +6650,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL592
 lab HudsonAlpha
@@ -6533,6 +6676,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHelas3GabpPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL592
 lab HudsonAlpha
@@ -6610,6 +6754,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
 fileName wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL592
 lab HudsonAlpha
@@ -6635,6 +6780,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-07-19
 dateUnrestricted 2010-04-19
 fileName wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHelas3Pol2Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL592
 lab HudsonAlpha
@@ -6712,6 +6858,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL592
 lab HudsonAlpha
@@ -6737,6 +6884,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHelas3Taf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL592
 lab HudsonAlpha
@@ -6814,6 +6962,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -6838,6 +6987,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -6912,6 +7062,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2010-06-04
 dateUnrestricted 2011-03-04
 fileName wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -6937,6 +7088,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2010-06-04
 dateUnrestricted 2011-03-04
 fileName wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2ControlPcr1xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -6961,6 +7113,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -6984,6 +7137,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -7007,6 +7161,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -7031,6 +7186,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 fileName wgEncodeHaibTfbsHepg2Fosl2Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Fosl2Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7082,6 +7238,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsHepg2Fosl2V0416101AlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Fosl2V0416101AlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -7132,6 +7289,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL294
 lab HudsonAlpha
@@ -7155,6 +7313,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2GabpPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL295
 lab HudsonAlpha
@@ -7227,6 +7386,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7251,6 +7411,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 fileName wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Hey1V0416101AlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -7325,6 +7486,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2JundPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2JundPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7350,6 +7512,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2JundPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2JundPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7426,6 +7589,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL294
 lab HudsonAlpha
@@ -7449,6 +7613,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2NrsfPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL295
 lab HudsonAlpha
@@ -7521,6 +7686,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2P300Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2P300Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7546,6 +7712,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2P300Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2P300Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -7622,6 +7789,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL294
 lab HudsonAlpha
@@ -7645,6 +7813,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Pol2Pcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL295
 lab HudsonAlpha
@@ -7717,6 +7886,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
 fileName wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7742,6 +7912,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-12-25
 dateUnrestricted 2010-09-25
 fileName wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2RxraPcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -7819,6 +7990,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7844,6 +8016,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Sin3ak20Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -7920,6 +8093,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL294
 lab HudsonAlpha
@@ -7943,6 +8117,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Taf1Pcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL295
 lab HudsonAlpha
@@ -8014,6 +8189,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -8037,6 +8213,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
 fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -8109,6 +8286,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -8134,6 +8312,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-07-17
 dateUnrestricted 2010-04-17
 fileName wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Usf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -8211,6 +8390,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL593
 lab HudsonAlpha
@@ -8236,6 +8416,7 @@ dateResubmitted 2010-06-04
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-16
 fileName wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHepg2Zbtb33Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL819
 lab HudsonAlpha
@@ -8312,6 +8493,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -8335,6 +8517,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsHtb11NrsfPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsHtb11NrsfPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL410
 lab HudsonAlpha
@@ -8382,6 +8565,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsK562ControlPcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsK562ControlPcr1xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -8405,6 +8589,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsK562ControlPcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsK562ControlPcr1xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -8429,6 +8614,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL518
 lab HudsonAlpha
@@ -8454,6 +8640,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsK562Hey1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL519
 lab HudsonAlpha
@@ -8531,6 +8718,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Pol24h8Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsK562Pol24h8Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL518
 lab HudsonAlpha
@@ -8556,6 +8744,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Pol24h8Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsK562Pol24h8Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL519
 lab HudsonAlpha
@@ -8633,6 +8822,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL518
 lab HudsonAlpha
@@ -8658,6 +8848,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsK562Pu1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL519
 lab HudsonAlpha
@@ -8735,6 +8926,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Six5Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsK562Six5Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL518
 lab HudsonAlpha
@@ -8760,6 +8952,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-10-26
 dateUnrestricted 2010-07-26
 fileName wgEncodeHaibTfbsK562Six5Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsK562Six5Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL519
 lab HudsonAlpha
@@ -8837,6 +9030,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsK562Taf1Pcr1xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsK562Taf1Pcr1xAlnRep1.bam.bai
 grant Myers
 inputType SL519
 lab HudsonAlpha
@@ -8862,6 +9056,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
 fileName wgEncodeHaibTfbsK562Taf1Pcr1xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsK562Taf1Pcr1xAlnRep2.bam.bai
 grant Myers
 inputType SL519
 lab HudsonAlpha
@@ -8938,6 +9133,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -8961,6 +9157,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsPanc1NrsfPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsPanc1NrsfPcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL117
 lab HudsonAlpha
@@ -9008,6 +9205,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -9031,6 +9229,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsPfsk1NrsfPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsPfsk1NrsfPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL412
 lab HudsonAlpha
@@ -9078,6 +9277,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeHaibTfbsSknmcControlV0416101AlnRep1.bam
+fileIndex wgEncodeHaibTfbsSknmcControlV0416101AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -9101,6 +9301,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1.bam.bai
 grant Myers
 inputType SL1216
 lab HudsonAlpha
@@ -9124,6 +9325,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL1490
 lab HudsonAlpha
@@ -9147,6 +9349,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -9170,6 +9373,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -9241,6 +9445,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsU87ControlPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsU87ControlPcr2xAlnRep2.bam.bai
 grant Myers
 inputType control
 lab HudsonAlpha
@@ -9264,6 +9469,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsU87NrsfPcr2xAlnRep2.bam.bai
 grant Myers
 inputType SL414
 lab HudsonAlpha

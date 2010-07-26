@@ -10,6 +10,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneBjCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneBjCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -36,6 +37,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-19
 fileName wgEncodeUwHistoneBjCtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneBjCtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -243,6 +245,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneBjH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -269,6 +272,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneBjH3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -451,6 +455,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneBjH3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -477,6 +482,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneBjH3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -659,6 +665,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneBjH3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -685,6 +692,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneBjH3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -867,6 +875,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneBjInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType BJ/Input/std
@@ -919,6 +928,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneCaco2CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneCaco2CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -945,6 +955,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneCaco2CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneCaco2CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1127,6 +1138,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1153,6 +1165,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1335,6 +1348,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1361,6 +1375,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1543,6 +1558,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1569,6 +1585,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1751,6 +1768,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType Caco-2/Input/std
@@ -1803,6 +1821,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneGm06990CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm06990CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -1829,6 +1848,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneGm06990CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm06990CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2011,6 +2031,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2037,6 +2058,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2219,6 +2241,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2245,6 +2268,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2427,6 +2451,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2453,6 +2478,7 @@ dateResubmitted 2010-06-11
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2635,6 +2661,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM06990/Input/std
@@ -2687,6 +2714,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneGm12801CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12801CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12801/Input/std
@@ -2791,6 +2819,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12801InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12801InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12801/Input/std
@@ -2843,6 +2872,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12864CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12864CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -2869,6 +2899,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12864CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12864CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -3051,6 +3082,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12864InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12864/Input/std
@@ -3103,6 +3135,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12865CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12865CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3129,6 +3162,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12865CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12865CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3311,6 +3345,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12865InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12865/Input/std
@@ -3363,6 +3398,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12872CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12872CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3389,6 +3425,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12872CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12872CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3571,6 +3608,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12872InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12872InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12872/Input/std
@@ -3623,6 +3661,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12873CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12873CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3649,6 +3688,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12873CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12873CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3831,6 +3871,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12873InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12873InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12873/Input/std
@@ -3883,6 +3924,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12874CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12874CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -3909,6 +3951,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12874CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12874CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4091,6 +4134,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12874InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12874InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12874/Input/std
@@ -4143,6 +4187,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12875CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12875CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4169,6 +4214,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
 dateUnrestricted 2010-10-11
 fileName wgEncodeUwHistoneGm12875CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12875CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4351,6 +4397,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12875InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12875/Input/std
@@ -4403,6 +4450,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneGm12878CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12878CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4429,6 +4477,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneGm12878CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12878CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4611,6 +4660,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4637,6 +4687,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4819,6 +4870,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -4845,6 +4897,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5027,6 +5080,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5053,6 +5107,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5235,6 +5290,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType GM12878/Input/std
@@ -5287,6 +5343,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneHek293CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHek293CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5313,6 +5370,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHek293CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHek293CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5495,6 +5553,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHek293InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HEK293/Input/std
@@ -5547,6 +5606,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHelas3CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHelas3CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5573,6 +5633,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwHistoneHelas3CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHelas3CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5755,6 +5816,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5781,6 +5843,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5963,6 +6026,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -5989,6 +6053,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6171,6 +6236,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6197,6 +6263,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6379,6 +6446,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HeLa-S3/Input/std
@@ -6431,6 +6499,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwHistoneHepg2CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHepg2CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6457,6 +6526,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwHistoneHepg2CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHepg2CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6639,6 +6709,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6665,6 +6736,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6847,6 +6919,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-21
 fileName wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6951,6 +7024,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -6977,6 +7051,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7159,6 +7234,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HepG2/Input/std
@@ -7211,6 +7287,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneHl60CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHl60CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7315,6 +7392,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHl60H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7341,6 +7419,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHl60H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7523,6 +7602,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHl60InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HL-60/Input/std
@@ -7575,6 +7655,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneHmecCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHmecCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7679,6 +7760,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHmecH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7783,6 +7865,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHmecInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HMEC/Input/std
@@ -7835,6 +7918,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneHreCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHreCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -7861,6 +7945,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHreCtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHreCtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8043,6 +8128,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHreH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8069,6 +8155,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHreH3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8251,6 +8338,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHreH3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8277,6 +8365,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHreH3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8459,6 +8548,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHreH3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8485,6 +8575,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHreH3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8667,6 +8758,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHreInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HRE/Input/std
@@ -8719,6 +8811,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHuvecCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHuvecCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8745,6 +8838,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHuvecCtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHuvecCtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8927,6 +9021,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -8953,6 +9048,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9135,6 +9231,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9161,6 +9258,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9343,6 +9441,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9369,6 +9468,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9551,6 +9651,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType HUVEC/Input/std
@@ -9603,6 +9704,7 @@ dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneK562CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneK562CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9629,6 +9731,7 @@ dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneK562CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneK562CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9811,6 +9914,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneK562H3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -9837,6 +9941,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneK562H3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10019,6 +10124,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneK562H3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10045,6 +10151,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneK562H3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10227,6 +10334,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneK562H3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10253,6 +10361,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2011-03-15
 fileName wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneK562H3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10435,6 +10544,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneK562InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType K562/Input/std
@@ -10487,6 +10597,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-20
 fileName wgEncodeUwHistoneNhekCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneNhekCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10513,6 +10624,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneNhekCtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneNhekCtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10695,6 +10807,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneNhekH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10721,6 +10834,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneNhekH3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10903,6 +11017,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneNhekH3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -10929,6 +11044,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneNhekH3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11111,6 +11227,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneNhekH3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11137,6 +11254,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
 dateUnrestricted 2010-07-12
 fileName wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneNhekH3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11319,6 +11437,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneNhekInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType NHEK/Input/std
@@ -11371,6 +11490,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSaecCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSaecCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11397,6 +11517,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSaecCtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSaecCtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11579,6 +11700,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSaecH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11605,6 +11727,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSaecH3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11787,6 +11910,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSaecH3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11813,6 +11937,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSaecH3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -11995,6 +12120,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSaecH3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12021,6 +12147,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSaecH3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12203,6 +12330,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSaecInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SAEC/Input/std
@@ -12255,6 +12383,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSknshraCtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSknshraCtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12281,6 +12410,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
 dateUnrestricted 2010-07-22
 fileName wgEncodeUwHistoneSknshraCtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSknshraCtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12463,6 +12593,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12489,6 +12620,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
 dateUnrestricted 2010-07-20
 fileName wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12671,6 +12803,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12697,6 +12830,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
 dateUnrestricted 2010-07-19
 fileName wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12879,6 +13013,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -12905,6 +13040,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
 dateUnrestricted 2010-07-11
 fileName wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13087,6 +13223,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType SK-N-SH_RA/Input/std
@@ -13139,6 +13276,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwHistoneWerirb1CtcfStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneWerirb1CtcfStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13165,6 +13303,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwHistoneWerirb1CtcfStdAlnRep2.bam
+fileIndex wgEncodeUwHistoneWerirb1CtcfStdAlnRep2.bam.bai
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std
@@ -13347,6 +13486,7 @@ dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
 dateUnrestricted 2010-11-18
 fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam
+fileIndex wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam.bai
 fragLength 350
 grant Stam
 inputType WERI-Rb-1/Input/std

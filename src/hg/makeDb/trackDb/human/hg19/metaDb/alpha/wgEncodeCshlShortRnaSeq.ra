@@ -7,6 +7,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqGm12878CellShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization cell
@@ -61,6 +62,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqGm12878CytosolShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -115,6 +117,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqGm12878NucleusShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -169,6 +172,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562CellShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562CellShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization cell
@@ -223,6 +227,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562ChromatinShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization chromatin
@@ -277,6 +282,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562CytosolShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization cytosol
@@ -331,6 +337,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562NucleolusShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization nucleolus
@@ -385,6 +392,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization nucleoplasm
@@ -439,6 +447,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562NucleusShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization nucleus
@@ -493,6 +502,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-14
 dateUnrestricted 2011-03-14
 fileName wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam
+fileIndex wgEncodeCshlShortRnaSeqK562PolysomeShortAln.bam.bai
 grant Gingeras
 lab CSHL
 localization polysome
@@ -547,6 +557,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-06-30
 dateUnrestricted 2011-03-30
 fileName wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam
+fileIndex wgEncodeCshlShortRnaSeqProstateCellTotalAln.bam.bai
 grant Gingeras
 lab CSHL
 localization cell

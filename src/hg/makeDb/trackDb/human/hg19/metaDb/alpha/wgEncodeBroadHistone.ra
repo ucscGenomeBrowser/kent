@@ -10,6 +10,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -33,6 +34,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -78,6 +80,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -101,6 +104,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -146,6 +150,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -169,6 +174,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -214,6 +220,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -237,6 +244,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -282,6 +290,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -305,6 +314,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -350,6 +360,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -373,6 +384,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -418,6 +430,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -441,6 +454,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -486,6 +500,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -509,6 +524,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-04
 dateUnrestricted 2009-10-04
 fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -554,6 +570,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -577,6 +594,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -622,6 +640,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -645,6 +664,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType GM12878/Input/std
 lab Broad
@@ -690,6 +710,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -713,6 +734,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -757,6 +779,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -780,6 +803,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -825,6 +849,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -848,6 +873,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -892,6 +918,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -915,6 +942,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -960,6 +988,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -983,6 +1012,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1028,6 +1058,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1051,6 +1082,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1096,6 +1128,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1119,6 +1152,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1164,6 +1198,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1187,6 +1222,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1232,6 +1268,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1255,6 +1292,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1300,6 +1338,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1323,6 +1362,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType H1-hESC/Input/std
 lab Broad
@@ -1368,6 +1408,7 @@ dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1391,6 +1432,7 @@ dateResubmitted 2010-07-13
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1436,6 +1478,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1459,6 +1502,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1503,6 +1547,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1526,6 +1571,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1570,6 +1616,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1593,6 +1640,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1637,6 +1685,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1660,6 +1709,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1704,6 +1754,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1727,6 +1778,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1771,6 +1823,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1794,6 +1847,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1838,6 +1892,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1861,6 +1916,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1905,6 +1961,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1928,6 +1985,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1972,6 +2030,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -1995,6 +2054,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam.bai
 grant Bernstein
 inputType HeLa-S3/Input/std
 lab Broad
@@ -2039,6 +2099,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2062,6 +2123,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2106,6 +2168,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2129,6 +2192,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2174,6 +2238,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2197,6 +2262,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2241,6 +2307,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2264,6 +2331,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2309,6 +2377,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2332,6 +2401,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2376,6 +2446,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2399,6 +2470,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2444,6 +2516,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2467,6 +2540,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2512,6 +2586,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2535,6 +2610,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2580,6 +2656,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2603,6 +2680,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2647,6 +2725,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2670,6 +2749,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2715,6 +2795,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2738,6 +2819,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HepG2/Input/std
 lab Broad
@@ -2783,6 +2865,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -2806,6 +2889,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -2850,6 +2934,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
 fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -2873,6 +2958,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-27
 fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -2918,6 +3004,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -2941,6 +3028,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -2986,6 +3074,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3009,6 +3098,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3054,6 +3144,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3077,6 +3168,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3122,6 +3214,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3145,6 +3238,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3190,6 +3284,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3213,6 +3308,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3258,6 +3354,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3281,6 +3378,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3326,6 +3424,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3349,6 +3448,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3394,6 +3494,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3417,6 +3518,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HMEC/Input/std
 lab Broad
@@ -3462,6 +3564,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3485,6 +3588,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3529,6 +3633,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3552,6 +3657,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3597,6 +3703,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3620,6 +3727,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3665,6 +3773,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3688,6 +3797,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3733,6 +3843,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3756,6 +3867,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3801,6 +3913,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3824,6 +3937,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3869,6 +3983,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3892,6 +4007,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3937,6 +4053,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -3960,6 +4077,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4005,6 +4123,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4028,6 +4147,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4072,6 +4192,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4095,6 +4216,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4140,6 +4262,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4163,6 +4286,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4207,6 +4331,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4230,6 +4355,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMM/Input/std
 lab Broad
@@ -4275,6 +4401,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4298,6 +4425,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4342,6 +4470,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4365,6 +4494,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4409,6 +4539,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4432,6 +4563,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4476,6 +4608,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4499,6 +4632,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4543,6 +4677,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4566,6 +4701,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4610,6 +4746,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4633,6 +4770,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4677,6 +4815,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4700,6 +4839,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4744,6 +4884,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4767,6 +4908,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4811,6 +4953,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4834,6 +4977,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4878,6 +5022,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4901,6 +5046,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4945,6 +5091,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -4968,6 +5115,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HSMMtube/Input/std
 lab Broad
@@ -5012,6 +5160,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5035,6 +5184,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5058,6 +5208,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5102,6 +5253,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5125,6 +5277,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5148,6 +5301,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5193,6 +5347,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5216,6 +5371,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5239,6 +5395,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5284,6 +5441,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5307,6 +5465,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5352,6 +5511,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5375,6 +5535,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5398,6 +5559,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5443,6 +5605,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5466,6 +5629,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5489,6 +5653,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5534,6 +5699,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5557,6 +5723,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5602,6 +5769,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5625,6 +5793,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5648,6 +5817,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5693,6 +5863,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5716,6 +5887,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5739,6 +5911,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5784,6 +5957,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5807,6 +5981,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5830,6 +6005,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5875,6 +6051,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5898,6 +6075,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5921,6 +6099,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5966,6 +6145,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -5989,6 +6169,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-06
 dateUnrestricted 2009-10-06
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -6012,6 +6193,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam.bai
 grant Bernstein
 inputType HUVEC/Input/std
 lab Broad
@@ -6057,6 +6239,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562ControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6101,6 +6284,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6124,6 +6308,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6169,6 +6354,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6192,6 +6378,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6237,6 +6424,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6260,6 +6448,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6305,6 +6494,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6328,6 +6518,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6373,6 +6564,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6396,6 +6588,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6441,6 +6634,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6464,6 +6658,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6509,6 +6704,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6532,6 +6728,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6577,6 +6774,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6600,6 +6798,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6645,6 +6844,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6690,6 +6890,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6713,6 +6914,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6758,6 +6960,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6781,6 +6984,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
 fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam.bai
 grant Bernstein
 inputType K562/Input/std
 lab Broad
@@ -6825,6 +7029,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -6847,6 +7052,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -6890,6 +7096,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -6912,6 +7119,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -6955,6 +7163,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -6977,6 +7186,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7020,6 +7230,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7042,6 +7253,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7085,6 +7297,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7107,6 +7320,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7150,6 +7364,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7172,6 +7387,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7215,6 +7431,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7237,6 +7454,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NH-A/Input/std
 lab Broad
@@ -7281,6 +7499,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7304,6 +7523,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7348,6 +7568,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7371,6 +7592,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7394,6 +7616,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-20
 fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7439,6 +7662,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7462,6 +7686,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7485,6 +7710,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7530,6 +7756,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7553,6 +7780,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7576,6 +7804,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7621,6 +7850,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7644,6 +7874,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7667,6 +7898,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7712,6 +7944,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7735,6 +7968,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7758,6 +7992,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7803,6 +8038,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7826,6 +8062,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7849,6 +8086,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7894,6 +8132,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7917,6 +8156,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7940,6 +8180,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -7985,6 +8226,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8008,6 +8250,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8031,6 +8274,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8076,6 +8320,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8099,6 +8344,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8122,6 +8368,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8167,6 +8414,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8190,6 +8438,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8213,6 +8462,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam
+fileIndex wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8258,6 +8508,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8281,6 +8532,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
 fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHEK/Input/std
 lab Broad
@@ -8326,6 +8578,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8349,6 +8602,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8393,6 +8647,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8416,6 +8671,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8461,6 +8717,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8484,6 +8741,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8529,6 +8787,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8552,6 +8811,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8597,6 +8857,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8620,6 +8881,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8665,6 +8927,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8688,6 +8951,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8733,6 +8997,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8756,6 +9021,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8801,6 +9067,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8824,6 +9091,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8869,6 +9137,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8892,6 +9161,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8937,6 +9207,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam
+fileIndex wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
@@ -8960,6 +9231,7 @@ dateResubmitted 2010-07-12
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-28
 fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam
+fileIndex wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam.bai
 grant Bernstein
 inputType NHLF/Input/std
 lab Broad
