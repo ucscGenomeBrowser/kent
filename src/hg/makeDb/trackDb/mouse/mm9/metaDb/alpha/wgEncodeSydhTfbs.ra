@@ -295,6 +295,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Stanford
@@ -317,6 +318,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Stanford
@@ -819,6 +821,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -841,6 +844,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -951,6 +955,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -973,6 +978,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1215,6 +1221,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1237,6 +1244,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1479,6 +1487,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1501,6 +1510,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1743,6 +1753,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam.bai
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -1765,6 +1776,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam.bai
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -1875,6 +1887,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -1897,6 +1910,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2139,6 +2153,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelInputDmso20StdAln.bam
+fileIndex wgEncodeSydhTfbsMelInputDmso20StdAln.bam.bai
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -2437,6 +2452,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2459,6 +2475,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2569,6 +2586,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2591,6 +2609,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2701,6 +2720,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2723,6 +2743,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -3097,6 +3118,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -3119,6 +3141,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
