@@ -36,7 +36,8 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 
 # This could be made into an option:
-my $splitSize = '10k';
+# BLAT -fastMap will not work with query chunks greater than 5000
+my $splitSize = '5k';  
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;

@@ -134,5 +134,3 @@ priority 3.2
 visibility off
 type distance mouseLandscapeDistance query target distance
 
-name zebrafishOrthologs
-itemUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s

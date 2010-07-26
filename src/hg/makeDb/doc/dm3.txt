@@ -3011,17 +3011,17 @@ rm bed.tab wiggle.tab
 # add a sentence in the Methods section to indicate it is based on dm2 data 
 # lifted over to dm3.
 #######################################################################################
-# Update BlastTab tables for dm3 (Done, Fan, 6/28/2010)
+# Update BlastTab tables for dm3 (Done, Fan, 7/22/2010)
     ssh hgwdev
     mkdir /hive/data/genomes/dm3/bed/hgNearBlastp
     cd /hive/data/genomes/dm3/bed/hgNearBlastp
-    mkdir 100628
-    cd 100628
+    mkdir 100722
+    cd 100722
     # Get the proteins used by the other hgNear organisms:
     pepPredToFa hg19 knownGenePep hg19.known.faa
     pepPredToFa mm9 knownGenePep mm9.known.faa
     pepPredToFa rn4 knownGenePep rn4.known.faa
-    pepPredToFa danRer5 ensPep danRer5.ensPep.faa
+    pepPredToFa danRer6 ensPep danRer6.ensPep.faa
     pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
     pepPredToFa ce6 sangerPep ce6.sangerPep.faa
     pepPredToFa sacCer2 sgdPep sacCer2.sgdPep.faa
@@ -3032,19 +3032,19 @@ rm bed.tab wiggle.tab
 
 targetGenesetPrefix flyBase
 targetDb dm3
-queryDbs  hg19 mm9 rn4 danRer5 ce6 sacCer2
-recipBest hg19 mm9 rn4 danRer5 ce6 sacCer2
+queryDbs  hg19 mm9 rn4 danRer6 ce6 sacCer2
+recipBest hg19 mm9 rn4 danRer6 ce6 sacCer2
 
-dm3Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100628/dm3.flyBasePep.faa
-hg19Fa    /hive/data/genomes/dm3/bed/hgNearBlastp/100628/hg19.known.faa
-mm9Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100628/mm9.known.faa
-rn4Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100628/rn4.known.faa
-danRer5Fa /hive/data/genomes/dm3/bed/hgNearBlastp/100628/danRer5.ensPep.faa
-ce6Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100628/ce6.sangerPep.faa
-sacCer2Fa /hive/data/genomes/dm3/bed/hgNearBlastp/100628/sacCer2.sgdPep.faa
+dm3Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100722/dm3.flyBasePep.faa
+hg19Fa    /hive/data/genomes/dm3/bed/hgNearBlastp/100722/hg19.known.faa
+mm9Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100722/mm9.known.faa
+rn4Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100722/rn4.known.faa
+danRer6Fa /hive/data/genomes/dm3/bed/hgNearBlastp/100722/danRer6.ensPep.faa
+ce6Fa     /hive/data/genomes/dm3/bed/hgNearBlastp/100722/ce6.sangerPep.faa
+sacCer2Fa /hive/data/genomes/dm3/bed/hgNearBlastp/100722/sacCer2.sgdPep.faa
 
-buildDir /hive/data/genomes/dm3/bed/hgNearBlastp/100628
-scratchDir /hive/data/genomes/dm3/bed/hgNearBlastp/100628/tmp
+buildDir /hive/data/genomes/dm3/bed/hgNearBlastp/100722
+scratchDir /hive/data/genomes/dm3/bed/hgNearBlastp/100722/tmp
 _EOF_
 doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 #########################################################################

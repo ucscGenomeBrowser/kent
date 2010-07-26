@@ -6,7 +6,8 @@ dataType DnaPet
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeGisDnaPetGm12878F10kAln.bam.gz
+fileName wgEncodeGisDnaPetGm12878F10kAln.bam
+fileIndex wgEncodeGisDnaPetGm12878F10kAln.bam.bai
 fragSize 10k
 grant Gingeras
 lab GIS
@@ -23,7 +24,8 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeGisDnaPetGm12878F1kAln.bam.gz
+fileName wgEncodeGisDnaPetGm12878F1kAln.bam
+fileIndex wgEncodeGisDnaPetGm12878F1kAln.bam.bai
 fragSize 1k
 grant Gingeras
 lab GIS
@@ -40,7 +42,8 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeGisDnaPetGm12878F5kAln.bam.gz
+fileName wgEncodeGisDnaPetGm12878F5kAln.bam
+fileIndex wgEncodeGisDnaPetGm12878F5kAln.bam.bai
 fragSize 5k
 grant Gingeras
 lab GIS
@@ -57,7 +60,8 @@ dataType DnaPet
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeGisDnaPetK562F10kAln.bam.gz
+fileName wgEncodeGisDnaPetK562F10kAln.bam
+fileIndex wgEncodeGisDnaPetK562F10kAln.bam.bai
 fragSize 10k
 grant Gingeras
 lab GIS
@@ -74,7 +78,8 @@ dataType DnaPet
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeGisDnaPetK562F1kAln.bam.gz
+fileName wgEncodeGisDnaPetK562F1kAln.bam
+fileIndex wgEncodeGisDnaPetK562F1kAln.bam.bai
 fragSize 1k
 grant Gingeras
 lab GIS
@@ -91,7 +96,8 @@ dataType DnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
-fileName wgEncodeGisDnaPetK562F20kAln.bam.gz
+fileName wgEncodeGisDnaPetK562F20kAln.bam
+fileIndex wgEncodeGisDnaPetK562F20kAln.bam.bai
 fragSize 20k
 grant Gingeras
 lab GIS

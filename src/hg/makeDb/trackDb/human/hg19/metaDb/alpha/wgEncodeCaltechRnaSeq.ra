@@ -51,7 +51,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -73,7 +74,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -139,7 +141,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -161,7 +163,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -183,7 +185,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -205,7 +207,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -227,7 +229,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -249,7 +252,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -608,7 +612,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -629,7 +634,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -650,7 +656,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -671,7 +677,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -692,7 +698,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -713,7 +720,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -929,7 +937,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -951,7 +960,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -973,7 +982,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam.bai
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1083,7 +1093,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1105,7 +1116,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1171,7 +1183,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1193,7 +1205,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1215,7 +1227,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1237,7 +1249,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1259,7 +1271,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1281,7 +1294,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1963,7 +1977,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1985,7 +2000,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2007,7 +2023,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2029,7 +2046,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2051,7 +2069,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2073,7 +2091,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2095,7 +2113,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2117,7 +2135,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2139,7 +2157,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2161,7 +2180,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2183,7 +2203,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2205,7 +2226,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2513,7 +2535,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam.bai
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2535,7 +2558,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2557,7 +2580,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam.bai
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2667,7 +2691,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2689,7 +2714,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2755,7 +2781,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2777,7 +2803,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2799,7 +2825,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2821,7 +2847,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2843,7 +2869,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2865,7 +2892,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3195,7 +3223,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3217,7 +3246,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3239,7 +3269,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3261,7 +3291,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3283,7 +3313,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3305,7 +3336,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3459,7 +3491,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3481,7 +3514,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3547,7 +3581,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3569,7 +3603,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3591,7 +3625,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3613,7 +3647,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3635,7 +3669,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3657,7 +3692,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3987,7 +4023,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4009,7 +4046,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4031,7 +4069,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4053,7 +4091,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4075,7 +4113,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4097,7 +4136,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4446,7 +4486,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4466,7 +4507,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4486,7 +4528,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4506,7 +4548,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4526,7 +4568,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4546,7 +4589,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4691,7 +4735,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4713,7 +4758,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4779,7 +4825,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4801,7 +4847,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4823,7 +4869,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4845,7 +4891,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4867,7 +4913,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4889,7 +4936,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5219,7 +5267,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5241,7 +5290,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5263,7 +5313,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5285,7 +5335,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5307,7 +5357,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5329,7 +5380,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5483,7 +5535,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5505,7 +5558,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam
+fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5571,7 +5625,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5593,7 +5647,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5615,7 +5669,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5637,7 +5691,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5659,7 +5713,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5681,7 +5736,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5996,7 +6052,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6017,7 +6074,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6038,7 +6096,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6059,7 +6117,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6080,7 +6138,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6101,7 +6160,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6326,7 +6386,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6346,7 +6407,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6366,7 +6427,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6449,7 +6511,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam
+fileIndex wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6493,7 +6556,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6515,7 +6578,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6537,7 +6600,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam.bai
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6833,7 +6897,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6854,7 +6919,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6875,7 +6941,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6896,7 +6962,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6917,7 +6983,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6938,7 +7005,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7262,7 +7330,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam
+fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7282,7 +7351,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam
+fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7302,7 +7372,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7322,7 +7392,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7342,7 +7412,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam
+fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7362,7 +7433,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam.gz
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam
+fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam.bai
 grant Myers
 insertLength 200
 lab Caltech(Wold)
