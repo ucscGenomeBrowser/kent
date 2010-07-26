@@ -1448,7 +1448,7 @@ my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
 
 # Special cases to handle conditionally required fields
 if(!defined($ddfHeader{controlId})) {
-    if($db == "hg19") {
+    if($db eq "hg19") {
         if($daf->{compositeSuffix} == "HaibTfbs"
         || $daf->{compositeSuffix} == "SydhTfbs"
         || $daf->{compositeSuffix} == "SydhHistone") {
