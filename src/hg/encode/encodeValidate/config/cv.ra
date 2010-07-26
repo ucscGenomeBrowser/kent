@@ -4920,7 +4920,7 @@ type treatment
 
 term TAM_1uM_36hr
 tag TAM
-description 36h, 2uM tamoxifen (Myers)
+description 36h, 1uM tamoxifen (Myers)
 type treatment
 
 term TNFa
