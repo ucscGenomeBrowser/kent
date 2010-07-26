@@ -780,19 +780,19 @@ sub validateBam
     }
 	#Venkat: Changed $sex to $cellLineSex to accomadate the sex being passed from the DDF
     my $cellLineSex = $terms{'Cell Line'}->{$cell}->{'sex'};
-   
+
 	# Venkat: For category= Tissues change sex to one defined by the DFF
 	# The reason that I did not just pass sex is because I will be using the
 	# same DAF with required fields for mouse tissue and cell samples
 
-	#Venkat: Category is defined in cv.ra for 
+	#Venkat: Category is defined in cv.ra for
 	# T= Tissue
 	# L= Cell Line
 	# P= Primary Cells
     my $category = $terms{'Cell Line'}->{$cell}->{'category'};
-    
+
 	#Venkat: Can be a better design, but need to flesh out design more.
-	if (defined $category && $category eq "T") {
+	if (defined $category && $category eq "Tissue") {
 	$cellLineSex=$sex;
     }
 
@@ -1001,7 +1001,7 @@ sub validatePsl
 
 sub validateDdfField {
     # validate value for type of field
-	# Venkat: Added $sex to accomadate tissues for mouse 
+	# Venkat: Added $sex to accomadate tissues for mouse
     my ($type, $val, $track, $daf, $cell,$sex) = @_;
     $type =~ s/ /_/g;
     HgAutomate::verbose(4, "Validating $type: " . (defined($val) ? $val : "") . "\n");
@@ -1444,6 +1444,18 @@ while(@{$lines}) {
 }
 
 my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
+
+# Special cases to handle conditionally required fields
+if(!defined($ddfHeader{inputType})) {
+    if($db == "hg19") {
+        if($daf->{compositeSuffix} == "HaibTfbs"
+        || $daf->{compositeSuffix} == "SydhTfbs"
+        || $daf->{compositeSuffix} == "SydhHistone") {
+            push(@errors, "field 'inputType' not defined");
+        }
+    }
+}
+
 if(@errors) {
     die "ERROR in DDF '$ddfFile':\n" . join("\n", @errors) . "\n";
 }
@@ -2012,7 +2024,6 @@ foreach my $ddfLine (@ddfLines) {
     } else {
         $metadata .= " tableName=$tableName";
     }
-    $metadata .= " fileName=$tableName.$fileType.gz";
 
     print LOADER_RA "tablename $tableName\n";
     print LOADER_RA "view $view\n";
@@ -2030,9 +2041,21 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
-    # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
-    if($downloadOnly) {
-        print MDB_TXT sprintf("metadata %s\n", $metadata);
+    if ($type eq "bam") {  
+        # print out metadata for bam file
+        my $metaextra = " fileName=$tableName.$fileType";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+
+        # print out metadata for bai file 
+        # turns out we probably don't need this.
+        # $metaextra = " fileName=$tableName.$fileType.bai";
+        # print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+    } elsif ($type eq "bigWig") {  
+        my $metaextra = " fileName=$tableName.$fileType";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
+    } else {
+        my $metaextra = " fileName=$tableName.$fileType.gz";
+        print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     }
 
     if($downloadOnly || ($type eq "wig" && !grep(/$Encode::autoCreatedPrefix/, @{$ddfLine->{files}}))) {
@@ -2098,9 +2121,6 @@ foreach my $ddfLine (@ddfLines) {
                         $terms{'Cell Line'}->{$ddfLine->{cell}}->{'color'});
             }
         }
-        # metadata proj=wgEncode lab=Yale cell=GM12878 antiBody=Pol2 labVersion="PeakSeq 1.2 ..." dataVersion="ENCODE Feb 2009 Freeze"
-        # The metadata line is no longer put into fileDb.ra and trackDb.ra but is in mdb.txt.  This line could be rewritten as RA but isn't yet.
-        print MDB_TXT sprintf("metadata %s\n", $metadata);
         print TRACK_RA sprintf("        # subId=%s dateSubmitted=%s\n", $subId,$dateSubmitted);
         print TRACK_RA "\n";
     }

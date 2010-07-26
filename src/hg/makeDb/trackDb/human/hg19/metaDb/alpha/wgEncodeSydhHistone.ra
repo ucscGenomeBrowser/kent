@@ -8,7 +8,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k27me3UcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneK562H3k27me3UcdAlnRep1.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -30,7 +30,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k27me3UcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneK562H3k27me3UcdAlnRep2.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -120,7 +120,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k27me3UcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneK562H3k27me3UcdSig.bigWig
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -142,7 +142,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
-fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep1.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -164,7 +164,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
-fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneK562H3k4me1UcdAlnRep2.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -252,7 +252,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
-fileName wgEncodeSydhHistoneK562H3k4me1UcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneK562H3k4me1UcdSig.bigWig
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -274,7 +274,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k4me3UcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneK562H3k4me3UcdAlnRep1.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -296,7 +296,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k4me3UcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneK562H3k4me3UcdAlnRep2.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -386,7 +386,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k4me3UcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneK562H3k4me3UcdSig.bigWig
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -408,7 +408,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep1.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -430,7 +430,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneK562H3k9acbUcdAlnRep2.bam
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -520,7 +520,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneK562H3k9acbUcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneK562H3k9acbUcdSig.bigWig
 grant Snyder
 inputType K562/None/Input/UCDavis
 lab UCD
@@ -542,7 +542,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep1.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -564,7 +564,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3StdAlnRep2.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -654,7 +654,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k27me3StdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1H3k27me3StdSig.bigWig
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -676,7 +676,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep1.bam
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -698,7 +698,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdAlnRep2.bam
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -788,7 +788,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
-fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1H3k36me3bUcdSig.bigWig
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -810,7 +810,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep1.bam
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -832,7 +832,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdAlnRep2.bam
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -920,7 +920,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me1UcdSig.bigWig
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -942,7 +942,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep1.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -964,7 +964,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3StdAlnRep2.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -1054,7 +1054,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k4me3StdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1H3k4me3StdSig.bigWig
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -1076,7 +1076,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep1.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -1098,7 +1098,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acStdAlnRep2.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -1188,7 +1188,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1H3k9acStdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9acStdSig.bigWig
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -1210,7 +1210,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep1.bam
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -1232,7 +1232,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdAlnRep2.bam
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -1322,7 +1322,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1H3k9me3UcdSig.bigWig
 grant Snyder
 inputType NT2_D1/None/Input/UCDavis
 lab UCD
@@ -1344,7 +1344,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1InputStdAln.bam.gz
+fileName wgEncodeSydhHistoneNt2d1InputStdAln.bam
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD
@@ -1386,7 +1386,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-04
 dateUnrestricted 2011-02-04
-fileName wgEncodeSydhHistoneNt2d1InputStdSig.bigWig.gz
+fileName wgEncodeSydhHistoneNt2d1InputStdSig.bigWig
 grant Snyder
 inputType NT2-D1/None/Input/std
 lab UCD

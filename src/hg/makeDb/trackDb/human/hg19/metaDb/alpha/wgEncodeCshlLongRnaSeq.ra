@@ -7,7 +7,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep1.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -28,7 +28,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep2.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -49,7 +49,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -70,7 +70,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -91,7 +91,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -112,7 +112,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -133,7 +133,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -154,7 +154,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -175,7 +175,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -196,7 +196,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -217,7 +217,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -238,7 +238,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -259,7 +259,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -280,7 +280,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -301,7 +301,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
 localization cell
@@ -322,7 +322,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2.bigWig.gz
+fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
 localization cell

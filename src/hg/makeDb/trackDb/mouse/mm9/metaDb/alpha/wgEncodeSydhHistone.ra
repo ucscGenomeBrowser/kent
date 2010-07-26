@@ -8,7 +8,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam.gz
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -30,7 +30,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam.gz
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -118,7 +118,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig.gz
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -140,7 +140,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12InputIggyaleAln.bam.gz
+fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -182,7 +182,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig.gz
+fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -204,7 +204,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam.gz
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam
 grant Snyder
 inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
@@ -226,7 +226,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam.gz
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam
 grant Snyder
 inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
@@ -314,7 +314,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig.bigWig.gz
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig.bigWig
 grant Snyder
 inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
@@ -446,7 +446,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig.gz
+fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-Yale
 lab Stanford
@@ -510,7 +510,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
-fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig.gz
+fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-Yale
 lab Stanford
