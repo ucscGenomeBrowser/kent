@@ -285,7 +285,7 @@ sex M
 tier 3
 protocol UW_Stam:AG10803_Stam_protocol.pdf
 
-termPAoAF
+term AoAF
 tag AOAF
 type Cell Line
 organism Human
