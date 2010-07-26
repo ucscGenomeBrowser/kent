@@ -705,8 +705,6 @@ organism Human
 description lymphoblastoid
 tissue Blood
 vendorName Cloned for maternal X inactivation by Hunt Willard's at Duke University
-vendorId 
-orderUrl 
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for maternal X inactivation
 termId BTO:0002026 (non-specific)
@@ -722,8 +720,6 @@ organism Human
 description lymphoblastoid
 tissue Blood
 vendorName Cloned for paternal X inactivation by Hunt Willard's at Duke University
-vendorId 
-orderUrl 
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for paternal X inactivation
 termId BTO:0002026 (non-specific)
@@ -739,8 +735,6 @@ organism Human
 description lymphoblastoid
 tissue Blood
 vendorName Cloned for paternal X inactivation by Hunt Willard's at Duke University
-vendorId 
-orderUrl 
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for paternal X inactivation
 termId BTO:0002026 (non-specific)
@@ -756,8 +750,6 @@ organism Human
 description lymphoblastoid
 tissue Blood
 vendorName Cloned for maternal X inactivation by Hunt Willard's at Duke University
-vendorId 
-orderUrl 
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for maternal X inactivation
 termId BTO:0002026 (non-specific)
