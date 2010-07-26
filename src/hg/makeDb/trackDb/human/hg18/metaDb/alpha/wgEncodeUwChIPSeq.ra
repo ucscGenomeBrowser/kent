@@ -3420,7 +3420,7 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -3429,12 +3429,12 @@ fragLength 350
 grant Stam
 inputType GM06990/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 298
+subId 520
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm06990Ctcf
 view Hotspots
 
@@ -3674,7 +3674,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -3683,12 +3683,12 @@ fragLength 350
 grant Stam
 inputType GM12878/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 301
+subId 690
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878Ctcf
 view Hotspots
 
@@ -3744,7 +3744,7 @@ antibody H3K4me3
 cell GM12878
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -3753,12 +3753,12 @@ fragLength 350
 grant Stam
 inputType GM12878/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 302
+subId 699
 tableName wgEncodeUwChIPSeqHotspotsRep1Gm12878H3k4me3
 view Hotspots
 
@@ -3768,7 +3768,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -3777,12 +3777,12 @@ fragLength 350
 grant Stam
 inputType HEK293/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 303
+subId 626
 tableName wgEncodeUwChIPSeqHotspotsRep1Hek293Ctcf
 view Hotspots
 
@@ -3792,7 +3792,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -3801,12 +3801,12 @@ fragLength 350
 grant Stam
 inputType HeLa-S3/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 304
+subId 691
 tableName wgEncodeUwChIPSeqHotspotsRep1Helas3Ctcf
 view Hotspots
 
@@ -4257,7 +4257,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -4266,12 +4266,12 @@ fragLength 350
 grant Stam
 inputType K562/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 307
+subId 659
 tableName wgEncodeUwChIPSeqHotspotsRep1K562Ctcf
 view Hotspots
 
@@ -4327,7 +4327,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -4336,12 +4336,12 @@ fragLength 350
 grant Stam
 inputType K562/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 308
+subId 660
 tableName wgEncodeUwChIPSeqHotspotsRep1K562H3k4me3
 view Hotspots
 
@@ -5272,7 +5272,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -5281,12 +5281,12 @@ fragLength 350
 grant Stam
 inputType HepG2/Input
 lab Uw
-labVersion Hotspot-v5.0
+labVersion Hotspot-v5.1
 project wgEncode
 rank 2nd
 replicate 2
 setType exp
-subId 406
+subId 608
 tableName wgEncodeUwChIPSeqHotspotsRep2Hepg2Ctcf
 view Hotspots
 
@@ -10301,7 +10301,7 @@ cell GM06990
 composite wgEncodeUwChIPSeq
 dataSubmitted 2009-06-29
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -10315,7 +10315,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 298
+subId 520
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm06990Ctcf
 view RawSignal
 
@@ -10555,7 +10555,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -10569,7 +10569,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 301
+subId 690
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878Ctcf
 view RawSignal
 
@@ -10625,7 +10625,7 @@ antibody H3K4me3
 cell GM12878
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -10639,7 +10639,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 302
+subId 699
 tableName wgEncodeUwChIPSeqRawSignalRep1Gm12878H3k4me3
 view RawSignal
 
@@ -10649,7 +10649,7 @@ antibody CTCF
 cell HEK293
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-30
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -10663,7 +10663,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 303
+subId 626
 tableName wgEncodeUwChIPSeqRawSignalRep1Hek293Ctcf
 view RawSignal
 
@@ -10673,7 +10673,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -10687,7 +10687,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 304
+subId 691
 tableName wgEncodeUwChIPSeqRawSignalRep1Helas3Ctcf
 view RawSignal
 
@@ -11138,7 +11138,7 @@ antibody CTCF
 cell K562
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -11152,7 +11152,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 307
+subId 659
 tableName wgEncodeUwChIPSeqRawSignalRep1K562Ctcf
 view RawSignal
 
@@ -11208,7 +11208,7 @@ antibody H3K4me3
 cell K562
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-13
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
@@ -11222,7 +11222,7 @@ project wgEncode
 rank 1st
 replicate 1
 setType exp
-subId 308
+subId 660
 tableName wgEncodeUwChIPSeqRawSignalRep1K562H3k4me3
 view RawSignal
 
@@ -12153,7 +12153,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeUwChIPSeq
 dataType ChIPSeq
-dataVersion ENCODE July 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -12167,7 +12167,7 @@ project wgEncode
 rank 2nd
 replicate 2
 setType exp
-subId 406
+subId 608
 tableName wgEncodeUwChIPSeqRawSignalRep2Hepg2Ctcf
 view RawSignal
 
@@ -12793,4 +12793,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: 859705586
+# MAGIC: -482472574
