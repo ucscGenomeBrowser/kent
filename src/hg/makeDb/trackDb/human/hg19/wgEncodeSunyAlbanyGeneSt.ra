@@ -7,8 +7,8 @@ longLabel ENCODE SUNY Albany (Tenenbaum Lab) RBP Associated RNA by GeneST
 group regulation
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
 subGroup2 cellType Cell_Line  GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2
-subGroup3 antibody Antibody CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
-dimensions dimensionX=cellType dimensionY=antibody
+subGroup3 antibody Target_Protien  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
+dimensions dimensionX=antibody dimensionY=cellType
 sortOrder cellType=+ antibody=+ 
 controlledVocabulary encode/cv.ra cellType=cell antibody=Antibody
 dragAndDrop subTracks
@@ -37,7 +37,7 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneSTGm12878RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyRipChipView
-    	shortLabel GM12878 Input
+    	shortLabel GM12878  Input
     	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in GM12878 cells)
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=ripInput
     	type broadPeak
@@ -107,7 +107,7 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneSTK562RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyRipChipView
-    	shortLabel K562 Input
+    	shortLabel K562  Input
     	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in K562 cells)
     	subGroups view=RbpAssocRna cellType=K562 antibody=ripInput
     	type broadPeak
@@ -157,7 +157,7 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneSTHelas3RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyRipChipView off
-    	shortLabel HeLa-S3 Input
+    	shortLabel HeLa-S3  Input
     	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HeLa-S3 cells)
     	subGroups view=RbpAssocRna cellType=HeLaS3 antibody=ripInput
     	type broadPeak
@@ -167,7 +167,7 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneSTHepg2RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyRipChipView off
-    	shortLabel HepG2 Input
+    	shortLabel HepG2  Input
     	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (in HepG2 cells)
     	subGroups view=RbpAssocRna cellType=HepG2 antibody=ripInput
     	type broadPeak
