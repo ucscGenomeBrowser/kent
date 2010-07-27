@@ -14,15 +14,17 @@ Instructions for configuring multi-view
 tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 The following views are in this track: <DL>
 <DT><I>RPKM</I>
-<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (RPKM). The RPKM measure assists in visualizing the relative amount of a given transcript across multiple samples. 
+<DD>Density graph (wiggle) of signal enrichment based on a normalized aligned read density (RPKM). RPKM is reported in the score of the track and is displayed in a gray scale that becomes darker as RPKM increases. The RPKM measure assists in visualizing the relative amount of a given transcript across multiple samples. 
 <DT><I>Alignments</I>
 <DD>The Alignments view shows reads mapped to the genome. 
 Alignments are colored by cell type.
 </DL>
 
 <H2>Methods</H2>
-
-
+<P>
+Gene expression is measured in Reads Per Kilobase exon per Million reads (RPKM; Mortazavi et al., 2008).  RNA-seq reads are aligned to RefSeq gene models.  RPKM is then calculated by dividing the total number of reads that align to the gene model (RefSeq) by the size of the spliced transcript in kilobases.  This number is then divided by the total number of reads in millions for the experiment.  For example, if x reads align to a RefSeq gene whose spliced transcript is y kb in size and there are z million reads in the experiment, then RPKM = x/(y*z).  
+</P>
+<P>
 Cells were grown according to the approved <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>. A total of 2 X 107 cells were lysed in either 4mls of RLT buffer (Qiagen RNEasy kit), and processed on 2 RNEasy midi columns according to the manufacturer's protocol, with the inclusion of the "on-column" DNAse digestion step to remove residual genomic DNA.  75 µgs of total RNA was selected twice with oligodT beads (Dynal) according to the manufacturer's protocol to isolate mRNA from each of the preparations. 100 ngs of mRNA was then processed according to the protocol in Mortazavi et al (2008), and prepared for sequencing on the Genome Analyzer flow cell according to the protocol for the ChIPSeq DNA genomic DNA kit (Illumina). 
 Following alignment of the sequence reads to the genome assembly as described above, the sequence reads were further analyzed using the ERANGE 3.0 software package, which quantifies the number of reads falling within the mapped boundaries of known transcripts from the Gencode annotations. ERANGE assigns both genomically unique reads and reads that occur in 2-10 genomic locations for quantification. 
 <H2>Verification</H2>

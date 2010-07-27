@@ -4,7 +4,7 @@ compositeTrack on
 shortLabel CSHL ShortRnaSeq
 longLabel ENCODE CSHL Gingeras ShortRnaSeq
 group expression
-subGroup1 view Views 3-MinusRawSignal=MinusRawSignal 2-PlusRawSignal=PlusRawSignal 4-Alignments=Alignments
+subGroup1 view Views 1-Transfrags=TransFrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments 
 subGroup2 cellType Cell_Line K562=K562 prostate=prostate GM12878=GM12878
 subGroup3 localization Localization chromatin=chromatin cell=cell cytosol=cytosol nucleus=nucleus nucleolus=nucleolus polysome=polysome nucleoplasm=nucleoplasm
 subGroup4 rnaExtract RnaExtract short=short total=total
@@ -382,12 +382,132 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1411 dateSubmitted=2010-06-14
 
-    track wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
-    release alpha
-    parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-    shortLabel GM12878 nucleus short PlusRaw
-    longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short in GM12878 nucleus)
-    subGroups view=2-PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=short
-    type bigWig 1.000000 643513.000000
-    color 153,38,0
-    # subId=1402 dateSubmitted=2010-06-14
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
+        shortLabel GM12878 nucleus short PlusRaw
+        longLabel ENCODE CSHL RNA-seq Plus Strand Raw Signal (short in GM12878 nucleus)
+        subGroups view=2-PlusRawSignal cellType=GM12878 localization=nucleus rnaExtract=short
+        type bigWig 1.000000 643513.000000
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
+
+    track wgEncodeCshlShortRnaSeqView1-Transfrags
+    shortLabel Transfrags
+    view 1-Transfrags
+    visibility dense
+    subTrack wgEncodeCshlShortRnaSeq
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    scoreMin 100
+    minGrayLevel 4
+
+        track wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel prostate cell short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in prostate cell)
+        subGroups view=1-Transfrags cellType=prostate localization=cell rnaExtract=short
+        type bed 6 +
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel GM12878 cytosol short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cytosol)
+        subGroups view=1-Transfrags cellType=GM12878 localization=cytosol rnaExtract=short
+        type bed 6 +
+        color 153,38,0
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel GM12878 nucleus short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 nucleus)
+        subGroups view=1-Transfrags cellType=GM12878 localization=nucleus rnaExtract=short
+        type bed 6 +
+        color 153,38,0
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel GM12878 cell short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in GM12878 cell)
+        subGroups view=1-Transfrags cellType=GM12878 localization=cell rnaExtract=short
+        type bed 6 +
+        color 153,38,0
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 chromatin short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 chromatin)
+        subGroups view=1-Transfrags cellType=K562 localization=chromatin rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 cytosol short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cytosol)
+        subGroups view=1-Transfrags cellType=K562 localization=cytosol rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 nucleus short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 nucleus)
+        subGroups view=1-Transfrags cellType=K562 localization=nucleus rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 nucleolus short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 nucleolus)
+        subGroups view=1-Transfrags cellType=K562 localization=nucleolus rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 nucleoplasm short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 nucleoplasm)
+        subGroups view=1-Transfrags cellType=K562 localization=nucleoplasm rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 polysome short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 polysome)
+        subGroups view=1-Transfrags cellType=K562 localization=polysome rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
+        track wgEncodeCshlShortRnaSeqK562CellShortTransfrags
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView1-Transfrags off
+        shortLabel K562 cell short
+        longLabel ENCODE CSHL RNA-seq Transfrags (short in K562 cell)
+        subGroups view=1-Transfrags cellType=K562 localization=cell rnaExtract=short
+        type bed 6 +
+        color 46,0,184
+        # subId=1965 dateSubmitted=2010-07-20
+
