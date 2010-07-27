@@ -1,14 +1,14 @@
 track wgEncodeSunyAlbanyTiling
 compositeTrack on
-shortLabel SunyAlbany Tiling
-longLabel ENCODE SunyAlbany (Tenenbaum Lab) Tiling Array
+shortLabel SUNY Tiling
+longLabel ENCODE SUNY Albany (Tenenbaum Lab) RBP Associated RNA by Tiling Array
 group regulation
-subGroup1 view Views RbpAssocRna=RbpAssocRna 
+subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA 
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
-subGroup3 ripTgtProtein RipTgtProtein ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input  
-dimensions dimensionX=cellType dimensionY=ripTgtProtein
-sortOrder cellType=+ ripTgtProtein=+ 
-controlledVocabulary encode/cv.ra cellType=cell ripTgtProtein=Antibody
+subGroup3 antibody Antibody_Target ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input  
+dimensions dimensionX=antibody dimensionY=cellType
+sortOrder cellType=+ antibody=+ 
+controlledVocabulary encode/cv.ra cellType=cell antibody=antibody
 dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide
 priority 0
@@ -32,9 +32,9 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel GM12878 Input
+    	shortLabel GM12878  Input
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (Input in GM12878 cells)
-    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=ripInput
+    	subGroups view=RbpAssocRna cellType=GM12878 antibody=ripInput
     	type broadPeak
     	color 153,38,0
     	# subId=1245 dateSubmitted=2010-06-01
@@ -42,9 +42,9 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel GM12878 T7Tag
+    	shortLabel GM12878  T7Tag
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (T7Tag in GM12878 cells)
-    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=T7Tag
+    	subGroups view=RbpAssocRna cellType=GM12878 antibody=T7Tag
     	type broadPeak
     	color 153,38,0
     	# subId=1245 dateSubmitted=2010-06-01
@@ -54,7 +54,7 @@ origAssembly hg19
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 PABPC1
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (PABPC1 in GM12878 cells)
-    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=PABPC1
+    	subGroups view=RbpAssocRna cellType=GM12878 antibody=PABPC1
     	type broadPeak
     	color 153,38,0
     	# subId=1245 dateSubmitted=2010-06-01
@@ -64,7 +64,7 @@ origAssembly hg19
      	subTrack wgEncodeSunyAlbanyTilingView
   	shortLabel GM12878 ELAVL1
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (ELAVL1 in GM12878 cells)
-    	subGroups view=RbpAssocRna cellType=GM12878 ripTgtProtein=ELAVL1
+    	subGroups view=RbpAssocRna cellType=GM12878 antibody=ELAVL1
     	type broadPeak
     	color 153,38,0
     	# subId=1245 dateSubmitted=2010-06-01
@@ -72,9 +72,9 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel K562 Input
+    	shortLabel K562  Input
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (Input in K562 cells)
-    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=ripInput
+    	subGroups view=RbpAssocRna cellType=K562 antibody=ripInput
     	type broadPeak
     	color 46,0,184
     	# subId=1245 dateSubmitted=2010-06-01
@@ -82,9 +82,9 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel K562 T7Tag
+    	shortLabel K562  T7Tag
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (T7Tag in K562 cells)
-    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=T7Tag
+    	subGroups view=RbpAssocRna cellType=K562 antibody=T7Tag
     	type broadPeak
     	color 46,0,184
     	# subId=1245 dateSubmitted=2010-06-01
@@ -94,7 +94,7 @@ origAssembly hg19
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 PABPC1
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (PABPC1 in K562 cells)
-    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=PABPC1
+    	subGroups view=RbpAssocRna cellType=K562 antibody=PABPC1
     	type broadPeak
     	color 46,0,184
     	# subId=1245 dateSubmitted=2010-06-01
@@ -104,7 +104,7 @@ origAssembly hg19
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 ELAVL1
     	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (ELAVL1 in K562 cells)
-    	subGroups view=RbpAssocRna cellType=K562 ripTgtProtein=ELAVL1
+    	subGroups view=RbpAssocRna cellType=K562 antibody=ELAVL1
     	type broadPeak
     	color 46,0,184
     	# subId=1245 dateSubmitted=2010-06-01
