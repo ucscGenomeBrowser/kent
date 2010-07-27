@@ -207,10 +207,10 @@ priority 300
     color 58,119,40
 
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
-include wgEncodeBroadChipSeq.new.ra
+include wgEncodeBroadChipSeq.ra
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
-include wgEncodeChromatinMap.new.ra
+include wgEncodeChromatinMap.ra
 
 
 # Mapability - Cross lab special track (wrangler: tdreszer)
@@ -2019,15 +2019,15 @@ group regulation
 
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwChIPSeq.new.ra
+include wgEncodeUwChIPSeq.ra
 
 
 # UW DGF (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDGF.new.ra
+include wgEncodeUwDGF.ra
 
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.new.ra
+include wgEncodeUwDnaseSeq.ra
 
 
 
