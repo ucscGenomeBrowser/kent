@@ -75,8 +75,32 @@ char *cgiRemoteAddr();
 char *cgiUserAgent();
 /* Return remote user agent (HTTP_USER_AGENT) or NULL if remote user agent is not known */
 
+enum browserType
+/* How to look at a track. */
+    {
+    btUnknown=0, // Not yet known
+    btOpera=1,   // Opera
+    btIE=2,      // MS Internet Explorer
+    btFF=3,      // Firefox
+    btChrome=4,  // Google Chrome
+    btSafari=5,  // Safari
+    btOther=6    // Anything else
+    };
+
+enum osType
+/* How to look at a track. */
+    {
+    osUnknown=0, // Not yet known
+    osWindows=1, // The evil empire
+    osLinux=2,   // Workhorse
+    osMac=3,     // ashion or Religion
+    osOther=4    // Anything else
+    };
+
+enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs, char **clientOsQualifier);
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
+
 char *cgiString(char *varName);
 int cgiInt(char *varName);
 double cgiDouble(char *varName);
