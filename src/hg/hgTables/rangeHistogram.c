@@ -17,7 +17,7 @@ static void printValueHistogram(char *db, char *table, char *field)
 {
 double maxHist = 60;
 double scale = -1.0;
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -52,7 +52,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     }
 // hPrintf("</TABLE>");
 hTableEnd();
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 void doValueHistogram(char *field)
@@ -68,7 +68,7 @@ htmlClose();
 static void printValueRange(char *db, char *table, char *field)
 /* Print min/max/mean. */
 {
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 struct sqlResult *sr;
 char **row;
 char query[256];
@@ -81,7 +81,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     hPrintf("<B>min:</B> %s <B>max:</B> %s <B>average:</B> %s\n",
     	row[0], row[1], row[2]);
     }
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 

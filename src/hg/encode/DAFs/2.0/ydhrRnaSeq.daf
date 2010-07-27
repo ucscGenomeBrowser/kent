@@ -1,0 +1,9 @@
+files	view	cell	treatment	rnaExtract	origAssembly	seqPlatform	labVersion
+wgEncodeYaleRnaSeqPolyaRawDataGm12878.bam	Alignments	GM12878	None	longNonPolyA	hg18		
+wgEncodeYaleRnaSeqPolyaRawDataK562.bm	Alignments	K562	None	longNonPolyA	hg18		
+wgEncodeYaleRnaSeqPolyaRawDataK562Ifna30m.bam	Alignments	K562	IFNa30m	longNonPolyA	hg18		
+wgEncodeYaleRnaSeqPolyaRawDataK562Ifna30m.bam	Alignments	K562	IFNa30m	longNonPolyA	hg18		
+wgEncodeYaleRnaSeqPolyaRawDataK562Ifna6h.bam	Alignments	K562	IFNa6h	longNonPolyA	hg18		
+wgEncodeYaleRnaSeqPolyaRawDataK562Ifng30m.bam	Alignments	K562	IFNg30m	longNonPolyA	hg18		
+wgEncodeYaleRnaSeqPolyaRawDataK562Ifng6h.bam	Alignments	K562	IFNg6h	longNonPolyA	hg18		
+
