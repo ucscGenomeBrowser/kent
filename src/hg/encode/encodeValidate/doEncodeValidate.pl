@@ -311,6 +311,7 @@ our %formatCheckers = (
     cBiP => \&validateFreepass,  # TODO: this is a dodge, because bed file is for different species, so chrom violations
     bigWig => \&validateBigWig,
     bam => \&validateBam,
+    shortFrags => \&validateBed,
     );
 
 my $floatRegEx = "[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?";
