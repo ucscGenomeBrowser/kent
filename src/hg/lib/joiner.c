@@ -17,6 +17,7 @@
 #include "dystring.h"
 #include "obscure.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "joiner.h"
 
 static char const rcsid[] = "$Id: joiner.c,v 1.28 2009/02/11 18:49:44 angie Exp $";
@@ -1074,23 +1075,22 @@ static boolean tableExists(char *database, char *table, char *splitPrefix)
 /* Return TRUE if database and table exist.  If splitPrefix is given,
  * check for existence with and without it. */
 {
-struct sqlConnection *conn = sqlMayConnect(database);
-boolean exists;
-boolean hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
-char t2[1024];
+struct sqlConnection *conn = hAllocConnMaybe(database);
 if (conn == NULL)
     return FALSE;
+char t2[1024];
 if (isNotEmpty(splitPrefix))
     safef(t2, sizeof(t2), "%s%s", splitPrefix, table);
 else
     safef(t2, sizeof(t2), "%s", table);
-exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
+boolean hasSqlWildcard = (strchr(table, '%') || strchr(table, '_'));
+boolean exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
 if (!exists && isNotEmpty(splitPrefix))
     {
     safef(t2, sizeof(t2), "%s", table);
     exists = hasSqlWildcard ? sqlTableWildExists(conn, t2) : sqlTableExists(conn, t2);
     }
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 return exists;
 }
 

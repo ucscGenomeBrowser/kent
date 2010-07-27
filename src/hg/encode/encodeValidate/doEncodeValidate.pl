@@ -160,7 +160,8 @@ our %validators = (
     view => \&validateDatasetName,
     labVersion => \&validateNoValidation,
     origAssembly => \&validateNoValidation,
-    inputType => \&validateNoValidation,
+    controlId => \&validateNoValidation,
+    labExpId => \&validateNoValidation,
     softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
     replicate => \&validateNoValidation,
@@ -1446,12 +1447,12 @@ while(@{$lines}) {
 my @errors = Encode::validateFieldList(\@ddfHeader, $fields, 'ddf');
 
 # Special cases to handle conditionally required fields
-if(!defined($ddfHeader{inputType})) {
-    if($db == "hg19") {
+if(!defined($ddfHeader{controlId})) {
+    if($db eq "hg19") {
         if($daf->{compositeSuffix} == "HaibTfbs"
         || $daf->{compositeSuffix} == "SydhTfbs"
         || $daf->{compositeSuffix} == "SydhHistone") {
-            push(@errors, "field 'inputType' not defined");
+            push(@errors, "field 'controlId' not defined");
         }
     }
 }
@@ -1778,13 +1779,13 @@ foreach my $ddfLine (@ddfLines) {
                 $metadata .= " setType=exp";
             }
         }
-        if(!$ddfLine->{inputType}) {
-            my $inputType = $ddfLine->{cell};
-            $inputType .= "/" . $ddfLine->{treatment} if $ddfLine->{treatment};
-            $inputType .= "/Input"; # default inputType for ChIPseq is "Input" instead of antibody
-            $inputType .= "/" . $ddfLine->{protocol} if $ddfLine->{protocol};
-            $inputType .= "/" . $ddfLine->{control} if $ddfLine->{control};
-            $metadata .= " inputType=$inputType";
+        if(!$ddfLine->{controlId}) {
+            my $controlId = $ddfLine->{cell};
+            $controlId .= "/" . $ddfLine->{treatment} if $ddfLine->{treatment};
+            $controlId .= "/Input"; # default antibody for ChIPseq is "Input"
+            $controlId .= "/" . $ddfLine->{protocol} if $ddfLine->{protocol};
+            $controlId .= "/" . $ddfLine->{control} if $ddfLine->{control};
+            $metadata .= " controlId=$controlId";
         }
     }
     $metadata .= " view=$view";
@@ -2041,16 +2042,16 @@ foreach my $ddfLine (@ddfLines) {
     print LOADER_RA "pushQDescription $pushQDescription\n";
     print LOADER_RA "\n";
 
-    if ($type eq "bam") {  
+    if ($type eq "bam") {
         # print out metadata for bam file
         my $metaextra = " fileName=$tableName.$fileType";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
 
-        # print out metadata for bai file 
+        # print out metadata for bai file
         # turns out we probably don't need this.
         # $metaextra = " fileName=$tableName.$fileType.bai";
         # print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
-    } elsif ($type eq "bigWig") {  
+    } elsif ($type eq "bigWig") {
         my $metaextra = " fileName=$tableName.$fileType";
         print MDB_TXT sprintf("metadata %s %s\n", $metadata, $metaextra);
     } else {

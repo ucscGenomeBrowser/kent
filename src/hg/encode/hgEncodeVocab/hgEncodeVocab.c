@@ -156,23 +156,65 @@ char *s, *t, *u;
 
 if (sameString(type,"Antibody"))
     {
+    /* if the type is Antibody then
+     * print "term targetDescription antibodyDescription" */
+
     puts("<TR>");
     printf("  <TD>%s</TD>\n", term);
     s = hashFindVal(ra, "targetDescription");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "antibodyDescription");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+ 
+    /* In the antibody cv, there may be multiple sources of the antibody.  In this text we allow the vendorName, 
+     * vendorId, and vendorUrls to be a semi-colon separated list to account for this in the display */
+ 
+    struct slName *sList;
+    struct slName *tList;
+    struct slName *uList;
+    struct slName *currentS;
+    struct slName *currentT;
+    struct slName *currentU;
 
+
+    /* For vendorName, vendorId, and orderUrl, grab the string and separate it into a list based on ';' */  
     s = hashFindVal(ra, "vendorName");
+    sList =  slNameListFromString (s, ';') ;
+
     t = hashFindVal(ra, "vendorId");
+    tList =  slNameListFromString (t, ';') ;
+
     u = hashFindVal(ra, "orderUrl");
+    uList =  slNameListFromString (u, ';') ;
+    
+    /* if the number of vendorNames and vendorId's do not match, error */
+    if (slCount( sList) != slCount( tList))
+	errAbort("The number of antibody vendors must equal number of antibody vender ID's");
     printf("  <TD>");
-    if (u)
-        printf("<A TARGET=_BLANK HREF=%s>", u);
-    printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
-    if (u)
-        printf("</A>");
+
+    /* while there are items in the list of vendorNames, print the vendorName and vendorID together with the url if present */
+    for (currentS=sList, currentT=tList, currentU=uList; (currentS != NULL) ; currentS = currentS->next, currentT = currentT->next) {
+        /* if there is a url, add it as a link */
+	if (currentU != NULL)
+	    printf("<A TARGET=_BLANK HREF=%s>", currentU->name);
+        /* print the current vendorName - vendorId pair */
+	printf("%s %s", currentS->name , currentT->name );
+        /* if there is a url, finish the link statement and increment the currentU counter */
+	if (currentU)
+	    {
+	    printf("</A>");
+            currentU=currentU->next;
+	    }
+	puts("\r");
+        
+	}
     puts("</TD>");
+
+    /* Free the memory */
+    slFreeList (&sList);
+    slFreeList (&tList);
+    slFreeList (&uList);
+    
 
     s = hashFindVal(ra, "lab");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
@@ -197,6 +239,10 @@ if (sameString(type,"Antibody"))
 
     puts("</TR>");
     }
+
+    /* Ideally, Cricket will be removing all of the ripAntibody and ripTgtProtien
+     * code after this is tested a bit 
+
 else if (sameString(type,"ripAntibody"))
     {
     puts("<TR>");
@@ -231,7 +277,8 @@ else if (sameString(type,"ripTgtProtein"))
     s = hashFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     puts("</TR>");
-    }
+    } */
+
 else if (sameString(type,"localization"))
     {
     puts("<TR>");

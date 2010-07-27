@@ -83,7 +83,12 @@ file ddf
 type string
 required no
 
-field inputType
+field controlId
+file ddf
+type string
+required no
+
+field labExpId
 file ddf
 type string
 required no

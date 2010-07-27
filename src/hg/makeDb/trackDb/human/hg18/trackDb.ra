@@ -3897,7 +3897,7 @@ type bed 3
     parent ucsfBrainMethyl
     visibility hide
   
-      track ucsfMedipSeqBrainHs1821Reads
+      track ucsfMedipSeqBrainReads
       shortLabel MeDIP Reads
       longLabel MeDIP-seq Reads
       parent ucsfBrainMethylViewALN
@@ -3909,7 +3909,7 @@ type bed 3
       spectrum on
       priority 1
   
-      track ucsfMreSeqBrainHs1822Reads
+      track ucsfMreSeqBrainReads
       shortLabel MRE Reads
       longLabel MRE-seq Reads
       parent ucsfBrainMethylViewALN
@@ -3921,7 +3921,7 @@ type bed 3
       spectrum on
       priority 2
   
-      track ucsfRnaSeqBrainHs0992SmartReads
+      track ucsfRnaSeqBrainSmartReads
       shortLabel Smart Reads
       longLabel RNA-seq Smart-Tagged Reads
       parent ucsfBrainMethylViewALN
@@ -3933,7 +3933,7 @@ type bed 3
       spectrum on
       priority 3
   
-      track ucsfRnaSeqBrainHs0992AllReads
+      track ucsfRnaSeqBrainAllReads
       shortLabel RNA-seq Reads
       longLabel RNA-seq Reads
       parent ucsfBrainMethylViewALN
@@ -3954,7 +3954,7 @@ type bed 3
     parent ucsfBrainMethyl
     visibility full
   
-      track ucsfChipSeqH3K4me3BrainHs0367Coverage
+      track ucsfChipSeqH3K4me3BrainCoverage
       shortLabel H3K4me3 Raw Signal
       longLabel H3K4me3 ChIP-seq Raw Signal
       parent ucsfBrainMethylViewCOV
@@ -3969,7 +3969,7 @@ type bed 3
       autoScale on
       priority 5
   
-      track ucsfMedipSeqBrainHs1821Coverage
+      track ucsfMedipSeqBrainCoverage
       shortLabel MeDIP Raw Signal
       longLabel MeDIP-seq Raw Signal
       parent ucsfBrainMethylViewCOV
@@ -3984,7 +3984,7 @@ type bed 3
       autoScale on
       priority 6
   
-      track ucsfRnaSeqBrainHs0992SmartCoverage
+      track ucsfRnaSeqBrainSmartCoverage
       shortLabel Smart Raw Signal
       longLabel RNA-seq Smart-Tagged Raw Signal
       parent ucsfBrainMethylViewCOV
@@ -3999,7 +3999,7 @@ type bed 3
       configurable on
       priority 7
   
-      track ucsfRnaSeqBrainHs0992AllCoverage
+      track ucsfRnaSeqBrainAllCoverage
       shortLabel RNA-seq Raw Signal
       longLabel RNA-seq Raw Signal
       parent ucsfBrainMethylViewCOV
@@ -4023,7 +4023,7 @@ type bed 3
     parent ucsfBrainMethyl
     visibility full
   
-      track ucsfMedipSeqBrainHs1821CpG
+      track ucsfMedipSeqBrainCpG
       shortLabel MeDIP CpG
       longLabel MeDIP-seq CpG Score
       parent ucsfBrainMethylViewCG
@@ -4038,7 +4038,7 @@ type bed 3
       autoScale on
       priority 9
   
-      track ucsfMreSeqBrainHs1822CpG
+      track ucsfMreSeqBrainCpG
       shortLabel MRE CpG
       longLabel MRE-seq CpG Score
       parent ucsfBrainMethylViewCG

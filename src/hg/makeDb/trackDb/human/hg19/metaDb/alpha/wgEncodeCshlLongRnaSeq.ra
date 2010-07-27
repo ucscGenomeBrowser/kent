@@ -50,6 +50,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
+fileIndex wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 localization cell
@@ -71,6 +72,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
+fileIndex wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 localization cell
@@ -218,6 +220,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
+fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.bai
 grant Gingeras
 lab CSHL
 localization cell
@@ -239,6 +242,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
+fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.bai
 grant Gingeras
 lab CSHL
 localization cell
