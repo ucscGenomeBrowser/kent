@@ -23,7 +23,7 @@
 
 track wgEncodeUwHistone
 compositeTrack on
-superTrack wgEncodeHistoneSuper
+superTrack wgEncodeHistoneSuper dense
 shortLabel UW Histone
 longLabel ENCODE Histone Modifications by ChIP-Seq from Univ. of Washington
 group regulation
