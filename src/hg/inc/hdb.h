@@ -124,6 +124,10 @@ int hChromCount(char *db);
 struct sqlConnection *hAllocConn(char *db);
 /* Get free connection if possible. If not allocate a new one. */
 
+struct sqlConnection *hAllocConnMaybe(char *db);
+/* Get free connection if possible. If not allocate a new one. Return
+ * NULL if db doesn't exist or can't be connected to. */
+
 char *getTrackProfileName(struct trackDb *tdb);
 /* get profile is associated with a track, return it, otherwise NULL */
 

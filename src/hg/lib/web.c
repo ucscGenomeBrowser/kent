@@ -98,7 +98,7 @@ boolean isGsid   = hIsGsidServer();
 boolean isGisaid = hIsGisaidServer();
 if (db == NULL)
     db = hDefaultDb();
-boolean dbIsFound = sqlDatabaseExists(db);
+boolean dbIsFound = hDbExists(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -630,8 +630,6 @@ exit(0);
 void printCladeListHtml(char *genome, char *onChangeText)
 /* Make an HTML select input listing the clades. */
 {
-struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr = NULL;
 char **row = NULL;
 char *clades[128];
 char *labels[128];
@@ -639,7 +637,8 @@ char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
 
-sr = sqlGetResult(conn, "select name, label from clade order by priority");
+struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
+struct sqlResult *sr = sqlGetResult(conn, "select name, label from clade order by priority");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
@@ -675,7 +674,7 @@ char *cgiName;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (!hashFindVal(hash, cur->genome) &&
-	(!doCheck || sqlDatabaseExists(cur->name)))
+	(!doCheck || hDbExists(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;
