@@ -1,3 +1,4 @@
+
 # for emacs: -*- mode: sh; -*-
 
 
@@ -30341,4 +30342,5 @@ hgsql hg18 -e 'load data local infile "knownCanonToDecipher.tab" into table
 knownCanonToDecipher'
 
 #############################################################################
+# Got UCSF Brain Methyl data from Ting already loaded.  7/2010
 
