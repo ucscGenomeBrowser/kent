@@ -2,15 +2,15 @@
 track wgEncodeSunyAlbanyGeneST
 compositeTrack on
 release alpha
-shortLabel SunyAlbany Gene ST 
-longLabel ENCODE SUNY Albany (Tenenbaum Lab) RBP Associated RNA by GeneST
+shortLabel SUNY GeneST 
+longLabel ENCODE SUNY Albany (Tenenbaum) RBP Associated RNA by GeneST
 group regulation
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
 subGroup2 cellType Cell_Line  GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2
-subGroup3 antibody Target_Protien  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
+subGroup3 antibody Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
 dimensions dimensionX=antibody dimensionY=cellType
 sortOrder cellType=+ antibody=+ 
-controlledVocabulary encode/cv.ra cellType=cell antibody=Antibody
+controlledVocabulary encode/cv.ra cellType=cell antibody=antibody
 dragAndDrop subTracks
 visibilityViewDefaults  RbpAssocRna=hide 
 useScore 1
