@@ -19,7 +19,7 @@
 #               - Raw Signal-??
 track wgEncodeUwDnase
 compositeTrack on
-superTrack wgEncodeDNAseSuper
+superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNaseI HS
 longLabel ENCODE DNaseI Hypersensitivity by Digital DNaseI from Univ. of Washington
 group regulation
@@ -1168,7 +1168,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks
-        shortLabel K562     Pk rank:1
+        shortLabel K562    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in K562 cells)
         subGroups view=Peaks cellType=1K562 rank=1st
         type narrowPeak

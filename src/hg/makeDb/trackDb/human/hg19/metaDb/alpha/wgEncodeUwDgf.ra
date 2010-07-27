@@ -8,6 +8,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeUwDgfGm06990Aln.bam
+fileIndex wgEncodeUwDgfGm06990Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -102,6 +103,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfHepg2Aln.bam
+fileIndex wgEncodeUwDgfHepg2Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -196,6 +198,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeUwDgfK562Aln.bam
+fileIndex wgEncodeUwDgfK562Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -290,6 +293,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
 fileName wgEncodeUwDgfSknshraAln.bam
+fileIndex wgEncodeUwDgfSknshraAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -384,6 +388,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
 fileName wgEncodeUwDgfTh1Aln.bam
+fileIndex wgEncodeUwDgfTh1Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
