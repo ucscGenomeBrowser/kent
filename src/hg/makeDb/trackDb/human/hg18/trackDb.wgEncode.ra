@@ -3366,7 +3366,6 @@ wgEncode 1
 
 # Yale RNA-seq (wrangler: tdreszer)
 include trackDb.wgEncodeYaleRnaSeq.ra
-
 # Yale RNA-seq (wrangler: cricket)
 include trackDb.wgEncodeYaleRnaSeq.new.ra
 
