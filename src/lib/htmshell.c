@@ -153,7 +153,10 @@ else
     strSwapStrs(cleanQuote, size,"&" ,"&amp;" ); //  '&' is not the start of a control char
     strSwapStrs(cleanQuote, size,">" ,"&gt;"  ); // '>' is not the close of a tag
     strSwapStrs(cleanQuote, size,"<" ,"&lt;"  ); // '<' is not the open of a tag
-    strSwapStrs(cleanQuote, size,"\n","&#124;"); // new lines replaced with '|' for lack of a better alternative
+    if(cgiClientBrowser(NULL,NULL,NULL) == btFF)
+        strSwapStrs(cleanQuote, size,"\n","&#124;"); // FF does not support!  Use "&#124;" for '|' instead
+    else
+        strSwapStrs(cleanQuote, size,"\n","&#x0A;"); // '\n' is supported on some browsers
     }
 strSwapStrs(cleanQuote, size,"\"","&quot;"); // Shield double quotes
 strSwapStrs(cleanQuote, size,"'" ,"&#39;" ); // Shield single quotes

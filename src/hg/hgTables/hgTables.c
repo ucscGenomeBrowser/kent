@@ -290,7 +290,7 @@ return regionList;
 struct region *getEncodeRegions()
 /* Get encode regions from encodeRegions table. */
 {
-struct sqlConnection *conn = sqlConnect(database);
+struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 struct region *list = NULL, *region;
@@ -306,7 +306,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, region);
     }
 sqlFreeResult(&sr);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 return list;
 }
 
@@ -605,7 +605,7 @@ boolean isPositional(char *db, char *table)
 /* Return TRUE if it looks to be a positional table. */
 {
 boolean result = FALSE;
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 if (sqlTableExists(conn, "chromInfo"))
     {
     char chromName[64];
@@ -618,7 +618,7 @@ if (sqlTableExists(conn, "chromInfo"))
 	result = htiIsPositional(hti);
 	}
     }
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 return result;
 }
 
@@ -1789,6 +1789,7 @@ fprintf(stderr, "%s\n", in->string);
 hgTables();
 
 textOutClose(&compressPipeline);
-
+// FIXME: temporary to track connection resources used
+sqlPrintStats(stderr);
 return 0;
 }
