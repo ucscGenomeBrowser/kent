@@ -29,13 +29,13 @@ queryOne select description,value from proteome.pfamDesc,sgdToPfam where sgdToPf
 invQueryOne select name from sgdToPfam,proteome.pfamDesc where description = '%s' and pfamDesc.pfamAc = sgdToPfam.value
 
 name bitScore
-type distance knownBlastTab query target bitScore
+type distance sgdBlastTab query target bitScore
 
 name eVal
-type distance knownBlastTab query target eValue
+type distance sgdBlastTab query target eValue
 
 name percentId
-type distance knownBlastTab query target identity
+type distance sgdBlastTab query target identity
 
 name pdb
 queryFull select acc,pdb from  proteome.pdbSP,uniProt.displayId where val=sp 
