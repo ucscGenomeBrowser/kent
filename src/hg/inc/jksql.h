@@ -516,4 +516,7 @@ boolean sqlIsRemote(struct sqlConnection *conn);
 void sqlWarnings(struct sqlConnection *conn, int numberOfWarnings);
 /* Show the number of warnings requested. New feature in mysql5. */
 
+void sqlDump(FILE *fh);
+/* dump internal info about SQL configuration for debugging purposes */
+
 #endif /* JKSQL_H */

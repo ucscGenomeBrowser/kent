@@ -9696,3 +9696,44 @@ hgsql mm8 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql mm8 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
+# LIFTOVER TO MM9 (RE-DONE 2010-07-24 galt)
+    mkdir /hive/data/genomes/mm8/bed/blat.mm9.2010-07-24
+    cd /hive/data/genomes/mm8/bed/blat.mm9.2010-07-24
+    # -debug run to create run dir, preview scripts...
+    #   verifies files can be found
+    doSameSpeciesLiftOver.pl -debug mm8 mm9
+    # Real run:
+    screen
+    nice doSameSpeciesLiftOver.pl -verbose=2 \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         mm8 mm9 >& do.log
+
+There was a question by jdidion on the mailing
+list in which the liftover in the 9->8 direction
+was working better than in the other direction.
+
+We found that fastMap cannot be used with queries of size greater than 5000.
+This information was known to Kate back in 2004, and was forgotten by oct 2006
+when doSameSpecies.pl was being used with query sizes of 10k chunks.
+
+I contacted Jim, and he told me make blat errAbort if the query size
+exceeds this limit when fastMap is used.  
+This will prevent problems in the future.
+I tested that this actually happens, so we know the check is working.
+CONFIRMED: New blat 34x9 does errAbort with chunk size 10k and -fastMap.
+
+Then I re-ran it with the smaller allowed sizes of 5k chunks
+which should take care of the problem.
+We will probably also need to re-run other same-species liftovers.
+
+CONFIRMED: the problem lifting reported by the user jdidion is now fixed.
+
+on hgwdev, liftOver from mm8
+chr2:22766881-22766905
+to mm9
+chr2:22770754-22770778
+now works perfectly.
+
+#############################################################################
+
+

@@ -7,7 +7,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeUwDgfGm06990Aln.bam.gz
+fileName wgEncodeUwDgfGm06990Aln.bam
+fileIndex wgEncodeUwDgfGm06990Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -64,7 +65,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeUwDgfGm06990Raw.bigWig.gz
+fileName wgEncodeUwDgfGm06990Raw.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -83,7 +84,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeUwDgfGm06990Sig.bigWig.gz
+fileName wgEncodeUwDgfGm06990Sig.bigWig
 grant Stam
 lab UW
 origAssembly hg18
@@ -101,7 +102,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeUwDgfHepg2Aln.bam.gz
+fileName wgEncodeUwDgfHepg2Aln.bam
+fileIndex wgEncodeUwDgfHepg2Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -158,7 +160,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeUwDgfHepg2Raw.bigWig.gz
+fileName wgEncodeUwDgfHepg2Raw.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -177,7 +179,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeUwDgfHepg2Sig.bigWig.gz
+fileName wgEncodeUwDgfHepg2Sig.bigWig
 grant Stam
 lab UW
 origAssembly hg18
@@ -195,7 +197,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeUwDgfK562Aln.bam.gz
+fileName wgEncodeUwDgfK562Aln.bam
+fileIndex wgEncodeUwDgfK562Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -252,7 +255,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeUwDgfK562Raw.bigWig.gz
+fileName wgEncodeUwDgfK562Raw.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -271,7 +274,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeUwDgfK562Sig.bigWig.gz
+fileName wgEncodeUwDgfK562Sig.bigWig
 grant Stam
 lab UW
 origAssembly hg18
@@ -289,7 +292,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeUwDgfSknshraAln.bam.gz
+fileName wgEncodeUwDgfSknshraAln.bam
+fileIndex wgEncodeUwDgfSknshraAln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -346,7 +350,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeUwDgfSknshraRaw.bigWig.gz
+fileName wgEncodeUwDgfSknshraRaw.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -365,7 +369,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
-fileName wgEncodeUwDgfSknshraSig.bigWig.gz
+fileName wgEncodeUwDgfSknshraSig.bigWig
 grant Stam
 lab UW
 origAssembly hg18
@@ -383,7 +387,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
-fileName wgEncodeUwDgfTh1Aln.bam.gz
+fileName wgEncodeUwDgfTh1Aln.bam
+fileIndex wgEncodeUwDgfTh1Aln.bam.bai
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
@@ -440,7 +445,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
-fileName wgEncodeUwDgfTh1Raw.bigWig.gz
+fileName wgEncodeUwDgfTh1Raw.bigWig
 grant Stam
 lab UW
 labVersion WindowDensity-bin20-win+/-75
@@ -459,7 +464,7 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
-fileName wgEncodeUwDgfTh1Sig.bigWig.gz
+fileName wgEncodeUwDgfTh1Sig.bigWig
 grant Stam
 lab UW
 origAssembly hg18
