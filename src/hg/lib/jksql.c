@@ -2535,3 +2535,48 @@ boolean sqlIsRemote(struct sqlConnection *conn)
 {
 return (conn->conn->unix_socket == NULL);
 }
+
+static void sqlDumpProfile(struct sqlProfile *sp, FILE *fh)
+/* dump one db profile */
+{
+fprintf(fh, "profile: %s host: %s user: %s dbs:", sp->name, sp->host, sp->user);
+struct slName *db;
+for (db = sp->dbs; db != NULL; db = db->next)
+    fprintf(fh, " %s", db->name);
+fputc('\n', fh);
+}
+
+static void sqlDumpConnection(struct sqlConnection *conn, FILE *fh)
+/* dump an sql connection for debugging */
+{
+fprintf(fh, "conn: profile: %s host: %s db: %s results: %d",
+        conn->profile->name, conn->conn->host, conn->conn->db, dlCount(conn->resultList));
+if (conn->hasHardLock)
+    fputs(" hardLocked", fh);
+if (conn->inCache)
+    fputs(" cached", fh);
+if (conn->isFree)
+    fputs(" free", fh);
+fputc('\n', fh);
+}
+
+void sqlDump(FILE *fh)
+/* dump internal info about SQL configuration for debugging purposes */
+{
+static char *dashes = "--------------------------------------------------------";
+fprintf(fh, "%s\n", dashes);
+fprintf(fh, "defaultProfile=%s\n", (defaultProfile != NULL) ? defaultProfile->name : "NULL");
+struct hashCookie cookie = hashFirst(profiles);
+struct hashEl *hel;
+while((hel = hashNext(&cookie)) != NULL)
+    sqlDumpProfile(hel->val, fh);
+
+cookie = hashFirst(dbToProfile);
+while((hel = hashNext(&cookie)) != NULL)
+    fprintf(fh, "db: %s profile: %s\n", hel->name, ((struct sqlProfile*)hel->val)->name);
+
+struct dlNode *connNode;
+for (connNode = sqlOpenConnections->head; !dlEnd(connNode); connNode = connNode->next)
+    sqlDumpConnection(connNode->val, fh);
+fprintf(fh, "%s\n", dashes);
+}
