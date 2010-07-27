@@ -30402,7 +30402,55 @@ knownCanonToDecipher'
     grep -v "^#" refGene.hg18ToHg19.10K.unMapped.gp \
 	| awk '{print $1}' | sort -u > 10K.genes.unMapped
 
-##############################################################################
+    #	do just the exons all by themselves:
+    featureBits hg18 refGene:exon -bed=hg18.refGene.exons.bed
+    liftOver hg18.refGene.exons.bed ../hg18ToHg19.over.chain.gz \
+	hg18ToHg19.refGene.exons.lifted.5K.bed \
+	hg18ToHg19.refGene.exons.5K.unMapped
+    liftOver hg18.refGene.exons.bed \
+	../../liftOver10K/hg18ToHg19.over.chain.gz \
+	hg18ToHg19.refGene.exons.lifted.10K.bed \
+	hg18ToHg19.refGene.exons.10K.unMapped
+    wc -l *.exons.*.unMapped
+    #	284 hg18ToHg19.refGene.exons.10K.unMapped
+    #	260 hg18ToHg19.refGene.exons.5K.unMapped
+
+    #	create custom track showing identical fragments in hg18 and hg19:
+    hgsql -e "show tables;" hg18 | grep _gold | while read T
+do
+    hgsql -N -e "select frag,fragStart,fragEnd from $T;" hg18
+done | sort > hg18.gold.frags.tab
+
+    hgsql -N -e "select frag,fragStart,fragEnd from gold;" hg19 \
+	| sort > hg19.gold.frags.tab
+
+    #	most are identical:
+    comm -12 hg18.gold.frags.tab hg19.gold.frags.tab | wc -l
+    #	26436
+    #	unique to hg18:
+    comm -23 hg18.gold.frags.tab hg19.gold.frags.tab | wc -l
+    #	705
+    #	unique to hg19:  (includes patch1 fragments)
+    comm -13 hg18.gold.frags.tab hg19.gold.frags.tab | wc -l
+    #	1126
+    hgsql -e "show tables;" hg18 | grep _gold | while read T
+do
+    hgsql -N -e "select chrom,chromStart,chromEnd,frag,0,strand from $T;" hg18
+done | sort -k4,4 > hg18.gold.bed
+
+    #	construct custom track of fragments in hg18 that are not in hg19
+    comm -23 hg18.gold.frags.tab hg19.gold.frags.tab | sort \
+	> hg18.unique.frags.tab
+    join -1 4 -2 1 hg18.gold.bed hg18.unique.frags.tab \
+	| awk '{print $2,$3,$4,$1,$5,$6}' | sort -k1,1 -k2,2n \
+	> hg18.unique.frags.bed
+    comm -12 hg18.gold.frags.tab hg19.gold.frags.tab | sort \
+	> hg18.hg19.common.frags.tab
+    join -1 4 -2 1 hg18.gold.bed hg18.hg19.common.frags.tab \
+	| awk '{print $2,$3,$4,$1,$5,$6}' | sort -k1,1 -k2,2n \
+	> hg18.hg19.common.frags.bed
+
+#############################################################################
 # LIFTOVER TO Hg17 (RE-DONE - 2010-07-26 - Hiram )
     #	preserving the previous 10K liftOver files
     cd /hive/data/genomes/hg18/bed/liftOver10K
