@@ -127,7 +127,7 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneSTK562Pabpc1RbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyRipChipView
-    	shortLabel K562 PABPC1
+    	shortLabel K562  PABPC1
     	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (PABPC1 in K562 cells)
     	subGroups view=RbpAssocRna cellType=K562 antibody=PABPC1
     	type broadPeak
