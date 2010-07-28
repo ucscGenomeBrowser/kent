@@ -1,7 +1,7 @@
 # This contains Yeast specific ordering info.
 #
 name blastp
-type pair knownBlastTab query target bitScore -1 
+type pair sgdBlastTab query target bitScore -1 
 
 name choExpn
 shortLabel Expression (Cho)

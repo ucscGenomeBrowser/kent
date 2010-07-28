@@ -5,6 +5,7 @@
 #include "hdb.h"
 #include "hui.h"
 #include "jsHelper.h"
+#include "cheapcgi.h"
 #include "htmshell.h"
 #include "imageV2.h"
 #include "hgTracks.h"
@@ -1515,8 +1516,17 @@ else if(slice->link != NULL)
         hPrintf("  <A HREF=%s",slice->link);
     else
         hPrintf("  <A HREF='%s'",slice->link);
-    if(slice->title != NULL)
-        hPrintf(" TITLE='Click for %s'", htmlEncode(slice->title) );
+    if (slice->title != NULL)
+        {
+        char *newLine = " &#x0A;";
+        if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
+            newLine = " - "; // FF does not support newline code!
+
+        if (imgTrack->reorderable && sliceType == stButton)
+            hPrintf(" TITLE='Click for:%s%s%s(drag to reorder)'", newLine,htmlEncode(slice->title),newLine );
+        else
+            hPrintf(" TITLE='Click for:%s%s'", newLine,htmlEncode(slice->title) );
+        }
     hPrintf(">\n" );
     }
 
@@ -1622,8 +1632,16 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         hPrintf("</TD>\n");
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
-        hPrintf(" <TD id='td_%s'%s>\n",name,
-            (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
+        if (imgTrack->reorderable)
+            {
+            char *newLine = " &#x0A;";
+            if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
+                newLine = " - "; // FF does not support!  Use "&#124;" for '|' instead
+
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='Drag to reorder:%s%s'>\n",name,newLine,htmlEncode(imgTrack->tdb->longLabel));
+            }
+        else
+            hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
         hPrintf("</TD>\n");
         }
