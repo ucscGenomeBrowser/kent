@@ -1921,7 +1921,9 @@ mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString("table");
 mdbObj->varHash = hashNew(0);
 hashAdd(mdbObj->varHash, mdbObj->vars->var, mdbObj->vars);
-return mdbObjAddVarPairs(mdbObj,setting);
+mdbObj = mdbObjAddVarPairs(mdbObj,setting);
+mdbObjRemoveVars(mdbObj,"tableName"); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
+return mdbObj;
 }
 
 const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
@@ -1962,10 +1964,6 @@ if(tdb)
         return metadataForTableFromTdb(tdb);  // FIXME: metadata setting in TDB is soon to be obsolete
         }
     }
-
-// FIXME: Temporary to distinguish mdb metadata from trackDb metadata:
-mdbObjRemoveVars(mdbObj,"tableName");
-
 
 return mdbObj;
 }
