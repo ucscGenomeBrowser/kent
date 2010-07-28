@@ -3955,7 +3955,7 @@ type bed 3
     visibility full
   
       track ucsfChipSeqH3K4me3BrainCoverage
-      shortLabel H3K4me3 Raw Signal
+      shortLabel H3K4me3 RawSignal
       longLabel H3K4me3 ChIP-seq Raw Signal
       parent ucsfBrainMethylViewCOV
       subGroups view=COV sampleType=Brain assayType=H3K4me3
@@ -3970,7 +3970,7 @@ type bed 3
       priority 5
   
       track ucsfMedipSeqBrainCoverage
-      shortLabel MeDIP Raw Signal
+      shortLabel MeDIP RawSignal
       longLabel MeDIP-seq Raw Signal
       parent ucsfBrainMethylViewCOV
       subGroups view=COV sampleType=Brain assayType=MeDIP2
@@ -3985,7 +3985,7 @@ type bed 3
       priority 6
   
       track ucsfRnaSeqBrainSmartCoverage
-      shortLabel Smart Raw Signal
+      shortLabel Smart RawSignal
       longLabel RNA-seq Smart-Tagged Raw Signal
       parent ucsfBrainMethylViewCOV
       subGroups view=COV sampleType=Brain assayType=RNA2
@@ -4000,7 +4000,7 @@ type bed 3
       priority 7
   
       track ucsfRnaSeqBrainAllCoverage
-      shortLabel RNA-seq Raw Signal
+      shortLabel RNA-seq RawSignal
       longLabel RNA-seq Raw Signal
       parent ucsfBrainMethylViewCOV
       subGroups view=COV sampleType=Brain assayType=RNA1
