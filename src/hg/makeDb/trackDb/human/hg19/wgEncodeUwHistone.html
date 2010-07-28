@@ -19,9 +19,10 @@ For each cell type, this track contains the following views:
 <DD> ChIP-seq affinity zones identified using the HotSpot algorithm.
 <DT><I>Peaks</I>
 <DD> ChIP-seq affinity sites identified as signal peaks within
-FDR 0.5% hypersensitive zones.
+FDR 1.0% affinity zones.
 <DT><I>Raw Signal</I>
-<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+<DD> The density of tags mapping within a 150 bp sliding window
+(at a 20 bp step across the genome).
 </DL>
 <H2>Methods</H2>
 
@@ -40,12 +41,16 @@ by phenol-chloroform-isoamyl alcohol extraction and ethanol precipitation.
 20-50 ng of ChIP DNA was end-repaired, followed by the addition of adenine,
 ligated to Illumina adapters and made in to Solexa library for sequencing.
 <P>
-The sequencing reads uniquely mapping
-to the hg18 reference human genome were then scored using a scan statistic based
-on the binomial distribution.  Regions of significant tag enrichment
-(significance being gauged using an FDR procedure based on randomly generated
-data) were then resolved into 150 bp peaks called on a continuous, sliding window
-tag density representation of the data (Sabo et al., 2004).
+ChIP-seq affinity is directly reflected in
+raw tag density (<I>Raw Signal</I>), which is shown in the track as density of tags
+mapping within a 150 bp sliding window (at a 20 bp step across the genome).
+ChIP-seq affinity zones (<I>HotSpots</I>) were identified using the
+HotSpot algorithm described in Sabo <EM>et al.</EM> (2004).
+1.0% false discovery rate thresholds (FDR 0.01) were computed for each cell type by
+applying the HotSpot algorithm to an equivalent number of random
+uniquely mapping 36mers. ChIP-Seq affinity  <I>Peaks</I>)
+were identified as signal peaks within FDR 1.0% hypersensitive
+zones using a peak-finding algorithm.
 </P>
 
 <H2>Verification</H2>
