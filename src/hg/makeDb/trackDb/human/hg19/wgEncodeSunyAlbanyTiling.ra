@@ -1,7 +1,7 @@
 track wgEncodeSunyAlbanyTiling
 compositeTrack on
 shortLabel SUNY Tiling
-longLabel ENCODE SUNY Albany (Tenenbaum Lab) RBP Associated RNA by Tiling Array
+longLabel ENCODE SUNY Albany (Tenenbaum) RBP Associated RNA by Tiling Array
 group regulation
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA 
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562

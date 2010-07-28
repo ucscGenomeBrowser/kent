@@ -96,6 +96,100 @@ char *cgiUserAgent()
 return getenv("HTTP_USER_AGENT");
 }
 
+enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs, char **clientOsQualifier)
+/* Return client browser type determined from (HTTP_USER_AGENT)
+   Optionally requuest the additional info about the client */
+{
+// WARNING: The specifics of the HTTP_USER_AGENT vary widely.
+//          This has only been tested on a few cases.
+static enum browserType clientBrowser = btUnknown;
+static enum browserType clientOsType  = osUnknown;
+static char *clientBrowserExtra       = NULL;
+static char *clientOsExtra            = NULL;
+
+if (clientBrowser == btUnknown)
+    {
+    char *userAgent = cgiUserAgent();
+    if (userAgent != NULL)
+        {
+        //warn(userAgent);  // Use this to investigate other cases
+        char *ptr=NULL;
+
+        // Determine the browser
+        if ((ptr = stringIn("Opera",userAgent)) != NULL) // Must be before IE
+            {
+            clientBrowser = btOpera;
+            }
+        else if ((ptr = stringIn("MSIE ",userAgent)) != NULL)
+            {
+            clientBrowser = btIE;
+            ptr += strlen("MSIE ");
+            clientBrowserExtra = cloneFirstWordByDelimiter(ptr,';');
+            }
+        else if ((ptr = stringIn("Firefox",userAgent)) != NULL)
+            {
+            clientBrowser = btFF;
+            ptr += strlen("(Firefox/");
+            clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
+            }
+        else if ((ptr = stringIn("Chrome",userAgent)) != NULL)  // Must be before Safari
+            {
+            clientBrowser = btChrome;
+            ptr += strlen("Chrome/");
+            clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
+            }
+        else if ((ptr = stringIn("Safari",userAgent)) != NULL)
+            {
+            clientBrowser = btSafari;
+            ptr += strlen("Safari/");
+            clientBrowserExtra = cloneFirstWordByDelimiter(ptr,' ');
+            }
+        else
+            {
+            clientBrowser = btOther;
+            }
+
+        // Determine the OS
+        if ((ptr = stringIn("(Windows",userAgent)) != NULL)
+            {
+            clientOsType = osWindows;
+            ptr += strlen("Windows ");
+            clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
+            }
+        else if (stringIn("Linux",userAgent) || stringIn("(X11)",userAgent))
+            {
+            clientOsType = osLinux;
+            }
+        else if (stringIn("Mac",userAgent))
+            {
+            clientOsType = osMac;
+            }
+        else
+            {
+            clientOsType = osOther;
+            }
+        }
+    }
+if (browserQualifier != NULL)
+    {
+    if (clientBrowserExtra != NULL)
+        *browserQualifier = cloneString(clientBrowserExtra);
+    else
+        *browserQualifier = NULL;
+    }
+if (clientOs != NULL)
+    *clientOs = clientOsType;
+if (clientOsQualifier != NULL)
+    {
+    if (clientOsExtra != NULL)
+        *clientOsQualifier = cloneString(clientOsExtra);
+    else
+        *clientOsQualifier = NULL;
+    }
+
+return clientBrowser;
+}
+
 char *_cgiRawInput()
 /* For debugging get the unprocessed input. */
 {
