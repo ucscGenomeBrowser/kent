@@ -131,6 +131,19 @@ zeroBytes(mg->pixels, mg->width*mg->height);
 #endif
 }
 
+void mgClearPixelsTrans(struct memGfx *mg)
+/* Set all pixels to transparent. */
+{
+#ifdef COLOR32
+unsigned *ptr = mg->pixels;
+unsigned *lastPtr = &mg->pixels[mg->width * mg->height];
+for(; ptr < lastPtr; ptr++)
+    *ptr = 0xffffff;  // transparent white
+#else
+zeroBytes(mg->pixels, mg->width*mg->height);
+#endif
+}
+
 Color mgFindColor(struct memGfx *mg, unsigned char r, unsigned char g, unsigned char b)
 /* Returns closest color in color map to rgb values.  If it doesn't
  * already exist in color map and there's room, it will create

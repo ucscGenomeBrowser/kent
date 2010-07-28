@@ -1355,6 +1355,7 @@ for(ii=0; ii < head->n_targets; ii++)
     int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
 
     bd->chrom = head->target_name[ii];
+    verbose(2,"asking for alignments on %s\n",bd->chrom);
     ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
 
     }
