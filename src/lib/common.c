@@ -1677,7 +1677,7 @@ if(s != NULL)
     {
     char *beyond = NULL;
     if(delimit == ' ')
-        beyond = skipLeadingSpaces(skipToSpaces(s));
+        return skipLeadingSpaces(skipToSpaces(s));
     else
         beyond = strchr(s,delimit);
     if(beyond != NULL)
