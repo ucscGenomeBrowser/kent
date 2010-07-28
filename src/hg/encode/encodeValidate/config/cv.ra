@@ -2296,13 +2296,68 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+term 3134
+tag 3143
+type Cell Line
+organism Mouse
+tissue Mammary
+category Cell Line
+description Mammary
+vendorName
+termId 7035
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+color 153,38,0
+sex M
+protocol
+
+term 416B
+tag 416B
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description myeloid progenitor cells, CD34+
+vendorName
+termId 7043
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
+color 153,38,0
+sex M
+protocol
+
+term AtT-20
+tag AtT20
+type Cell Line
+organism Mouse
+tissue Cortex 
+category Cell Line
+description Pituitary tumor LAF1 
+vendorName ATCC
+termId 7087
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
+color 153,38,0
+sex M
+protocol
+
+term B-cell_(CD19+)
+tag BCellCD19p
+type Cell Line
+organism Mouse
+tissue Blood 
+category Cell Line
+description B Cell , CD19+
+vendorName
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol
+
 term BoneMarrow
 tag BoneMarrow
 type Cell Line
 organism Mouse
 tissue Bone
 category Tissue
-#category T
 description Bone Marrow
 vendorName LICR lab
 termId 6943
@@ -2317,7 +2372,6 @@ type Cell Line
 organism Mouse
 tissue Cerebellum
 category Tissue
-#category T
 description Cerebellum
 vendorName LICR lab
 termId 7012
@@ -2326,13 +2380,26 @@ color 153,38,0
 sex U
 protocol LICR:Cerebellum_Ren_protocol.pdf
 
+term Cerebrum
+tag Cerebrumm
+type Cell Line
+organism Mouse
+tissue Cerebrum
+category Tissue
+description Cerebrum
+vendorName UW Lab
+termId 
+termUrl
+color 153,38,0
+sex U
+protocol 
+
 term CH12
 tag CH12
 type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description B-cell lymphoma (GM12878 analog)
 vendorName Weissman lab
 vendorId
@@ -2345,13 +2412,33 @@ color 153,38,0
 sex U
 protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
+term ES-CJ7
+tag ESCJ7
+type Cell Line
+organism Mouse
+tissue
+category Primary Cells
+description ES-cells were originally
+isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal
+lethality and defects in hindbrain development in mice homozygous for a
+targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
+Genes Dev. 1993 Nov;7(11):2071-84.)
+vendorName Uw lab
+vendorId
+orderUrl
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol
+
+
 term Colon
 tag Colon
 type Cell Line
 organism Mouse
 tissue Colon
 category Tissue
-#category T
 description Colon
 vendorName LICR lab
 termId 6984
@@ -2366,7 +2453,6 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Tissue
-#category T
 description Cortex
 vendorName LICR lab
 termId 4465
@@ -2375,13 +2461,27 @@ color 153,38,0
 sex U
 protocol LICR:Cortex_Ren_protocol.pdf
 
+term Fibroblast
+tag Fibroblast
+type Cell Line
+organism Mouse
+tissue Lung
+category Tissue
+description Fribroblast
+vendorName UW lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol 
+
+
 term G1E
 tag G1E
 type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description Gata1- erythroid progenitor
 vendorName Mitch Weiss lab
 orderUrl
@@ -2400,7 +2500,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
 vendorName Mitch Weiss lab
 orderUrl
@@ -2419,7 +2518,6 @@ type Cell Line
 organism Mouse
 tissue Heart
 category Tissue
-#category T
 description Heart
 vendorName LICR lab
 termId 7103
@@ -2428,13 +2526,26 @@ color 153,38,0
 sex U
 protocol LICR:Heart_Ren_protocol.pdf
 
+term Kidney
+tag Kidney
+type Cell Line
+organism Mouse
+tissue Kidney
+category Tissue
+description Kidney
+vendorName UW lab
+termId 
+termUrl
+color 153,38,0
+sex U
+protocol
+
 term Limb
 tag Limb
 type Cell Line
 organism Mouse
 tissue Limb
 category Tissue
-#category T
 description Limb
 vendorName LICR lab
 termId 7127
@@ -2450,11 +2561,10 @@ type Cell Line
 organism Mouse
 tissue Liver
 category Tissue
-#category T
 description Liver
 vendorName LICR lab
 termId 6963
-ermUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
 protocol LICR:Liver_Ren_protocol.pdf
@@ -2465,7 +2575,6 @@ type Cell Line
 organism Mouse
 tissue Lung
 category Tissue
-#category T
 description Lung
 vendorName LICR lab
 termId 6948
@@ -2474,14 +2583,14 @@ color 153,38,0
 sex U
 protocol LICR:Lung_Ren_protocol.pdf
 
+
 term MEF
 tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
 category Primary Cells
-#category P
-description MEF
+description Mouse Embryonic Fibroblast
 vendorName LICR lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -2496,7 +2605,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Primary Cells
-#category P
 description Megakaryocyte
 vendorName Mitch Weiss lab
 orderUrl
@@ -2515,7 +2623,6 @@ tag MEL
 type Cell Line
 organism Mouse
 category Cell Line
-#category L
 description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
@@ -2529,7 +2636,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description Myocyte
 vendorName
 orderUrl
@@ -2545,7 +2651,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Tissue
-#category T
 description Muscle
 vendorName
 orderUrl
@@ -2562,7 +2667,6 @@ type Cell Line
 organism Mouse
 tissue OlfactoryBulb
 category Tissue
-#category T
 description Olfactory Bulb
 vendorName LICR lab
 termId 7015
@@ -2577,7 +2681,6 @@ type Cell Line
 organism Mouse
 tissue Pancreas
 category Tissue
-#category T
 description Pancreas
 vendorName LICR lab
 termId 7015
@@ -2592,7 +2695,6 @@ type Cell Line
 organism Mouse
 tissue Placenta
 category Tissue
-#category T
 description Placenta
 vendorName LICR lab
 termId 6957
@@ -2609,7 +2711,6 @@ type Cell Line
 organism Mouse
 tissue SmallIntestine
 category Tissue
-#category T
 description Small Intestine
 vendorName LICR lab
 termId 6978
@@ -2624,7 +2725,6 @@ type Cell Line
 organism Mouse
 tissue Spleen
 category Tissue
-#category T
 description Spleen
 vendorName LICR lab
 termId 7038
@@ -2639,7 +2739,6 @@ type Cell Line
 organism Mouse
 tissue Testis
 category Tissue
-#category T
 description Testis
 vendorName LICR lab
 termId 9201
@@ -2654,7 +2753,6 @@ type Cell Line
 organism Mouse
 tissue Thymus
 category Tissue
-#category T
 description Thymus
 vendorName LICR lab
 termId 7037
@@ -2662,6 +2760,35 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
 protocol LICR:Thymus_Ren_protocol.pdf
+
+term T-Naive
+tag TNaive
+type Cell Line
+organism Mouse
+tissue Blood
+category Tissue
+description Naive T cells: CD4+, CD25-
+vendorName UW lab
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 153,38,0
+sex U
+protocol 
+
+term WholeBrain
+tag WholeBrain
+type Cell Line
+organism Mouse
+tissue Brain
+category Tissue
+description Whole Brain
+vendorName UW lab
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol LICR:Thymus_Ren_protocol.pdf
+
 
 
 # Gene types
@@ -5386,6 +5513,12 @@ type version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+
+term C3H
+tag C3H
+type strain
+description Strain C3H, Very related to C57BL/6
+
 term C57BL/6
 tag C57BL6
 type strain
@@ -5406,6 +5539,7 @@ description Strain 129, has widely available embryonic stem cells
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
 
+term E0
 term E11.5
 tag E11half
 type age
@@ -5442,7 +5576,6 @@ type age
 Stage Adult
 description Adult 8 weeks
 
-### Sex
 # Expected fields:
 # ----------------
 # term (human-readable name)
