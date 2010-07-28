@@ -5540,6 +5540,11 @@ description Strain 129, has widely available embryonic stem cells
 # description (human-readable description.  Can't say where/how it's used)
 
 term E0
+tag E0
+type age
+stage Embryonic
+description Embyonic day 0 (stem cell)
+
 term E11.5
 tag E11half
 type age
