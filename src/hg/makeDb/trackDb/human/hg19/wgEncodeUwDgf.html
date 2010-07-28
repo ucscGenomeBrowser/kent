@@ -39,7 +39,7 @@ For each cell type, this track contains the following views:
 <DD> DNaseI hypersensitive zones identified using the HotSpot algorithm.
 <DT><I>Peaks</I>
 <DD> DNaseI hypersensitive sites (DHSs) identified as signal peaks within 
-FDR 0.5% hypersensitive zones.
+FDR 1.0% hypersensitive zones.
 <!-- footprint track is expected in the future
 <DT><I>Footprint</I>
 <DD>While the HotSpots algorithm identifies
@@ -50,11 +50,13 @@ identified HotSpot regions.
 </DT>
 -->
 </h2><DT><I>Signal</I>
-<DD>The density of tags mapping within a 150 bp sliding window
-(at a 20 bp step across the genome).
+<DD> Cut-counts. Per-base count of tas whose 5' end 
+(corresponding to a DNaseI-induced DNA cut) coincidees 
+with the given position. (Exact Verbiage to be determined)
 </DT>
 <DT><I>Raw Signal</I>
-<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+<DD>The density of tags mapping within a 150 bp sliding window
+(at a 20 bp step across the genome).
 </DL>
 <P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM> 
 cleavage sites across the genome mapped using the Digital DNaseI methodology 
@@ -79,10 +81,10 @@ in the track as density of tags mapping within a 150 bp sliding window
 (at a 20 bp step across the genome).  DNaseI hypersensitive zones
 (<I>HotSpots</I>) were identified using the HotSpot algorithm
 described in Sabo <EM>et al.</EM> (2004).  False discovery rate thresholds 
-of 0.5% (FDR 0.005) were computed for each cell type by applying
+of 1.0% (FDR 0.01) were computed for each cell type by applying
 the HotSpot algorithm to an equivalent number of random uniquely
 mapping 36-mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>)
-were identified as signal peaks within 0.5% (FDR 0.005) hypersensitive zones
+were identified as signal peaks within 1.0% (FDR 0.01) hypersensitive zones
 using a peak-finding algorithm.  Only DNase Solexa libraries from unique
 cell types producing the highest quality data, as defined by Percent
 Tags in Hotspots (PTIH ~40%) were designated for deep sequencing to a depth
@@ -136,7 +138,6 @@ Hall R, Mack J, Dorschner M <EM>et al</EM>.
 <A TARGET=_BLANK HREF="http://www.pnas.org/content/101/48/16837">
 Discovery of functional noncoding elements by digital analysis of chromatin structure.</A>
 <EM>Proc Natl Acad Sci U S A</EM>. 2004 Nov 30;101(48):16837-42.</P>
-
 
 <H2> Data Release Policy </H2>
 
