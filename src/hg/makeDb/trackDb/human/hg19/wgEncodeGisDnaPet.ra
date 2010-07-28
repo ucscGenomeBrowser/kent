@@ -24,9 +24,9 @@ wgEncode 1
 
         track wgEncodeGisDnaPetK562F10kAln
         release alpha
-        parent wgEncodeGisDnaPetViewAlignments
-        shortLabel K562 Aln
-        longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+        parent wgEncodeGisDnaPetViewAlignments on
+        shortLabel K562 10k
+        longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
         subGroups view=Alignments cellType=K562 fragSize=2-10k
         type bam
         color 46,0,184
@@ -35,9 +35,9 @@ wgEncode 1
 
         track wgEncodeGisDnaPetK562F1kAln
         release alpha
-        parent wgEncodeGisDnaPetViewAlignments
-        shortLabel K562 Aln
-        longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel K562 1k
+        longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
         subGroups view=Alignments cellType=K562 fragSize=0-1k
         type bam
         color 46,0,184
@@ -46,9 +46,9 @@ wgEncode 1
 
         track wgEncodeGisDnaPetGm12878F10kAln
         release alpha
-        parent wgEncodeGisDnaPetViewAlignments
-        shortLabel GM12878 Aln
-        longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+        parent wgEncodeGisDnaPetViewAlignments on
+        shortLabel GM12878 10k
+        longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 fragSize=2-10k
         type bam
         color 153,38,0
@@ -57,9 +57,9 @@ wgEncode 1
 
         track wgEncodeGisDnaPetK562F20kAln
         release alpha
-        parent wgEncodeGisDnaPetViewAlignments
-        shortLabel K562 Aln
-        longLabel ENCODE GIS DNA PET Alignments (in K562 cells)
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel K562 20k
+        longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
         subGroups view=Alignments cellType=K562 fragSize=3-f20k
         type bam
         color 46,0,184
@@ -68,9 +68,9 @@ wgEncode 1
 
         track wgEncodeGisDnaPetGm12878F5kAln
         release alpha
-        parent wgEncodeGisDnaPetViewAlignments
-        shortLabel GM12878 Aln
-        longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel GM12878 5k
+        longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 fragSize=1-5k
         type bam
         color 153,38,0
@@ -79,9 +79,9 @@ wgEncode 1
 
         track wgEncodeGisDnaPetGm12878F1kAln
         release alpha
-        parent wgEncodeGisDnaPetViewAlignments
-        shortLabel GM12878 Aln
-        longLabel ENCODE GIS DNA PET Alignments (in GM12878 cells)
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel GM12878 1k
+        longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 fragSize=0-1k
         type bam
         color 153,38,0
