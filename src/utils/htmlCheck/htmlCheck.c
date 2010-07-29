@@ -323,7 +323,7 @@ struct htmlCookie *cookies = NULL;
 
 if (cookieFile != NULL)
     cookies = readCookies(cookieFile);
-    fullText = htmlSlurpWithCookies(url, cookies);
+fullText = htmlSlurpWithCookies(url, cookies);
 if (sameString(command, "getAll"))
     mustWrite(stdout, fullText, strlen(fullText));
 else if (sameString(command, "ok"))
