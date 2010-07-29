@@ -45,6 +45,7 @@ char alpha[256];
 char csSeqName[256];
 char bedTypeCols[10];
 struct twoBitFile *genome = NULL;
+int mismatchTotalQuality;
 int mismatches;
 int matchFirst=0;
 int mmCheckOneInN;
@@ -92,6 +93,7 @@ errAbort(
   "                                  in .2bit file\n"
   "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if \n"
   "                                  validating tagAlign or pairedTagAlign files\n"
+  "   -mismatchTotalQuality=n      Maximum total quality score at mismatching positions\n"
   "   -matchFirst=n                only check the first N bases of the sequence\n"
   "   -mmPerPair                   Check either pair dont exceed mismatch count if validating\n"
   "                                  pairedTagAlign files (default is the total for the pair)\n"
@@ -120,6 +122,7 @@ static struct optionSpec options[] = {
    {"maxErrors", OPTION_INT},
    {"colorSpace", OPTION_BOOLEAN},
    {"zeroSizeOk", OPTION_BOOLEAN},
+   {"mismatchTotalQuality", OPTION_INT},
    {"printOkLines", OPTION_BOOLEAN},
    {"printFailLines", OPTION_BOOLEAN},
    {"genome", OPTION_STRING},
@@ -1135,7 +1138,7 @@ struct bamCallbackData
     int numPos;
     };
 
-boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, unsigned int *cigarPacked, int nCigar)
+boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, UBYTE* quals, unsigned int *cigarPacked, int nCigar)
 {
 static char cacheChrom[1024];
 static struct dnaSeq *cacheSeq = NULL;
@@ -1160,6 +1163,7 @@ if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
 
 int curPosGenome = chromStart;
 int i, j;
+int mmTotalQual = 0;
 int mm = 0;
 char dna[10000], *dnaPtr = dna;
 for (i = 0;   (i < nCigar);  i++)
@@ -1218,16 +1222,21 @@ else
 for (i = start; (strand == '-') ? i >= 0 : i < strlen(seq); i += incr)
     {
     char c = tolower(seq[i]);
-    if ((dna[i] != '-') && (checkMismatch(c,  dna[i])))
+    if ((dna[i] != '-') && (checkMismatch(c,  dna[i]))) 
+        {
         ++mm;
+        if (quals)
+            mmTotalQual += min( round( quals[i] / 10 ) * 10, 30 );
+        }
 
     if (--length == 0)
         break;
     }
 
 
-if (mm > mismatches)
+if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality)))
     {
+    assert(checkLength < 10000);
     char match[10000];
 
     for(i = 0; i < strlen(seq); i++)
@@ -1238,11 +1247,24 @@ if (mm > mismatches)
             match[i] = 'x';
         }
     match[i] = 0;
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
-         file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+
+    if (mm > mismatches)
+        {
+        warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+            file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+        }
+
+    if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
+        {
+        char squal[10000];
+        for (i = 0; i < checkLength; i++)
+            squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
+
+        warn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+            file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+        }        
     return FALSE;
     }
-
 return TRUE;
 }
 
@@ -1255,15 +1277,19 @@ char *chrom = bd->chrom;
 char *file = bd->file;
 int *errs = bd->errs;
 const bam1_core_t *core = &bam->core;
-
 unsigned int *cigarPacked = bam1_cigar(bam);
 char *query = bamGetQuerySequence(bam, FALSE);
 char strand = bamIsRc(bam) ? '-' : '+';
+UBYTE *queryQuals = NULL;
+
 bd->numAligns++;
 
 if (core->flag &  BAM_FUNMAP)
     // read is unmapped... ignore
     return 0;
+
+if ( mismatchTotalQuality)
+    queryQuals = bamGetQueryQuals(bam, FALSE);
 
 if (bam->core.l_qseq == 0)
     {
@@ -1271,7 +1297,8 @@ if (bam->core.l_qseq == 0)
     if (++(*errs) >= maxErrors)
         errAbort("Aborting .. found %d errors\n", *errs);
     }
-else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
+else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, 
+            strand, query, queryQuals, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
     warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
@@ -1455,6 +1482,7 @@ genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) :
 mismatches     = optionInt("mismatches",0);
 matchFirst     = optionInt("matchFirst",0);
 mmPerPair      = optionExists("mmPerPair");
+mismatchTotalQuality = optionInt("mismatchTotalQuality",0);
 nMatch         = optionExists("nMatch");
 privateData    = optionExists("privateData");
 isSort         = optionExists("isSort");
