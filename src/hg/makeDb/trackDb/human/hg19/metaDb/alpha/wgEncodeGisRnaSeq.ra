@@ -4,13 +4,14 @@ cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-03
+dateResubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
 fileIndex wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai
+fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -24,12 +25,13 @@ cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-03
+dateResubmitted 2010-07-03
 dateUnrestricted 2011-04-03
 fileName wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -43,12 +45,13 @@ cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-03
+dateResubmitted 2010-07-03
 dateUnrestricted 2011-04-03
 fileName wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -62,13 +65,14 @@ cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-03
+dateResubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
 fileIndex wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.bai
+fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -82,12 +86,13 @@ cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-03
+dateResubmitted 2010-07-03
 dateUnrestricted 2011-04-03
 fileName wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -101,12 +106,13 @@ cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-03
+dateResubmitted 2010-07-03
 dateUnrestricted 2011-04-03
 fileName wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -120,13 +126,14 @@ cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-01
+dateResubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
 fileIndex wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.bai
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -140,13 +147,14 @@ cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-01
+dateResubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
 fileIndex wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam.bai
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -160,12 +168,13 @@ cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-01
+dateResubmitted 2010-07-01
 dateUnrestricted 2011-04-01
 fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -179,12 +188,13 @@ cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-01
+dateResubmitted 2010-07-01
 dateUnrestricted 2011-04-01
 fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -198,12 +208,13 @@ cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-01
+dateResubmitted 2010-07-01
 dateUnrestricted 2011-04-01
 fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -217,12 +228,13 @@ cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-01
+dateResubmitted 2010-07-01
 dateUnrestricted 2011-04-01
 fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -230,4 +242,4 @@ subId 1401
 tableName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2
 view PlusRawSignal
 
-# MAGIC: -281948149
+# MAGIC: -1000298319
