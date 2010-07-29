@@ -6,7 +6,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
         hgGateway hgGene hgGenome hgPcr hgSession hgSuggest hgTables hgTracks \
 	hgTrackUi hgc cartDump near/hgNear \
 	protein/pbGateway protein/pbTracks protein/pbGlobal \
-	hgLiftOver useCount visiGene/hgVisiGene \
+	hgLiftOver visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab phyloGif hgCustom hgPal \
 	makeDb/hgCgiData js
