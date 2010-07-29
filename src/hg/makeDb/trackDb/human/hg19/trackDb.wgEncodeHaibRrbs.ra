@@ -1,4 +1,4 @@
-# HAIB Methyl RRBS (wrangler: braney)
+# HAIB Methyl RRBS (wrangler:vsmalladi taken over from cricket and braney)
 track wgEncodeHaibMethylRrbs
 compositeTrack on
 shortLabel HAIB Methyl RRBS
@@ -11,7 +11,7 @@ subGroup4 treatment Treatmenet None=None
 subGroup5 protocol Growth_Protocol uwStamGrowProt=UW_Stam_Growth_Protocol hudsonAlphaGrowProt=HudsonAlpha_Growth_Protocol openChromGrowProt=Open_Chromatin_Growth_Protocol YaleGrowProt=Yale_TFBS_Growth_Protocol
 dimensions dimensionX=protocol dimensionY=cellType dimensionZ=rep 
 sortOrder cellType=+ protocol=+ rep=+
-controlledVocabulary encode/cv.ra cellType treatment protocol
+controlledVocabulary encode/cv.ra cellType=cell treatment=treatment protocol=protocol
 dragAndDrop subTracks
 # visibilityViewDefaults  Sites=hide
 priority 0
