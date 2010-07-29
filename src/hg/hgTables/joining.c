@@ -387,7 +387,7 @@ static void orderFieldsInTable(struct tableJoiner *tj)
 /* Rearrange order of fields in tj->fieldList so that 
  * they are the same as the order in the database. */
 {
-struct sqlConnection *conn = sqlConnect(tj->database);
+struct sqlConnection *conn = hAllocConn(tj->database);
 char *splitTable = chromTable(conn, tj->table);
 struct hash *fieldHash = hashNew(0);
 struct slName *field, *fieldList = sqlListFields(conn, splitTable);
@@ -396,7 +396,7 @@ struct joinerDtf *dtf, *newList = NULL;
 /* Build up hash of field names. */
 for (dtf = tj->fieldList; dtf != NULL; dtf = dtf->next)
     hashAdd(fieldHash, dtf->field, dtf);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 
 /* Build up new list in correct order. */
 for (field = fieldList; field != NULL; field = field->next)
@@ -584,7 +584,7 @@ struct slRef *ref;
 struct joinerPair *jp;
 int fieldCount = 0, keyCount = 0;
 int idFieldIx = -1;
-struct sqlConnection *conn = sqlConnect(tj->database);
+struct sqlConnection *conn = hAllocConn(tj->database);
 char *identifierFilter = NULL;
 char *filter;
 boolean needUpdateFilter = FALSE;
@@ -694,7 +694,7 @@ if (needUpdateFilter)
 	}
     }
 tj->loaded = TRUE;
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 	
 struct joinedTables *tjLoadFirst(struct region *regionList,
@@ -983,7 +983,7 @@ boolean doJoin = joinRequired(primaryDb, primaryTable,
 
 if (! doJoin)
     {
-    struct sqlConnection *conn = sqlConnect(dtfList->database);
+    struct sqlConnection *conn = hAllocConn(dtfList->database);
     struct dyString *dy = dyStringNew(0);
     
     if (hIsBigBed(database, dtfList->table, NULL, ctLookupName))
@@ -993,7 +993,7 @@ if (! doJoin)
     else
 	makeDbOrderedCommaFieldList(conn, dtfList->table, dtfList, dy);
     doTabOutTable(dtfList->database, dtfList->table, f, conn, dy->string);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 else
     {

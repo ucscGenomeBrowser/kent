@@ -170,6 +170,18 @@ for (i=0; i<motif->columnCount; ++i)
 return p;
 }
 
+static float dnaMotifSequenceProbWithMark0(struct dnaMotif *motif, DNA *dna, double mark0[5])
+{
+float p = 1.0;
+int i;
+for (i=0; i<motif->columnCount; ++i)
+    {
+    int val = ntVal[(int) dna[i]] + 1;
+    p *= (mark0[val]/mark0[0]);
+    }
+return p;
+}
+
 static float dnaMotifSequenceProbLog(struct dnaMotif *motif, DNA *dna)
 {
 float p = 0;
@@ -225,6 +237,15 @@ double dnaMotifBitScore(struct dnaMotif *motif, DNA *dna)
 {
 double p = dnaMotifSequenceProb(motif, dna);
 double q = pow(0.25, motif->columnCount);
+double odds = p/q;
+return logBase2(odds);
+}
+
+double dnaMotifBitScoreWithMark0Bg(struct dnaMotif *motif, DNA *dna, double mark0[5])
+/* Return logBase2-odds score of dna given a probabalistic motif and using a 0-order markov model for the background. */
+{
+double p = dnaMotifSequenceProb(motif, dna);
+double q = dnaMotifSequenceProbWithMark0(motif, dna, mark0);
 double odds = p/q;
 return logBase2(odds);
 }

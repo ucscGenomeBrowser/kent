@@ -56,6 +56,12 @@ module PipelineBackground
     timeout = projectType['time_out']
 
     exitCode = run_with_timeout(cmd, timeout)
+
+    if exitCode == -1
+      ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/validate_error"
+      run_with_timeout(ecmd, 60)
+    end
+
     # Try to avoid error "Lost connection to MySQL server during query"
     ActiveRecord::Base.verify_active_connections!
 
@@ -94,6 +100,12 @@ module PipelineBackground
     timeout = projectType['load_time_out']
 
     exitCode = run_with_timeout(cmd, timeout)
+
+    if exitCode == -1
+      ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/load_error"
+      run_with_timeout(ecmd, 60)
+    end
+
     # Try to avoid error "Lost connection to MySQL server during query"
     ActiveRecord::Base.verify_active_connections!
 
@@ -140,6 +152,11 @@ module PipelineBackground
       #logger.info "GALT! cmd=#{cmd} timeout=#{timeout}"
 
       exitCode = run_with_timeout(cmd, timeout)
+
+      if exitCode == -1
+        ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/unload_error"
+        run_with_timeout(ecmd, 60)
+      end
 
       if exitCode == 0
         if project.project_archives.length == 0
@@ -242,6 +259,12 @@ module PipelineBackground
 
       timeout = 72000  # 20 hours
       exitCode = run_with_timeout(cmd, timeout)
+
+      if exitCode == -1
+        ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/upload_error"
+        run_with_timeout(ecmd, 60)
+      end
+
       if exitCode != 0
         new_status project, "upload failed"
         # send email notification
@@ -436,8 +459,13 @@ module PipelineBackground
     Dir.mkdir(uploadDir,0775)
 
     cmd = makeUnarchiveCommand(project, uploadDir, filename)
-    timeout = 3600
+    timeout = 36000
     exitCode = run_with_timeout(cmd, timeout)
+
+    if exitCode == -1
+      ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/upload_error"
+      run_with_timeout(ecmd, 60)
+    end
 
     if exitCode != 0
       return false

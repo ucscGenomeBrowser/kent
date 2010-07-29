@@ -291,7 +291,7 @@ my $ok = GetOptions("fileType=s",
                     );
 usage() if (!$ok);
 $opt_verbose = 1 if (!defined $opt_verbose);
-my $fileMask = "*.gz *.bb *.bw *.bam";
+my $fileMask = "*.gz *.bb *.bigWig *.bam *.bai";
    $fileMask = $opt_fileType if(defined $opt_fileType);
 
 my $preamble = "preamble.html";
@@ -469,6 +469,9 @@ for my $line (@fileList) {
                         }
                     }
                     $tix++;
+                }
+                if ($fileName =~ m/bai$/) {
+                    $metaData{type} = "bai";
                 }
                 if($metaData{type}) {
                     unshift @tags, "type"; # push values onto the front

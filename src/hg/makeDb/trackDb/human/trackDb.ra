@@ -3485,9 +3485,9 @@ type bed 4 +
 
 track darned
 shortLabel Human RNA Editing
-longLabel Human RNA Editing from the DAtabase of RNa-EDiting
-group varRep
-priority 200
+longLabel Human RNA Editing from the DAtabase of RNa EDiting
+group rna
+priority 300
 visibility hide
 itemRgb on
 noScoreFilter .

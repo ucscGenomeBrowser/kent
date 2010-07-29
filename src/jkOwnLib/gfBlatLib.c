@@ -1479,7 +1479,7 @@ void gfLongDnaInMem(struct dnaSeq *query, struct genoFind *gf,
  * together again. */
 {
 int hitCount;
-int maxSize = 5000;
+int maxSize = MAXSINGLEPIECESIZE;
 int preferredSize = 4500;
 int overlapSize = 250;
 struct dnaSeq subQuery = *query;

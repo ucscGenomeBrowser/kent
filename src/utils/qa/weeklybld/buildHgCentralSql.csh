@@ -62,7 +62,7 @@ endif
 
 # push to hgdownload
 ssh -n qateam@hgdownload "rm /mirrordata/apache/htdocs/admin/hgcentral.sql"
-scp -p /usr/local/apache/htdocs/admin/hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
+scp -p hgcentral.sql qateam@hgdownload:/mirrordata/apache/htdocs/admin/
 
 echo
 echo "A new hgcentral.sql file should now be present at:"

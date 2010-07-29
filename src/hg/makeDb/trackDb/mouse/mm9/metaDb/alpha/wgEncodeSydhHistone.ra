@@ -1,29 +1,530 @@
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=JunD setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1126 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12JundIggrabPk fileName=wgEncodeSydhTfbsCh12JundIggrabPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=E2F4 treatment=None control=IgG-rab setType=exp inputType=CH12/None/Input/IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1153 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12E2f4IggrabPk fileName=wgEncodeSydhTfbsCh12E2f4IggrabPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Pol2 setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1155 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12Pol2IggmusPk fileName=wgEncodeSydhTfbsCh12Pol2IggmusPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=TBP setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1156 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12TbpIggmusPk fileName=wgEncodeSydhTfbsCh12TbpIggmusPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Jun setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1157 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CjunIggrabPk fileName=wgEncodeSydhTfbsCh12CjunIggrabPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabPk fileName=wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPe
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=TBP setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1160 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelTbpIggmusPk fileName=wgEncodeSydhTfbsMelTbpIggmusPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Pol2 setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1161 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelPol2IggmusPk fileName=wgEncodeSydhTfbsMelPol2IggmusPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=c-Myc setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1163 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelCmycIggrabPk fileName=wgEncodeSydhTfbsMelCmycIggrabPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=GATA-1 setType=exp treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1165 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelGata1IggratPk fileName=wgEncodeSydhTfbsMelGata1IggratPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=JunD setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1192 dateSubmitted=2010-05-11 dateUnrestricted=2011-02-11 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelJundIggrabPk fileName=wgEncodeSydhTfbsMelJundIggrabPk.narrowPeak.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Peaks labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabPk fileName=wgEncodeSydhTfbsMelE2f4IggrabPk.narrowPeak.gz
-		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1125 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12InputIggrabSig fileName=wgEncodeSydhTfbsCh12InputIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=JunD setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1126 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12JundIggrabSig fileName=wgEncodeSydhTfbsCh12JundIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=E2F4 treatment=None control=IgG-rab setType=exp inputType=CH12/None/Input/IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1153 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12E2f4IggrabSig fileName=wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Input setType=input treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1154 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12InputIggmusSig fileName=wgEncodeSydhTfbsCh12InputIggmusSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=Pol2 setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1155 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12Pol2IggmusSig fileName=wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=TBP setType=exp treatment=None inputType=CH12/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1156 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12TbpIggmusSig fileName=wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Jun setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1157 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CjunIggrabSig fileName=wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=CH12 antibody=c-Myc setType=exp treatment=None inputType=CH12/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1159 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsCh12CmycIggrabSig fileName=wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=TBP setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1160 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelTbpIggmusSig fileName=wgEncodeSydhTfbsMelTbpIggmusSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Pol2 setType=exp treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1161 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelPol2IggmusSig fileName=wgEncodeSydhTfbsMelPol2IggmusSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-mus control=IgG-mus view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1162 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggmusSig fileName=wgEncodeSydhTfbsMelInputIggmusSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=c-Myc setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1163 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelCmycIggrabSig fileName=wgEncodeSydhTfbsMelCmycIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1164 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggrabSig fileName=wgEncodeSydhTfbsMelInputIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=GATA-1 setType=exp treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1165 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelGata1IggratSig fileName=wgEncodeSydhTfbsMelGata1IggratSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=Input setType=input treatment=None inputType=MEL/None/Input/IgG-rat control=IgG-rat view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1167 dateSubmitted=2010-04-22 dateUnrestricted=2011-01-22 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelInputIggratSig fileName=wgEncodeSydhTfbsMelInputIggratSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=JunD setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1192 dateSubmitted=2010-05-11 dateUnrestricted=2011-02-11 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelJundIggrabSig fileName=wgEncodeSydhTfbsMelJundIggrabSig.bigWig.gz
-    		metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabSig fileName=wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig.gz
+metaObject wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
+objType file
+antibody H3K4me3
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
+fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam.bai
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+parentTable wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1194
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2
+objType file
+antibody H3K4me3
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
+fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam.bai
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+parentTable wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1194
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistCh12H3k4me3IggyalePk
+objType table
+antibody H3K4me3
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12H3k4me3IggyalePk.narrowPeak.gz
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1194
+tableName wgEncodeSydhHistCh12H3k4me3IggyalePk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep1
+objType file
+antibody H3K4me3
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep1.fastq.gz
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+parentTable wgEncodeSydhHistCh12H3k4me3IggyaleRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1194
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep2
+objType file
+antibody H3K4me3
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep2.fastq.gz
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+parentTable wgEncodeSydhHistCh12H3k4me3IggyaleRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1194
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistCh12H3k4me3IggyaleSig
+objType table
+antibody H3K4me3
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1194
+tableName wgEncodeSydhHistCh12H3k4me3IggyaleSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistCh12InputIggyaleAln
+objType file
+antibody Input
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
+fileIndex wgEncodeSydhHistCh12InputIggyaleAln.bam.bai
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+parentTable wgEncodeSydhHistCh12InputIggyaleAln
+project wgEncode
+setType input
+subId 1195
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistCh12InputIggyaleRawData
+objType file
+antibody Input
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12InputIggyaleRawData.fastq.gz
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+parentTable wgEncodeSydhHistCh12InputIggyaleRawSignal
+project wgEncode
+setType input
+subId 1195
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistCh12InputIggyaleSig
+objType table
+antibody Input
+cell CH12
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-05-12
+dateUnrestricted 2011-02-12
+fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig
+grant Snyder
+inputType CH12/None/Input/IgG-Yale
+lab Yale
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 1195
+tableName wgEncodeSydhHistCh12InputIggyaleSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam
+fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam.bai
+grant Snyder
+inputType MEL/DMSO-5D/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1353
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam
+fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam.bai
+grant Snyder
+inputType MEL/DMSO-5D/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1353
+treatment DMSO_2.0pct
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
+objType table
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk.narrowPeak.gz
+grant Snyder
+inputType MEL/DMSO-5D/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1353
+tableName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk
+treatment DMSO_2.0pct
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1.fastq.gz
+grant Snyder
+inputType MEL/DMSO-5D/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1353
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2.fastq.gz
+grant Snyder
+inputType MEL/DMSO-5D/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1353
+treatment DMSO_2.0pct
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
+objType table
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-07-09
+dateUnrestricted 2011-04-09
+fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig.bigWig
+grant Snyder
+inputType MEL/DMSO-5D/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1353
+tableName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig
+treatment DMSO_2.0pct
+view Signal
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1.tagAlign.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1166
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2.tagAlign.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1166
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyalePk
+objType table
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1166
+tableName wgEncodeSydhHistMelH3k4me3IggyalePk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1.fastq.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3IggyaleRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 1166
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2
+objType file
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2.fastq.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelH3k4me3IggyaleRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 1166
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistMelH3k4me3IggyaleSig
+objType table
+antibody H3K4me3
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-22
+dateUnrestricted 2011-01-22
+fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 1166
+tableName wgEncodeSydhHistMelH3k4me3IggyaleSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhHistMelInputIggyaleAln
+objType file
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-26
+dateUnrestricted 2011-01-26
+fileName wgEncodeSydhHistMelInputIggyaleAln.tagAlign.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelInputIggyaleAln
+project wgEncode
+setType input
+subId 1168
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistMelInputIggyaleRawData
+objType file
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-26
+dateUnrestricted 2011-01-26
+fileName wgEncodeSydhHistMelInputIggyaleRawData.fastq.gz
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+parentTable wgEncodeSydhHistMelInputIggyaleRawSignal
+project wgEncode
+setType input
+subId 1168
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistMelInputIggyaleSig
+objType table
+antibody Input
+cell MEL
+composite wgEncodeSydhHist
+control IgG-Yale
+dataType ChIPseq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-26
+dateUnrestricted 2011-01-26
+fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig
+grant Snyder
+inputType MEL/None/Input/IgG-Yale
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType input
+subId 1168
+tableName wgEncodeSydhHistMelInputIggyaleSig
+treatment None
+view Signal
+
+# MAGIC: 765401979

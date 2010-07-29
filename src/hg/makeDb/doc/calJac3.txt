@@ -1523,7 +1523,8 @@ update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3
 
 ############################################################################
 ## Annotate 13-way multiple alignment with gene annotations
-##              DONE - 2010-05-17 - Chin)
+##                                (DONE - 2010-05-17 - Chin)
+##       use ensGene for calJac3 (DONE - 2010-07-22 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
     ssh hgwdev
@@ -1560,27 +1561,25 @@ end
     chmod +x ./showGenes.csh
 
     ./showGenes.csh
-    # calJac3: xenoRefGene: 235146, Mrnas: 3722
-    # ponAbe2: ensGene: 30230, refGene: 3466, xenoRefGene: 224711, Mrnas: 0
-    # hg19: ensGene: 143123, knownGene: 77614, mgcGenes: 31354, 
-            refGene: 35776, xenoRefGene: 126698, Mrnas: 287363
-    # panTro2: ensGene: 40215, refGene: 743, xenoRefGene: 217765, Mrnas: 1535
-    # gorGor2: xenoRefGene: 223719, Mrnas: 1
-    # rheMac2: ensGene: 41617, refGene: 939, xenoRefGene: 285046, Mrnas: 5227
-    # papHam1: xenoRefGene: 249401, Mrnas: 70
-    # tarSyr1: ensGene: 44646, Mrnas: 8
-    # micMur1: ensGene: 36501, Mrnas: 43
-    # otoGar1: ensGene: 35274, Mrnas: 0
-    # mm9: ensGene: 83124, knownGene: 54042, mgcGenes: 26582, 
-           refGene: 27131, xenoRefGene: 122280, Mrnas: 258076
-    # canFam2: ensGene: 30299, refGene: 1039, xenoRefGene: 210336, Mrnas: 3211
-    # monDom5: ensGene: 34745, refGene: 392, xenoRefGene: 213342, Mrnas: 1605
+    # calJac3: ensGene: 53051, nscanGene: 28723, refGene: 9, xenoRefGene: 241897, Mrnas: 3739
+    # ponAbe2: ensGene: 31566, nscanGene: 23499, refGene: 3466, xenoRefGene: 231218, Mrnas: 0
+    # hg19: ensGene: 151222, knownGene: 77614, mgcGenes: 31354, nscanGene: 67448, refGene: 36557, xenoRefGene: 130754, Mrnas: 288234
+    # panTro2: ensGene: 41488, nscanGene: 22251, refGene: 847, xenoRefGene: 224011, Mrnas: 1644
+    # gorGor2: xenoRefGene: 230153, Mrnas: 1
+    # rheMac2: ensGene: 42820, nscanGene: 22003, refGene: 1019, xenoRefGene: 293269, Mrnas: 5512
+    # papHam1: xenoRefGene: 256814, Mrnas: 70
+    # tarSyr1: ensGene: 45832, Mrnas: 8
+    # micMur1: ensGene: 37458, Mrnas: 43
+    # otoGar1: ensGene: 36560, Mrnas: 0
+    # mm9: ensGene: 84869, knownGene: 54042, mgcGenes: 26582, nscanGene: 21895, refGene: 27373, xenoRefGene: 126474, Mrnas: 259268
+    # canFam2: ensGene: 30914, nscanGene: 24615, refGene: 1048, xenoRefGene: 216324, Mrnas: 3236
+    # monDom5: ensGene: 35113, nscanGene: 45946, refGene: 394, xenoRefGene: 219198, Mrnas: 1628
 
 
     #   rearrange that output to create 3 sections:
     #1. knownGenes: hg19 mm9
-    #2. ensGene: ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
-    #3. xenoRefGene: calJac3 papHam1 gorGor2
+    #2. ensGene: catJac3,ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
+    #3. xenoRefGene: papHam1 gorGor2
 
 
     mkdir genes
@@ -1598,11 +1597,11 @@ do
     echo "${DB} done"
 done
 
-    echo "ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5" \
+    echo "calJac3 ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5" \
     | sed -e "s/  */ /g" > ensGene.list
 
     # ensGene
-    for DB in  ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
+    for DB in  calJac3 ponAbe2 panTro2 rheMac2 tarSyr1 micMur1 otoGar1 canFam2 monDom5
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1611,9 +1610,9 @@ do
     echo "${DB} done"
 done
 
-    echo "calJac3 papHam1 gorGor2" > xenoRef.list 
+    echo "papHam1 gorGor2" > xenoRef.list 
     # xenoRefGene
-    for DB in  calJac3 papHam1 gorGor2
+    for DB in  papHam1 gorGor2
 do
     hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from xenoRefGene" ${DB} \
       | genePredSingleCover stdin stdout | gzip -2c \
@@ -1652,11 +1651,12 @@ runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz
     para -ram=8g create jobList
     para try ... check ... push
 # Completed: 3072 of 3072 jobs
-# CPU time in finished jobs:       5599s      93.32m     1.56h    0.06d  0.000 y
-# IO & Wait Time:                279159s    4652.65m    77.54h    3.23d  0.009 y
-# Average job time:                  93s       1.54m     0.03h    0.00d
-# Longest finished job:            1292s      21.53m     0.36h    0.01d
-# Submission to last job:          1380s      23.00m     0.38h    0.02d
+# CPU time in finished jobs:       5616s      93.60m     1.56h    0.07d  0.000 y
+# IO & Wait Time:                 44389s     739.81m    12.33h    0.51d  0.001 y
+# Average job time:                  16s       0.27m     0.00h    0.00d
+# Longest finished job:             194s       3.23m     0.05h    0.00d
+# Submission to last job:           302s       5.03m     0.08h    0.00d
+
 
     # see what it looks like in terms of number of annotations per DB:
     find ./parts -type f | while read F
@@ -1665,18 +1665,18 @@ do
 done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
    
    cat annotation.survey.txt
-   #   159735 tarSyr1
-   #   202861 panTro2
-   #   203073 rheMac2
-   #   205358 ponAbe2
-   #   205679 hg19
-   #   206899 micMur1
-   #   211208 papHam1
-   #   211692 monDom5
-   #   213918 otoGar1
-   #   217594 gorGor2
-   #   233938 mm9
-   #   240194 canFam2
+   #  159735 tarSyr1
+   #  202861 panTro2
+   #  203073 rheMac2
+   #  205358 ponAbe2
+   #  205679 hg19
+   #  206899 micMur1
+   #  211692 monDom5
+   #  211872 papHam1
+   #  213918 otoGar1
+   #  218009 gorGor2
+   #  233938 mm9
+   #  240194 canFam2
 
     #   load the resulting file
     ssh hgwdev
@@ -1689,7 +1689,7 @@ done | sort -k1,1 -k2,2n > multiz13wayFrames.bed
     hgLoadMafFrames calJac3 multiz13wayFrames multiz13wayFrames.bed
 
     featureBits -countGaps calJac3 multiz13wayFrames.bed
-    #   40132771 bases of 2914958544 (1.377%) in intersection
+    #   40178768 bases of 2914958544 (1.378%) in intersection
 
     #   enable the trackDb entries:
 # frames multiz13wayFrames
@@ -2386,3 +2386,160 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
 
 
 #############################################################################
+# Quality track (DONE - 2010-07-14 - Hiram)
+    mkdir -p /hive/data/genomes/calJac3/bed/qual/genbank
+    cd /hive/data/genomes/calJac3/bed/qual/genbank
+    cd /hive/data/genomes/calJac3/bed/qual
+    grep "^chr" ../../calJac3.agp \
+	| egrep -v "contig|fragment|telo|centrom|clone" \
+	| awk '{print $6}' | sort -u > contig.name.list
+    cd genbank
+    wget --timestamping \
+ftp://ftp.ncbi.nih.gov/genbank/wgs/wgs.ACFV.*.qscore.gz
+    zcat wgs.ACFV.*.qscore.gz | grep "^>" | sed -e "s/^>gb|//; s/|.*//" \
+	sort -u > contig.list
+    wc -l ../contig.name.list contig.list
+    #	201514 ../contig.name.list
+    #	202483 contig.list
+    #	not all the contigs have quality scores here, but almost all:
+    comm -12 ../contig.name.list contig.list | wc -l
+    #	201433
+    cat << '_EOF_' > extractContigs.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: ./ctContigs.pl ../contig.name.list > calJac3.qual.fa\n";
+    printf STDERR "after collecting the contig names from the given list\n";
+    printf STDERR "this is going to read wgs.ACFV.*.qscore.gz\n";
+    printf STDERR "and output any fasta elements that match the name list\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) { usage; exit 255; }
+
+my $file = shift;
+my %ctgNames;
+my $readNames = 0;
+
+open (FH, "<$file") or die "can not open $file";
+while (my $line = <FH>) {
+    chomp $line;
+    $ctgNames{$line} = 1;
+    ++$readNames;
+}
+
+close (FH);
+printf STDERR "read $readNames from $file\n";
+
+my $ctgCount = 0;
+foreach my $key (keys %ctgNames) {
+    ++$ctgCount;
+}
+printf STDERR "found $ctgCount contig names in $file\n";
+open (NF,">not.found.list") or die "can not write to not.found.list";
+my $notFound = 0;
+
+my $ctgsDone = 0;
+for (my $i = 1; $i < 15; ++$i) {
+    my $fname = sprintf("wgs.ACFV.%d.qscore.gz", $i);
+    my $goodElement = 0;
+    open (FH, "zcat $fname|") or die "can not read $fname";
+    while (my $line = <FH>) {
+	if ($line =~ m/^>/) {
+	    chomp $line;
+	    my $name = $line;
+	    $name =~ s/^>gb\|//;
+	    $name =~ s/\|.*//;
+#	    printf STDERR "name: %s\n", $name;
+	    if (exists($ctgNames{$name})) {
+		$goodElement = 1;
+		printf ">%s\n", $name;
+		++$ctgsDone;
+	    } else {
+		printf NF "%s:%s\n", $name, $line;
+		++$notFound;
+		$goodElement = 0;
+	    }
+	} elsif ($goodElement > 0) {
+	    $line =~ s/^\s+//;
+	    printf "%s", $line;
+	}
+	
+    }
+    close (FH);
+}
+
+close(NF);
+
+printf STDERR "found $ctgsDone during processing\n";
+printf STDERR "not found $notFound during processing\n";
+'_EOF_'
+    # << happy emacs
+    chmod +x ./extractContigs.pl
+    time ./extractContigs.pl ../contig.name.list \
+	| gzip -c > ../calJac3.contigs.qual.fa.gz
+# read 201514 from ../contig.name.list
+# found 201514 contig names in ../contig.name.list
+# found 201433 during processing
+# not found 1050 during processing
+    cd ..
+    time qaToQac calJac3.contigs.qual.fa.gz calJac3.contigs.qual.qac
+# real    1m28.846s
+    time qacAgpLift -mScore=0 ../../calJac3.agp \
+	calJac3.contigs.qual.qac calJac3.qual.qac
+# real    1m16.994s
+    time qacToWig -fixed calJac3.qual.qac stdout | gzip -c \
+	> calJac3.qual.wigFix.gz
+# real    7m21.203s
+    #	avoid memory size problem
+sizeG=50000000
+export sizeG
+ulimit -d $sizeG
+ulimit -v $sizeG
+    time wigToBigWig calJac3.qual.wigFix.gz ../../chrom.sizes calJac3.qual.bw
+    #	real    29m7.143s
+    bigWigInfo -minMax calJac3.qual.bw
+    #	0.000000 97.000000
+    bigWigInfo calJac3.qual.bw
+# version: 4
+# isCompressed: yes
+# isSwapped: 0
+# primaryDataSize: 587,271,637
+# primaryIndexSize: 91,661,572
+# zoomLevels: 10
+# chromCount: 14205
+# basesCovered: 2,914,958,544
+# mean: 87.707709
+# min: 0.000000
+# max: 97.000000
+# std: 25.751106
+
+    mkdir /gbdb/calJac3/bbi
+    ln -s `pwd`/calJac3.qual.bw /gbdb/calJac3/bbi
+    hgsql calJac3 -e 'drop table if exists qualityBw; \
+            create table qualityBw \
+		(fileName varchar(255) not null); \
+            insert into qualityBw values
+	("/gbdb/calJac3/bbi/calJac3.qual.bw");'
+
+#############################################################################
+#  calJac3 - Marmoset - Ensembl Genes version 58  (DONE - 2010-07-20 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3
+    cat << '_EOF_' > calJac3.ensGene.ra
+# required db variable
+db calJac3
+nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=58 calJac3.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/ensGene.58
+    featureBits calJac3 ensGene
+    # 50565085 bases of 2752505800 (1.837%) in intersection
+############################################################################

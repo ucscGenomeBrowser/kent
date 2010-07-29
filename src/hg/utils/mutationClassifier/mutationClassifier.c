@@ -24,7 +24,7 @@ char *outputExtension = NULL;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 float minDelta = -1;
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
-char *markovTable = "markovModels";
+char *markovTable;
 static int maxNearestGene = 10000;
 boolean skipGeneModel = FALSE;
 boolean oneBased = FALSE;
@@ -74,6 +74,7 @@ static struct optionSpec optionSpecs[] = {
     {"clusterTable", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
     {"minDelta", OPTION_FLOAT},
+    {"markovTable", OPTION_STRING},
     {"maxNearestGene", OPTION_INT},
     {"outputExtension", OPTION_STRING},
     {"skipGeneModel", OPTION_BOOLEAN},
@@ -586,7 +587,7 @@ struct sqlConnection *conn = sqlConnect(database);
 struct sqlConnection *conn2 = sqlConnect(database);
 boolean done = FALSE;
 boolean motifTableExists = sqlTableExists(conn, clusterTable);
-boolean markovTableExists = sqlTableExists(conn, markovTable);
+boolean markovTableExists = markovTable != NULL && sqlTableExists(conn, markovTable);
 long time;
 struct genePred *genes = NULL;
 
@@ -822,14 +823,14 @@ while(!done)
                     int pos;
                     float delta, before, after, maxDelta = 0;
                     boolean cacheHit;
-                    double mark2[5][5][5];
                     struct dnaMotif *motif = loadMotif(database, site->name, &cacheHit);
-                    if(!cacheHit)
-                        dnaMotifMakeLog2(motif);
+                    double mark2[5][5][5];
 
                     // XXXX cache markov models? (we should be processing them in manner where we can use the same one repeatedly).
                     if(markovTableExists && loadMark2(conn2, markovTable, bed->chrom, bed->chromStart, bed->chromStart + 1, mark2))
                         {
+                        if(!cacheHit)
+                            dnaMotifMakeLog2(motif);
                         dnaMarkMakeLog2(mark2);
 
                         seq = hDnaFromSeq(database, bed->chrom, site->chromStart - 2, site->chromEnd + 2, dnaUpper);
@@ -852,7 +853,7 @@ while(!done)
                         }
                     else
                         {
-                        seq = hDnaFromSeq(database, bed->chrom, site->chromStart - 2, site->chromEnd + 2, dnaUpper);
+                        seq = hDnaFromSeq(database, bed->chrom, site->chromStart, site->chromEnd, dnaUpper);
                         if(refCall && seq->dna[bed->chromStart - site->chromStart] != refCall)
                             errAbort("Actual reference doesn't match what is reported in input file");
                         if(*site->strand == '-')
@@ -939,6 +940,7 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 clusterTable = optionVal("clusterTable", clusterTable);
 lazyLoading = optionExists("lazyLoading");
+markovTable = optionVal("markovTable", NULL);
 maxNearestGene = optionInt("maxNearestGene", maxNearestGene);
 minDelta = optionFloat("minDelta", minDelta);
 outputExtension = optionVal("outputExtension", NULL);

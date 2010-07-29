@@ -75,7 +75,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 46,0,184
 sex F
 tier 1
-protocol Yale_TFSB(Farnham):K562_protocol.pdf
+protocol Yale_TFBS(Farnham):K562_protocol.pdf
 
 term HepG2
 tag HepG2
@@ -284,6 +284,21 @@ vendorId AG10803
 sex M
 tier 3
 protocol UW_Stam:AG10803_Stam_protocol.pdf
+
+term AoAF
+tag AOAF
+type Cell Line
+organism Human
+description Normal Human Aortic Adventitial Fibroblast Cells
+tissue Heart
+vendorName Lonza
+vendorId CC-7014, CC-7014T75
+orderUrl https://shop.lonza.com/shop/prd/human-aortic-adventitial-fibroblasts/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36999591D0C0F18852001A4B525E10/
+termUrl 
+sex F
+tier 3
+termId 
+protocol UW_Stam:AoAF_Stam_protocol.pdf
 
 term AoSMC
 tag AOSMC
@@ -583,7 +598,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM12801
 tag GM12801
@@ -698,6 +713,67 @@ sex F
 tier 3
 protocol UW_Stam:GM12875_Stam_protocol.pdf
 
+term GM12878-16XiMat
+tag GM1287816XiMat
+type Cell Line
+organism Human
+description lymphoblastoid
+tissue Blood
+vendorName Cloned for maternal X inactivation by Hunt Willard's at Duke University
+karyotype relatively normal
+lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for maternal X inactivation
+termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
+tier 3
+protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
+
+term GM12878-34XiPat
+tag GM1287834XiPat
+type Cell Line
+organism Human
+description lymphoblastoid
+tissue Blood
+vendorName Cloned for paternal X inactivation by Hunt Willard's at Duke University
+karyotype relatively normal
+lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for paternal X inactivation
+termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
+tier 3
+protocol HudsonAlpha:GM12878-34XiPat_Myers_protocol.pdf
+
+term GM12878-40XiPat
+tag GM1287840XPat
+type Cell Line
+organism Human
+description lymphoblastoid
+tissue Blood
+vendorName Cloned for paternal X inactivation by Hunt Willard's at Duke University
+karyotype relatively normal
+lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for paternal X inactivation
+termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
+tier 3
+protocol HudsonAlpha:GM12878-40XiPat_Myers_protocol.pdf
+
+term GM12878-56XiMat
+tag GM1287856XiMat
+type Cell Line
+organism Human
+description lymphoblastoid
+tissue Blood
+vendorName Cloned for maternal X inactivation by Hunt Willard's at Duke University
+karyotype relatively normal
+lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for maternal X inactivation
+termId BTO:0002026 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+sex F
+tier 3
+protocol HudsonAlpha:GM12878-56XiMat_Myers_protocol.pdf
+
+
 term GM12891
 tag GM12891
 type Cell Line
@@ -743,7 +819,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex U
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18505
 tag GM18505
@@ -758,7 +834,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18507
 tag GM18507
@@ -790,7 +866,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM18951
 tag GM18951
@@ -805,7 +881,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19099
 tag GM19099
@@ -820,7 +896,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19193
 tag GM19193
@@ -835,7 +911,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol Yale_TFSB:GM-generalized_Snyder_protocol.pdf
+protocol Yale_TFBS:GM-generalized_Snyder_protocol.pdf
 
 term GM19238
 tag GM19238
@@ -1030,6 +1106,33 @@ orderUrl http://www.asterand.com/Asterand/
 sex U
 protocol HudsonAlpha:HAL_Myers_protocol.pdf
 
+term HBMEC
+tag HBMEC
+type Cell Line
+organism Human
+description Human Brain Microvascular Endothelial Cells
+tissue Brain
+tier 3
+lineage 
+vendorName ScienCell
+vendorId 1000
+orderUrl http://www.sciencellonline.com/site/products/1000.php
+sex U
+protocol UW_Stam:HBMEC_Myers_protocol.pdf
+
+term HCFaa
+tag HCFaa
+type Cell Line
+organism Human
+description Human Cardiac Fibroblasts-Adult Atrial
+tissue Heart
+vendorName ScienCell
+vendorId 6320
+orderUrl http://www.sciencellonline.com/site/products/6320.php
+sex F
+tier 3
+protocol UW_Stam:HCFaa_Stam_protocol.pdf
+
 term HCF
 tag HCF
 type Cell Line
@@ -1042,6 +1145,19 @@ orderUrl http://www.sciencellonline.com/site/products/6300.php
 sex U
 tier 3
 protocol UW_Stam:HCF_Stam_protocol.pdf
+
+term HConF
+tag HCONF
+type Cell Line
+organism Human
+description Human Conjunctival Fibroblast
+tissue Eyet
+vendorName ScienCell
+vendorId 6570
+orderUrl http://www.sciencellonline.com/site/products/6570.php
+sex U
+tier 3
+protocol UW_Stam:HConF_Stam_protocol.pdf
 
 term HCM
 tag HCM
@@ -1084,7 +1200,7 @@ termId BTO:0002254
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002254
 sex M
 tier 3
-protocol Yale_TFSB:HCT-116_protocol.pdf,UW_Stam:HCT116_Stam_protocol.pdf
+protocol Yale_TFBS:HCT-116_protocol.pdf UW_Stam:HCT116_Stam_protocol.pdf
 
 term HEEpiC
 tag HEE
@@ -1131,7 +1247,7 @@ termId BTO:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000007&termName=HEK293%20cell
 sex U
 tier 3
-protocol Yale_TFSB:HEK293b_Snyder_protocol.pdf
+protocol Yale_TFBS:HEK293b_Snyder_protocol.pdf
 
 term HFL11W
 tag HFL11W
@@ -1173,6 +1289,20 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 protocol UW_Stam:HGF_Stam_protocol.pdf
+
+term HHSEC
+tag HHSEC
+type Cell Line
+organism Human
+description Human Hepatic Sinusoidal Endothelial Cells
+tissue Liver
+vendorName ScienCell
+vendorId 5000
+orderUrl http://www.sciencellonline.com/site/products/5000.php
+sex U
+tier 3
+protocol UW_Stam:HHSEC_Stam_protocol.pdf
+
 
 term HIPEpiC
 tag HIPE
@@ -1221,6 +1351,110 @@ sex U
 tier 3
 protocol Broad_Histone:HMEC_Bernstein_protocol.pdf <Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
+term HMF
+tag HMF
+type Cell Line
+organism Human
+description Human Mammary Fibroblast
+tissue Heart
+vendorName ScienCell
+vendorId 7630
+orderUrl http://www.sciencellonline.com/site/products/7630.php
+sex F
+tier 3
+protocol UW_Stam:HMF_Stam_protocol.pdf
+
+term HMVEC-LLy
+tag HMVECLLy
+type Cell Line
+organism Human
+description Normal Human Lymphatic Microvascular Endothelial Cells, Lung-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2814, CC-2814T25
+orderUrl https://shop.lonza.com/shop/prd/human-lung-lymphatic-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699839AD5E2F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-LLy_Stam_protocol.pdf
+
+term HMVEC-dBl-Ad
+tag HMVECdBlAd
+type Cell Line
+organism Human
+description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2811, CC-2811T75
+orderUrl https://shop.lonza.com/shop/prd/adult-human-dermal-blood-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD7C1F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-dBl-Ad_Stam_protocol.pdf
+
+term HMVEC-dBl-Neo
+tag HMVECdBlNeo
+type Cell Line
+organism Human
+description Normal Neonatal Human Blood Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2813, CC-2813T75
+orderUrl https://shop.lonza.com/shop/prd/neo-human-dermal-blood-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD7F1F18852001A4B525E10/ 
+sex M
+tier 3
+protocol UW_Stam:HMVEC-dBl-Neo_Stam_protocol.pdf
+
+term HMVEC-dLy-Ad
+tag HMVECdLyAd
+type Cell Line
+organism Human
+description Normal Adult Human Blood Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2810, CC-2810T75
+orderUrl https://shop.lonza.com/shop/prd/adult-human-dermal-lymp-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF36997D9DD821F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-dLy-Ad_Stam_protocol.pdf
+
+term HMVEC-dLy-Neo
+tag HMVECdLyNeo
+type Cell Line
+organism Human
+description Normal Neonatal Human Lymphatic Microvascular Endothelial Cells, Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2812, CC-2812T25
+orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36997D9DD857F18852001A4B525E10%29/.do
+sex M
+tier 3
+protocol UW_Stam:HMVEC-dLy-Neo_Stam_protocol.pdf
+
+term HMVEC-dNeo
+tag HMVECdNeo
+type Cell Line
+organism Human
+description Normal Neonatal Human Microvascular Endothelial Cells (single Donnor), Dermal-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2505, CC-2505T225
+orderUrl https://shop.lonza.com/shop/prd/neo-human-dermal-mv-endo-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF369977A0DA71F18852001A4B525E10/
+sex M
+tier 3
+protocol UW_Stam:HMVEC-dNeo_Stam_protocol.pdf
+
+term HMVEC-LBl
+tag HMVECLbl
+type Cell Line
+organism Human
+description Normal Human Blood Microvascular Endothelial Cells, Lung-Derived
+tissue Blood
+vendorName Lonza
+vendorId CC-2815, CC-2815T75
+orderUrl https://shop.lonza.com/shop/prd/human-lung-blood-mv-endothelial-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699839AD5A8F18852001A4B525E10/
+sex F
+tier 3
+protocol UW_Stam:HMVEC-Lbl_Stam_protocol.pdf
+
 term HNPCEpiC
 tag HNPCE
 type Cell Line
@@ -1233,6 +1467,58 @@ orderUrl http://www.sciencellonline.com/site/products/6580.php
 sex U
 tier 3
 protocol UW_Stam:HNPCEpiC_Stam_protocol.pdf
+
+term HPAEpiC
+tag HPAE
+type Cell Line
+organism Human
+description Human Pulmonay Alevolar Epithelial Cells
+tissue Epithelium
+vendorName ScienCell
+vendorId 3200
+orderUrl http://www.sciencellonline.com/site/products/3200.php
+sex U
+tier 3
+protocol UW_Stam:HPAEpiC_Stam_protocol.pdf
+
+term HPAF
+tag HPAF
+type Cell Line
+organism Human
+description Human Pulmonary Artery Fibroblasts 
+tissue Blood
+vendorName ScienCell
+vendorId 3120
+orderUrl http://www.sciencellonline.com/site/products/3120.php
+sex U
+tier 3
+protocol UW_Stam:HPAF_Stam_protocol.pdf
+
+term HPdLF
+tag HPdLF
+type Cell Line
+organism Human
+description Normal Human Periodontal Ligament Fibroblast Cells
+tissue Epithelium
+vendorName ScienCell
+vendorId 7409
+orderUrl http://www.sciencellonline.com/site/products/7409.php
+sex M
+tier 3
+protocol UW_Stam:HPdLF_Stam_protocol.pdf
+
+term HPF
+tag HPF
+type Cell Line
+organism Human
+description Human Pulmonary Fibroblasts
+tissue Blood
+vendorName ScienCell
+vendorId 3300
+orderUrl http://www.sciencellonline.com/site/products/3300.php
+sex U
+tier 3
+protocol UW_Stam:HPF_Stam_protocol.pdf
 
 term HRCEpiC
 tag HRCE
@@ -1345,6 +1631,32 @@ sex F
 tier 3
 protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
 
+term HVMF
+tag HVMF
+type Cell Line
+organism Human
+description Human Villous Mesenchymal Fibroblast Cells
+tissue Connective
+vendorName ScienCell
+vendorId 7130
+orderUrl http://www.sciencellonline.com/site/products/7130.php
+sex U
+tier 3
+protocol UW_Stam:HVMF_Stam_protocol.pdf
+
+term IMR90
+tag IMR90
+type Cell Line
+organism Human
+description Normal Human Lung Fibroblasts
+tissue Lung
+vendorName ATCC
+vendorId CCL-186
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CCL-186&Template=cellBiology
+sex U
+tier 3
+protocol UW_Stam:IMR90_Stam_protocol.pdf
+
 term Jurkat
 tag Jurkat
 type Cell Line
@@ -1394,7 +1706,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 0,119,158
 sex M
 tier 3
-protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFSB(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
+protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -1411,7 +1723,7 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 sex F
 tier 3
-protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFSB(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
+protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
 #tag MCF10A
@@ -1523,7 +1835,22 @@ termId BTO:0002489
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002489&termName=promyelocytic%20leukemia%20cell%20line
 sex U
 tier 3
-protocol Yale_TFSB:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
+protocol Yale_TFBS:NB4_protocol.pdf UW_Stam:NB4_Stam_protocol.pdf
+
+term NH-A
+tag NHA
+type Cell Line
+organism Human
+tissue Nervous
+description normal human astrocytes
+vendorName Lonza
+vendorId CC-2565
+orderUrl https://shop.lonza.com/shop/prd/normal-human-astrocytes/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699D16C95C8F18852001A4B525E10/
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099&termName=astrocyte
+sex U
+tier 3
+termId BTO:0000099
+protocol Broad:NH-A_Bernstein_protocol.pdf UW_Stam: NH-A_Stam_protocol.pdf
 
 term NHBE
 tag NHBE
@@ -1539,6 +1866,19 @@ sex U
 tier 3
 termId BTO:0002022
 protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
+
+term NHDF-Ad
+tag NHDF-Ad
+type Cell Line
+organism Human
+tissue Skin
+description Adult Normal Human Dermal Fibroblasts
+vendorName Lonza
+vendorId CC-2511, CC-2511T225
+orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF36999591CFE2F18852001A4B525E10%29/.do
+sex F
+tier 3
+protocol UW_Stam:NHDF-Ad_Stam_protocol.pdf
 
 term NHDF-neo
 tag NHDF-neo
@@ -1585,7 +1925,7 @@ termId BTO:0000946
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000946
 sex M
 tier 3
-protocol Yale_TFSB:NT2-D1_protocol.pdf
+protocol Yale_TFBS:NT2-D1_protocol.pdf
 
 term Osteobl
 tag Osteobl
@@ -1736,6 +2076,19 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:00
 sex M
 tier 3
 protocol SYDH_TFBS(Farnham):Raji_Farnham_protocol.pdf
+
+term RPTEC
+tag RPTEC
+type Cell Line
+organism Human
+description Renal Proximal Tubule Epithelial Cells
+tissue Epithelium
+vendorName Lonza
+vendorId CC-2553, CC-2553T225
+orderUrl https://shop.lonza.com/shop/b2c/start/%28xcm=lonza_b2b&carea=DF3699B3878B6CF18852001A4B525E10%29/.do
+sex U
+tier 3
+protocol UW_Stam:RPTEC_Stam_protocol.pdf
 
 term SAEC
 tag SAEC
@@ -1943,328 +2296,499 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+term 3134
+tag 3143
+type Cell Line
+organism Mouse
+tissue Mammary
+category Cell Line
+description Mammary
+vendorName
+termId 7035
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+color 153,38,0
+sex M
+protocol
+
+term 416B
+tag 416B
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description myeloid progenitor cells, CD34+
+vendorName
+termId 7043
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
+color 153,38,0
+sex M
+protocol
+
+term AtT-20
+tag AtT20
+type Cell Line
+organism Mouse
+tissue Cortex 
+category Cell Line
+description Pituitary tumor LAF1 
+vendorName ATCC
+termId 7087
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
+color 153,38,0
+sex M
+protocol
+
+term B-cell_(CD19+)
+tag BCellCD19p
+type Cell Line
+organism Mouse
+tissue Blood 
+category Cell Line
+description B Cell , CD19+
+vendorName
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol
+
 term BoneMarrow
 tag BoneMarrow
 type Cell Line
 organism Mouse
 tissue Bone
-category T
+category Tissue
 description Bone Marrow
 vendorName LICR lab
 termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 153,38,0
 sex U
-protocol BoneMarrow_Ren_protocol.pdf
+protocol LICR:BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
 tag Cerebellum
 type Cell Line
 organism Mouse
 tissue Cerebellum
-category T
+category Tissue
 description Cerebellum
 vendorName LICR lab
 termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-protocol Cerebellum_Ren_protocol.pdf
+protocol LICR:Cerebellum_Ren_protocol.pdf
+
+term Cerebrum
+tag Cerebrumm
+type Cell Line
+organism Mouse
+tissue Cerebrum
+category Tissue
+description Cerebrum
+vendorName UW Lab
+termId 
+termUrl
+color 153,38,0
+sex U
+protocol 
 
 term CH12
 tag CH12
 type Cell Line
 organism Mouse
 tissue Blood
-category L
-description B-cell lymphoma
+category Cell Line
+description B-cell lymphoma (GM12878 analog)
 vendorName Weissman lab
 vendorId
-orderUrl (Contact Sherman Weissman)
+orderUrl
+# Not an OrderUrl need to talk to confirm what goes here.
+#orderUrl (Contact Sherman Weissman)
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-protocol CH12_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
+
+term ES-CJ7
+tag ESCJ7
+type Cell Line
+organism Mouse
+tissue
+category Primary Cells
+description ES-cells were originally
+isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal
+lethality and defects in hindbrain development in mice homozygous for a
+targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
+Genes Dev. 1993 Nov;7(11):2071-84.)
+vendorName Uw lab
+vendorId
+orderUrl
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol
+
 
 term Colon
 tag Colon
 type Cell Line
 organism Mouse
 tissue Colon
-category T
+category Tissue
 description Colon
 vendorName LICR lab
 termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
 sex U
-protocol Colon_Ren_protocol.pdf
+protocol LICR:Colon_Ren_protocol.pdf
 
 term Cortex
 tag Cortex
 type Cell Line
 organism Mouse
 tissue Cortex
-category T
+category Tissue
 description Cortex
 vendorName LICR lab
 termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
 sex U
-protocol Cortex_Ren_protocol.pdf
+protocol LICR:Cortex_Ren_protocol.pdf
+
+term Fibroblast
+tag Fibroblast
+type Cell Line
+organism Mouse
+tissue Lung
+category Tissue
+description Fribroblast
+vendorName UW lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol 
+
 
 term G1E
 tag G1E
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
 description Gata1- erythroid progenitor
 vendorName Mitch Weiss lab
-orderUrl weissmi@email.chop.edu
+orderUrl
+# This is an email address how do we want these links displayed
+#orderUrl weissmi@email.chop.edu
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol G1E_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
-term G1E
+term G1E_E4+E2
 tag G1E_E4_E2
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
 vendorName Mitch Weiss lab
-orderUrl weissmi@email.chop.edu
+orderUrl
+# This is an email address how do we want these links displayed
+#orderUrl weissmi@email.chop.edu
 termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol G1E_E4_E2_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
 
 term Heart
 tag Heart
 type Cell Line
 organism Mouse
 tissue Heart
-category T
+category Tissue
 description Heart
 vendorName LICR lab
 termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-protocol Heart_Ren_protocol.pdf
+protocol LICR:Heart_Ren_protocol.pdf
+
+term Kidney
+tag Kidney
+type Cell Line
+organism Mouse
+tissue Kidney
+category Tissue
+description Kidney
+vendorName UW lab
+termId 
+termUrl
+color 153,38,0
+sex U
+protocol
 
 term Limb
 tag Limb
 type Cell Line
 organism Mouse
 tissue Limb
-category T
+category Tissue
 description Limb
 vendorName LICR lab
 termId 7127
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 153,38,0
 sex U
-protocol Limb_Ren_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol LICR:Limb_Ren_protocol.pdf
 
 term Liver
 tag Liver
 type Cell Line
 organism Mouse
 tissue Liver
-category T
+category Tissue
 description Liver
 vendorName LICR lab
 termId 6963
-ermUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-protocol Liver_Ren_protocol.pdf
+protocol LICR:Liver_Ren_protocol.pdf
 
 term Lung
 tag Lung
 type Cell Line
 organism Mouse
 tissue Lung
-category T
+category Tissue
 description Lung
 vendorName LICR lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol Lung_Ren_protocol.pdf
+protocol LICR:Lung_Ren_protocol.pdf
+
 
 term MEF
 tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
-category T
-description MEF
+category Primary Cells
+description Mouse Embryonic Fibroblast
 vendorName LICR lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol MEF_Ren_protocol.pdf
+protocol LICR:MEF_Ren_protocol.pdf
 
-term Megakaryocyte
+#Shortened Tem
+term Megakaryo
 tag Megakaryocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Primary Cells
 description Megakaryocyte
 vendorName Mitch Weiss lab
-orderUrl weissmi@email.chop.edu
+orderUrl
+# This is an email address how do we want these links displayed
+#orderUrl weissmi@email.chop.edu
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
-protocol Megakaryocyte_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
 
+#Needs protocol, VendorName and Term Id
 term MEL
 tag MEL
 type Cell Line
 organism Mouse
-category L
-description leukemia (K562 analog)
+category Cell Line
+description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
+protocol missing
 
+#Missing VendorName and termId
 term Myocyte
 tag Myocyte
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Cell Line
 description Myocyte
-vendorName 
-orderUrl 
+vendorName
+orderUrl
 color 153,38,0
 sex U
-protocol Myocyte_Hardison_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol PSU(Hardison):Myocyte_Hardison_protocol.pdf
 
+#missing VendorId
 term Muscle
 tag Muscle
 type Cell Line
 organism Mouse
 tissue Blood
-category L
+category Tissue
 description Muscle
-vendorName 
-orderUrl 
+vendorName
+orderUrl
 termId 7054
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
-protocol Muscle_Hardison_protocol.pdf
+#protocol PSU(Hardison):Muscle_Hardison_protocol.pdf
 
-term OlfactoryBulb
+# shortened term
+term OlfactBulb
 tag OlfactoryBulb
 type Cell Line
 organism Mouse
 tissue OlfactoryBulb
-category T
-description OlfactoryBulb
+category Tissue
+description Olfactory Bulb
 vendorName LICR lab
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-protocol OlfactoryBulb_Ren_protocol.pdf
+protocol LICR:OlfactoryBulb_Ren_protocol.pdf
 
 term Pancreas
 tag Pancreas
 type Cell Line
 organism Mouse
 tissue Pancreas
-category T
+category Tissue
 description Pancreas
 vendorName LICR lab
 termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-protocol Pancreas_Ren_protocol.pdf
+protocol LICR:Pancreas_Ren_protocol.pdf
 
 term Placenta
 tag Placenta
 type Cell Line
 organism Mouse
 tissue Placenta
-category T
+category Tissue
 description Placenta
 vendorName LICR lab
 termId 6957
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6957
 color 153,38,0
 sex U
-protocol Placenta_Ren_protocol.pdf
+# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
+#protocol LICR:Placenta_Ren_protocol.pdf
 
-term SmallIntestine
+#Shortened term
+term SmIntestine
 tag SmallIntestine
 type Cell Line
 organism Mouse
 tissue SmallIntestine
-category T
-description SmallIntestine
+category Tissue
+description Small Intestine
 vendorName LICR lab
 termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
 sex U
-protocol SmallIntestine_Ren_protocol.pdf
+protocol LICR:SmallIntestine_Ren_protocol.pdf
 
 term Spleen
 tag Spleen
 type Cell Line
 organism Mouse
 tissue Spleen
-category T
+category Tissue
 description Spleen
 vendorName LICR lab
 termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
 sex U
-protocol Spleen_Ren_protocol.pdf
+protocol LICR:Spleen_Ren_protocol.pdf
 
 term Testis
 tag Testis
 type Cell Line
 organism Mouse
 tissue Testis
-category T
+category Tissue
 description Testis
 vendorName LICR lab
 termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
 sex U
-protocol Testis_Ren_protocol.pdf
+protocol LICR:Testis_Ren_protocol.pdf
 
 term Thymus
 tag Thymus
 type Cell Line
 organism Mouse
 tissue Thymus
-category T
+category Tissue
 description Thymus
 vendorName LICR lab
 termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
-protocol Thymus_Ren_protocol.pdf
+protocol LICR:Thymus_Ren_protocol.pdf
+
+term T-Naive
+tag TNaive
+type Cell Line
+organism Mouse
+tissue Blood
+category Tissue
+description Naive T cells: CD4+, CD25-
+vendorName UW lab
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 153,38,0
+sex U
+protocol 
+
+term WholeBrain
+tag WholeBrain
+type Cell Line
+organism Mouse
+tissue Brain
+category Tissue
+description Whole Brain
+vendorName UW lab
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol LICR:Thymus_Ren_protocol.pdf
+
 
 
 # Gene types
@@ -2691,7 +3215,7 @@ validation missing
 term ERRA
 tag ERRA
 type Antibody
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin. 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of Ets-1 of human origin.
 targetDescription epitope corresponding to amino acids 81-160 mapping near the N-terminus of ERRalpha of human origin
 orderUrl http://www.scbt.com/datasheet-66882-erralpha-h-80-antibody.html
 vendorName Santa Cruz Biotech
@@ -3200,8 +3724,8 @@ validation missing
 term MEF2A
 tag MEF2A
 type Antibody
-antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin. 
-targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscle-specific, growth factor-induced, and stress-induced genes. 
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of MEF-2 of human origin.
+targetDescription The protein encoded by this gene is a DNA-binding transcription factor that activates many muscme-specific, growth factor-induced, and stress-induced genes.
 vendorName Santa Cruz Biotech
 vendorId sc-313
 orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
@@ -3905,7 +4429,113 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
 
 
+###  These Antibodies are from the Rip Target Protien Table and are being intigrated into this table ####
+### They will be commented out until we are ready to get rid of the original Table
+#term ripInput
+#tag ripInput
+#tag ripInput
+#type Antibody
+#targetDescription RIP CHIP Total input for comparison for RIP experiments
+#antibodyDescription
+#vendorName
+#vendorId
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl
+#validation
+
+
+#term T7Tag
+#tag T7Tag
+#type Antibody
+#targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
+#antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+#vendorName Millipore; Novagen
+#vendorId Mil_AB3790; Nov_69522
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+#validation
+
+#term ELAVL1
+#tag ELAVL1
+#type Antibody
+#targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); #Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
+#antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
+#vendorName Santa Cruz Biotech
+#vendorId SC-5261
+#orderUrl
+#lab Tenebaum
+#lots B2508(Nov2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+#validation
+
+#term IGF2BP1
+#tag IGF2BP1
+#type Antibody
+#targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; #ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+#antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+#vendorName Santa Cruz Biotech
+#vendorId SC-21027
+#orderUrl
+#lab Tenebaum
+#lots I0607(Nov2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+#validation
+
+#term PABPC1
+#tag PABPC1
+#type Antibody
+#targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; #PABPC2; PABPL1; PABPC
+#antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+#lab Tenebaum
+#vendorName Sigma Chemical Co.
+#vendorId Sig_P6246
+#orderUrl
+#lab Tenebaum
+#lots 044K4810 (Nov 2008)
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+#validation
+
+#term SLBP
+#tag SLBP
+#type Antibody
+#targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
+#antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   #2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
+#at origin.
+#vendorName Millipore; Santa Cruz Biotech
+#vendorId Mil 06-1376; SC-26522
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+#validation
+
+#term CELF1
+#tag CELF1
+#type Antibody
+#targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
+#antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also #known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
+#tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
+#vendorName Millipore
+#vendorId Mil-05621
+#orderUrl
+#lab Tenebaum
+#lots
+#targetId
+#targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+#validation
+
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
+### We will be replacing this.
 
 term ripInput
 tag ripInput
@@ -3956,7 +4586,8 @@ alternativeSymbols CUG-BP1; BRUNOL2
 description Embryo deadenylation element-binding protein homolog (Homo sapiens)
 url http://view.ncbi.nlm.nih.gov/gene/10658
 
-# ripAntibody - Tenenbaum RIP-chip / RIP-seq project
+
+#### ripAntibody - Tenenbaum RIP-chip / RIP-seq project
 term AUF1
 tag AUF1
 type ripAntibody
@@ -4600,12 +5231,12 @@ tag ESTRADIa1h
 description  1h,10nM Estradiol  (Myers)
 type treatment
 
-term Estradiol_1nM 
+term Estradiol_1nM
 tag ESTRADIb1h
 description  1h,1nM Estradiol  (Myers)
 type treatment
 
-term Estradiol_10nM_4hr 
+term Estradiol_10nM_4hr
 tag ESTRADIa4h
 description  4h,10nM Estradiol (Myers)
 type treatment
@@ -4691,6 +5322,11 @@ tag SERUMFREE
 description grown in serum free media (Crawford)
 type treatment
 
+term TAM_1uM_36hr
+tag TAM
+description 36h, 1uM tamoxifen (Myers)
+type treatment
+
 term TNFa
 tag TNFa
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
@@ -4720,6 +5356,31 @@ type protocol
 term v041610.2
 tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
+type protocol
+
+##### Growth Protocols used, still of type protocol
+##### This is being used by Hudson Alpha and possibly CSHL.  They would like the cell type and the term to be able to link to the correct protocol
+
+
+term UW_Stam
+tag uwStamGrowProt
+description Cells grown using the UW_Stam growth protocol.
+type protocol
+
+term Open_Chromatin
+tag openChromGrowProt
+description Cells grown using the Open_Chromatin growth protocol.
+type protocol
+
+term HudsonAlpha
+tag hudsonAlphaGrowProt
+description Cells grown using the HudsonAlpha growth protocol.
+type protocol
+
+
+term Yale_TFBS
+tag YaleGrowProt
+description Cells grown using the Yale TFBS growth protocol.
 type protocol
 
 
@@ -4852,6 +5513,12 @@ type version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+
+term C3H
+tag C3H
+type strain
+description Strain C3H, Very related to C57BL/6
+
 term C57BL/6
 tag C57BL6
 type strain
@@ -4872,6 +5539,7 @@ description Strain 129, has widely available embryonic stem cells
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
 
+term E0
 term E11.5
 tag E11half
 type age
@@ -4908,7 +5576,6 @@ type age
 Stage Adult
 description Adult 8 weeks
 
-### Sex
 # Expected fields:
 # ----------------
 # term (human-readable name)
@@ -4946,46 +5613,54 @@ description UnknownD
 # type (informs pipeline code of stanza type, should be seqPlatform)
 # description
 
-term Illumina_Genome_Analyzer
+term Illumina_GA
 tag IlluminaGA
+geo Illumina Genome Analyzer
 type seqPlatform
 description ? TBD
 # Matches GA that Kate initially indicated as the term
 
-term Illumina_Genome_Analyzer_II
+term Illumina_GA2
 tag IlluminaGA2
+geo Illumina Genome Analyzer II
 type seqPlatform
 description ? TBD
 # Matches GA2 that Kate initially indicated as the term
 
-term Illumina_Genome_Analyzer_IIx
-tag IlluminaGAx
+term Illumina_GA2x
+tag IlluminaGA2x
+geo Illumina Genome Analyzer II
 type seqPlatform
 description ? TBD
 # Matches GA2x that Kate initally indicated as the term
 
 term 454_GS
 tag 454GS
+geo 454 GS
 type seqPlatform
 description ? TBD
 
 term 454_GS_20
 tag 454GS20
+geo 454 GS 20
 type seqPlatform
 description ? TBD
 
 term 454_GS_FLX
 tag 454GSFLX
+geo 454 GS FLX
 type seqPlatform
 description ? TBD
 
-term AB_SOLiD_System
+term AB_SOLiD
 tag ABSOLiD
+geo AB SOLiD System
 type seqPlatform
 description ? TBD
 
-term AB_SOLiD_System_2.0
+term AB_SOLiD_2.0
 tag ABSOLiD2
+geo AB_SOLiD System 2.0
 type seqPlatform
 description ? TBD
 

@@ -5,7 +5,7 @@
 
 
 # The header for the associated .ddf file should look like this:
-# files   view    cell    localization    rnaExtract      accession
+# files   view    cell    localization    rnaExtract      replicate
 
 
 dafVersion        2.0
@@ -19,26 +19,26 @@ group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
 
-validationSettings validateFiles.bam:mismatches=2
-# noAutoCreate     yes
+validationSettings validateFiles.bam:mismatches=7,nMatch
+noAutoCreate     yes
 
 # Track/view definition
 view             Transfrags
 longLabelPrefix  CSHL RNA-seq Transfrags
-type             broadPeak
+type             bed6+    
 hasReplicates    no
 required         no
 
 view             PlusRawSignal
 longLabelPrefix  CSHL RNA-seq Plus Strand Raw Signal
 type             bigWig
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 view             MinusRawSignal
 longLabelPrefix  CSHL RNA-seq Minus Strand Raw Signal
 type             bigWig
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 view             Alignments

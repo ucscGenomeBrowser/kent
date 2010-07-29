@@ -13,6 +13,7 @@
 #include "hgConfig.h"
 #include "jsHelper.h"
 #include "imageV2.h"
+#include "searchTracks.h"
 
 static void textSizeDropDown()
 /* Create drop down for font size. */
@@ -450,6 +451,11 @@ else
 	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
+if(isSearchTracksSupported(database))
+    {
+    cgiMakeButton(searchTracks, "find");
+    hPrintf(" ");
+    }
 cgiMakeButton(configHideAll, "hide all");
 hPrintf(" ");
 cgiMakeButton(configShowAll, "show all");

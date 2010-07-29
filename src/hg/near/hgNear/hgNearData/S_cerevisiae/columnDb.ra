@@ -76,9 +76,6 @@ goaIdColumn dbObjectId
 name description
 type knownDetails sgdDescription name description
 
-name zebrafishOrthologs
-itemUrl http://apr2006.archive.ensembl.org/Danio_rerio/transview?transcript=%s
-
 name flyOrthologs
 xrefOrg D. melanogaster
 xrefLookup flyBase2004Xref name fbgn

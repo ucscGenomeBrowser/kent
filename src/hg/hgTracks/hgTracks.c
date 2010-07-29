@@ -51,6 +51,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 #include "suggest.h"
+#include "searchTracks.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
@@ -2086,16 +2087,18 @@ if (psOutput)
     }
 else
     {
+    boolean transparentImage = FALSE;
+    #ifdef IMAGEv2_BG_IMAGE
+    if (theImgBox!=NULL)
+        transparentImage = TRUE;   // transparent when BG is defined
+    #endif///def IMAGEv2_BG_IMAGE
+
 #ifdef USE_PNG
     trashDirFile(&gifTn, "hgt", "hgt", ".png");
-    #ifdef IMAGEv2_BG_IMAGE
-    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, (theImgBox!=NULL?TRUE:FALSE));  // transparent when BG is defined
-    #else//ifndef IMAGEv2_BG_IMAGE
-    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-    #endif//ndef IMAGEv2_BG_IMAGE
+    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
 #else //ifndef
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
-    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
 #endif //ndef USE_PNG
 
     if(theImgBox)
@@ -2112,10 +2115,10 @@ else
         struct tempName gifTnSide;
         #ifdef USE_PNG
             trashDirFile(&gifTnSide, "hgt", "side", ".png");
-            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, FALSE);
+            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
         #else //ifndef
             trashDirFile(&gifTnSide, "hgt", "side", ".gif");
-            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, FALSE);
+            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
         #endif //ndef USE_PNG
 
         // Also add the side image
@@ -2383,7 +2386,7 @@ if (withGuidelines)
         {
         struct tempName gifBg;
         trashDirFile(&gifBg, "hgt", "bg", ".png");  // TODO: We could have a few static files by (pixHeight*pixWidth)  And I doubt pixHeight is needed!
-        bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, FALSE);
+        bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
         }
     #endif //defined(IMAGEv2_BG_IMAGE) && defined(USE_PNG)
@@ -4701,9 +4704,9 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></FONT>\n");
 	if (survey && differentWord(survey, "off"))
-	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
@@ -4792,12 +4795,21 @@ if (!hideControls)
     hPrintf("move end<BR>");
     hButton("hgt.dinkRL", " < ");
     hTextVar("dinkR", cartUsualString(cart, "dinkR", "2.0"), 3);
-    hButton("hgt.dinkRR", " ></TD> ");
+    hButton("hgt.dinkRR", " > ");
+    hPrintf("</TD>");
 #endif//ndef USE_NAVIGATION_LINKS
     hPrintf("</TR></TABLE>\n");
     // smallBreak();
 
     /* Display bottom control panel. */
+
+#ifdef TRACK_SEARCH
+    if(isSearchTracksSupported(database))
+        {
+        hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
+        hPrintf(" ");
+        }
+#endif
     hButton("hgt.reset", "default tracks");
 #ifdef IMAGEv2_DRAG_REORDER
 	hPrintf("&nbsp;");
@@ -4823,11 +4835,6 @@ if (!hideControls)
         hButton("hgt.toggleRevCmplDisp", "reverse");
         hPrintf(" ");
 	}
-
-#ifdef TRACK_SEARCH
-    hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
-    hPrintf(" ");
-#endif
 
     hButton("hgt.refresh", "refresh");
 

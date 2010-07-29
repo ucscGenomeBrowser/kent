@@ -192,16 +192,17 @@ for my $key (keys %ra) {
         unloadBam($assembly, $db, $tablename);
         unlink "$downloadDir/gbdb/$tablename.bam";
         unlink "$downloadDir/gbdb/$tablename.bam.bai";
-        unlink "$downloadDir/$tablename.bam.gz";
+        unlink "$downloadDir/$tablename.bam";
+        unlink "$downloadDir/$tablename.bam.bai";
     } elsif ($type eq "bigWig") {
         unloadBigWig($assembly, $db, $tablename);
         unlink "$downloadDir/gbdb/$tablename.bw";
-        unlink "$downloadDir/$tablename.bigWig.gz";
+        unlink "$downloadDir/$tablename.bigWig";
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";
     }
 
-    # delete the download files
+    # delete the download files 
     my $target = "$downloadDir/$tablename.$type.gz";
     if(@files == 1 && $files[0] =~ /^$Encode::autoCreatedPrefix/) {
         $target = "$downloadDir/raw/$tablename.$type.gz";
@@ -209,8 +210,18 @@ for my $key (keys %ra) {
             mkdir "$downloadDir/raw" or die "Could not create dir [$downloadDir/raw] error: [$!]\n";
             }
     }
-    $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
-    unlink $target;
+    if ($type eq "bam") {
+        $target = "$downloadDir/$tablename.$type";
+        unlink $target;
+        $target = "$downloadDir/$tablename.$type.bai";
+        unlink $target;
+    } elsif ($type eq "bigWig") {
+        $target = "$downloadDir/$tablename.$type";
+        unlink $target;
+    } else {
+        $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
+        unlink $target;
+    }
 }
 
 exit(0);

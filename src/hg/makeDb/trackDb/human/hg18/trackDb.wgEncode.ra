@@ -1008,7 +1008,7 @@ wgEncode 1
 
 
 
-# U. Washington Affy Exon (wrangler: Andy, Tim, Brian)
+# U. Washington Affy Exon (wrangler: Andy, Brian)
 
 track wgEncodeUwAffyExonArray
 compositeTrack on
@@ -1618,7 +1618,7 @@ track wgEncodeReg
 superTrack on show
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation Track Based on ENCODE Data
-release alpha
+release alpha,beta
 wgEncode 1
 group regulation
 
@@ -1629,7 +1629,7 @@ group regulation
     superTrack wgEncodeReg hide
     shortLabel Transcription
     longLabel Transcription levels assayed by RNA-seq from ENCODE
-    release alpha
+    release alpha,beta
     configurable on
     visibility full
     maxHeightPixels 100:30:11
@@ -1643,7 +1643,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
 	shortLabel Gm12878
 	longLabel Transcription of Gm12878 cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegTxn
         type wig 0.00 2446.53
 	color 255,128,128
@@ -1652,7 +1652,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75
 	shortLabel H1 ES
 	longLabel Transcription of H1 ES cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegTxn
         type wig 0.00 3686.36
 	color 255,212,128
@@ -1661,7 +1661,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75
 	shortLabel HepG2
 	longLabel Transcription of HepG2 cells from ENCODE
-	release alpha
+	release alpha,beta
 	parent wgEncodeRegTxn
         type wig 0.00 1674.27
 	color 212,255,128
@@ -1670,7 +1670,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1HuvecCellPapBb2R2x75
 	shortLabel HUVEC
 	longLabel Transcription of HUVEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegTxn
         type wig 0.00 1889.44
 	color 128,212,255
@@ -1679,7 +1679,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75
 	shortLabel K562
 	longLabel Transcription of K562 cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegTxn
         type wig 0.00 2716.04
 	color 128,128,255
@@ -1688,7 +1688,7 @@ group regulation
 	table wgEncodeCaltechRnaSeqRawSignalRep1NhekCellPapBb2R2x75
 	shortLabel NHEK
 	longLabel Transcription of NHEK cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegTxn
 	type wig 0.00 4417.02
 	color 212,128,255
@@ -1701,7 +1701,7 @@ group regulation
     superTrack wgEncodeReg full
     shortLabel Enhancer H3K4Me1
     longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on 8 Cell Lines from ENCODE
-    release alpha
+    release alpha,beta
     configurable on
     visibility full
     viewLimits 0:50
@@ -1713,7 +1713,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Gm12878
 	shortLabel Gm12878
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on Gm12878 cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1722,7 +1722,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1H1hesc
 	shortLabel H1 ES
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on H1 ES cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k4me1
@@ -1731,7 +1731,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Hepg2
 	shortLabel HepG2
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HepG2 cells from ENCODE
-	release alpha
+	release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,255,128
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me1
@@ -1740,7 +1740,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Hmec
 	shortLabel HMEC
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HMEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k4me1
@@ -1749,7 +1749,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Hsmm
 	shortLabel HSMM
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HSMM cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k4me1
@@ -1758,7 +1758,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Huvec
 	shortLabel HUVEC
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HUVEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k4me1
@@ -1767,7 +1767,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1K562
 	shortLabel K562
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on K562 cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k4me1
@@ -1776,7 +1776,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Nhek
 	shortLabel NHEK
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on NHEK cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k4me1
@@ -1785,7 +1785,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k4me1Nhlf
 	shortLabel NHLF
 	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on NHLF cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k4me1
@@ -1798,7 +1798,7 @@ group regulation
     superTrack wgEncodeReg hide
     shortLabel Enhancer H3K27Ac
     longLabel H3K27Ac - An Enhancer and Promoter Histone Mark on 8 Cell Lines from ENCODE
-    release alpha
+    release alpha,beta
     configurable on
     visibility full
     viewLimits 0:50
@@ -1810,7 +1810,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acGm12878
 	shortLabel Gm12878
 	longLabel H3K27Ac - An enhancer and promoter mark on Gm12878 cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1819,7 +1819,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acH1hesc
 	shortLabel H1 ES
 	longLabel H3K27Ac - An enhancer and promoter mark on H1 ES cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k27ac
@@ -1828,7 +1828,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acHepg2
 	shortLabel HepG2
 	longLabel H3K27Ac - An enhancer and promoter mark on HepG2 cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,255,128
         table wgEncodeBroadChipSeqSignalHepg2H3k27ac
@@ -1837,7 +1837,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acHmec
 	shortLabel HMEC
 	longLabel H3K27Ac - An enhancer and promoter mark on HMEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k27ac
@@ -1846,7 +1846,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acHsmm
 	shortLabel HSMM
 	longLabel H3K27Ac - An enhancer and promoter mark on HSMM cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k27ac
@@ -1855,7 +1855,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acHuvec
 	shortLabel HUVEC
 	longLabel H3K27Ac - An enhancer and promoter mark on HUVEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k27ac
@@ -1864,7 +1864,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acK562
 	shortLabel K562
 	longLabel H3K27Ac - An enhancer and promoter mark on K562 cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k27ac
@@ -1873,7 +1873,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acNhek
 	shortLabel NHEK
 	longLabel H3K27Ac - An enhancer and promoter mark on NHEK cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k27ac
@@ -1882,7 +1882,7 @@ group regulation
 	track wgEncodeRegMarkEnhH3k27acNhlf
 	shortLabel NHLF
 	longLabel H3K27Ac - An enhancer and promoter mark on NHLF cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k27ac
@@ -1893,7 +1893,7 @@ group regulation
     superTrack wgEncodeReg full
     shortLabel Promoter H3K4Me3
     longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE
-    release alpha
+    release alpha,beta
     type wig 0 30000
     viewLimits 0:100
     configurable on
@@ -1903,12 +1903,13 @@ group regulation
     showSubtrackColorOnUi on
     windowingFunction mean
     priority 4
+    html wgEncodeRegMarkEnhH3k4me3
 
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
 	shortLabel Gm12878
 	longLabel Promoter mark (H3K4Me3) on Gm12878 cells from ENCODE
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 100593.50
 	color 255,128,128
@@ -1917,7 +1918,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalH1hescH3k4me3
 	shortLabel H1 ES
 	longLabel Promoter mark (H3K4Me3) on H1 cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12434.00
 	color 255,212,128
@@ -1926,7 +1927,7 @@ group regulation
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
 	shortLabel HepG2
 	longLabel Promoter mark (H3K4Me3) on HepG2 cells from ENCODE
-	release alpha
+	release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 4927.00
 	color 212,255,128
@@ -1935,7 +1936,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
 	shortLabel HMEC
 	longLabel Promoter mark (H3K4Me3) on HMEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 15838.00
 	color 120,235,120
@@ -1944,7 +1945,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalHsmmH3k4me3
 	shortLabel HSMM
 	longLabel Promoter mark (H3K4Me3) on HSMM cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 42282.00
 	color 120,235,204
@@ -1953,7 +1954,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalHuvecH3k4me3
 	shortLabel HUVEC
 	longLabel Promoter mark (H3K4Me3) on HUVEC cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 9954.75
 	color 128,212,255
@@ -1962,7 +1963,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalK562H3k4me3
 	shortLabel K562
 	longLabel Promoter mark (H3K4Me3) on K562 cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 16145.25
 	color 128,128,255
@@ -1971,7 +1972,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalNhekH3k4me3
 	shortLabel NHEK
 	longLabel Promoter mark (H3K4Me3) on NHEK cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12229.50
 	color 212,128,255
@@ -1980,7 +1981,7 @@ group regulation
         table wgEncodeBroadChipSeqSignalNhlfH3k4me3
 	shortLabel NHLF
 	longLabel Promoter mark (H3K4Me3) on NHLF cells from ENCODE 
-        release alpha
+        release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 28587.00
 	color 255,128,212
@@ -2086,7 +2087,7 @@ group regulation
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
     longLabel ENCODE Digital DNaseI Hypersensitivity Clusters (# Out of 77 Assays)
-    release alpha
+    release alpha,beta
     type bed 5 .
     superTrack wgEncodeReg dense
     inputTrackTable wgEncodeRegDnaseClusteredInputs
@@ -2100,7 +2101,7 @@ group regulation
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
     longLabel ENCODE Transcription Factor ChIP-SEQ
-    release alpha
+    release alpha,beta
     type factorSource
     superTrack wgEncodeReg dense
     sourceTable wgEncodeRegTfbsCells
@@ -3375,7 +3376,7 @@ subGroup3 ripAntibody RIP_Antibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_52
 subGroup4 ripTgtProtein RIP_Target_Protein PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 zCTL_T7Tag=T7Tag_Control
 dimensions dimensionX=cellType dimensionY=ripTgtProtein
 sortOrder cellType=+ ripTgtProtein=+
-controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=ripTgtProtein
+controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=Antibody
 dragAndDrop subTracks
 useScore 1
 noInherit on
@@ -3458,87 +3459,12 @@ wgEncode 1
         metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 
 
+
 # Yale RNA-seq (wrangler: tdreszer)
-track wgEncodeYaleRNAseq
-compositeTrack on
-shortLabel Yale RNA-seq
-longLabel ENCODE RNA-seq from Yale/UC-Davis/Harvard
-group expression
-priority 0
-origAssembly hg18
-subGroup1 cellType Cell_Line t1GM12878=GM12878_<i>Tier1</i> t1K562=K562_<i>Tier1</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-dimensions dimensionX=cellType
-boxedCfg on
-sortOrder cellType=+
-dragAndDrop subTracks
-#visibilityViewDefaults Signal=full zRAW=hide
-controlledVocabulary encode/cv.ra cellType=cell
-#noInherit on
-#settingsByView Signal:viewLimits=0:78,minLimit=0,maxLimit=20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,minLimit=0,maxLimit=65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
-type bedGraph 4
-viewLimits 0:78
-minLimit 0
-maxLimit 20910
-autoScale off
-windowingFunction mean
-maxHeightPixels 100:32:16
-dataVersion ENCODE Feb 2009 Freeze
-canPack On
-wgEncode 1
+include trackDb.wgEncodeYaleRnaSeq.ra
+# Yale RNA-seq (wrangler: cricket)
+include trackDb.wgEncodeYaleRnaSeq.new.ra
 
-    track wgEncodeYaleRnaSeqPolyaSignalGm12878
-    subTrack wgEncodeYaleRNAseq
-    shortLabel GM12878 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in GM12878 cells)
-    subGroups cellType=t1GM12878
-    type bedGraph 4
-    color 153,38,0
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=GM12878 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=539 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalGm12878 fileName=wgEncodeYaleRnaSeqPolyaSignalGm12878.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562
-    subTrack wgEncodeYaleRNAseq
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562 cells)
-    subGroups cellType=t1K562
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa30m cells)
-    subGroups cellType=uK562Ia30
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=540 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa6h cells)
-    subGroups cellType=uK562Ia6
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=541 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg30m cells)
-    subGroups cellType=uK562Ig30
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=542 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg6h cells)
-    subGroups cellType=uK562Ig6
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=543 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h.bedGraph4.gz
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
 include wgEncodeYaleChIPseq.ra

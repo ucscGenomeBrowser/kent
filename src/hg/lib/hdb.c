@@ -273,9 +273,9 @@ static struct hash *dbsChecked = NULL;
 
 if (dbsChecked)
     {
-    void *hashDb = hashFindVal(dbsChecked, database);
-    if (hashDb)
-	return(hashIntVal(dbsChecked, database));
+    struct hashEl *hel = hashLookup(dbsChecked, database);
+    if (hel != NULL)
+	return ptToInt(hel->val);
     }
 else
     dbsChecked = newHash(0);
@@ -283,11 +283,18 @@ else
 struct sqlConnection *conn = hConnectCentral();
 char buf[128];
 char query[256];
-boolean res = FALSE;
 char *escaped = sqlEscapeString(database);
 safef(query, sizeof(query), "select name from dbDb where name = '%s'", escaped);
 freez(&escaped);
-res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL) && sqlDatabaseExists(database);
+boolean res = (sqlQuickQuery(conn, query, buf, sizeof(buf)) != NULL);
+if (res)
+    {
+    // this is done instead of sqlDatabaseExists() since it uses the cache,
+    // which will recycle free connections for new databases
+    struct sqlConnection *conn2 = hAllocConnMaybe(database);
+    res = (conn2 != NULL);
+    hFreeConn(&conn2);
+    }
 hDisconnectCentral(&conn);
 hashAddInt(dbsChecked, database, res);
 return res;
@@ -479,6 +486,15 @@ struct sqlConnection *hAllocConn(char *db)
 if (hdbCc == NULL)
     hdbCc = sqlConnCacheNew();
 return sqlConnCacheAlloc(hdbCc, db);
+}
+
+struct sqlConnection *hAllocConnMaybe(char *db)
+/* Get free connection if possible. If not allocate a new one. Return
+ * NULL if db doesn't exist or can't be connected to. */
+{
+if (hdbCc == NULL)
+    hdbCc = sqlConnCacheNew();
+return sqlConnCacheMayAlloc(hdbCc, db);
 }
 
 struct sqlConnection *hAllocConnProfile(char *profileName, char *db)
@@ -3899,11 +3915,11 @@ static struct dbDb *hGetIndexedDbsMaybeClade(char *theDb)
 /* Get list of active databases, in theDb's clade if theDb is not NULL.
  * Dispose of this with dbDbFreeList. */
 {
-struct sqlConnection *conn = hConnectCentral();
+char *theClade = theDb ? hClade(hGenome(theDb)) : NULL;
+struct sqlConnection *conn = hConnectCentral(); // after hClade, since it access hgcentral too
 struct sqlResult *sr = NULL;
 char **row;
 struct dbDb *dbList = NULL, *db;
-char *theClade = theDb ? hClade(hGenome(theDb)) : NULL;
 
 /* Scan through dbDb table, loading into list */
 if (theClade != NULL)
@@ -4532,6 +4548,7 @@ for (table = tables; table != NULL; table = table->next)
 	grpSuperimpose(&grps, &oneTable);
     else if (!grps)
 	grps = oneTable;
+    hFreeConn(&conn);
     }
 return grps;
 }
