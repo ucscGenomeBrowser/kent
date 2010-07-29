@@ -1,4 +1,4 @@
-table cshlShortTransfrag
+table shortFrags
 "CSHL transfrags format (BED 6+)"
 (
     string chrom;         "Reference sequence chromosome or scaffold"
