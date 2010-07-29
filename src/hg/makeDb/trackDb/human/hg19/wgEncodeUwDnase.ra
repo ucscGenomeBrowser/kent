@@ -1110,26 +1110,6 @@ wgEncode 1
         origAssembly hg19
         # subId=2043 dateSubmitted=2010-07-24
 
-        track wgEncodeUwDnaseHek293HotspotsRep1
-        release alpha
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel HEK293  Hs rank:1
-        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HEK293 cells)
-        subGroups view=Hot cellType=HEK293 rank=1st
-        type broadPeak
-        origAssembly hg19
-        # subId=2042 dateSubmitted=2010-07-24
-
-        track wgEncodeUwDnaseHek293HotspotsRep2
-        release alpha
-        parent wgEncodeUwDnaseViewHot off
-        shortLabel HEK293  Hs rank:2
-        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HEK293 cells)
-        subGroups view=Hot cellType=HEK293 rank=2nd
-        type broadPeak
-        origAssembly hg19
-        # subId=2041 dateSubmitted=2010-07-24
-
         track wgEncodeUwDnaseHct116HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
@@ -2231,26 +2211,6 @@ wgEncode 1
         type narrowPeak
         origAssembly hg19
         # subId=2043 dateSubmitted=2010-07-24
-
-        track wgEncodeUwDnaseHek293PkRep1
-        release alpha
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HEK293  Pk rank:1
-        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HEK293 cells)
-        subGroups view=Peaks cellType=HEK293 rank=1st
-        type narrowPeak
-        origAssembly hg19
-        # subId=2042 dateSubmitted=2010-07-24
-
-        track wgEncodeUwDnaseHek293PkRep2
-        release alpha
-        parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HEK293  Pk rank:2
-        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HEK293 cells)
-        subGroups view=Peaks cellType=HEK293 rank=2nd
-        type narrowPeak
-        origAssembly hg19
-        # subId=2041 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116PkRep2
         release alpha
@@ -3355,26 +3315,6 @@ wgEncode 1
         type bigWig 1.000000 66499.000000
         origAssembly hg19
         # subId=2043 dateSubmitted=2010-07-24
-
-        track wgEncodeUwDnaseHek293RawRep1
-        release alpha
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HEK293  Ra rank:1
-        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HEK293 cells)
-        subGroups view=zRSig cellType=HEK293 rank=1st
-        type bigWig 1.000000 13429.000000
-        origAssembly hg19
-        # subId=2042 dateSubmitted=2010-07-24
-
-        track wgEncodeUwDnaseHek293RawRep2
-        release alpha
-        parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HEK293  Ra rank:2
-        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HEK293 cells)
-        subGroups view=zRSig cellType=HEK293 rank=2nd
-        type bigWig 1.000000 8142.000000
-        origAssembly hg19
-        # subId=2041 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116RawRep2
         release alpha
