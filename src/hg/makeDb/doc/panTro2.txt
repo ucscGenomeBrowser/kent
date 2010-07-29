@@ -2942,14 +2942,46 @@ doPhast.csh $(root1) $(file1) 13 .01 .23
     cd /cluster/data/panTro2/bed/multiz8way/frames
     make getGenes >&! getGenes.log &
         
-    ssh kkstore04
-    cd /cluster/data/panTro2/bed/multiz8way/frames
+
     nice tcsh # easy way to get process niced
     (cat  ../maf/*.maf | genePredToMafFrames panTro2 stdin stdout panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz canFam2 genes/canFam2.gp.gz danRer4 genes/danRer4.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz | gzip > multiz8way.mafFrames.gz)>&log&
+
+   ################################################################
+    # Use ensGene to annotate panTro2, reload multiz8wayFrames table
+    # (working 2010-07-29 - Chin)
+    cd /cluster/data/panTro2/bed/multiz8way/frames
+    for DB in panTro2 
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+   time  (cat  ../maf/*.maf | genePredToMafFrames panTro2 stdin stdout panTro2 genes/panTro2.gp.gz rheMac2 genes/rheMac2.gp.gz canFam2 genes/canFam2.gp.gz danRer4 genes/danRer4.gp.gz galGal2 genes/galGal2.gp.gz hg18 genes/hg18.gp.gz mm8 genes/mm8.gp.gz | gzip > multiz8way.mafFrames.gz) > frames.log 2>&1
+    # real    17m21.258s
+
  
+    zcat multiz8way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+    #   4403 rheMac2
+    #  13552 canFam2
+    #  84969 galGal2
+    #  188785 hg18
+    #  190678 panTro2
+    #  285468 mm8
+
     ssh hgwdev
     cd /cluster/data/panTro2/bed/multiz8way/frames
-    hgLoadMafFrames panTro2 multiz8wayFrames multiz8way.mafFrames.gz >&log&
+    time nice -n +19 hgLoadMafFrames panTro2 multiz8wayFrames \
+        multiz8way.mafFrames.gz > loadFrames.log 2>&1 &
+    # real    0m8.607s
+
+    # check it:
+    hgsql -N -e "select src from  multiz8wayFrames;" panTro2 \
+      | sort | uniq -c | grep panTro2
+    #  190678 panTro2
+
 
 ##########################################################################
 # NSCAN track - (2006-07-28 markd)
