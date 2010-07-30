@@ -2510,8 +2510,7 @@ if (!tdbIsSuper(tdb))
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
     if (trackDbSetting(tdb, "dimensions"))
         {
-        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>jump to:");
-        //printf("<A HREF='#DISPLAY_SUBTRACKS' TITLE='Jump to subtracks section of page'>Subtracks&dArr;</A>&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description&darr;</A>");
+        printf("\n&nbsp;&nbsp;<span id='navDown' style='float:right; display:none;'>");
         if (trackDbSetting(tdb, "wgEncode"))
             {
             printf("&nbsp;&nbsp;");

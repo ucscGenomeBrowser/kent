@@ -76,7 +76,8 @@ void makeTopLink(struct trackDb *tdb)
 if (trackDbSetting(tdb, "dimensions"))
     {
     char *upArrow = "&uArr;";
-    if (cgiBrowser() == btIE)
+    enum browserType browser = cgiBrowser();
+    if (browser == btIE || browser == btFF)
         upArrow = "&uarr;";
     // Note: the nested spans are so that javascript can determine position and selectively display the link when appropriate
     printf("<span><span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span></span>\n",upArrow);
