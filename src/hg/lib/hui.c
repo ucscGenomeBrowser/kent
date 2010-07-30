@@ -108,7 +108,8 @@ mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitt
 struct mdbVar *mdbVar;
 for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if(sameString(mdbVar->var,"fileName"))
+    if (sameString(mdbVar->var,"fileName")
+    && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
         makeNamedDownloadsLink(db, trackDbTopLevelSelfOrParent(tdb), mdbVar->val);

@@ -240,6 +240,8 @@ priority 34.3
 #visibility pack
 color 12,12,120
 url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
+yalePseudoAssoc wgEncodeSangerGencodeYalePseudoV4
+yaleUrl http://tables.pseudogene.org/
 type genePred
 hgGene on
 hgsid on
