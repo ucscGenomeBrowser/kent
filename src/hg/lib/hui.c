@@ -3665,6 +3665,8 @@ boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
 #ifdef BIG_UI_NAV_LINKS
+printf("<table><tr><td class='windowSize'>");
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
 makeTopLink(parentTdb);
 #endif//def BIG_UI_NAV_LINKS
 
@@ -3716,9 +3718,6 @@ if (!primarySubtrack)
     if(useDragAndDrop)
         printf(" id=\"noDrag\" class='nodrop nodrag'");
     printf(">");
-    #ifdef BIG_UI_NAV_LINKS
-    printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
-    #endif//def BIG_UI_NAV_LINKS
     printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
@@ -3913,6 +3912,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
+#ifdef BIG_UI_NAV_LINKS
+printf("</td></tr></table>");
+#endif//def BIG_UI_NAV_LINKS
 if(slCount(subtrackRefList) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='subCBcount'></font>");
 puts("<P>");
