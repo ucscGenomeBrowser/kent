@@ -1621,6 +1621,7 @@ longLabel Integrated Regulation Track Based on ENCODE Data
 release alpha,beta
 wgEncode 1
 group regulation
+priority 1
 
     track wgEncodeRegTxn
     container multiWig
@@ -1637,7 +1638,8 @@ group regulation
     aggregate transparentOverlay
     transformFunc LOG
     viewLimits 0:4
-    priority 1
+    priority 1.1
+    dragAndDrop subTracks
 
         track wgEncodeRegTxnGm12878
 	table wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
@@ -1708,7 +1710,8 @@ group regulation
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
-    priority 2
+    priority 1.2
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkEnhH3k4me1Gm12878
 	shortLabel Gm12878
@@ -1805,7 +1808,8 @@ group regulation
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
-    priority 3
+    priority 1.3
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkEnhH3k27acGm12878
 	shortLabel Gm12878
@@ -1902,8 +1906,9 @@ group regulation
     aggregate transparentOverlay
     showSubtrackColorOnUi on
     windowingFunction mean
-    priority 4
+    priority 1.4
     html wgEncodeRegMarkEnhH3k4me3
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
@@ -2000,7 +2005,8 @@ group regulation
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
-    priority 5
+    priority 1.5
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkRepressH3k27me3Gm12878
 	shortLabel Gm12878
@@ -2096,7 +2102,7 @@ group regulation
     inputTracksSubgroupDisplay cellType rank
     visibility dense
     useScore 1
-    priority 6
+    priority 1.6
 
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
@@ -2111,7 +2117,7 @@ group regulation
     inputTracksSubgroupDisplay cellType factor
     visibility dense
     useScore 1
-    priority 7
+    priority 1.7
 
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
