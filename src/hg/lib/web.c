@@ -432,15 +432,15 @@ if(!skipSectionHeader)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
 	 "<TR><TD COLSPAN=3>	" "\n"
 	 "  	<!--outer table is for border purposes-->" "\n"
-	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-	 "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-	 "	<TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"../images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+       "      <TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>    " "\n"
+       "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>     " "\n"
+       "      <TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"../images/hr.gif\" WIDTH=\"100%\"><TR><TD class='windowSize'>" "\n"
 	 "		<FONT SIZE=\"4\" id='sectTtl'><b>&nbsp;"
 	 );
     htmlTextOut(textOutBuf);
 
     puts(
-	 "</b></FONT></TD></TR></TABLE>" "\n"
+	 "</b></FONT></TD><TD>&nbsp;</TD></TR></TABLE>" "\n"
 	 "	<TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"

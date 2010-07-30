@@ -2,6 +2,7 @@
 // $Header: /projects/compbio/cvsroot/kent/src/hg/js/hui.js,v 1.59 2010/06/03 20:27:26 tdreszer Exp $
 
 var compositeName = "";
+//var browser;                // browser ("msie", "safari" etc.)
 //var now = new Date();
 //var start = now.getTime();
 //$(window).load(function () {
@@ -71,9 +72,9 @@ function _matSelectViewForSubTracks(obj,view)
             var matCBs = $("input.matCB").not(".abc").not(".halfVis").not(":checked");
             if(matCBs.length > 0) {
                 $( matCBs ).each( function (i) { matChkBoxNormalize( this, classesHidden ); });
-                        }
-                    }
-                }
+            }
+        }
+    }
     // fix 3-way matCBs which may need to go from halfVis to checked or unchecked depending
     var matCBs = $("input.matCB").not(":checked").not(".halfVis");
     var matCBs = matCBsWhichAreComplete(false);
@@ -82,8 +83,8 @@ function _matSelectViewForSubTracks(obj,view)
             $( matCBs ).each( function (i) { matCbComplete( this, true ); });
         } else {
             $( matCBs ).each( function (i) { matChkBoxNormalize( this, classesHidden ); });
-            }
         }
+    }
     matSubCBsSelected();
     obj.lastIndex = obj.selectedIndex;
 }
@@ -1209,6 +1210,39 @@ function multiSelectClick(obj,sizeWhenOpen)
 return true;
 }
 
+function navigationLinksSetup()
+{ // Navigation links let you jump to places in the document
+  // If they exist, then they need to be well placed to fit window dimensions
+
+    // Put navigation links in top corner
+    var navDown = $("span#navDown");
+    if(navDown != undefined) {
+        var winWidth = ($(window).width() - 20) + "px";
+        $('.windowSize').css({maxWidth: winWidth,width: winWidth});
+        var sectTtl = $("#sectTtl").parents("td");
+        if(sectTtl != undefined) {
+            $(sectTtl).css({clear: 'none'});
+            if($.browser.msie)
+                $(sectTtl).prepend($(navDown));
+            else
+                $(sectTtl).append($(navDown));
+        }
+        $(navDown).css({display:''});
+        $(navDown).show();
+    }
+
+    // Decide if top links are needed
+    var navUp = $('span.navUp');
+    if($(navUp) != undefined && $(navUp).length > 0) {
+        $(navUp).each(function(i) {
+            var offset = $(this).parent().offset();
+            if(offset.top  > $(window).height()) {
+                $(this).css({display:''});
+                $(this).show();
+            }
+        });
+    }
+}
 
 // The following js depends upon the jQuery library
 $(document).ready(function()
@@ -1244,4 +1278,8 @@ $(document).ready(function()
     $('.filterComp').each( function(i) { // Do this by 'each' to set noneIsAll individually
         $(this).dropdownchecklist({ firstItemChecksAll: true, noneIsAll: $(this).hasClass('filterBy') });
     });
+
+    // Put navigation links in top corner
+    navigationLinksSetup();
 });
+                                                                                                       
