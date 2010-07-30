@@ -1,6 +1,6 @@
 # Data Agreement File for LICR ChIP-seq (Transciption Factor Binding Sites) experiments for mm9
 
-$Revision: 1.8 $
+#$Revision: 1.9 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -14,7 +14,7 @@ compositeSuffix   LicrTfbs
 assembly          mm9
 medianFragmentLength 200
 dafVersion        2.0
-validationSettings validateFiles.bam:mismatches=2,matchFirst=25;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mismatches=2,matchFirst=25,nMatch;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks
