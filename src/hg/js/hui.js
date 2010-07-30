@@ -1217,7 +1217,7 @@ function navigationLinksSetup()
     // Put navigation links in top corner
     var navDown = $("span#navDown");
     if(navDown != undefined) {
-        var winWidth = ($(window).width() - 20) + "px";
+        var winWidth = ($(window).width() - 30) + "px"; // Room for borders
         $('.windowSize').css({maxWidth: winWidth,width: winWidth});
         var sectTtl = $("#sectTtl").parents("td");
         if(sectTtl != undefined) {

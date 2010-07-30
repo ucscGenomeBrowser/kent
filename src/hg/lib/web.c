@@ -440,7 +440,7 @@ if(!skipSectionHeader)
     htmlTextOut(textOutBuf);
 
     puts(
-	 "</b></FONT></TD><TD>&nbsp;</TD></TR></TABLE>" "\n"
+	 "</b></FONT></TD><TD></TD></TR></TABLE>" "\n"
 	 "	<TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
