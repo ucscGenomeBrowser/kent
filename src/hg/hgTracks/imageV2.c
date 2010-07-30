@@ -1524,7 +1524,7 @@ else if(slice->link != NULL)
             if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
                 newLine = " - "; // FF does not support newline code!
             hPrintf(" TITLE='Click for:%s%s%s(drag to reorder%s)'", newLine,htmlEncode(slice->title),
-                    newLine,(tdbIsCompositeChild(imgTrack->tdb)?" higlighted subtrack":"") );
+                    newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
             }
         else
             hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
