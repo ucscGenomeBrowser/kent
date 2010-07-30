@@ -1282,4 +1282,3 @@ $(document).ready(function()
     // Put navigation links in top corner
     navigationLinksSetup();
 });
-                                                                                                       
