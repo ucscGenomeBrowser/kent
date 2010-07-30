@@ -794,26 +794,47 @@ function initImgTblButtons()
     var btns = $("p.btn");
     if(btns.length > 0) {
         imgTblZipButtons($('#imgTbl'));
-        $(btns).mouseover( imgTblButtonMouseOver );
-        $(btns).mouseout(  imgTblButtonMouseOut  );
+        $(btns).mouseenter( imgTblButtonMouseOver );
+        $(btns).mouseleave( imgTblButtonMouseOut  );
         $(btns).show();
     }
+var handle = $("td.dragHandle");
+    if(handle.length > 0) {
+        $(handle).mouseenter( imgTblDragHandleMouseOver );
+        $(handle).mouseleave( imgTblDragHandleMouseOut  );
+    }
+}
+
+function imgTblDragHandleMouseOver()
+{
+// Highlights a single row when mouse over a dragHandle column (sideLabel and buttons)
+    if(jQuery.tableDnD.dragObject == null) {
+        $( this ).parents("tr").addClass("trDrag");
+    }
+}
+
+function imgTblDragHandleMouseOut()
+{
+// Ends row highlighting by mouse over
+    $( this ).parents("tr").removeClass("trDrag");
 }
 
 function imgTblButtonMouseOver()
 {
 // Highlights a composite set of buttons, regarless of whether tracks are adjacent
-    var classList = $( this ).attr("class").split(" ");
-    var btns = $( "p." + classList[0] )
-    $( btns ).removeClass('btnGrey');
-    $( btns ).addClass('btnBlue');
+    if(jQuery.tableDnD.dragObject == null) {
+        var classList = $( this ).attr("class").split(" ");
+        var btns = $( "p." + classList[0] );
+        $( btns ).removeClass('btnGrey');
+        $( btns ).addClass('btnBlue');
+    }
 }
 
 function imgTblButtonMouseOut()
 {
-// Ends compositre highlighting by mouse over
+// Ends composite highlighting by mouse over
     var classList = $( this ).attr("class").split(" ");
-    var btns = $( "p." + classList[0] )
+    var btns = $( "p." + classList[0] );
     $( btns ).removeClass('btnBlue');
     $( btns ).addClass('btnGrey');
 }
@@ -1190,6 +1211,7 @@ $(document).ready(function()
             $(imgTable).tableDnD({
                 onDragClass: "trDrag",
                 dragHandle: "dragHandle",
+                scrollAmount: 40,
                 onDragStart: function(ev, table, row) {
                     saveMouseOffset(ev);
                     $(document).bind('mousemove',blockTheMapOnMouseMove);
@@ -1202,7 +1224,7 @@ $(document).ready(function()
                         imgTblZipButtons( table );
                     }
                     $(document).unbind('mousemove',blockTheMapOnMouseMove);
-                    setTimeout('blockUseMap=false;',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+                    setTimeout('blockUseMap=false;',50); // Necessary incase the onDrop was over a map item. onDrop takes precedence.
                 }
             });
         }

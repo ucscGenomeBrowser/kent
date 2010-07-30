@@ -12,7 +12,7 @@ grant Snyder
 inputType MEL/None/Input/IgG-Yale
 lab Stanford
 labVersion PeakSeq1.0
-metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabSig fileName=wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig.gz
+metadata project=wgEncode grant=Snyder lab=Stanford dataType=ChIPseq cell=MEL antibody=E2F4 setType=exp treatment=None inputType=MEL/None/Input/IgG-rab control=IgG-rab view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE June 2010 Freeze" subId=1193 dateSubmitted=2010-05-12 dateUnrestricted=2011-02-12 composite=wgEncodeSydhTfbs tableName=wgEncodeSydhTfbsMelE2f4IggrabSig fileName=wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig
 project wgEncode
 setType input
 subId 1168
@@ -140,7 +140,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -272,7 +272,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -294,7 +294,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Stanford
@@ -316,7 +317,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Stanford
@@ -404,7 +406,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12CtcfIggyaleSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12CtcfIggyaleSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Stanford
@@ -536,7 +538,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -600,7 +602,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12InputIggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12InputIggmusSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -664,7 +666,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12InputIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12InputIggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -796,7 +798,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12JundIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12JundIggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -818,7 +820,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -840,7 +843,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -928,7 +932,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12MaxIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12MaxIggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -950,7 +954,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -972,7 +977,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1060,7 +1066,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12P300IggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12P300IggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1192,7 +1198,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1214,7 +1220,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1236,7 +1243,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1324,7 +1332,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Rad21IggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12Rad21IggrabSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-rab
 lab Stanford
@@ -1456,7 +1464,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1478,7 +1486,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1500,7 +1509,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1588,7 +1598,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsCh12Usf2IggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsCh12Usf2IggmusSig.bigWig
 grant Snyder
 inputType CH12/None/Input/IgG-mus
 lab Stanford
@@ -1720,7 +1730,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelCmycIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelCmycIggrabSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -1742,7 +1752,8 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam.bai
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -1764,7 +1775,8 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam.bai
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -1852,7 +1864,7 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelCtcfDmso20StdSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelCtcfDmso20StdSig.bigWig
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -1874,7 +1886,8 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -1896,7 +1909,8 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -1984,7 +1998,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
-fileName wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2116,7 +2130,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelGata1IggratSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelGata1IggratSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-rat
 lab Stanford
@@ -2138,7 +2152,8 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20StdAln.bam.gz
+fileName wgEncodeSydhTfbsMelInputDmso20StdAln.bam
+fileIndex wgEncodeSydhTfbsMelInputDmso20StdAln.bam.bai
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -2180,7 +2195,7 @@ dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
-fileName wgEncodeSydhTfbsMelInputDmso20StdSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelInputDmso20StdSig.bigWig
 grant Snyder
 inputType MEL/DMSO_2.0pct/Input/std
 lab Stanford
@@ -2244,7 +2259,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelInputIggmusSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2308,7 +2323,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelInputIggrabSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2372,7 +2387,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelInputIggratSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelInputIggratSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-rat
 lab Stanford
@@ -2436,7 +2451,8 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2458,7 +2474,8 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2546,7 +2563,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
-fileName wgEncodeSydhTfbsMelJundIggrabSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelJundIggrabSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-rab
 lab Stanford
@@ -2568,7 +2585,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2590,7 +2608,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2678,7 +2697,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelMaxIggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelMaxIggmusSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2700,7 +2719,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2722,7 +2742,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2810,7 +2831,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelP300IggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelP300IggmusSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -2942,7 +2963,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelPol2IggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelPol2IggmusSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -3074,7 +3095,7 @@ dataType ChIPseq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
-fileName wgEncodeSydhTfbsMelTbpIggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelTbpIggmusSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -3096,7 +3117,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.gz
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
+fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -3118,7 +3140,8 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.gz
+fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
+fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.bai
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford
@@ -3206,7 +3229,7 @@ dataType ChIPseq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
-fileName wgEncodeSydhTfbsMelUsf2IggmusSig.bigWig.gz
+fileName wgEncodeSydhTfbsMelUsf2IggmusSig.bigWig
 grant Snyder
 inputType MEL/None/Input/IgG-mus
 lab Stanford

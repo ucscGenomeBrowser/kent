@@ -1,5 +1,6 @@
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Nov69522T7tag
 objType table
+antibody T7Tag
 cell GM12878
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -19,6 +20,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sc5261Elavl1
 objType table
+antibody ELAVL1
 cell GM12878
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -38,6 +40,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaGm12878Sigp6246Pabpc1
 objType table
+antibody PABPC1
 cell GM12878
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -57,6 +60,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Nov69522T7tag
 objType table
+antibody T7Tag
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -76,6 +80,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc21027Igf2bp1
 objType table
+antibody IGF2BP1
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -95,6 +100,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sc5261Elavl1
 objType table
+antibody ELAVL1
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -114,6 +120,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 objType table
+antibody PABPC1
 cell K562
 composite wgEncodeSunyalbanyRnaGeneChip
 dataType RnaGeneChip
@@ -131,4 +138,4 @@ subId 101
 tableName wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1
 view RbpAssocRna
 
-# MAGIC: -2116088545
+# MAGIC: -2099872552

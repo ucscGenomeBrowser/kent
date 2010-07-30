@@ -102,6 +102,9 @@ struct memGfx *mgNew(int width, int height);
 void mgFree(struct memGfx **pmg);
 /* Free up memory raster. */
 
+void mgClearPixelsTrans(struct memGfx *mg);
+/* Set all pixels to transparent. */
+
 void mgClearPixels(struct memGfx *mg);
 /* Set all pixels to background. */
 

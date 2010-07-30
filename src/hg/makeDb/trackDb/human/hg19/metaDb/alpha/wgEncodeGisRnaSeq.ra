@@ -6,7 +6,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.gz
+fileName wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
+fileIndex wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 localization cytosol
@@ -25,7 +26,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1.bigWig.gz
+fileName wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
@@ -44,7 +45,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1.bigWig.gz
+fileName wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
@@ -63,7 +64,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.gz
+fileName wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
+fileIndex wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 localization cell
@@ -82,7 +84,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1.bigWig.gz
+fileName wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
@@ -101,7 +103,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-03
 dateUnrestricted 2011-04-03
-fileName wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1.bigWig.gz
+fileName wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
@@ -120,7 +122,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.gz
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
+fileIndex wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.bai
 grant Gingeras
 lab GIS
 localization cytosol
@@ -139,7 +142,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam.gz
+fileName wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
+fileIndex wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam.bai
 grant Gingeras
 lab GIS
 localization cytosol
@@ -158,7 +162,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1.bigWig.gz
+fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
@@ -177,7 +181,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2.bigWig.gz
+fileName wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
@@ -196,7 +200,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1.bigWig.gz
+fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
@@ -215,7 +219,7 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-01
 dateUnrestricted 2011-04-01
-fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2.bigWig.gz
+fileName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol

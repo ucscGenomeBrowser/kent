@@ -51,6 +51,7 @@
 #include "agpFrag.h"
 #include "imageV2.h"
 #include "suggest.h"
+#include "searchTracks.h"
 
 static char const rcsid[] = "$Id: doMiddle.c,v 1.1651 2010/06/11 17:53:06 larrym Exp $";
 
@@ -2086,16 +2087,18 @@ if (psOutput)
     }
 else
     {
+    boolean transparentImage = FALSE;
+    #ifdef IMAGEv2_BG_IMAGE
+    if (theImgBox!=NULL)
+        transparentImage = TRUE;   // transparent when BG is defined
+    #endif///def IMAGEv2_BG_IMAGE
+
 #ifdef USE_PNG
     trashDirFile(&gifTn, "hgt", "hgt", ".png");
-    #ifdef IMAGEv2_BG_IMAGE
-    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, (theImgBox!=NULL?TRUE:FALSE));  // transparent when BG is defined
-    #else//ifndef IMAGEv2_BG_IMAGE
-    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, FALSE);
-    #endif//ndef IMAGEv2_BG_IMAGE
+    hvg = hvGfxOpenPng(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
 #else //ifndef
     trashDirFile(&gifTn, "hgt", "hgt", ".gif");
-    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, FALSE);
+    hvg = hvGfxOpenGif(pixWidth, pixHeight, gifTn.forCgi, transparentImage);
 #endif //ndef USE_PNG
 
     if(theImgBox)
@@ -2112,10 +2115,10 @@ else
         struct tempName gifTnSide;
         #ifdef USE_PNG
             trashDirFile(&gifTnSide, "hgt", "side", ".png");
-            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, FALSE);
+            hvgSide = hvGfxOpenPng(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
         #else //ifndef
             trashDirFile(&gifTnSide, "hgt", "side", ".gif");
-            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, FALSE);
+            hvgSide = hvGfxOpenGif(pixWidth, pixHeight, gifTnSide.forCgi, transparentImage);
         #endif //ndef USE_PNG
 
         // Also add the side image
@@ -2383,7 +2386,7 @@ if (withGuidelines)
         {
         struct tempName gifBg;
         trashDirFile(&gifBg, "hgt", "bg", ".png");  // TODO: We could have a few static files by (pixHeight*pixWidth)  And I doubt pixHeight is needed!
-        bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, FALSE);
+        bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
         }
     #endif //defined(IMAGEv2_BG_IMAGE) && defined(USE_PNG)
@@ -2774,17 +2777,13 @@ else
     }
 }
 
-void loadFromTrackDb(struct track **pTrackList)
-/* Load tracks from database, consulting handler list. */
+void addTdbListToTrackList(struct trackDb *tdbList, char *trackNameFilter,
+	struct track **pTrackList)
+/* Convert a list of trackDb's to tracks, and append these to trackList. */
 {
-struct trackDb *tdb, *next, *tdbList = NULL;
+struct trackDb *tdb, *next;
 struct track *track;
 TrackHandler handler;
-char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
-if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database, chromName);
-else
-    tdbList = hTrackDbForTrack(database, trackNameFilter);
 tdbSortPrioritiesFromCart(cart, &tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
@@ -2817,6 +2816,18 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     else
         slAddHead(pTrackList, track);
     }
+}
+
+void loadFromTrackDb(struct track **pTrackList)
+/* Load tracks from database, consulting handler list. */
+{
+char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
+struct trackDb *tdbList;
+if(trackNameFilter == NULL)
+    tdbList = hTrackDb(database, chromName);
+else
+    tdbList = hTrackDbForTrack(database, trackNameFilter);
+addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
 }
 
 static int getScoreFilter(char *trackName)
@@ -3308,7 +3319,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 return pos;
 }
 
-void loadCustomTracks(struct track **pGroupList)
+void loadCustomTracks(struct track **pTrackList)
 /* Load up custom tracks and append to list. */
 {
 struct customTrack *ct;
@@ -3360,7 +3371,7 @@ for (bl = browserLines; bl != NULL; bl = bl->next)
 		    char *s = words[i];
 		    struct track *tg;
 		    boolean toAll = sameWord(s, "all");
-		    for (tg = *pGroupList; tg != NULL; tg = tg->next)
+		    for (tg = *pTrackList; tg != NULL; tg = tg->next)
 			{
 			if (toAll || sameString(s, tg->track))
 			    {
@@ -3410,7 +3421,42 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     {
     hasCustomTracks = TRUE;
     tg = newCustomTrack(ct);
-    slAddHead(pGroupList, tg);
+    slAddHead(pTrackList, tg);
+    }
+}
+
+void addTracksFromDataHub(char *hubUrl, struct track **pTrackList)
+/* Load up stuff from data hub and append to list. The hubUrl points to
+ * a trackDb.ra format file.  */
+{
+/* Squirrel away hub directory for later. */
+char hubDir[PATH_LEN];
+splitPath(hubUrl, hubDir, NULL, NULL);
+
+/* Load trackDb.ra file and make it into proper trackDb tree */
+struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl);
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+     {
+     trackDbFieldsFromSettings(tdb);
+     trackDbPolish(tdb);
+     }
+trackDbLinkUpGenerations(tdbList);
+addTdbListToTrackList(tdbList, NULL, pTrackList);
+}
+
+void loadDataHubs(struct track **pTrackList)
+/* Load up stuff from data hubs and append to list. */
+{
+char *dataHubs = cloneString(cartUsualString(cart, "dataHubs", NULL));
+if (dataHubs == NULL)
+    return;
+int hubCount = chopByWhite(dataHubs, NULL, 10);
+char *hubArrays[hubCount];
+chopByWhite(dataHubs, hubArrays, hubCount);
+int i;
+for (i = 0; i<hubCount; ++i)
+    {
+    addTracksFromDataHub(hubArrays[i], pTrackList);
     }
 }
 
@@ -4064,6 +4110,9 @@ if (restrictionEnzymesOk())
     }
 if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
+#ifdef SOON
+loadDataHubs(&trackList);
+#endif /* SOON */
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
@@ -4655,9 +4704,9 @@ if (!hideControls)
 	hPrintf(" size <span id='size'>%s</span> bp. ", buf);
 	hWrites(" ");
 	hButton("hgTracksConfigPage", "configure");
-        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</EM></B></A></FONT>\n");
+        //hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"text-decoration:none; padding:2px; background-color:yellow; border:solid 1px\" HREF=\"http://www.surveymonkey.com/s.asp?u=881163743177\" TARGET=_BLANK><EM><B>Your feedback</B></EM></A></FONT>\n");
 	if (survey && differentWord(survey, "off"))
-	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</EM></B></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
+	    hPrintf("&nbsp;&nbsp;<FONT SIZE=3><A STYLE=\"background-color:yellow;\" HREF=\"%s\" TARGET=_BLANK><EM><B>%s</B></EM></A></FONT>\n", survey, surveyLabel ? surveyLabel : "Take survey");
 	// info for drag selection javascript
 	hPrintf("<input type='hidden' id='hgt.winStart' name='winStart' value='%d'>\n", winStart);
 	hPrintf("<input type='hidden' id='hgt.winEnd' name='winEnd' value='%d'>\n", winEnd);
@@ -4753,6 +4802,14 @@ if (!hideControls)
     // smallBreak();
 
     /* Display bottom control panel. */
+
+#ifdef TRACK_SEARCH
+    if(isSearchTracksSupported(database))
+        {
+        hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
+        hPrintf(" ");
+        }
+#endif
     hButton("hgt.reset", "default tracks");
 #ifdef IMAGEv2_DRAG_REORDER
 	hPrintf("&nbsp;");
@@ -4778,11 +4835,6 @@ if (!hideControls)
         hButton("hgt.toggleRevCmplDisp", "reverse");
         hPrintf(" ");
 	}
-
-#ifdef TRACK_SEARCH
-    hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
-    hPrintf(" ");
-#endif
 
     hButton("hgt.refresh", "refresh");
 

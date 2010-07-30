@@ -1,16 +1,44 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeUwDnaseSeq.ra,v 1.1 2010/05/27 21:50:07 tdreszer Exp $
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-
+# Notes:
+#	- Short Labels: 7 charactesr for cell type, 2 characters for view, 6 characters (other information, rank or maybe treatment )
+#	- Views: For consistency sake view will be two letters
+#		- Peaks = Pk
+#		- Raw Signal = Ra
+#		- Hotspots = Hs
+#	- Rank: rank:#
+#	- Cell Line begining with HMVEC: To shorten use the Cell name and the following abbreviations:
+#		- Bl = B
+#		= Ly = L
+#		- Ad = A
+#		- Neo = N
+#		- HMVEC-dBl-Ad = HMVECBA
+#		- HMVEC-dBl-Neo = HMVECBN
+#		- HMVEC-dLy-Ad = HMVECLA
+#		- HMVEC-dLy-Neo = HMVECLN
+#		- HMVEC-dNeo = HMVECN 
+#		- HMVEC-LBl = HMVECLB 
+#		- HMVEC-LLy = HMVECLL
+#	- cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
+#	- Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks for Tier 1 cell lines
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
+#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
+#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
+#       - View Displays: Deafult view filters:
+#               - Peaks-??
+#               - HotSpots-??
+#               - Raw Signal-??
 track wgEncodeUwDnase
 compositeTrack on
-superTrack wgEncodeDNAseSuper
+superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNaseI HS
-longLabel ENCODE Univ. Washington DNaseI Hypersensitivity by Digital DNaseI
+longLabel ENCODE DNaseI Hypersensitivity by Digital DNaseI from Univ. of Washington
 group regulation
 subGroup1 view Views Hot=Hot_Spots Peaks=Peaks zRSig=Raw_Signal
-subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i>&nbsp;(Epiderm_kerat) AG04449=AG04449&nbsp;(f-thigh_fib) AG04450=AG04450&nbsp;(f-lung_fib) AG09309=AG09309&nbsp;(Ad-toe_skin_fib) AG09319=AG09319&nbsp;(Ad-Gum_fib) AG10803=AG10803&nbsp;(Ad-abdom_fib) BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC&nbsp;(amniot_epith) HCF=HCF&nbsp;(cardiac_fib) HCM=HCM&nbsp;(cardiomyo) HCPE=HCPEpiC&nbsp;(chor_plex_epi) HEE=HEEpiC&nbsp;(Esopha_epi) HGF=HGF&nbsp;(Ging_Fib) HIPE=HIPEpiC&nbsp;(Iris_pigm_epi) HL60=HL-60 HMEC=HMEC&nbsp;(Mammar_epi) HNPCE=HNPCEpiC&nbsp;(non-pigm_cil_epi) HRCE=HRCEpiC&nbsp;(Renal_cortical_epi) HRE=HRE&nbsp;(Renal_epi) HRPE=HRPEpiC&nbsp;(Ret_pigm_epi) Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo&nbsp;(Dermal_fib) NHLF=NHLF&nbsp;(Lung_Fib) PANC1=PANC-1 SAEC=SAEC&nbsp;(small_airway_epi) SKMC=SKMC&nbsp;(skel_musc) SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
-subGroup3 rank Rank 1st=1st 2nd=2nd
+subGroup2 cellType Cell_Line  1K562=K562&nbsp;(Tier_1) 1GM12878=GM12878&nbsp;(Tier_1) 2H1=H1-hESC&nbsp;(Tier_2) 2HELA=HeLa-S3&nbsp;(Tier_2) 2HEPG2=HepG2&nbsp;(Tier_2) 2HUVEC=HUVEC&nbsp;(Tier_2) 2NHEK=NHEK&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC HCFaa=HCFaa HCF=HCF HCM=HCM HCONF=HConF HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HGF=HGF HIPE=HIPEpiC HL60=HL-60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-LBl HMVECLLy=HMVEC-LLy  HNPCE=HNPCEpiC HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HVMF=HVMF Jurkat=Jurkat JurkatG1=Jurkat&nbsp(G1_phase) MCF7=MCF-7 NB4=NB4 NHDF-Ad=NHDF-Ad NHDFneo=NHDF-neo NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th2
+#subGroup2 cellType Cell_Line 1GM12878=GM12878_<i>Tier1</i> 1K562=K562_<i>Tier1</i> 2H1=H1-hESC_<i>Tier2</i> 2HELA=HeLa-S3_<i>Tier2</i> 2HEPG2=HepG2_<i>Tier2</i> 2HUVEC=HUVEC_<i>Tier2</i> 2NHEK=NHEK_<i>Tier2</i>&nbsp;(Epiderm_kerat) AG04449=AG04449&nbsp;(f-thigh_fib) AG04450=AG04450&nbsp;(f-lung_fib) AG09309=AG09309&nbsp;(Ad-toe_skin_fib) AG09319=AG09319&nbsp;(Ad-Gum_fib) AG10803=AG10803&nbsp;(Ad-abdom_fib) BJ=BJ CACO2=Caco-2 CMK=CMK GM06990=GM06990 GM12865=GM12865 H7es=H7-hESC HAE=HAEpiC&nbsp;(amniot_epith) HCF=HCF&nbsp;(cardiac_fib) HCM=HCM&nbsp;(cardiomyo) HCPE=HCPEpiC&nbsp;(chor_plex_epi) HEE=HEEpiC&nbsp;(Esopha_epi) HGF=HGF&nbsp;(Ging_Fib) HIPE=HIPEpiC&nbsp;(Iris_pigm_epi) HL60=HL-60 HMEC=HMEC&nbsp;(Mammar_epi) HNPCE=HNPCEpiC&nbsp;(non-pigm_cil_epi) HRCE=HRCEpiC&nbsp;(Renal_cortical_epi) HRE=HRE&nbsp;(Renal_epi) HRPE=HRPEpiC&nbsp;(Ret_pigm_epi) Jurkat=Jurkat JurkatG1=Jurkat_<i>(G1_phase)</i> MCF7=MCF-7 NB4=NB4 NHDFneo=NHDF-neo&nbsp;(Dermal_fib) NHLF=NHLF&nbsp;(Lung_Fib) PANC1=PANC-1 SAEC=SAEC&nbsp;(small_airway_epi) SKMC=SKMC&nbsp;(skel_musc) SKNSHRA=SK-N-SH_RA Th1=Th1 Th2=Th3
+subGroup3 rank rank 1st=1st 2nd=2nd
 dimensions dimensionY=cellType dimensionX=rank
 sortOrder cellType=+ rank=+ view=+
 dragAndDrop subTracks
@@ -34,7 +62,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04450 H1
+        shortLabel AG04450 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in AG04450 cells)
         subGroups view=Hot cellType=AG04450 rank=1st
         type broadPeak
@@ -44,7 +72,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09309 H1
+        shortLabel AG09309 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in AG09309 cells)
         subGroups view=Hot cellType=AG09309 rank=1st
         type broadPeak
@@ -54,7 +82,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09319 H1
+        shortLabel AG09319 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in AG09319 cells)
         subGroups view=Hot cellType=AG09319 rank=1st
         type broadPeak
@@ -64,7 +92,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SAEC H1
+        shortLabel SAEC    Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in SAEC cells)
         subGroups view=Hot cellType=SAEC rank=1st
         type broadPeak
@@ -74,7 +102,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NB4 H1
+        shortLabel NB4     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in NB4 cells)
         subGroups view=Hot cellType=NB4 rank=1st
         type broadPeak
@@ -84,7 +112,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHLF H1
+        shortLabel NHLF    Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in NHLF cells)
         subGroups view=Hot cellType=NHLF rank=1st
         type broadPeak
@@ -94,7 +122,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HGF H1
+        shortLabel HGF     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HGF cells)
         subGroups view=Hot cellType=HGF rank=1st
         type broadPeak
@@ -104,7 +132,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM12865 H1
+        shortLabel GM12865 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in GM12865 cells)
         subGroups view=Hot cellType=GM12865 rank=1st
         type broadPeak
@@ -114,7 +142,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaeHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HAEpiC H1
+        shortLabel HAEpiC  Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HAEpiC cells)
         subGroups view=Hot cellType=HAE rank=1st
         type broadPeak
@@ -124,7 +152,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HL-60 H1
+        shortLabel HL-60   Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HL-60 cells)
         subGroups view=Hot cellType=HL60 rank=1st
         type broadPeak
@@ -134,7 +162,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HMEC H1
+        shortLabel HMEC    Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMEC cells)
         subGroups view=Hot cellType=HMEC rank=1st
         type broadPeak
@@ -144,7 +172,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SKMC H1
+        shortLabel SKMC    Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in SKMC cells)
         subGroups view=Hot cellType=SKMC rank=1st
         type broadPeak
@@ -154,7 +182,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG10803 H1
+        shortLabel AG10803 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in AG10803 cells)
         subGroups view=Hot cellType=AG10803 rank=1st
         type broadPeak
@@ -164,7 +192,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrceHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRCEpiC H1
+        shortLabel HRCEpiC Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HRCEpiC cells)
         subGroups view=Hot cellType=HRCE rank=1st
         type broadPeak
@@ -174,7 +202,7 @@ wgEncode 1
         track wgEncodeUwDnaseHreHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRE H1
+        shortLabel HRE     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HRE cells)
         subGroups view=Hot cellType=HRE rank=1st
         type broadPeak
@@ -184,7 +212,7 @@ wgEncode 1
         track wgEncodeUwDnaseCmkHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel CMK H1
+        shortLabel CMK     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in CMK cells)
         subGroups view=Hot cellType=CMK rank=1st
         type broadPeak
@@ -194,7 +222,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot
-        shortLabel GM12878 H1
+        shortLabel GM12878 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in GM12878 cells)
         subGroups view=Hot cellType=1GM12878 rank=1st
         type broadPeak
@@ -205,7 +233,7 @@ wgEncode 1
         track wgEncodeUwDnaseH1hescHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel H1-hESC H1
+        shortLabel H1-hESC Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in H1-hESC cells)
         subGroups view=Hot cellType=2H1 rank=1st
         type broadPeak
@@ -216,7 +244,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCF H1
+        shortLabel HCF     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HCF cells)
         subGroups view=Hot cellType=HCF rank=1st
         type broadPeak
@@ -226,7 +254,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel H7-hESC H1
+        shortLabel H7-hESC Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in H7-hESC cells)
         subGroups view=Hot cellType=H7es rank=1st
         type broadPeak
@@ -236,7 +264,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpeHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCPEpiC H1
+        shortLabel HCPEpiC Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HCPEpiC cells)
         subGroups view=Hot cellType=HCPE rank=1st
         type broadPeak
@@ -246,7 +274,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCM H1
+        shortLabel HCM     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HCM cells)
         subGroups view=Hot cellType=HCM rank=1st
         type broadPeak
@@ -256,7 +284,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeeHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HEEpiC H1
+        shortLabel HEEpiC  Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HEEpiC cells)
         subGroups view=Hot cellType=HEE rank=1st
         type broadPeak
@@ -266,7 +294,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HeLa-S3 H1
+        shortLabel HeLa-S3 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HeLa-S3 cells)
         subGroups view=Hot cellType=2HELA rank=1st
         type broadPeak
@@ -277,7 +305,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM06990 H1
+        shortLabel GM06990 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in GM06990 cells)
         subGroups view=Hot cellType=GM06990 rank=1st
         type broadPeak
@@ -287,7 +315,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HepG2 H1
+        shortLabel HepG2   Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HepG2 cells)
         subGroups view=Hot cellType=2HEPG2 rank=1st
         type broadPeak
@@ -298,7 +326,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpceHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HNPCEpiC H1
+        shortLabel HNPCEpi Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HNPCEpiC cells)
         subGroups view=Hot cellType=HNPCE rank=1st
         type broadPeak
@@ -308,7 +336,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpeHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRPEpiC H1
+        shortLabel HRPEpiC Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HRPEpiC cells)
         subGroups view=Hot cellType=HRPE rank=1st
         type broadPeak
@@ -318,7 +346,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HUVEC H1
+        shortLabel HUVEC   Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HUVEC cells)
         subGroups view=Hot cellType=2HUVEC rank=1st
         type broadPeak
@@ -329,7 +357,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel PANC-1 H1
+        shortLabel PANC-1  Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in PANC-1 cells)
         subGroups view=Hot cellType=PANC1 rank=1st
         type broadPeak
@@ -339,7 +367,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel MCF-7 H1
+        shortLabel MCF-7   Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in MCF-7 cells)
         subGroups view=Hot cellType=MCF7 rank=1st
         type broadPeak
@@ -349,7 +377,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-neo H1
+        shortLabel NHDFneo Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in NHDF-neo cells)
         subGroups view=Hot cellType=NHDFneo rank=1st
         type broadPeak
@@ -359,7 +387,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHEK H1
+        shortLabel NHEK    Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in NHEK cells)
         subGroups view=Hot cellType=2NHEK rank=1st
         type broadPeak
@@ -370,7 +398,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SK-N-SH_RA H1
+        shortLabel SKNSHRA Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in SK-N-SH_RA cells)
         subGroups view=Hot cellType=SKNSHRA rank=1st
         type broadPeak
@@ -380,7 +408,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh1HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th1 H1
+        shortLabel Th1     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in Th1 cells)
         subGroups view=Hot cellType=Th1 rank=1st
         type broadPeak
@@ -390,7 +418,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Caco-2 H1
+        shortLabel Caco-2  Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in Caco-2 cells)
         subGroups view=Hot cellType=CACO2 rank=1st
         type broadPeak
@@ -400,7 +428,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjHotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel BJ H1
+        shortLabel BJ      Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in BJ cells)
         subGroups view=Hot cellType=BJ rank=1st
         type broadPeak
@@ -410,7 +438,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot
-        shortLabel K562 H1
+        shortLabel K562    Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in K562 cells)
         subGroups view=Hot cellType=1K562 rank=1st
         type broadPeak
@@ -421,7 +449,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh2HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Th2 H1
+        shortLabel Th2     Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in Th2 cells)
         subGroups view=Hot cellType=Th2 rank=1st
         type broadPeak
@@ -431,7 +459,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449HotspotsRep1
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04449 H1
+        shortLabel AG04449 Hs rank:1 
         longLabel ENCODE UW DNaseI HS Hotspots - 1st (in AG04449 cells)
         subGroups view=Hot cellType=AG04449 rank=1st
         type broadPeak
@@ -441,7 +469,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04449 H2
+        shortLabel AG04449 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in AG04449 cells)
         subGroups view=Hot cellType=AG04449 rank=2nd
         type broadPeak
@@ -451,7 +479,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG04450 H2
+        shortLabel AG04450 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in AG04450 cells)
         subGroups view=Hot cellType=AG04450 rank=2nd
         type broadPeak
@@ -461,7 +489,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09309 H2
+        shortLabel AG09309 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in AG09309 cells)
         subGroups view=Hot cellType=AG09309 rank=2nd
         type broadPeak
@@ -471,7 +499,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG09319 H2
+        shortLabel AG09319 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in AG09319 cells)
         subGroups view=Hot cellType=AG09319 rank=2nd
         type broadPeak
@@ -481,7 +509,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel AG10803 H2
+        shortLabel AG10803 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in AG10803 cells)
         subGroups view=Hot cellType=AG10803 rank=2nd
         type broadPeak
@@ -491,7 +519,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SAEC H2
+        shortLabel SAEC    Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in SAEC cells)
         subGroups view=Hot cellType=SAEC rank=2nd
         type broadPeak
@@ -501,7 +529,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NB4 H2
+        shortLabel NB4     Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in NB4 cells)
         subGroups view=Hot cellType=NB4 rank=2nd
         type broadPeak
@@ -511,7 +539,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHLF H2
+        shortLabel NHLF    Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in NHLF cells)
         subGroups view=Hot cellType=NHLF rank=2nd
         type broadPeak
@@ -521,7 +549,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel MCF-7 H2
+        shortLabel MCF-7   Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in MCF-7 cells)
         subGroups view=Hot cellType=MCF7 rank=2nd
         type broadPeak
@@ -531,7 +559,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrceHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRCEpiC H2
+        shortLabel HRCEpiC Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HRCEpiC cells)
         subGroups view=Hot cellType=HRCE rank=2nd
         type broadPeak
@@ -541,7 +569,7 @@ wgEncode 1
         track wgEncodeUwDnaseHreHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRE H2
+        shortLabel HRE     Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HRE cells)
         subGroups view=Hot cellType=HRE rank=2nd
         type broadPeak
@@ -551,7 +579,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel NHDF-neo H2
+        shortLabel NHDFneo Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in NHDF-neo cells)
         subGroups view=Hot cellType=NHDFneo rank=2nd
         type broadPeak
@@ -561,7 +589,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel PANC-1 H2
+        shortLabel PANC-1  Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in PANC-1 cells)
         subGroups view=Hot cellType=PANC1 rank=2nd
         type broadPeak
@@ -571,7 +599,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HL-60 H2
+        shortLabel HL-60   Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HL-60 cells)
         subGroups view=Hot cellType=HL60 rank=2nd
         type broadPeak
@@ -581,7 +609,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaeHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HAEpiC H2
+        shortLabel HAEpiC  Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HAEpiC cells)
         subGroups view=Hot cellType=HAE rank=2nd
         type broadPeak
@@ -591,7 +619,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM12865 H2
+        shortLabel GM12865 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in GM12865 cells)
         subGroups view=Hot cellType=GM12865 rank=2nd
         type broadPeak
@@ -601,7 +629,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel Caco-2 H2
+        shortLabel Caco-2  Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in Caco-2 cells)
         subGroups view=Hot cellType=CACO2 rank=2nd
         type broadPeak
@@ -611,7 +639,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCF H2
+        shortLabel HCF     Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HCF cells)
         subGroups view=Hot cellType=HCF rank=2nd
         type broadPeak
@@ -621,7 +649,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCM H2
+        shortLabel HCM     Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HCM cells)
         subGroups view=Hot cellType=HCM rank=2nd
         type broadPeak
@@ -631,7 +659,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpeHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HCPEpiC H2
+        shortLabel HCPEpiC Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HCPEpiC cells)
         subGroups view=Hot cellType=HCPE rank=2nd
         type broadPeak
@@ -641,7 +669,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeeHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HEEpiC H2
+        shortLabel HEEpiC  Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HEEpiC cells)
         subGroups view=Hot cellType=HEE rank=2nd
         type broadPeak
@@ -651,7 +679,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HGF H2
+        shortLabel HGF     Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HGF cells)
         subGroups view=Hot cellType=HGF rank=2nd
         type broadPeak
@@ -661,7 +689,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HeLa-S3 H2
+        shortLabel HeLa-S3 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HeLa-S3 cells)
         subGroups view=Hot cellType=2HELA rank=2nd
         type broadPeak
@@ -672,7 +700,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel GM06990 H2
+        shortLabel GM06990 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in GM06990 cells)
         subGroups view=Hot cellType=GM06990 rank=2nd
         type broadPeak
@@ -682,7 +710,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HepG2 H2
+        shortLabel HepG2   Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HepG2 cells)
         subGroups view=Hot cellType=2HEPG2 rank=2nd
         type broadPeak
@@ -693,7 +721,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpceHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HNPCEpiC H2
+        shortLabel HNPCEpi Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HNPCEpiC cells)
         subGroups view=Hot cellType=HNPCE rank=2nd
         type broadPeak
@@ -703,7 +731,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpeHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel HRPEpiC H2
+        shortLabel HRPEpiC Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HRPEpiC cells)
         subGroups view=Hot cellType=HRPE rank=2nd
         type broadPeak
@@ -713,7 +741,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SKMC H2
+        shortLabel SKMC    Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in SKMC cells)
         subGroups view=Hot cellType=SKMC rank=2nd
         type broadPeak
@@ -723,7 +751,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel SK-N-SH_RA H2
+        shortLabel SKNSHRA Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in SK-N-SH_RA cells)
         subGroups view=Hot cellType=SKNSHRA rank=2nd
         type broadPeak
@@ -733,7 +761,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot
-        shortLabel GM12878 H2
+        shortLabel GM12878 Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in GM12878 cells)
         subGroups view=Hot cellType=1GM12878 rank=2nd
         type broadPeak
@@ -744,7 +772,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562HotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot
-        shortLabel K562 H2
+        shortLabel K562    Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in K562 cells)
         subGroups view=Hot cellType=1K562 rank=2nd
         type broadPeak
@@ -755,12 +783,372 @@ wgEncode 1
         track wgEncodeUwDnaseBjHotspotsRep2
         release alpha
         parent wgEncodeUwDnaseViewHot off
-        shortLabel BJ H2
+        shortLabel BJ      Hs rank:2 
         longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in BJ cells)
         subGroups view=Hot cellType=BJ rank=2nd
         type broadPeak
         origAssembly hg18
         # subId=1249 dateSubmitted=2010-06-06
+
+        track wgEncodeUwDnaseNhdfadHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel NHDF-Ad Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in NHDF-Ad cells)
+        subGroups view=Hot cellType=NHDF-Ad rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2081 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseNhdfadHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel NHDF-Ad Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in NHDF-Ad cells)
+        subGroups view=Hot cellType=NHDF-Ad rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2080 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHvmfHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HVMF    Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HVMF cells)
+        subGroups view=Hot cellType=HVMF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2079 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHvmfHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HVMF    Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HVMF cells)
+        subGroups view=Hot cellType=HVMF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2078 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpdlfHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPdLF   Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HPdLF cells)
+        subGroups view=Hot cellType=HPdLF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2077 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpdlfHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPdLF   Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HPdLF cells)
+        subGroups view=Hot cellType=HPdLF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2076 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpfHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPF     Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HPF cells)
+        subGroups view=Hot cellType=HPF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2075 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpfHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPF     Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HPF cells)
+        subGroups view=Hot cellType=HPF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2074 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpafHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPAF    Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HPAF cells)
+        subGroups view=Hot cellType=HPAF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2073 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpafHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HPAF    Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HPAF cells)
+        subGroups view=Hot cellType=HPAF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2072 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdneoHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECN  Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-dNeo cells)
+        subGroups view=Hot cellType=HMVECdNeo rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2071 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdneoHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECN  Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-dNeo cells)
+        subGroups view=Hot cellType=HMVECdNeo rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2070 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyneoHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLN Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-dLy-Neo cells)
+        subGroups view=Hot cellType=HMVECdLyNeo rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2069 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyneoHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECdLN Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-dLy-Neo cells)
+        subGroups view=Hot cellType=HMVECdLyNeo rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2068 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyadHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLA Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-dLy-Ad cells)
+        subGroups view=Hot cellType=HMVECdLyAd rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2067 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyadHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLA Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-dLy-Ad cells)
+        subGroups view=Hot cellType=HMVECdLyAd rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2066 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdblneoHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECBN Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-dBl-Neo cells)
+        subGroups view=Hot cellType=HMVECdBlNeo rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2065 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdblneoHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECBN Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-dBl-Neo cells)
+        subGroups view=Hot cellType=HMVECdBlNeo rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2064 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdbladHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECBA Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-dBl-Ad cells)
+        subGroups view=Hot cellType=HMVECdBlAd rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2063 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdbladHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECBA Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-dBl-Ad cells)
+        subGroups view=Hot cellType=HMVECdBlAd rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2062 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecllyHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLL Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-LLy cells)
+        subGroups view=Hot cellType=HMVECLLy rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2061 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecllyHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLL Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-LLy cells)
+        subGroups view=Hot cellType=HMVECLLy rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2060 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmveclblHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLB Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMVEC-LBl cells)
+        subGroups view=Hot cellType=HMVECLbl rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2059 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmfHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMF     Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMF cells)
+        subGroups view=Hot cellType=HMF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2058 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmfHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMF     Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMF cells)
+        subGroups view=Hot cellType=HMF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2057 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHconfHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HConF   Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HConF cells)
+        subGroups view=Hot cellType=HCONF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2056 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHconfHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HConF   Pk rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HConF cells)
+        subGroups view=Hot cellType=HCONF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2055 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHcfaaHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HCFaa   Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HCFaa cells)
+        subGroups view=Hot cellType=HCFaa rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2054 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHcfaaHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HCFaa   Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HCFaa cells)
+        subGroups view=Hot cellType=HCFaa rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2053 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseAoafHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel AoAF    Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in AoAF cells)
+        subGroups view=Hot cellType=AOAF rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2052 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmecHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMEC    Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HMEC cells)
+        subGroups view=Hot cellType=HMEC rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2044 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHct116HotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HCT-116 Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HCT-116 cells)
+        subGroups view=Hot cellType=HCT116 rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2043 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHct116HotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HCT-116 Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in HCT-116 cells)
+        subGroups view=Hot cellType=HCT116 rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2040 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHmveclblHotspotsRep1
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel HMVECLB Hs rank:1
+        longLabel ENCODE UW DNaseI HS Hotspots - 1st (in HMVEC-LBl cells)
+        subGroups view=Hot cellType=HMVECLbl rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2039 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseAoafHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel AoAF    Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in AoAF cells)
+        subGroups view=Hot cellType=AOAF rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2038 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseH7esHotspotsRep2
+        release alpha
+        parent wgEncodeUwDnaseViewHot off
+        shortLabel H7-hESC Hs rank:2
+        longLabel ENCODE UW DNaseI HS Hotspots - 2nd (in H7-hESC cells)
+        subGroups view=Hot cellType=H7es rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2037 dateSubmitted=2010-07-24
 
 
     track wgEncodeUwDnaseViewaPeaks
@@ -776,7 +1164,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG04450 P1
+        shortLabel AG04450 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in AG04450 cells)
         subGroups view=Peaks cellType=AG04450 rank=1st
         type narrowPeak
@@ -786,7 +1174,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG09309 P1
+        shortLabel AG09309 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in AG09309 cells)
         subGroups view=Peaks cellType=AG09309 rank=1st
         type narrowPeak
@@ -796,7 +1184,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG09319 P1
+        shortLabel AG09319 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in AG09319 cells)
         subGroups view=Peaks cellType=AG09319 rank=1st
         type narrowPeak
@@ -806,7 +1194,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SAEC P1
+        shortLabel SAEC    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in SAEC cells)
         subGroups view=Peaks cellType=SAEC rank=1st
         type narrowPeak
@@ -816,7 +1204,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NB4 P1
+        shortLabel NB4     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in NB4 cells)
         subGroups view=Peaks cellType=NB4 rank=1st
         type narrowPeak
@@ -826,7 +1214,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHLF P1
+        shortLabel NHLF    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in NHLF cells)
         subGroups view=Peaks cellType=NHLF rank=1st
         type narrowPeak
@@ -836,7 +1224,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HGF P1
+        shortLabel HGF     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HGF cells)
         subGroups view=Peaks cellType=HGF rank=1st
         type narrowPeak
@@ -846,7 +1234,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel GM12865 P1
+        shortLabel GM12865 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in GM12865 cells)
         subGroups view=Peaks cellType=GM12865 rank=1st
         type narrowPeak
@@ -856,7 +1244,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HAEpiC P1
+        shortLabel HAEpiC  Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HAEpiC cells)
         subGroups view=Peaks cellType=HAE rank=1st
         type narrowPeak
@@ -866,7 +1254,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HL-60 P1
+        shortLabel HL-60   Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HL-60 cells)
         subGroups view=Peaks cellType=HL60 rank=1st
         type narrowPeak
@@ -876,7 +1264,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HMEC P1
+        shortLabel HMEC    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HMEC cells)
         subGroups view=Peaks cellType=HMEC rank=1st
         type narrowPeak
@@ -886,7 +1274,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SKMC P1
+        shortLabel SKMC    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in SKMC cells)
         subGroups view=Peaks cellType=SKMC rank=1st
         type narrowPeak
@@ -896,7 +1284,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG10803 P1
+        shortLabel AG10803 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in AG10803 cells)
         subGroups view=Peaks cellType=AG10803 rank=1st
         type narrowPeak
@@ -906,7 +1294,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrcePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRCEpiC P1
+        shortLabel HRCEpiC Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HRCEpiC cells)
         subGroups view=Peaks cellType=HRCE rank=1st
         type narrowPeak
@@ -916,7 +1304,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRE P1
+        shortLabel HRE     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HRE cells)
         subGroups view=Peaks cellType=HRE rank=1st
         type narrowPeak
@@ -926,7 +1314,7 @@ wgEncode 1
         track wgEncodeUwDnaseCmkPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel CMK P1
+        shortLabel CMK     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in CMK cells)
         subGroups view=Peaks cellType=CMK rank=1st
         type narrowPeak
@@ -936,7 +1324,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks
-        shortLabel GM12878 P1
+        shortLabel GM12878 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in GM12878 cells)
         subGroups view=Peaks cellType=1GM12878 rank=1st
         type narrowPeak
@@ -947,7 +1335,7 @@ wgEncode 1
         track wgEncodeUwDnaseH1hescPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel H1-hESC P1
+        shortLabel H1-hESC Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in H1-hESC cells)
         subGroups view=Peaks cellType=2H1 rank=1st
         type narrowPeak
@@ -958,7 +1346,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCF P1
+        shortLabel HCF     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HCF cells)
         subGroups view=Peaks cellType=HCF rank=1st
         type narrowPeak
@@ -968,7 +1356,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel H7-hESC P1
+        shortLabel H7-hESC Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in H7-hESC cells)
         subGroups view=Peaks cellType=H7es rank=1st
         type narrowPeak
@@ -978,7 +1366,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCPEpiC P1
+        shortLabel HCPEpiC Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HCPEpiC cells)
         subGroups view=Peaks cellType=HCPE rank=1st
         type narrowPeak
@@ -988,7 +1376,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCM P1
+        shortLabel HCM     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HCM cells)
         subGroups view=Peaks cellType=HCM rank=1st
         type narrowPeak
@@ -998,7 +1386,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HEEpiC P1
+        shortLabel HEEpiC  Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HEEpiC cells)
         subGroups view=Peaks cellType=HEE rank=1st
         type narrowPeak
@@ -1008,7 +1396,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HeLa-S3 P1
+        shortLabel HeLa-S3 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HeLa-S3 cells)
         subGroups view=Peaks cellType=2HELA rank=1st
         type narrowPeak
@@ -1019,7 +1407,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel GM06990 P1
+        shortLabel GM06990 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in GM06990 cells)
         subGroups view=Peaks cellType=GM06990 rank=1st
         type narrowPeak
@@ -1029,7 +1417,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HepG2 P1
+        shortLabel HepG2   Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HepG2 cells)
         subGroups view=Peaks cellType=2HEPG2 rank=1st
         type narrowPeak
@@ -1040,7 +1428,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpcePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HNPCEpiC P1
+        shortLabel HNPCEpi Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HNPCEpiC cells)
         subGroups view=Peaks cellType=HNPCE rank=1st
         type narrowPeak
@@ -1050,7 +1438,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpePkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRPEpiC P1
+        shortLabel HRPEpiC Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HRPEpiC cells)
         subGroups view=Peaks cellType=HRPE rank=1st
         type narrowPeak
@@ -1060,7 +1448,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HUVEC P1
+        shortLabel HUVEC   Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in HUVEC cells)
         subGroups view=Peaks cellType=2HUVEC rank=1st
         type narrowPeak
@@ -1071,7 +1459,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel PANC-1 P1
+        shortLabel PANC-1  Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in PANC-1 cells)
         subGroups view=Peaks cellType=PANC1 rank=1st
         type narrowPeak
@@ -1081,7 +1469,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel MCF-7 P1
+        shortLabel MCF-7   Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in MCF-7 cells)
         subGroups view=Peaks cellType=MCF7 rank=1st
         type narrowPeak
@@ -1091,7 +1479,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHDF-neo P1
+        shortLabel NHDFneo Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in NHDF-neo cells)
         subGroups view=Peaks cellType=NHDFneo rank=1st
         type narrowPeak
@@ -1101,7 +1489,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHEK P1
+        shortLabel NHEK    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in NHEK cells)
         subGroups view=Peaks cellType=2NHEK rank=1st
         type narrowPeak
@@ -1112,7 +1500,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SK-N-SH_RA P1
+        shortLabel SKNSHRA Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in SK-N-SH_RA cells)
         subGroups view=Peaks cellType=SKNSHRA rank=1st
         type narrowPeak
@@ -1122,7 +1510,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh1PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th1 P1
+        shortLabel Th1     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in Th1 cells)
         subGroups view=Peaks cellType=Th1 rank=1st
         type narrowPeak
@@ -1132,7 +1520,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Caco-2 P1
+        shortLabel Caco-2  Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in Caco-2 cells)
         subGroups view=Peaks cellType=CACO2 rank=1st
         type narrowPeak
@@ -1142,7 +1530,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjPkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel BJ P1
+        shortLabel BJ      Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in BJ cells)
         subGroups view=Peaks cellType=BJ rank=1st
         type narrowPeak
@@ -1152,7 +1540,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks
-        shortLabel K562 P1
+        shortLabel K562    Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in K562 cells)
         subGroups view=Peaks cellType=1K562 rank=1st
         type narrowPeak
@@ -1163,7 +1551,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh2PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Th2 P1
+        shortLabel Th2     Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in Th2 cells)
         subGroups view=Peaks cellType=Th2 rank=1st
         type narrowPeak
@@ -1173,7 +1561,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449PkRep1
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG04449 P1
+        shortLabel AG04449 Pk rank:1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 1st (in AG04449 cells)
         subGroups view=Peaks cellType=AG04449 rank=1st
         type narrowPeak
@@ -1183,7 +1571,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG04449 P2
+        shortLabel AG04449 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in AG04449 cells)
         subGroups view=Peaks cellType=AG04449 rank=2nd
         type narrowPeak
@@ -1193,7 +1581,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG04450 P2
+        shortLabel AG04450 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in AG04450 cells)
         subGroups view=Peaks cellType=AG04450 rank=2nd
         type narrowPeak
@@ -1203,7 +1591,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG09309 P2
+        shortLabel AG09309 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in AG09309 cells)
         subGroups view=Peaks cellType=AG09309 rank=2nd
         type narrowPeak
@@ -1213,7 +1601,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG09319 P2
+        shortLabel AG09319 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in AG09319 cells)
         subGroups view=Peaks cellType=AG09319 rank=2nd
         type narrowPeak
@@ -1223,7 +1611,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel AG10803 P2
+        shortLabel AG10803 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in AG10803 cells)
         subGroups view=Peaks cellType=AG10803 rank=2nd
         type narrowPeak
@@ -1233,7 +1621,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SAEC P2
+        shortLabel SAEC    Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in SAEC cells)
         subGroups view=Peaks cellType=SAEC rank=2nd
         type narrowPeak
@@ -1243,7 +1631,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NB4 P2
+        shortLabel NB4     Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in NB4 cells)
         subGroups view=Peaks cellType=NB4 rank=2nd
         type narrowPeak
@@ -1253,7 +1641,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHLF P2
+        shortLabel NHLF    Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in NHLF cells)
         subGroups view=Peaks cellType=NHLF rank=2nd
         type narrowPeak
@@ -1263,7 +1651,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel MCF-7 P2
+        shortLabel MCF-7   Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in MCF-7 cells)
         subGroups view=Peaks cellType=MCF7 rank=2nd
         type narrowPeak
@@ -1273,7 +1661,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrcePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRCEpiC P2
+        shortLabel HRCEpiC Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HRCEpiC cells)
         subGroups view=Peaks cellType=HRCE rank=2nd
         type narrowPeak
@@ -1283,7 +1671,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRE P2
+        shortLabel HRE     Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HRE cells)
         subGroups view=Peaks cellType=HRE rank=2nd
         type narrowPeak
@@ -1293,7 +1681,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel NHDF-neo P2
+        shortLabel NHDFneo Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in NHDF-neo cells)
         subGroups view=Peaks cellType=NHDFneo rank=2nd
         type narrowPeak
@@ -1303,7 +1691,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel PANC-1 P2
+        shortLabel PANC-1  Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in PANC-1 cells)
         subGroups view=Peaks cellType=PANC1 rank=2nd
         type narrowPeak
@@ -1313,7 +1701,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HL-60 P2
+        shortLabel HL-60   Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HL-60 cells)
         subGroups view=Peaks cellType=HL60 rank=2nd
         type narrowPeak
@@ -1323,7 +1711,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HAEpiC P2
+        shortLabel HAEpiC  Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HAEpiC cells)
         subGroups view=Peaks cellType=HAE rank=2nd
         type narrowPeak
@@ -1333,7 +1721,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel GM12865 P2
+        shortLabel GM12865 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in GM12865 cells)
         subGroups view=Peaks cellType=GM12865 rank=2nd
         type narrowPeak
@@ -1343,7 +1731,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel Caco-2 P2
+        shortLabel Caco-2  Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in Caco-2 cells)
         subGroups view=Peaks cellType=CACO2 rank=2nd
         type narrowPeak
@@ -1353,7 +1741,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCF P2
+        shortLabel HCF     Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HCF cells)
         subGroups view=Peaks cellType=HCF rank=2nd
         type narrowPeak
@@ -1363,7 +1751,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCM P2
+        shortLabel HCM     Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HCM cells)
         subGroups view=Peaks cellType=HCM rank=2nd
         type narrowPeak
@@ -1373,7 +1761,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HCPEpiC P2
+        shortLabel HCPEpiC Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HCPEpiC cells)
         subGroups view=Peaks cellType=HCPE rank=2nd
         type narrowPeak
@@ -1383,7 +1771,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HEEpiC P2
+        shortLabel HEEpiC  Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HEEpiC cells)
         subGroups view=Peaks cellType=HEE rank=2nd
         type narrowPeak
@@ -1393,7 +1781,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HGF P2
+        shortLabel HGF     Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HGF cells)
         subGroups view=Peaks cellType=HGF rank=2nd
         type narrowPeak
@@ -1403,7 +1791,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HeLa-S3 P2
+        shortLabel HeLa-S3 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HeLa-S3 cells)
         subGroups view=Peaks cellType=2HELA rank=2nd
         type narrowPeak
@@ -1414,7 +1802,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel GM06990 P2
+        shortLabel GM06990 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in GM06990 cells)
         subGroups view=Peaks cellType=GM06990 rank=2nd
         type narrowPeak
@@ -1424,7 +1812,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HepG2 P2
+        shortLabel HepG2   Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HepG2 cells)
         subGroups view=Peaks cellType=2HEPG2 rank=2nd
         type narrowPeak
@@ -1435,7 +1823,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpcePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HNPCEpiC P2
+        shortLabel HNPCEpi Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HNPCEpiC cells)
         subGroups view=Peaks cellType=HNPCE rank=2nd
         type narrowPeak
@@ -1445,7 +1833,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpePkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel HRPEpiC P2
+        shortLabel HRPEpiC Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in HRPEpiC cells)
         subGroups view=Peaks cellType=HRPE rank=2nd
         type narrowPeak
@@ -1455,7 +1843,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SKMC P2
+        shortLabel SKMC    Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in SKMC cells)
         subGroups view=Peaks cellType=SKMC rank=2nd
         type narrowPeak
@@ -1465,7 +1853,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel SK-N-SH_RA P2
+        shortLabel SKNSHRA Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in SK-N-SH_RA cells)
         subGroups view=Peaks cellType=SKNSHRA rank=2nd
         type narrowPeak
@@ -1475,7 +1863,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks
-        shortLabel GM12878 P2
+        shortLabel GM12878 Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in GM12878 cells)
         subGroups view=Peaks cellType=1GM12878 rank=2nd
         type narrowPeak
@@ -1486,7 +1874,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562PkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks
-        shortLabel K562 P2
+        shortLabel K562    Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in K562 cells)
         subGroups view=Peaks cellType=1K562 rank=2nd
         type narrowPeak
@@ -1497,12 +1885,372 @@ wgEncode 1
         track wgEncodeUwDnaseBjPkRep2
         release alpha
         parent wgEncodeUwDnaseViewaPeaks off
-        shortLabel BJ P2
+        shortLabel BJ      Pk rank:2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) - 2nd (in BJ cells)
         subGroups view=Peaks cellType=BJ rank=2nd
         type narrowPeak
         origAssembly hg18
         # subId=1249 dateSubmitted=2010-06-06
+
+        track wgEncodeUwDnaseNhdfadPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel NHDF-Ad Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in NHDF-Ad cells)
+        subGroups view=Peaks cellType=NHDF-Ad rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2081 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseNhdfadPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel NHDF-Ad Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in NHDF-Ad cells)
+        subGroups view=Peaks cellType=NHDF-Ad rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2080 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHvmfPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HVMF    Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HVMF cells)
+        subGroups view=Peaks cellType=HVMF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2079 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHvmfPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HVMF    Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HVMF cells)
+        subGroups view=Peaks cellType=HVMF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2078 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpdlfPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPdLF   Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HPdLF cells)
+        subGroups view=Peaks cellType=HPdLF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2077 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpdlfPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPdLF   Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HPdLF cells)
+        subGroups view=Peaks cellType=HPdLF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2076 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpfPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPF     Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HPF cells)
+        subGroups view=Peaks cellType=HPF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2075 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpfPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPF     Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HPF cells)
+        subGroups view=Peaks cellType=HPF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2074 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpafPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPAF    Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HPAF cells)
+        subGroups view=Peaks cellType=HPAF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2073 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpafPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HPAF    Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HPAF cells)
+        subGroups view=Peaks cellType=HPAF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2072 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdneoPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECN  Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-dNeo cells)
+        subGroups view=Peaks cellType=HMVECdNeo rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2071 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdneoPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECN  Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-dNeo cells)
+        subGroups view=Peaks cellType=HMVECdNeo rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2070 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyneoPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLN Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-dLy-Neo cells)
+        subGroups view=Peaks cellType=HMVECdLyNeo rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2069 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyneoPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLN Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-dLy-Neo cells)
+        subGroups view=Peaks cellType=HMVECdLyNeo rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2068 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyadPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLA Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-dLy-Ad cells)
+        subGroups view=Peaks cellType=HMVECdLyAd rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2067 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyadPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLA Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-dLy-Ad cells)
+        subGroups view=Peaks cellType=HMVECdLyAd rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2066 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdblneoPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECBN Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-dBl-Neo cells)
+        subGroups view=Peaks cellType=HMVECdBlNeo rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2065 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdblneoPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECBN Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-dBl-Neo cells)
+        subGroups view=Peaks cellType=HMVECdBlNeo rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2064 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdbladPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECBA Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-dBl-Ad cells)
+        subGroups view=Peaks cellType=HMVECdBlAd rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2063 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdbladPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECBA Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-dBl-Ad cells)
+        subGroups view=Peaks cellType=HMVECdBlAd rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2062 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecllyPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLL Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-LLy cells)
+        subGroups view=Peaks cellType=HMVECLLy rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2061 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecllyPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLL Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-LLy cells)
+        subGroups view=Peaks cellType=HMVECLLy rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2060 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmveclblPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLB Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMVEC-LBl cells)
+        subGroups view=Peaks cellType=HMVECLbl rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2059 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmfPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMF     Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMF cells)
+        subGroups view=Peaks cellType=HMF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2058 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmfPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMF     Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMF cells)
+        subGroups view=Peaks cellType=HMF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2057 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHconfPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HConF   Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HConF cells)
+        subGroups view=Peaks cellType=HCONF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2056 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHconfPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HConF   Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HConF cells)
+        subGroups view=Peaks cellType=HCONF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2055 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHcfaaPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HCFaa   Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HCFaa cells)
+        subGroups view=Peaks cellType=HCFaa rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2054 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHcfaaPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HCFaa   Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HCFaa cells)
+        subGroups view=Peaks cellType=HCFaa rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2053 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseAoafPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel AoAF    Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in AoAF cells)
+        subGroups view=Peaks cellType=AOAF rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2052 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmecPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMEC    Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HMEC cells)
+        subGroups view=Peaks cellType=HMEC rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2044 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHct116PkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HCT-116 Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HCT-116 cells)
+        subGroups view=Peaks cellType=HCT116 rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2043 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHct116PkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HCT-116 Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in HCT-116 cells)
+        subGroups view=Peaks cellType=HCT116 rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2040 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHmveclblPkRep1
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel HMVECLB Pk rank:1
+        longLabel ENCODE UW DNaseI HS Peaks - 1st (in HMVEC-LBl cells)
+        subGroups view=Peaks cellType=HMVECLbl rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2039 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseAoafPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel AoAF    Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in AoAF cells)
+        subGroups view=Peaks cellType=AOAF rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2038 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseH7esPkRep2
+        release alpha
+        parent wgEncodeUwDnaseViewaPeaks off
+        shortLabel H7-hESC Pk rank:2
+        longLabel ENCODE UW DNaseI HS Peaks - 2nd (in H7-hESC cells)
+        subGroups view=Peaks cellType=H7es rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2037 dateSubmitted=2010-07-24
 
 
     track wgEncodeUwDnaseViewzRaw
@@ -1520,7 +2268,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG04450 S1
+        shortLabel AG04450 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG04450 cells)
         subGroups view=zRSig cellType=AG04450 rank=1st
         type bigWig 1.000000 23646.000000
@@ -1530,7 +2278,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG09309 S1
+        shortLabel AG09309 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG09309 cells)
         subGroups view=zRSig cellType=AG09309 rank=1st
         type bigWig 1.000000 55288.000000
@@ -1540,7 +2288,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG09319 S1
+        shortLabel AG09319 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG09319 cells)
         subGroups view=zRSig cellType=AG09319 rank=1st
         type bigWig 1.000000 47177.000000
@@ -1550,7 +2298,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SAEC S1
+        shortLabel SAEC    Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in SAEC cells)
         subGroups view=zRSig cellType=SAEC rank=1st
         type bigWig 1.000000 9812.000000
@@ -1560,7 +2308,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NB4 S1
+        shortLabel NB4     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NB4 cells)
         subGroups view=zRSig cellType=NB4 rank=1st
         type bigWig 1.000000 24532.000000
@@ -1570,7 +2318,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHLF S1
+        shortLabel NHLF    Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHLF cells)
         subGroups view=zRSig cellType=NHLF rank=1st
         type bigWig 1.000000 39720.000000
@@ -1580,7 +2328,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HGF S1
+        shortLabel HGF     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HGF cells)
         subGroups view=zRSig cellType=HGF rank=1st
         type bigWig 1.000000 27318.000000
@@ -1590,7 +2338,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel GM12865 S1
+        shortLabel GM12865 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in GM12865 cells)
         subGroups view=zRSig cellType=GM12865 rank=1st
         type bigWig 1.000000 22282.000000
@@ -1600,7 +2348,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaeRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HAEpiC S1
+        shortLabel HAEpiC  Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HAEpiC cells)
         subGroups view=zRSig cellType=HAE rank=1st
         type bigWig 1.000000 10900.000000
@@ -1610,7 +2358,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HL-60 S1
+        shortLabel HL-60   Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HL-60 cells)
         subGroups view=zRSig cellType=HL60 rank=1st
         type bigWig 1.000000 14390.000000
@@ -1620,7 +2368,7 @@ wgEncode 1
         track wgEncodeUwDnaseHmecRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HMEC S1
+        shortLabel HMEC    Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMEC cells)
         subGroups view=zRSig cellType=HMEC rank=1st
         type bigWig 1.000000 44157.000000
@@ -1630,7 +2378,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SKMC S1
+        shortLabel SKMC    Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in SKMC cells)
         subGroups view=zRSig cellType=SKMC rank=1st
         type bigWig 1.000000 9371.000000
@@ -1640,7 +2388,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG10803 S1
+        shortLabel AG10803 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG10803 cells)
         subGroups view=zRSig cellType=AG10803 rank=1st
         type bigWig 1.000000 41633.000000
@@ -1650,7 +2398,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrceRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HRCEpiC S1
+        shortLabel HRCEpiC Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HRCEpiC cells)
         subGroups view=zRSig cellType=HRCE rank=1st
         type bigWig 1.000000 10959.000000
@@ -1660,7 +2408,7 @@ wgEncode 1
         track wgEncodeUwDnaseHreRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HRE S1
+        shortLabel HRE     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HRE cells)
         subGroups view=zRSig cellType=HRE rank=1st
         type bigWig 1.000000 16747.000000
@@ -1670,7 +2418,7 @@ wgEncode 1
         track wgEncodeUwDnaseCmkRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel CMK S1
+        shortLabel CMK     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in CMK cells)
         subGroups view=zRSig cellType=CMK rank=1st
         type bigWig 1.000000 66926.000000
@@ -1680,7 +2428,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw
-        shortLabel GM12878 S1
+        shortLabel GM12878 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in GM12878 cells)
         subGroups view=zRSig cellType=1GM12878 rank=1st
         type bigWig 1.000000 19102.000000
@@ -1691,7 +2439,7 @@ wgEncode 1
         track wgEncodeUwDnaseH1hescRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel H1-hESC S1
+        shortLabel H1-hESC Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in H1-hESC cells)
         subGroups view=zRSig cellType=2H1 rank=1st
         type bigWig 1.000000 12096.000000
@@ -1702,7 +2450,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCF S1
+        shortLabel HCF     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCF cells)
         subGroups view=zRSig cellType=HCF rank=1st
         type bigWig 1.000000 38516.000000
@@ -1712,7 +2460,7 @@ wgEncode 1
         track wgEncodeUwDnaseH7esRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel H7-hESC S1
+        shortLabel H7-hESC Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in H7-hESC cells)
         subGroups view=zRSig cellType=H7es rank=1st
         type bigWig 1.000000 33541.000000
@@ -1722,7 +2470,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpeRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCPEpiC S1
+        shortLabel HCPEpiC Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCPEpiC cells)
         subGroups view=zRSig cellType=HCPE rank=1st
         type bigWig 1.000000 10919.000000
@@ -1732,7 +2480,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCM S1
+        shortLabel HCM     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCM cells)
         subGroups view=zRSig cellType=HCM rank=1st
         type bigWig 1.000000 45088.000000
@@ -1742,7 +2490,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeeRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HEEpiC S1
+        shortLabel HEEpiC  Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HEEpiC cells)
         subGroups view=zRSig cellType=HEE rank=1st
         type bigWig 1.000000 48631.000000
@@ -1752,7 +2500,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HeLa-S3 S1
+        shortLabel HeLa-S3 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HeLa-S3 cells)
         subGroups view=zRSig cellType=2HELA rank=1st
         type bigWig 1.000000 47453.000000
@@ -1763,7 +2511,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel GM06990 S1
+        shortLabel GM06990 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in GM06990 cells)
         subGroups view=zRSig cellType=GM06990 rank=1st
         type bigWig 1.000000 12670.000000
@@ -1773,7 +2521,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HepG2 S1
+        shortLabel HepG2   Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HepG2 cells)
         subGroups view=zRSig cellType=2HEPG2 rank=1st
         type bigWig 1.000000 11297.000000
@@ -1784,7 +2532,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpceRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HNPCEpiC S1
+        shortLabel HNPCEpi Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HNPCEpiC cells)
         subGroups view=zRSig cellType=HNPCE rank=1st
         type bigWig 1.000000 57165.000000
@@ -1794,7 +2542,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpeRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HRPEpiC S1
+        shortLabel HRPEpiC Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HRPEpiC cells)
         subGroups view=zRSig cellType=HRPE rank=1st
         type bigWig 1.000000 67353.000000
@@ -1804,7 +2552,7 @@ wgEncode 1
         track wgEncodeUwDnaseHuvecRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HUVEC S1
+        shortLabel HUVEC   Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HUVEC cells)
         subGroups view=zRSig cellType=2HUVEC rank=1st
         type bigWig 1.000000 12042.000000
@@ -1815,7 +2563,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel PANC-1 S1
+        shortLabel PANC-1  Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in PANC-1 cells)
         subGroups view=zRSig cellType=PANC1 rank=1st
         type bigWig 1.000000 49187.000000
@@ -1825,7 +2573,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel MCF-7 S1
+        shortLabel MCF-7   Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in MCF-7 cells)
         subGroups view=zRSig cellType=MCF7 rank=1st
         type bigWig 1.000000 33810.000000
@@ -1835,7 +2583,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHDF-neo S1
+        shortLabel NHDFneo Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHDF-neo cells)
         subGroups view=zRSig cellType=NHDFneo rank=1st
         type bigWig 1.000000 36954.000000
@@ -1845,7 +2593,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhekRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHEK S1
+        shortLabel NHEK    Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHEK cells)
         subGroups view=zRSig cellType=2NHEK rank=1st
         type bigWig 1.000000 20593.000000
@@ -1856,7 +2604,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SK-N-SH_RA S1
+        shortLabel SKNSHRA Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in SK-N-SH_RA cells)
         subGroups view=zRSig cellType=SKNSHRA rank=1st
         type bigWig 1.000000 4202.000000
@@ -1866,7 +2614,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh1RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th1 S1
+        shortLabel Th1     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in Th1 cells)
         subGroups view=zRSig cellType=Th1 rank=1st
         type bigWig 1.000000 10572.000000
@@ -1876,7 +2624,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Caco-2 S1
+        shortLabel Caco-2  Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in Caco-2 cells)
         subGroups view=zRSig cellType=CACO2 rank=1st
         type bigWig 1.000000 9694.000000
@@ -1886,7 +2634,7 @@ wgEncode 1
         track wgEncodeUwDnaseBjRawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel BJ S1
+        shortLabel BJ      Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in BJ cells)
         subGroups view=zRSig cellType=BJ rank=1st
         type bigWig 1.000000 76204.000000
@@ -1896,7 +2644,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw
-        shortLabel K562 S1
+        shortLabel K562    Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in K562 cells)
         subGroups view=zRSig cellType=1K562 rank=1st
         type bigWig 1.000000 66237.000000
@@ -1907,7 +2655,7 @@ wgEncode 1
         track wgEncodeUwDnaseTh2RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Th2 S1
+        shortLabel Th2     Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in Th2 cells)
         subGroups view=zRSig cellType=Th2 rank=1st
         type bigWig 1.000000 11480.000000
@@ -1917,7 +2665,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449RawRep1
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG04449 S1
+        shortLabel AG04449 Ra rank:1
         longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AG04449 cells)
         subGroups view=zRSig cellType=AG04449 rank=1st
         type bigWig 1.000000 31758.000000
@@ -1927,7 +2675,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04449RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG04449 S2
+        shortLabel AG04449 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG04449 cells)
         subGroups view=zRSig cellType=AG04449 rank=2nd
         type bigWig 1.000000 35692.000000
@@ -1937,7 +2685,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg04450RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG04450 S2
+        shortLabel AG04450 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG04450 cells)
         subGroups view=zRSig cellType=AG04450 rank=2nd
         type bigWig 1.000000 43642.000000
@@ -1947,7 +2695,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09309RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG09309 S2
+        shortLabel AG09309 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG09309 cells)
         subGroups view=zRSig cellType=AG09309 rank=2nd
         type bigWig 1.000000 51881.000000
@@ -1957,7 +2705,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg09319RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG09319 S2
+        shortLabel AG09319 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG09319 cells)
         subGroups view=zRSig cellType=AG09319 rank=2nd
         type bigWig 1.000000 50184.000000
@@ -1967,7 +2715,7 @@ wgEncode 1
         track wgEncodeUwDnaseAg10803RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel AG10803 S2
+        shortLabel AG10803 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AG10803 cells)
         subGroups view=zRSig cellType=AG10803 rank=2nd
         type bigWig 1.000000 44945.000000
@@ -1977,7 +2725,7 @@ wgEncode 1
         track wgEncodeUwDnaseSaecRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SAEC S2
+        shortLabel SAEC    Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in SAEC cells)
         subGroups view=zRSig cellType=SAEC rank=2nd
         type bigWig 1.000000 8779.000000
@@ -1987,7 +2735,7 @@ wgEncode 1
         track wgEncodeUwDnaseNb4RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NB4 S2
+        shortLabel NB4     Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NB4 cells)
         subGroups view=zRSig cellType=NB4 rank=2nd
         type bigWig 1.000000 25204.000000
@@ -1997,7 +2745,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhlfRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHLF S2
+        shortLabel NHLF    Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NHLF cells)
         subGroups view=zRSig cellType=NHLF rank=2nd
         type bigWig 1.000000 18936.000000
@@ -2007,7 +2755,7 @@ wgEncode 1
         track wgEncodeUwDnaseMcf7RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel MCF-7 S2
+        shortLabel MCF-7   Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in MCF-7 cells)
         subGroups view=zRSig cellType=MCF7 rank=2nd
         type bigWig 1.000000 69705.000000
@@ -2017,7 +2765,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrceRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HRCEpiC S2
+        shortLabel HRCEpiC Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HRCEpiC cells)
         subGroups view=zRSig cellType=HRCE rank=2nd
         type bigWig 1.000000 9826.000000
@@ -2027,7 +2775,7 @@ wgEncode 1
         track wgEncodeUwDnaseHreRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HRE S2
+        shortLabel HRE     Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HRE cells)
         subGroups view=zRSig cellType=HRE rank=2nd
         type bigWig 1.000000 12621.000000
@@ -2037,7 +2785,7 @@ wgEncode 1
         track wgEncodeUwDnaseNhdfneoRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel NHDF-neo S2
+        shortLabel NHDFneo Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NHDF-neo cells)
         subGroups view=zRSig cellType=NHDFneo rank=2nd
         type bigWig 1.000000 42501.000000
@@ -2047,7 +2795,7 @@ wgEncode 1
         track wgEncodeUwDnasePanc1RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel PANC-1 S2
+        shortLabel PANC-1  Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in PANC-1 cells)
         subGroups view=zRSig cellType=PANC1 rank=2nd
         type bigWig 1.000000 52600.000000
@@ -2057,7 +2805,7 @@ wgEncode 1
         track wgEncodeUwDnaseHl60RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HL-60 S2
+        shortLabel HL-60   Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HL-60 cells)
         subGroups view=zRSig cellType=HL60 rank=2nd
         type bigWig 1.000000 16883.000000
@@ -2067,7 +2815,7 @@ wgEncode 1
         track wgEncodeUwDnaseHaeRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HAEpiC S2
+        shortLabel HAEpiC  Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HAEpiC cells)
         subGroups view=zRSig cellType=HAE rank=2nd
         type bigWig 1.000000 22758.000000
@@ -2077,7 +2825,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12865RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel GM12865 S2
+        shortLabel GM12865 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in GM12865 cells)
         subGroups view=zRSig cellType=GM12865 rank=2nd
         type bigWig 1.000000 18347.000000
@@ -2087,7 +2835,7 @@ wgEncode 1
         track wgEncodeUwDnaseCaco2RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel Caco-2 S2
+        shortLabel Caco-2  Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in Caco-2 cells)
         subGroups view=zRSig cellType=CACO2 rank=2nd
         type bigWig 1.000000 13808.000000
@@ -2097,7 +2845,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcfRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCF S2
+        shortLabel HCF     Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCF cells)
         subGroups view=zRSig cellType=HCF rank=2nd
         type bigWig 1.000000 40946.000000
@@ -2107,7 +2855,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcmRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCM S2
+        shortLabel HCM     Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCM cells)
         subGroups view=zRSig cellType=HCM rank=2nd
         type bigWig 1.000000 22002.000000
@@ -2117,7 +2865,7 @@ wgEncode 1
         track wgEncodeUwDnaseHcpeRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HCPEpiC S2
+        shortLabel HCPEpiC Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCPEpiC cells)
         subGroups view=zRSig cellType=HCPE rank=2nd
         type bigWig 1.000000 39423.000000
@@ -2127,7 +2875,7 @@ wgEncode 1
         track wgEncodeUwDnaseHeeRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HEEpiC S2
+        shortLabel HEEpiC  Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HEEpiC cells)
         subGroups view=zRSig cellType=HEE rank=2nd
         type bigWig 1.000000 41063.000000
@@ -2137,7 +2885,7 @@ wgEncode 1
         track wgEncodeUwDnaseHgfRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HGF S2
+        shortLabel HGF     Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HGF cells)
         subGroups view=zRSig cellType=HGF rank=2nd
         type bigWig 1.000000 19584.000000
@@ -2147,7 +2895,7 @@ wgEncode 1
         track wgEncodeUwDnaseHelas3RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HeLa-S3 S2
+        shortLabel HeLa-S3 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HeLa-S3 cells)
         subGroups view=zRSig cellType=2HELA rank=2nd
         type bigWig 1.000000 48046.000000
@@ -2158,7 +2906,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm06990RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel GM06990 S2
+        shortLabel GM06990 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in GM06990 cells)
         subGroups view=zRSig cellType=GM06990 rank=2nd
         type bigWig 1.000000 13706.000000
@@ -2168,7 +2916,7 @@ wgEncode 1
         track wgEncodeUwDnaseHepg2RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HepG2 S2
+        shortLabel HepG2   Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HepG2 cells)
         subGroups view=zRSig cellType=2HEPG2 rank=2nd
         type bigWig 1.000000 11649.000000
@@ -2179,7 +2927,7 @@ wgEncode 1
         track wgEncodeUwDnaseHnpceRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HNPCEpiC S2
+        shortLabel HNPCEpi Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HNPCEpiC cells)
         subGroups view=zRSig cellType=HNPCE rank=2nd
         type bigWig 1.000000 47149.000000
@@ -2189,7 +2937,7 @@ wgEncode 1
         track wgEncodeUwDnaseHrpeRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel HRPEpiC S2
+        shortLabel HRPEpiC Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HRPEpiC cells)
         subGroups view=zRSig cellType=HRPE rank=2nd
         type bigWig 1.000000 41590.000000
@@ -2199,7 +2947,7 @@ wgEncode 1
         track wgEncodeUwDnaseSkmcRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SKMC S2
+        shortLabel SKMC    Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in SKMC cells)
         subGroups view=zRSig cellType=SKMC rank=2nd
         type bigWig 1.000000 12057.000000
@@ -2209,7 +2957,7 @@ wgEncode 1
         track wgEncodeUwDnaseSknshraRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel SK-N-SH_RA S2
+        shortLabel SKNSHRA Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in SK-N-SH_RA cells)
         subGroups view=zRSig cellType=SKNSHRA rank=2nd
         type bigWig 1.000000 12022.000000
@@ -2219,7 +2967,7 @@ wgEncode 1
         track wgEncodeUwDnaseGm12878RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw
-        shortLabel GM12878 S2
+        shortLabel GM12878 Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in GM12878 cells)
         subGroups view=zRSig cellType=1GM12878 rank=2nd
         type bigWig 1.000000 18952.000000
@@ -2230,7 +2978,7 @@ wgEncode 1
         track wgEncodeUwDnaseK562RawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw
-        shortLabel K562 S2
+        shortLabel K562    Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in K562 cells)
         subGroups view=zRSig cellType=1K562 rank=2nd
         type bigWig 1.000000 47721.000000
@@ -2241,11 +2989,371 @@ wgEncode 1
         track wgEncodeUwDnaseBjRawRep2
         release alpha
         parent wgEncodeUwDnaseViewzRaw off
-        shortLabel BJ S2
+        shortLabel BJ      Ra rank:2
         longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in BJ cells)
         subGroups view=zRSig cellType=BJ rank=2nd
         type bigWig 1.000000 25429.000000
         origAssembly hg18
         # subId=1249 dateSubmitted=2010-06-06
+
+        track wgEncodeUwDnaseNhdfadRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel NHDF-Ad Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in NHDF-Ad cells)
+        subGroups view=zRSig cellType=NHDF-Ad rank=1st
+        type bigWig 1.000000 16582.000000
+        origAssembly hg19
+        # subId=2081 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseNhdfadRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel NHDF-Ad Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in NHDF-Ad cells)
+        subGroups view=zRSig cellType=NHDF-Ad rank=2nd
+        type bigWig 1.000000 17499.000000
+        origAssembly hg19
+        # subId=2080 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHvmfRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HVMF    Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HVMF cells)
+        subGroups view=zRSig cellType=HVMF rank=1st
+        type bigWig 1.000000 13045.000000
+        origAssembly hg19
+        # subId=2079 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHvmfRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HVMF    Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HVMF cells)
+        subGroups view=zRSig cellType=HVMF rank=2nd
+        type bigWig 1.000000 13877.000000
+        origAssembly hg19
+        # subId=2078 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpdlfRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPdLF   Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HPdLF cells)
+        subGroups view=zRSig cellType=HPdLF rank=1st
+        type bigWig 1.000000 24867.000000
+        origAssembly hg19
+        # subId=2077 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpdlfRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPdLF   Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HPdLF cells)
+        subGroups view=zRSig cellType=HPdLF rank=2nd
+        type bigWig 1.000000 18889.000000
+        origAssembly hg19
+        # subId=2076 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpfRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPF     Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HPF cells)
+        subGroups view=zRSig cellType=HPF rank=1st
+        type bigWig 1.000000 15633.000000
+        origAssembly hg19
+        # subId=2075 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpfRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPF     Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HPF cells)
+        subGroups view=zRSig cellType=HPF rank=2nd
+        type bigWig 1.000000 27053.000000
+        origAssembly hg19
+        # subId=2074 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpafRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPAF    Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HPAF cells)
+        subGroups view=zRSig cellType=HPAF rank=2nd
+        type bigWig 1.000000 23516.000000
+        origAssembly hg19
+        # subId=2073 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHpafRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HPAF    Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HPAF cells)
+        subGroups view=zRSig cellType=HPAF rank=1st
+        type bigWig 1.000000 41132.000000
+        origAssembly hg19
+        # subId=2072 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdneoRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECN  Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-dNeo cells)
+        subGroups view=zRSig cellType=HMVECdNeo rank=1st
+        type bigWig 1.000000 67486.000000
+        origAssembly hg19
+        # subId=2071 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdneoRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECN  Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-dNeo cells)
+        subGroups view=zRSig cellType=HMVECdNeo rank=2nd
+        type bigWig 1.000000 18755.000000
+        origAssembly hg19
+        # subId=2070 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyneoRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLN Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-dLy-Neo cells)
+        subGroups view=zRSig cellType=HMVECdLyNeo rank=1st
+        type bigWig 1.000000 20935.000000
+        origAssembly hg19
+        # subId=2069 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyneoRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLN Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-dLy-Neo cells)
+        subGroups view=zRSig cellType=HMVECdLyNeo rank=2nd
+        type bigWig 1.000000 39204.000000
+        origAssembly hg19
+        # subId=2068 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyadRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLA Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-dLy-Ad cells)
+        subGroups view=zRSig cellType=HMVECdLyAd rank=1st
+        type bigWig 1.000000 86195.000000
+        origAssembly hg19
+        # subId=2067 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdlyadRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLA Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-dLy-Ad cells)
+        subGroups view=zRSig cellType=HMVECdLyAd rank=2nd
+        type bigWig 1.000000 63735.000000
+        origAssembly hg19
+        # subId=2066 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdblneoRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECBN Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-dBl-Neo cells)
+        subGroups view=zRSig cellType=HMVECdBlNeo rank=1st
+        type bigWig 1.000000 39913.000000
+        origAssembly hg19
+        # subId=2065 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdblneoRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECBN Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-dBl-Neo cells)
+        subGroups view=zRSig cellType=HMVECdBlNeo rank=2nd
+        type bigWig 1.000000 46139.000000
+        origAssembly hg19
+        # subId=2064 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdbladRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECBA Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-dBl-Ad cells)
+        subGroups view=zRSig cellType=HMVECdBlAd rank=1st
+        type bigWig 1.000000 28117.000000
+        origAssembly hg19
+        # subId=2063 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecdbladRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECBA Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-dBl-Ad cells)
+        subGroups view=zRSig cellType=HMVECdBlAd rank=2nd
+        type bigWig 1.000000 25825.000000
+        origAssembly hg19
+        # subId=2062 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecllyRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLL Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-LLy cells)
+        subGroups view=zRSig cellType=HMVECLLy rank=2nd
+        type bigWig 1.000000 50197.000000
+        origAssembly hg19
+        # subId=2061 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmvecllyRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLL Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-LLy cells)
+        subGroups view=zRSig cellType=HMVECLLy rank=1st
+        type bigWig 1.000000 64382.000000
+        origAssembly hg19
+        # subId=2060 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmveclblRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLB Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMVEC-LBl cells)
+        subGroups view=zRSig cellType=HMVECLbl rank=2nd
+        type bigWig 1.000000 23569.000000
+        origAssembly hg19
+        # subId=2059 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmfRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMF     Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMF cells)
+        subGroups view=zRSig cellType=HMF rank=2nd
+        type bigWig 1.000000 24459.000000
+        origAssembly hg19
+        # subId=2058 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmfRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMF     Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMF cells)
+        subGroups view=zRSig cellType=HMF rank=1st
+        type bigWig 1.000000 30258.000000
+        origAssembly hg19
+        # subId=2057 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHconfRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HConF   Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HConF cells)
+        subGroups view=zRSig cellType=HCONF rank=1st
+        type bigWig 1.000000 23078.000000
+        origAssembly hg19
+        # subId=2056 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHconfRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HConF   Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HConF cells)
+        subGroups view=zRSig cellType=HCONF rank=2nd
+        type bigWig 1.000000 34915.000000
+        origAssembly hg19
+        # subId=2055 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHcfaaRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HCFaa   Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCFaa cells)
+        subGroups view=zRSig cellType=HCFaa rank=2nd
+        type bigWig 1.000000 22612.000000
+        origAssembly hg19
+        # subId=2054 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHcfaaRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HCFaa   Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCFaa cells)
+        subGroups view=zRSig cellType=HCFaa rank=1st
+        type bigWig 1.000000 33937.000000
+        origAssembly hg19
+        # subId=2053 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseAoafRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel AoAF    Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in AoAF cells)
+        subGroups view=zRSig cellType=AOAF rank=1st
+        type bigWig 1.000000 37414.000000
+        origAssembly hg19
+        # subId=2052 dateSubmitted=2010-07-26
+
+        track wgEncodeUwDnaseHmecRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMEC    Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HMEC cells)
+        subGroups view=zRSig cellType=HMEC rank=2nd
+        type bigWig 1.000000 79686.000000
+        origAssembly hg19
+        # subId=2044 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHct116RawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HCT-116 Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HCT-116 cells)
+        subGroups view=zRSig cellType=HCT116 rank=1st
+        type bigWig 1.000000 66499.000000
+        origAssembly hg19
+        # subId=2043 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHct116RawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HCT-116 Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in HCT-116 cells)
+        subGroups view=zRSig cellType=HCT116 rank=2nd
+        type bigWig 1.000000 56421.000000
+        origAssembly hg19
+        # subId=2040 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseHmveclblRawRep1
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel HMVECLB Ra rank:1
+        longLabel ENCODE UW DNaseI HS Raw Signal - 1st (in HMVEC-LBl cells)
+        subGroups view=zRSig cellType=HMVECLbl rank=1st
+        type bigWig 1.000000 35010.000000
+        origAssembly hg19
+        # subId=2039 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseAoafRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel AoAF    Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in AoAF cells)
+        subGroups view=zRSig cellType=AOAF rank=2nd
+        type bigWig 1.000000 19400.000000
+        origAssembly hg19
+        # subId=2038 dateSubmitted=2010-07-24
+
+        track wgEncodeUwDnaseH7esRawRep2
+        release alpha
+        parent wgEncodeUwDnaseViewzRaw off
+        shortLabel H7-hESC Ra rank:2
+        longLabel ENCODE UW DNaseI HS Raw Signal - 2nd (in H7-hESC cells)
+        subGroups view=zRSig cellType=H7es rank=2nd
+        type bigWig 1.000000 14083.000000
+        origAssembly hg19
+        # subId=2037 dateSubmitted=2010-07-24
 
 

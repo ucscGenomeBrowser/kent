@@ -3875,9 +3875,9 @@ type bed 6
 track ucsfBrainMethyl
 compositeTrack on
 shortLabel UCSF Brain Methyl
-longLabel UCSF Brain DNA methylation
+longLabel UCSF Brain DNA Methylation
 group regulation
-subGroup1 view Views ALN=Alignments COV=Coverage CG=CpG_score
+subGroup1 view Views ALN=Alignments COV=Raw_Signal CG=CpG_score
 subGroup2 sampleType Sample_Type Brain=Brain
 subGroup3 assayType Assay_Type MRE1=MRE-seq MRE2=MRE-seq MRE3=MRE-seq MeDIP1=MeDIP-seq MeDIP2=MeDIP-seq H3K4me3=H3K4me3_ChIP-seq RNA1=RNA-seq RNA2=RNA-seq_(SMART)
 dimensions 
@@ -3896,115 +3896,143 @@ type bed 3
     view ALN
     parent ucsfBrainMethyl
     visibility hide
-  
-      track ucsfMedipSeqBrainHs1821Reads
-      shortLabel MeDIP Reads
-      longLabel MeDIP filtered reads
-      parent ucsfBrainMethylViewALN
-      subGroups view=ALN sampleType=Brain assayType=MeDIP1
-      type bed 9
-      noInherit on
-      itemRgb on
-      spectrum on
-      priority 1
-  
-      track ucsfMreSeqBrainHs1822Reads
-      shortLabel MRE Reads
-      longLabel MRE filtered reads
-      parent ucsfBrainMethylViewALN
-      subGroups view=ALN sampleType=Brain assayType=MRE1
-      type bed 9
-      noInherit on
-      itemRgb on
-      spectrum on
-      priority 2
-  
-      track ucsfRnaSeqBrainHs0992SmartReads
-      shortLabel Smart Reads
-      longLabel RNA-seq smart-tagged reads
-      parent ucsfBrainMethylViewALN
-      subGroups view=ALN sampleType=Brain assayType=RNA2
-      type bed 9
-      noInherit on
-      itemRgb on
-      spectrum on
-      priority 3
-  
-      track ucsfRnaSeqBrainHs0992AllReads
-      shortLabel RNA-seq Reads
-      longLabel RNA-seq reads
-      parent ucsfBrainMethylViewALN
-      subGroups view=ALN sampleType=Brain assayType=RNA1
-      type bed 9
-      noInherit on
-      itemRgb on
-      spectrum on
-      priority 4
+
+        track ucsfMedipSeqBrainReads
+        shortLabel MeDIP Reads
+        longLabel MeDIP-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MeDIP1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 1
+
+        track ucsfMreSeqBrainReads
+        shortLabel MRE Reads
+        longLabel MRE-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MRE1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 2
+
+        track ucsfRnaSeqBrainSmartReads
+        shortLabel Smart Reads
+        longLabel RNA-seq Smart-Tagged Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA2
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 3
+
+        track ucsfRnaSeqBrainAllReads
+        shortLabel RNA-seq Reads
+        longLabel RNA-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA1
+        type bed 9
+        noInherit on
+        configurable on
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        itemRgb on
+        spectrum on
+        priority 4
 
     track ucsfBrainMethylViewCOV
-    shortLabel Coverage
+    shortLabel Raw Signal
     view COV
     minLimit 0
     maxLimit 1000
     viewLimits 0:100
     parent ucsfBrainMethyl
     visibility full
-  
-      track ucsfChipSeqH3K4me3BrainHs0367Coverage
-      shortLabel H3K4me3 Coverage
-      longLabel H3K4me3 coverage
-      parent ucsfBrainMethylViewCOV
-      subGroups view=COV sampleType=Brain assayType=H3K4me3
-      type bedGraph 4
-      noInherit on
-      maxHeightPixels 128:32:16
-      yLineOnOff on
-      color 0,200,0
-      altColor 200,100,0
-      autoScale on
-      priority 5
-  
-      track ucsfMedipSeqBrainHs1821Coverage
-      shortLabel MeDIP Coverage
-      longLabel MeDIP filtered reads coverage
-      parent ucsfBrainMethylViewCOV
-      subGroups view=COV sampleType=Brain assayType=MeDIP2
-      type bedGraph 4
-      noInherit on
-      maxHeightPixels 128:32:16
-      yLineOnOff on
-      color 100,0,0
-      altColor 200,100,0
-      autoScale on
-      priority 6
-  
-      track ucsfRnaSeqBrainHs0992SmartCoverage
-      shortLabel Smart Coverage
-      longLabel RNA-seq smart-tagged coverage
-      parent ucsfBrainMethylViewCOV
-      subGroups view=COV sampleType=Brain assayType=RNA2
-      type bedGraph 4
-      noInherit on
-      maxHeightPixels 128:32:16
-      yLineOnOff on
-      color 0,0,200
-      altColor 100,0,0
-      autoScale on
-      priority 7
-  
-      track ucsfRnaSeqBrainHs0992AllCoverage
-      shortLabel RNA-seq Coverage
-      longLabel RNA-seq read coverage
-      parent ucsfBrainMethylViewCOV
-      subGroups view=COV sampleType=Brain assayType=RNA1
-      type bedGraph 4
-      noInherit on
-      maxHeightPixels 128:32:16
-      yLineOnOff on
-      color 0,0,200
-      altColor 100,0,0
-      autoScale on
-      priority 8
+
+        track ucsfChipSeqH3K4me3BrainCoverage
+        shortLabel H3K4me3 RawSignal
+        longLabel H3K4me3 ChIP-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=H3K4me3
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,200,0
+        altColor 200,100,0
+        configurable on
+        autoScale on
+        priority 5
+
+        track ucsfMedipSeqBrainCoverage
+        shortLabel MeDIP RawSignal
+        longLabel MeDIP-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=MeDIP2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 100,0,0
+        altColor 200,100,0
+        configurable on
+        autoScale on
+        priority 6
+
+        track ucsfRnaSeqBrainSmartCoverage
+        shortLabel Smart RawSignal
+        longLabel RNA-seq Smart-Tagged Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=RNA2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,0,200
+        altColor 100,0,0
+        autoScale on
+        configurable on
+        priority 7
+
+        track ucsfRnaSeqBrainAllCoverage
+        shortLabel RNA-seq RawSignal
+        longLabel RNA-seq Raw Signal
+        parent ucsfBrainMethylViewCOV
+        subGroups view=COV sampleType=Brain assayType=RNA1
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        color 0,0,200
+        altColor 100,0,0
+        autoScale on
+        configurable on
+        priority 8
 
     track ucsfBrainMethylViewCG
     shortLabel CpG score
@@ -4014,34 +4042,36 @@ type bed 3
     viewLimits 0:100
     parent ucsfBrainMethyl
     visibility full
-  
-      track ucsfMedipSeqBrainHs1821CpG
-      shortLabel MeDIP CpG
-      longLabel MeDIP CpG score
-      parent ucsfBrainMethylViewCG
-      subGroups view=CG sampleType=Brain assayType=MeDIP2
-      type bedGraph 4
-      noInherit on
-      maxHeightPixels 128:32:16
-      yLineOnOff on
-      color 100,0,0
-      altColor 200,100,0
-      autoScale on
-      priority 9
-  
-      track ucsfMreSeqBrainHs1822CpG
-      shortLabel MRE CpG
-      longLabel MRE CpG score
-      parent ucsfBrainMethylViewCG
-      subGroups view=CG sampleType=Brain assayType=MRE3
-      type bedGraph 4
-      noInherit on
-      maxHeightPixels 128:32:16
-      yLineOnOff on
-      color 0,100,0
-      altColor 200,100,0
-      autoScale on
-      priority 10
+
+        track ucsfMedipSeqBrainCpG
+        shortLabel MeDIP CpG
+        longLabel MeDIP-seq CpG Score
+        parent ucsfBrainMethylViewCG
+        subGroups view=CG sampleType=Brain assayType=MeDIP2
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        configurable on
+        color 100,0,0
+        altColor 200,100,0
+        autoScale on
+        priority 9
+
+        track ucsfMreSeqBrainCpG
+        shortLabel MRE CpG
+        longLabel MRE-seq CpG Score
+        parent ucsfBrainMethylViewCG
+        subGroups view=CG sampleType=Brain assayType=MRE3
+        type bedGraph 4
+        noInherit on
+        maxHeightPixels 128:32:16
+        yLineOnOff on
+        configurable on
+        color 0,100,0
+        altColor 200,100,0
+        autoScale on
+        priority 10
   
 
 track brTestPlus

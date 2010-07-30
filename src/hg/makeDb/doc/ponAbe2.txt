@@ -1127,25 +1127,59 @@ done
 # -rw-rw-r--  1 1935916 Nov 27 14:37 rheMac2.gp.gz
 
 
-    ssh kkstore02
+    ##################################################
+    # redmine GB - Feature #480 -  missing self frames on multiz 
+    #   NwayFrames tables (DONE 2010-07-29) 
+    #   re-run the genePredToMafFrames with ponAbe2 genes/ponAbe2
+    #
+    # fixed up steps:
+    # mv frames.log frames.2007-11-27.log
+    # mv multiz8way.mafFrames.gz multiz8way.mafFrames.2007-11-27.gz
+    # Since ponAbe2 has ensGene: 41488, refGene: 1337, Mrnas: 2153
+    #  use ensGene for ponAbe2:
+   for DB in  ponAbe2
+do
+    hgsql -N -e "select name,chrom,strand,txStart,txEnd,cdsStart,cdsEnd,exonCount,exonStarts,exonEnds from ensGene" ${DB} \
+      | genePredSingleCover stdin stdout | gzip -2c \
+        > /scratch/tmp/${DB}.tmp.gz
+    mv /scratch/tmp/${DB}.tmp.gz genes/$DB.gp.gz
+    echo "${DB} done"
+done
+
+    ssh hgwdv
+    sizeG=188743680
+    export sizeG
+    ulimit -d $sizeG
+    ulimit -v $sizeG
+
     cd /cluster/data/ponAbe2/bed/multiz8way/frames
     # leaving out calJac1 ponAbe2
-    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames ponAbe2 stdin stdout hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz rheMac2 genes/rheMac2.gp.gz panTro2 genes/panTro2.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz8way.mafFrames.gz) > frames.log 2>&1
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames ponAbe2 stdin stdout  ponAbe2 genes/ponAbe2.gp.gz hg18 genes/hg18.gp.gz mm9 genes/mm9.gp.gz rheMac2 genes/rheMac2.gp.gz panTro2 genes/panTro2.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz | gzip > multiz8way.mafFrames.gz) > frames.log 2>&1
+    # real    6m52.150s
+
     # see what it looks like in terms of number of annotations per DB:
     zcat multiz8way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
-# 219627 hg18
-# 221459 panTro2
-# 230108 rheMac2
-# 238734 mm9
-# 412384 ornAna1
-# 459521 monDom4
+    # 192293 ponAbe2
+    # 219627 hg18
+    # 221459 panTro2
+    # 230108 rheMac2
+    # 238734 mm9
+    # 412384 ornAna1
+    # 459521 monDom4
+    ## output from multiz8way.mafFrames.2007-11-27.gz matched
+    # 219627 hg18
+    # 221459 panTro2
+    # 230108 rheMac2
+    # 238734 mm9
+    # 412384 ornAna1
+    # 459521 monDom4
 
     #	load the resulting file
     ssh hgwdev
     cd /cluster/data/ponAbe2/bed/multiz8way/frames
     time nice -n +19 hgLoadMafFrames ponAbe2 multiz8wayFrames \
 	multiz8way.mafFrames.gz
-    #	real    0m45.837s
+    #	real    0m18.905s
 
     #	enable the trackDb entries:
 # frames multiz8wayFrames

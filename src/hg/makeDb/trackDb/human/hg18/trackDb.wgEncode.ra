@@ -1008,7 +1008,7 @@ wgEncode 1
 
 
 
-# U. Washington Affy Exon (wrangler: Andy, Tim, Brian)
+# U. Washington Affy Exon (wrangler: Andy, Brian)
 
 track wgEncodeUwAffyExonArray
 compositeTrack on
@@ -1619,6 +1619,7 @@ superTrack on show
 shortLabel ENCODE Regulation
 longLabel Integrated Regulation Track Based on ENCODE Data
 release alpha,beta
+wgEncode 1
 group regulation
 
     track wgEncodeRegTxn
@@ -1791,7 +1792,6 @@ group regulation
 	type wig 0.00 14639.00
 
     track wgEncodeRegMarkEnhH3k27ac
-    # compositeTrack on
     container multiWig
     noInherit on
     type wig 0 10000
@@ -1888,7 +1888,6 @@ group regulation
 	table wgEncodeBroadChipSeqSignalNhlfH3k27ac
 	type wig 0.00 14639.00
 
-
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
@@ -1904,6 +1903,7 @@ group regulation
     showSubtrackColorOnUi on
     windowingFunction mean
     priority 4
+    html wgEncodeRegMarkEnhH3k4me3
 
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
@@ -1924,13 +1924,13 @@ group regulation
 	color 255,212,128
 
 	track wgEncodeRegMarkEnhH3k4me3Hepg2
+	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
 	shortLabel HepG2
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HepG2 cells from ENCODE
+	longLabel Promoter mark (H3K4Me3) on HepG2 cells from ENCODE
 	release alpha,beta
 	parent wgEncodeRegMarkPromoter
-	color 212,255,128
-	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
         type wig 0.00 4927.00
+	color 212,255,128
 
 	track wgEncodeRegMarkPromoterHmec
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
@@ -1986,6 +1986,103 @@ group regulation
         type wig 0.00 28587.00
 	color 255,128,212
 
+    track wgEncodeRegMarkRepressH3k27me3
+    container multiWig
+    noInherit on
+    type wig 0 10000
+    superTrack wgEncodeReg hide
+    shortLabel Repress H3K27Me3
+    longLabel H3K27Me3 - An repressor histone Mark on 8 Cell Lines from ENCODE
+    release alpha
+    configurable on
+    visibility full
+    viewLimits 0:50
+    maxHeightPixels 100:30:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 5
+
+	track wgEncodeRegMarkRepressH3k27me3Gm12878
+	shortLabel Gm12878
+	longLabel H3K27Me3 - An repressor mark on Gm12878 cells from ENCODE
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	type wig 0.00 9323.50
+	color 255,128,128
+	table wgEncodeBroadChipSeqSignalGm12878H3k27me3
+
+	track wgEncodeRegMarkRepressH3k27me3H1hesc
+	shortLabel H1 ES
+	longLabel H3K27Me3 - An repressor mark on H1 ES cells from ENCODE
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 255,212,128
+	table wgEncodeBroadChipSeqSignalH1hescH3k27me3
+	type wig 0.00 12286.00
+
+	track wgEncodeRegMarkRepressH3k27me3Hepg2
+	shortLabel HepG2
+	longLabel H3K27Me3 - An repressor mark on HepG2 cells from ENCODE
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 212,255,128
+        table wgEncodeBroadChipSeqSignalHepg2H3k27me3
+        type wig 0.00 2133.00
+
+	track wgEncodeRegMarkRepressH3k27me3Hmec
+	shortLabel HMEC
+	longLabel H3K27Me3 - An repressor mark on HMEC cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 120,235,120
+	table wgEncodeBroadChipSeqSignalHmecH3k27me3
+	type wig 0.00 13574.00
+
+	track wgEncodeRegMarkRepressH3k27me3Hsmm
+	shortLabel HSMM
+	longLabel H3K27Me3 - An repressor mark on HSMM cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 120,235,204
+	table wgEncodeBroadChipSeqSignalHsmmH3k27me3
+	type wig 0.00 10412.00
+
+	track wgEncodeRegMarkRepressH3k27me3Huvec
+	shortLabel HUVEC
+	longLabel H3K27Me3 - An repressor mark on HUVEC cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 128,212,255
+	table wgEncodeBroadChipSeqSignalHuvecH3k27me3
+	type wig 0.00 5259.25
+
+	track wgEncodeRegMarkRepressH3k27me3K562
+	shortLabel K562
+	longLabel H3K27Me3 - An repressor mark on K562 cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 128,128,255
+	table wgEncodeBroadChipSeqSignalK562H3k27me3
+	type wig 0.00 8682.25
+
+	track wgEncodeRegMarkRepressH3k27me3Nhek
+	shortLabel NHEK
+	longLabel H3K27Me3 - An repressor mark on NHEK cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 212,128,255
+	table wgEncodeBroadChipSeqSignalNhekH3k27me3
+	type wig 0.00 4240.50
+
+	track wgEncodeRegMarkRepressH3k27me3Nhlf
+	shortLabel NHLF
+	longLabel H3K27Me3 - An repressor mark on NHLF cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 255,128,212
+	table wgEncodeBroadChipSeqSignalNhlfH3k27me3
+	type wig 0.00 14639.00
+
 
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
@@ -1999,7 +2096,7 @@ group regulation
     inputTracksSubgroupDisplay cellType rank
     visibility dense
     useScore 1
-    priority 5
+    priority 6
 
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
@@ -2014,7 +2111,7 @@ group regulation
     inputTracksSubgroupDisplay cellType factor
     visibility dense
     useScore 1
-    priority 6
+    priority 7
 
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
@@ -3362,87 +3459,12 @@ wgEncode 1
         metadata project=wgEncode grant=Tenenbaum lab=SunyAlbany dataType=RnaGeneChip cell=K562 ripAntibody=Sig_P6246 ripTgtProtein=PABPC1 view=RbpAssocRna labVersion=gene.core.presAllIP[DABG_10e-256].enrichedIPvTotal_minFC_maxPVal[RMA_PLIER] dataVersion="ENCODE Nov 2008 Freeze" subId=101 dateSubmitted=2008-12-02 dateUnrestricted=2009-09-02 composite=wgEncodeSunyalbanyRnaGeneChip tableName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1 fileName=wgEncodeSunyalbanyRnaGeneChipRbpAssocRnaK562Sigp6246Pabpc1.broadPeak.gz
 
 
+
 # Yale RNA-seq (wrangler: tdreszer)
-track wgEncodeYaleRNAseq
-compositeTrack on
-shortLabel Yale RNA-seq
-longLabel ENCODE RNA-seq from Yale/UC-Davis/Harvard
-group expression
-priority 0
-origAssembly hg18
-subGroup1 cellType Cell_Line t1GM12878=GM12878_<i>Tier1</i> t1K562=K562_<i>Tier1</i> uK562Ia30=K562_<i>IFN&alpha;_30min</i> uK562Ia6=K562_<i>IFN&alpha;_6hrs</i> uK562Ig30=K562_<i>IFN&gamma;_30min</i> uK562Ig6=K562_<i>IFN&gamma;_6hrs</i>
-dimensions dimensionX=cellType
-boxedCfg on
-sortOrder cellType=+
-dragAndDrop subTracks
-#visibilityViewDefaults Signal=full zRAW=hide
-controlledVocabulary encode/cv.ra cellType=cell
-#noInherit on
-#settingsByView Signal:viewLimits=0:78,minLimit=0,maxLimit=20910,autoScale=off,windowingFunction=mean,maxHeightPixels=100:32:16 zRAW:viewLimits=0:15,minLimit=0,maxLimit=65499,autoScale=off,windowingFunction=mean,maxHeightPixels=100:16:16
-type bedGraph 4
-viewLimits 0:78
-minLimit 0
-maxLimit 20910
-autoScale off
-windowingFunction mean
-maxHeightPixels 100:32:16
-dataVersion ENCODE Feb 2009 Freeze
-canPack On
-wgEncode 1
+include trackDb.wgEncodeYaleRnaSeq.ra
+# Yale RNA-seq (wrangler: cricket)
+include trackDb.wgEncodeYaleRnaSeq.new.ra
 
-    track wgEncodeYaleRnaSeqPolyaSignalGm12878
-    subTrack wgEncodeYaleRNAseq
-    shortLabel GM12878 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in GM12878 cells)
-    subGroups cellType=t1GM12878
-    type bedGraph 4
-    color 153,38,0
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=GM12878 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=539 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalGm12878 fileName=wgEncodeYaleRnaSeqPolyaSignalGm12878.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562
-    subTrack wgEncodeYaleRNAseq
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562 cells)
-    subGroups cellType=t1K562
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Feb 2009 Freeze" subId=276 dateSubmitted=2009-03-17 dateUnrestricted=2009-12-17 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562 fileName=wgEncodeYaleRnaSeqPolyaSignalK562.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa30m cells)
-    subGroups cellType=uK562Ia30
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=540 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNa6h cells)
-    subGroups cellType=uK562Ia6
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNa6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=541 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg30m cells)
-    subGroups cellType=uK562Ig30
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg30m view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=542 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m.bedGraph4.gz
-
-    track wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
-    subTrack wgEncodeYaleRNAseq off
-    shortLabel K562 PolyA Sig
-    longLabel ENCODE Yale/UCD/Harvard RNA-seq PolyA Signal (in K562/IFNg6h cells)
-    subGroups cellType=uK562Ig6
-    type bedGraph 4
-    color 46,0,184
-    metadata project=wgEncode grant=Snyder lab=Yale dataType=RnaSeqPolya cell=K562 treatment=IFNg6h view=Signal labVersion=PeakSeq1.0 dataVersion="ENCODE Sep 2009 Freeze" subId=543 dateSubmitted=2009-09-24 dateUnrestricted=2010-06-24 composite=wgEncodeYaleRNAseq tableName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h fileName=wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h.bedGraph4.gz
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)
 include wgEncodeYaleChIPseq.ra

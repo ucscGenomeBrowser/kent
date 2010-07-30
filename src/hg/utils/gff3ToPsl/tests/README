@@ -1,0 +1,11 @@
+To build the patch 2bit file, I used the following script:
+wget "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/PATCHES/patch_release_1/FASTA/alt.scaf.fa.gz"
+zcat  alt.scaf.fa.gz | sed 's/>gi.*gb|/>/' | sed 's/|.*//' | faToTwoBit stdin GL339449.2bit
+
+To build the locusNameAndSize.txt file, I used this script:
+
+while read chrom locus; do c=chr$chrom; s=`grep "$c      " /cluster/data/hg19/chrom.sizes | awk '{print $2}'`; echo $locus $c $s; done < /hive/data/genomes/hg19/download/assembled_chromosomes/chr2acc > locusNameAndSize.txt
+
+To grab the GL339450_CM000671.gff file
+wget "ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/PATCHES/patch_release_1/alignments/GL339450_CM000671.gff"
+

@@ -45,9 +45,11 @@ char alpha[256];
 char csSeqName[256];
 char bedTypeCols[10];
 struct twoBitFile *genome = NULL;
+int mismatchTotalQuality;
 int mismatches;
 int matchFirst=0;
 int mmCheckOneInN;
+int allowErrors = 0;
 
 void usage()
 /* Explain usage and exit. */
@@ -85,14 +87,13 @@ errAbort(
   "   -chromInfo=file.txt          Specify chromInfo file to validate chrom names and sizes\n"
   "   -colorSpace                  Sequences include colorspace values [0-3] (can be used \n"
   "                                  with formats such as tagAlign and pairedTagAlign)\n"
-  "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
-  "                                  stopping (default %d)\n"
   "   -zeroSizeOk                  For BED-type positional data, allow rows with start==end\n"
   "                                  otherwise require strictly start < end\n"
   "   -genome=path/to/hg18.2bit    Validate tagAlign or pairedTagAlign sequences match genome\n"
   "                                  in .2bit file\n"
   "   -mismatches=n                Maximum number of mismatches in sequence (or read pair) if \n"
   "                                  validating tagAlign or pairedTagAlign files\n"
+  "   -mismatchTotalQuality=n      Maximum total quality score at mismatching positions\n"
   "   -matchFirst=n                only check the first N bases of the sequence\n"
   "   -mmPerPair                   Check either pair dont exceed mismatch count if validating\n"
   "                                  pairedTagAlign files (default is the total for the pair)\n"
@@ -108,6 +109,9 @@ errAbort(
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
   "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
   "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
+  "   -allowErrors=N               number of errors allowed to still pass (default 0)\n"
+  "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
+  "                                  stopping (default %d)\n"
   , MAX_ERRORS);
 }
 
@@ -118,6 +122,7 @@ static struct optionSpec options[] = {
    {"maxErrors", OPTION_INT},
    {"colorSpace", OPTION_BOOLEAN},
    {"zeroSizeOk", OPTION_BOOLEAN},
+   {"mismatchTotalQuality", OPTION_INT},
    {"printOkLines", OPTION_BOOLEAN},
    {"printFailLines", OPTION_BOOLEAN},
    {"genome", OPTION_STRING},
@@ -133,6 +138,7 @@ static struct optionSpec options[] = {
    {"version", OPTION_BOOLEAN},
    {"allowOther", OPTION_BOOLEAN},
    {"allowBadLength", OPTION_BOOLEAN},
+   {"allowErrors", OPTION_INT},
    {"complementMinus", OPTION_BOOLEAN},
    {NULL, 0},
 };
@@ -1132,7 +1138,7 @@ struct bamCallbackData
     int numPos;
     };
 
-boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, unsigned int *cigarPacked, int nCigar)
+boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, UBYTE* quals, unsigned int *cigarPacked, int nCigar)
 {
 static char cacheChrom[1024];
 static struct dnaSeq *cacheSeq = NULL;
@@ -1150,12 +1156,14 @@ if ((cacheChrom == NULL) || !sameString(chrom, cacheChrom))
     int size =  twoBitSeqSize(genome, chrom);
     cacheSeq = twoBitReadSeqFragLower(genome, chrom, 0, size);
     strcpy(cacheChrom, chrom);
-    verbose(2, "read in chrom %s size %d\n",cacheChrom, size);
+    verbose(2, "read in chrom %s size %d: aligns to this point %d\n",
+        cacheChrom, size, line);
     }
 
 
 int curPosGenome = chromStart;
 int i, j;
+int mmTotalQual = 0;
 int mm = 0;
 char dna[10000], *dnaPtr = dna;
 for (i = 0;   (i < nCigar);  i++)
@@ -1214,16 +1222,21 @@ else
 for (i = start; (strand == '-') ? i >= 0 : i < strlen(seq); i += incr)
     {
     char c = tolower(seq[i]);
-    if ((dna[i] != '-') && (checkMismatch(c,  dna[i])))
+    if ((dna[i] != '-') && (checkMismatch(c,  dna[i]))) 
+        {
         ++mm;
+        if (quals)
+            mmTotalQual += min( round( quals[i] / 10 ) * 10, 30 );
+        }
 
     if (--length == 0)
         break;
     }
 
 
-if (mm > mismatches)
+if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality)))
     {
+    assert(checkLength < 10000);
     char match[10000];
 
     for(i = 0; i < strlen(seq); i++)
@@ -1234,11 +1247,24 @@ if (mm > mismatches)
             match[i] = 'x';
         }
     match[i] = 0;
-    warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
-         file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+
+    if (mm > mismatches)
+        {
+        warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+            file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+        }
+
+    if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
+        {
+        char squal[10000];
+        for (i = 0; i < checkLength; i++)
+            squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
+
+        warn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+            file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+        }        
     return FALSE;
     }
-
 return TRUE;
 }
 
@@ -1251,15 +1277,19 @@ char *chrom = bd->chrom;
 char *file = bd->file;
 int *errs = bd->errs;
 const bam1_core_t *core = &bam->core;
-
 unsigned int *cigarPacked = bam1_cigar(bam);
 char *query = bamGetQuerySequence(bam, FALSE);
 char strand = bamIsRc(bam) ? '-' : '+';
+UBYTE *queryQuals = NULL;
+
 bd->numAligns++;
 
 if (core->flag &  BAM_FUNMAP)
     // read is unmapped... ignore
     return 0;
+
+if ( mismatchTotalQuality)
+    queryQuals = bamGetQueryQuals(bam, FALSE);
 
 if (bam->core.l_qseq == 0)
     {
@@ -1267,7 +1297,8 @@ if (bam->core.l_qseq == 0)
     if (++(*errs) >= maxErrors)
         errAbort("Aborting .. found %d errors\n", *errs);
     }
-else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, strand, query, cigarPacked, core->n_cigar))
+else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, 
+            strand, query, queryQuals, cigarPacked, core->n_cigar))
     {
     char *cigar = bamGetCigar(bam);
     warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
@@ -1326,7 +1357,7 @@ for(ii=0; ii < head->n_targets; ii++)
 	}
     }
 
-if (errs)
+if (errs > allowErrors)
     errAbort("Aborting... %d errors found in BAM file\n", errs);
 
 if (!genome)
@@ -1351,6 +1382,7 @@ for(ii=0; ii < head->n_targets; ii++)
     int ret = bam_parse_region(fh->header, position, &chromId, &start, &end);
 
     bd->chrom = head->target_name[ii];
+    verbose(2,"asking for alignments on %s\n",bd->chrom);
     ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
 
     }
@@ -1374,8 +1406,11 @@ for (i = 0; i < numFiles ; ++i)
     lineFileClose(&lf);
     }
 verbose(2,"[%s %3d] done loop\n", __func__, __LINE__);
-if (errs > 0)
+if (errs > allowErrors)
     errAbort("Aborting ... found %d errors in total\n", errs);
+else
+    verbose(2, "Error count %d\n",errs);
+
 verbose(2,"[%s %3d] done\n", __func__, __LINE__);
 
 }
@@ -1439,6 +1474,7 @@ type = optionVal("type", "");
 if (strlen(type) == 0)
     errAbort("please specify type");
 maxErrors      = optionInt("maxErrors", MAX_ERRORS);
+allowErrors    = optionInt("allowErrors", allowErrors);
 zeroSizeOk     = optionExists("zeroSizeOk");
 printOkLines   = optionExists("printOkLines");
 printFailLines = optionExists("printFailLines");
@@ -1446,6 +1482,7 @@ genome         = optionExists("genome") ? twoBitOpen(optionVal("genome",NULL)) :
 mismatches     = optionInt("mismatches",0);
 matchFirst     = optionInt("matchFirst",0);
 mmPerPair      = optionExists("mmPerPair");
+mismatchTotalQuality = optionInt("mismatchTotalQuality",0);
 nMatch         = optionExists("nMatch");
 privateData    = optionExists("privateData");
 isSort         = optionExists("isSort");

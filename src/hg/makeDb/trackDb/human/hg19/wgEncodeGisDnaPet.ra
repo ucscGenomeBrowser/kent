@@ -22,3 +22,140 @@ wgEncode 1
     visibility dense
     subTrack wgEncodeGisDnaPet
 
+        track wgEncodeGisDnaPetK562F10kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments on
+        shortLabel K562 10k
+        longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=2-10k
+        type bam
+        pairEndsByName on
+        showNames off
+        noColorTag .
+        bamColorMode gray
+        bamGrayMode aliQual
+        baseColorDefault diffBases
+        baseColorUseSequence lfExtra
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 100
+        maxWindowToDraw 1000000
+        color 46,0,184
+        # subId=1853 dateSubmitted=2010-07-07
+
+
+        track wgEncodeGisDnaPetK562F1kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel K562 1k
+        longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=0-1k
+        type bam
+        pairEndsByName on
+        showNames off
+        noColorTag .
+        bamColorMode gray
+        bamGrayMode aliQual
+        baseColorDefault diffBases
+        baseColorUseSequence lfExtra
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 100
+        maxWindowToDraw 1000000
+        color 46,0,184
+        # subId=1854 dateSubmitted=2010-07-07
+
+
+        track wgEncodeGisDnaPetGm12878F10kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments on
+        shortLabel GM12878 10k
+        longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=2-10k
+        type bam
+        pairEndsByName on
+        showNames off
+        noColorTag .
+        bamColorMode gray
+        bamGrayMode aliQual
+        baseColorDefault diffBases
+        baseColorUseSequence lfExtra
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 100
+        maxWindowToDraw 1000000
+        color 153,38,0
+        # subId=1852 dateSubmitted=2010-07-07
+
+
+        track wgEncodeGisDnaPetK562F20kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel K562 20k
+        longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
+        subGroups view=Alignments cellType=K562 fragSize=3-f20k
+        type bam
+        pairEndsByName on
+        showNames off
+        noColorTag .
+        bamColorMode gray
+        bamGrayMode aliQual
+        baseColorDefault diffBases
+        baseColorUseSequence lfExtra
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 100
+        maxWindowToDraw 1000000
+        color 46,0,184
+        # subId=1524 dateSubmitted=2010-06-16
+
+
+        track wgEncodeGisDnaPetGm12878F5kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel GM12878 5k
+        longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=1-5k
+        type bam
+        pairEndsByName on
+        showNames off
+        noColorTag .
+        bamColorMode gray
+        bamGrayMode aliQual
+        baseColorDefault diffBases
+        baseColorUseSequence lfExtra
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 100
+        maxWindowToDraw 1000000
+        color 153,38,0
+        # subId=1521 dateSubmitted=2010-06-16
+
+
+        track wgEncodeGisDnaPetGm12878F1kAln
+        release alpha
+        parent wgEncodeGisDnaPetViewAlignments off
+        shortLabel GM12878 1k
+        longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)
+        subGroups view=Alignments cellType=GM12878 fragSize=0-1k
+        type bam
+        pairEndsByName on
+        showNames off
+        noColorTag .
+        bamColorMode gray
+        bamGrayMode aliQual
+        baseColorDefault diffBases
+        baseColorUseSequence lfExtra
+        indelDoubleInsert on
+        indelQueryInsert on
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 100
+        maxWindowToDraw 1000000
+        color 153,38,0
+        # subId=1520 dateSubmitted=2010-06-16
+

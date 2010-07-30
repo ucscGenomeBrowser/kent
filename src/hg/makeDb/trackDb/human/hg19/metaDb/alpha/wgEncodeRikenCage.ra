@@ -6,7 +6,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -63,7 +64,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageGm12878NucleusTotalAln.bam.gz
+fileName wgEncodeRikenCageGm12878NucleusTotalAln.bam
+fileIndex wgEncodeRikenCageGm12878NucleusTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -120,7 +122,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageH1hescCellTotalAln.bam.gz
+fileName wgEncodeRikenCageH1hescCellTotalAln.bam
+fileIndex wgEncodeRikenCageH1hescCellTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -177,7 +180,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -234,7 +238,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -291,7 +296,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageHepg2NucleusTotalAln.bam.gz
+fileName wgEncodeRikenCageHepg2NucleusTotalAln.bam
+fileIndex wgEncodeRikenCageHepg2NucleusTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -348,7 +354,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -405,7 +412,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562ChromatinTotalAln.bam.gz
+fileName wgEncodeRikenCageK562ChromatinTotalAln.bam
+fileIndex wgEncodeRikenCageK562ChromatinTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -462,7 +470,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562CytosolPapAln.bam.gz
+fileName wgEncodeRikenCageK562CytosolPapAln.bam
+fileIndex wgEncodeRikenCageK562CytosolPapAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -519,7 +528,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562CytosolTotalAln.bam.gz
+fileName wgEncodeRikenCageK562CytosolTotalAln.bam
+fileIndex wgEncodeRikenCageK562CytosolTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion bowtie version 0.12.5
@@ -576,7 +586,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562NucleolusTotalAln.bam.gz
+fileName wgEncodeRikenCageK562NucleolusTotalAln.bam
+fileIndex wgEncodeRikenCageK562NucleolusTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -633,7 +644,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562NucleoplasmTotalAln.bam.gz
+fileName wgEncodeRikenCageK562NucleoplasmTotalAln.bam
+fileIndex wgEncodeRikenCageK562NucleoplasmTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -690,7 +702,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562NucleusTotalAln.bam.gz
+fileName wgEncodeRikenCageK562NucleusTotalAln.bam
+fileIndex wgEncodeRikenCageK562NucleusTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion bowtie version 0.12.5
@@ -747,7 +760,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -804,7 +818,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -861,7 +876,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.gz
+fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam
+fileIndex wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
@@ -918,7 +934,8 @@ dataType CAGE
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageProstateCellTotalAln.bam.gz
+fileName wgEncodeRikenCageProstateCellTotalAln.bam
+fileIndex wgEncodeRikenCageProstateCellTotalAln.bam.bai
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
