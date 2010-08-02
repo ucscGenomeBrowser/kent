@@ -54,7 +54,10 @@ png->useTransparency = useTransparency;
 
 /* Fill in the mg part of this structure with normal memGfx. */
 mg = mgNew(width, height);
-mgClearPixels(mg);
+if (png->useTransparency)
+    mgClearPixelsTrans(mg);
+else
+    mgClearPixels(mg);
 png->mg = *mg;
 freez(&mg);	/* We don't need this copy any more. */
 

@@ -1,5 +1,6 @@
 metaObject wgEncodeSunyAlbanyTilingGm12878Elavl1RbpAssocRna
 objType table
+antibody ELAVL1
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -18,6 +19,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingGm12878Pabpc1RbpAssocRna
 objType table
+antibody PABPC1
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -36,6 +38,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
 objType table
+antibody ripInput
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -54,6 +57,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
 objType table
+antibody T7Tag
 cell GM12878
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -72,6 +76,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingK562Elavl1RbpAssocRna
 objType table
+antibody ELAVL1
 cell K562
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -90,6 +95,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingK562Pabpc1RbpAssocRna
 objType table
+antibody PABPC1
 cell K562
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -108,6 +114,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
 objType table
+antibody ripInput
 cell K562
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -126,6 +133,7 @@ view RbpAssocRna
 
 metaObject wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
 objType table
+antibody T7Tag
 cell K562
 composite wgEncodeSunyAlbanyTiling
 dataType RipChip
@@ -142,4 +150,4 @@ subId 1245
 tableName wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
 view RbpAssocRna
 
-# MAGIC: 84427119
+# MAGIC: 107326309

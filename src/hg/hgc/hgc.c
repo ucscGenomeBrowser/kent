@@ -244,8 +244,6 @@ char *organism;		/* Colloquial name of organism. */
 char *genome;		/* common name, e.g. Mouse, Human */
 char *scientificName;	/* Scientific name of organism. */
 
-char *protDbName;	/* Name of proteome database */
-struct sqlConnection *protDbConn; /* connection to proteins database */
 struct hash *trackHash;	/* A hash of all tracks - trackDb valued */
 
 void printLines(FILE *f, char *s, int lineSize);
@@ -20480,6 +20478,8 @@ while ((row = sqlNextRow(sr2)) != NULL)
 sqlFreeResult(&sr2);
 
 safef(query3, sizeof(query3), "select * from dvXref2 where varId = '%s' ", itemName);
+char *protDbName = hPdbFromGdb(database);
+struct sqlConnection *protDbConn = hAllocConn(protDbName);
 sr3 = sqlGetResult(protDbConn, query3);
 while ((row = sqlNextRow(sr3)) != NULL)
     {
@@ -20507,6 +20507,7 @@ while ((row = sqlNextRow(sr3)) != NULL)
     dvXref2Free(&dvXref2);
     }
 sqlFreeResult(&sr3);
+hFreeConn(&protDbConn);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -21690,7 +21691,7 @@ if (gotExtra)
     ptr = strchr(ptr, ',');
     *ptr = '\0';
 
-    // Use the MGI ID to show all centers that are working on this gene:
+    // Show entries with the MGI ID and design ID 
     safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%s%%'",
 	  extraTable, mgiId, designId);
     sr = sqlGetResult(conn, query);
@@ -22138,9 +22139,6 @@ organism = hOrganism(database);
 scientificName = hScientificName(database);
 
 setUdcCacheDir();
-
-protDbName = hPdbFromGdb(database);
-protDbConn = sqlConnect(protDbName);
 
 dbIsFound = sqlDatabaseExists(database);
 

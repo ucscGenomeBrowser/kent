@@ -25,6 +25,7 @@ DIRS = \
 	toDev64 \
 	twoBitMask \
 	gff3ToGenePred \
+	gff3ToPsl \
 	automation \
 	refreshNamedSessionCustomTracks \
 	refSeqGet \
@@ -35,6 +36,7 @@ DIRS = \
 
 TEST_DIRS = \
 	gff3ToGenePred \
+	gff3ToPsl \
 	refSeqGet
 
 

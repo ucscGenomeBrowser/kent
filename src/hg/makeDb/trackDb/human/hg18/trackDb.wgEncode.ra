@@ -207,10 +207,10 @@ priority 300
     color 58,119,40
 
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
-include wgEncodeBroadChipSeq.new.ra
+include wgEncodeBroadChipSeq.ra
 
 # Duke/UT/UNC Open Chromatin (wrangler: Venkat, assisted by Tim)
-include wgEncodeChromatinMap.new.ra
+include wgEncodeChromatinMap.ra
 
 
 # Mapability - Cross lab special track (wrangler: tdreszer)
@@ -1617,9 +1617,11 @@ wgEncode 1
 track wgEncodeReg
 superTrack on show
 shortLabel ENCODE Regulation
-longLabel Integrated Regulation Track Based on ENCODE Data
+longLabel ENCODE Integrated Regulation
 release alpha,beta
+wgEncode 1
 group regulation
+priority 1
 
     track wgEncodeRegTxn
     container multiWig
@@ -1627,7 +1629,7 @@ group regulation
     type wig 0.00 2716.04
     superTrack wgEncodeReg hide
     shortLabel Transcription
-    longLabel Transcription levels assayed by RNA-seq from ENCODE
+    longLabel ENCODE Transcription Levels Assayed by RNA-seq on 6 Cell Lines
     release alpha,beta
     configurable on
     visibility full
@@ -1636,7 +1638,8 @@ group regulation
     aggregate transparentOverlay
     transformFunc LOG
     viewLimits 0:4
-    priority 1
+    priority 1.1
+    dragAndDrop subTracks
 
         track wgEncodeRegTxnGm12878
 	table wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75
@@ -1699,7 +1702,7 @@ group regulation
     type wig 0 10000
     superTrack wgEncodeReg full
     shortLabel Enhancer H3K4Me1
-    longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on 8 Cell Lines from ENCODE
+    longLabel ENCODE Enhancer and Promoter Histone Mark (H3K4Me1) on 8 Cell Lines
     release alpha,beta
     configurable on
     visibility full
@@ -1707,11 +1710,12 @@ group regulation
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
-    priority 2
+    priority 1.2
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkEnhH3k4me1Gm12878
 	shortLabel Gm12878
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on Gm12878 cells from ENCODE
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	type wig 0.00 9323.50
@@ -1720,7 +1724,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1H1hesc
 	shortLabel H1 ES
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on H1 ES cells from ENCODE
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,212,128
@@ -1729,7 +1733,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1Hepg2
 	shortLabel HepG2
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HepG2 cells from ENCODE
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
 	release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,255,128
@@ -1738,7 +1742,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1Hmec
 	shortLabel HMEC
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HMEC cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HMEC cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,120
@@ -1747,7 +1751,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1Hsmm
 	shortLabel HSMM
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HSMM cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HSMM cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,204
@@ -1756,7 +1760,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1Huvec
 	shortLabel HUVEC
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HUVEC cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HUVEC cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,212,255
@@ -1765,7 +1769,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1K562
 	shortLabel K562
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on K562 cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on K562 cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,128,255
@@ -1774,7 +1778,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1Nhek
 	shortLabel NHEK
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on NHEK cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on NHEK cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,128,255
@@ -1783,7 +1787,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k4me1Nhlf
 	shortLabel NHLF
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on NHLF cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on NHLF cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,128,212
@@ -1791,13 +1795,12 @@ group regulation
 	type wig 0.00 14639.00
 
     track wgEncodeRegMarkEnhH3k27ac
-    # compositeTrack on
     container multiWig
     noInherit on
     type wig 0 10000
     superTrack wgEncodeReg hide
     shortLabel Enhancer H3K27Ac
-    longLabel H3K27Ac - An Enhancer and Promoter Histone Mark on 8 Cell Lines from ENCODE
+    longLabel ENCODE Enhancer and Promoter Histone Mark (H3K27Ac) on 8 Cell Lines
     release alpha,beta
     configurable on
     visibility full
@@ -1805,11 +1808,12 @@ group regulation
     maxHeightPixels 100:30:11
     aggregate transparentOverlay
     showSubtrackColorOnUi on
-    priority 3
+    priority 1.3
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkEnhH3k27acGm12878
 	shortLabel Gm12878
-	longLabel H3K27Ac - An enhancer and promoter mark on Gm12878 cells from ENCODE
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	type wig 0.00 9323.50
@@ -1818,7 +1822,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acH1hesc
 	shortLabel H1 ES
-	longLabel H3K27Ac - An enhancer and promoter mark on H1 ES cells from ENCODE
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,212,128
@@ -1827,7 +1831,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acHepg2
 	shortLabel HepG2
-	longLabel H3K27Ac - An enhancer and promoter mark on HepG2 cells from ENCODE
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,255,128
@@ -1836,7 +1840,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acHmec
 	shortLabel HMEC
-	longLabel H3K27Ac - An enhancer and promoter mark on HMEC cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HMEC cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,120
@@ -1845,7 +1849,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acHsmm
 	shortLabel HSMM
-	longLabel H3K27Ac - An enhancer and promoter mark on HSMM cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HSMM cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,204
@@ -1854,7 +1858,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acHuvec
 	shortLabel HUVEC
-	longLabel H3K27Ac - An enhancer and promoter mark on HUVEC cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HUVEC cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,212,255
@@ -1863,7 +1867,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acK562
 	shortLabel K562
-	longLabel H3K27Ac - An enhancer and promoter mark on K562 cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on K562 cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,128,255
@@ -1872,7 +1876,7 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acNhek
 	shortLabel NHEK
-	longLabel H3K27Ac - An enhancer and promoter mark on NHEK cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on NHEK cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,128,255
@@ -1881,19 +1885,18 @@ group regulation
 
 	track wgEncodeRegMarkEnhH3k27acNhlf
 	shortLabel NHLF
-	longLabel H3K27Ac - An enhancer and promoter mark on NHLF cells from ENCODE 
+	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on NHLF cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k27ac
 	type wig 0.00 14639.00
 
-
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
     shortLabel Promoter H3K4Me3
-    longLabel Promoter histone mark (H3K4Me3) on 8 cell lines from ENCODE
+    longLabel ENCODE Promoter Histone Mark (H3K4Me3) on 9 Cell Lines
     release alpha,beta
     type wig 0 30000
     viewLimits 0:100
@@ -1903,13 +1906,14 @@ group regulation
     aggregate transparentOverlay
     showSubtrackColorOnUi on
     windowingFunction mean
-    priority 4
+    priority 1.4
     html wgEncodeRegMarkEnhH3k4me3
+    dragAndDrop subTracks
 
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
 	shortLabel Gm12878
-	longLabel Promoter mark (H3K4Me3) on Gm12878 cells from ENCODE
+	longLabel Promoter Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 100593.50
@@ -1918,25 +1922,25 @@ group regulation
 	track wgEncodeRegMarkPromoterH1hesc
         table wgEncodeBroadChipSeqSignalH1hescH3k4me3
 	shortLabel H1 ES
-	longLabel Promoter mark (H3K4Me3) on H1 cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on H1 cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12434.00
 	color 255,212,128
 
 	track wgEncodeRegMarkEnhH3k4me3Hepg2
+	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
 	shortLabel HepG2
-	longLabel H3K4Me1 - an Enhancer and Promoter Histone Mark on HepG2 cells from ENCODE
+	longLabel Promoter Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
 	release alpha,beta
 	parent wgEncodeRegMarkPromoter
-	color 212,255,128
-	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
         type wig 0.00 4927.00
+	color 212,255,128
 
 	track wgEncodeRegMarkPromoterHmec
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
 	shortLabel HMEC
-	longLabel Promoter mark (H3K4Me3) on HMEC cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on HMEC cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 15838.00
@@ -1945,7 +1949,7 @@ group regulation
 	track wgEncodeRegMarkPromoterHsmm
         table wgEncodeBroadChipSeqSignalHsmmH3k4me3
 	shortLabel HSMM
-	longLabel Promoter mark (H3K4Me3) on HSMM cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on HSMM cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 42282.00
@@ -1954,7 +1958,7 @@ group regulation
 	track wgEncodeRegMarkPromoterHuvec
         table wgEncodeBroadChipSeqSignalHuvecH3k4me3
 	shortLabel HUVEC
-	longLabel Promoter mark (H3K4Me3) on HUVEC cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on HUVEC cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 9954.75
@@ -1963,7 +1967,7 @@ group regulation
 	track wgEncodeRegMarkPromoterK562
         table wgEncodeBroadChipSeqSignalK562H3k4me3
 	shortLabel K562
-	longLabel Promoter mark (H3K4Me3) on K562 cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on K562 cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 16145.25
@@ -1972,7 +1976,7 @@ group regulation
 	track wgEncodeRegMarkPromoterNhek
         table wgEncodeBroadChipSeqSignalNhekH3k4me3
 	shortLabel NHEK
-	longLabel Promoter mark (H3K4Me3) on NHEK cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on NHEK cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12229.50
@@ -1981,16 +1985,114 @@ group regulation
 	track wgEncodeRegMarkPromoterNhlf
         table wgEncodeBroadChipSeqSignalNhlfH3k4me3
 	shortLabel NHLF
-	longLabel Promoter mark (H3K4Me3) on NHLF cells from ENCODE 
+	longLabel Promoter Histone Mark (H3K4Me3) on NHLF cells from ENCODE 
         release alpha,beta
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 28587.00
 	color 255,128,212
 
+    track wgEncodeRegMarkRepressH3k27me3
+    container multiWig
+    noInherit on
+    type wig 0 10000
+    superTrack wgEncodeReg hide
+    shortLabel Repress H3K27Me3
+    longLabel ENCODE Repressor Histone Mark (H3K27Me3) on 8 Cell Lines
+    release alpha
+    configurable on
+    visibility full
+    viewLimits 0:50
+    maxHeightPixels 100:30:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    priority 1.5
+    dragAndDrop subTracks
+
+	track wgEncodeRegMarkRepressH3k27me3Gm12878
+	shortLabel Gm12878
+	longLabel H3K27Me3 - An repressor mark on Gm12878 cells from ENCODE
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	type wig 0.00 9323.50
+	color 255,128,128
+	table wgEncodeBroadChipSeqSignalGm12878H3k27me3
+
+	track wgEncodeRegMarkRepressH3k27me3H1hesc
+	shortLabel H1 ES
+	longLabel H3K27Me3 - An repressor mark on H1 ES cells from ENCODE
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 255,212,128
+	table wgEncodeBroadChipSeqSignalH1hescH3k27me3
+	type wig 0.00 12286.00
+
+	track wgEncodeRegMarkRepressH3k27me3Hepg2
+	shortLabel HepG2
+	longLabel H3K27Me3 - An repressor mark on HepG2 cells from ENCODE
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 212,255,128
+        table wgEncodeBroadChipSeqSignalHepg2H3k27me3
+        type wig 0.00 2133.00
+
+	track wgEncodeRegMarkRepressH3k27me3Hmec
+	shortLabel HMEC
+	longLabel H3K27Me3 - An repressor mark on HMEC cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 120,235,120
+	table wgEncodeBroadChipSeqSignalHmecH3k27me3
+	type wig 0.00 13574.00
+
+	track wgEncodeRegMarkRepressH3k27me3Hsmm
+	shortLabel HSMM
+	longLabel H3K27Me3 - An repressor mark on HSMM cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 120,235,204
+	table wgEncodeBroadChipSeqSignalHsmmH3k27me3
+	type wig 0.00 10412.00
+
+	track wgEncodeRegMarkRepressH3k27me3Huvec
+	shortLabel HUVEC
+	longLabel H3K27Me3 - An repressor mark on HUVEC cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 128,212,255
+	table wgEncodeBroadChipSeqSignalHuvecH3k27me3
+	type wig 0.00 5259.25
+
+	track wgEncodeRegMarkRepressH3k27me3K562
+	shortLabel K562
+	longLabel H3K27Me3 - An repressor mark on K562 cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 128,128,255
+	table wgEncodeBroadChipSeqSignalK562H3k27me3
+	type wig 0.00 8682.25
+
+	track wgEncodeRegMarkRepressH3k27me3Nhek
+	shortLabel NHEK
+	longLabel H3K27Me3 - An repressor mark on NHEK cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 212,128,255
+	table wgEncodeBroadChipSeqSignalNhekH3k27me3
+	type wig 0.00 4240.50
+
+	track wgEncodeRegMarkRepressH3k27me3Nhlf
+	shortLabel NHLF
+	longLabel H3K27Me3 - An repressor mark on NHLF cells from ENCODE 
+        release alpha
+	parent wgEncodeRegMarkRepressH3k27me3
+	color 255,128,212
+	table wgEncodeBroadChipSeqSignalNhlfH3k27me3
+	type wig 0.00 14639.00
+
 
     track wgEncodeRegDnaseClustered
     shortLabel DNase Clusters
-    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters (# Out of 77 Assays)
+    longLabel ENCODE Digital DNaseI Hypersensitivity Clusters
     release alpha,beta
     type bed 5 .
     superTrack wgEncodeReg dense
@@ -2000,11 +2102,11 @@ group regulation
     inputTracksSubgroupDisplay cellType rank
     visibility dense
     useScore 1
-    priority 5
+    priority 1.6
 
     track wgEncodeRegTfbsClustered
     shortLabel Txn Factor ChIP
-    longLabel ENCODE Transcription Factor ChIP-SEQ
+    longLabel ENCODE Transcription Factor ChIP-seq
     release alpha,beta
     type factorSource
     superTrack wgEncodeReg dense
@@ -2015,19 +2117,19 @@ group regulation
     inputTracksSubgroupDisplay cellType factor
     visibility dense
     useScore 1
-    priority 6
+    priority 1.7
 
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwChIPSeq.new.ra
+include wgEncodeUwChIPSeq.ra
 
 
 # UW DGF (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDGF.new.ra
+include wgEncodeUwDGF.ra
 
 
 # UW DNase-seq (wrangler: Venkat, assisted by Tim)
-include wgEncodeUwDnaseSeq.new.ra
+include wgEncodeUwDnaseSeq.ra
 
 
 
@@ -3366,8 +3468,7 @@ wgEncode 1
 
 # Yale RNA-seq (wrangler: tdreszer)
 include trackDb.wgEncodeYaleRnaSeq.ra
-# Yale RNA-seq (wrangler: cricket)
-include trackDb.wgEncodeYaleRnaSeq.new.ra
+
 
 
 # Yale TFBS (wrangler: Venkat, assisted by Tim)

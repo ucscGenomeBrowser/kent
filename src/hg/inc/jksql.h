@@ -519,4 +519,8 @@ void sqlWarnings(struct sqlConnection *conn, int numberOfWarnings);
 void sqlDump(FILE *fh);
 /* dump internal info about SQL configuration for debugging purposes */
 
+void sqlPrintStats(FILE *fh);
+/* print statistic about the number of connections and other options done by
+ * this process. */
+
 #endif /* JKSQL_H */
