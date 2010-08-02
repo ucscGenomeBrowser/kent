@@ -212,6 +212,7 @@ sub getExpVars
 # Returns hash indexed by the composite name in the experiments.ra file
     my ($configPath, $composite) = @_;
     my %expVars = RAFile::readRaFile("$configPath/$expVarsFile", "composite");
+    die "could not find $composite $configPath/$expVarsFile" unless defined($expVars{$composite});
     %expVars = %{$expVars{$composite}};
     my @results;
     for(my $i = 1; $i < scalar(keys %expVars); ++$i) {
