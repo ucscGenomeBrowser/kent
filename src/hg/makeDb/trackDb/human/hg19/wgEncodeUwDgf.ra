@@ -1,4 +1,4 @@
-# $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeUwDGF.ra,v 1.1 2010/05/27 21:50:07 tdreszer Exp $
+
 
 # UW DGF (wrangler: Venkat, assisted by Tim)
 
@@ -10,7 +10,7 @@ longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad NHDF-Ad=NHDF-Ad SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 noInherit on
@@ -84,6 +84,76 @@ wgEncode 1
         origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
 
+        track wgEncodeUwDgfSkmcHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel SKMC
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in SKMC cells)
+        subGroups view=Hotspots cellType=SKMC
+        type broadPeak
+        origAssembly hg19
+        # subId=2045 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfNhdfadHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel NHDF-Ad
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in NHDF-Ad cells)
+        subGroups view=Hotspots cellType=NHDF-Ad
+        type broadPeak
+        origAssembly hg19
+        # subId=2046 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfH7esHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel H7-hESC
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in H7-hESC cells)
+        subGroups view=Hotspots cellType=H7es
+        type broadPeak
+        origAssembly hg19
+        # subId=2047 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHaeHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HAEpiC
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in HAEpiC cells)
+        subGroups view=Hotspots cellType=HAE
+        type broadPeak
+        origAssembly hg19
+        # subId=2048 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmfHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HMF
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in HMF cells)
+        subGroups view=Hotspots cellType=HMF
+        type broadPeak
+        origAssembly hg19
+        # subId=2049 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHcpeHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HCPEpiC
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in HCPEpiC cells)
+        subGroups view=Hotspots cellType=HCPE
+        type broadPeak
+        origAssembly hg19
+        # subId=2050 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmvecdbladHotspots
+        release alpha
+        parent wgEncodeUwDgfViewHotspots off
+        shortLabel HMVEC-dBl-Ad
+        longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in HMVEC-dBl-Ad cells)
+        subGroups view=Hotspots cellType=HMVECdBlAd
+        type broadPeak
+        origAssembly hg19
+        # subId=2051 dateSubmitted=2010-07-25
+
 
     track wgEncodeUwDgfViewPeaks
     shortLabel Peaks
@@ -147,6 +217,76 @@ wgEncode 1
         type narrowPeak
         origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfSkmcPk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel SKMC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in SKMC cells)
+        subGroups view=Peaks cellType=SKMC
+        type narrowPeak
+        origAssembly hg19
+        # subId=2045 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfNhdfadPk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel NHDF-Ad Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in NHDF-Ad cells)
+        subGroups view=Peaks cellType=NHDF-Ad
+        type narrowPeak
+        origAssembly hg19
+        # subId=2046 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfH7esPk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel H7-hESC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in H7-hESC cells)
+        subGroups view=Peaks cellType=H7es
+        type narrowPeak
+        origAssembly hg19
+        # subId=2047 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHaePk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HAEpiC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HAEpiC cells)
+        subGroups view=Peaks cellType=HAE
+        type narrowPeak
+        origAssembly hg19
+        # subId=2048 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmfPk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HMF Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HMF cells)
+        subGroups view=Peaks cellType=HMF
+        type narrowPeak
+        origAssembly hg19
+        # subId=2049 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHcpePk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HCPEpiC Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HCPEpiC cells)
+        subGroups view=Peaks cellType=HCPE
+        type narrowPeak
+        origAssembly hg19
+        # subId=2050 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmvecdbladPk
+        release alpha
+        parent wgEncodeUwDgfViewPeaks off
+        shortLabel HMVEC-dBl-Ad Pk
+        longLabel ENCODE UW Digital Genomic Footprinting - Peaks(FDR 1%) (in HMVEC-dBl-Ad cells)
+        subGroups view=Peaks cellType=HMVECdBlAd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2051 dateSubmitted=2010-07-25
 
 
     track wgEncodeUwDgfViewSignal
@@ -213,6 +353,76 @@ wgEncode 1
         origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
 
+        track wgEncodeUwDgfSkmcSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel SKMC Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in SKMC cells)
+        subGroups view=Signal cellType=SKMC
+        type bigWig 1.000000 31113.000000
+        origAssembly hg19
+        # subId=2045 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfNhdfadSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel NHDF-Ad Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in NHDF-Ad cells)
+        subGroups view=Signal cellType=NHDF-Ad
+        type bigWig 1.000000 25248.000000
+        origAssembly hg19
+        # subId=2046 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfH7esSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel H7-hESC Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in H7-hESC cells)
+        subGroups view=Signal cellType=H7es
+        type bigWig 1.000000 99682.000000
+        origAssembly hg19
+        # subId=2047 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHaeSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HAEpiC Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HAEpiC cells)
+        subGroups view=Signal cellType=HAE
+        type bigWig 1.000000 30034.000000
+        origAssembly hg19
+        # subId=2048 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmfSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HMF Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HMF cells)
+        subGroups view=Signal cellType=HMF
+        type bigWig 1.000000 77693.000000
+        origAssembly hg19
+        # subId=2049 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHcpeSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HCPEpiC Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HCPEpiC cells)
+        subGroups view=Signal cellType=HCPE
+        type bigWig 1.000000 28712.000000
+        origAssembly hg19
+        # subId=2050 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmvecdbladSig
+        release alpha
+        parent wgEncodeUwDgfViewSignal off
+        shortLabel HMVEC-dBl-Ad Sig
+        longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HMVEC-dBl-Ad cells)
+        subGroups view=Signal cellType=HMVECdBlAd
+        type bigWig 1.000000 34767.000000
+        origAssembly hg19
+        # subId=2051 dateSubmitted=2010-07-25
+
 
     track wgEncodeUwDgfViewzRaw
     shortLabel RawSignal
@@ -277,5 +487,75 @@ wgEncode 1
         type bigWig 1.000000 108696.000000
         origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
+
+        track wgEncodeUwDgfSkmcRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel SKMC Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in SKMC cells)
+        subGroups view=zRaw cellType=SKMC
+        type bigWig 1.000000 178347.000000
+        origAssembly hg19
+        # subId=2045 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfNhdfadRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel NHDF-Ad Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in NHDF-Ad cells)
+        subGroups view=zRaw cellType=NHDF-Ad
+        type bigWig 1.000000 91896.000000
+        origAssembly hg19
+        # subId=2046 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfH7esRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel H7-hESC Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in H7-hESC cells)
+        subGroups view=zRaw cellType=H7es
+        type bigWig 1.000000 326258.000000
+        origAssembly hg19
+        # subId=2047 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHaeRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HAEpiC Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in HAEpiC cells)
+        subGroups view=zRaw cellType=HAE
+        type bigWig 1.000000 110519.000000
+        origAssembly hg19
+        # subId=2048 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmfRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HMF Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in HMF cells)
+        subGroups view=zRaw cellType=HMF
+        type bigWig 1.000000 220489.000000
+        origAssembly hg19
+        # subId=2049 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHcpeRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HCPEpiC Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in HCPEpiC cells)
+        subGroups view=zRaw cellType=HCPE
+        type bigWig 1.000000 96000.000000
+        origAssembly hg19
+        # subId=2050 dateSubmitted=2010-07-25
+
+        track wgEncodeUwDgfHmvecdbladRaw
+        release alpha
+        parent wgEncodeUwDgfViewzRaw off
+        shortLabel HMVEC-dBl-Ad Raw
+        longLabel ENCODE UW Digital Genomic Footprinting - Raw Signal (in HMVEC-dBl-Ad cells)
+        subGroups view=zRaw cellType=HMVECdBlAd
+        type bigWig 1.000000 145895.000000
+        origAssembly hg19
+        # subId=2051 dateSubmitted=2010-07-25
 
 

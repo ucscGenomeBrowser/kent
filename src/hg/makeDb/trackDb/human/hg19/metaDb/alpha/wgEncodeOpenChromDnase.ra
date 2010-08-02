@@ -8,6 +8,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -29,6 +30,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 fileName wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -110,6 +112,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 fileName wgEncodeOpenChromDnaseChorionAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseChorionAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -131,6 +134,7 @@ dateResubmitted 2010-06-14
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
 fileName wgEncodeOpenChromDnaseChorionAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseChorionAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -212,6 +216,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromDnaseFibroblAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseFibroblAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -233,6 +238,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeOpenChromDnaseFibroblAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseFibroblAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -314,6 +320,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromDnaseFibropAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseFibropAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -335,6 +342,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromDnaseFibropAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseFibropAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -356,6 +364,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromDnaseFibropAlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseFibropAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -437,6 +446,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromDnaseGm12878AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm12878AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -458,6 +468,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromDnaseGm12878AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm12878AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -479,6 +490,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromDnaseGm12878AlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseGm12878AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -500,6 +512,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 fileName wgEncodeOpenChromDnaseGm12878AlnRep4.bam
+fileIndex wgEncodeOpenChromDnaseGm12878AlnRep4.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -521,6 +534,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2010-06-16
 dateUnrestricted 2011-03-16
 fileName wgEncodeOpenChromDnaseGm12878AlnRep5.bam
+fileIndex wgEncodeOpenChromDnaseGm12878AlnRep5.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -642,6 +656,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
 fileName wgEncodeOpenChromDnaseGm12891AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm12891AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -663,6 +678,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
 fileName wgEncodeOpenChromDnaseGm12891AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm12891AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -744,6 +760,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm12892AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm12892AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -765,6 +782,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm12892AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm12892AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -846,6 +864,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseGm18507AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm18507AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -867,6 +886,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseGm18507AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm18507AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -888,6 +908,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseGm18507AlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseGm18507AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -969,6 +990,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm19238AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm19238AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -990,6 +1012,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm19238AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm19238AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1071,6 +1094,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm19239AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm19239AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1092,6 +1116,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm19239AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm19239AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1173,6 +1198,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm19240AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseGm19240AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1194,6 +1220,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
 fileName wgEncodeOpenChromDnaseGm19240AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseGm19240AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1275,6 +1302,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromDnaseH1hescAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseH1hescAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1296,6 +1324,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromDnaseH1hescAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseH1hescAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1377,6 +1406,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
 fileName wgEncodeOpenChromDnaseH9esAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseH9esAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1398,6 +1428,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
 fileName wgEncodeOpenChromDnaseH9esAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseH9esAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1479,6 +1510,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromDnaseHelas3AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseHelas3AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1500,6 +1532,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromDnaseHelas3AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseHelas3AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1521,6 +1554,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromDnaseHelas3AlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseHelas3AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1562,6 +1596,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1583,6 +1618,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
 fileName wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1704,6 +1740,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2010-01-15
 fileName wgEncodeOpenChromDnaseHepg2AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseHepg2AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1725,6 +1762,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 fileName wgEncodeOpenChromDnaseHepg2AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseHepg2AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1746,6 +1784,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
 fileName wgEncodeOpenChromDnaseHepg2AlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseHepg2AlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1827,6 +1866,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseHsmmAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1848,6 +1888,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseHsmmAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1869,6 +1910,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmAlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseHsmmAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1950,6 +1992,7 @@ dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmtAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseHsmmtAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1971,6 +2014,7 @@ dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmtAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseHsmmtAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -1992,6 +2036,7 @@ dateResubmitted 2010-06-20
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromDnaseHsmmtAlnRep3.bam
+fileIndex wgEncodeOpenChromDnaseHsmmtAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2073,6 +2118,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromDnaseHuvecAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseHuvecAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2094,6 +2140,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromDnaseHuvecAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseHuvecAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2175,6 +2222,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromDnaseK562AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseK562AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2196,6 +2244,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
 fileName wgEncodeOpenChromDnaseK562AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseK562AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2277,6 +2326,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseLhsrAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseLhsrAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2298,6 +2348,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseLhsrAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseLhsrAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2319,6 +2370,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseLhsrAndroAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseLhsrAndroAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2340,6 +2392,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseLhsrAndroAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseLhsrAndroAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2481,6 +2534,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseMcf7AlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseMcf7AlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2502,6 +2556,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromDnaseMcf7AlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseMcf7AlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2583,6 +2638,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeOpenChromDnaseMedulloAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseMedulloAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2604,6 +2660,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
 fileName wgEncodeOpenChromDnaseMedulloAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseMedulloAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2685,6 +2742,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 fileName wgEncodeOpenChromDnaseMyometrAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseMyometrAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2706,6 +2764,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
 fileName wgEncodeOpenChromDnaseMyometrAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseMyometrAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2787,6 +2846,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromDnaseNhekAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseNhekAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2808,6 +2868,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeOpenChromDnaseNhekAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseNhekAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2889,6 +2950,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeOpenChromDnasePanisletsAlnRep1.bam
+fileIndex wgEncodeOpenChromDnasePanisletsAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2910,6 +2972,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeOpenChromDnasePanisletsAlnRep2.bam
+fileIndex wgEncodeOpenChromDnasePanisletsAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -2931,6 +2994,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeOpenChromDnasePanisletsAlnRep3.bam
+fileIndex wgEncodeOpenChromDnasePanisletsAlnRep3.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -3012,6 +3076,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeOpenChromDnaseProgfibAlnRep1.bam
+fileIndex wgEncodeOpenChromDnaseProgfibAlnRep1.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
@@ -3033,6 +3098,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
 fileName wgEncodeOpenChromDnaseProgfibAlnRep2.bam
+fileIndex wgEncodeOpenChromDnaseProgfibAlnRep2.bam.bai
 grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1

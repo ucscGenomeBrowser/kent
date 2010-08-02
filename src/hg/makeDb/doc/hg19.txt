@@ -8366,7 +8366,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 6/2/10 angie)
+# NHGRI GWAS CATALOG (DONE 8/2/10 angie)
+# Updated 6/2/10
 # Updated 5/12/10 (last one to use snp130)
 # Updated 4/1/10
 # Updated 3/1/10
@@ -8388,7 +8389,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 3852 elements of size 22
+#Loaded 4158 elements of size 22
 
 
 ######################################################################## 
@@ -10692,4 +10693,289 @@ buildDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100722
 scratchDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100722/tmp
 _EOF_
 doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+
 #########################################################################
+# LIFTOVER TO Hg18 (RE-DONE - 2010-07-26 - Hiram )
+    #	preserving the previous 10K liftOver files
+    mkdir /hive/data/genomes/hg19/bed/liftOver10K
+    cd /hive/data/genomes/hg19/bed/liftOver10K
+    ln -s ../blat.hg18.2009-06-04/hg19ToHg18.over.chain.gz .
+
+    #	this liftOver is a 5000 size chunk
+    mkdir /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26
+    cd /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26
+    # -debug run to create run dir, preview scripts...
+    #	verifies files can be found
+    doSameSpeciesLiftOver.pl -debug hg19 hg18
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 hg19 hg18 > do.log 2>&1
+    #	real    115m26.071s
+
+    #	checking liftOver accuracy
+    mkdir /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26/refGene
+    cd /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26/refGene
+    hgsql -N -e "select * from refGene;" hg19 | cut -f2- > refGene.hg19.gp
+    wc -l refGene.hg19.gp
+    #	36766
+    #	the 5K block size lift over chain
+    liftOver -genePred refGene.hg19.gp ../hg19ToHg18.over.chain.gz \
+	refGene.hg19ToHg18.5K.lift.gp refGene.hg19ToHg18.5K.unMapped.gp
+    wc -l refGene.hg19ToHg18.5K.unMapped.gp
+    #   830
+    #	the 10K block size lift over chain
+    liftOver -genePred refGene.hg19.gp \
+	../../liftOver10K/hg19ToHg18.over.chain.gz \
+	refGene.hg19ToHg18.10K.lift.gp refGene.hg19ToHg18.10K.unMapped.gp
+    wc -l refGene.hg19ToHg18.10K.unMapped.gp
+    #	820
+    #	construct custom track of chain files.
+    #	the 5K block size lift over chain
+    chainToPsl ../hg19ToHg18.over.chain.gz \
+	/hive/data/genomes/hg19/chrom.sizes \
+	/hive/data/genomes/hg18/chrom.sizes \
+	/hive/data/genomes/hg19/hg19.2bit \
+	/hive/data/genomes/hg18/hg18.2bit stdout \
+	| pslToBed stdin hg19ToHg18.5K.bed
+    #	the 10K block size lift over chain
+    chainToPsl ../../liftOver10K/hg19ToHg18.over.chain.gz \
+	/hive/data/genomes/hg19/chrom.sizes \
+	/hive/data/genomes/hg18/chrom.sizes \
+	/hive/data/genomes/hg19/hg19.2bit \
+	/hive/data/genomes/hg18/hg18.2bit stdout \
+	| pslToBed stdin hg19ToHg18.10K.bed
+
+##############################################################################
+# UNIGENE/SAGE TRACK (DONE - 2010-07-19 Fan)
+
+# Create the uniGene alignments
+
+    # Download of the latest UniGene version is now automated by a
+    # cron job -- see /cluster/home/angie/crontab ,
+    # /cluster/home/angie/unigeneVers/unigene.csh .
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100719
+    cd /hive/data/genomes/hg19/bed/uniGene/100719
+
+    set Version = 224
+
+    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh pk
+    set Version = 224
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+
+    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
+    ls -1S \
+    /hive/data/genomes/hg19/bed/uniGene/100719/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95
+ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+
+    #Completed: 93 of 93 jobs
+    #CPU time in finished jobs:      61718s    1028.63m    17.14h    0.71d  0.002 y
+    #IO & Wait Time:                  1049s      17.48m     0.29h    0.01d  0.000 y
+    #Average job time:                 675s      11.25m     0.19h    0.01d
+    #Longest finished job:            4611s      76.85m     1.28h    0.05d
+    #Submission to last job:          5295s      88.25m     1.47h    0.06d
+    #Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg19.uniGene.pslReps.psl /dev/null
+    #Processed 799148 alignments
+    
+    gzip raw.psl
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+
+    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
+
+    mkdir -p /gbdb/hg19/uniGene
+    cd /gbdb/hg19/uniGene
+
+    ln -s
+    /hive/data/genomes/hg19/bed/uniGene/100719/Hs.seq.uniq.simpleHeader.fa \
+    Hs.seq.uniq.simpleHeader.fa
+
+# load the sequence
+
+    hgLoadSeq hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+
+#############################################################################
+# GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)
+    #   After several attempts, the old genscan process could not be
+    #   successfully completed, nor the new process used by mm9,
+    #   even with the manual steps to do gsBig with
+    #   smaller windowSize.
+    #
+    #	A new process is developed to overcome the challenges.
+    #   This new build process for hg19 genscan is substantially different from
+    #	hg18.  Due to gsBig errors, the chroms are split into 2,000,000 bp
+    #   segments and the -windowSize is set to the default value of 1,200,000.
+    #   The results are then collected and lifted to original chrom
+    #   coordinates and then loaded into 3 genscan tables. 
+
+    ssh hgwdev
+    
+    mkdir -p /hive/data/genomes/hg19/bed/genscan
+    cd /hive/data/genomes/hg19/bed/genscan
+
+    # Check out hg3rdParty/genscanlinux to get latest genscan.
+    cvs co hg3rdParty/genscanlinux
+
+# the latest and correct genscan build subdir is newTry
+
+    mkdir -p /hive/data/genomes/hg19/bed/genscan/newTry
+    cd /hive/data/genomes/hg19/bed/genscan/newTry
+
+# collect .fa files for all chroms in one subdir
+
+    mkdir -p faOrig
+    for f in `cat /hive/data/genomes/hg19/chr.fasta.list`
+	do
+	cp -p /hive/data/genomes/hg19/$f faOrig
+	done
+
+# construct the chrom.list
+
+    ls -1 faOrig |sed -e 's/\.fa//'>chrom.list
+
+# creaet the file template to be used for cluster runs
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=../../../hg3rdParty/genscanlinux/genscan -par=../../../hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+#ENDLOOP
+'_EOF_'
+
+# create the chunk2, lift, and runBlat subdir structures
+    
+    mkdir -p chunk2
+    mkdir -p lift
+    mkdir -p runBlat
+    
+    for f in `cat chrom.list`
+	do
+	mkdir -p lift/$f
+	mkdir -p chunk2/$f
+	mkdir -p runBlat/$f/gtf 
+	mkdir -p runBlat/$f/pep 
+	mkdir -p runBlat/$f/subopt
+        cp ./template runBlat/$f
+        done
+
+# split the chrom fa files into chunks of 2,000,000 bases or less 
+# and create corresponding lift files
+
+    for f in `cat chrom.list`
+	do
+	cd chunk2/$f
+	cat ../../faOrig/$f.fa\
+	|faSplit -lift=../../lift/$f/$f.lft gap stdin 2000000 ./ck_
+	cd ../..
+	done
+
+# go to memk to run cluster jobs
+
+    ssh memk
+    cd /hive/data/genomes/hg19/bed/genscan/newTry
+
+# create genome.list and jobList files for each chrom
+
+    for f in `cat chrom.list`
+	do
+	cd runBlat/$f
+	ls -1 /hive/data/genomes/hg19/bed/genscan/newTry/chunk2/$f/* > genome.list
+	gensub2 genome.list single template jobList
+	cd ../..
+	done
+
+# create batch files
+
+    for f in `cat chrom.list`
+	do
+	cd runBlat/$f
+	para create jobList
+	cd ../..
+	done
+
+# Send off cluster runs
+
+    for f in `cat chrom.list`
+	do
+        cd runBlat/$f
+	para try
+        cd ../..
+       done
+
+    for f in `cat chrom.list`
+	do
+        cd runBlat/$f
+	para push
+        cd ../..
+       done
+
+# When all the cluster runs are finished,
+# go back to hgwdev for final data collection and table loading
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/genscan/newTry
+
+# collect ptf results and lift them and then load into the genscan table 
+
+    mkdir -p gtf
+    for f in `cat chrom.list`
+	do
+	echo
+	echo processing $f
+	cat runBlat/$f/gtf/*.gtf| liftUp -type=.gtf stdout \
+        lift/$f/$f.lft error stdin \
+	| sed -e "s/ck_/${f}_/g" > gtf/$f.gtf
+        ldHgGene -oldTable hg19 -gtf genscan gtf/$f.gtf
+	done
+
+# collect subopt results and lift them and then load them into the
+# genscanSubopt table
+
+    mkdir -p subopt
+    for f in `cat chrom.list`
+	do
+        echo
+	echo processing $f
+	cat runBlat/$f/subopt/*.bed| liftUp -type=.bed stdout \
+        lift/$f/$f.lft error stdin \
+	| sed -e "s/ck_/${f}_/g" > subopt/$f.bed
+	hgLoadBed -oldTable hg19 genscanSubopt subopt/$f.bed
+	done
+
+# collect pep results and load them into the genscanPep table
+
+    mkdir -p pep
+    rm pep/genscanPep.pep
+    for f in `cat chrom.list`
+	do
+        echo
+	echo processing $f
+	cat runBlat/$f/pep/*.pep\
+	| sed -e "s/ck_/${f}_/g" >> pep/genscanPep.pep
+	done
+    hgPepPred hg19 generic genscanPep pep/genscanPep.pep
+#############################################################################

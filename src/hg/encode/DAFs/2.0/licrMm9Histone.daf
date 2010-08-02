@@ -1,6 +1,6 @@
 # Data Agreement File for LICR Lab ChIP-seq (Histone) experiments for mm9
 
-$Revision: 1.3 $
+#$Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -14,19 +14,19 @@ compositeSuffix   LicrHistone
 assembly          mm9
 medianFragmentLength 200
 dafVersion        2.0
-validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2,matchFirst=25;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mismatches=2,matchFirst=25,nMatch;validateFiles.fastq:quick=1000
 
 # Track/view definition
 view             Peaks
 longLabelPrefix  LICR Histone Peaks
 type             broadPeak
-hasReplicates    no
+hasReplicates    yes
 required         no
 
 view             Signal
 longLabelPrefix  LICR Histone Signal
 type             bigWig
-hasReplicates    no
+hasReplicates    yes
 required         yes
 
 view             Alignments

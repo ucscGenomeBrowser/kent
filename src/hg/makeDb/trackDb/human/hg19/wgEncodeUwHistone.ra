@@ -23,13 +23,13 @@
 
 track wgEncodeUwHistone
 compositeTrack on
-superTrack wgEncodeHistoneSuper
+superTrack wgEncodeHistoneSuper dense
 shortLabel UW Histone
 longLabel ENCODE Histone Modifications by ChIP-Seq from Univ. of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 #subGroup2 cellType Cell_Line BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 GM12878=GM12878 HEK293=HEK293 HELA=HeLa-S3 HEPG2=HepG2 HL60=HL-60 HMEC=HMEC HRE=HRE HUVEC=HUVEC K562=K562 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
-subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)  GM12878=GM12878&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) NHEK=NHEK&nbsp;(Tier_2) BJ=BJ Caco2=Caco-2  HEK293=HEK293 HL60=HL-60 HMEC=HMEC HRE=HRE GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
+subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)  GM12878=GM12878&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) NHEK=NHEK&nbsp;(Tier_2) BJ=BJ Caco2=Caco-2 H7es=H7-HESC  HEK293=HEK293 HL60=HL-60 HMEC=HMEC HRE=HRE GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup3 factor Factor CTCF=CTCF  H3K04me3=H3K4me3  H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
 subGroup4 rank Rank 1st=1st 2nd=2nd
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rank
@@ -1268,6 +1268,77 @@ noInherit on
         origAssembly hg18
         # subId=1492 dateSubmitted=2010-06-16
 
+        track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel H7hES H3K4me3 Hs1
+        longLabel ENCODE UW Histone Mods Hotspots - 1st (H3K4me3 in H7-hESC cells)
+        subGroups view=Hot factor=H3K04me3 cellType=H7es rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2029 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep1
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel H7hES H3K27m3 Hs1
+        longLabel ENCODE UW Histone Mods Hotspots - 1st (H3K27me3 in H7-hESC cells)
+        subGroups view=Hot factor=H3K27me3 cellType=H7es rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2030 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k27me3StdHotspotsRep2
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel H7hESC H3K27m3 Hs2
+        longLabel ENCODE UW Histone Mods Hotspots - 2nd (H3K27me3 in H7-hESC cells)
+        subGroups view=Hot factor=H3K27me3 cellType=H7es rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2031 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep2
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel H7hES H3K36m3 Hs2
+        longLabel ENCODE UW Histone Mods Hotspots - 2nd (H3K36me3 in H7-hESC cells)
+        subGroups view=Hot factor=H3K36me3 cellType=H7es rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2032 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep2
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel H7hES H3K4me3 Hs2
+        longLabel ENCODE UW Histone Mods Hotspots - 2nd (H3K4me3 in H7-hESC cells)
+        subGroups view=Hot factor=H3K04me3 cellType=H7es rank=2nd
+        type broadPeak
+        origAssembly hg19
+        # subId=2034 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k36me3StdHotspotsRep1
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel H7hES H3K36m3 Hs1
+        longLabel ENCODE UW Histone Mods Hotspots - 1st (H3K36me3 in H7-hESC cells)
+        subGroups view=Hot factor=H3K36me3 cellType=H7es rank=1st
+        type broadPeak
+        origAssembly hg19
+        # subId=2035 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneHepg2H3k36me3StdHotspotsRep2
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HepG2   H3K36m3 Hs2
+        longLabel ENCODE UW Histone Mods Hotspots - 2nd (H3K36me3 in HepG2 cells)
+        subGroups view=Hot factor=H3K36me3 cellType=HEPG2 rank=2nd
+        type broadPeak
+        origAssembly hg19
+        color 189,0,157
+        # subId=2036 dateSubmitted=2010-07-24
+
 
     track wgEncodeUwHistoneViewPeaks
     shortLabel Peaks
@@ -2493,6 +2564,77 @@ noInherit on
         type narrowPeak
         origAssembly hg18
         # subId=1492 dateSubmitted=2010-06-16
+
+        track wgEncodeUwHistoneH7esH3k4me3StdPkRep1
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel H7hES H3K4me3 Pk1
+        longLabel ENCODE UW Histone Mods Peaks - 1st (H3K4me3 in H7-hESC cells)
+        subGroups view=Peaks factor=H3K04me3 cellType=H7es rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2029 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k27me3StdPkRep1
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel H7hES H3K27m3 Pk1
+        longLabel ENCODE UW Histone Mods Peaks - 1st (H3K27me3 in H7-hESC cells)
+        subGroups view=Peaks factor=H3K27me3 cellType=H7es rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2030 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k27me3StdPkRep2
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel H7hES H3K27m3 Pk2
+        longLabel ENCODE UW Histone Mods Peaks - 2nd (H3K27me3 in H7-hESC cells)
+        subGroups view=Peaks factor=H3K27me3 cellType=H7es rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2031 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k36me3StdPkRep2
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel H7hES H3K36m3 Pk2
+        longLabel ENCODE UW Histone Mods Peaks - 2nd (H3K36me3 in H7-hESC cells)
+        subGroups view=Peaks factor=H3K36me3 cellType=H7es rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2032 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k4me3StdPkRep2
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel H7hES H3K4me3 Pk2
+        longLabel ENCODE UW Histone Mods Peaks - 2nd (H3K4me3 in H7-hESC cells)
+        subGroups view=Peaks factor=H3K04me3 cellType=H7es rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        # subId=2034 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k36me3StdPkRep1
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel H7hES H3K36m3 Pk1
+        longLabel ENCODE UW Histone Mods Peaks - 1st (H3K36me3 in H7-hESC cells)
+        subGroups view=Peaks factor=H3K36me3 cellType=H7es rank=1st
+        type narrowPeak
+        origAssembly hg19
+        # subId=2035 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneHepg2H3k36me3StdPkRep2
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HepG2   H3K36m3 Pk2
+        longLabel ENCODE UW Histone Mods Peaks - 2nd (H3K36me3 in HepG2 cells)
+        subGroups view=Peaks factor=H3K36me3 cellType=HEPG2 rank=2nd
+        type narrowPeak
+        origAssembly hg19
+        color 189,0,157
+        # subId=2036 dateSubmitted=2010-07-24
 
 
     track wgEncodeUwHistoneViewRawSig
@@ -3959,4 +4101,85 @@ noInherit on
         type bigWig 1.000000 3015.000000
         origAssembly hg18
         # subId=1492 dateSubmitted=2010-06-16
+
+        track wgEncodeUwHistoneH7esH3k4me3StdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hES H3K4me3 Ra1
+        longLabel ENCODE UW Histone Mods Raw Signal - 1st (H3K4me3 in H7-hESC cells)
+        subGroups view=zRSig factor=H3K04me3 cellType=H7es rank=1st
+        type bigWig 1.000000 1089.000000
+        origAssembly hg19
+        # subId=2029 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k27me3StdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hES H3K27m3 Ra1
+        longLabel ENCODE UW Histone Mods Raw Signal - 1st (H3K27me3 in H7-hESC cells)
+        subGroups view=zRSig factor=H3K27me3 cellType=H7es rank=1st
+        type bigWig 1.000000 3427.000000
+        origAssembly hg19
+        # subId=2030 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k27me3StdRawRep2
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hES H3K27m3 Ra2
+        longLabel ENCODE UW Histone Mods Raw Signal - 2nd (H3K27me3 in H7-hESC cells)
+        subGroups view=zRSig factor=H3K27me3 cellType=H7es rank=2nd
+        type bigWig 1.000000 6743.000000
+        origAssembly hg19
+        # subId=2031 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k36me3StdRawRep2
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hES H3K36m3 Ra2
+        longLabel ENCODE UW Histone Mods Raw Signal - 2nd (H3K36me3 in H7-hESC cells)
+        subGroups view=zRSig factor=H3K36me3 cellType=H7es rank=2nd
+        type bigWig 1.000000 5883.000000
+        origAssembly hg19
+        # subId=2032 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esInputStdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hESC Input   Ra1
+        longLabel ENCODE UW Histone Mods Raw Signal - 1st (Input in H7-hESC cells)
+        subGroups view=zRSig factor=zInput cellType=H7es rank=1st
+        type bigWig 1.000000 9907.000000
+        origAssembly hg19
+        # subId=2033 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k4me3StdRawRep2
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hES H3K4me3 Ra2
+        longLabel ENCODE UW Histone Mods Raw Signal - 2nd (H3K4me3 in H7-hESC cells)
+        subGroups view=zRSig factor=H3K04me3 cellType=H7es rank=2nd
+        type bigWig 1.000000 2759.000000
+        origAssembly hg19
+        # subId=2034 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneH7esH3k36me3StdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel H7hES H3K36m3 Ra1
+        longLabel ENCODE UW Histone Mods Raw Signal - 1st (H3K36me3 in H7-hESC cells)
+        subGroups view=zRSig factor=H3K36me3 cellType=H7es rank=1st
+        type bigWig 1.000000 5084.000000
+        origAssembly hg19
+        # subId=2035 dateSubmitted=2010-07-24
+
+        track wgEncodeUwHistoneHepg2H3k36me3StdRawRep2
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HepG2   H3K36m3 Ra2
+        longLabel ENCODE UW Histone Mods Raw Signal - 2nd (H3K36me3 in HepG2 cells)
+        subGroups view=zRSig factor=H3K36me3 cellType=HEPG2 rank=2nd
+        type bigWig 1.000000 4879.000000
+        origAssembly hg19
+        color 189,0,157
+        # subId=2036 dateSubmitted=2010-07-24
 

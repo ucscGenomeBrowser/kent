@@ -20,7 +20,7 @@
 
 track wgEncodeSydhHistone
 compositeTrack on
-superTrack wgEncodeHistoneSuper
+superTrack wgEncodeHistoneSuper dense
 priority 0
 type bed 3
 origAssembly hg19

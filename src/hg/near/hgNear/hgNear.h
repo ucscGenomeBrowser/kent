@@ -144,6 +144,7 @@ struct column
       /* The GO column uses this. */
    struct sqlConnection *goConn;  /* Connection to go database. */
    char *goaIdColumn;		  /* Column to use in go.goaPart. */
+   struct sqlConnection *uniProtConn;  /* Connection to uniProt database. */
 
    /* Association tables use this. */
    char *tablesUsed;	/* Space delimited list of tables. */

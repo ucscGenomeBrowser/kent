@@ -8,6 +8,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 fileName wgEncodeOpenChromFaireGm12878AlnRep1.bam
+fileIndex wgEncodeOpenChromFaireGm12878AlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -28,6 +29,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 fileName wgEncodeOpenChromFaireGm12878AlnRep2.bam
+fileIndex wgEncodeOpenChromFaireGm12878AlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -48,6 +50,7 @@ dateResubmitted 2010-06-15
 dateSubmitted 2009-04-20
 dateUnrestricted 2010-01-20
 fileName wgEncodeOpenChromFaireGm12878AlnRep3.bam
+fileIndex wgEncodeOpenChromFaireGm12878AlnRep3.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -125,6 +128,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507AlnRep1.bam
+fileIndex wgEncodeOpenChromFaireGm18507AlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -145,6 +149,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeOpenChromFaireGm18507AlnRep2.bam
+fileIndex wgEncodeOpenChromFaireGm18507AlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -222,6 +227,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239AlnRep1.bam
+fileIndex wgEncodeOpenChromFaireGm19239AlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -242,6 +248,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeOpenChromFaireGm19239AlnRep2.bam
+fileIndex wgEncodeOpenChromFaireGm19239AlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -319,6 +326,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireH1hescAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -339,6 +347,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireH1hescAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireH1hescAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -416,6 +425,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3AlnRep1.bam
+fileIndex wgEncodeOpenChromFaireHelas3AlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -436,6 +446,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3AlnRep2.bam
+fileIndex wgEncodeOpenChromFaireHelas3AlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -475,6 +486,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -496,6 +508,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireHelas3Ifna4hAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -577,6 +590,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -598,6 +612,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireHelas3Ifng4hAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -717,6 +732,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeOpenChromFaireHepg2AlnRep1.bam
+fileIndex wgEncodeOpenChromFaireHepg2AlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -737,6 +753,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeOpenChromFaireHepg2AlnRep2.bam
+fileIndex wgEncodeOpenChromFaireHepg2AlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -757,6 +774,7 @@ dateResubmitted 2010-06-16
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeOpenChromFaireHepg2AlnRep3.bam
+fileIndex wgEncodeOpenChromFaireHepg2AlnRep3.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -834,6 +852,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireHuvecAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -854,6 +873,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeOpenChromFaireHuvecAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireHuvecAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -931,6 +951,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 fileName wgEncodeOpenChromFaireK562AlnRep1.bam
+fileIndex wgEncodeOpenChromFaireK562AlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -951,6 +972,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-08-09
 fileName wgEncodeOpenChromFaireK562AlnRep2.bam
+fileIndex wgEncodeOpenChromFaireK562AlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1028,6 +1050,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeOpenChromFaireLhsrAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireLhsrAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1048,6 +1071,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeOpenChromFaireLhsrAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireLhsrAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1068,6 +1092,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeOpenChromFaireLhsrAndroAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireLhsrAndroAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1089,6 +1114,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeOpenChromFaireLhsrAndroAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireLhsrAndroAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1227,6 +1253,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireNhbeAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1247,6 +1274,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeOpenChromFaireNhbeAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireNhbeAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1324,6 +1352,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekAlnRep1.bam
+fileIndex wgEncodeOpenChromFaireNhekAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1344,6 +1373,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeOpenChromFaireNhekAlnRep2.bam
+fileIndex wgEncodeOpenChromFaireNhekAlnRep2.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1
@@ -1421,6 +1451,7 @@ dateResubmitted 2010-06-17
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 fileName wgEncodeOpenChromFairePanisletsAlnRep1.bam
+fileIndex wgEncodeOpenChromFairePanisletsAlnRep1.bam.bai
 grant Crawford
 lab UNC(Lieb)
 labVersion align_on_cluster_bwa.pl v 1

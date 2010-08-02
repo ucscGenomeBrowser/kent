@@ -9,6 +9,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
+fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -31,6 +32,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
+fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -141,6 +143,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
+fileIndex wgEncodeSydhHistCh12InputIggyaleAln.bam.bai
 grant Snyder
 inputType CH12/None/Input/IgG-Yale
 lab Yale
@@ -205,6 +208,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam
+fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam.bai
 grant Snyder
 inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
@@ -227,6 +231,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam
+fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam.bai
 grant Snyder
 inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford

@@ -68,9 +68,6 @@ set xrg $panTro,$galGal,$ci,$canFam,$dp,$droYak,$droMult,$bosTau,$rn,$hg,$rheMac
 set vegaGeneDbs hg18,hg19,mm9
 
 # Define organism databases for which we build a SNP track:
-set snpDb130 hg18
-set snpDb129 hg18
-set snpDb128 hg18,mm9
 set snpDb127 hg18,bosTau3
 set snpDb126 hg18,mm8
 set snpDb125 hg17,panTro1,canFam1,rn4

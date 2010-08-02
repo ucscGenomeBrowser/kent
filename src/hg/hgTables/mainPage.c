@@ -310,13 +310,13 @@ struct slName *tablesForDb(char *db)
 /* Find tables associated with database. */
 {
 boolean isGenomeDb = sameString(db, database);
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 struct slName *raw, *rawList = sqlListTables(conn);
 struct slName *cooked, *cookedList = NULL;
 struct hash *uniqHash = newHash(0);
 struct hash *accessCtlHash = accessControlInit(db, conn);
 
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 for (raw = rawList; raw != NULL; raw = raw->next)
     {
     if (isGenomeDb)

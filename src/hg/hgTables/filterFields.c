@@ -155,7 +155,7 @@ struct hash *inHash = newHash(8);
 /* Build up list of tables we link to in outList. */
 for (in = inList; in != NULL; in = in->next)
     {
-    struct sqlConnection *conn = sqlConnect(in->db);
+    struct sqlConnection *conn = hAllocConn(in->db);
     struct joinerPair *jpList, *jp;
 
     /* Keep track of tables in inList. */
@@ -181,7 +181,7 @@ for (in = inList; in != NULL; in = in->next)
 	    }
 	}
     joinerPairFreeList(&jpList);
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     }
 slSort(&outList, dbTableCmp);
 
@@ -192,7 +192,7 @@ if (outList != NULL)
     hTableStart();
     for (out = outList; out != NULL; out = out->next)
 	{
-	struct sqlConnection *conn = sqlConnect(out->db);
+	struct sqlConnection *conn = hAllocConn(out->db);
 	struct asObject *asObj = asForTable(conn, out->table);
 	char *var = dbTableVar(varPrefix, out->db, out->table);
 	hPrintf("<TR>");
@@ -208,7 +208,7 @@ if (outList != NULL)
 	    hPrintf("&nbsp;");
 	hPrintf("</TD>");
 	hPrintf("</TR>");
-	sqlDisconnect(&conn);
+	hFreeConn(&conn);
 	}
     hTableEnd();
     hPrintf("<BR>");
@@ -313,7 +313,7 @@ static void showTableFieldsDb(char *db, char *rootTable, boolean withGetButton)
 /* Put up a little html table with a check box, name, and hopefully
  * a description for each field in SQL rootTable. */
 {
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 struct asObject *asObj = asForTable(conn, rootTable);
@@ -330,7 +330,7 @@ else
 showTableFieldsOnList(db, rootTable, asObj, fieldList, showItemRgb, withGetButton);
 
 freez(&table);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 }
 
 static void showBedTableFields(char *db, char *table, int fieldCount, boolean withGetButton)
@@ -889,7 +889,7 @@ hPrintf("</TABLE>\n");
 static void filterControlsForTableDb(char *db, char *rootTable)
 /* Put up filter controls for a single database table. */
 {
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 char *table = chromTable(conn, rootTable);
 struct trackDb *tdb = findTdbForTable(db, curTrack, rootTable, ctLookupName);
 boolean isSmallWig = isWiggle(db, table);
@@ -966,7 +966,7 @@ if (isWig||isBedGr)
     }
 
 freez(&table);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 hPrintf("<BR>\n");
 cgiMakeButton(hgtaDoFilterSubmit, "submit");
 hPrintf(" ");
@@ -1476,13 +1476,13 @@ else
 /* Cope with split table and/or custom tracks. */
 if (isCustomTrack(table))
     {
-    conn = sqlConnect(CUSTOM_TRASH);
+    conn = hAllocConn(CUSTOM_TRASH);
     struct customTrack *ct = ctLookupName(table);
     safef(explicitDbTable, sizeof(explicitDbTable), "%s", ct->dbTableName);
     }
 else
     {
-    conn = sqlConnect(db);
+    conn = hAllocConn(db);
     safef(splitTable, sizeof(splitTable), "%s_%s", chrom, table);
     if (!sqlTableExists(conn, splitTable))
 	safef(splitTable, sizeof(splitTable), "%s", table);
@@ -1496,7 +1496,7 @@ varPrefixSize = strlen(varPrefix);
 varList = cartFindPrefix(cart, varPrefix);
 if (varList == NULL)
     {
-    sqlDisconnect(&conn);
+    hFreeConn(&conn);
     return cloneString(extraClause);
     }
 
@@ -1633,7 +1633,7 @@ for (var = varList; var != NULL; var = var->next)
     }
 
 /* Clean up and return */
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 hashElFreeList(&varList);
 if (dy->stringSize == 0)
     {

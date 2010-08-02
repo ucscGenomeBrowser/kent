@@ -6,6 +6,7 @@
 #include "linefile.h"
 #include "dystring.h"
 #include "jksql.h"
+#include "hdb.h"
 #include "mdb.h"
 
 static char const rcsid[] = "$Id: mdb.c,v 1.8 2010/06/11 17:11:28 tdreszer Exp $";
@@ -1920,7 +1921,9 @@ mdbObj->vars->var = cloneString(MDB_OBJ_TYPE);
 mdbObj->vars->val = cloneString("table");
 mdbObj->varHash = hashNew(0);
 hashAdd(mdbObj->varHash, mdbObj->vars->var, mdbObj->vars);
-return mdbObjAddVarPairs(mdbObj,setting);
+mdbObj = mdbObjAddVarPairs(mdbObj,setting);
+mdbObjRemoveVars(mdbObj,"tableName"); // NOTE: Special hint that the tdb metadata is used since no mdb metadata is found
+return mdbObj;
 }
 
 const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table)
@@ -1942,13 +1945,13 @@ if(tdb != NULL)
         }
     }
 
-struct sqlConnection *conn = sqlConnect(db);
+struct sqlConnection *conn = hAllocConn(db);
 char *mdb = mdbTableName(conn,TRUE);  // Look for sandbox name first
 if(tdb != NULL && tdb->table != NULL)
     table = tdb->table;
 if(mdb != NULL)
     mdbObj = mdbObjQueryByObj(conn,mdb,table,NULL);
-sqlDisconnect(&conn);
+hFreeConn(&conn);
 
 // save the mdbObj for next time
 if(tdb)
@@ -1961,10 +1964,6 @@ if(tdb)
         return metadataForTableFromTdb(tdb);  // FIXME: metadata setting in TDB is soon to be obsolete
         }
     }
-
-// FIXME: Temporary to distinguish mdb metadata from trackDb metadata:
-mdbObjRemoveVars(mdbObj,"tableName");
-
 
 return mdbObj;
 }
