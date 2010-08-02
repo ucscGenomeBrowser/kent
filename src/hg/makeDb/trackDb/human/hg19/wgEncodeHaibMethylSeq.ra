@@ -1,5 +1,6 @@
 track wgEncodeHaibMethylSeq
 compositeTrack on
+superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl-seq
 longLabel ENCODE HudsonAlpha Methyl-seq
 group regulation
