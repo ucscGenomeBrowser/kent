@@ -1,6 +1,7 @@
 # HAIB Methyl RRBS (wrangler:vsmalladi taken over from cricket and braney)
 track wgEncodeHaibMethylRrbs
 compositeTrack on
+superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl RRBS
 longLabel ENCODE HudsonAlpha CpG Methylation by RRBS
 group regulation
