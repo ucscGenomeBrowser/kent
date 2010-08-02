@@ -21691,7 +21691,7 @@ if (gotExtra)
     ptr = strchr(ptr, ',');
     *ptr = '\0';
 
-    // Use the MGI ID to show all centers that are working on this gene:
+    // Show entries with the MGI ID and design ID 
     safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%s%%'",
 	  extraTable, mgiId, designId);
     sr = sqlGetResult(conn, query);
