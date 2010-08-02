@@ -62,12 +62,20 @@ struct dyString *dy = newDyString(255);
 dyStringAppend(dy, format);
 
 #define STACK_LIMIT 20
+char **strings = NULL;
+int count = 0;
+
+// developer: this is an occasionally useful means of getting stack info without crashing
+// however, it is not supported on cygwin.  Conditionally compile this in when desired.
+//#ifdef BACKTRACE_EXISTS
+#ifdef BACKTRACE_EXISTS
 void *buffer[STACK_LIMIT];
-char **strings;
-int count = backtrace(buffer, STACK_LIMIT);
+count = backtrace(buffer, STACK_LIMIT);
 strings = backtrace_symbols(buffer, count);
+#endif///def BACKTRACE_EXISTS
+
 if (strings == NULL)
-    dyStringAppend(dy,"\nno backtrace_symbols.");
+    dyStringAppend(dy,"\nno backtrace_symbols available in errabort::warnWithBackTrace().");
 else
     {
     dyStringAppend(dy,"\nBACKTRACE [can use 'addr2line -Cfise {exe} addr addr ...']:");

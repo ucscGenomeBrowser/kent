@@ -97,4 +97,7 @@ wget "http://homes.gersteinlab.org/people/yhl3/pgenes/gencode/wgEncodeGencodePge
 
 hgLoadSqlTab hg19 wgEncodeSangerGencodeYalePseudoV4 ~/kent/src/hg/lib/yaleGencodeAssoc.sql wgEncodeGencodePgenes.v4.Human58.tsv 
 
+# load 2wayconspeudo
+mv old/gencode.v3.2wayconspseudos.GRCh37.gtf .
+ldHgGene -exon=transcript -noncoding -genePredExt hg19 wgEncodeGencode2wayConsPseudo gencode.v3.2wayconspseudos.GRCh37.gtf
 

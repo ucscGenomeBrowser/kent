@@ -325,6 +325,13 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 4
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V4c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV4 fileName=wgEncodeGencodePolyaV4.gtf.gz
 
+    track wgEncodeGencode2wayConsPseudo
+    subTrack wgEncodeGencode off
+    shortLabel Gencode Pseudo
+    longLabel ENCODE Gencode 2way Pseudogenes
+    type genePred
+    priority 5
+
 searchName wgEncodeGencodeManualV4
 searchTable wgEncodeGencodeManualV4
 searchMethod exact
