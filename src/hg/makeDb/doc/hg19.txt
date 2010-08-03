@@ -10004,7 +10004,6 @@ EOF
          print $1, $4-1, $5, $9, 480, $7, 0, 0, "miRNA";}' \
         hsMirBaseFormatIdOnly.gff > hsMirBaseFormatIdOnly.bed
 
-XXXX 04-27 stop pending new data for snoRNA
     # 2010-04-21
     # Down load the current snoRNABase coordinates (version 3, based on hg19)
     #  from 
@@ -10024,14 +10023,24 @@ XXXX 04-27 stop pending new data for snoRNA
        else if ($4 == "-") \
          print $1, $2-1, $3, $5, 480, $4, 0, 0,$6;}' \
        snoRNABaseVer3Coords.txt > snoRNABaseVer3Coords.bed
+    # 2010-08-02: snoRnaBase team has not response to hg19 update request.
+    # use liftOver to convert the 400 coordinates to hg19 directly.
+    liftOver snoRNABaseVer3Coords.bed -bedPlus=3 \ 
+      /hive/data/genomes/hg18/bed/liftOver10K/hg18ToHg19.over.chain.gz \
+        snoRNABaseHg19Coords.bed unMapped
+    # Reading liftover chains
+    # Mapping coordinates
+
+
+
     # Merge the miRNA and snoRNA files together
-    cat hsMirBaseFormatIdOnly.bed snoRNABaseVer3Coords.bed \
+    cat hsMirBaseFormatIdOnly.bed snoRNABaseHg19Coords.bed \
         > wgRna20100420.bed
     # Create and load wgRna
-    cp -p /cluster/home/chinhli/kent/src/hg/lib/wgRna.sql wgRna.sql
+    cp -p /cluster/bin/build/build-kent/src/hg/lib/wgRna.sql wgRna.sql
     hgLoadBed -sqlTable=wgRna.sql hg19 wgRna wgRna20100420.bed
     #  Reading wgRna20100420.bed
-    #  Loaded 1152 elements of size 9
+    #  Loaded 1341 elements of size 9
     #  Sorted
     #  Creating table definition for wgRna
     #  Saving bed.tab
@@ -10042,16 +10051,20 @@ XXXX 04-27 stop pending new data for snoRNA
 
     # some details about this track:
     hgsql -e "select count(*) from wgRna;" hg19
-    #  1152
+    #  1341
     # contain 4 types:
     cat wgRna20100420.bed | awk '{print $9}' | sort | uniq
+    # CDBox
+    # HAcaBox
+    # miRNA
+    # scaRna
     hgsql -e "select type, count(*) from wgRna  group by type;" hg19
     #   CDBox     269
     #   HAcaBox   112
-    #   miRNA     750
+    #   miRNA     939
     #   scaRna     21
     featureBits hg19 wgRna
-    #    107878 bases of 2897316137 (0.004%) in intersection
+    # 122226 bases of 2899183193 (0.004%) in intersection
 
 
 #############################################################################
