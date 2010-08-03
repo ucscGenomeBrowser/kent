@@ -176,6 +176,15 @@ sGroup_mammal panTro2 rheMac2 mm8 rn4 canFam2
 #treeImage phylo/syn_6way.jpg
 speciesCodonDefault hg18
 
+track rdmr
+shortLabel R-DMR
+longLabel Reprogrammed Differentially Methylated Regions
+group phenDis
+priority 29.5
+visibility hide
+color 0,20,150
+type bed 4
+
 track consIndelsHgMmCanFam
 shortLabel Cons Indels MmCf
 longLabel Indel-based Conservation for human hg18, mouse mm8 and dog canFam2
@@ -4093,3 +4102,10 @@ visibility hide
 group genes
 type psl mRNA
 
+track hg19ContigDiff
+shortLabel Hg19 Diff
+longLabel Contigs dropped or changed from NCBI build 36(hg18) to GRCh37(hg19)
+visibility hide
+group map
+type bed 6
+color 128,0,0

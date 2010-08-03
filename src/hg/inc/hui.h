@@ -887,7 +887,7 @@ char *compositeGroupLabel(struct trackDb *childTdb, char *group, char *id);
 char *compositeGroupId(struct trackDb *tdb, char *group, char *id);
 /* Given label, return id,  looking through parent's subGroupN's */
 
-char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb, 
+char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct trackDb *childTdb,
 	char *vocabType, char *label);
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
@@ -1117,6 +1117,13 @@ boolean makeDownloadsLink(char *database, struct trackDb *tdb);
 
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 // Make a table schema link (if appropriate and then returns TRUE)
+
+//#define BIG_UI_NAV_LINKS
+#ifdef BIG_UI_NAV_LINKS
+void makeTopLink(struct trackDb *tdb);
+/* Link to top of UI page */
+#endif//def BIG_UI_NAV_LINKS
+
 
 void extraUiLinks(char *db,struct trackDb *tdb);
 /* Show downloads, schema and metadata links where appropriate */

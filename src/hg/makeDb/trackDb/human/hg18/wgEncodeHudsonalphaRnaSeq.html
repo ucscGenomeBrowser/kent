@@ -1,11 +1,33 @@
 
 <H2>Description</H2>
-This track is produced as part of the ENCODE Project. RNA-seq is a method for mapping and quantifying the transcriptome of any organism that has a genomic DNA sequence assembly. RNA-seq is performed by reverse-transcribing an RNA sample into cDNA, followed by high throughput DNA sequencing, which was done here on an Illumina Genome Analyzer (GA2) (Mortazavi et al., 2008). The transcriptome measurements shown on these tracks were performed on polyA selected RNA from total cellular RNA. Data have been produced in two formats: single reads, each of which comes from one end of a randomly primed cDNA molecule; and paired-end reads, which are obtained as pairs from both ends cDNAs resulting from random priming. The resulting sequence reads are then informatically mapped onto the genome sequence (Alignments). Those that don't map to the genome are mapped to known RNA splice junctions (Splice Sites). These mapped reads are then counted to determine their frequency of occurrence at known gene models. Sequence reads that cluster at genome locations that lack an existing transcript model are also identified informatically and they are quantified. RNA-seq is especially suited for giving information about RNA splicing patterns and for determining unequivocally the presence or absence of lower abundance class RNAs. As performed here, internal RNA standards are used to assist in quantification and to provide internal process controls. This RNA-seq protocol does not specify the coding strand. As a result, there will be ambiguity at loci where both strands are transcribed. The "randomly primed" reverse transcription is, apparently, not fully random. This is inferred from a sequence bias in the first residues of the read population, and this likely contributes to observed unevenness in sequence coverage across transcripts. 
-
-<P>
-This track is produced as part of the ENCODE Project.
-These tracks show short tag sequencing of cDNA obtained from biological replicate samples (different culture plates) of the ENCODE cell lines. The sequences were aligned to the human genome (hg18) and UCSC known-gene splice junctions using different  sequence alignment programs such ELAND (Illumina) or Bowtie (Langmead et al., 2009). 
-
+This track is produced as part of the ENCODE Project. This track shows short tag
+sequencing of cDNA obtained from biological replicate samples (different culture
+plates) of the ENCODE cell lines. The sequences were aligned to the human genome
+(hg18) and UCSC known-gene splice junctions using different  sequence alignment
+programs such ELAND (Illumina) or Bowtie (Langmead et al., 2009). RNA-seq is a
+method for mapping and quantifying the transcriptome of any organism that has a
+genomic DNA sequence assembly. RNA-seq is performed by reverse-transcribing an
+RNA sample into cDNA, followed by high throughput DNA sequencing, which was done
+here on an Illumina Genome Analyzer (GA2) (Mortazavi et al., 2008). The
+transcriptome measurements shown on these tracks were performed on polyA selected
+RNA from total cellular RNA. Data have been produced in two formats: single reads,
+each of which comes from one end of a randomly primed cDNA molecule; and
+paired-end reads, which are obtained as pairs from both ends cDNAs resulting from
+random priming. The resulting sequence reads are then informatically mapped onto
+the genome sequence (Alignments). Those that don't map to the genome are mapped
+to known RNA splice junctions (Splice Sites). These mapped reads are then counted
+to determine their frequency of occurrence at known gene models. Sequence reads
+that cluster at genome locations that lack an existing transcript model are also
+identified informatically and they are quantified. RNA-seq is especially suited
+for giving information about RNA splicing patterns and for determining
+unequivocally the presence or absence of lower abundance class RNAs. As
+performed here, internal RNA standards are used to assist in quantification and
+to provide internal process controls. This RNA-seq protocol does not specify the
+coding strand. As a result, there will be ambiguity at loci where both strands
+are transcribed. The "randomly primed" reverse transcription is, apparently, not
+fully random. This is inferred from a sequence bias in the first residues of the
+read population, and this likely contributes to observed unevenness in sequence
+coverage across transcripts.</P>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
@@ -14,7 +36,8 @@ Instructions for configuring multi-view
 tracks are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 The following views are in this track: <DL>
 <DT><I>RPKM</I>
-<DD>Density graph of signal enrichment based on a normalized aligned read density (Reads Per Kilobase exon per Million reads or RPKM). RPKM is reported in the score of the track and is displayed in a gray scale that becomes darker as RPKM increases. The RPKM measure assists in visualizing the relative amount of a given transcript across multiple samples. 
+<DD>RefSeq gene models are displayed shaded by their RPKM (Reads Per Kilobase of exon per Million reads) value. RPKM is reported in the score of each element, and each element 
+is shaded using a gray scale that becomes darker as RPKM increases. The RPKM measure assists in visualizing the relative amount of a given transcript across multiple samples.  
 <DT><I>Alignments</I>
 <DD>The Alignments view shows reads mapped to the genome. 
 Alignments are colored by cell type.

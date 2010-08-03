@@ -20,6 +20,7 @@ install:
 	cp -p --remove-destination checkCoverage.csh       ${SCRIPTS}
 	cp -p --remove-destination checkEncodeRegions.csh  ${SCRIPTS}
 	cp -p --remove-destination checkGbdbDiffs.csh      ${SCRIPTS}
+	cp -p --remove-destination checkGenomeMysql        ${SCRIPTS}
 	cp -p --remove-destination checkHitter.csh         ${SCRIPTS}
 	cp -p --remove-destination checkMachineName.csh    ${SCRIPTS}
 	cp -p --remove-destination checkMetaData.csh       ${SCRIPTS}

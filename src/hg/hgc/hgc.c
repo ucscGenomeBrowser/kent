@@ -21581,6 +21581,54 @@ else
 printTrackHtml(tdb);
 }
 
+void doRdmr(struct trackDb *tdb, char *item)
+/* details page for rdmr track */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[512];
+struct sqlResult *sr;
+char **row;
+int ii;
+
+char *chrom,*chromStart,*chromEnd,*fibroblast,*iPS,*absArea,*gene,*dist2gene,*relation2gene,*dist2island,*relation2island,*fdr;
+
+genericHeader(tdb, item);
+
+safef(query, sizeof(query), 
+"select chrom,chromStart,chromEnd,fibroblast,iPS,absArea,gene,dist2gene,relation2gene,dist2island,relation2island,fdr from rdmrRaw where gene = '%s'",
+item);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+
+    ii = 0;
+    chrom 	= row[ii];ii++;
+    chromStart 	= row[ii];ii++;
+    chromEnd	= row[ii];ii++;
+    fibroblast	= row[ii];ii++;
+    iPS		= row[ii];ii++;
+    absArea	= row[ii];ii++;
+    gene	= row[ii];ii++;
+    dist2gene	= row[ii];ii++;
+    relation2gene = row[ii];ii++;
+    dist2island	= row[ii];ii++;
+    relation2island = row[ii];ii++;
+    fdr		= row[ii];
+
+    printf("<B>Gene:</B> %s\n", gene);fflush(stdout);
+    printf("<BR><B>Genomic Position:</B> %s:%s-%s", chrom, chromStart, chromEnd);
+
+    printf("<BR><B>Fibroblast M value:</B> %s\n", fibroblast);
+    printf("<BR><B>iPS M value:</B> %s\n", iPS);
+    printf("<BR><B>Absolute area:</B> %s", absArea);
+    printf("<BR><B>Distance to gene:</B> %s\n", dist2gene);
+    printf("<BR><B>Relation to gene:</B> %s\n", relation2gene);
+    printf("<BR><B>Distance to CGI:</B> %s\n",  dist2island);
+    printf("<BR><B>Relation to CGI:</B> %s\n", relation2island);
+    printf("<BR><B>False discovery rate:</B> %s\n", fdr);
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void doKomp(struct trackDb *tdb, char *item)
 /* KnockOut Mouse Project */
 {
@@ -21691,7 +21739,7 @@ if (gotExtra)
     ptr = strchr(ptr, ',');
     *ptr = '\0';
 
-    // Use the MGI ID to show all centers that are working on this gene:
+    // Show entries with the MGI ID and design ID 
     safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%s%%'",
 	  extraTable, mgiId, designId);
     sr = sqlGetResult(conn, query);
@@ -23223,6 +23271,10 @@ else if (sameString("mammalPsg", table))
 else if (sameString("igtc", table))
     {
     doIgtc(tdb, item);
+    }
+else if (sameString("rdmr", table))
+    {
+    doRdmr(tdb, item);
     }
 else if (startsWith("komp", table) || startsWith("ikmc", table))
     {

@@ -11,7 +11,7 @@ DOWNLOAD_DIR = /usr/local/apache/htdocs/encode/tests
 # Put the working dataType's into DIRS
 DIRS = chipseq
 BAD = badDaf badDdf
-FILES = load.ra trackDb.ra fileDb.ra mdb.txt README.txt
+FILES = load.ra trackDb.ra  mdb.txt README.txt
 
 TMP_FILE_1 = 1.tmp
 TMP_FILE_2 = 2.tmp
