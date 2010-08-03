@@ -10822,6 +10822,7 @@ ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(roo
 
 #############################################################################
 # GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)
+# 		      (PARTIALLY RE-DONE AFTER FIXING .LTF FILES - 2010-08-03 Fan)
     #   After several attempts, the old genscan process could not be
     #   successfully completed, nor the new process used by mm9,
     #   even with the manual steps to do gsBig with
@@ -10892,6 +10893,39 @@ ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(roo
 	|faSplit -lift=../../lift/$f/$f.lft gap stdin 2000000 ./ck_
 	cd ../..
 	done
+
+# LATER FOUND THAT THE SEQUENCE ID IN THE .fa FILES UNDER 
+# /hive/data/genomes/hg19/* ARE NOT ALWAYS THE SAME AS THE CHROM ID.
+# THIS CAUSED INCORRECT CHROM IDs GENERATED IN THE .lft FILES.
+# PERFORM THE FOLLOWING TO FIX THE .lft FILES.
+
+    mkdir fixLift
+    cd fixLift
+
+    cat << '_EOF_' > fixAll
+fix1 chr6_apd_hap1 apd.chr6.4622290.0.4622290.1
+fix1 chr6_cox_hap2 cox.chr6.4795371.0.4795371.1
+fix1 chr6_dbb_hap3 dbb.chr6.4610396.0.4610396.1
+fix1 chr6_mann_hap4 mann
+fix1 chr6_mcf_hap5 mcf.chr6.4833398.0.4833398.1
+fix1 chr6_qbl_hap6 qbl.chr6.4611984.0.4611984.1
+fix1 chr6_ssto_hap7 ssto
+'_EOF_'
+
+    cat << '_EOF_' > fix1
+echo
+echo
+echo processing $1 $2
+cat /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft |grep $2
+cat /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft |sed -e
+"s/${2}/${1}/g" >new/$1.lft
+cat new/$1.lft |grep $1
+cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft 
+'_EOF_'
+
+    chmod +x fix*
+    fixAll
+    cd ..
 
 # go to memk to run cluster jobs
 
