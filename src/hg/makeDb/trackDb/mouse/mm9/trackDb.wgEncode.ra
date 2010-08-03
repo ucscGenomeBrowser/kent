@@ -3,4 +3,4 @@
 #Tracks to be included
 include trackDb.wgEncodeSydhHist.ra
 include trackDb.wgEncodeSydhTfbs.ra
-
+include trackDb.wgEncodeUwDnase.ra
