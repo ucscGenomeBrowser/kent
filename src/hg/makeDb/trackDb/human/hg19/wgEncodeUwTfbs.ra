@@ -6,7 +6,7 @@ track wgEncodeUwTFBS
 compositeTrack on
 superTrack wgEncodeTfBindingSuper dense
 shortLabel UW TFBS
-longLabel ENCODE Transcription Factor Binding by ChIP-Seq from Univ. of Washington
+longLabel ENCODE Transcription Factor Binding Sites by ChIP-Seq from Univ. of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 #subGroup2 cellType Cell_Line BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 GM12878=GM12878 HEK293=HEK293 HELA=HeLa-S3 HEPG2=HepG2 HL60=HL-60 HMEC=HMEC HRE=HRE HUVEC=HUVEC K562=K562 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
