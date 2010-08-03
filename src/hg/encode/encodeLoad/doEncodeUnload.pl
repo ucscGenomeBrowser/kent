@@ -190,13 +190,13 @@ for my $key (keys %ra) {
         unloadWig($assembly, $db, $tablename);
     } elsif ($type eq "bam") {
         unloadBam($assembly, $db, $tablename);
-        unlink "$downloadDir/gbdb/$tablename.bam";
-        unlink "$downloadDir/gbdb/$tablename.bam.bai";
+#        unlink "$downloadDir/gbdb/$tablename.bam";
+#        unlink "$downloadDir/gbdb/$tablename.bam.bai";
         unlink "$downloadDir/$tablename.bam";
         unlink "$downloadDir/$tablename.bam.bai";
     } elsif ($type eq "bigWig") {
         unloadBigWig($assembly, $db, $tablename);
-        unlink "$downloadDir/gbdb/$tablename.bw";
+#        unlink "$downloadDir/gbdb/$tablename.bw";
         unlink "$downloadDir/$tablename.bigWig";
     } else {
         die "ERROR: unknown type: $h->{type} in load.ra ($PROG)\n";

@@ -1,6 +1,7 @@
 
 track wgEncodeHaibMethyl27
 compositeTrack on
+superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl27
 longLabel ENCODE HudsonAlpha CpG Methylation by Illumina Methyl27
 group regulation

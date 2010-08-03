@@ -1,4 +1,18 @@
 # Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
+# UW DNase-seq (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Short Labels: 7 charactesr for cell type, 2 characters for view
+#       - Views: For consistency sake view will be two letters
+#               - Peaks = Pk
+#               - Signal = Sg
+#       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks for Tier 1 cell lines
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
+#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
+#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
+#       - View Displays: Deafult view filters:
+#               - Peaks-??
+
 track wgEncodeSydhTfbs
 release alpha
 compositeTrack on

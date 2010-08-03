@@ -6293,7 +6293,7 @@ done
     cd /cluster/data/mm9/bed/multiz30way/frames
     # leaving out calJac1, echTel1, otoGar1, sorAra1, eriEur1, cavPor2
     #		tupBel1 since no gene preds there
-    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames mm9 stdin stdout rn4 genes/rn4.gp.gz hg18 genes/hg18.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz equCab1 genes/equCab1.gp.gz dasNov1 genes/dasNov1.gp.gz oryCun1 genes/oryCun1.gp.gz felCat3 genes/felCat3.gp.gz canFam2 genes/canFam2.gp.gz loxAfr1 genes/loxAfr1.gp.gz bosTau3 genes/bosTau3.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz galGal3 genes/galGal3.gp.gz anoCar1 genes/anoCar1.gp.gz xenTro2 genes/xenTro2.gp.gz gasAcu1 genes/gasAcu1.gp.gz danRer5 genes/danRer5.gp.gz tetNig1 genes/tetNig1.gp.gz fr2 genes/fr2.gp.gz oryLat1 genes/oryLat1.gp.gz | gzip > multiz30way.mafFrames.gz) > frames.log 2>&1
+    time (cat  ../maf/*.maf | nice -n +19 genePredToMafFrames mm9 stdin stdout mm9 genes/mm9.gp.gz rn4 genes/rn4.gp.gz hg18 genes/hg18.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz equCab1 genes/equCab1.gp.gz dasNov1 genes/dasNov1.gp.gz oryCun1 genes/oryCun1.gp.gz felCat3 genes/felCat3.gp.gz canFam2 genes/canFam2.gp.gz loxAfr1 genes/loxAfr1.gp.gz bosTau3 genes/bosTau3.gp.gz monDom4 genes/monDom4.gp.gz ornAna1 genes/ornAna1.gp.gz galGal3 genes/galGal3.gp.gz anoCar1 genes/anoCar1.gp.gz xenTro2 genes/xenTro2.gp.gz gasAcu1 genes/gasAcu1.gp.gz danRer5 genes/danRer5.gp.gz tetNig1 genes/tetNig1.gp.gz fr2 genes/fr2.gp.gz oryLat1 genes/oryLat1.gp.gz | gzip > multiz30way.mafFrames.gz) > frames.log 2>&1
     # see what it looks like in terms of number of annotations per DB:
     zcat multiz30way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
      67 loxAfr1
@@ -6307,6 +6307,7 @@ done
   85568 bosTau3
  118192 galGal3
  129442 xenTro2
+ 185607 mm9
  208239 rn4
  224420 rheMac2
  226866 panTro2
@@ -6324,7 +6325,7 @@ done
     cd /cluster/data/mm9/bed/multiz30way/frames
     time nice -n +19 hgLoadMafFrames mm9 multiz30wayFrames \
 	multiz30way.mafFrames.gz
-    #	real    1m1.893s
+    #	real     0m43.134s
 
     #	enable the trackDb entries:
 # frames multiz30wayFrames
