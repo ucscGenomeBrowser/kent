@@ -266,16 +266,16 @@ sub loadBigWig
 #            HgAutomate::verbose(2, "$fileList linked to ${gbdbDir}/${tableName}.bw\n");
 #        }
 	# symlink bigWig binary file into gbdb bbi directory
-        my @cmds = ( "ln -sf ${downloadDir}/${tableName}.bw /gbdb/${assembly}/bbi/");
+        my @cmds = ( "ln -sf ${downloadDir}/${tableName}.bigWig /gbdb/${assembly}/bbi/");
         HgAutomate::verbose(2, "loadBigWig cmds [".join(" ; ",@cmds)."]\n");
         my $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
             die("ERROR: File(s) '$fileList' failed symbolic link to /gbdb/${assembly}/bbi/\n" . $safe->stderr() . "\n");
         } else {
-            HgAutomate::verbose(2, "${downloadDir}/${tableName}.bw linked to  /gbdb/${assembly}/bbi/\n");
+            HgAutomate::verbose(2, "${downloadDir}/${tableName}.bigWig linked to  /gbdb/${assembly}/bbi/\n");
         }
 	# create BigWig link table from trackDb to gbdb bigWig binary file
-        @cmds = ( "/cluster/bin/x86_64/hgBbiDbLink $assembly $tableName /gbdb/${assembly}/bbi/${tableName}.bw");
+        @cmds = ( "/cluster/bin/x86_64/hgBbiDbLink $assembly $tableName /gbdb/${assembly}/bbi/${tableName}.bigWig");
         HgAutomate::verbose(2, "loadBigBed cmds [".join(" ; ",@cmds)."]\n");
         $safe = SafePipe->new(CMDS => \@cmds, STDOUT => "/dev/null", DEBUG => $opt_verbose > 2);
         if(my $err = $safe->exec()) {
@@ -603,10 +603,8 @@ Further information is available in the
 <p><B>Data is <A HREF="http://genome.ucsc.edu/ENCODE/terms.html">RESTRICTED FROM USE</a>
 in publication  until the restriction date noted for the given data file.</B></p>
 <p>
-There are two files within this directory that contain information about the dow
-nloads:
-<LI><A HREF="files.txt">files.txt</A> which is a tab-separated file with the nam
-e and metadata for each download.</LI>
+There are two files within this directory that contain information about the downloads:
+<LI><A HREF="files.txt">files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>
 <LI><A HREF="md5sum.txt">md5sum.txt</A> which is a list of the md5sum output for
  each download.</LI>
  <HR>

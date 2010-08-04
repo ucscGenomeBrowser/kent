@@ -86,7 +86,7 @@ sub unloadBigWig
     $db->dropTableIfExist($tableName);
 
     # remove symlink
-    my $file = "/gbdb/$assembly/bbi/$tableName.bw";
+    my $file = "/gbdb/$assembly/bbi/$tableName.bigWig";
     if(-e $file) {
         HgAutomate::verbose(3, "removing bigWig '$file'\n");
         if(system("rm -f $file")) {

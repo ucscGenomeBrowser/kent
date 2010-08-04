@@ -14,7 +14,7 @@ int main(int argc, char *argv[])
 int count = 0;
 cgiSpoof(&argc, argv);
 
-char *dateTime = NULL;
+char dateTime[256];
 char *remoteAddr = getenv("REMOTE_ADDR");
 char *userAgent = getenv("HTTP_USER_AGENT");
 char *version = cgiUsualString("version", "unknown");
@@ -46,8 +46,7 @@ if (conn)
 	count = sqlLastAutoId(conn);
 	safef(query, sizeof(query), "SELECT dateTime FROM %s WHERE count=%d",
 	    useCount, count);
-	/* yes, query is being reused here as result string */
-	dateTime = sqlQuickQuery(conn, query, query, sizeof(query));
+	(void) sqlQuickQuery(conn, query, dateTime, sizeof(dateTime));
 	}
     else
 	{
