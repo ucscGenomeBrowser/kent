@@ -1,10 +1,26 @@
+include trackDb.chainNet.ra
+
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
 
 # Local declaration so that local gap.html is picked up.
 track gap override
+visibility hide
 html gap
+
+####
+# Overrides for default position
+track mrna override
+visibility hide 
+
+track intronEst override
+visibility hide
+
+track refGene override
+visibility pack
+
+####
 
 track ctgPos2
 shortLabel Scaffolds
