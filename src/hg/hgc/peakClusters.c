@@ -324,26 +324,12 @@ if (cluster != NULL)
 	}
     webPrintLinkTableEnd();
 
-    webNewSection("Track Description");
-
-    /* Print out table of abbreviations. */
+    webNewSection("Table of abbreviations for cells");
     char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
-    printf("<B>Table of abbreviations for cells</B><BR>\n");
-    safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
-    struct sqlResult *sr = sqlGetResult(conn, query);
-    webPrintLinkTableStart();
-    webPrintLabelCell("Symbol");
-    webPrintLabelCell("Cell Type");
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-	printf("</TR><TR>\n");
-	char *name = row[0];
-	char *description = row[1];
-	webPrintLinkCell(name);
-	webPrintLinkCell(description);
-	}
-    sqlFreeResult(&sr);
-    webPrintLinkTableEnd();
+    hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
+
+
+    webNewSection("Track Description");
     }
 }
 
