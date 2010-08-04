@@ -250,7 +250,7 @@ else
 struct trackDb *trackDbFromRa(char *raFile)
 /* Load track info from ra file into list. */
 {
-struct lineFile *lf = netLineFileOpen(raFile);
+struct lineFile *lf = lineFileOpen(raFile, TRUE);
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;

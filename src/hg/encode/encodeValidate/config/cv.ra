@@ -2297,7 +2297,7 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 ### Mouse Cell Lines
 term 3134
-tag 3143
+tag 3134
 type Cell Line
 organism Mouse
 tissue Mammary
@@ -2381,7 +2381,7 @@ sex U
 protocol LICR:Cerebellum_Ren_protocol.pdf
 
 term Cerebrum
-tag Cerebrumm
+tag Cerebrum
 type Cell Line
 organism Mouse
 tissue Cerebrum
@@ -5616,56 +5616,56 @@ description UnknownD
 # term (human-readable name)
 # tag (machine-readable name, no special characters
 # type (informs pipeline code of stanza type, should be seqPlatform)
-# description
+# description: Working on inputing description from geo and product website
 
 term Illumina_GA
 tag IlluminaGA
 geo Illumina Genome Analyzer
 type seqPlatform
-description ? TBD
+description Other
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
 tag IlluminaGA2
 geo Illumina Genome Analyzer II
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
 tag IlluminaGA2x
 geo Illumina Genome Analyzer II
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 # Matches GA2x that Kate initally indicated as the term
 
 term 454_GS
 tag 454GS
 geo 454 GS
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term 454_GS_20
 tag 454GS20
 geo 454 GS 20
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term 454_GS_FLX
 tag 454GSFLX
 geo 454 GS FLX
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term AB_SOLiD
 tag ABSOLiD
 geo AB SOLiD System
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term AB_SOLiD_2.0
 tag ABSOLiD2
 geo AB_SOLiD System 2.0
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
