@@ -60,7 +60,8 @@ cd $base/kent/src
 echo "Before make utils on $HOST [${0}: `date`]"
 if ( "$HOST" == "$BOX32" ) then
     # -j is having a side-effect?
-    make $MAKEPARAMS utils >& make.utils.log
+    # going to try adding -j back in because it's so slow
+    make -j 8 $MAKEPARAMS utils >& make.utils.log
 else
     make -j 16 $MAKEPARAMS utils >& make.utils.log
 endif
