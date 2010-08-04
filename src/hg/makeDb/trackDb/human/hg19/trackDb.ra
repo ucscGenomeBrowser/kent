@@ -1614,7 +1614,7 @@ noInherit on
     
 track haplotypeLocations
 shortLabel HapsLocate
-longLabel Haplotype locations on reference sequence
+longLabel Haplotype locations on reference sequence (on chroms: 4, 5, 6, 17)
 visibility hide
 type bed 4
 group map
@@ -1622,7 +1622,7 @@ priority 25
 color 0,0,0
 url http:/cgi-bin/hgTracks?position=$$
 urlLabel Haplotype sequence:
-chromosomes  chr4,chr6,chr17
+chromosomes  chr4,chr5,chr6,chr17
 
 track rfamHuman
 shortLabel RfamConsensus
@@ -1631,3 +1631,10 @@ visibility hide
 group genes
 type psl mRNA
 
+track hg18ContigDiff
+shortLabel Hg18 Diff
+longLabel Contigs new to GRCh37/(hg19), not carried forward from NCBI build 36(hg18)
+visibility hide
+group map
+type bed 6
+color 128,0,0

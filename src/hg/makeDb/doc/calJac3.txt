@@ -1631,31 +1631,34 @@ done
     # real    9m41.993s
 
     zcat multiz13way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
-    159735 tarSyr1
-    202861 panTro2
-    203073 rheMac2
-    205358 ponAbe2
-    205679 hg19
-    206899 micMur1
-    211692 monDom5
-    211778 papHam1
-    213918 otoGar1
-    217990 gorGor2
-    233938 mm9
-    240194 canFam2
+    # 159735 tarSyr1
+    # 193983 calJac3
+    # 202861 panTro2
+    # 203073 rheMac2
+    # 205358 ponAbe2
+    # 205679 hg19
+    # 206899 micMur1
+    # 211692 monDom5
+    # 211778 papHam1
+    # 213918 otoGar1
+    # 217990 gorGor2
+    # 233938 mm9
+    # 240194 canFam2
 
     #   load the resulting file
     ssh hgwdev
     cd /cluster/data/calJac3/bed/multiz13way/frames
     time nice -n +19 hgLoadMafFrames calJac3 multiz13wayFrames \
         multiz13way.mafFrames.gz
-    #   real    1m1.893s
+    #   real    0m29.735s
+    # check it:
+    hgsql -N -e "select src from  multiz13wayFrames;" calJac3 \
+      | sort | uniq -c | grep calJac3
+    # 193983 calJac3
 
     #   enable the trackDb entries:
 # frames multiz13wayFrames
 # irows on
-
-
 
 #############################################################################
 ## create upstream refGene maf files
@@ -2389,6 +2392,7 @@ Found start=0 at line 1192229886, the first chrom position is 1, not 0
 ==> need to find the "start=1" in each header line of wigFix files
 ==> using
 ==> cat wigFile.list | xargs cat | grep "start=1 " > start1.txt
+XXXX 07-28 Waiting for Adam's phast fix
     cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
         | wigEncode stdin phyloP13way.wig \
                 phyloP13way.wib  > wigEncode.log 2>&1 &

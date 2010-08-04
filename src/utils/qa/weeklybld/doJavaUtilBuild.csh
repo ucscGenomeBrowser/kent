@@ -19,6 +19,7 @@ cd $JAVABUILD
 set branch="v${BRANCHNN}_branch"
 
 git clone -q $GITSHAREDREPO kent
+chmod g+w kent
 cd kent
 git checkout -tb $branch origin/$branch
 set err = $status
