@@ -603,10 +603,8 @@ Further information is available in the
 <p><B>Data is <A HREF="http://genome.ucsc.edu/ENCODE/terms.html">RESTRICTED FROM USE</a>
 in publication  until the restriction date noted for the given data file.</B></p>
 <p>
-There are two files within this directory that contain information about the dow
-nloads:
-<LI><A HREF="files.txt">files.txt</A> which is a tab-separated file with the nam
-e and metadata for each download.</LI>
+There are two files within this directory that contain information about the downloads:
+<LI><A HREF="files.txt">files.txt</A> which is a tab-separated file with the name and metadata for each download.</LI>
 <LI><A HREF="md5sum.txt">md5sum.txt</A> which is a list of the md5sum output for
  each download.</LI>
  <HR>
