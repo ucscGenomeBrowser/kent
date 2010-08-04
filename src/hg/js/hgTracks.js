@@ -1710,8 +1710,6 @@ function parseMap(ele, reset)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-
-    alert(response);
     $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
