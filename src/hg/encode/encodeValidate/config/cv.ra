@@ -2297,7 +2297,7 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 ### Mouse Cell Lines
 term 3134
-tag 3143
+tag 3134
 type Cell Line
 organism Mouse
 tissue Mammary
@@ -2381,7 +2381,7 @@ sex U
 protocol LICR:Cerebellum_Ren_protocol.pdf
 
 term Cerebrum
-tag Cerebrumm
+tag Cerebrum
 type Cell Line
 organism Mouse
 tissue Cerebrum
