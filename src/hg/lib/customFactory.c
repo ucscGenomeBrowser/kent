@@ -310,6 +310,10 @@ if (bed->chromEnd < 1)
 if (bed->chromEnd < bed->chromStart)
     lineFileAbort(lf, "chromStart after chromEnd (%d > %d)", 
     	bed->chromStart, bed->chromEnd);
+int chromSize = hChromSize(db, bed->chrom);
+if (bed->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)", 
+    	bed->chrom, bed->chromEnd, chromSize);
 if (wordCount > 3)
      bed->name = cloneString(row[3]);
 if (wordCount > 4)
