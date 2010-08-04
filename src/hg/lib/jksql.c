@@ -1816,13 +1816,20 @@ return ((database == NULL) && (scce->conn->conn->db == NULL))
     || sameString(database, scce->conn->conn->db);
 }
 
-static void sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
-                                   char *database)
+static boolean sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
+                                      char *database,
+                                      boolean abort)
 /* set the connect cache and connect to the specified database */
 {
 if (mysql_select_db(scce->conn->conn, database) != 0)
-    errAbort("Couldn't set connection database to %s\n%s",
-             database, mysql_error(scce->conn->conn));
+    {
+    if (abort) 
+        errAbort("Couldn't set connection database to %s\n%s",
+                 database, mysql_error(scce->conn->conn));
+    else
+        return FALSE;
+    }
+return TRUE;
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
@@ -1897,7 +1904,10 @@ if (scce == NULL)
     {
     scce = sqlConnCacheFindFree(cache, profile, database, FALSE);
     if (scce != NULL)
-        sqlConnCacheEntrySetDb(scce, database);
+        {
+        if (!sqlConnCacheEntrySetDb(scce, database, abort))
+            scce = NULL;  // got error with no abort
+        }
     else
         scce = sqlConnCacheAddNew(cache, profile, database, abort);
     }
