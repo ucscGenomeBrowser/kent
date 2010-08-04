@@ -11025,4 +11025,52 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
 	| sed -e "s/ck_/${f}_/g" >> pep/genscanPep.pep
 	done
     hgPepPred hg19 generic genscanPep pep/genscanPep.pep
+
+################################################################
+# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (working 2010-08-03 - Chin)
+# Note from Andy: All primary data files were lost, The table
+# has all of the original data. 
+# The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should 
+# still be valid.  The hgFixed table sestanBrainAtlasExps should be ok.
+# So it's just a matter of getting the hg18.sestanBrainAtlas table in
+#  hg19 coordinates.
+
+    mkdir  /hive/data/genomes/hg19/bed/yaleMicroarrays
+    cd  /hive/data/genomes/hg19/bed/yaleMicroarrays
+    cp  /hive/data/genomes/hg18/bed/yaleMicroarrays/sestanBrainAtlas.bed \
+           sestanBrainAtlasHg18.bed
+    # In the hg18, thickStart is off by 1, fix it
+    # hgsql -e " select thickStart-chromStart from sestanBrainAtlas;" hg18 |
+    #   sort | uniq
+    # 1
+    cat sestanBrainAtlasHg18.bed | awk '{print  $1,$2,$3,$4,$5,$6,$7-1,$8,$9,$10,$11,$12,$13,$14,$15 }' >  sestanBrainAtlasHg18Fixed.bed
+
+
+    # use liftOver to convert the hg18 coordinates to hg19 directly.
+    liftOver sestanBrainAtlasHg18Fixed.bed -bedPlus=8 \
+      /hive/data/genomes/hg18/bed/liftOver10K/hg18ToHg19.over.chain.gz \
+        sestanBrainAtlasHg19.bed unMapped
+
+    # Check the result of liftOver:
+    wc -l sestanBrainAtlasHg1*.bed
+    # 877877 sestanBrainAtlasHg18.bed
+    # 877469 sestanBrainAtlasHg19.bed
+    cat unMapped | awk ' /^chr/ {print $1}' | wc -l       
+    408
+    cat unMapped | awk ' /^#/|| /^chr/ {print $1, $2, $3,_}' \
+       > summaryUnMapped.txt
+
+    # load the table
+    hgLoadBed hg19 sestanBrainAtlas sestanBrainAtlasHg19.bed
+    # Reading sestanBrainAtlasHg19.bed
+    # Loaded 877469 elements of size 15
+    # Sorted
+    # Creating table definition for sestanBrainAtlas
+    # Saving bed.tab
+    # Loading hg19
+
+    # track stuff done from hg18 days: 
+    # kent/src/hg/makeDb/trackDb/human/sestanBrainAtlas.html
+    # kent/src/hg/makeDb/trackDb/human/trackDb.ra
+
 #############################################################################
