@@ -38,6 +38,7 @@ my $dbHost = 'hgwdev';
 # This could be made into an option:
 # BLAT -fastMap will not work with query chunks greater than 5000
 my $splitSize = '5k';  
+my $splitOverlap = '500';  
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -212,7 +213,7 @@ foreach spec (\$specList)
   if (! -e q.sizes) twoBitInfo \$file q.sizes
   set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
   while (\$start < \$end)
-    set chunkEnd = `expr \$start + $size`
+    set chunkEnd = `expr \$start + $size + $splitOverlap`
     if (\$chunkEnd > \$end) set chunkEnd = \$end
     set chunkSize = `expr \$chunkEnd - \$start`
     echo \$file\\:\$seq\\:\$start-\$chunkEnd >> reSplitQuery.lst

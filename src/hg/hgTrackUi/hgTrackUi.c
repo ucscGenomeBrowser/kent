@@ -2405,12 +2405,6 @@ else if (tdbIsComposite(tdb))  // for the moment generalizing this to include ot
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
-else if (trackDbLocalSetting(tdb, "container"))
-    {
-    /* For the moment, be a composite... */
-    tdbMarkAsComposite(tdb);
-    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
-    }
 extraUiLinks(database,tdb);
 }
 
@@ -2428,6 +2422,12 @@ char setting[128];
 // NOTE: Currently only composite multi-view tracks because
 // reset relies upon all cart vars following naming convention:
 //   {track}.{varName}...  ( One exception supported: {track}_sel ).
+
+if (trackDbLocalSetting(tdb, "container"))
+    {
+    /* For the moment, be a composite... */
+    tdbMarkAsComposite(tdb);
+    }
 if(tdbIsComposite(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);

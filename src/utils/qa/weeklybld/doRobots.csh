@@ -38,6 +38,7 @@ if ( $err ) then
     set returnCode=1
 endif
 
+# NOTE QA asked to have this robot more or less permanently disabled.
 echo "disabled doSearchRobot.csh [${0}: `date`]"
 #./doSearchRobot.csh
 #set err = $status
