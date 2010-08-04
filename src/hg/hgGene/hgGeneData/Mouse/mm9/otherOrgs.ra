@@ -2,7 +2,7 @@ name human
 db hg19
 
 name zebrafish
-db danRer6
+db danRer4
 
 name drosophila
 db dm3

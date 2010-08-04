@@ -20,8 +20,9 @@ wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeGisDnaPet.ra \
-wgEncodeUwDgf.ra \
 wgEncodeUwTfbs.ra
+wgEncodeMapability.ra \
+wgEncodeUwDgf.ra 
 
 include ../../../../makefile.metaDb
 
