@@ -9204,7 +9204,7 @@ done > ucscToEnsemblV57.tab
 
 
 ############################################################################
-# dbSNP BUILD 131 (SNP131) (DONE 5/25/10 angie)
+# dbSNP BUILD 131 (SNP131) (DONE 5/25/10 angie - TWEAKED 8/4/10)
 # Originally done 4/15/10 -- updated 5/25 with corrected function codes from
 # dbSNP (b131_SNPContigLocusId_37_1.bcp.gz).
     # Set up build directory
@@ -9419,12 +9419,14 @@ done > ucscToEnsemblV57.tab
                   if (defined $prevId && $id == $prevId && $c == $prevC && $s == $prevS) { \
                     $prevFunc .= "$f," unless ($f == 8); \
                   } else { \
-                    print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if (defined $prevId); \
+                    if (defined $prevId) { \
+                      print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc); \
+                    } \
                     $prevFunc = ($f == 8) ? "" : "$f,"; \
                   } \
                   ($prevId, $prevC, $prevS, $prevE) = ($id, $c, $s, $e); \
                 } \
-                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n"' \
+                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc);' \
       > ucscFunc.txt
     wc -l ucscFunc.txt
 #10328697 ucscFunc.txt
@@ -9588,6 +9590,8 @@ EOF
     # Put in a link where one would expect to find the track build dir...
     ln -s /hive/data/outside/dbSNP/131/human /hive/data/genomes/hg19/bed/snp131
 
+#*** NOTE FOR NEXT TIME: ask cluster-admin to pack the snp131 table
+
     # Look at the breakdown of exception categories:
     cd /hive/data/outside/dbSNP/131/human
     cut -f 5 snp131Exceptions.bed | sort | uniq -c | sort -nr
@@ -9612,6 +9616,11 @@ EOF
     # Compared to snp130, nice to see fewer disfunctional locTypes (FlankMismatch*)
     # and singleClassQuadAllelic -- major increases in most others though.
     # Sent a few bug reports to dbSNP
+
+    # Tweaked 8/4/10 to correct missing-func (loophole fixed in perl that generates
+    # ucscFunc.txt above).
+    hgsql hg19 -e "update snp131 set func = 'unknown' where name = 'rs75946332' and func = '';"
+
 
 
 ############################################################################
