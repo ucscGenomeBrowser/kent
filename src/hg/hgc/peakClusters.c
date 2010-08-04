@@ -22,7 +22,8 @@
 #include "hgc.h"
 #include "encode/encodePeak.h"
 #include "expRecord.h"
-
+#include "bed6FloatScore.h"
+#include "txCluster.h"
 
 char *findGroupTagVal(struct trackDb *tdb, char *tag)
 /* Find value of given tag inside of subgroups field. */ 
@@ -273,6 +274,11 @@ int rowOffset = hOffsetPastBin(database, seqName, tdb->table);
 char **row;
 struct sqlResult *sr;
 char query[256];
+char *motifTable = NULL;
+#ifdef TXCLUSTER_MOTIFS_TABLE
+motifTable = TXCLUSTER_MOTIFS_TABLE;
+#endif
+
 safef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	tdb->table, item, seqName, start);
@@ -283,12 +289,71 @@ if (row != NULL)
     cluster = bedLoadN(row + rowOffset, 15);
 sqlFreeResult(&sr);
 
-
 if (cluster != NULL)
     {
+    struct dnaMotif *motif = NULL;
+    struct dnaSeq **seqs = NULL;
+    struct bed6FloatScore *hits = NULL;
+
+    if(motifTable != NULL && sqlTableExists(conn, motifTable))
+        {
+        struct sqlResult *sr;
+        int rowOffset;
+        char where[256];
+
+        motif = loadDnaMotif(item, "transRegCodeMotif");
+        safef(where, sizeof(where), "name = '%s'", item);
+        sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", cluster->chrom, cluster->chromStart,
+                         cluster->chromEnd, where, &rowOffset);
+        while ((row = sqlNextRow(sr)) != NULL)
+            {
+            struct bed6FloatScore *hit = NULL;
+            AllocVar(hit);
+            hit->chromStart = sqlUnsigned(row[rowOffset + 1]);
+            hit->chromEnd = sqlUnsigned(row[rowOffset + 2]);
+            hit->score = sqlFloat(row[rowOffset + 4]);
+            hit->strand[0] = row[rowOffset + 5][0];
+            slAddHead(&hits, hit);
+            }
+        sqlFreeResult(&sr);
+        }
+    
     printf("<B>Factor:</B> %s<BR>\n", cluster->name);
     printf("<B>Cluster Score (out of 1000):</B> %d<BR>\n", cluster->score);
+    if(motif != NULL && hits != NULL)
+        {
+        struct bed6FloatScore *hit = NULL;
+        int i;
+        seqs = needMem(sizeof(struct dnaSeq *) * slCount(hits));
+        for (hit = hits, i = 0; hit != NULL; hit = hit->next, i++)
+            {
+            char query[256];
+            float maxScore = -1;
+
+            safef(query, sizeof(query), "select max(score) from %s where name = '%s'", "wgEncodeRegTfbsClusteredMotifs", item);
+            sr = sqlGetResult(conn, query);
+            if ((row = sqlNextRow(sr)) != NULL)
+                {
+                if(!isEmpty(row[0]))
+                    {
+                    maxScore = sqlFloat(row[0]);
+                    }
+                }
+            sqlFreeResult(&sr);
+
+            struct dnaSeq *seq = hDnaFromSeq(database, seqName, hit->chromStart, hit->chromEnd, dnaLower);
+            if(hit->strand[0] == '-')
+                reverseComplement(seq->dna, seq->size);
+            seqs[i] = seq;
+            printf("<B>Motif Score #%d:</B>  %.2f (max: %.2f)<BR>\n", i + 1, hit->score, maxScore);
+            }
+        }
     printPos(cluster->chrom, cluster->chromStart, cluster->chromEnd, NULL, TRUE, NULL);
+
+    if(seqs != NULL)
+        {
+        motifMultipleHitsSection(seqs, slCount(hits), motif);
+        }
 
     /* Get list of tracks we'll look through for input. */
     char *inputTrackTable = trackDbRequiredSetting(tdb, "inputTrackTable");
@@ -330,7 +395,7 @@ if (cluster != NULL)
     char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
     printf("<B>Table of abbreviations for cells</B><BR>\n");
     safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
-    struct sqlResult *sr = sqlGetResult(conn, query);
+    sr = sqlGetResult(conn, query);
     webPrintLinkTableStart();
     webPrintLabelCell("Symbol");
     webPrintLabelCell("Cell Type");

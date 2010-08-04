@@ -28,6 +28,7 @@ mkdir -p $branch
 cd $branch
 echo "Checking out branch $BRANCHNN. [${0}: `date`]"
 git clone -q $GITSHAREDREPO kent
+chmod g+w kent
 cd kent
 git checkout -tb $branch origin/$branch
 set err = $status
