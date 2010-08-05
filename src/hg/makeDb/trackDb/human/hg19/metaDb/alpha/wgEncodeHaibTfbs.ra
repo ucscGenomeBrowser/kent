@@ -1766,6 +1766,30 @@ tableName wgEncodeHaibTfbsGm12878Bcl3Pcr1xPkRep2
 treatment None
 view Peaks
 
+metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1
+objType file
+antibody Control
+cell GM12878
+composite wgEncodeHaibTfbs
+controlId SL516
+dataType ChipSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-05
+dateUnrestricted 2011-05-05
+fileName wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL516
+labVersion SL516
+parentTable wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1
+project wgEncode
+protocol PCR1x
+replicate 1
+setType input
+subId 1978
+treatment None
+view Alignments
+
 metaObject wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep2
 objType file
 antibody Control
@@ -9515,4 +9539,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -1889480880
+# MAGIC: 2089601467
