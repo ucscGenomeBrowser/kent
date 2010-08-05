@@ -2467,7 +2467,7 @@ type Cell Line
 organism Mouse
 tissue Lung
 category Tissue
-description Fribroblast
+description Fibroblast
 vendorName UW lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -2783,8 +2783,8 @@ tissue Brain
 category Tissue
 description Whole Brain
 vendorName UW lab
-termId 
-termUrl 
+termId 7005
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
 protocol LICR:Thymus_Ren_protocol.pdf
