@@ -1622,6 +1622,7 @@ release alpha,beta
 wgEncode 1
 group regulation
 priority 1
+canPack On
 
     track wgEncodeRegTxn
     container multiWig

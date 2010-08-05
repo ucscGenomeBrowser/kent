@@ -2345,7 +2345,7 @@ else if (tdb->type != NULL)
     wordCount = chopLine(typeLine, words);
     if (wordCount > 0)
         {
-	    if (sameWord(words[0], "genePred"))
+	if (sameWord(words[0], "genePred"))
             {
             genePredCfgUi(cart,tdb,tdb->track,NULL,FALSE);
             }
@@ -2394,6 +2394,14 @@ else if (tdb->type != NULL)
             baseColorDrawOptDropDown(cart, tdb);
 	    indelShowOptions(cart, tdb);
             }
+	else if (sameWord(words[0], "factorSource"))
+	    {
+	    printf("<BR><B>Cell Abbreviations:</B><BR>\n");
+	    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+	    struct sqlConnection *conn = hAllocConn(database);
+	    hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
+	    hFreeConn(&conn);
+	    }
         }
         freeMem(typeLine);
     }

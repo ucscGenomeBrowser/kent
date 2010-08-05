@@ -1131,4 +1131,7 @@ void extraUiLinks(char *db,struct trackDb *tdb);
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 /*	check if normScore column is specified in trackDb as available */
 
+void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
+/* Print out table of abbreviations. */
+
 #endif /* HUI_H */
