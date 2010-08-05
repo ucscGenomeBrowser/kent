@@ -211,7 +211,8 @@ foreach spec (\$specList)
   set end   = `echo \$range | awk -F- '{print \$2;}'`
   if (! -e q.sizes) twoBitInfo \$file q.sizes
   set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
-  while (\$start < \$end)
+  set chunkEnd = '0'
+  while (\$chunkEnd < \$end)
     set chunkEnd = `expr \$start + $size`
     if (\$chunkEnd > \$end) set chunkEnd = \$end
     set chunkSize = `expr \$chunkEnd - \$start`
