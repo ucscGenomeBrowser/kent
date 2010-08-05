@@ -844,7 +844,7 @@ grant Gingeras
 lab CSHL
 localization cell
 project wgEncode
-rnaExtract total
+rnaExtract short
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalAln
 view Alignments
@@ -864,7 +864,7 @@ grant Gingeras
 lab CSHL
 localization cell
 project wgEncode
-rnaExtract total
+rnaExtract short
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
 view MinusRawSignal
@@ -884,7 +884,7 @@ grant Gingeras
 lab CSHL
 localization cell
 project wgEncode
-rnaExtract total
+rnaExtract short
 subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 view PlusRawSignal
