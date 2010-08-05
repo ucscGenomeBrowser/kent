@@ -37,7 +37,7 @@ my $dbHost = 'hgwdev';
 
 # This could be made into an option:
 # BLAT -fastMap will not work with query chunks greater than 5000
-my $splitSize = '5k';  
+my $splitSize = '4500';  
 my $splitOverlap = '500';  
 
 my $base = $0;
@@ -176,7 +176,6 @@ sub doAlign {
   # script for a single job: split query partition further into
   # $splitSize bites while building a .lft liftUp spec; blat; lift.
   my $size = $splitSize;
-  $size =~ s/k$/000/;
   my $fh = &HgAutomate::mustOpen(">$runDir/job.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
