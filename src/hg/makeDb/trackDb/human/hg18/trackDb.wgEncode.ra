@@ -1622,6 +1622,7 @@ release alpha,beta
 wgEncode 1
 group regulation
 priority 1
+canPack On
 
     track wgEncodeRegTxn
     container multiWig
@@ -3382,7 +3383,7 @@ subGroup3 ripAntibody RIP_Antibody Nov_69522=Nov_69522 Sig_P6246=Sig_P6246 SC_52
 subGroup4 ripTgtProtein RIP_Target_Protein PABPC1=PABPC1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 zCTL_T7Tag=T7Tag_Control
 dimensions dimensionX=cellType dimensionY=ripTgtProtein
 sortOrder cellType=+ ripTgtProtein=+
-controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=Antibody
+controlledVocabulary encode/cv.ra cellType=cell ripAntibody=ripAntibody ripTgtProtein=antibody
 dragAndDrop subTracks
 useScore 1
 noInherit on
@@ -3491,6 +3492,7 @@ priority 34.3
 #visibility pack
 color 12,12,120
 url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
+ensemblIdUrl http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 type genePred
 hgGene on
 hgsid on

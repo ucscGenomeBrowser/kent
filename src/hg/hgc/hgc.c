@@ -2319,10 +2319,15 @@ if(sameString(tdb->type,"genePred")
 && startsWith("ENCODE Gencode",tdb->longLabel)
 && startsWith("ENST",geneName))
     {
-#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
-    puts("<LI>\n");
-    printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
-    puts("</LI>\n");
+    char *ensemblIdUrl = trackDbSetting(tdb, "ensemblIdUrl");
+
+    if (ensemblIdUrl != NULL)
+// #define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
+        {
+        puts("<LI>\n");
+        printf("<a href=\"%s%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id", ensemblIdUrl,geneName);
+        puts("</LI>\n");
+        }
     }
 
 if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
@@ -21581,6 +21586,54 @@ else
 printTrackHtml(tdb);
 }
 
+void doRdmr(struct trackDb *tdb, char *item)
+/* details page for rdmr track */
+{
+struct sqlConnection *conn = hAllocConn(database);
+char query[512];
+struct sqlResult *sr;
+char **row;
+int ii;
+
+char *chrom,*chromStart,*chromEnd,*fibroblast,*iPS,*absArea,*gene,*dist2gene,*relation2gene,*dist2island,*relation2island,*fdr;
+
+genericHeader(tdb, item);
+
+safef(query, sizeof(query), 
+"select chrom,chromStart,chromEnd,fibroblast,iPS,absArea,gene,dist2gene,relation2gene,dist2island,relation2island,fdr from rdmrRaw where gene = '%s'",
+item);
+sr = sqlGetResult(conn, query);
+row = sqlNextRow(sr);
+
+    ii = 0;
+    chrom 	= row[ii];ii++;
+    chromStart 	= row[ii];ii++;
+    chromEnd	= row[ii];ii++;
+    fibroblast	= row[ii];ii++;
+    iPS		= row[ii];ii++;
+    absArea	= row[ii];ii++;
+    gene	= row[ii];ii++;
+    dist2gene	= row[ii];ii++;
+    relation2gene = row[ii];ii++;
+    dist2island	= row[ii];ii++;
+    relation2island = row[ii];ii++;
+    fdr		= row[ii];
+
+    printf("<B>Gene:</B> %s\n", gene);fflush(stdout);
+    printf("<BR><B>Genomic Position:</B> %s:%s-%s", chrom, chromStart, chromEnd);
+
+    printf("<BR><B>Fibroblast M value:</B> %s\n", fibroblast);
+    printf("<BR><B>iPS M value:</B> %s\n", iPS);
+    printf("<BR><B>Absolute area:</B> %s", absArea);
+    printf("<BR><B>Distance to gene:</B> %s\n", dist2gene);
+    printf("<BR><B>Relation to gene:</B> %s\n", relation2gene);
+    printf("<BR><B>Distance to CGI:</B> %s\n",  dist2island);
+    printf("<BR><B>Relation to CGI:</B> %s\n", relation2island);
+    printf("<BR><B>False discovery rate:</B> %s\n", fdr);
+sqlFreeResult(&sr);
+printTrackHtml(tdb);
+hFreeConn(&conn);
+}
 void doKomp(struct trackDb *tdb, char *item)
 /* KnockOut Mouse Project */
 {
@@ -23223,6 +23276,10 @@ else if (sameString("mammalPsg", table))
 else if (sameString("igtc", table))
     {
     doIgtc(tdb, item);
+    }
+else if (sameString("rdmr", table))
+    {
+    doRdmr(tdb, item);
     }
 else if (startsWith("komp", table) || startsWith("ikmc", table))
     {

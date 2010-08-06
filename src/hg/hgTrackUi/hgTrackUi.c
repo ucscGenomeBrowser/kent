@@ -2345,7 +2345,7 @@ else if (tdb->type != NULL)
     wordCount = chopLine(typeLine, words);
     if (wordCount > 0)
         {
-	    if (sameWord(words[0], "genePred"))
+	if (sameWord(words[0], "genePred"))
             {
             genePredCfgUi(cart,tdb,tdb->track,NULL,FALSE);
             }
@@ -2394,6 +2394,14 @@ else if (tdb->type != NULL)
             baseColorDrawOptDropDown(cart, tdb);
 	    indelShowOptions(cart, tdb);
             }
+	else if (sameWord(words[0], "factorSource"))
+	    {
+	    printf("<BR><B>Cell Abbreviations:</B><BR>\n");
+	    char *sourceTable = trackDbRequiredSetting(tdb, "sourceTable");
+	    struct sqlConnection *conn = hAllocConn(database);
+	    hPrintAbbreviationTable(conn, sourceTable, "Cell Type");
+	    hFreeConn(&conn);
+	    }
         }
         freeMem(typeLine);
     }
@@ -2405,17 +2413,11 @@ else if (tdbIsComposite(tdb))  // for the moment generalizing this to include ot
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
     }
-else if (trackDbLocalSetting(tdb, "container"))
-    {
-    /* For the moment, be a composite... */
-    tdbMarkAsComposite(tdb);
-    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
-    }
 extraUiLinks(database,tdb);
 }
 
 
-void trackUi(struct trackDb *tdb, struct customTrack *ct)
+void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
 jsIncludeFile("jquery.js", NULL);
@@ -2428,6 +2430,12 @@ char setting[128];
 // NOTE: Currently only composite multi-view tracks because
 // reset relies upon all cart vars following naming convention:
 //   {track}.{varName}...  ( One exception supported: {track}_sel ).
+
+if (trackDbLocalSetting(tdb, "container"))
+    {
+    /* For the moment, be a composite... */
+    tdbMarkAsComposite(tdb);
+    }
 if(tdbIsComposite(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
@@ -2442,7 +2450,10 @@ cartSaveSession(cart);
 #ifdef BIG_UI_NAV_LINKS
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 #else///ifndef BIG_UI_NAV_LINKS
-printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+if(ajax)
+    printf("<p><b>%s%s</b></p>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
+else
+    printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
 #endif///ndef BIG_UI_NAV_LINKS
 
 /* Print link for parent track */
@@ -2563,6 +2574,10 @@ else
 	hFreeConn(&conn);
 	}
     }
+
+if(ajax)
+    return;
+
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
@@ -2679,13 +2694,19 @@ if (super)
         }
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
-cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
-trackUi(tdb, ct);
-printf("<BR>\n");
-webEnd();
+if(cartOptionalString(cart, "ajax"))
+    // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
+    trackUi(tdb, ct, TRUE);
+else
+    {
+    cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
+    trackUi(tdb, ct, FALSE);
+    printf("<BR>\n");
+    webEnd();
+    }
 }
 
-char *excludeVars[] = { "submit", "Submit", "g", NULL,};
+char *excludeVars[] = { "submit", "Submit", "g", NULL, "ajax", NULL,};
 
 int main(int argc, char *argv[])
 /* Process command line. */

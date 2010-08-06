@@ -611,6 +611,20 @@ identifier wgEncodeGencodeClassesV3
     hg18.wgEncodeGencodeManualV3.name unique
     hg18.wgEncodeGencodePolyaV3.name unique
 
+identifier wgEncodeGencodeClassesV4
+"Link together Gencode gene model (Known) and class for May 2010 Data Version"
+    hg19.wgEncodeGencodeClassesV4.name
+    hg19.wgEncodeGencodeAutoV4.name unique
+    hg19.wgEncodeGencodeManualV4.name unique
+    hg19.wgEncodeGencodePolyaV4.name unique
+
+identifier wgEncodeGencodeClassesV3Hg19
+"Link together Gencode gene model (Known) and class for July 2009 Data Version"
+    hg19.wgEncodeGencodeClassesV3.name
+    hg19.wgEncodeGencodeAutoV3.name unique
+    hg19.wgEncodeGencodeManualV3.name unique
+    hg19.wgEncodeGencodePolyaV3.name unique
+
 identifier acemblyName dependency
 "Link together Acembly gene model structure and peptide."
     $hg,$mm.acembly.name
