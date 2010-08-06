@@ -23,6 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 #include "mdb.h"
+#include "web.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -6581,5 +6582,27 @@ if (differentWord(normScoreTest, "no"))
         normScoreAvailable = TRUE;
 
 return normScoreAvailable;
+}
+
+void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label)
+/* Print out table of abbreviations. */
+{
+char query[256];
+safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+webPrintLinkTableStart();
+webPrintLabelCell("Symbol");
+webPrintLabelCell(label);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    char *name = row[0];
+    char *description = row[1];
+    webPrintLinkCell(name);
+    webPrintLinkCell(description);
+    }
+sqlFreeResult(&sr);
+webPrintLinkTableEnd();
 }
 

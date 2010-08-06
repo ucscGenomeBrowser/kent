@@ -9204,7 +9204,7 @@ done > ucscToEnsemblV57.tab
 
 
 ############################################################################
-# dbSNP BUILD 131 (SNP131) (DONE 5/25/10 angie)
+# dbSNP BUILD 131 (SNP131) (DONE 5/25/10 angie - TWEAKED 8/4/10)
 # Originally done 4/15/10 -- updated 5/25 with corrected function codes from
 # dbSNP (b131_SNPContigLocusId_37_1.bcp.gz).
     # Set up build directory
@@ -9419,12 +9419,14 @@ done > ucscToEnsemblV57.tab
                   if (defined $prevId && $id == $prevId && $c == $prevC && $s == $prevS) { \
                     $prevFunc .= "$f," unless ($f == 8); \
                   } else { \
-                    print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if (defined $prevId); \
+                    if (defined $prevId) { \
+                      print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc); \
+                    } \
                     $prevFunc = ($f == 8) ? "" : "$f,"; \
                   } \
                   ($prevId, $prevC, $prevS, $prevE) = ($id, $c, $s, $e); \
                 } \
-                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n"' \
+                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc);' \
       > ucscFunc.txt
     wc -l ucscFunc.txt
 #10328697 ucscFunc.txt
@@ -9588,6 +9590,8 @@ EOF
     # Put in a link where one would expect to find the track build dir...
     ln -s /hive/data/outside/dbSNP/131/human /hive/data/genomes/hg19/bed/snp131
 
+#*** NOTE FOR NEXT TIME: ask cluster-admin to pack the snp131 table
+
     # Look at the breakdown of exception categories:
     cd /hive/data/outside/dbSNP/131/human
     cut -f 5 snp131Exceptions.bed | sort | uniq -c | sort -nr
@@ -9612,6 +9616,11 @@ EOF
     # Compared to snp130, nice to see fewer disfunctional locTypes (FlankMismatch*)
     # and singleClassQuadAllelic -- major increases in most others though.
     # Sent a few bug reports to dbSNP
+
+    # Tweaked 8/4/10 to correct missing-func (loophole fixed in perl that generates
+    # ucscFunc.txt above).
+    hgsql hg19 -e "update snp131 set func = 'unknown' where name = 'rs75946332' and func = '';"
+
 
 
 ############################################################################
@@ -11025,4 +11034,58 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
 	| sed -e "s/ck_/${f}_/g" >> pep/genscanPep.pep
 	done
     hgPepPred hg19 generic genscanPep pep/genscanPep.pep
+
+################################################################
+# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (working 2010-08-03 - Chin)
+# Note from Andy: All primary data files were lost, The table
+# has all of the original data. 
+# The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should 
+# still be valid.  The hgFixed table sestanBrainAtlasExps should be ok.
+# So it's just a matter of getting the hg18.sestanBrainAtlas table in
+#  hg19 coordinates.
+
+    mkdir  /hive/data/genomes/hg19/bed/yaleMicroarrays
+    cd  /hive/data/genomes/hg19/bed/yaleMicroarrays
+    cp  /hive/data/genomes/hg18/bed/yaleMicroarrays/sestanBrainAtlas.bed \
+           sestanBrainAtlasHg18.bed
+    # In the hg18, thickStart is off by 1, fix it
+    # hgsql -e " select thickStart-chromStart from sestanBrainAtlas;" hg18 |
+    #   sort | uniq
+    # 1
+    cat sestanBrainAtlasHg18.bed | awk '{print  $1,$2,$3,$4,$5,$6,$7-1,$8,$9,$10,$11,$12,$13,$14,$15 }' >  sestanBrainAtlasHg18Fixed.bed
+
+
+    # use liftOver to convert the hg18 coordinates to hg19 directly.
+    liftOver sestanBrainAtlasHg18Fixed.bed -bedPlus=8 \
+      /hive/data/genomes/hg18/bed/liftOver10K/hg18ToHg19.over.chain.gz \
+        sestanBrainAtlasHg19.bed unMapped
+
+    # Check the result of liftOver:
+    wc -l sestanBrainAtlasHg1*.bed
+    # 877877 sestanBrainAtlasHg18.bed
+    # 877469 sestanBrainAtlasHg19.bed
+    cat unMapped | awk ' /^chr/ {print $1}' | wc -l       
+    408
+    cat unMapped | awk ' /^#/|| /^chr/ {print $1, $2, $3,_}' \
+       > summaryUnMapped.txt
+
+    # Fix up the result, so that $11(blockSizes) = $8(thickEnd)  - $7
+    # (thickStart) without the fix, the checkTableCoors will complain.
+     cat sestanBrainAtlasHg19.bed | awk '{print  $1,$2,$3,$4,$5,$6,$7,$8,$9, \
+        $10, $8-$7, $12,$13,$14,$15 }' >  sestanBrainAtlasHg19Fixed.bed
+
+
+    # load the table
+    hgLoadBed hg19 sestanBrainAtlas sestanBrainAtlasHg19Fixed.bed
+    # Reading sestanBrainAtlasHg19.bed
+    # Loaded 877469 elements of size 15
+    # Sorted
+    # Creating table definition for sestanBrainAtlas
+    # Saving bed.tab
+    # Loading hg19
+
+    # track stuff done from hg18 days: 
+    # kent/src/hg/makeDb/trackDb/human/sestanBrainAtlas.html
+    # kent/src/hg/makeDb/trackDb/human/trackDb.ra
+
 #############################################################################

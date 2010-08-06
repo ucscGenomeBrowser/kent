@@ -2467,7 +2467,7 @@ type Cell Line
 organism Mouse
 tissue Lung
 category Tissue
-description Fribroblast
+description Fibroblast
 vendorName UW lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -2783,8 +2783,8 @@ tissue Brain
 category Tissue
 description Whole Brain
 vendorName UW lab
-termId 
-termUrl 
+termId 7005
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
 protocol LICR:Thymus_Ren_protocol.pdf
@@ -3280,7 +3280,7 @@ type Antibody
 targetDescription GATA binding protein 1 (globin transcription factor 1)
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId
+vendorId   ;
 orderUrl
 targetId GeneCard:GC0XP048529
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=GC0XP048529
@@ -3293,7 +3293,7 @@ type Antibody
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId
+vendorId   ;
 orderUrl
 targetId GeneCard:GC03M129680
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
@@ -3780,7 +3780,7 @@ type Antibody
 targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId
+vendorId  ;
 orderUrl
 lab Struhl
 targetId GeneCard:GC06P041148
@@ -3793,7 +3793,7 @@ type Antibody
 targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId
+vendorId  ;
 orderUrl
 lab Struhl
 targetId GeneCard:GC12M103013
@@ -3829,8 +3829,8 @@ tag NRSF
 type Antibody
 antibodyDescription Mouse monoclonal
 targetDescription Neuron-restrictive silencer transcription factor
-vendorName David Anderson, Caltech (Made by Protein Expression Center: pec@caltech.edu)
-vendorId
+vendorName David Anderson, Caltech 
+vendorId  (Made by Protein Expression Center: pec@caltech.edu)
 orderUrl
 lab Myers / Wold
 lots 20070905JV
@@ -4177,7 +4177,7 @@ type Antibody
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
-vendorId
+vendorId   ;
 orderUrl
 lab Farnham
 targetId GeneCard:GC17P027289
@@ -4306,6 +4306,7 @@ type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 vendorName Donated by Dr. J.D.Engel, University of Michigan
+vendorId  ;
 lab Farnham
 targetId GeneCard:GC03P014964
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
@@ -4423,6 +4424,7 @@ antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic pept
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
 orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 vendorName Lazlo Tora, Institut de Génétique et de Biologie Moléculaire et Cellulaire
+vendorId  ;
 lab Struhl
 targetId GeneCard:GC01M077742
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
@@ -5669,3 +5671,351 @@ geo AB_SOLiD System 2.0
 type seqPlatform
 description High-throughput sequencing
 
+
+#Project CV
+#
+#
+#
+
+term Broad
+tag Broad
+type project
+projectNameFull Broad Institute
+organism Human
+labName Broad
+pi Bernstein
+piFull Bradley Bernstein
+grant Bernstein
+
+term Duke
+tag Duke
+type project
+projectNameFull Duke University
+organism Human
+labName Duke
+pi Crawford
+piFull Greg Crawford
+grant Crawford
+
+term Caltech    
+tag Caltech    
+type project
+projectNameFull California Institute of Technology (Wold Lab)
+organism Human
+labName Caltech
+pi Wold
+piFull Barbara Wold
+grant Myers
+
+term HudsonAlpha
+tag HudsomAlpha
+type project
+project HAIB
+projectNameFull HudsonAlpha Institute for Biotechnology
+organism Human
+labName HudsonAlpha
+pi Myers
+piFull Richard Myers
+grant Myers
+
+
+
+term NHGRI-Elnitski
+tag NHGRI-Elnitski
+type project
+projectNameFull National Human Genome Research Institute Elnitski
+organism Human
+labName NHGRI-Elnitski
+pi Elnitski
+piFull Laura Elnitski
+grant Elnitski
+
+term CSHL
+tag CSHL
+type project
+project Transcriptome
+projectNameFull Transcriptome Cold Spring Harbor Laboratory
+organism Human
+labName Cshl
+pi Gingeras
+piFull Thomas Gingeras
+grant Gingeras
+
+term GIS
+tag  GIS
+type project
+project Transcriptome
+projectNameFull Transcriptome  Genome Institute of Singapore
+organism Human
+labName GIS
+pi Ruan
+piFull Yijun Ruan
+grant Gingeras
+
+term Helicos       
+tag Helicos      
+type project
+project Transcriptome
+projectNameFull Transcriptome Helicos BioScience Corporation
+organism Human
+labName Helicos
+pi Kapranov
+piFull Philipp Kapranov
+grant Gingeras
+
+
+#synonym
+term Duke
+tag Duke
+type project
+projectNameFull Duke University
+organism Human
+labName UNC
+pi Lieb
+piFull Jason Lieb
+grant Crawford
+
+term Duke 
+tag Duke
+type project
+projectNameFull Duke University
+organism Human
+labName UT-A
+pi Iyer
+piFull Tara Iyer
+grant Crawford
+
+term Genecode
+tag Genecode
+type project
+projectNameFull Genecode Sanger Institute
+organism Human
+labName Sanger
+pi Hubbard
+piFull Tim Hubbard
+grant Hubbard
+
+term NHGRI-Margulies
+tag NHGRI-Marigulies
+type project
+projectNameFull National Human Genome Research Institute Margulies
+organism Human
+labName Margulies
+pi Margulies
+piFull Elliott Margulies
+grant Margulies
+
+term SUNY
+tag SUNY
+type project
+projectNameFull State University of New York at Albany
+organism Human
+labName SunyAlbany
+pi Tenenbaum
+piFull Scott Tenebaum
+grant Tenenbaum
+
+term Transcriptome - Affy
+tag Transcriptome - Affy
+type project
+projectNameFull Transcriptome Affymetrix
+organism Human
+labName Affy
+pi Gingeras
+piFull Thomas Gingeras
+grant Gingeras
+
+term Riken
+tag  Riken
+type project
+projectNameFull Transcriptome Riken Lab
+organism Human
+labName Riken
+pi Carninci
+piFull Piero Carninci
+grant Gingeras
+
+term UMass-Dekker
+tag UMass-Dekker
+type project
+projectNameFull University of Massachusetts Amherst Dekker
+organism Human
+labName UMass-Dekker
+pi Dekker
+piFull Job Dekker
+grant Dekker
+
+term UMass-Weng
+tag UMass-Weng
+type project
+projectNameFull University of Massachusetts Amherst Weng Lab 
+organism Human
+labName UMassHA
+pi Weng
+piFull Zhiping Weng
+grant Weng
+
+term UW
+tag UW
+type project
+projectNameFull University of Washington
+organism Human
+labName Uw
+pi Stam
+piFull George Stamatoyannopoulos??
+grant Stam
+
+term SYDH-Stanford
+tag  SYDH-Stanford
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName Stanford
+pi Snyder
+piFull Michael Snyder
+grant Snyder
+
+term SYDH-Yale
+tag  SYDH-Yale
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName Yale
+pi Snyder
+piFull Michael Snyder
+grant Snyder
+
+term SYDH-Harvard 
+tag  SYDH-Harvard 
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName Harvard
+pi Weissman
+piFull Sherman Weissman
+grant Snyder
+
+term SYDH - UCD
+tag SYDH - UCD 
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName UCD
+pi Farnham
+piFull Peggy Farnham
+grant Snyder
+
+
+
+
+
+
+
+# Mouse and ARRA grants
+
+term LICR-m
+tag LICR 
+type project
+projectNameFull Ludwig Institue for Cancer Research
+organism Mouse
+labName LICR
+pi Ren
+piFull Bing Ren
+grant Ren
+
+
+term PSU-m
+tag PSU 
+type project
+projectNameFull Penn State University
+organism Mouse
+labName Caltech-Mouse
+pi Wold
+piFull Barbara Wold
+grant Hardison
+
+
+
+term PSU-m
+tag  PSU
+type project
+projectNameFull Penn State University
+organism Mouse
+labName UMass-Mouse
+pi Dekker
+piFull Job Dekker
+grant Hardison
+
+
+
+
+term PSU-m
+tag PSU 
+type project
+projectNameFull Penn State University 
+organism Mouse
+labName Duke-Mouse
+pi Crawford
+piFull Greg Crawford
+grant Hardison
+
+term Caltech-m
+tag Caltech-m
+type project
+projectNameFull Caltech  
+organism Mouse
+labName Caltech-mouse
+pi Wold
+piFull Barbara Wold
+grant Hardison
+
+term UChicago-m
+tag UChicago 
+type project
+projectNameFull University of Chicago 
+organism Mouse
+labName UChicago
+pi White
+piFull Kevin White
+grant White
+
+term UNC-m
+tag UNC 
+type project
+projectNameFull University of North Carolina
+organism Mouse
+labName UNC-Giddings
+pi Giddings
+piFull Morgan Giddings
+grant Giddings
+
+term UW-m
+tag UW 
+type project
+projectNameFull University of Washington 
+organism Mouse
+labName UW-Mouse
+pi Stam
+piFull George Stamatoyannopoulos??
+grant Stam
+
+term BU
+tag BU 
+type project
+projectNameFull Boston University
+organism human
+labName BU
+pi Tullius
+piFull Thomas Tullius
+grant Tullius
+
+# Tech development
+term GIS
+tag GIS 
+type project
+projectNameFull Gene Identification Signature 
+organism human
+labName GIS-Chia
+pi Ruan
+piFull Yijun Ruan
+grant Ruan
