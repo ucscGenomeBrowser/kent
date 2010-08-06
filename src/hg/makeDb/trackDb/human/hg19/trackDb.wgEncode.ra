@@ -22,8 +22,8 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
 include trackDb.wgEncodeCshlLongRnaSeq.ra
-include trackDb.wgEncodeCaltechRnaSeq.ra
 include wgEncodeUwTfbs.ra
+include wgEncodeCaltechRnaSeq.ra
 
 track wgEncodeMapability
 compositeTrack on
@@ -243,6 +243,8 @@ color 12,12,120
 url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
 yalePseudoAssoc wgEncodeSangerGencodeYalePseudoV4
 yaleUrl http://tables.pseudogene.org/
+ensemblIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
+#ensemblIdUrl http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 type genePred
 hgGene on
 hgsid on

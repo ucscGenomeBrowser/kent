@@ -9,6 +9,7 @@
 #include "hdb.h"
 #include "hgTracks.h"
 #include "expRecord.h"
+#include "txCluster.h"
 
 static struct bed *loadOne(char **row)
 /* Load up factorSource from array of strings. */
@@ -37,11 +38,11 @@ static void factorSourceDrawItemAt(struct track *track, void *item,
 int i, rowOffset;
 struct bed *bed = item;
 double maxScore = 0.0;
-struct sqlConnection *conn = hAllocConn(database);
-struct sqlResult *sr;
-char where[256];
-char **row;
-char *motifTable = "wgEncodeRegTfbsClusteredMotifs";
+char *motifTable = NULL;
+#ifdef TXCLUSTER_MOTIFS_TABLE
+motifTable = TXCLUSTER_MOTIFS_TABLE;
+#endif
+
 for (i=0; i<track->sourceCount; ++i)
     {
     float score = bed->expScores[i];
@@ -60,28 +61,35 @@ if (w < 1)
     w = 1;
 hvGfxBox(hvg, x1, y, w, heightPer, color);
 
-// Draw region with highest motif score
-
-if(sqlTableExists(conn, motifTable))
+if(motifTable != NULL)
     {
-    safef(where, sizeof(where), "name = '%s'", bed->name);
-    sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
-                     bed->chromEnd, where, &rowOffset);
-    while((row = sqlNextRow(sr)) != NULL)
+    // Draw region with highest motif score
+    struct sqlConnection *conn = hAllocConn(database);
+    if(sqlTableExists(conn, motifTable))
         {
-        Color color = hvGfxFindColorIx(hvg, 28, 226, 40);
-        int start = sqlUnsigned(row[rowOffset+1]);
-        int end = sqlUnsigned(row[rowOffset+2]);
-        int x1 = round((double)((int)start-winStart)*scale) + xOff;
-        int x2 = round((double)((int)end-winStart)*scale) + xOff;
-        int w = x2-x1;
-        if (w < 1)
-            w = 1;
-        hvGfxBox(hvg, x1, y, w, heightPer, color);
+        struct sqlResult *sr;
+        char where[256];
+        char **row;
+
+        safef(where, sizeof(where), "name = '%s'", bed->name);
+        sr = hRangeQuery(conn, "wgEncodeRegTfbsClusteredMotifs", bed->chrom, bed->chromStart,
+                         bed->chromEnd, where, &rowOffset);
+        while((row = sqlNextRow(sr)) != NULL)
+            {
+            Color color = hvGfxFindColorIx(hvg, 28, 226, 40);
+            int start = sqlUnsigned(row[rowOffset+1]);
+            int end = sqlUnsigned(row[rowOffset+2]);
+            int x1 = round((double)((int)start-winStart)*scale) + xOff;
+            int x2 = round((double)((int)end-winStart)*scale) + xOff;
+            int w = x2-x1;
+            if (w < 1)
+                w = 1;
+            hvGfxBox(hvg, x1, y, w, heightPer, color);
+            }
+        sqlFreeResult(&sr);
         }
-    sqlFreeResult(&sr);
+    hFreeConn(&conn);
     }
-hFreeConn(&conn);
 
 /* Draw text to the right */
 if (vis == tvFull || vis == tvPack)
