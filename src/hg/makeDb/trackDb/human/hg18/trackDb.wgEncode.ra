@@ -3492,6 +3492,7 @@ priority 34.3
 #visibility pack
 color 12,12,120
 url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
+ensemblIdUrl http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 type genePred
 hgGene on
 hgsid on
