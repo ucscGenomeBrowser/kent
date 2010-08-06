@@ -10769,7 +10769,7 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 	| pslToBed stdin hg19ToHg18.10K.bed
 
 ##############################################################################
-# UNIGENE/SAGE TRACK (DONE - 2010-07-19 Fan)
+# UNIGENE/SAGE TRACK (RE-BUILT - 2010-08-06 Fan)
 
 # Create the uniGene alignments
 
@@ -10778,22 +10778,22 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
     # /cluster/home/angie/unigeneVers/unigene.csh .
 
     ssh hgwdev
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100719
-    cd /hive/data/genomes/hg19/bed/uniGene/100719
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806
+    cd /hive/data/genomes/hg19/bed/uniGene/100806
 
-    set Version = 224
+    set Version = 225
 
     zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
     sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
 
     ssh pk
-    set Version = 224
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
-    cd /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+    set Version = 225
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
 
     ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
     ls -1S \
-    /hive/data/genomes/hg19/bed/uniGene/100719/Hs.seq.uniq.simpleHeader.fa \
+    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
     
     cat << '_EOF_' > template.sub
@@ -10810,37 +10810,38 @@ ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(roo
     para check
     para push
 
-    #Completed: 93 of 93 jobs
-    #CPU time in finished jobs:      61718s    1028.63m    17.14h    0.71d  0.002 y
-    #IO & Wait Time:                  1049s      17.48m     0.29h    0.01d  0.000 y
-    #Average job time:                 675s      11.25m     0.19h    0.01d
-    #Longest finished job:            4611s      76.85m     1.28h    0.05d
-    #Submission to last job:          5295s      88.25m     1.47h    0.06d
-    #Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # Completed: 93 of 93 jobs
+    # CPU time in finished jobs:      61305s    1021.74m    17.03h    0.71d  0.002 y
+    # IO & Wait Time:                  1117s      18.62m     0.31h    0.01d  0.000 y
+    # Average job time:                 671s      11.19m     0.19h    0.01d
+    # Longest finished job:            4574s      76.23m     1.27h    0.05d
+    # Submission to last job:          4709s      78.48m     1.31h    0.05d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
     pslSort dirs raw.psl tmp psl >& pslSort.log
     cat raw.psl|\
     pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
       stdin hg19.uniGene.pslReps.psl /dev/null
-    #Processed 799148 alignments
+    #Processed 800002 alignments
     
     gzip raw.psl
 
     ssh hgwdev
-    cd /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
 
     hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
 
     mkdir -p /gbdb/hg19/uniGene
     cd /gbdb/hg19/uniGene
 
-    ln -s
-    /hive/data/genomes/hg19/bed/uniGene/100719/Hs.seq.uniq.simpleHeader.fa \
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
     Hs.seq.uniq.simpleHeader.fa
 
 # load the sequence
 
-    hgLoadSeq hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
 
 #############################################################################
 # GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)

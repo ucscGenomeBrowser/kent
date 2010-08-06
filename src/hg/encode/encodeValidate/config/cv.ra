@@ -2364,7 +2364,7 @@ termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 153,38,0
 sex U
-protocol LICR:BoneMarrow_Ren_protocol.pdf
+#protocol LICR:BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
 tag Cerebellum
@@ -2378,7 +2378,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-protocol LICR:Cerebellum_Ren_protocol.pdf
+#protocol LICR:Cerebellum_Ren_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -2410,7 +2410,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
+#protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term ES-CJ7
 tag ESCJ7
@@ -2445,7 +2445,7 @@ termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
 sex U
-protocol LICR:Colon_Ren_protocol.pdf
+#protocol LICR:Colon_Ren_protocol.pdf
 
 term Cortex
 tag Cortex
@@ -2459,7 +2459,7 @@ termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
 sex U
-protocol LICR:Cortex_Ren_protocol.pdf
+#protocol LICR:Cortex_Ren_protocol.pdf
 
 term Fibroblast
 tag Fibroblast
@@ -2524,7 +2524,7 @@ termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-protocol LICR:Heart_Ren_protocol.pdf
+#protocol LICR:Heart_Ren_protocol.pdf
 
 term Kidney
 tag Kidney
@@ -2567,7 +2567,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-protocol LICR:Liver_Ren_protocol.pdf
+#protocol LICR:Liver_Ren_protocol.pdf
 
 term Lung
 tag Lung
@@ -2581,7 +2581,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol LICR:Lung_Ren_protocol.pdf
+#protocol LICR:Lung_Ren_protocol.pdf
 
 
 term MEF
@@ -2596,7 +2596,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-protocol LICR:MEF_Ren_protocol.pdf
+#protocol LICR:MEF_Ren_protocol.pdf
 
 #Shortened Tem
 term Megakaryo
@@ -2673,7 +2673,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-protocol LICR:OlfactoryBulb_Ren_protocol.pdf
+#protocol LICR:OlfactoryBulb_Ren_protocol.pdf
 
 term Pancreas
 tag Pancreas
@@ -2687,7 +2687,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-protocol LICR:Pancreas_Ren_protocol.pdf
+#protocol LICR:Pancreas_Ren_protocol.pdf
 
 term Placenta
 tag Placenta
@@ -2717,7 +2717,7 @@ termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
 sex U
-protocol LICR:SmallIntestine_Ren_protocol.pdf
+#protocol LICR:SmallIntestine_Ren_protocol.pdf
 
 term Spleen
 tag Spleen
@@ -2731,7 +2731,7 @@ termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
 sex U
-protocol LICR:Spleen_Ren_protocol.pdf
+#protocol LICR:Spleen_Ren_protocol.pdf
 
 term Testis
 tag Testis
@@ -2745,7 +2745,7 @@ termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
 sex U
-protocol LICR:Testis_Ren_protocol.pdf
+#protocol LICR:Testis_Ren_protocol.pdf
 
 term Thymus
 tag Thymus
@@ -2759,7 +2759,7 @@ termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
-protocol LICR:Thymus_Ren_protocol.pdf
+#protocol LICR:Thymus_Ren_protocol.pdf
 
 term T-Naive
 tag TNaive
@@ -2787,7 +2787,7 @@ termId 7005
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
 color 153,38,0
 sex U
-protocol LICR:Thymus_Ren_protocol.pdf
+protocol 
 
 
 
@@ -5407,13 +5407,19 @@ type restrictionEnzyme
 
 
 ### dataType
+### term:  Ideally this should be the term used by NHGRI for the data type
+### tag:   This is the camel case convention that we use in our file names
+### label: This will be used for human display and should also match NHGRI with any further information
+
 term ChIP-seq
-tag chipseq
+tag ChipSeq
 type dataType
+label ChIP-seq
 
 term Exon-array
-tag affyexonarray
+tag AffyExonArray
 type dataType
+label Affy_Exon_Array
 
 term BIP
 tag bip
@@ -5422,6 +5428,7 @@ type dataType
 term CAGE
 tag cage
 type dataType
+label CAGE
 
 term CNV
 tag cnv
@@ -5432,15 +5439,17 @@ tag dgf
 type dataType
 
 term DNA-PET
-tag dnapet
+tag DnaPet
 type dataType
+label DNA-PET
 
 term DNase-seq
-tag dnaseseq
+tag DnaseSeq
 type dataType
+label DNase-seq
 
 term FAIRE-seq
-tag faireseq
+tag FaireSeq
 type dataType
 
 term Genes
@@ -5476,20 +5485,23 @@ tag nre
 type dataType
 
 term PET
-tag pet
+tag RnaPet
 type dataType
+label RNA-PET
 
 term RNA-chip
 tag rnachip
 type dataType
 
 term RNA-seq
-tag rnaseq
+tag RnaSeq
 type dataType
+label RNA-seq
 
 term shRNA-seq
 tag shortrnaseq
 type dataType
+label RNA-seq
 
 term TFBS-valid
 tag tfbsvalid
@@ -5497,9 +5509,9 @@ type dataType
 label TfbsValid
 
 term RIP-chip
-tag rnagenechip
+tag  RipChip
 type dataType
-
+label RIP-chip
 
 ### version
 
