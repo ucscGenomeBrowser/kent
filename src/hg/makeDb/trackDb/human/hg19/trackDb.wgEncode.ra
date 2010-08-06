@@ -239,8 +239,8 @@ dragAndDrop subTracks
 priority 34.3
 #visibility pack
 color 12,12,120
-url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
-yalePseudoAssoc wgEncodeSangerGencodeYalePseudoV4
+#url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
+yalePseudoAssoc wgEncodeGencodeYalePseudoV4
 yaleUrl http://tables.pseudogene.org/
 ensemblIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 #ensemblIdUrl http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
@@ -326,7 +326,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     priority 4
     metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V4c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV4 fileName=wgEncodeGencodePolyaV4.gtf.gz
 
-    track wgEncodeGencode2wayConsPseudo
+    track wgEncodeGencode2wayConsPseudoV4
     subTrack wgEncodeGencode off
     shortLabel Gencode Pseudo
     longLabel ENCODE Gencode 2way Pseudogenes
