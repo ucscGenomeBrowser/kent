@@ -40,7 +40,7 @@ my $clusterHub = 'pk';
 my $distrHost = 'pk';
 my $dbHost = 'hgwdev';
 my $workhorse = 'least loaded';
-my $blastPath = '/scratch/data/blast229';
+my $blastPath = '/scratch/data/blast';
 my $defaultVerbose = 1;
 
 sub usage {
