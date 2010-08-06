@@ -5407,13 +5407,19 @@ type restrictionEnzyme
 
 
 ### dataType
+### term:  Ideally this should be the term used by NHGRI for the data type
+### tag:   This is the camel case convention that we use in our file names
+### label: This will be used for human display and should also match NHGRI with any further information
+
 term ChIP-seq
-tag chipseq
+tag ChipSeq
 type dataType
+label ChIP-seq
 
 term Exon-array
-tag affyexonarray
+tag AffyExonArray
 type dataType
+label Affy_Exon_Array
 
 term BIP
 tag bip
@@ -5422,6 +5428,7 @@ type dataType
 term CAGE
 tag cage
 type dataType
+label CAGE
 
 term CNV
 tag cnv
@@ -5432,15 +5439,17 @@ tag dgf
 type dataType
 
 term DNA-PET
-tag dnapet
+tag DnaPet
 type dataType
+label DNA-PET
 
 term DNase-seq
-tag dnaseseq
+tag DnaseSeq
 type dataType
+label DNase-seq
 
 term FAIRE-seq
-tag faireseq
+tag FaireSeq
 type dataType
 
 term Genes
@@ -5476,20 +5485,23 @@ tag nre
 type dataType
 
 term PET
-tag pet
+tag RnaPet
 type dataType
+label RNA-PET
 
 term RNA-chip
 tag rnachip
 type dataType
 
 term RNA-seq
-tag rnaseq
+tag RnaSeq
 type dataType
+label RNA-seq
 
 term shRNA-seq
 tag shortrnaseq
 type dataType
+label RNA-seq
 
 term TFBS-valid
 tag tfbsvalid
@@ -5497,9 +5509,9 @@ type dataType
 label TfbsValid
 
 term RIP-chip
-tag rnagenechip
+tag  RipChip
 type dataType
-
+label RIP-chip
 
 ### version
 

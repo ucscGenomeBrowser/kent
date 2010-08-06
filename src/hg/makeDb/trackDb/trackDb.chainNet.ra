@@ -2952,6 +2952,7 @@ html chainNet
         html chainNet
 
 track chainNetFelCat4
+release alpha, beta
 compositeTrack on
 shortLabel $o_db Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments
@@ -3003,6 +3004,7 @@ html chainNet
         html chainNet
 
 track chainNetFelCatV17e
+release alpha
 compositeTrack on
 shortLabel $o_db Chain/Net
 longLabel $o_Organism ($o_date), Chain and Net Alignments

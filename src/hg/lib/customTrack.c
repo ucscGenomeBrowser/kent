@@ -559,6 +559,7 @@ for (track = trackList; track != NULL; track = track->next)
         track->maxChromName = hGetMinIndexLength(genomeDb); /* for the loaders */
         wigLoaderEncoding(track, track->wigAscii, ctDbUseAll());
         ctAddToSettings(track, "tdbType", track->tdb->type);
+        ctAddToSettings(track, "wibFile", track->wibFile);
         }
 
     /* handle track description */
