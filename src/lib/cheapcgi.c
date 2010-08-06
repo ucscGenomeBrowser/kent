@@ -150,19 +150,23 @@ if (clientBrowser == btUnknown)
             }
 
         // Determine the OS
-        if ((ptr = stringIn("(Windows",userAgent)) != NULL)
+        if ((ptr = stringIn("Windows",userAgent)) != NULL)
             {
             clientOsType = osWindows;
             ptr += strlen("Windows ");
             clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
-        else if (stringIn("Linux",userAgent) || stringIn("(X11)",userAgent))
+        else if ((ptr = stringIn("Linux",userAgent)) != NULL)
             {
             clientOsType = osLinux;
+            ptr += strlen("Linux ");
+            clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
-        else if (stringIn("Mac",userAgent))
+        else if ((ptr = stringIn("Mac ",userAgent)) != NULL)
             {
             clientOsType = osMac;
+            ptr += strlen("Mac ");
+            clientOsExtra = cloneFirstWordByDelimiter(ptr,';');
             }
         else
             {

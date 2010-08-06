@@ -1518,14 +1518,16 @@ else if(slice->link != NULL)
         hPrintf("  <A HREF='%s'",slice->link);
     if (slice->title != NULL)
         {
-        char *newLine = " &#x0A;";
-        if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-            newLine = " - "; // FF does not support newline code!
-
         if (imgTrack->reorderable && sliceType == stButton)
-            hPrintf(" TITLE='Click for:%s%s%s(drag to reorder)'", newLine,htmlEncode(slice->title),newLine );
+            {
+            char *newLine = " &#x0A;";
+            if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
+                newLine = " - "; // FF does not support newline code!
+            hPrintf(" TITLE='Click for:%s%s%s(drag to reorder%s)'", newLine,htmlEncode(slice->title),
+                    newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+            }
         else
-            hPrintf(" TITLE='Click for:%s%s'", newLine,htmlEncode(slice->title) );
+            hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
         }
     hPrintf(">\n" );
     }
@@ -1560,7 +1562,7 @@ jsIncludeFile("jquery.tablednd.js", NULL);
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
 #ifdef IMAGEv2_DRAG_REORDER
-hPrintf(".trDrag {opacity:0.4; padding:1px; background-color:red;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
+hPrintf(".trDrag {background-color:#ccFFcc;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
 hPrintf(".dragHandle {cursor: s-resize;}\n");
 #endif//def IMAGEv2_DRAG_REORDER
 #ifdef FLAT_TRACK_LIST
@@ -1633,13 +1635,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
-            {
-            char *newLine = " &#x0A;";
-            if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-                newLine = " - "; // FF does not support!  Use "&#124;" for '|' instead
-
-            hPrintf(" <TD id='td_%s' class='dragHandle' title='Drag to reorder:%s%s'>\n",name,newLine,htmlEncode(imgTrack->tdb->longLabel));
-            }
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='Drag to reorder: &#x0A;%s'>\n",name,htmlEncode(imgTrack->tdb->longLabel));
         else
             hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);

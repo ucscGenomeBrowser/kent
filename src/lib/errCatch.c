@@ -9,7 +9,7 @@
  *     doFlakyStuff();
  * errCatchEnd(errCatch);
  * if (errCatch->gotError)
- *     warn(errCatch->message->string);
+ *     warn("%s", errCatch->message->string);
  * errCatchFree(&errCatch); 
  * cleanupFlakyStuff();
  */

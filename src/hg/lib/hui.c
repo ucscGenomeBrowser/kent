@@ -23,6 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 #include "mdb.h"
+#include "web.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -69,6 +70,22 @@ boolean makeDownloadsLink(char *database, struct trackDb *tdb)
 return makeNamedDownloadsLink(database, tdb,"Downloads");
 }
 
+#ifdef BIG_UI_NAV_LINKS
+void makeTopLink(struct trackDb *tdb)
+/* Link to top of UI page */
+{
+if (trackDbSetting(tdb, "dimensions"))
+    {
+    char *upArrow = "&uArr;";
+    enum browserType browser = cgiBrowser();
+    if (browser == btIE || browser == btFF)
+        upArrow = "&uarr;";
+    // Note: the nested spans are so that javascript can determine position and selectively display the link when appropriate
+    printf("<span><span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span></span>\n",upArrow);
+    }
+}
+#endif///def BIG_UI_NAV_LINKS
+
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
@@ -108,7 +125,8 @@ mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitt
 struct mdbVar *mdbVar;
 for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if(sameString(mdbVar->var,"fileName"))
+    if (sameString(mdbVar->var,"fileName")
+    && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
         makeNamedDownloadsLink(db, trackDbTopLevelSelfOrParent(tdb), mdbVar->val);
@@ -162,6 +180,7 @@ if (metadataLink)
 
 if(moreThanOne)
     printf("</td></tr></table>");
+
 puts("</P>");
 }
 
@@ -3646,6 +3665,12 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
+#ifdef BIG_UI_NAV_LINKS
+printf("<table><tr><td class='windowSize'>");
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+makeTopLink(parentTdb);
+#endif//def BIG_UI_NAV_LINKS
+
 // Now we can start in on the table of subtracks
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 if(sortOrder != NULL)
@@ -3693,7 +3718,8 @@ if (!primarySubtrack)
     printf("<TR");
     if(useDragAndDrop)
         printf(" id=\"noDrag\" class='nodrop nodrag'");
-    printf("><TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
+    printf(">");
+    printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
@@ -3887,6 +3913,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
+#ifdef BIG_UI_NAV_LINKS
+printf("</td></tr></table>");
+#endif//def BIG_UI_NAV_LINKS
 if(slCount(subtrackRefList) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='subCBcount'></font>");
 puts("<P>");
@@ -6553,5 +6582,27 @@ if (differentWord(normScoreTest, "no"))
         normScoreAvailable = TRUE;
 
 return normScoreAvailable;
+}
+
+void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label)
+/* Print out table of abbreviations. */
+{
+char query[256];
+safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+webPrintLinkTableStart();
+webPrintLabelCell("Symbol");
+webPrintLabelCell(label);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    char *name = row[0];
+    char *description = row[1];
+    webPrintLinkCell(name);
+    webPrintLinkCell(description);
+    }
+sqlFreeResult(&sr);
+webPrintLinkTableEnd();
 }
 

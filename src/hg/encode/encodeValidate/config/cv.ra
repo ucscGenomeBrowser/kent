@@ -2296,13 +2296,68 @@ protocol UW_Stam:WERI-Rb-1_Stam_protocol.pdf
 
 
 ### Mouse Cell Lines
+term 3134
+tag 3134
+type Cell Line
+organism Mouse
+tissue Mammary
+category Cell Line
+description Mammary
+vendorName
+termId 7035
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7035
+color 153,38,0
+sex M
+protocol
+
+term 416B
+tag 416B
+type Cell Line
+organism Mouse
+tissue Blood
+category Cell Line
+description myeloid progenitor cells, CD34+
+vendorName
+termId 7043
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7043
+color 153,38,0
+sex M
+protocol
+
+term AtT-20
+tag AtT20
+type Cell Line
+organism Mouse
+tissue Cortex 
+category Cell Line
+description Pituitary tumor LAF1 
+vendorName ATCC
+termId 7087
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7087
+color 153,38,0
+sex M
+protocol
+
+term B-cell_(CD19+)
+tag BCellCD19p
+type Cell Line
+organism Mouse
+tissue Blood 
+category Cell Line
+description B Cell , CD19+
+vendorName
+termId 7069
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
+color 153,38,0
+sex M
+protocol
+
 term BoneMarrow
 tag BoneMarrow
 type Cell Line
 organism Mouse
 tissue Bone
 category Tissue
-#category T
 description Bone Marrow
 vendorName LICR lab
 termId 6943
@@ -2317,7 +2372,6 @@ type Cell Line
 organism Mouse
 tissue Cerebellum
 category Tissue
-#category T
 description Cerebellum
 vendorName LICR lab
 termId 7012
@@ -2326,13 +2380,26 @@ color 153,38,0
 sex U
 protocol LICR:Cerebellum_Ren_protocol.pdf
 
+term Cerebrum
+tag Cerebrum
+type Cell Line
+organism Mouse
+tissue Cerebrum
+category Tissue
+description Cerebrum
+vendorName UW Lab
+termId 
+termUrl
+color 153,38,0
+sex U
+protocol 
+
 term CH12
 tag CH12
 type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description B-cell lymphoma (GM12878 analog)
 vendorName Weissman lab
 vendorId
@@ -2345,13 +2412,33 @@ color 153,38,0
 sex U
 protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
+term ES-CJ7
+tag ESCJ7
+type Cell Line
+organism Mouse
+tissue
+category Primary Cells
+description ES-cells were originally
+isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal
+lethality and defects in hindbrain development in mice homozygous for a
+targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
+Genes Dev. 1993 Nov;7(11):2071-84.)
+vendorName Uw lab
+vendorId
+orderUrl
+termId 
+termUrl 
+color 153,38,0
+sex U
+protocol
+
+
 term Colon
 tag Colon
 type Cell Line
 organism Mouse
 tissue Colon
 category Tissue
-#category T
 description Colon
 vendorName LICR lab
 termId 6984
@@ -2366,7 +2453,6 @@ type Cell Line
 organism Mouse
 tissue Cortex
 category Tissue
-#category T
 description Cortex
 vendorName LICR lab
 termId 4465
@@ -2375,13 +2461,27 @@ color 153,38,0
 sex U
 protocol LICR:Cortex_Ren_protocol.pdf
 
+term Fibroblast
+tag Fibroblast
+type Cell Line
+organism Mouse
+tissue Lung
+category Tissue
+description Fibroblast
+vendorName UW lab
+termId 6948
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
+color 153,38,0
+sex U
+protocol 
+
+
 term G1E
 tag G1E
 type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description Gata1- erythroid progenitor
 vendorName Mitch Weiss lab
 orderUrl
@@ -2400,7 +2500,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description Gata1 restored erythroid cells, differentiation induced by estradiol (E2)	
 vendorName Mitch Weiss lab
 orderUrl
@@ -2419,7 +2518,6 @@ type Cell Line
 organism Mouse
 tissue Heart
 category Tissue
-#category T
 description Heart
 vendorName LICR lab
 termId 7103
@@ -2428,13 +2526,26 @@ color 153,38,0
 sex U
 protocol LICR:Heart_Ren_protocol.pdf
 
+term Kidney
+tag Kidney
+type Cell Line
+organism Mouse
+tissue Kidney
+category Tissue
+description Kidney
+vendorName UW lab
+termId 
+termUrl
+color 153,38,0
+sex U
+protocol
+
 term Limb
 tag Limb
 type Cell Line
 organism Mouse
 tissue Limb
 category Tissue
-#category T
 description Limb
 vendorName LICR lab
 termId 7127
@@ -2450,11 +2561,10 @@ type Cell Line
 organism Mouse
 tissue Liver
 category Tissue
-#category T
 description Liver
 vendorName LICR lab
 termId 6963
-ermUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
 protocol LICR:Liver_Ren_protocol.pdf
@@ -2465,7 +2575,6 @@ type Cell Line
 organism Mouse
 tissue Lung
 category Tissue
-#category T
 description Lung
 vendorName LICR lab
 termId 6948
@@ -2474,14 +2583,14 @@ color 153,38,0
 sex U
 protocol LICR:Lung_Ren_protocol.pdf
 
+
 term MEF
 tag MEF
 type Cell Line
 organism Mouse
 tissue MEF
 category Primary Cells
-#category P
-description MEF
+description Mouse Embryonic Fibroblast
 vendorName LICR lab
 termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
@@ -2496,7 +2605,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Primary Cells
-#category P
 description Megakaryocyte
 vendorName Mitch Weiss lab
 orderUrl
@@ -2515,7 +2623,6 @@ tag MEL
 type Cell Line
 organism Mouse
 category Cell Line
-#category L
 description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
@@ -2529,7 +2636,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Cell Line
-#category L
 description Myocyte
 vendorName
 orderUrl
@@ -2545,7 +2651,6 @@ type Cell Line
 organism Mouse
 tissue Blood
 category Tissue
-#category T
 description Muscle
 vendorName
 orderUrl
@@ -2562,7 +2667,6 @@ type Cell Line
 organism Mouse
 tissue OlfactoryBulb
 category Tissue
-#category T
 description Olfactory Bulb
 vendorName LICR lab
 termId 7015
@@ -2577,7 +2681,6 @@ type Cell Line
 organism Mouse
 tissue Pancreas
 category Tissue
-#category T
 description Pancreas
 vendorName LICR lab
 termId 7015
@@ -2592,7 +2695,6 @@ type Cell Line
 organism Mouse
 tissue Placenta
 category Tissue
-#category T
 description Placenta
 vendorName LICR lab
 termId 6957
@@ -2609,7 +2711,6 @@ type Cell Line
 organism Mouse
 tissue SmallIntestine
 category Tissue
-#category T
 description Small Intestine
 vendorName LICR lab
 termId 6978
@@ -2624,7 +2725,6 @@ type Cell Line
 organism Mouse
 tissue Spleen
 category Tissue
-#category T
 description Spleen
 vendorName LICR lab
 termId 7038
@@ -2639,7 +2739,6 @@ type Cell Line
 organism Mouse
 tissue Testis
 category Tissue
-#category T
 description Testis
 vendorName LICR lab
 termId 9201
@@ -2654,7 +2753,6 @@ type Cell Line
 organism Mouse
 tissue Thymus
 category Tissue
-#category T
 description Thymus
 vendorName LICR lab
 termId 7037
@@ -2662,6 +2760,35 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
 protocol LICR:Thymus_Ren_protocol.pdf
+
+term T-Naive
+tag TNaive
+type Cell Line
+organism Mouse
+tissue Blood
+category Tissue
+description Naive T cells: CD4+, CD25-
+vendorName UW lab
+termId 7060
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7060
+color 153,38,0
+sex U
+protocol 
+
+term WholeBrain
+tag WholeBrain
+type Cell Line
+organism Mouse
+tissue Brain
+category Tissue
+description Whole Brain
+vendorName UW lab
+termId 7005
+termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7005
+color 153,38,0
+sex U
+protocol LICR:Thymus_Ren_protocol.pdf
+
 
 
 # Gene types
@@ -3153,7 +3280,7 @@ type Antibody
 targetDescription GATA binding protein 1 (globin transcription factor 1)
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId
+vendorId   ;
 orderUrl
 targetId GeneCard:GC0XP048529
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=GC0XP048529
@@ -3166,7 +3293,7 @@ type Antibody
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
-vendorId
+vendorId   ;
 orderUrl
 targetId GeneCard:GC03M129680
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
@@ -3653,7 +3780,7 @@ type Antibody
 targetDescription NF-YA is the alpha subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against amino acids 139-347 of recombinant human NF-YA
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId
+vendorId  ;
 orderUrl
 lab Struhl
 targetId GeneCard:GC06P041148
@@ -3666,7 +3793,7 @@ type Antibody
 targetDescription NF-YB is the beta subunit of the trimeric NFY transcription factor complex that binds to the ubiquitous CCAAT motif
 antibodyDescription Affinity purified rabbit polyclonal raised against recombinant full length human NF-YB
 vendorName Donated by Dr. R. Mantovani, Universita degli Studi di Milano, Italy
-vendorId
+vendorId  ;
 orderUrl
 lab Struhl
 targetId GeneCard:GC12M103013
@@ -3702,8 +3829,8 @@ tag NRSF
 type Antibody
 antibodyDescription Mouse monoclonal
 targetDescription Neuron-restrictive silencer transcription factor
-vendorName David Anderson, Caltech (Made by Protein Expression Center: pec@caltech.edu)
-vendorId
+vendorName David Anderson, Caltech 
+vendorId  (Made by Protein Expression Center: pec@caltech.edu)
 orderUrl
 lab Myers / Wold
 lots 20070905JV
@@ -4050,7 +4177,7 @@ type Antibody
 targetDescription Suppressor of zeste 12 homolog, Polycomb group (PcG) protein, Component of the PRC2/EED-EZH2 complex
 antibodyDescription rabbit polyclonal
 vendorName Antibody made by Farnham lab
-vendorId
+vendorId   ;
 orderUrl
 lab Farnham
 targetId GeneCard:GC17P027289
@@ -4179,6 +4306,7 @@ type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription (Also: NR2C2) Members of the nuclear hormone receptor family, such as NR2C2, act as ligand-activated transcription factors. The proteins have an N-terminal transactivation domain, a central DNA-binding domain with 2 zinc fingers, and a ligand-binding domain at the C terminus.
 vendorName Donated by Dr. J.D.Engel, University of Michigan
+vendorId  ;
 lab Farnham
 targetId GeneCard:GC03P014964
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=nr2c2
@@ -4296,6 +4424,7 @@ antibodyDescription Rabbit Polyclonal anti-human ZZZ3, Immunogen: Synthetic pept
 targetDescription ZZZ3 contains one ZZ-type zinc finger domain. ZZ type finger domains are named because of their ability to bind two zinc ions. These domains contain 4-6 Cys residues that participate in zinc binding (plus additional Ser/His residues), including a Cys-X2-Cys motif found in other zinc finger domains. These zinc fingers are thought to be involved in protein-protein interactions -they are most likely involved in ligand binding or molecular scaffolding. The structure of the ZZ domain shows that it belongs to the family of cross-brace zinc finger motifs that include the PHD, RING, and FYVE domains.
 orderUrl http://www.igbmc.fr/recherche/Dep_GF/Eq_LTora/index_uk.html
 vendorName Lazlo Tora, Institut de Génétique et de Biologie Moléculaire et Cellulaire
+vendorId  ;
 lab Struhl
 targetId GeneCard:GC01M077742
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
@@ -5278,13 +5407,19 @@ type restrictionEnzyme
 
 
 ### dataType
+### term:  Ideally this should be the term used by NHGRI for the data type
+### tag:   This is the camel case convention that we use in our file names
+### label: This will be used for human display and should also match NHGRI with any further information
+
 term ChIP-seq
-tag chipseq
+tag ChipSeq
 type dataType
+label ChIP-seq
 
 term Exon-array
-tag affyexonarray
+tag AffyExonArray
 type dataType
+label Affy_Exon_Array
 
 term BIP
 tag bip
@@ -5293,6 +5428,7 @@ type dataType
 term CAGE
 tag cage
 type dataType
+label CAGE
 
 term CNV
 tag cnv
@@ -5303,15 +5439,17 @@ tag dgf
 type dataType
 
 term DNA-PET
-tag dnapet
+tag DnaPet
 type dataType
+label DNA-PET
 
 term DNase-seq
-tag dnaseseq
+tag DnaseSeq
 type dataType
+label DNase-seq
 
 term FAIRE-seq
-tag faireseq
+tag FaireSeq
 type dataType
 
 term Genes
@@ -5347,20 +5485,23 @@ tag nre
 type dataType
 
 term PET
-tag pet
+tag RnaPet
 type dataType
+label RNA-PET
 
 term RNA-chip
 tag rnachip
 type dataType
 
 term RNA-seq
-tag rnaseq
+tag RnaSeq
 type dataType
+label RNA-seq
 
 term shRNA-seq
 tag shortrnaseq
 type dataType
+label RNA-seq
 
 term TFBS-valid
 tag tfbsvalid
@@ -5368,9 +5509,9 @@ type dataType
 label TfbsValid
 
 term RIP-chip
-tag rnagenechip
+tag  RipChip
 type dataType
-
+label RIP-chip
 
 ### version
 
@@ -5386,6 +5527,12 @@ type version
 # tag (machine-readable name, no special characters)
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
+
+term C3H
+tag C3H
+type strain
+description Strain C3H, Very related to C57BL/6
+
 term C57BL/6
 tag C57BL6
 type strain
@@ -5405,6 +5552,12 @@ description Strain 129, has widely available embryonic stem cells
 # type (informs pipeline code of stanza type.  Should always be age)
 # stage (either embryonic or adult.  cannot say how/where this is used)
 # description (human-readable description.  Can't say where/how it's used)
+
+term E0
+tag E0
+type age
+stage Embryonic
+description Embyonic day 0 (stem cell)
 
 term E11.5
 tag E11half
@@ -5442,7 +5595,6 @@ type age
 Stage Adult
 description Adult 8 weeks
 
-### Sex
 # Expected fields:
 # ----------------
 # term (human-readable name)
@@ -5478,56 +5630,404 @@ description UnknownD
 # term (human-readable name)
 # tag (machine-readable name, no special characters
 # type (informs pipeline code of stanza type, should be seqPlatform)
-# description
+# description: Working on inputing description from geo and product website
 
 term Illumina_GA
 tag IlluminaGA
 geo Illumina Genome Analyzer
 type seqPlatform
-description ? TBD
+description Other
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
 tag IlluminaGA2
 geo Illumina Genome Analyzer II
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
 tag IlluminaGA2x
 geo Illumina Genome Analyzer II
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 # Matches GA2x that Kate initally indicated as the term
 
 term 454_GS
 tag 454GS
 geo 454 GS
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term 454_GS_20
 tag 454GS20
 geo 454 GS 20
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term 454_GS_FLX
 tag 454GSFLX
 geo 454 GS FLX
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term AB_SOLiD
 tag ABSOLiD
 geo AB SOLiD System
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
 term AB_SOLiD_2.0
 tag ABSOLiD2
 geo AB_SOLiD System 2.0
 type seqPlatform
-description ? TBD
+description High-throughput sequencing
 
+
+#Project CV
+#
+#
+#
+
+term Broad
+tag Broad
+type project
+projectNameFull Broad Institute
+organism Human
+labName Broad
+pi Bernstein
+piFull Bradley Bernstein
+grant Bernstein
+
+term Duke
+tag Duke
+type project
+projectNameFull Duke University
+organism Human
+labName Duke
+pi Crawford
+piFull Greg Crawford
+grant Crawford
+
+term Caltech    
+tag Caltech    
+type project
+projectNameFull California Institute of Technology (Wold Lab)
+organism Human
+labName Caltech
+pi Wold
+piFull Barbara Wold
+grant Myers
+
+term HudsonAlpha
+tag HudsomAlpha
+type project
+project HAIB
+projectNameFull HudsonAlpha Institute for Biotechnology
+organism Human
+labName HudsonAlpha
+pi Myers
+piFull Richard Myers
+grant Myers
+
+
+
+term NHGRI-Elnitski
+tag NHGRI-Elnitski
+type project
+projectNameFull National Human Genome Research Institute Elnitski
+organism Human
+labName NHGRI-Elnitski
+pi Elnitski
+piFull Laura Elnitski
+grant Elnitski
+
+term CSHL
+tag CSHL
+type project
+project Transcriptome
+projectNameFull Transcriptome Cold Spring Harbor Laboratory
+organism Human
+labName Cshl
+pi Gingeras
+piFull Thomas Gingeras
+grant Gingeras
+
+term GIS
+tag  GIS
+type project
+project Transcriptome
+projectNameFull Transcriptome  Genome Institute of Singapore
+organism Human
+labName GIS
+pi Ruan
+piFull Yijun Ruan
+grant Gingeras
+
+term Helicos       
+tag Helicos      
+type project
+project Transcriptome
+projectNameFull Transcriptome Helicos BioScience Corporation
+organism Human
+labName Helicos
+pi Kapranov
+piFull Philipp Kapranov
+grant Gingeras
+
+
+#synonym
+term Duke
+tag Duke
+type project
+projectNameFull Duke University
+organism Human
+labName UNC
+pi Lieb
+piFull Jason Lieb
+grant Crawford
+
+term Duke 
+tag Duke
+type project
+projectNameFull Duke University
+organism Human
+labName UT-A
+pi Iyer
+piFull Tara Iyer
+grant Crawford
+
+term Genecode
+tag Genecode
+type project
+projectNameFull Genecode Sanger Institute
+organism Human
+labName Sanger
+pi Hubbard
+piFull Tim Hubbard
+grant Hubbard
+
+term NHGRI-Margulies
+tag NHGRI-Marigulies
+type project
+projectNameFull National Human Genome Research Institute Margulies
+organism Human
+labName Margulies
+pi Margulies
+piFull Elliott Margulies
+grant Margulies
+
+term SUNY
+tag SUNY
+type project
+projectNameFull State University of New York at Albany
+organism Human
+labName SunyAlbany
+pi Tenenbaum
+piFull Scott Tenebaum
+grant Tenenbaum
+
+term Transcriptome - Affy
+tag Transcriptome - Affy
+type project
+projectNameFull Transcriptome Affymetrix
+organism Human
+labName Affy
+pi Gingeras
+piFull Thomas Gingeras
+grant Gingeras
+
+term Riken
+tag  Riken
+type project
+projectNameFull Transcriptome Riken Lab
+organism Human
+labName Riken
+pi Carninci
+piFull Piero Carninci
+grant Gingeras
+
+term UMass-Dekker
+tag UMass-Dekker
+type project
+projectNameFull University of Massachusetts Amherst Dekker
+organism Human
+labName UMass-Dekker
+pi Dekker
+piFull Job Dekker
+grant Dekker
+
+term UMass-Weng
+tag UMass-Weng
+type project
+projectNameFull University of Massachusetts Amherst Weng Lab 
+organism Human
+labName UMassHA
+pi Weng
+piFull Zhiping Weng
+grant Weng
+
+term UW
+tag UW
+type project
+projectNameFull University of Washington
+organism Human
+labName Uw
+pi Stam
+piFull George Stamatoyannopoulos??
+grant Stam
+
+term SYDH-Stanford
+tag  SYDH-Stanford
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName Stanford
+pi Snyder
+piFull Michael Snyder
+grant Snyder
+
+term SYDH-Yale
+tag  SYDH-Yale
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName Yale
+pi Snyder
+piFull Michael Snyder
+grant Snyder
+
+term SYDH-Harvard 
+tag  SYDH-Harvard 
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName Harvard
+pi Weissman
+piFull Sherman Weissman
+grant Snyder
+
+term SYDH - UCD
+tag SYDH - UCD 
+type project
+projectNameFull  Stanford Yale UCDavis Harvard
+organism Human
+labName UCD
+pi Farnham
+piFull Peggy Farnham
+grant Snyder
+
+
+
+
+
+
+
+# Mouse and ARRA grants
+
+term LICR-m
+tag LICR 
+type project
+projectNameFull Ludwig Institue for Cancer Research
+organism Mouse
+labName LICR
+pi Ren
+piFull Bing Ren
+grant Ren
+
+
+term PSU-m
+tag PSU 
+type project
+projectNameFull Penn State University
+organism Mouse
+labName Caltech-Mouse
+pi Wold
+piFull Barbara Wold
+grant Hardison
+
+
+
+term PSU-m
+tag  PSU
+type project
+projectNameFull Penn State University
+organism Mouse
+labName UMass-Mouse
+pi Dekker
+piFull Job Dekker
+grant Hardison
+
+
+
+
+term PSU-m
+tag PSU 
+type project
+projectNameFull Penn State University 
+organism Mouse
+labName Duke-Mouse
+pi Crawford
+piFull Greg Crawford
+grant Hardison
+
+term Caltech-m
+tag Caltech-m
+type project
+projectNameFull Caltech  
+organism Mouse
+labName Caltech-mouse
+pi Wold
+piFull Barbara Wold
+grant Hardison
+
+term UChicago-m
+tag UChicago 
+type project
+projectNameFull University of Chicago 
+organism Mouse
+labName UChicago
+pi White
+piFull Kevin White
+grant White
+
+term UNC-m
+tag UNC 
+type project
+projectNameFull University of North Carolina
+organism Mouse
+labName UNC-Giddings
+pi Giddings
+piFull Morgan Giddings
+grant Giddings
+
+term UW-m
+tag UW 
+type project
+projectNameFull University of Washington 
+organism Mouse
+labName UW-Mouse
+pi Stam
+piFull George Stamatoyannopoulos??
+grant Stam
+
+term BU
+tag BU 
+type project
+projectNameFull Boston University
+organism human
+labName BU
+pi Tullius
+piFull Thomas Tullius
+grant Tullius
+
+# Tech development
+term GIS
+tag GIS 
+type project
+projectNameFull Gene Identification Signature 
+organism human
+labName GIS-Chia
+pi Ruan
+piFull Yijun Ruan
+grant Ruan

@@ -246,6 +246,8 @@ void tallyMoltype(struct lineFile *lf, char *molType)
 /* Keep track of what molTypes are actually used. */
 {
 int i;
+if (isEmpty(molType))
+    lineFileAbort(lf, "Empty (as opposed to missing) molType value.\n");
 for (i = 0;  i < MAX_MOLTYPE+1;  i++)
     if (sameString(molType, molTypeStrings[i]))
 	{
@@ -706,6 +708,8 @@ if (funcList == NULL)
     funcList = dyStringNew(funcSize);
 dyStringClear(funcList);
 
+if (isEmpty(funcCode))
+    lineFileAbort(lf, "Empty (as opposed to missing) function value.\n");
 if (isMissing(funcCode))
     {
     dyStringAppend(funcList, functionStrings[0]);
@@ -849,6 +853,8 @@ if (expanded == NULL)
 
 dyStringClear(expanded);
 /* Common case: no expansion required; don't bother with regex. */
+if (isEmpty(refNcbiEnc))
+    lineFileAbort(lf, "Empty (as opposed to missing) refNcbi value.\n");
 if (isMissing(refNcbiEnc))
     {
     dyStringAppend(expanded, "unknown");
@@ -1382,6 +1388,8 @@ boolean checkObserved(struct lineFile *lf, char *class, char *observed,
 		      char *refAllele)
 /* If there is a formatting problem, don't proceed with other checks. */
 {
+if (isEmpty(observed))
+    lineFileAbort(lf, "Empty (as opposed to missing) observed value.\n");
 if (isMissing(observed))
     {
     writeError("Missing observed value (deleted SNP?).");

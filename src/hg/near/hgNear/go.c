@@ -21,6 +21,12 @@ col->goConn = sqlMayConnect("go");
 if (col->goConn != NULL)
     {
     gotIt = sqlTableExists(col->goConn, "goaPart");
+    if (gotIt)
+	{
+    	col->uniProtConn = sqlMayConnect(UNIPROT_DB_NAME);
+	if (col->uniProtConn == NULL)
+	    gotIt = FALSE;
+	}
     }
 return gotIt;
 }
@@ -39,16 +45,15 @@ struct hash *hash = newHash(6);
 
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
-    struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
     char *proteinAcc;
     
     if (kgVersion == KG_III)
     	{
-    	proteinAcc = spFindAcc(spConn, lookupProtein(conn, gp->name));
+    	proteinAcc = spFindAcc(col->uniProtConn, lookupProtein(conn, gp->name));
 	}
     else
     	{
-    	proteinAcc = spFindAcc(spConn, gp->protein);
+    	proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
         }
     
     safef(query, sizeof(query), 
@@ -68,7 +73,6 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
-    sqlDisconnect(&spConn);
     }
 if (gotOne)
     result = cloneString(dy->string);
@@ -89,16 +93,15 @@ struct hash *hash = newHash(6);
 hPrintf("<TD>");
 if (gp->protein != NULL && gp->protein[0] != 0)
     {
-    struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
     char *proteinAcc;
     
     if (kgVersion == KG_III)
     	{
-    	proteinAcc = spFindAcc(spConn, lookupProtein(conn, gp->name));
+    	proteinAcc = spFindAcc(col->uniProtConn, lookupProtein(conn, gp->name));
 	}
     else
     	{
-    	proteinAcc = spFindAcc(spConn, gp->protein);
+    	proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
         }
 
     safef(query, sizeof(query), 
@@ -129,7 +132,6 @@ if (gp->protein != NULL && gp->protein[0] != 0)
 	    }
 	}
     sqlFreeResult(&sr);
-    sqlDisconnect(&spConn);
     }
 if (!gotOne)
     hPrintf("n/a");
@@ -190,7 +192,6 @@ if (searchString != NULL )
 	}
 
     /* Now whittle down list to only include those with correct protein. */
-    struct sqlConnection *spConn = sqlConnect(UNIPROT_DB_NAME);
     for (gp = list; gp != NULL; gp = next)
 	{
 	next = gp->next;
@@ -198,11 +199,11 @@ if (searchString != NULL )
     
         if (kgVersion == KG_III)
     	    {
-    	    proteinAcc = spFindAcc(spConn, lookupProtein(conn, gp->name));
+    	    proteinAcc = spFindAcc(col->uniProtConn, lookupProtein(conn, gp->name));
 	    }
         else
     	    {
-    	    proteinAcc = spFindAcc(spConn, gp->protein);
+    	    proteinAcc = spFindAcc(col->uniProtConn, gp->protein);
             }
 
         if (proteinAcc && hashLookup(proteinHash, proteinAcc))
@@ -210,7 +211,6 @@ if (searchString != NULL )
              slAddHead(&newList, gp);
              }
 	}
-    sqlDisconnect(&spConn);
     slReverse(&newList);
     list = newList;
     hashFree(&prevHash);

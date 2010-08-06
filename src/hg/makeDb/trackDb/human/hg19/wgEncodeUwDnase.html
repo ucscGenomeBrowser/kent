@@ -11,10 +11,10 @@ DNaseI hypersensitivity is a universal feature of active
 <EM>cis</EM>-regulatory sequences. The use of this method has led
 to the discovery of functional regulatory elements that include enhancers,
 insulators, promotors, locus control regions and novel elements.
-For each experiment (cell type) this track shows DNaseI hypersensitive zones
-(<I>HotSpots</I>) and
-hypersensitive sites (<I>Peaks</I>) based on the sequencing tag density
-(<I>Signal</I>).
+For each experiment (cell type) this track shows DNaseI sensitivity as a
+continuous function using sequencing tage desnsity (<I>Raw Signal</I>), 
+and discrete loci of DNaseI sensitive zones  (<I>HotSpots</I>) and
+hypersensitive sites (<I>Peaks</I>)."
 </P>
 
 <H2>Display Conventions and Configuration</H2>
@@ -27,12 +27,13 @@ are <A HREF="../../goldenPath/help/multiView.html" TARGET=_BLANK>here</A>.
 For each cell type, this track contains the following views:
 <DL>
 <DT><I>HotSpots</I>
-<DD> DNaseI hypersensitive zones identified using the HotSpot algorithm.
+<DD> DNaseI sensitive zones identified using the HotSpot algorithm.
 <DT><I>Peaks</I>
 <DD> DNaseI hypersensitive sites (DHSs) identified as signal peaks within
-FDR 0.5% hypersensitive zones.
+FDR 1.0% hypersensitive zones.
 <DT><I>Raw Signal</I>
-<DD>Density graph (wiggle) of signal enrichment based on aligned read density.
+<DD>The density of tags mapping within a 150 bp sliding window
+(at a 20 bp step across the genome).
 </DL>
 <P>DNaseI sensitivity is shown as the absolute density of <EM>in vivo</EM>
 cleavage sites across the genome mapped using the Digital DNaseI methodology
@@ -51,17 +52,17 @@ Digital DNaseI was performed by performing DNaseI digestion of intact
 nuclei, isolating DNaseI 'double-hit' fragments as described in
 Sabo <EM>et al.</EM> (2006), and direct sequencing of fragment
 ends (which correspond to <EM>in vivo</EM> DNaseI cleavage sites)
-using the Solexa platform (27 bp reads).  Uniquely mapping high-quality reads
+using the Solexa platform (36 bp reads).  Uniquely mapping high-quality reads
 were mapped to the genome.  DNaseI sensitivity is directly reflected in
-raw tag density (<I>Signal</I>), which is shown in the track as density of tags
+raw tag density (<I>Raw Signal</I>), which is shown in the track as density of tags
 mapping within a 150 bp sliding window (at a 20 bp step across the genome).
-DNaseI hypersensitive zones (<I>HotSpots</I>) were identified using the
+DNaseI sensitive zones (<I>HotSpots</I>) were identified using the
 HotSpot algorithm
-described in Sabo <EM>et al.</EM> (2004).  0.5% false discovery
-rate thresholds (FDR 0.005) were computed for each cell type by
+described in Sabo <EM>et al.</EM> (2004).  1.0% false discovery
+rate thresholds (FDR 0.01) were computed for each cell type by
 applying the HotSpot algorithm to an equivalent number of random
-uniquely mapping 27mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>)
-were identified as signal peaks within FDR 0.5% hypersensitive
+uniquely mapping 36mers.  DNaseI hypersensitive sites (DHSs or <I>Peaks</I>)
+were identified as signal peaks within FDR 1.0% hypersensitive
 zones using a peak-finding algorithm.</P>
 
 <H2>Verification</H2>

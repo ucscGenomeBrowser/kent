@@ -205,7 +205,7 @@ if (sameString(type,"Antibody"))
 	    printf("</A>");
             currentU=currentU->next;
 	    }
-	puts("\r");
+	puts("<BR>");
         
 	}
     puts("</TD>");
@@ -241,7 +241,7 @@ if (sameString(type,"Antibody"))
     }
 
     /* Ideally, Cricket will be removing all of the ripAntibody and ripTgtProtien
-     * code after this is tested a bit 
+     * code after this is tested a bit */
 
 else if (sameString(type,"ripAntibody"))
     {
@@ -264,6 +264,7 @@ else if (sameString(type,"ripAntibody"))
 
     puts("</TR>");
     }
+
 else if (sameString(type,"ripTgtProtein"))
     {
     puts("<TR>");
@@ -277,7 +278,7 @@ else if (sameString(type,"ripTgtProtein"))
     s = hashFindVal(ra, "description");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     puts("</TR>");
-    } */
+    } 
 
 else if (sameString(type,"localization"))
     {

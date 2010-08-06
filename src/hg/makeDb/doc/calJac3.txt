@@ -1523,7 +1523,7 @@ update dbDb set description="March 2009 (WUGSC 3.2/calJac3)" where name="calJac3
 
 ############################################################################
 ## Annotate 13-way multiple alignment with gene annotations
-##                                (DONE - 2010-05-17 - Chin)
+##       (DONE - 2010-05-17 - Chin)
 ##       use ensGene for calJac3 (DONE - 2010-07-22 - Chin)
     # Gene frames
     ## survey all genomes to see what type of gene track to use
@@ -1621,81 +1621,44 @@ do
     echo "${DB} done"
 done
 
-    #   turn it into a kluster job
-    ssh swarm
-    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
-    cat << '_EOF_' > runOne
-#!/bin/csh -fe
-
-set C = $1
-set G = $2
-
-cat ../run/maf/${C}.maf | genePredToMafFrames calJac3 stdin stdout \
-        ${G} genes/${G}.gp.gz | gzip > parts/${C}.${G}.mafFrames.gz
-'_EOF_'
-    # << happy emacs
-    chmod +x runOne
-
-    ls ../run/maf | sed -e "s/.maf//" > chr.list
-    ls genes | sed -e "s/.gp.gz//" | grep -v calJac3 > gene.list
-
-    cat << '_EOF_' > template
-#LOOP
-runOne $(root1) $(root2) {check out exists+ parts/$(root1).$(root2).mafFrames.gz}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-
-    mkdir parts
-    gensub2 chr.list gene.list template jobList
-    para -ram=8g create jobList
-    para try ... check ... push
-# Completed: 3072 of 3072 jobs
-# CPU time in finished jobs:       5616s      93.60m     1.56h    0.07d  0.000 y
-# IO & Wait Time:                 44389s     739.81m    12.33h    0.51d  0.001 y
-# Average job time:                  16s       0.27m     0.00h    0.00d
-# Longest finished job:             194s       3.23m     0.05h    0.00d
-# Submission to last job:           302s       5.03m     0.08h    0.00d
+   sizeG=256743680
+   export sizeG
+   ulimit -d $sizeG
+   ulimit -v $sizeG
 
 
-    # see what it looks like in terms of number of annotations per DB:
-    find ./parts -type f | while read F
-do
-    zcat ${F}
-done | cut -f4 | sort | uniq -c | sort -n > annotation.survey.txt
-   
-   cat annotation.survey.txt
-   #  159735 tarSyr1
-   #  202861 panTro2
-   #  203073 rheMac2
-   #  205358 ponAbe2
-   #  205679 hg19
-   #  206899 micMur1
-   #  211692 monDom5
-   #  211872 papHam1
-   #  213918 otoGar1
-   #  218009 gorGor2
-   #  233938 mm9
-   #  240194 canFam2
+   time (cat  ../run/maf/*.maf | nice -n +19 genePredToMafFrames calJac3 stdin stdout calJac3 genes/calJac3.gp.gz mm9 genes/mm9.gp.gz hg19 genes/hg19.gp.gz rheMac2 genes/rheMac2.gp.gz ponAbe2 genes/ponAbe2.gp.gz panTro2 genes/panTro2.gp.gz canFam2 genes/canFam2.gp.gz  monDom5 genes/monDom5.gp.gz tarSyr1 genes/tarSyr1.gp.gz micMur1 genes/micMur1.gp.gz otoGar1 genes/otoGar1.gp.gz papHam1 genes/papHam1.gp.gz gorGor2 genes/gorGor2.gp.gz | gzip > multiz13way.mafFrames.gz) > frames.log 2>&1
+    # real    9m41.993s
+
+    zcat multiz13way.mafFrames.gz | cut -f4 | sort | uniq -c | sort -n
+    # 159735 tarSyr1
+    # 193983 calJac3
+    # 202861 panTro2
+    # 203073 rheMac2
+    # 205358 ponAbe2
+    # 205679 hg19
+    # 206899 micMur1
+    # 211692 monDom5
+    # 211778 papHam1
+    # 213918 otoGar1
+    # 217990 gorGor2
+    # 233938 mm9
+    # 240194 canFam2
 
     #   load the resulting file
     ssh hgwdev
-    cd /hive/data/genomes/calJac3/bed/multiz13way/frames
-    find ./parts -type f | while read F
-do
-    zcat ${F}
-done | sort -k1,1 -k2,2n > multiz13wayFrames.bed 
-    
-    hgLoadMafFrames calJac3 multiz13wayFrames multiz13wayFrames.bed
-
-    featureBits -countGaps calJac3 multiz13wayFrames.bed
-    #   40178768 bases of 2914958544 (1.378%) in intersection
+    cd /cluster/data/calJac3/bed/multiz13way/frames
+    time nice -n +19 hgLoadMafFrames calJac3 multiz13wayFrames \
+        multiz13way.mafFrames.gz
+    #   real    0m29.735s
+    # check it:
+    hgsql -N -e "select src from  multiz13wayFrames;" calJac3 \
+      | sort | uniq -c | grep calJac3
+    # 193983 calJac3
 
     #   enable the trackDb entries:
 # frames multiz13wayFrames
 # irows on
-    #   appears to work OK
-
 
 #############################################################################
 ## create upstream refGene maf files
@@ -2117,274 +2080,6 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
     display histo.png &
 
 
-#########################################################################
-# phyloP conservation for 13-way (working - 2010-06-07 - Chin)
-#  XXXX Stop 06-11
-# Vertebrate
-#
-    # split SS files into 1M chunks, this business needs smaller files
-    #   to complete
-
-    ssh swarm
-    mkdir /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP
-    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP
-    mkdir ss run.split
-    cd run.split
-XXXX 06-08 4PM -- 
-??? /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf
-vs set MAF = /hive/data/genomes/calJac3/bed/multiz13way/splitRun/maf/calJac3_$c.maf
-
-    cat << '_EOF_' > doSplit.csh
-#!/bin/csh -ef
-set c = $1
-set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf
-set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.split/ss/$c
-set WC = `cat $MAF | wc -l`
-set NL = `grep "^#" $MAF | wc -l`
-if ( -s $2 ) then
-    exit 0
-endif
-if ( -s $2.running ) then
-    exit 0
-endif
-
-date >> $2.running
-
-
-rm -fr $WINDOWS
-mkdir $WINDOWS
-pushd $WINDOWS > /dev/null
-if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
-    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
-endif
-popd > /dev/null
-date >> $2
-rm -f $2.running
-'EOF'
-# << happy emacs
-    chmod +x ./doSplit.csh
-
-
-    ls -1S /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24 \
-        | egrep -E -v "chrUn" \
-        | sed -e "s#.*multiz13way/mafSplit/##" \
-        > maf.list
-
-
-    cat << '_EOF_' > template
-#LOOP
-doSplit.csh $(path1) {check out exists+ done/$(path1).done}
-#ENDLOOP
-'_EOF_'
-# << happy emacs
-
-    mkdir ss done
-    gensub2 maf.list single template jobList
-    para -ram=8g create jobList
-    # para try para check para push
-
-# Completed: 504 of 504 jobs
-# CPU time in finished jobs:      14486s     241.43m     4.02h    0.17d
-# 0.000 y
-# IO & Wait Time:                306280s    5104.67m    85.08h    3.54d
-# 0.010 y
-# Average job time:                 636s      10.61m     0.18h    0.01d
-# Longest finished job:            1635s      27.25m     0.45h    0.02d
-# Submission to last job:          2965s      49.42m     0.82h    0.03d
-
-
-    # run phyloP with score=LRT 
-    ssh swarm
-    cd /cluster/data/hg18/bed/multiz44way/consPhyloP
-    mkdir run.phyloP
-    cd run.phyloP
-
-    # Adjust model file base composition background and rate matrix to
-    # be
-    # representative of the chromosomes in play
-    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
-    #   0.542
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
-        ../../cons/all/all.mod 0.542 > all.mod
-    grep BACKGROUND ../../cons/all/all.chrX.mod \
-        | awk '{printf "%0.3f\n", $3 + $4}'
-    #   0.503
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
-        ../../cons/all/all.chrX.mod 0.503 > all.chrX.mod
-    grep BACKGROUND ../../cons/primates/primates.mod \
-        | awk '{printf "%0.3f\n", $3 + $4}'
-    #   0.523
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
-        ../../cons/primates/primates.mod 0.523 > primates.mod
-    grep BACKGROUND ../../cons/primates/primates.chrX.mod \
-        | awk '{printf "%0.3f\n", $3 + $4}'
-    #   0.491
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
-        ../../cons/primates/primates.chrX.mod 0.491 > primates.chrX.mod
-    grep BACKGROUND ../../cons/placental/placental.mod \
-        | awk '{printf "%0.3f\n", $3 + $4}'
-    #   0.542
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
-        ../../cons/placental/placental.mod 0.542 > placental.mod
-    grep BACKGROUND ../../cons/placental/placental.chrX.mod \
-        | awk '{printf "%0.3f\n", $3 + $4}'
-    #   0.489
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
-        ../../cons/placental/placental.chrX.mod 0.489 > placental.chrX.mod
-
-
-    # repeat for chrX only tree
-    cd /cluster/data/hg18/bed/multiz13way/4d
-    $PHASTBIN/modFreqs 4d.chrX.mod $gc > 13way.chrX.mod
-    ln -s `pwd`/13way.chrX.mod /usr/local/apache/golenPath/hg18/phastCons13way
-
-    cat << '_EOF_' > doPhyloP.csh
-#!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
-set f = $1
-set out = $2
-set cName = $f:r:r
-set chrDir = $f:r
-set n = $f:r:e
-set grp = $cwd:t
-set cons = /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP
-set tmp = $cons/tmp/$grp/$f
-rm -fr $tmp
-mkdir -p $tmp
-set ssSrc = "$cons/run.split/ss/$chrDir/$f"
-set useGrp = "$grp.mod"
-if ( $cName == "chrX" ) then
-    set useGrp = "$grp.chrX.mod"
-endif
-ln -s $cons/run.phyloP/$grp.mod $tmp
-ln -s $cons/run.phyloP/$grp.chrX.mod $tmp
-pushd $tmp > /dev/null
-$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
-    -i SS $useGrp $ssSrc.ss > $f.wigFix
-popd > /dev/null
-mkdir -p $out:h
-sleep 4
-mv $tmp/$f.wigFix $out
-rm -fr $tmp
-'_EOF_'
-    # << happy emacs
-
-    # Create list of chunks
-    find ../run.split/ss -type f | sed -e "s/.ss$//; s#^../run.split/ss/##" \
-        > ss.list
-
-    # Create template file
-    #   file1 == $chr/$chunk/file name without .ss suffix
-    cat << '_EOF_' > template
-#LOOP
-../run.phyloP/doPhyloP.csh $(file1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
-#ENDLOOP
-'_EOF_'
-    # << happy emacs
-    ######################   Running all species  #######################
-    # setup run for all species
-    mkdir /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
-    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
-    rm -fr wigFix
-    mkdir wigFix
-
-    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
-    para create jobList
-    para try ... check ... push ... etc ...
-
-    para time
-# Completed: 3186 of 3186 jobs
-# CPU time in finished jobs:    1306874s   21781.23m   363.02h   15.13d
-# 0.041 y
-# IO & Wait Time:                105488s    1758.14m    29.30h    1.22d
-# 0.003 y
-# Average job time:                 443s       7.39m     0.12h    0.01d
-# Longest finished job:             678s      11.30m     0.19h    0.01d
-# Submission to last job:          7789s     129.82m     2.16h    0.09d
-
-    ssh hgwdev
-    cd /cluster/data/hg18/bed/multiz13way/consPhyloP/run.phyloP/all
-    find ./wigFix -type f \
-        | sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
-        | sort -k1,1 -k3,3n -k4,4n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
-    cat wigFile.list | xargs cat \
-        | wigEncode stdin phyloP13way.wig phyloP13way.wib > wigEncode.log 2>&1 &
-    #   Converted stdin, upper limit 6.39, lower limit -13.27
-    cat wigFile.list | xargs cat \
-        | wigToBigWig stdin ../../../../chrom.sizes phyloP13way.bw
-    #   if you wanted to use the bigWig file, loading bigWig table:
-    ln -s `pwd`/phyloP13way.bw /gbdb/calJac3/bbi
-    hgsql calJac3 -e 'drop table if exists phyloP13wayAll; \
-            create table phyloP13wayAll \
-                (fileName varchar(255) not null); \
-            insert into phyloP13wayAll values
-        ("/gbdb/calJac3/bbi/phyloP13way.bw");'
-
-    #   loading the wiggle table:
-    ln -s `pwd`/phyloP13way.wib /gbdb/calJac3/multiz13way
-    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/calJac3/multiz13way calJac3 \
-        phyloP13wayAll phyloP13way.wig
-
-    #   create download files:
-    cat << '_EOF_' > mkDown.csh
-#!/bin/csh -fe
-foreach F (`cat wigFile.list`)
-    set C = $F:h:t:r
-    cat $F >> downloads/${C}.wigFix
-end
-'_EOF_'
-    # << happy emacs
-    chmod +x ./mkDown.csh
-    mkdir downloads
-    time ./mkDown.csh
-    #   real    16m19.683s
-
-    time gzip downloads/chr*.wigFix
-    #   real    47m11.017s
-
-    wigTableStats.sh calJac3 phyloP13wayAll
-# db.table      min max mean count sumData
-# calJac3.phyloP13wayAll     -14.08 6.424 0.0896064 2845303719 2.54957e+08
-#       stdDev viewLimits
-#       0.833186 viewLimits=-4.07632:4.25553
-    #   that range is: 14.08+6.424 = 20.504
-
-    #  Create histogram to get an overview of all the data
-    time nice -n +19 hgWiggle -doHistogram \
-        -hBinSize=0.020504 -hBinCount=1000 -hMinVal=-14.08 -verbose=2 \
-            -db=calJac3 phyloP13wayAll > histogram.data 2>&1
-    #   real    8m15.623s
-
-    #   create plot of histogram:
-
-    cat << '_EOF_' | gnuplot > histo.png
-set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
-set size 1.4, 0.8
-set key left box
-set grid noxtics
-set grid ytics
-set title " Human Hg19 Histogram phyloP13way track, all 46 vertebrates"
-set xlabel " phyloP13way score, all 46 vertebrates"
-set ylabel " Relative Frequency"
-set y2label " Cumulative Relative Frequency (CRF)"
-set y2range [0:1]
-set y2tics
-set yrange [0:0.04]
-set xrange [-2:2]
-
-plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
-        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
-'_EOF_'
-    #   << happy emacs
-
-    display histo.png &
-
-  ######################   Running the primates  #######################
-
-
-
-
 #############################################################################
 # Quality track (DONE - 2010-07-14 - Hiram)
     mkdir -p /hive/data/genomes/calJac3/bed/qual/genbank
@@ -2542,4 +2237,243 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
     cd /hive/data/genomes/calJac3/bed/ensGene.58
     featureBits calJac3 ensGene
     # 50565085 bases of 2752505800 (1.837%) in intersection
+
+
+#########################################################################
+# phyloP conservation for 13-way (working 2010-07-22 - Chin - Hiram)
+#
+#
+    # split SS files into 1M chunks, this business needs smaller files
+    #   to complete
+
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP
+    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP
+    mkdir run.split
+    cd run.split
+
+
+    cat << '_EOF_' > doSplit.csh
+#!/bin/csh -ef
+set c = $1
+set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf 
+set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.split/ss/$c
+set WC = `cat $MAF | wc -l`
+set NL = `grep "^#" $MAF | wc -l`
+if ( -s $2 ) then
+    exit 0
+endif
+if ( -s $2.running ) then
+    exit 0
+endif
+
+date >> $2.running
+
+rm -fr $WINDOWS
+mkdir $WINDOWS
+pushd $WINDOWS > /dev/null
+if ( $WC != $NL ) then
+/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+    $MAF -i MAF -o SS -r $WINDOWS/$c -w 1000000,0 -I 1000 -B 5000
+endif
+popd > /dev/null
+date >> $2
+rm -f $2.running
+'_EOF_'
+# << happy emacs
+    chmod +x doSplit.csh
+
+    ls -1S -r ../../mafSplit | sed -e "s/.maf//" > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+doSplit.csh $(path1) {check out exists+ done/$(path1).done}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    mkdir ss done
+    ssh memk
+    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.split
+    gensub2 maf.list single template jobList
+    para -ram=8g create jobList
+    para try 
+    para push
+    para check
+    para time
+    # Completed: 10770 of 10770 jobs
+    # CPU time in finished jobs:   4401s      73.36m     1.22h    0.05d  0.000 y
+    # IO & Wait Time:             74525s    1242.08m    20.70h    0.86d  0.002 y
+    # Average job time:               7s       0.12m     0.00h    0.00d
+    # Longest finished job:         529s       8.82m     0.15h    0.01d
+    # Submission to last job:       892s      14.87m     0.25h    0.01d
+
+
+    # run phyloP with --method LRT 
+    ssh swarm
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.phyloP
+    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.phyloP
+
+    # Adjust model file base composition background and rate matrix to
+    # be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #   0.566
+    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
+        ../../cons/all/all.mod 0.566 > all.mod
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set f = $1
+set out = $2
+set cName = $f:r:r
+set chrDir = $f:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+rm -fr $tmp
+mkdir -p $tmp
+set ssSrc = "$cons/run.split/ss/$chrDir/$f"
+set useGrp = "$grp.mod"
+ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $f.wigFix
+popd > /dev/null
+mkdir -p $out:h
+sleep 4
+mv $tmp/$f.wigFix $out
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find ../run.split/ss -type f | sed -e "s/.ss$//; s#^../run.split/ss/##" \
+        > ss.list
+
+    # Create template file
+    #   file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(file1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+
+    ######################   Running all species  #######################
+    # setup run for all species
+    mkdir /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
+    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
+    rm -fr wigFix
+    mkdir wigFix
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push ... etc ...
+    para time
+# Completed: 7247 of 7247 jobs
+# CPU time in finished jobs:      78451s    1307.52m    21.79h    0.91d  0.002 y
+# IO & Wait Time:                306130s    5102.16m    85.04h    3.54d  0.010 y
+# Average job time:                  53s       0.88m     0.01h    0.00d
+# Longest finished job:             122s       2.03m     0.03h    0.00d
+# Submission to last job:           485s       8.08m     0.13h    0.01d
+
+    ssh hgwdev
+    cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
+    find ./wigFix -type f \
+        | sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
+        | sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
+XXXX 07-23 4:35PM
+error in log:
+Found start=0 at line 1192229886, the first chrom position is 1, not 0
+==> need to find the "start=1" in each header line of wigFix files
+==> using
+==> cat wigFile.list | xargs cat | grep "start=1 " > start1.txt
+XXXX 07-28 Waiting for Adam's phast fix
+    cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+        | wigEncode stdin phyloP13way.wig \
+                phyloP13way.wib  > wigEncode.log 2>&1 &
+    #   Converted stdin, upper limit 5.04, lower limit -10.12
+
+    #   good test to make sure no overlapping coordinates, bigWig:
+    #   consumes massive amount of memory, in bash raise your memory
+    #   limits:
+    ulimit -d 188743680
+    ulimit -v 188743680
+    time cat wigFile.list | xargs cat | sed -e "s/__[0-9]//" \
+        | wigToBigWig stdin ../../../../chrom.sizes phyloP13way.bw &
+
+    #   if you wanted to use the bigWig file, loading bigWig table:
+    ln -s `pwd`/phyloP13way.bw /gbdb/calJac3/bbi
+    hgsql calJac3 -e 'drop table if exists phyloP13wayAll; \
+            create table phyloP13wayAll \
+                (fileName varchar(255) not null); \
+            insert into phyloP13wayAll values
+        ("/gbdb/calJac3/bbi/phyloP13way.bw");'
+
+    #   loading the wiggle table:
+    ln -s `pwd`/phyloP13way.wib /gbdb/calJac3/multiz13way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/calJac3/multiz13way calJac3 \
+        phyloP13wayAll phyloP13way.wig
+    #   real    0m32.778s
+
+
+    #   create download files:
+    cat << '_EOF_' > mkDown.csh
+#!/bin/csh -fe
+foreach F (`cat wigFile.list`)
+    set C = $F:h:t:r
+    cat $F | sed -e "s/__[0-9]//" >> downloads/${C}.wigFix
+end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./mkDown.csh
+    mkdir downloads
+    time ./mkDown.csh
+    #   real    16m19.683s
+
+    time gzip downloads/chr*.wigFix
+    #   real    47m11.017s
+
+    wigTableStats.sh calJac3 phyloP13wayAll
+# db.table      min max mean count sumData
+# calJac3.phyloP13wayAll      -10.116 5.038 0.119587 1914580285 2.28959e+08
+#       stdDev viewLimits
+#       0.760605 viewLimits=-3.68344:3.92261
+    #   that range is: 10.116+5.039 = 15.154
+
+    #  Create histogram to get an overview of all the data
+    time nice -n +19 hgWiggle -doHistogram \
+        -hBinSize=0.015154 -hBinCount=1000 -hMinVal=-10.116 -verbose=2 \
+            -db=calJac3 phyloP13wayAll > histogram.data 2>&1
+    #   real    8m15.623s
+
+    #   create plot of histogram:
+
+    cat << '_EOF_' | gnuplot > histo.png
+set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
+set size 1.4, 0.8
+set key left box
+set grid noxtics
+set grid ytics
+set title " Human Hg19 Histogram phyloP13way track, all 30 vertebrates"
+set xlabel " phyloP13way score, all 30 vertebrates"
+set ylabel " Relative Frequency"
+set y2label " Cumulative Relative Frequency (CRF)"
+set y2range [0:1]
+set y2tics
+set yrange [0:0.04]
+set xrange [-2:2]
+
+plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
+        "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
+'_EOF_'
+    #   << happy emacs
+
+    display histo.png &
+
+
 ############################################################################

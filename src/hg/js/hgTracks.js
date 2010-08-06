@@ -794,22 +794,23 @@ function initImgTblButtons()
     var btns = $("p.btn");
     if(btns.length > 0) {
         imgTblZipButtons($('#imgTbl'));
-        $(btns).mouseover( imgTblButtonMouseOver );
-        $(btns).mouseout(  imgTblButtonMouseOut  );
+        $(btns).mouseenter( imgTblButtonMouseOver );
+        $(btns).mouseleave( imgTblButtonMouseOut  );
         $(btns).show();
     }
-    var handle = $("td.dragHandle[id^='td_side_']");
+var handle = $("td.dragHandle");
     if(handle.length > 0) {
-        $(handle).mouseover( imgTblDragHandleMouseOver );
-        $(handle).mouseout(  imgTblDragHandleMouseOut  );
+        $(handle).mouseenter( imgTblDragHandleMouseOver );
+        $(handle).mouseleave( imgTblDragHandleMouseOut  );
     }
 }
 
 function imgTblDragHandleMouseOver()
 {
 // Highlights a single row when mouse over a dragHandle column (sideLabel and buttons)
-    if(jQuery.tableDnD.dragObject == null)
+    if(jQuery.tableDnD.dragObject == null) {
         $( this ).parents("tr").addClass("trDrag");
+    }
 }
 
 function imgTblDragHandleMouseOut()
@@ -832,12 +833,10 @@ function imgTblButtonMouseOver()
 function imgTblButtonMouseOut()
 {
 // Ends composite highlighting by mouse over
-    if(jQuery.tableDnD.dragObject == null) {
-        var classList = $( this ).attr("class").split(" ");
-        var btns = $( "p." + classList[0] );
-        $( btns ).removeClass('btnBlue');
-        $( btns ).addClass('btnGrey');
-    }
+    var classList = $( this ).attr("class").split(" ");
+    var btns = $( "p." + classList[0] );
+    $( btns ).removeClass('btnBlue');
+    $( btns ).addClass('btnGrey');
 }
 
 
@@ -1711,8 +1710,6 @@ function parseMap(ele, reset)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-
-    alert(response);
     $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
