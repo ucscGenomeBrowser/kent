@@ -16,7 +16,7 @@ export logDir="${userLog}/${YYYY}/${MM}"
 export cleanerLog="${logDir}/cleanerLog.${dateStamp}.txt"
 export dbTrashLog="${logDir}/dbTrash.${dateStamp}.txt"
 export trashLog="${logDir}/trash.${YYYY}-${MM}.txt"
-export trashCleaner="/usr/local/apache/cgi-bin-hiram/trashCleaner.csh"
+export trashCleaner="$HOME/kent/src/product/scripts/trashCleaner.csh"
 
 export ECHO="/bin/echo -e"
 
