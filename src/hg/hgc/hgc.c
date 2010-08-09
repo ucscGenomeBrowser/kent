@@ -2606,7 +2606,7 @@ char *tableName;
 
 if (!isCustomTrack(tdb->track))
     {
-    extraUiLinks(database,tdb);
+    extraUiLinks(database,tdb,trackHash);
     printTrackUiLink(tdb);
     printDataVersion(tdb);
     printOrigAssembly(tdb);

@@ -487,6 +487,7 @@ if(doSearch)
 
 if(tracksFound)
     {
+    struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<h3><b>%d tracks found:</b></h3>\n", tracksFound);
     hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
     hPrintf("<table><tr><td colspan='2'>\n");
@@ -516,7 +517,7 @@ if(tracksFound)
             }
         hPrintf("</td>\n");
         hPrintf("<td>%s", track->shortLabel);
-        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE);
+        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
         hPrintf("</td>\n");
         hPrintf("<td><a target='_top' href='%s'>%s</a></td>\n", trackUrl(track->track, NULL), track->longLabel);
         hPrintf("</tr>\n");
