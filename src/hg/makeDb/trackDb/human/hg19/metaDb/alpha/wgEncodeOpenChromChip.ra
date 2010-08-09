@@ -1227,7 +1227,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-16
@@ -1250,7 +1250,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeOpenChromChip
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-16
@@ -1606,7 +1606,7 @@ antibody Input
 cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-13
@@ -1629,7 +1629,7 @@ antibody Input
 cell HepG2
 composite wgEncodeOpenChromChip
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-03-13
@@ -1963,7 +1963,7 @@ antibody Input
 cell HUVEC
 composite wgEncodeOpenChromChip
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-09-24
@@ -1986,7 +1986,7 @@ antibody Input
 cell HUVEC
 composite wgEncodeOpenChromChip
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2009-09-24
@@ -2364,7 +2364,7 @@ antibody Input
 cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2008-12-05
@@ -2387,7 +2387,7 @@ antibody Input
 cell K562
 composite wgEncodeOpenChromChip
 controlId K562/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2008-12-05
@@ -2617,7 +2617,7 @@ antibody Input
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-22
@@ -2640,7 +2640,7 @@ antibody Input
 cell MCF-7
 composite wgEncodeOpenChromChip
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-22
@@ -2871,7 +2871,7 @@ antibody Input
 cell ProgFib
 composite wgEncodeOpenChromChip
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-23
@@ -2894,7 +2894,7 @@ antibody Input
 cell ProgFib
 composite wgEncodeOpenChromChip
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2009-12-23
@@ -3015,4 +3015,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: -1201171735
+# MAGIC: -1186566139

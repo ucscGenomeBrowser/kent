@@ -33,15 +33,6 @@
 
 set ECHO = "/bin/echo -e"
 
-${ECHO} "Content-type: text/html"
-${ECHO}
-${ECHO} "<HTML><HEAD><TITLE>hgwdev-hiram CGI</TITLE></HEAD>"
-${ECHO} "<BODY>"
-${ECHO} "<HR>"
-${ECHO} "<H4>hgwdev-hiram CGI</H4>"
-${ECHO} "<HR>"
-${ECHO} "<PRE>"
-
 # set hardLinkOK = 1 if the userData save area is on the same filesystem
 # as the trashCt.  If this is not true, set hardLinkOK = 0 to avoid hard links.
 set hardLinkOK = 1
@@ -74,8 +65,8 @@ set sessionFiles = `mktemp /data/tmp/ct/sessionFiles.XXXXXX`
 /bin/chmod 666 "${sessionFiles}"
 set saveList = `mktemp /data/tmp/ct/saveList.XXXXXX`
 /bin/chmod 666 "${saveList}"
-set refreshList = `mktemp /data/tmp/ct/refreshList.XXXXXX`
-/bin/chmod 666 "${refreshList}"
+# set refreshList = `mktemp /data/tmp/ct/refreshList.XXXXXX`
+# /bin/chmod 666 "${refreshList}"
 
 # get directories started and read permissions if first time use
 if ( ! -d "${userCt}" ) then
@@ -97,7 +88,7 @@ if ( ! -s "${trashLog}" ) then
 endif
 
 #  XXX debugging, capture entire refreshCommand output for perusal
-${refreshCommand} ${centralDb} -verbose=4 >& "${refreshList}"
+# ${refreshCommand} ${centralDb} -verbose=4 >& "${refreshList}"
 
 # this refreshNamedSessionCustomTracks has the side effect of accessing
 #	the trash files to be saved and the hgcustom customTrash database
@@ -122,16 +113,17 @@ egrep "^Got |^Found live custom track: |^setting .*File: |^setting bigDataUrl:" 
 # XXX what if this comm produces nothing, is it a failure ?
 /usr/bin/comm -13 "${alreadySaved}" "${sessionFiles}" > "${saveList}"
 
+set filesToDo =  `cat "${saveList}" | egrep "Got|hiram" | wc -l`
 # we do not want to do everything at once.  Limit the number of
 # files to process at once.
-set maxFiles = 1
+set maxFiles = 2
 
 # it appears that an empty list is OK for this foreach() loop
 #	it does nothing and is not a failure
 foreach F (`cat "${saveList}" | egrep "Got|hiram"`)
     @ filesDone++
     if ( $filesDone > $maxFiles ) then
-        ${ECHO} "completed maximum of $maxFiles files ($filesDone)"
+        ${ECHO} "completed maximum of $maxFiles files of $filesToDo to do"
 	break
     endif
     if ( "${F}" == "Got" ) then
@@ -159,12 +151,12 @@ end
 
 #############################################################################
 # can now clean customTrash tables that are aged out
-#	testing here has -drop not present
+#	XXX testing here has -drop not present
 #	add -drop to get the tables to actually drop
 ${dbTrash} -extFile -extDel -age=${dbTrashTime} -verbose=2 >>& ${dbTrashLog}
 
 #############################################################################
-# XXX find and remove commands here to remove trash files
+# find and remove commands here to remove trash files
 #  measure trash size before removal
 set kbBefore = \
 `du --apparent-size -ksc "${trashDir}" | grep "${trashDir}" | awk '{print $1}'`
@@ -210,16 +202,14 @@ ${ECHO} "${dateStamp}\t${eightHourClean}\t${seventyTwoHourClean}" \
 # XXX what if this comm produces nothing, is it a failure ?
 /usr/bin/comm -23 "${alreadySaved}" "${sessionFiles}" > "${considerRemoval}"
 /bin/chmod 666 "${considerRemoval}"
+${ECHO} "candidates for removal, from sessions removed or files replaced:"
+cat "${considerRemoval}"
 # XXX debug - leave these files for inspection, they should be removed
 # in production
-# rm -f "${saveList}"
-# rm -f "${alreadySaved}"
-# rm -f "${sessionFiles}"
+rm -f "${saveList}"
+rm -f "${alreadySaved}"
+rm -f "${sessionFiles}"
 # rm -f "${refreshList}"
 
-${ECHO} "</PRE>"
-${ECHO} "<HR>"
-${ECHO} "<H1>SUCCESS trash cleaning "`date`"</H1>"
-${ECHO} "<HR>"
-${ECHO} "</BODY></HTML>"
+${ECHO} "SUCCESS trash cleaning "`date`
 exit 0
