@@ -54,37 +54,51 @@ set MM = `date "+%m"`
 set logDir = "${userLog}/${YYYY}/${MM}"
 set dbTrashLog = "${logDir}/dbTrash.${dateStamp}.txt"
 set trashLog = "${logDir}/trash.${YYYY}-${MM}.txt"
+# number of minutes for expiration for find commands on trash files
+set eightHours = "+480"
+set seventyTwoHours = "+4320"
+
+if ( $1 != "searchAndDestroy" ) then
+    ${ECHO} "usage:  trashCleaner.csh searchAndDestroy"
+    ${ECHO} "This script will run when given the argument searchAndDestroy"
+    ${ECHO} "which is exactly what it will do to the trash files for the"
+    ${ECHO} "genome browser.  There is no turning back after it gets going."
+    ${ECHO} "It will move files that belong to sessions from the directory"
+    ${ECHO} "${trashCt} to ${userCt}"
+    ${ECHO} "activity logs can be found in ${userLog}"
+    exit 255
+endif
 
 # this special hg.conf needs read-only access to hgcentral (and ordinary dbs)
 #	and it needs read-write access to hgcustom customTrash db
 setenv HGDB_CONF "/data/apache/userdata/.hg.localhost.conf"
 
 set alreadySaved = `mktemp /data/tmp/ct/alreadySaved.XXXXXX`
-/bin/chmod 666 "${alreadySaved}"
+chmod 666 "${alreadySaved}"
 set sessionFiles = `mktemp /data/tmp/ct/sessionFiles.XXXXXX`
-/bin/chmod 666 "${sessionFiles}"
+chmod 666 "${sessionFiles}"
 set saveList = `mktemp /data/tmp/ct/saveList.XXXXXX`
-/bin/chmod 666 "${saveList}"
+chmod 666 "${saveList}"
 # set refreshList = `mktemp /data/tmp/ct/refreshList.XXXXXX`
-# /bin/chmod 666 "${refreshList}"
+# chmod 666 "${refreshList}"
 
 # get directories started and read permissions if first time use
 if ( ! -d "${userCt}" ) then
-    /bin/mkdir -p "${userCt}"
-    /bin/chmod 755 "${userCt}"
+    mkdir -p "${userCt}"
+    chmod 755 "${userCt}"
 endif
 if ( ! -d "${logDir}" ) then
-    /bin/mkdir -p "${logDir}"
-    /bin/chmod 755 "${userLog}"
-    /bin/chmod 755 "${userLog}/${YYYY}"
-    /bin/chmod 755 "${logDir}"
+    mkdir -p "${logDir}"
+    chmod 755 "${userLog}"
+    chmod 755 "${userLog}/${YYYY}"
+    chmod 755 "${logDir}"
 endif
 
 # if this is first reference to trashLog, start it with header lines
 if ( ! -s "${trashLog}" ) then
     ${ECHO} "# date\t\t8-hour\t\t72-hour" > "${trashLog}"
     ${ECHO} "#\t\tKbytes\t\tKbytes" >> "${trashLog}"
-    /bin/chmod 666 "${trashLog}"
+    chmod 666 "${trashLog}"
 endif
 
 #  XXX debugging, capture entire refreshCommand output for perusal
@@ -106,21 +120,21 @@ egrep "^Got |^Found live custom track: |^setting .*File: |^setting bigDataUrl:" 
 
 # construct a list of already moved files
 # XXX what if this finds nothing ?  Is it a failure ?
-/usr/bin/find $userCt -type f | sed -e "s#${userCt}/##" | sort \
+find $userCt -type f | sed -e "s#${userCt}/##" | sort \
 	> "${alreadySaved}"
 
 # construct a list of files that should move
 # XXX what if this comm produces nothing, is it a failure ?
-/usr/bin/comm -13 "${alreadySaved}" "${sessionFiles}" > "${saveList}"
+comm -13 "${alreadySaved}" "${sessionFiles}" > "${saveList}"
 
-set filesToDo =  `cat "${saveList}" | egrep "Got|hiram" | wc -l`
+set filesToDo =  `cat "${saveList}" | wc -l`
 # we do not want to do everything at once.  Limit the number of
 # files to process at once.
 set maxFiles = 2
 
 # it appears that an empty list is OK for this foreach() loop
 #	it does nothing and is not a failure
-foreach F (`cat "${saveList}" | egrep "Got|hiram"`)
+foreach F (`cat "${saveList}"`)
     @ filesDone++
     if ( $filesDone > $maxFiles ) then
         ${ECHO} "completed maximum of $maxFiles files of $filesToDo to do"
@@ -138,11 +152,11 @@ foreach F (`cat "${saveList}" | egrep "Got|hiram"`)
     else if ( -s "${trashFile}" ) then
         ${ECHO} "${trashFile} -> ${saveFile}"
 	if ( $hardLinkOK == 1 ) then
-	    /bin/ln ${trashFile} ${saveFile}
-	    /bin/ln -f -s ${saveFile} ${trashFile}
+	    ln ${trashFile} ${saveFile}
+	    ln -f -s ${saveFile} ${trashFile}
 	else
-	    /bin/cp -p ${trashFile} ${saveFile}
-	    /bin/ln -f -s ${saveFile} ${trashFile}
+	    cp -p ${trashFile} ${saveFile}
+	    ln -f -s ${saveFile} ${trashFile}
 	endif
     else
         ${ECHO} "not file or symlink: ${trashFile}"
@@ -151,9 +165,8 @@ end
 
 #############################################################################
 # can now clean customTrash tables that are aged out
-#	XXX testing here has -drop not present
-#	add -drop to get the tables to actually drop
-${dbTrash} -extFile -extDel -age=${dbTrashTime} -verbose=2 >>& ${dbTrashLog}
+${dbTrash} -extFile -extDel -drop -age=${dbTrashTime} \
+	-verbose=2 >>& ${dbTrashLog}
 
 #############################################################################
 # find and remove commands here to remove trash files
@@ -166,10 +179,9 @@ set kbBefore = \
 #       cleaner avoids files in trash/ct/ and trash/hgSs/ to leave
 #	custom tracks existing.
 
-# XXX uncomment to allow it to function
-# /usr/bin/find ${trashDir} \! \( -regex "${trashDir}/ct/.*" \
-#	-or -regex "${trashDir}/hgSs/.*" \) -type f -amin +480 \
-#	-exec rm -f {} \;
+find ${trashDir} \! \( -regex "${trashDir}/ct/.*" \
+	-or -regex "${trashDir}/hgSs/.*" \) -type f -amin ${eightHours} \
+	-exec rm -f {} \;
 
 set kbAfter = \
 `du --apparent-size -ksc "${trashDir}" | grep "${trashDir}" | awk '{print $1}'`
@@ -180,10 +192,9 @@ set kbBefore = $kbAfter
 #       specified full path TRASHDIR.  This 72-hour since last access cleaner
 #       works only on files in trash/ct/ and trash/hgSs/
 
-# XXX uncomment to allow it to function
-# /usr/bin/find ${trashDir} \( -regex "${trashDir}/ct/.*" \
-#	-or -regex "${trashDir}/hgSs/.*" \) -type f -amin +4320 \
-#	-exec rm -f {} \;
+find ${trashDir} \( -regex "${trashDir}/ct/.*" \
+	-or -regex "${trashDir}/hgSs/.*" \) -type f -amin ${seventyTwoHours} \
+	-exec rm -f {} \;
 
 set kbAfter = \
 `du --apparent-size -ksc "${trashDir}" | grep "${trashDir}" | awk '{print $1}'`
@@ -195,17 +206,15 @@ ${ECHO} "${dateStamp}\t${eightHourClean}\t${seventyTwoHourClean}" \
 #############################################################################
 
 # XXX is this find OK if it finds nothing ?
-/usr/bin/find "${userCt}" -type f | sed -e "s#${userCt}/##" | sort \
+find "${userCt}" -type f | sed -e "s#${userCt}/##" | sort \
 	> "${alreadySaved}"
 
 # construct a list of files that could be removed from userCt
 # XXX what if this comm produces nothing, is it a failure ?
-/usr/bin/comm -23 "${alreadySaved}" "${sessionFiles}" > "${considerRemoval}"
-/bin/chmod 666 "${considerRemoval}"
+comm -23 "${alreadySaved}" "${sessionFiles}" > "${considerRemoval}"
+chmod 666 "${considerRemoval}"
 ${ECHO} "candidates for removal, from sessions removed or files replaced:"
 cat "${considerRemoval}"
-# XXX debug - leave these files for inspection, they should be removed
-# in production
 rm -f "${saveList}"
 rm -f "${alreadySaved}"
 rm -f "${sessionFiles}"

@@ -8,43 +8,48 @@ export trashCt="${trashDir}/ct"
 export userData="/data/apache/userdata"
 export userCt="${userData}/ct"
 export userLog="${userData}/log"
-export considerRemoval="${userLog}/considerRemoval.txt"
 export dateStamp=`date "+%Y-%m-%dT%H"`
 export YYYY=`date "+%Y"`
 export MM=`date "+%m"`
 export logDir="${userLog}/${YYYY}/${MM}"
 export cleanerLog="${logDir}/cleanerLog.${dateStamp}.txt"
-export dbTrashLog="${logDir}/dbTrash.${dateStamp}.txt"
-export trashLog="${logDir}/trash.${YYYY}-${MM}.txt"
 export trashCleaner="$HOME/kent/src/product/scripts/trashCleaner.csh"
+export failMail="alert@some.where"
+export failMessage="ALERT: from trashCleanMonitor.sh - the trash cleaner is failing, check ${cleanerLog}"
 
 export ECHO="/bin/echo -e"
 
-${ECHO} "Content-type: text/html"
-${ECHO}
-${ECHO} "<HTML><HEAD><TITLE>trash clean and monitor</TITLE></HEAD>"
-${ECHO} "<BODY>"
-${ECHO} "<HR>"
-${ECHO} "<H4>running trash cleaner:</H4>"
-${ECHO} "<HR>"
-${ECHO} "<PRE>"
-$trashCleaner > "${cleanerLog}" 2>&1
+if [ "$1" != "searchAndDestroy" ]; then
+    ${ECHO} "usage:  trashCleanMonitor.csh searchAndDestroy"
+    ${ECHO} "This script will run when given the argument searchAndDestroy"
+    ${ECHO} "which is exactly what it will do to the trash files for the"
+    ${ECHO} "genome browser.  There is no turning back after it gets going."
+    ${ECHO} "This script is actually a monitor on the actual trash cleaner:"
+    ${ECHO} "\t${trashCleaner}"
+    ${ECHO} "It will verify the trash cleaner is functioning properly and if"
+    ${ECHO} "there are problems it will email a failure message to"
+    ${ECHO} "\t${failMail}"
+    ${ECHO} "Files that belong to sessions will be moved from the directory"
+    ${ECHO} "${trashCt} to ${userCt}"
+    ${ECHO} "activity logs can be found in ${userLog}"
+    exit 255
+fi
+
+exit 0
+
+$trashCleaner searchAndDestroy > "${cleanerLog}" 2>&1
 returnCode=$?
 if [ "${returnCode}" -eq "0" ]; then
     lastLine=`tail --lines=1 "${cleanerLog}" | sed -e "s/ trash clean.*//"`
     if [ "${lastLine}" != "SUCCESS" ]; then
-	${ECHO} "ERROR: trashCleaner has zero return code, but no success message"
-	${ECHO} "ERROR: Some of the log:"
-	tail --lines=10 "${cleanerLog}"
-    else
-	tail --lines=1 "${cleanerLog}"
+	${ECHO} "${failMessage}" \
+	    | mail -s "ALERT: TRASH" ${failMail} > /dev/null 2> /dev/null
+	exit 255
     fi
 else
-    ${ECHO} "ERROR: trashCleaner has failure exit code.  Some of the log:"
-    tail --lines=10 "${cleanerLog}"
+    ${ECHO} "${failMessage}" \
+	| mail -s "ALERT: TRASH" ${failMail} > /dev/null 2> /dev/null
+    exit 255
 fi
 
-${ECHO} "</PRE>"
-${ECHO} "<HR>"
-${ECHO} "</BODY></HTML>"
 exit 0
