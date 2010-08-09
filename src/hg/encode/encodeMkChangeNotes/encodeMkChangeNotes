@@ -148,8 +148,8 @@ def main(argv=None):
     addition_files = []
 
     # some re we will be using
-    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+|pairedTagAlign)$")
-    gbdb = re.compile("^(wig|tagAlign)$")
+    table_and_file = re.compile("^(narrowPeaks|narrowPeak|broadPeak|gtf|bedGraph\d+|bed\d+|pairedTagAlign|shortFrags)$")
+    gbdb = re.compile("^(wig|tagAlign|bigWig|bam)$")
     file_only = re.compile("^(fastq|fasta|rpkm|bowtie|psl|csqual|csfasta)$")
 
     # if new relase, add the full path to all files
@@ -159,16 +159,13 @@ def main(argv=None):
             % (database, options.composite_name, current_release_dir)
 
     # generate the list of files
-    if os.path.exists("gbdb"):
-        gbdb_files  = get_file_set("gbdb", ".*")
-    else:
-        gbdb_files = set()
-    current_files = get_file_set(current_release_dir, ".*\.gz$")
+    file_pattern = ".*\.(gz|bigWig|bam)$"   # the pattern that describes what files we even consider
+    current_files = get_file_set(current_release_dir, file_pattern)
     if prev_release_dir == "-":
         prev_files = set()
         prev_release_dir = ""
     else:
-        prev_files = get_file_set(prev_release_dir, ".*\.gz$")
+        prev_files = get_file_set(prev_release_dir, file_pattern)
 
     # form the three derived sets
     removed_files = prev_files - current_files
@@ -194,9 +191,14 @@ def main(argv=None):
 
     # process the list of unchanged files
     for f in unchanged_files:
-        name, type, extension = f.split(".")
-        assert extension == "gz"
+        if f.count(".") == 1:
+            name, type = f.split(".")
+            compression = None
+        elif f.count(".") == 2:
+            name, type, compression = f.split(".")
 
+        assert compression == None or compression == "gz"
+        
         # we don't deal with revisions yet
         stem, version = parse_version(name)
         if next_version(stem, version) in new_files:
@@ -210,12 +212,26 @@ def main(argv=None):
 
         if gbdb.match(type):
             unchanged_files_list.append(path_prefix + f)
+            if type == "bam":
+                if os.path.exists(path_prefix + f + ".bai"):
+                    new_files_list.append(path_prefix + f + ".bai")
+                else:
+                    warn = "could not find .bai file for bam file %s" % f
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+                gbdb_path = get_gbdb_pathname(database, name)
+                if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
+                    new_gbdbs_list.append(gbdb_path + ".bai")
+                else:
+                    warn = "could not find %s file for %s" % (gbdb_path + ".bai", f)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+
             if table_exists(database, name):
                 unchanged_tables_list.append(name)
                 gbdb_path = get_gbdb_pathname(database, name)
                 if gbdb_path != None and os.path.exists(gbdb_path):
                     unchanged_gbdbs_list.append(gbdb_path)
-                    gbdb_files.remove(os.path.basename(gbdb_path))
                 else:
                     warn = "could not find %s file for %s" % (gbdb_path, f)
                     warnings.append(warn)
@@ -239,11 +255,31 @@ def main(argv=None):
 
     # process the list of removed files
     for f in removed_files:
-        name, type, extension = f.split(".")
-        assert extension == "gz"
+        if f.count(".") == 1:
+            name, type = f.split(".")
+            compression = None
+        elif f.count(".") == 2:
+            name, type, compression = f.split(".")
+
+        assert compression == None or compression == "gz"
 
         if gbdb.match(type):
             removed_files_list.append(path_prefix + f)
+            if type == "bam":
+                if os.path.exists(path_prefix + f + ".bai"):
+                    new_files_list.append(path_prefix + f + ".bai")
+                else:
+                    warn = "could not find .bai file for bam file %s" % f
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+                gbdb_path = get_gbdb_pathname(database, name)
+                if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
+                    new_gbdbs_list.append(gbdb_path + ".bai")
+                else:
+                    warn = "could not find %s file for %s" % (gbdb_path + ".bai", f)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+
             if table_exists(database, name):
                 removed_tables_list.append(name)
                 gbdb_path = get_gbdb_pathname(database, name)
@@ -272,17 +308,36 @@ def main(argv=None):
 
     # process the list of new files
     for f in new_files:
-        name, type, extension = f.split(".")
-        assert extension == "gz"
+        if f.count(".") == 1:
+            name, type = f.split(".")
+            compression = None
+        elif f.count(".") == 2:
+            name, type, compression = f.split(".")
+
+        assert compression == None or compression == "gz"
 
         if gbdb.match(type):
             new_files_list.append(path_prefix + f)
+            if type == "bam":
+                if os.path.exists(path_prefix + f + ".bai"):
+                    new_files_list.append(path_prefix + f + ".bai")
+                else:
+                    warn = "could not find .bai file for bam file %s" % f
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+                gbdb_path = get_gbdb_pathname(database, name)
+                if gbdb_path != None and os.path.exists(gbdb_path + ".bai"):
+                    new_gbdbs_list.append(gbdb_path + ".bai")
+                else:
+                    warn = "could not find %s file for %s" % (gbdb_path + ".bai", f)
+                    warnings.append(warn)
+                    print >>sys.stderr, warn
+                    
             if table_exists(database, name):
                 new_tables_list.append(name)
                 gbdb_path = get_gbdb_pathname(database, name)
                 if gbdb_path != None and os.path.exists(gbdb_path):
                     new_gbdbs_list.append(gbdb_path)
-                    gbdb_files.remove(os.path.basename(gbdb_path))
                 else:
                     warn = "could not find %s file for %s" % (gbdb_path, f)
                     warnings.append(warn)
@@ -310,31 +365,6 @@ def main(argv=None):
             addition_files.append(path_prefix + f)
         else:
             warn = "addition file %s not found" % f
-            warnings.append(warn)
-            print >>sys.stderr, warn
-
-    # check remaining files from gbdb
-    for f in gbdb_files:
-        if '.' in f:
-            file, extension = f.split(".", 1)
-        else:
-            file = f
-        if table_exists(database, file):
-            if file not in new_tables_list:     # make sure table is already in our list
-                new_tables_list.append(file)
-            gbdb_path = get_gbdb_pathname(database, file)
-            if gbdb_path != None and os.path.exists(gbdb_path):
-                new_gbdbs_list.append(gbdb_path)
-                
-                warn = "file %s in ./gbdb/ found with coresponding table and gbdb file but no download file" % f
-                warnings.append(warn)
-                print >>sys.stderr, warn
-            else:
-                warn = "file %s in ./gbdb/ found with coresponding table but no download file" % f
-                warnings.append(warn)
-                print >>sys.stderr, warn
-        else:
-            warn = "file %s in ./gbdb/ found with no coresponding table or download file found" % f
             warnings.append(warn)
             print >>sys.stderr, warn
 
