@@ -2273,6 +2273,8 @@ while ((line = customPpNextReal(cpp)) != NULL)
 		continue;
 	    }
 	oneList = track;
+	if (!ctGenome(track) && ctDb)
+	    ctAddToSettings(track, "db", ctDb);
 	}
     else
     /* Main case - we have to find a track factory that recognizes

@@ -10680,12 +10680,12 @@ done
 -rw-rw-r-- 1     386 Jul 23 16:27 lineageSpecificRepeats/chrM_NC_012920.out.spec
 -rw-rw-r-- 1  221381 Jul 23 16:27 lineageSpecificRepeats/chr5_ctg1_hap1.out.spec 
 #############################################################################
-# Update BlastTab tables for hg19 (Done, Fan, 7/22/2010)
+# Update BlastTab tables for hg19 (Done, Fan, 8/6/2010)
     ssh hgwdev
-    mkdir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
+    mkdir -p /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
     cd /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
-    mkdir 100722
-    cd 100722
+    mkdir 100806
+    cd 100806
     # Get the proteins used by the other hgNear organisms:
     pepPredToFa hg19 knownGenePep hg19.known.faa
     pepPredToFa mm9 knownGenePep mm9.known.faa
@@ -10711,11 +10711,10 @@ dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
 ce6Fa /hive/data/genomes/ce6/bed/blastp/wormPep190.faa
 sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
 
-buildDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100722
-scratchDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100722/tmp
+buildDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100806
+scratchDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100806/tmp
 _EOF_
 doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
-
 #########################################################################
 # LIFTOVER TO Hg18 (RE-DONE - 2010-07-26 - Hiram )
     #	preserving the previous 10K liftOver files
@@ -10769,7 +10768,7 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 	| pslToBed stdin hg19ToHg18.10K.bed
 
 ##############################################################################
-# UNIGENE/SAGE TRACK (DONE - 2010-07-19 Fan)
+# UNIGENE/SAGE TRACK (RE-BUILT - 2010-08-06 Fan)
 
 # Create the uniGene alignments
 
@@ -10778,22 +10777,22 @@ doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
     # /cluster/home/angie/unigeneVers/unigene.csh .
 
     ssh hgwdev
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100719
-    cd /hive/data/genomes/hg19/bed/uniGene/100719
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806
+    cd /hive/data/genomes/hg19/bed/uniGene/100806
 
-    set Version = 224
+    set Version = 225
 
     zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
     sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
 
     ssh pk
-    set Version = 224
-    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
-    cd /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+    set Version = 225
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
 
     ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
     ls -1S \
-    /hive/data/genomes/hg19/bed/uniGene/100719/Hs.seq.uniq.simpleHeader.fa \
+    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
       > uniGene.lst
     
     cat << '_EOF_' > template.sub
@@ -10810,37 +10809,38 @@ ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(roo
     para check
     para push
 
-    #Completed: 93 of 93 jobs
-    #CPU time in finished jobs:      61718s    1028.63m    17.14h    0.71d  0.002 y
-    #IO & Wait Time:                  1049s      17.48m     0.29h    0.01d  0.000 y
-    #Average job time:                 675s      11.25m     0.19h    0.01d
-    #Longest finished job:            4611s      76.85m     1.28h    0.05d
-    #Submission to last job:          5295s      88.25m     1.47h    0.06d
-    #Estimated complete:                 0s       0.00m     0.00h    0.00d
+    # Completed: 93 of 93 jobs
+    # CPU time in finished jobs:      61305s    1021.74m    17.03h    0.71d  0.002 y
+    # IO & Wait Time:                  1117s      18.62m     0.31h    0.01d  0.000 y
+    # Average job time:                 671s      11.19m     0.19h    0.01d
+    # Longest finished job:            4574s      76.23m     1.27h    0.05d
+    # Submission to last job:          4709s      78.48m     1.31h    0.05d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
 
     pslSort dirs raw.psl tmp psl >& pslSort.log
     cat raw.psl|\
     pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
       stdin hg19.uniGene.pslReps.psl /dev/null
-    #Processed 799148 alignments
+    #Processed 800002 alignments
     
     gzip raw.psl
 
     ssh hgwdev
-    cd /hive/data/genomes/hg19/bed/uniGene/100719/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
 
     hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
 
     mkdir -p /gbdb/hg19/uniGene
     cd /gbdb/hg19/uniGene
 
-    ln -s
-    /hive/data/genomes/hg19/bed/uniGene/100719/Hs.seq.uniq.simpleHeader.fa \
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
     Hs.seq.uniq.simpleHeader.fa
 
 # load the sequence
 
-    hgLoadSeq hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
 
 #############################################################################
 # GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)
@@ -11069,8 +11069,14 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     cat unMapped | awk ' /^#/|| /^chr/ {print $1, $2, $3,_}' \
        > summaryUnMapped.txt
 
+    # Fix up the result, so that $11(blockSizes) = $8(thickEnd)  - $7
+    # (thickStart) without the fix, the checkTableCoors will complain.
+     cat sestanBrainAtlasHg19.bed | awk '{print  $1,$2,$3,$4,$5,$6,$7,$8,$9, \
+        $10, $8-$7, $12,$13,$14,$15 }' >  sestanBrainAtlasHg19Fixed.bed
+
+
     # load the table
-    hgLoadBed hg19 sestanBrainAtlas sestanBrainAtlasHg19.bed
+    hgLoadBed hg19 sestanBrainAtlas sestanBrainAtlasHg19Fixed.bed
     # Reading sestanBrainAtlasHg19.bed
     # Loaded 877469 elements of size 15
     # Sorted

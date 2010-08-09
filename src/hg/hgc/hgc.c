@@ -2319,10 +2319,15 @@ if(sameString(tdb->type,"genePred")
 && startsWith("ENCODE Gencode",tdb->longLabel)
 && startsWith("ENST",geneName))
     {
-#define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
-    puts("<LI>\n");
-    printf(ENSEMBL_TRANSCRIPTID_LINK,geneName);
-    puts("</LI>\n");
+    char *ensemblIdUrl = trackDbSetting(tdb, "ensemblIdUrl");
+
+    if (ensemblIdUrl != NULL)
+// #define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
+        {
+        puts("<LI>\n");
+        printf("<a href=\"%s%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id", ensemblIdUrl,geneName);
+        puts("</LI>\n");
+        }
     }
 
 if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))

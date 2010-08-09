@@ -1118,12 +1118,8 @@ boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trac
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 // Make a table schema link (if appropriate and then returns TRUE)
 
-//#define BIG_UI_NAV_LINKS
-#ifdef BIG_UI_NAV_LINKS
 void makeTopLink(struct trackDb *tdb);
 /* Link to top of UI page */
-#endif//def BIG_UI_NAV_LINKS
-
 
 void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash);
 /* Show downloads, schema and metadata links where appropriate */

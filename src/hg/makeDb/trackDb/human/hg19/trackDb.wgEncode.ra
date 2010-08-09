@@ -22,7 +22,7 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
 include trackDb.wgEncodeCshlLongRnaSeq.ra
-include trackDb.wgEncodeCaltechRnaSeq.ra
+include wgEncodeCaltechRnaSeq.ra
 
 track wgEncodeMapability
 compositeTrack on
@@ -239,9 +239,11 @@ dragAndDrop subTracks
 priority 34.3
 #visibility pack
 color 12,12,120
-url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
-yalePseudoAssoc wgEncodeSangerGencodeYalePseudoV4
+#url http://tables.pseudogene.org/PGOHUMxxxxxxxxxxx
+yalePseudoAssoc wgEncodeGencodeYalePseudoV4
 yaleUrl http://tables.pseudogene.org/
+ensemblIdUrl http://www.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
+#ensemblIdUrl http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=
 type genePred
 hgGene on
 hgsid on
@@ -303,7 +305,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     urlLabel Vega Transcript:
     idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV4 where name="%s"
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Manual level=1-2 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V4c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeManualV4 fileName=wgEncodeGencodeManualV4.gtf.gz
 
     track wgEncodeGencodeAutoV4
     subTrack wgEncodeGencode
@@ -314,7 +315,6 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     #url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     #urlLabel Vega Transcript:
     #idInUrlSql select ottTranscriptId from wgEncodeGencodeClassesV4 where name="%s"     ### there are not OTT ids for level 3
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V4c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodeAutoV4 fileName=wgEncodeGencodeAutoV4.gtf.gz
 
     track wgEncodeGencodePolyaV4
     subTrack wgEncodeGencode off
@@ -322,9 +322,8 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     longLabel ENCODE Gencode PolyA Transcript Annotations (level 2) (May 2010)
     type genePred
     priority 4
-    metadata project=wgEncode grant=Hubbard lab=Sanger dataType=Gencode annotation=Automatic level=3 freezeDate="GENCODE October 2009 Freeze" dataVersion="ENCODE September 2009 Freeze" subId=453 submittedDataVersion=V4c dateSubmitted=2009-10-27 dateUnrestricted=2010-07-27 composite=wgEncodeGencode tableName=wgEncodeGencodePolyaV4 fileName=wgEncodeGencodePolyaV4.gtf.gz
 
-    track wgEncodeGencode2wayConsPseudo
+    track wgEncodeGencode2wayConsPseudoV4
     subTrack wgEncodeGencode off
     shortLabel Gencode Pseudo
     longLabel ENCODE Gencode 2way Pseudogenes

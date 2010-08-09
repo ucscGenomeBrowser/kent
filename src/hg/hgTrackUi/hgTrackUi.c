@@ -2448,32 +2448,19 @@ if(tdbIsComposite(tdb))
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
 cartSaveSession(cart);
-#ifdef BIG_UI_NAV_LINKS
 printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
-#else///ifndef BIG_UI_NAV_LINKS
-if(ajax)
-    printf("<p><b>%s%s</b></p>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
-else
-    printf("<H1>%s%s</H1>\n", tdb->longLabel, tdbIsSuper(tdb) ? " Tracks" : "");
-#endif///ndef BIG_UI_NAV_LINKS
 
 /* Print link for parent track */
 struct trackDb *parentTdb = tdb->parent;
 if (parentTdb)
     {
     char *encodedMapName = cgiEncode(parentTdb->track);
-#ifdef BIG_UI_NAV_LINKS
     printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
-#else///ifndef BIG_UI_NAV_LINKS
-    printf("<H3>Parent track: <A HREF=\"%s?%s=%u&c=%s&g=%s\">%s</A></H3>",
-#endif///ndef BIG_UI_NAV_LINKS
 		hgTrackUiName(), cartSessionVarName(), cartSessionId(cart),
 		chromosome, encodedMapName, parentTdb->shortLabel);
     freeMem(encodedMapName);
     }
-#ifdef BIG_UI_NAV_LINKS
     puts("<BR><BR>");
-#endif///def BIG_UI_NAV_LINKS
 
 if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
@@ -2500,10 +2487,8 @@ else
 printf("&nbsp;");
 cgiMakeButton("Submit", "Submit");
 
-//#ifndef BIG_UI_NAV_LINKS
 if(tdbIsComposite(tdb))
     printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
-//#endif///ndef BIG_UI_NAV_LINKS
 
 if (ct)
     {
@@ -2516,7 +2501,6 @@ if (ct)
                                 "Update custom track");
     }
 
-#ifdef BIG_UI_NAV_LINKS
 if (!tdbIsSuper(tdb))
     {
     // NAVLINKS - For pages w/ matrix, add Description, Subtracks and Downloads links
@@ -2536,10 +2520,7 @@ if (!tdbIsSuper(tdb))
         printf("&nbsp;&nbsp;<A HREF='#TRACK_HTML' TITLE='Jump to description section of page'>Description%s</A>",downArrow);
         printf("&nbsp;</span>");
         }
-    //if(tdbIsComposite(tdb))
-    //    printf("\n&nbsp;&nbsp;<button type='button' title='Reset all track and subtrack settings to defaults.' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset</button><BR>\n",setting);
     }
-#endif///ndef BIG_UI_NAV_LINKS
 printf("<BR>\n");
 
 specificUi(tdb, ct);
@@ -2582,19 +2563,15 @@ if(ajax)
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
     htmlHorizontalLine();
-    #ifdef BIG_UI_NAV_LINKS
     // include anchor for Description link
     puts("<A NAME=TRACK_HTML></A>");
     printf("<table class='windowSize'><tr valign='top'><td>");
-    #endif///def BIG_UI_NAV_LINKS
     puts(tdb->html);
-    #ifdef BIG_UI_NAV_LINKS
     printf("</td><td>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr><tr valign='bottom'><td colspan=2>");
     makeTopLink(tdb);
     printf("&nbsp</td></tr></table>");
-    #endif///def BIG_UI_NAV_LINKS
     }
 }	/*	void trackUi(struct trackDb *tdb)	*/
 
