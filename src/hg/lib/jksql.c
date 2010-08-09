@@ -33,6 +33,10 @@ static unsigned traceIndent = 0;            /* how much to indent */
 static char *indentStr = "                                                       ";
 static boolean sqlParanoid = FALSE;         /* extra squawking */
 
+/* statistics */
+static unsigned totalNumConnects = 0;
+static unsigned maxNumConnections = 0;
+
 struct sqlProfile
 /* a configuration profile for connecting to a server */
 {
@@ -66,7 +70,8 @@ struct sqlResult
     long fetchTime;                     /* cummulative time taken by row fetches for this result */
     };
 
-static struct dlList *sqlOpenConnections;
+static struct dlList *sqlOpenConnections = NULL;
+static unsigned sqlNumOpenConnections = 0;
 
 char *defaultProfileName = "db";                  // name of default profile
 static struct hash *profiles = NULL;              // profiles parsed from hg.conf, by name
@@ -518,6 +523,7 @@ if (sc != NULL)
 	freeMem(node);
 	}
     freez(pSc);
+    sqlNumOpenConnections--;
     }
 }
 
@@ -733,6 +739,10 @@ if (monitorFlags & JKSQL_TRACE)
 deltaTime = monitorLeave();
 if (monitorFlags & JKSQL_TRACE)
     monitorPrint(sc, "SQL_TIME", "%0.3fs", ((double)deltaTime)/1000.0);
+sqlNumOpenConnections++;
+if (sqlNumOpenConnections > maxNumConnections)
+    maxNumConnections = sqlNumOpenConnections;
+totalNumConnects++;
 return sc;
 }
 
@@ -1806,13 +1816,20 @@ return ((database == NULL) && (scce->conn->conn->db == NULL))
     || sameString(database, scce->conn->conn->db);
 }
 
-static void sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
-                                   char *database)
+static boolean sqlConnCacheEntrySetDb(struct sqlConnCacheEntry *scce,
+                                      char *database,
+                                      boolean abort)
 /* set the connect cache and connect to the specified database */
 {
 if (mysql_select_db(scce->conn->conn, database) != 0)
-    errAbort("Couldn't set connection database to %s\n%s",
-             database, mysql_error(scce->conn->conn));
+    {
+    if (abort) 
+        errAbort("Couldn't set connection database to %s\n%s",
+                 database, mysql_error(scce->conn->conn));
+    else
+        return FALSE;
+    }
+return TRUE;
 }
 
 static struct sqlConnCacheEntry *sqlConnCacheFindFree(struct sqlConnCache *cache,
@@ -1887,7 +1904,10 @@ if (scce == NULL)
     {
     scce = sqlConnCacheFindFree(cache, profile, database, FALSE);
     if (scce != NULL)
-        sqlConnCacheEntrySetDb(scce, database);
+        {
+        if (!sqlConnCacheEntrySetDb(scce, database, abort))
+            scce = NULL;  // got error with no abort
+        }
     else
         scce = sqlConnCacheAddNew(cache, profile, database, abort);
     }
@@ -2535,3 +2555,56 @@ boolean sqlIsRemote(struct sqlConnection *conn)
 {
 return (conn->conn->unix_socket == NULL);
 }
+
+static void sqlDumpProfile(struct sqlProfile *sp, FILE *fh)
+/* dump one db profile */
+{
+fprintf(fh, "profile: %s host: %s user: %s dbs:", sp->name, sp->host, sp->user);
+struct slName *db;
+for (db = sp->dbs; db != NULL; db = db->next)
+    fprintf(fh, " %s", db->name);
+fputc('\n', fh);
+}
+
+static void sqlDumpConnection(struct sqlConnection *conn, FILE *fh)
+/* dump an sql connection for debugging */
+{
+fprintf(fh, "conn: profile: %s host: %s db: %s results: %d",
+        conn->profile->name, conn->conn->host, conn->conn->db, dlCount(conn->resultList));
+if (conn->hasHardLock)
+    fputs(" hardLocked", fh);
+if (conn->inCache)
+    fputs(" cached", fh);
+if (conn->isFree)
+    fputs(" free", fh);
+fputc('\n', fh);
+}
+
+void sqlDump(FILE *fh)
+/* dump internal info about SQL configuration for debugging purposes */
+{
+static char *dashes = "--------------------------------------------------------";
+fprintf(fh, "%s\n", dashes);
+fprintf(fh, "defaultProfile=%s\n", (defaultProfile != NULL) ? defaultProfile->name : "NULL");
+struct hashCookie cookie = hashFirst(profiles);
+struct hashEl *hel;
+while((hel = hashNext(&cookie)) != NULL)
+    sqlDumpProfile(hel->val, fh);
+
+cookie = hashFirst(dbToProfile);
+while((hel = hashNext(&cookie)) != NULL)
+    fprintf(fh, "db: %s profile: %s\n", hel->name, ((struct sqlProfile*)hel->val)->name);
+
+struct dlNode *connNode;
+for (connNode = sqlOpenConnections->head; !dlEnd(connNode); connNode = connNode->next)
+    sqlDumpConnection(connNode->val, fh);
+fprintf(fh, "%s\n", dashes);
+}
+
+void sqlPrintStats(FILE *fh)
+/* print statistic about the number of connections and other options done by
+ * this process. */
+{
+fprintf(fh, "sqlStats: connects: %d maxOpen: %d\n", totalNumConnects, maxNumConnections);
+}
+    

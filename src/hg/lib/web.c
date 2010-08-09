@@ -98,7 +98,7 @@ boolean isGsid   = hIsGsidServer();
 boolean isGisaid = hIsGisaidServer();
 if (db == NULL)
     db = hDefaultDb();
-boolean dbIsFound = sqlDatabaseExists(db);
+boolean dbIsFound = hDbExists(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -432,15 +432,15 @@ if(!skipSectionHeader)
          "<!-- +++++++++++++++++++++ CONTENT TABLES +++++++++++++++++++ -->" "\n"
 	 "<TR><TD COLSPAN=3>	" "\n"
 	 "  	<!--outer table is for border purposes-->" "\n"
-	 "  	<TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>	" "\n"
-	 "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>	" "\n"
-	 "	<TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"../images/hr.gif\" WIDTH=\"100%\"><TR><TD>" "\n"
+       "      <TABLE WIDTH=\"100%\" BGCOLOR=\"#"HG_COL_BORDER"\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>    " "\n"
+       "    <TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\"  BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR><TD>     " "\n"
+       "      <TABLE BGCOLOR=\"#"HG_COL_HEADER"\" BACKGROUND=\"../images/hr.gif\" WIDTH=\"100%\"><TR><TD class='windowSize'>" "\n"
 	 "		<FONT SIZE=\"4\" id='sectTtl'><b>&nbsp;"
 	 );
     htmlTextOut(textOutBuf);
 
     puts(
-	 "</b></FONT></TD></TR></TABLE>" "\n"
+	 "</b></FONT></TD><TD></TD></TR></TABLE>" "\n"
 	 "	<TABLE BGCOLOR=\"#"HG_COL_INSIDE"\" WIDTH=\"100%\" CELLPADDING=0><TR><TH HEIGHT=10></TH></TR>" "\n"
 	 "	<TR><TD WIDTH=10>&nbsp;</TD><TD>" "\n"
 	 "	" "\n"
@@ -630,8 +630,6 @@ exit(0);
 void printCladeListHtml(char *genome, char *onChangeText)
 /* Make an HTML select input listing the clades. */
 {
-struct sqlConnection *conn = hConnectCentral();
-struct sqlResult *sr = NULL;
 char **row = NULL;
 char *clades[128];
 char *labels[128];
@@ -639,7 +637,8 @@ char *defaultClade = hClade(genome);
 char *defaultLabel = NULL;
 int numClades = 0;
 
-sr = sqlGetResult(conn, "select name, label from clade order by priority");
+struct sqlConnection *conn = hConnectCentral();  // after hClade since it access hgcentral too
+struct sqlResult *sr = sqlGetResult(conn, "select name, label from clade order by priority");
 while ((row = sqlNextRow(sr)) != NULL)
     {
     clades[numClades] = cloneString(row[0]);
@@ -675,7 +674,7 @@ char *cgiName;
 for (cur = dbList; cur != NULL; cur = cur->next)
     {
     if (!hashFindVal(hash, cur->genome) &&
-	(!doCheck || sqlDatabaseExists(cur->name)))
+	(!doCheck || hDbExists(cur->name)))
         {
         hashAdd(hash, cur->genome, cur);
         orgList[numGenomes] = cur->genome;

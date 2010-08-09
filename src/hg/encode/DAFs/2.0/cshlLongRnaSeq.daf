@@ -4,7 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files   view    cell    localization    rnaExtract      replicate
+# files   view    cell    localization    rnaExtract	sampleID  replicate
 
 
 
@@ -16,10 +16,10 @@ grant             Gingeras
 lab               CSHL
 dataType          LongRnaSeq
 compositeSuffix   CshlLongRnaSeq
+superTrack        
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
-
 noAutoCreate     yes
 validationSettings validateFiles.bam:mismatches=7,nMatch
 

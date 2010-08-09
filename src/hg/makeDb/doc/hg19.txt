@@ -8366,7 +8366,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 6/2/10 angie)
+# NHGRI GWAS CATALOG (DONE 8/2/10 angie)
+# Updated 6/2/10
 # Updated 5/12/10 (last one to use snp130)
 # Updated 4/1/10
 # Updated 3/1/10
@@ -8388,7 +8389,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 3852 elements of size 22
+#Loaded 4158 elements of size 22
 
 
 ######################################################################## 
@@ -9203,7 +9204,7 @@ done > ucscToEnsemblV57.tab
 
 
 ############################################################################
-# dbSNP BUILD 131 (SNP131) (DONE 5/25/10 angie)
+# dbSNP BUILD 131 (SNP131) (DONE 5/25/10 angie - TWEAKED 8/4/10)
 # Originally done 4/15/10 -- updated 5/25 with corrected function codes from
 # dbSNP (b131_SNPContigLocusId_37_1.bcp.gz).
     # Set up build directory
@@ -9418,12 +9419,14 @@ done > ucscToEnsemblV57.tab
                   if (defined $prevId && $id == $prevId && $c == $prevC && $s == $prevS) { \
                     $prevFunc .= "$f," unless ($f == 8); \
                   } else { \
-                    print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if (defined $prevId); \
+                    if (defined $prevId) { \
+                      print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc); \
+                    } \
                     $prevFunc = ($f == 8) ? "" : "$f,"; \
                   } \
                   ($prevId, $prevC, $prevS, $prevE) = ($id, $c, $s, $e); \
                 } \
-                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n"' \
+                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc);' \
       > ucscFunc.txt
     wc -l ucscFunc.txt
 #10328697 ucscFunc.txt
@@ -9587,6 +9590,8 @@ EOF
     # Put in a link where one would expect to find the track build dir...
     ln -s /hive/data/outside/dbSNP/131/human /hive/data/genomes/hg19/bed/snp131
 
+#*** NOTE FOR NEXT TIME: ask cluster-admin to pack the snp131 table
+
     # Look at the breakdown of exception categories:
     cd /hive/data/outside/dbSNP/131/human
     cut -f 5 snp131Exceptions.bed | sort | uniq -c | sort -nr
@@ -9611,6 +9616,11 @@ EOF
     # Compared to snp130, nice to see fewer disfunctional locTypes (FlankMismatch*)
     # and singleClassQuadAllelic -- major increases in most others though.
     # Sent a few bug reports to dbSNP
+
+    # Tweaked 8/4/10 to correct missing-func (loophole fixed in perl that generates
+    # ucscFunc.txt above).
+    hgsql hg19 -e "update snp131 set func = 'unknown' where name = 'rs75946332' and func = '';"
+
 
 
 ############################################################################
@@ -10004,7 +10014,6 @@ EOF
          print $1, $4-1, $5, $9, 480, $7, 0, 0, "miRNA";}' \
         hsMirBaseFormatIdOnly.gff > hsMirBaseFormatIdOnly.bed
 
-XXXX 04-27 stop pending new data for snoRNA
     # 2010-04-21
     # Down load the current snoRNABase coordinates (version 3, based on hg19)
     #  from 
@@ -10024,14 +10033,24 @@ XXXX 04-27 stop pending new data for snoRNA
        else if ($4 == "-") \
          print $1, $2-1, $3, $5, 480, $4, 0, 0,$6;}' \
        snoRNABaseVer3Coords.txt > snoRNABaseVer3Coords.bed
+    # 2010-08-02: snoRnaBase team has not response to hg19 update request.
+    # use liftOver to convert the 400 coordinates to hg19 directly.
+    liftOver snoRNABaseVer3Coords.bed -bedPlus=3 \ 
+      /hive/data/genomes/hg18/bed/liftOver10K/hg18ToHg19.over.chain.gz \
+        snoRNABaseHg19Coords.bed unMapped
+    # Reading liftover chains
+    # Mapping coordinates
+
+
+
     # Merge the miRNA and snoRNA files together
-    cat hsMirBaseFormatIdOnly.bed snoRNABaseVer3Coords.bed \
+    cat hsMirBaseFormatIdOnly.bed snoRNABaseHg19Coords.bed \
         > wgRna20100420.bed
     # Create and load wgRna
-    cp -p /cluster/home/chinhli/kent/src/hg/lib/wgRna.sql wgRna.sql
+    cp -p /cluster/bin/build/build-kent/src/hg/lib/wgRna.sql wgRna.sql
     hgLoadBed -sqlTable=wgRna.sql hg19 wgRna wgRna20100420.bed
     #  Reading wgRna20100420.bed
-    #  Loaded 1152 elements of size 9
+    #  Loaded 1341 elements of size 9
     #  Sorted
     #  Creating table definition for wgRna
     #  Saving bed.tab
@@ -10042,16 +10061,20 @@ XXXX 04-27 stop pending new data for snoRNA
 
     # some details about this track:
     hgsql -e "select count(*) from wgRna;" hg19
-    #  1152
+    #  1341
     # contain 4 types:
     cat wgRna20100420.bed | awk '{print $9}' | sort | uniq
+    # CDBox
+    # HAcaBox
+    # miRNA
+    # scaRna
     hgsql -e "select type, count(*) from wgRna  group by type;" hg19
     #   CDBox     269
     #   HAcaBox   112
-    #   miRNA     750
+    #   miRNA     939
     #   scaRna     21
     featureBits hg19 wgRna
-    #    107878 bases of 2897316137 (0.004%) in intersection
+    # 122226 bases of 2899183193 (0.004%) in intersection
 
 
 #############################################################################
@@ -10326,9 +10349,11 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 # recieve  ucschuman.gff.gz from Carol Bult [Carol.Bult@jax.org] and place it under this subdirectory.
     gzip -d ucschuman.gff.gz
 
-# build hgIkmc table from raw data file ucschuman.gff (remove some records mapped to 'chrUn')
+# build hgIkmc table from raw data file ucschuman.gff (substitue some
+# troublesome chroms in raw data file and remove some records mapped to 'chrUn')
 
     cat ucschuman.gff |sort -u \
+    |sed -e 's/chr9|NT_113911.1/chr9/' \
     |grep -v 'chrUn' \
     | perl -we \
       'while (<>) { \
@@ -10384,4 +10409,683 @@ s/HSCHR17_1_CTG5/chr17_ctg5_hap1/;" > haplotypeLocations.bed
 
     hgLoadSqlTab hg19 hgIkmcExtra $HOME/kent/src/hg/lib/genericAlias.sql hgIkmcExtra.tab
     checkTableCoords  -verbose=2  hg19 hgIkmc
+
+#############################################################################
+# adding patches to the sequence (DONE - 2010-07-23)
+    #	fetch the "official" chrM sequence
+    mkdir -p /hive/data/genomes/hg19/bed/additionalSequence/chrM
+    cd /hive/data/genomes/hg19/bed/additionalSequence/chrM
+    wget --timestamping -O NC_012920.1.fa \
+"http://www.ncbi.nlm.nih.gov/sviewer/viewer.fcgi?db=nuccore&dopt=fasta&sendto=on&id=NC_012920.1.fa"
+    echo ">chrM_NC_012920" > chrM_NC_012920.fa
+    grep -v "^>" NC_012920.1.fa | sed -e "/^$/d" >> chrM_NC_012920.fa
+
+    #	fetch the first two patches:
+    mkdir -p /hive/data/genomes/hg19/bed/additionalSequence/patches
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patches
+    wget --cut-dirs=7 --no-parent --timestamping --no-remove-listing -m \
+        -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37/PATCHES/"
+
+    #	take a look through the downloaded files to find the name
+    #	correspondence.  The fasta names are in:
+    zcat patch_release_1/FASTA/alt.scaf.fa.gz | grep "^>" 
+    # the other names are in:
+    cat patch_release_1/alt_scaffold_placement.txt
+    #	Decide on UCSC chrom names
+    #	Create a file with these different names to use later:
+# fasta string             alt_scaf_name  parent_name  UCSC chrom name
+    cat << '_EOF_' > ucscNames.txt
+gi|289436847|gb|GL339449.1 HSCHR5_1_CTG1 CM000667.1 chr5_ctg1_hap1
+gi|289436846|gb|GL339450.1 HG79_PATCH CM000671.1 chr9_gl339450
+chrM_NC_012920 unknown unknown chrM_NC_012920
+'_EOF_'
+    # << happy emacs
+
+
+    #	construct the files for UCSC:
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1
+
+    #	add these sequences to existing hg19.2bit to make a new one:
+    cat ../chrM/chrM_NC_012920.fa > patch1.ucsc.fa
+    zcat ../patches/patch_release_1/FASTA/alt.scaf.fa.gz \
+        | sed -e "s/^>.*GL339449.1.*/>chr5_ctg1_hap1/;" \
+-e "s/^>.*GL339450.1.*/>chr9_gl339450/" >> patch1.ucsc.fa
+
+    twoBitToFa /gbdb/hg19/hg19.2bit hg19.existing.fa
+    faToTwoBit hg19.existing.fa patch1.ucsc.fa hg19.patch1.2bit
+    rm -f /gbdb/hg19/hg19.unmasked.patch1.2bit
+    #	temporarily use this unmasked sequence
+    ln -s `pwd`/hg19.unmasked.patch1.2bit /gbdb/hg19/hg19.patch1.2bit
+    twoBitInfo hg19.patch1.2bit stdout | sort -k2nr > patch1.chrom.sizes
+
+    cat << '_EOF_' > mkTables.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: mkTables.pl patches.chrom.sizes \\\n";
+    printf STDERR " ../patches/ucscNames.txt ../patches/patch_release_1/AGP/alt.scaf.agp.gz\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 3) {
+    usage;
+    exit 255;
+}
+
+my $sizes = shift;      # patches.chrom.sizes
+my $names = shift;      # patches/ucscNames.txt
+my $agpFile = shift;    # alt.scaf.agp.gz
+
+my %glToChr;
+my %chrToCtg;
+my %fastaToChr;
+my %chrToSize;
+
+open(FH, "<$sizes") or die "can not read $sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrToSize{$chr} = $size;
+}
+close (FH);
+
+open(CI, ">chromInfo.txt") or die "can not write to chromInfo.txt";
+open(CT, ">ctgPos.txt") or die "can not write to ctgPos.txt";
+open(FH, "<$names");
+while (my $line = <FH>) {
+    chomp $line;
+    my ($faName, $ctg, $cmName, $chr) = split('\s+', $line);
+    $faName =~ s/.*gb.GL/GL/;
+    my $size = $chrToSize{$chr};
+    if (exists($glToChr{$faName})) {
+        if ($glToChr{$faName} ne $chr) {
+            printf STDERR "ERROR: contig name: $faName was chr name: $glToChr{$faName}\n";
+            printf STDERR " now claiming to be chr name: $chr\n";
+            exit 255;
+        }
+    } else {
+        $glToChr{$faName} = $chr;
+    }
+    printf CT "%s\t%d\t%s\t0\t%d\n", $faName, $size, $chr, $size;
+    printf CI "%s\t%d\t/gbdb/hg19/hg19.patches.2bit\n", $chr, $size;
+}
+close (FH);
+close (CT);
+close (CI);
+
+my $prevObj = "";
+my $newIx = 1;
+open (GP,">gap.txt") or die "can not write to gap.txt";
+open (GL,">gold.txt") or die "can not write to gold.txt";
+open (FH,"zcat $agpFile|") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^\s*#/);
+    chomp $line;
+    my ($object, $objStart, $objEnd, $ix, $type, $frag, $fragStart, $fragEnd, $strand) = split('\s+', $line);
+    die "ERROR: can not find contig $object to chr name"
+        if (!exists($glToChr{$object}));
+    $newIx = 1 if ($prevObj ne $object);
+    my $chr = $glToChr{$object};
+    if ($type eq "N") {
+        # frag is size, fragStart is type of gap, and fragEnd is bridged y/n
+        printf GP "%s\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+            $chr, $objStart-1, $objEnd, $newIx, $type, $frag, $fragStart,
+            $fragEnd;
+    } else {
+        printf GL "%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+            $chr, $objStart-1, $objEnd, $newIx, $type, $frag, $fragStart-1,
+            $fragEnd, $strand;
+    }
+    ++$newIx;
+    $prevObj = $object;
+    printf "%s\n", $line;
+}
+close (FH);
+close (GL);
+close (GP);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkTables.pl
+    ./mkTables.pl  patch1.chrom.sizes ../patches/ucscNames.txt \
+	../patches/patch_release_1/AGP/alt.scaf.agp.gz
+    echo 'chrM_NC_012920  16569   /gbdb/hg19/hg19.patches.2bit' \
+	>> chromInfo.txt
+
+    #	create tab files
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=/cluster/home/hiram/kent/src/hg/lib/agpFrag.sql \
+        hg19 tGold gold.txt
+    rm -f gold.tab
+    mv bed.tab gold.tab
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=/cluster/home/hiram/kent/src/hg/lib/gap.sql \
+        hg19 tGap gap.txt
+    rm -f gap.tab
+    mv bed.tab gap.tab
+
+    # these table inserts are performed carefully to make sure they are
+    # sane, for example, count the rows before and after load:
+    hgsql -e 'load data local infile "gold.tab" into table gold;' hg19
+    hgsql -e 'load data local infile "gap.tab" into table gap;' hg19
+    hgsql -e 'load data local infile "ctgPos.txt" into table ctgPos;' hg19
+    hgsql -e 'load data local infile "chromInfo.txt" into table chromInfo;' hg19
+
+    hgsql -e 'update chromInfo set fileName="/gbdb/hg19/hg19.patch1.2bit";' hg19
+
+    cat << '_EOF_' > ctgPos2.txt
+HSCHR5_1_CTG1   1620324 chr5_ctg1_hap1  0       1620324 F
+HG79_PATCH      330164  chrUn_gl339450  0       330164  F
+NC_012920.1     16569   chrM_NC_012920  0       16569   F
+NC_001807.4     16571   chrM    0       16571   O
+'_EOF_'
+    # << happy emacs
+
+    hgsql -e 'load data local infile "ctgPos2.txt" into table ctgPos2;' hg19
+
+    #	RepeatMasking and SimpleRepeats
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1/RMRun
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1/RMRun
+    ln -s ../patch1.ucsc.fa .
+    time /scratch/data/RepeatMasker/RepeatMasker -align -s \
+	-species 'Homo sapiens' patch1.ucsc.fa
+    # took about 6 hours.  Probably should have broken up the large chr5 bit
+    #	sort it:
+
+    head -3 patch1.ucsc.fa.out | sed -e "s/  *$//" > patch1.ucsc.sort.out
+    headRest 3 patch1.ucsc.fa.out | sort -k5,5 -k6,6n \
+	| sed -e "s/  *$//" >> patch1.ucsc.sort.out
+    #	create a .tab file to load
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql \
+        hg19 tRmsk patch1.ucsc.sort.out
+    mv bed.tab patch1.rmsk.tab
+    hgsql -e 'load data local infile "patch1.rmsk.tab" into table rmsk;' hg19
+    #	create nestedRepeats
+    /cluster/bin/scripts/extractNestedRepeats.pl patch1.ucsc.sort.out
+    #	create a .tab file to load
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql \
+        hg19 tNest patch1.nestedRepeats.bed
+    rm -f patch1.nestedRepeats.tab
+    mv bed.tab patch1.nestedRepeats.tab
+    hgsql -e 'load data local infile "patch1.nestedRepeats.tab" into table nestedRepeats;' hg19
+
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1/simpleRepeat
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1/simpleRepeat
+    ln -s ../patch1.ucsc.fa .
+    /cluster/bin/$MACHTYPE/trfBig -trf=/cluster/bin/$MACHTYPE/trf \
+	patch1.ucsc.fa /dev/null -bedAt=patch1.ucsc.bed -tempDir=.
+    awk '$5 <= 12' patch1.ucsc.bed > trfMask.bed
+    mkdir trfMaskChrom
+    splitFileByColumn trfMask.bed trfMaskChrom/
+    hgLoadBed -oldTable hg19 simpleRepeat patch1.ucsc.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    #	add these masks
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1
+    twoBitMask -add hg19.unmasked.patch1.2bit RMRun/patch1.ucsc.sort.out \
+	hg19.rmsk.2bit
+    ln -s `pwd`/hg19.unmasked.patch1.2bit /gbdb/hg19/hg19.patch1.2bit
+    twoBitMask -add hg19.rmsk.2bit simpleRepeat/trfMask.bed hg19.patch1.t.2bit
+    #	safe to ignore errors about >= 13 fields
+    twoBitToFa hg19.patch1.t.2bit stdout | faSize stdin \
+	> hg19.patch1.2bit.faSize 2>&1
+    # 3139128321 bases (239950803 N's 2899177518 real 1431272440 upper
+    # 1467905078 lower) in 96 sequences in 1 files
+    # %46.76 masked total, %50.63 masked real
+    #	update the unmasked sequence from earlier:
+    rm -f hg19.patch1.2bit; mv hg19.patch1.t.2bit hg19.patch1.2bit
+
+    time blat hg19.patch1.2bit \
+	/dev/null /dev/null -tileSize=11 -makeOoc=hg19.patch1.11.ooc \
+	-repMatch=1024
+    #	Wrote 30723 overused 11-mers to hg19.patch1.11.ooc
+    cp -p hg19.patch1.2bit hg19.patch1.11.ooc /hive/data/staging/data/hg19
+    mkdir nib
+    twoBitToFa -seq=chrM_NC_012920 hg19.patch1.2bit stdout \
+	| faToNib -softMask stdin nib/chrM_NC_012920.nib
+    twoBitToFa -seq=chr5_ctg1_hap1 hg19.patch1.2bit stdout \
+	| faToNib -softMask stdin nib/chr5_ctg1_hap1.nib
+    twoBitToFa -seq=chr9_gl339450 hg19.patch1.2bit stdout \
+	| faToNib -softMask stdin nib/chr9_gl339450.nib
+
+
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch1/linSpecRep
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch1/linSpecRep
+for C in chr9_gl339450 chrM_NC_012920 chr5_ctg1_hap1
+do
+    head -3 ../RMRun/patch1.ucsc.sort.out > ${C}.out
+    grep "${C} " ../RMRun/patch1.ucsc.sort.out >> ${C}.out
+    rm -f ${C}.out_mus*
+    /scratch/data/RepeatMasker/DateRepeats ${C}.out -query human -comp mouse
+    /cluster/bin/scripts/extractRepeats 1 ${C}.out_mus* > ${C}.out.spec
+    rm -f ${C}.out_mus*
+done
+
+    # copy new files to /hive/data/staging/data/hg19/ and request rsync
+    #	to kluster nodes
+-rw-rw-r-- 1      2036 Jul 21 15:39 patch1.chrom.sizes
+-rw-rw-r-- 1 816756572 Jul 23 15:32 hg19.patch1.2bit
+-rw-rw-r-- 1    122900 Jul 23 15:56 hg19.patch1.11.ooc
+-rw-rw-r-- 1      8293 Jul 23 15:59 nib/chrM_NC_012920.nib
+-rw-rw-r-- 1    810170 Jul 23 16:01 nib/chr5_ctg1_hap1.nib
+-rw-rw-r-- 1    165090 Jul 23 16:01 nib/chr9_gl339450.nib
+-rw-rw-r-- 1   34676 Jul 23 16:27 lineageSpecificRepeats/chr9_gl339450.out.spec
+-rw-rw-r-- 1     386 Jul 23 16:27 lineageSpecificRepeats/chrM_NC_012920.out.spec
+-rw-rw-r-- 1  221381 Jul 23 16:27 lineageSpecificRepeats/chr5_ctg1_hap1.out.spec 
+#############################################################################
+# Update BlastTab tables for hg19 (Done, Fan, 8/6/2010)
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
+    cd /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp
+    mkdir 100806
+    cd 100806
+    # Get the proteins used by the other hgNear organisms:
+    pepPredToFa hg19 knownGenePep hg19.known.faa
+    pepPredToFa mm9 knownGenePep mm9.known.faa
+    pepPredToFa rn4 knownGenePep rn4.known.faa
+    pepPredToFa danRer6 ensPep danRer6.ensPep.faa
+    pepPredToFa dm3 flyBasePep dm3.flyBasePep.faa
+    pepPredToFa ce6 sangerPep ce6.sangerPep.faa
+    pepPredToFa sacCer2 sgdPep sacCer2.sgdPep.faa
+
+    cat << _EOF_ > config.ra
+# Latest human vs. other Gene Sorter orgs:
+# mouse, rat, zebrafish, worm, yeast, fly
+
+targetGenesetPrefix known
+targetDb hg19
+queryDbs mm9 rn4 danRer6 dm3 ce6 sacCer2
+
+hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
+mm9Fa /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
+rn4Fa /hive/data/genomes/rn4/bed/blastp/known.faa
+danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
+dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
+ce6Fa /hive/data/genomes/ce6/bed/blastp/wormPep190.faa
+sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
+
+buildDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100806
+scratchDir /hive/data/genomes/hg19/bed/ucsc.12/hgNearBlastp/100806/tmp
+_EOF_
+doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+#########################################################################
+# LIFTOVER TO Hg18 (RE-DONE - 2010-07-26 - Hiram )
+    #	preserving the previous 10K liftOver files
+    mkdir /hive/data/genomes/hg19/bed/liftOver10K
+    cd /hive/data/genomes/hg19/bed/liftOver10K
+    ln -s ../blat.hg18.2009-06-04/hg19ToHg18.over.chain.gz .
+
+    #	this liftOver is a 5000 size chunk
+    mkdir /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26
+    cd /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26
+    # -debug run to create run dir, preview scripts...
+    #	verifies files can be found
+    doSameSpeciesLiftOver.pl -debug hg19 hg18
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+	-bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+	 hg19 hg18 > do.log 2>&1
+    #	real    115m26.071s
+
+    #	checking liftOver accuracy
+    mkdir /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26/refGene
+    cd /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26/refGene
+    hgsql -N -e "select * from refGene;" hg19 | cut -f2- > refGene.hg19.gp
+    wc -l refGene.hg19.gp
+    #	36766
+    #	the 5K block size lift over chain
+    liftOver -genePred refGene.hg19.gp ../hg19ToHg18.over.chain.gz \
+	refGene.hg19ToHg18.5K.lift.gp refGene.hg19ToHg18.5K.unMapped.gp
+    wc -l refGene.hg19ToHg18.5K.unMapped.gp
+    #   830
+    #	the 10K block size lift over chain
+    liftOver -genePred refGene.hg19.gp \
+	../../liftOver10K/hg19ToHg18.over.chain.gz \
+	refGene.hg19ToHg18.10K.lift.gp refGene.hg19ToHg18.10K.unMapped.gp
+    wc -l refGene.hg19ToHg18.10K.unMapped.gp
+    #	820
+    #	construct custom track of chain files.
+    #	the 5K block size lift over chain
+    chainToPsl ../hg19ToHg18.over.chain.gz \
+	/hive/data/genomes/hg19/chrom.sizes \
+	/hive/data/genomes/hg18/chrom.sizes \
+	/hive/data/genomes/hg19/hg19.2bit \
+	/hive/data/genomes/hg18/hg18.2bit stdout \
+	| pslToBed stdin hg19ToHg18.5K.bed
+    #	the 10K block size lift over chain
+    chainToPsl ../../liftOver10K/hg19ToHg18.over.chain.gz \
+	/hive/data/genomes/hg19/chrom.sizes \
+	/hive/data/genomes/hg18/chrom.sizes \
+	/hive/data/genomes/hg19/hg19.2bit \
+	/hive/data/genomes/hg18/hg18.2bit stdout \
+	| pslToBed stdin hg19ToHg18.10K.bed
+
+##############################################################################
+# UNIGENE/SAGE TRACK (RE-BUILT - 2010-08-06 Fan)
+
+# Create the uniGene alignments
+
+    # Download of the latest UniGene version is now automated by a
+    # cron job -- see /cluster/home/angie/crontab ,
+    # /cluster/home/angie/unigeneVers/unigene.csh .
+
+    ssh hgwdev
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806
+    cd /hive/data/genomes/hg19/bed/uniGene/100806
+
+    set Version = 225
+
+    zcat /hive/data/outside/uniGene/uniGene.$Version/Hs.seq.uniq.gz|\
+    sed -e "s#>.*/ug=#>#; s# /len.*##;" > Hs.seq.uniq.simpleHeader.fa
+
+    ssh pk
+    set Version = 225
+    mkdir -p /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
+    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
+
+    ls -1 /hive/data/genomes/hg19/nib/*.nib > genome.lst
+    ls -1S \
+    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
+      > uniGene.lst
+    
+    cat << '_EOF_' > template.sub
+#LOOP
+/cluster/bin/x86_64/blat -repeats=lower -minIdentity=95
+ooc=/hive/data/genomes/hg19/11.ooc $(path1) $(path2)  {check out line+ psl/$(root1)_$(root2).psl}
+#ENDLOOP
+'_EOF_'
+
+    gensub2 genome.lst uniGene.lst template.sub para.spec
+    para create para.spec
+    mkdir psl
+    para try
+    para check
+    para push
+
+    # Completed: 93 of 93 jobs
+    # CPU time in finished jobs:      61305s    1021.74m    17.03h    0.71d  0.002 y
+    # IO & Wait Time:                  1117s      18.62m     0.31h    0.01d  0.000 y
+    # Average job time:                 671s      11.19m     0.19h    0.01d
+    # Longest finished job:            4574s      76.23m     1.27h    0.05d
+    # Submission to last job:          4709s      78.48m     1.31h    0.05d
+    # Estimated complete:                 0s       0.00m     0.00h    0.00d
+
+    pslSort dirs raw.psl tmp psl >& pslSort.log
+    cat raw.psl|\
+    pslReps -minCover=0.2 -sizeMatters -minAli=0.965 -nearTop=0.002 \
+      stdin hg19.uniGene.pslReps.psl /dev/null
+    #Processed 800002 alignments
+    
+    gzip raw.psl
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/uniGene/100806/run.blat
+
+    hgLoadPsl -table=uniGene_3 hg19 hg19.uniGene.pslReps.psl
+
+    mkdir -p /gbdb/hg19/uniGene
+    cd /gbdb/hg19/uniGene
+
+    rm Hs.seq.uniq.simpleHeader.fa
+    ln -s \
+    /hive/data/genomes/hg19/bed/uniGene/100806/Hs.seq.uniq.simpleHeader.fa \
+    Hs.seq.uniq.simpleHeader.fa
+
+# load the sequence
+
+    hgLoadSeq -replace hg19 /gbdb/hg19/uniGene/Hs.seq.uniq.simpleHeader.fa
+
+#############################################################################
+# GENSCAN PREDICTIONS (DONE - 2010-07-30 Fan)
+# 		      (PARTIALLY RE-DONE AFTER FIXING .LTF FILES - 2010-08-03 Fan)
+    #   After several attempts, the old genscan process could not be
+    #   successfully completed, nor the new process used by mm9,
+    #   even with the manual steps to do gsBig with
+    #   smaller windowSize.
+    #
+    #	A new process is developed to overcome the challenges.
+    #   This new build process for hg19 genscan is substantially different from
+    #	hg18.  Due to gsBig errors, the chroms are split into 2,000,000 bp
+    #   segments and the -windowSize is set to the default value of 1,200,000.
+    #   The results are then collected and lifted to original chrom
+    #   coordinates and then loaded into 3 genscan tables. 
+
+    ssh hgwdev
+    
+    mkdir -p /hive/data/genomes/hg19/bed/genscan
+    cd /hive/data/genomes/hg19/bed/genscan
+
+    # Check out hg3rdParty/genscanlinux to get latest genscan.
+    cvs co hg3rdParty/genscanlinux
+
+# the latest and correct genscan build subdir is newTry
+
+    mkdir -p /hive/data/genomes/hg19/bed/genscan/newTry
+    cd /hive/data/genomes/hg19/bed/genscan/newTry
+
+# collect .fa files for all chroms in one subdir
+
+    mkdir -p faOrig
+    for f in `cat /hive/data/genomes/hg19/chr.fasta.list`
+	do
+	cp -p /hive/data/genomes/hg19/$f faOrig
+	done
+
+# construct the chrom.list
+
+    ls -1 faOrig |sed -e 's/\.fa//'>chrom.list
+
+# creaet the file template to be used for cluster runs
+    cat << '_EOF_' > template
+#LOOP
+/cluster/bin/x86_64/gsBig {check in line+ $(path1)} {check out line gtf/$(root1).gtf} -trans={check out line pep/$(root1).pep} -subopt={check out line subopt/$(root1).bed} -exe=../../../hg3rdParty/genscanlinux/genscan -par=../../../hg3rdParty/genscanlinux/HumanIso.smat -tmp=/tmp -window=1200000
+#ENDLOOP
+'_EOF_'
+
+# create the chunk2, lift, and runBlat subdir structures
+    
+    mkdir -p chunk2
+    mkdir -p lift
+    mkdir -p runBlat
+    
+    for f in `cat chrom.list`
+	do
+	mkdir -p lift/$f
+	mkdir -p chunk2/$f
+	mkdir -p runBlat/$f/gtf 
+	mkdir -p runBlat/$f/pep 
+	mkdir -p runBlat/$f/subopt
+        cp ./template runBlat/$f
+        done
+
+# split the chrom fa files into chunks of 2,000,000 bases or less 
+# and create corresponding lift files
+
+    for f in `cat chrom.list`
+	do
+	cd chunk2/$f
+	cat ../../faOrig/$f.fa\
+	|faSplit -lift=../../lift/$f/$f.lft gap stdin 2000000 ./ck_
+	cd ../..
+	done
+
+# LATER FOUND THAT THE SEQUENCE ID IN THE .fa FILES UNDER 
+# /hive/data/genomes/hg19/* ARE NOT ALWAYS THE SAME AS THE CHROM ID.
+# THIS CAUSED INCORRECT CHROM IDs GENERATED IN THE .lft FILES.
+# PERFORM THE FOLLOWING TO FIX THE .lft FILES.
+
+    mkdir fixLift
+    cd fixLift
+
+    cat << '_EOF_' > fixAll
+fix1 chr6_apd_hap1 apd.chr6.4622290.0.4622290.1
+fix1 chr6_cox_hap2 cox.chr6.4795371.0.4795371.1
+fix1 chr6_dbb_hap3 dbb.chr6.4610396.0.4610396.1
+fix1 chr6_mann_hap4 mann
+fix1 chr6_mcf_hap5 mcf.chr6.4833398.0.4833398.1
+fix1 chr6_qbl_hap6 qbl.chr6.4611984.0.4611984.1
+fix1 chr6_ssto_hap7 ssto
+'_EOF_'
+
+    cat << '_EOF_' > fix1
+echo
+echo
+echo processing $1 $2
+cat /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft |grep $2
+cat /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft |sed -e
+"s/${2}/${1}/g" >new/$1.lft
+cat new/$1.lft |grep $1
+cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft 
+'_EOF_'
+
+    chmod +x fix*
+    fixAll
+    cd ..
+
+# go to memk to run cluster jobs
+
+    ssh memk
+    cd /hive/data/genomes/hg19/bed/genscan/newTry
+
+# create genome.list and jobList files for each chrom
+
+    for f in `cat chrom.list`
+	do
+	cd runBlat/$f
+	ls -1 /hive/data/genomes/hg19/bed/genscan/newTry/chunk2/$f/* > genome.list
+	gensub2 genome.list single template jobList
+	cd ../..
+	done
+
+# create batch files
+
+    for f in `cat chrom.list`
+	do
+	cd runBlat/$f
+	para create jobList
+	cd ../..
+	done
+
+# Send off cluster runs
+
+    for f in `cat chrom.list`
+	do
+        cd runBlat/$f
+	para try
+        cd ../..
+       done
+
+    for f in `cat chrom.list`
+	do
+        cd runBlat/$f
+	para push
+        cd ../..
+       done
+
+# When all the cluster runs are finished,
+# go back to hgwdev for final data collection and table loading
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/genscan/newTry
+
+# collect ptf results and lift them and then load into the genscan table 
+
+    mkdir -p gtf
+    for f in `cat chrom.list`
+	do
+	echo
+	echo processing $f
+	cat runBlat/$f/gtf/*.gtf| liftUp -type=.gtf stdout \
+        lift/$f/$f.lft error stdin \
+	| sed -e "s/ck_/${f}_/g" > gtf/$f.gtf
+        ldHgGene -oldTable hg19 -gtf genscan gtf/$f.gtf
+	done
+
+# collect subopt results and lift them and then load them into the
+# genscanSubopt table
+
+    mkdir -p subopt
+    for f in `cat chrom.list`
+	do
+        echo
+	echo processing $f
+	cat runBlat/$f/subopt/*.bed| liftUp -type=.bed stdout \
+        lift/$f/$f.lft error stdin \
+	| sed -e "s/ck_/${f}_/g" > subopt/$f.bed
+	hgLoadBed -oldTable hg19 genscanSubopt subopt/$f.bed
+	done
+
+# collect pep results and load them into the genscanPep table
+
+    mkdir -p pep
+    rm pep/genscanPep.pep
+    for f in `cat chrom.list`
+	do
+        echo
+	echo processing $f
+	cat runBlat/$f/pep/*.pep\
+	| sed -e "s/ck_/${f}_/g" >> pep/genscanPep.pep
+	done
+    hgPepPred hg19 generic genscanPep pep/genscanPep.pep
+
+################################################################
+# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (working 2010-08-03 - Chin)
+# Note from Andy: All primary data files were lost, The table
+# has all of the original data. 
+# The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should 
+# still be valid.  The hgFixed table sestanBrainAtlasExps should be ok.
+# So it's just a matter of getting the hg18.sestanBrainAtlas table in
+#  hg19 coordinates.
+
+    mkdir  /hive/data/genomes/hg19/bed/yaleMicroarrays
+    cd  /hive/data/genomes/hg19/bed/yaleMicroarrays
+    cp  /hive/data/genomes/hg18/bed/yaleMicroarrays/sestanBrainAtlas.bed \
+           sestanBrainAtlasHg18.bed
+    # In the hg18, thickStart is off by 1, fix it
+    # hgsql -e " select thickStart-chromStart from sestanBrainAtlas;" hg18 |
+    #   sort | uniq
+    # 1
+    cat sestanBrainAtlasHg18.bed | awk '{print  $1,$2,$3,$4,$5,$6,$7-1,$8,$9,$10,$11,$12,$13,$14,$15 }' >  sestanBrainAtlasHg18Fixed.bed
+
+
+    # use liftOver to convert the hg18 coordinates to hg19 directly.
+    liftOver sestanBrainAtlasHg18Fixed.bed -bedPlus=8 \
+      /hive/data/genomes/hg18/bed/liftOver10K/hg18ToHg19.over.chain.gz \
+        sestanBrainAtlasHg19.bed unMapped
+
+    # Check the result of liftOver:
+    wc -l sestanBrainAtlasHg1*.bed
+    # 877877 sestanBrainAtlasHg18.bed
+    # 877469 sestanBrainAtlasHg19.bed
+    cat unMapped | awk ' /^chr/ {print $1}' | wc -l       
+    408
+    cat unMapped | awk ' /^#/|| /^chr/ {print $1, $2, $3,_}' \
+       > summaryUnMapped.txt
+
+    # Fix up the result, so that $11(blockSizes) = $8(thickEnd)  - $7
+    # (thickStart) without the fix, the checkTableCoors will complain.
+     cat sestanBrainAtlasHg19.bed | awk '{print  $1,$2,$3,$4,$5,$6,$7,$8,$9, \
+        $10, $8-$7, $12,$13,$14,$15 }' >  sestanBrainAtlasHg19Fixed.bed
+
+
+    # load the table
+    hgLoadBed hg19 sestanBrainAtlas sestanBrainAtlasHg19Fixed.bed
+    # Reading sestanBrainAtlasHg19.bed
+    # Loaded 877469 elements of size 15
+    # Sorted
+    # Creating table definition for sestanBrainAtlas
+    # Saving bed.tab
+    # Loading hg19
+
+    # track stuff done from hg18 days: 
+    # kent/src/hg/makeDb/trackDb/human/sestanBrainAtlas.html
+    # kent/src/hg/makeDb/trackDb/human/trackDb.ra
+
 #############################################################################

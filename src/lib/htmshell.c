@@ -124,66 +124,44 @@ void htmlTextOut(char *s)
 htmTextOut(stdout, s);
 }
 
-char *htmlEncode(char *s)
-/* Return a clone of s but if necessary replacing > with &gt; and the like */
+char *htmlEncodeText(char *s,boolean tagsOkay)
+/* Returns a cloned string with quotes replaced by html codes.
+   Changes ',",\n and if not tagsOkay >,<,& to code equivalents.
+   This differs from cgiEncode as it handles text that will
+   be displayed in an html page or tooltip style title.  */
 {
-size_t len = 0;
-char c;
-char *encStr;
-char *p = s;
-if (s == NULL)	/*	do not try to encode a NULL pointer */
-    return NULL;
-/* First pass through s to determine encoded length to allocate: */
-/* [as a shortcut, we could simply allocate 6*length of s] */
-while ((c = *p++) != 0)
+int size = strlen(s) + 3; // Add some slop
+if(tagsOkay)
+    size += countChars(s,'\n') * 4;
+else
     {
-    switch (c)
-        {
-	case '>':
-	case '<':
-	    len += 4;
-	    break;
-	case '&':
-	    len += 5;
-	    break;
-	case '"':
-	    len += 6;
-	    break;
-	default:
-	    len++;
-	    break;
-	}
+    size += countChars(s,'>' ) * 4;
+    size += countChars(s,'<' ) * 4;
+    size += countChars(s,'&' ) * 5;
+    size += countChars(s,'\n') * 6;
     }
-encStr = needMem(len+1);
-/* Second pass through s to encode: */
-len = 0;
-p = s;
-while ((c = *p++) != 0)
+size += countChars(s,'"' ) * 6;
+size += countChars(s,'\'') * 5;
+char *cleanQuote = needMem(size);
+safecpy(cleanQuote,size,s);
+
+// NOTE: While some internal HTML should work, a single quote (') will will screw it up!
+if(tagsOkay)
+    strSwapStrs(cleanQuote, size,"\n","<BR>" ); // new lines also break the html
+else
     {
-    switch (c)
-        {
-	case '>':
-	    strcat(encStr+len, "&gt;");
-	    len += 4;
-	    break;
-	case '<':
-	    strcat(encStr+len, "&lt;");
-	    len += 4;
-	    break;
-	case '&':
-	    strcat(encStr+len, "&amp;");
-	    len += 5;
-	    break;
-	case '"':
-	    strcat(encStr+len, "&quot;");
-	    len += 6;
-	    break;
-	default:
-	    encStr[len++] = c;
-	    break;
-	}
+    strSwapStrs(cleanQuote, size,"&" ,"&amp;" ); //  '&' is not the start of a control char
+    strSwapStrs(cleanQuote, size,">" ,"&gt;"  ); // '>' is not the close of a tag
+    strSwapStrs(cleanQuote, size,"<" ,"&lt;"  ); // '<' is not the open of a tag
+    if(cgiClientBrowser(NULL,NULL,NULL) == btFF)
+        strSwapStrs(cleanQuote, size,"\n","&#124;"); // FF does not support!  Use "&#124;" for '|' instead
+    else
+        strSwapStrs(cleanQuote, size,"\n","&#x0A;"); // '\n' is supported on some browsers
     }
-return encStr;
+strSwapStrs(cleanQuote, size,"\"","&quot;"); // Shield double quotes
+strSwapStrs(cleanQuote, size,"'" ,"&#39;" ); // Shield single quotes
+
+return cleanQuote;
 }
 
 
@@ -249,14 +227,11 @@ va_copy(argscp, args);
 htmlWarnBoxSetup(stdout); // sets up the warnBox if it hasn't already been done.
 char warning[1024];
 vsnprintf(warning,sizeof(warning),format, args);
-// NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
-if( strSwapStrs(warning, sizeof(warning),"'","&#39;") == -1) // Sheild single quotes
-    strSwapChar(warning,'\'','`');  // ran out of memory, replacing them with (`)
-if( strSwapStrs(warning, sizeof(warning),"\n","<BR>") == -1) // new lines also break the code
-    strSwapChar(warning,'\n',' ');  // ran out of memory, replacing them with ( )
+char *encodedMessage = htmlEncodeText(warning,TRUE); // NOTE: While some internal HTML should work, a single quote (') will will screw it all up!
 printf("<script type='text/javascript'>{showWarnBox();"
         "var warnList=document.getElementById('warnList');"
-        "warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n",warning); // NOTE that "--ERROR --" is needed at the end of this print!!
+        "warnList.innerHTML += '<li>%s</li>';}</script><!-- ERROR -->\n",encodedMessage); // NOTE that "--ERROR --" is needed at the end of this print!!
+freeMem(encodedMessage);
 
 /* Log useful CGI info to stderr */
 logCgiToStderr();

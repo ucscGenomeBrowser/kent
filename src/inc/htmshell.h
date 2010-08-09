@@ -41,8 +41,12 @@ void htmTextOut(FILE *f, char *s);
 void htmlTextOut(char *s);
 /* Print out string, if necessary replacing > with &gt; and the like */
 
-char *htmlEncode(char *s);
-/* Return a clone of s but if necessary replacing > with &gt; and the like */
+char *htmlEncodeText(char *s, boolean tagsOkay);
+/* Returns a cloned string with quotes replaced by html codes.
+   Changes ',",\n and if not tagsOkay >,<,& to code equivalents.
+   This differs from cgiEncode as it handles text that will
+   be displayed in an html page or tooltip style title.  */
+#define htmlEncode(s) htmlEncodeText(s,FALSE)
 
 void htmlMemDeath();
 /* Complain about lack of memory and abort.  */

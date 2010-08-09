@@ -1,6 +1,6 @@
 # Data Agreement File for UW DNase-Seq experiments for mm9
 
-$Revision: 1.1 $
+#$Revision: 1.2 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -16,7 +16,8 @@ group             regulation
 variables         cell,strain,sex,age
 assembly          mm9
 
-validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:quick=1000
+validationSettings validateFiles.bam:mmCheckOneInN=1000,mismatches=2;validateFiles.fastq:mmCheckOneInN=1000
+
 
 # Track/view definition
 view             Hotspots

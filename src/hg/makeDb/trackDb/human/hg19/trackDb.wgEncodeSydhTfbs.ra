@@ -1,4 +1,18 @@
 # Stanford/Yale/UCD/Harvard TFBS (wrangler: vsmalladi)
+# UW DNase-seq (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Short Labels: 7 charactesr for cell type, 2 characters for view
+#       - Views: For consistency sake view will be two letters
+#               - Peaks = Pk
+#               - Signal = Sg
+#       - cellType Order: Odering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks for Tier 1 cell lines
+#       - Display matrix: Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct f
+#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
+#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in 
+#       - View Displays: Deafult view filters:
+#               - Peaks-??
+
 track wgEncodeSydhTfbs
 release alpha
 compositeTrack on
@@ -12,7 +26,7 @@ origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2  H1hESC=H1-hESC HUVEC=HUVEC Raji=Raji U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> vK562=K562_<i>IFN&gamma;_6hrs</i>
-subGroup3 factor Factor  cJUN=c-Jun CCNT2=CCNT2 ELK4=ELK4 GATA2=GATA2 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 JUND=JunD MAX=Max POL2=Pol2 POL2S2=Pol2(phosphoS2) NRF1=Nrf1 RAD21=Rad21 SETDB1=SETDB1 STAT3=STAT3 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP ZNF274=ZNF27 zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
+subGroup3 factor Factor  cJUN=c-Jun CCNT2=CCNT2 ELK4=ELK4 GATA2=GATA2 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 JUND=JunD MAX=Max POL2=Pol2 POL2S2=Pol2(phosphoS2) NRF1=Nrf1 RAD21=Rad21 SETDB1=SETDB1 STAT3=STAT3 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP ZNF274=ZNF274 zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit UCD=UC_Davis 
 subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNg6h=IFN&gamma;_6hrs
 dimensions dimensionX=cellType dimensionY=factor

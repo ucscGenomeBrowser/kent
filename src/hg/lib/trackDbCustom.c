@@ -10,6 +10,7 @@
 #include "hui.h"
 #include "ra.h"
 #include "hash.h"
+#include "net.h"
 #include "sqlNum.h"
 #include "obscure.h"
 #include "hgMaf.h"

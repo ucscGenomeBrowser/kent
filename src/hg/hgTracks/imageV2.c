@@ -5,6 +5,8 @@
 #include "hdb.h"
 #include "hui.h"
 #include "jsHelper.h"
+#include "cheapcgi.h"
+#include "htmshell.h"
 #include "imageV2.h"
 #include "hgTracks.h"
 #include "hgConfig.h"
@@ -1416,7 +1418,7 @@ for(;item!=NULL;item=item->next)
         warn("map item has no url!");
 
     if(item->title != NULL && strlen(item->title) > 0)
-        hPrintf(" TITLE='%s'", item->title );
+        hPrintf(" TITLE='%s'", htmlEncode(item->title) );
     if(item->id != NULL)
         hPrintf(" id='%s'", item->id);
     hPrintf(">" );
@@ -1448,12 +1450,14 @@ if(slice->parentImg && slice->parentImg->file != NULL)
         default: warn("unknown slice = %d !",slice->type); break;
         }
     if(slice->type==stData && imgBox->showPortal)
-        hPrintf(" panImg' ondrag='{return false;}");
+        hPrintf(" panImg' ondrag='{return false;}'");
+    else
+        hPrintf("'");
     if(slice->title != NULL)
-        hPrintf("' title='%s",slice->title);           // Adds slice wide title
+        hPrintf(" title='%s'", htmlEncode(slice->title) );           // Adds slice wide title
     else if(slice->parentImg->title != NULL)
-        hPrintf("' title='%s",slice->parentImg->title);// Adds image wide title
-    hPrintf("'>");
+        hPrintf("' title='%s'", htmlEncode(slice->parentImg->title) );// Adds image wide title
+    hPrintf(">");
     }
 else
     {
@@ -1512,8 +1516,19 @@ else if(slice->link != NULL)
         hPrintf("  <A HREF=%s",slice->link);
     else
         hPrintf("  <A HREF='%s'",slice->link);
-    if(slice->title != NULL)
-        hPrintf(" TITLE='Click for %s'", slice->title );
+    if (slice->title != NULL)
+        {
+        if (imgTrack->reorderable && sliceType == stButton)
+            {
+            char *newLine = " &#x0A;";
+            if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
+                newLine = " - "; // FF does not support newline code!
+            hPrintf(" TITLE='Click for:%s%s%s(drag to reorder%s)'", newLine,htmlEncode(slice->title),
+                    newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+            }
+        else
+            hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
+        }
     hPrintf(">\n" );
     }
 
@@ -1547,7 +1562,7 @@ jsIncludeFile("jquery.tablednd.js", NULL);
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
 #ifdef IMAGEv2_DRAG_REORDER
-hPrintf(".trDrag {opacity:0.4; padding:1px; background-color:red;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
+hPrintf(".trDrag {background-color:#ccFFcc;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
 hPrintf(".dragHandle {cursor: s-resize;}\n");
 #endif//def IMAGEv2_DRAG_REORDER
 #ifdef FLAT_TRACK_LIST
@@ -1619,8 +1634,10 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         hPrintf("</TD>\n");
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
-        hPrintf(" <TD id='td_%s'%s>\n",name,
-            (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
+        if (imgTrack->reorderable)
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='Drag to reorder: &#x0A;%s'>\n",name,htmlEncode(imgTrack->tdb->longLabel));
+        else
+            hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
         hPrintf("</TD>\n");
         }

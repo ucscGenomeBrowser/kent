@@ -2821,29 +2821,29 @@ zcat all_L3_L4.L3_L4.ce6.ingenes.both_strands.reannotated.BED.gz \
     #   real    6m22.653s
 
 #########################################################################
-# RE-BUILD HGNEAR PROTEIN BLAST TABLES -- TARGET (DONE 6/25/10, Fan)
+# RE-BUILD HGNEAR PROTEIN BLAST TABLES -- TARGET (DONE 8/6/10, Fan)
     ssh hgwdev
-    mkdir /hive/data/genomes/ce6/bed/hgNearBlastp/100625
-    cd /hive/data/genomes/ce6/bed/hgNearBlastp/100625
+    mkdir -p /hive/data/genomes/ce6/bed/hgNearBlastp/100806
+    cd /hive/data/genomes/ce6/bed/hgNearBlastp/100806
     cat << _EOF_ > config.ra
 # Latest worm vs. other Gene Sorter orgs:
 # human, mouse, rat, zebrafish, fly, yeast
 
 targetGenesetPrefix sanger
 targetDb ce6
-queryDbs hg19 mm9 rn4 danRer5 dm3 sacCer2
-recipBest hg19 mm9 rn4 danRer5 dm3 sacCer2
+queryDbs hg19 mm9 rn4 danRer6 dm3 sacCer2
+recipBest hg19 mm9 rn4 danRer6 dm3 sacCer2
 
-ce6Fa /cluster/data/ce6/bed/hgNearBlastp/080711/ce6.sangerPep.faa
+ce6Fa /hive/data/genomes/ce6/bed/hgNearBlastp/080711/ce6.sangerPep.faa
 rn4Fa /hive/data/genomes/rn4/bed/blastp/known.faa
 hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
 mm9Fa /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
-danRer5Fa /hive/data/genomes/danRer5/bed/blastp/ensembl.faa
+danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
 dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
 sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
 
-buildDir /cluster/data/ce6/bed/hgNearBlastp/100625
-scratchDir  /hive/data/genomes/ce6/bed/hgNearBlastp/100625/tmp
+buildDir /cluster/data/ce6/bed/hgNearBlastp/100806
+scratchDir  /hive/data/genomes/ce6/bed/hgNearBlastp/100806/tmp
 _EOF_
     doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
 # *** All done!

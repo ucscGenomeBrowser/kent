@@ -31,7 +31,8 @@ test:	dsnTest \
 	featuresTypeTest \
 	featuresTypeExactTest \
 	featuresType2Test \
-	bedGraphTest
+	bedGraphTest \
+	featuresRegress1Test
 
 dsnTest:
 	@${MAKE} doTest id=$@ request='${dasUrl}/dsn'
@@ -58,6 +59,10 @@ featuresType2Test:
 # score in bedGraph
 bedGraphTest:
 	@${MAKE} doTest id=$@ request='${testUrl}/features?segment=7:115404471,117281897&type=encodeSangerChipH3K36me3'
+
+# regression: didn't have closing tag
+featuresRegress1Test:
+	@${MAKE} doTest id=$@ request='${dasUrl}/dm1/features?segment=chr2L:827700,845800'
 
 # recursive target, call with: id, request
 # saves response headers and body, then splits them, dropping date for easy diffing

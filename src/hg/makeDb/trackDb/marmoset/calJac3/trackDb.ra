@@ -64,12 +64,12 @@ yLineOnOff Off
 frames multiz13wayFrames
 irows on
 summary multiz13waySummary
-speciesCodonDefault calJac1
+speciesCodonDefault calJac3
 speciesGroups Primates Vertebrate
 sGroup_Primates ponAbe2 hg19 panTro2 gorGor2 rheMac2 papHam1 tarSyr1 micMur1 otoGar1
 sGroup_Vertebrate mm9 canFam2 monDom5
 itemFirstCharCase noChange
-treeImage phylo/calJac1_13way.gif
+treeImage phylo/calJac3_13way.gif
 
 track nscanGene override
 visibility pack

@@ -36,7 +36,9 @@ my $stepper = new HgStepManager(
 my $dbHost = 'hgwdev';
 
 # This could be made into an option:
-my $splitSize = '10k';
+# BLAT -fastMap will not work with query chunks greater than 5000
+my $splitSize = '5000';  
+my $splitOverlap = '500';  
 
 my $base = $0;
 $base =~ s/^(.*\/)?//;
@@ -174,7 +176,6 @@ sub doAlign {
   # script for a single job: split query partition further into
   # $splitSize bites while building a .lft liftUp spec; blat; lift.
   my $size = $splitSize;
-  $size =~ s/k$/000/;
   my $fh = &HgAutomate::mustOpen(">$runDir/job.csh");
   print $fh <<_EOF_
 #!/bin/csh -ef
@@ -210,7 +211,8 @@ foreach spec (\$specList)
   set end   = `echo \$range | awk -F- '{print \$2;}'`
   if (! -e q.sizes) twoBitInfo \$file q.sizes
   set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
-  while (\$start < \$end)
+  set chunkEnd = '0'
+  while (\$chunkEnd < \$end)
     set chunkEnd = `expr \$start + $size`
     if (\$chunkEnd > \$end) set chunkEnd = \$end
     set chunkSize = `expr \$chunkEnd - \$start`
@@ -220,7 +222,7 @@ foreach spec (\$specList)
     else
       echo "\$start	\$seq"":\$start-\$chunkEnd	\$chunkSize	\$seq	\$seqSize" >> query.lft
     endif
-    set start = \$chunkEnd
+    set start = `expr \$chunkEnd - $splitOverlap`
   end
 end
 

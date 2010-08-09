@@ -10,7 +10,7 @@ subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line K562=K562&nbsp;<i>Tier1</i> GM12878=GM12878&nbsp;<i>Tier1</i> H1hESC=H1-hESC&nbsp;<i>Tier2</i> HeLaS3=HeLa-S3&nbsp;<i>Tier2</i> HepG2=HepG2&nbsp;<i>Tier2</i> A549=A549 ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HTB11=HTB-11 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC T47D=T-47D U87=U87  
 subGroup3 factor Factor BATF=BATF BCL11A=BCL11A BCL3=BCL3 BHLHE40=BHLHE40 CTCF=CTCF EBF=EBF EGR1=Egr-1 ERalpha(a)=ERalpha_a FOSL2=FOSL2 GABP=GABP GR=GR HEY1=HEY1 IRF4=IRF4 JUND=JunD NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SRF=SRF TAF1=TAF1 TCF12=TCF12 USF1=USF-1 ZBTB33=ZBTB33 zControl=Input(control)
 subGroup4 protocol Protocol PCR1x=PCR1x PCR2x=PCR2x V0416101=v041610.1 V0416102=v041610.2
-subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX_1500pM DMSO2=DMSO_0.02pct ETOH02=EtOH_0.02pct None=None
+subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX_1500pM DMSO2=DMSO_0.02pct ESTRADIa1h=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1h=Genistein_100nM None=None
 subGroup6 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=protocol dimC=treatment
 dimensionAchecked rep1
@@ -275,7 +275,7 @@ nextItemButton on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 ERal_a Pk 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Replicate 2 (ERalpha_a in ECC-1 cells)
-        subGroups view=Peaks factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=None rep=rep2
+        subGroups view=Peaks factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=ESTRADIa1h rep=rep2
         type broadPeak
     # subId=1216 dateSubmitted=2010-05-27
 
@@ -284,7 +284,7 @@ nextItemButton on
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 ERal_a Pk 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Replicate 1 (ERalpha_a in ECC-1 cells)
-        subGroups view=Peaks factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=None rep=rep1
+        subGroups view=Peaks factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=ESTRADIa1h rep=rep1
         type broadPeak
     # subId=1216 dateSubmitted=2010-05-27
 
@@ -1686,7 +1686,7 @@ nextItemButton on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel T-47D ERal_a Pk 2
             longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Replicate 2 (ERalpha_a in T-47D cells)
-            subGroups view=Peaks factor=ERalpha(a) cellType=T47D protocol=PCR2x treatment=None rep=rep2
+            subGroups view=Peaks factor=ERalpha(a) cellType=T47D protocol=PCR2x treatment=GEN1h rep=rep2
             type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
@@ -1695,7 +1695,7 @@ nextItemButton on
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel T-47D ERal_a Pk 1
             longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Peaks Replicate 1 (ERalpha_a in T-47D cells)
-            subGroups view=Peaks factor=ERalpha(a) cellType=T47D protocol=PCR2x treatment=None rep=rep1
+            subGroups view=Peaks factor=ERalpha(a) cellType=T47D protocol=PCR2x treatment=GEN1h rep=rep1
             type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
@@ -1986,7 +1986,7 @@ nextItemButton on
         subTrack wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC-1 ERalpha_a Raw 2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Replicate 2 (ERalpha_a in ECC-1 cells)
-        subGroups view=RawSignal factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=None rep=rep2
+        subGroups view=RawSignal factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=ESTRADIa1h rep=rep2
         type wig -94.62 85.47
     # subId=1216 dateSubmitted=2010-05-27
 
@@ -2004,7 +2004,7 @@ nextItemButton on
         subTrack wgEncodeHaibTfbsViewRawSignal off
         shortLabel ECC-1 ERalpha_a Raw 1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-Seq Raw Signal Replicate 1 (ERalpha_a in ECC-1 cells)
-        subGroups view=RawSignal factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=None rep=rep1
+        subGroups view=RawSignal factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=ESTRADIa1h rep=rep1
         type wig -93.94 75.33
     # subId=1216 dateSubmitted=2010-05-27
 

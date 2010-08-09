@@ -1,6 +1,8 @@
 
 LIST=\
+wgEncodeAffyRnaChip.ra \
 wgEncodeBroadHistone.ra \
+wgEncodeGencode.ra \
 wgEncodeHaibMethylRrbs.ra \
 wgEncodeHaibTfbs.ra \
 wgEncodeOpenChromChip.ra \
@@ -18,6 +20,8 @@ wgEncodeCshlShortRnaSeq.ra \
 wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
 wgEncodeGisRnaSeq.ra \
+wgEncodeGisDnaPet.ra \
+wgEncodeMapability.ra \
 wgEncodeUwDgf.ra 
 
 include ../../../../makefile.metaDb

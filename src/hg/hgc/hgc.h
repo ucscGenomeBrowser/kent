@@ -230,6 +230,9 @@ void doRnaSecStr(struct trackDb *tdb, char *itemName);
 void motifHitSection(struct dnaSeq *seq, struct dnaMotif *motif);
 /* Print out section about motif. */
 
+void motifMultipleHitsSection(struct dnaSeq **seqs, int count, struct dnaMotif *motif);
+/* Print out section about motif, possibly with mutliple occurrences. */
+
 struct dnaMotif *loadDnaMotif(char *motifName, char *motifTable);
 /* Load dnaMotif from table. */
 

@@ -1,17 +1,35 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/human/hg18/wgEncodeBroadChipSeq.ra,v 1.1 2010/05/27 21:39:14 tdreszer Exp $
 
 # BROAD Histone (wrangler: Vankat, assisted by Tim)
+# UW Histone (wrangler: Venkat, assisted by Tim)
+# Notes:
+#       - Short Labels: 5 charactesr for cell type, 8 characters for antibody, 2 characters  for View 
+#       - Views: For consistency sake view will be two letters
+#               - Peaks = Pk
+#               - Signal = Sg
+#       - factor Order: Ordering is based on Histone Histone then numerically and alphabetaclly. Numerically 09 before 12.
+#       - cellType Order: Ordering is based on tier and alphabetical within a tier. The proposed layout provides an eaiser way of accessing the tier 1 and tier 2 cells lines which are most likley to have default views displayed.
+#       - Default Tracks on: Peaks,Hotspots,Raw Signals for 1st and 2nd ranks.
+#       - Display matrix: 
+#		- Tier 1 and Tier 2 cell lines have distinct labels that defining that their tier and distinct from cell names.
+#               - Dimension X - Treatment
+#               - Dimension Y - Cell Type
+#       - Track Long Label: Standardize as Encode (dataType) from Univeristy
+#       - View Long Labels: ENCODE $lab(abbreviation) $dataType $view Replicate $replicate ([antibody,treatment etc} in $cell) under 80 characterss
+#       - View Displays: Deafult view filters:
+#               - Peaks - ??
+#               - Signal -??
 
 track wgEncodeBroadHistone
 compositeTrack on
-superTrack wgEncodeHistoneSuper
+superTrack wgEncodeHistoneSuper dense
 shortLabel Broad Histone
-longLabel ENCODE Histone Modifications by Broad Institute ChIP-seq
+longLabel ENCODE Histone Modifications by ChIP-Seq from  Broad Institute
 group regulation
 subGroup1 view Views Peaks=Peaks Signal=Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 H1=H1-hESC HELA=HeLa-S3 HEPG2=HepG2 HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC K562=K562 NHEK=NHEK NHLF=NHLF
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) H1=H1-hESC&nbsp;(Tier_2) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) NHEK=NHEK&nbsp;(Tier_2)  HMEC=HMEC HSMM=HSMM HSMMt=HSMMtube NHA=NH-A NHLF=NHLF
 subGroup3 factor Antibody CTCF=CTCF H2AZ=H2A.Z H3K04me1=H3K4me1 H3K04me2=H3K4me2 H3K04me3=H3K4me3 H3K09ac=H3K9ac H3K09me1=H3K9me1 H3K09me3=H3K9me3 H3K27ac=H3K27ac H3K27me3=H3K27me3 H3K36me3=H3K36me3 H3K79me2=H3K79me2 H4K20me1=H4K20me1 POL2B=Pol2(b) zCTRL=Input_Control
-dimensions dimensionX=cellType dimensionY=factor
+dimensions dimensionY=cellType dimensionX=factor
 sortOrder cellType=+ factor=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
@@ -64,7 +82,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK CTCF S
+        shortLabel NHEK  CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in NHEK cells)
         subGroups view=Signal factor=CTCF cellType=NHEK
         type bigWig 0.040000 3664.639893
@@ -75,7 +93,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K36me3 S
+        shortLabel HSMMt H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in HSMMtube cells)
         subGroups view=Signal factor=H3K36me3 cellType=HSMMt
         type bigWig 0.040000 15984.040039
@@ -85,7 +103,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K36me3 S
+        shortLabel HepG2 H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in HepG2 cells)
         subGroups view=Signal factor=H3K36me3 cellType=HEPG2
         type bigWig 0.040000 5547.879883
@@ -96,7 +114,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K27me3 S
+        shortLabel NHLF  H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in NHLF cells)
         subGroups view=Signal factor=H3K27me3 cellType=NHLF
         type bigWig 0.040000 9652.440430
@@ -106,7 +124,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube Control S
+        shortLabel HSMMt Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in HSMMtube cells)
         subGroups view=Signal factor=zCTRL cellType=HSMMt
         type bigWig 0.040000 44143.320312
@@ -116,7 +134,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K4me2 S
+        shortLabel HSMM  H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in HSMM cells)
         subGroups view=Signal factor=H3K04me2 cellType=HSMM
         type bigWig 0.040000 10200.320312
@@ -126,7 +144,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k9me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K9me1 S
+        shortLabel NHEK  H3K9me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9me1 in NHEK cells)
         subGroups view=Signal factor=H3K09me1 cellType=NHEK
         type bigWig 0.040000 5266.720215
@@ -137,7 +155,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K27me3 S
+        shortLabel HUVEC H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in HUVEC cells)
         subGroups view=Signal factor=H3K27me3 cellType=HUVEC
         type bigWig 0.040000 6214.319824
@@ -148,7 +166,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K36me3 S
+        shortLabel HMEC  H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in HMEC cells)
         subGroups view=Signal factor=H3K36me3 cellType=HMEC
         type bigWig 0.040000 10746.120117
@@ -158,7 +176,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K27me3 S
+        shortLabel HSMM  H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in HSMM cells)
         subGroups view=Signal factor=H3K27me3 cellType=HSMM
         type bigWig 0.040000 10213.759766
@@ -168,7 +186,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K9ac S
+        shortLabel HUVEC H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in HUVEC cells)
         subGroups view=Signal factor=H3K09ac cellType=HUVEC
         type bigWig 0.040000 3125.959961
@@ -179,7 +197,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM CTCF S
+        shortLabel HSMM  CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in HSMM cells)
         subGroups view=Signal factor=CTCF cellType=HSMM
         type bigWig 0.040000 10439.959961
@@ -189,7 +207,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H3K27ac S
+        shortLabel HeLaS H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in HeLa-S3 cells)
         subGroups view=Signal factor=H3K27ac cellType=HELA
         type bigWig 0.040000 23354.720703
@@ -200,7 +218,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K4me3 S
+        shortLabel HUVEC H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in HUVEC cells)
         subGroups view=Signal factor=H3K04me3 cellType=HUVEC
         type bigWig 0.040000 8289.919922
@@ -211,7 +229,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel K562 H3K4me3 S
+        shortLabel K562  H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in K562 cells)
         subGroups view=Signal factor=H3K04me3 cellType=K562
         type bigWig 0.040000 13314.719727
@@ -222,7 +240,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K4me2 S
+        shortLabel NHEK  H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in NHEK cells)
         subGroups view=Signal factor=H3K04me2 cellType=NHEK
         type bigWig 0.040000 3108.399902
@@ -233,7 +251,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC Control S
+        shortLabel HUVEC Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in HUVEC cells)
         subGroups view=Signal factor=zCTRL cellType=HUVEC
         type bigWig 0.040000 13452.160156
@@ -244,7 +262,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H4K20me1 S
+        shortLabel NHLF  H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in NHLF cells)
         subGroups view=Signal factor=H4K20me1 cellType=NHLF
         type bigWig 0.040000 7711.879883
@@ -254,7 +272,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 H4K20me1 S
+        shortLabel K562  H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in K562 cells)
         subGroups view=Signal factor=H4K20me1 cellType=K562
         type bigWig 0.040000 12717.959961
@@ -265,7 +283,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel K562 H3K27ac S
+        shortLabel K562  H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in K562 cells)
         subGroups view=Signal factor=H3K27ac cellType=K562
         type bigWig 0.040000 8162.640137
@@ -276,7 +294,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K9ac S
+        shortLabel HMEC  H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in HMEC cells)
         subGroups view=Signal factor=H3K09ac cellType=HMEC
         type bigWig 0.040000 7841.640137
@@ -286,7 +304,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K4me1 S
+        shortLabel NHLF  H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in NHLF cells)
         subGroups view=Signal factor=H3K04me1 cellType=NHLF
         type bigWig 0.040000 14138.480469
@@ -296,7 +314,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH2azStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H2A.Z S
+        shortLabel HSMMt H2A.Z    Sg
         longLabel ENCODE Broad Histone Mods Signal (H2A.Z in HSMMtube cells)
         subGroups view=Signal factor=H2AZ cellType=HSMMt
         type bigWig 0.040000 16899.519531
@@ -306,7 +324,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel H1-hESC H3K9ac S
+        shortLabel H1hES H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in H1-hESC cells)
         subGroups view=Signal factor=H3K09ac cellType=H1
         type bigWig 0.040000 17840.919922
@@ -317,7 +335,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K4me3 S
+        shortLabel HepG2 H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in HepG2 cells)
         subGroups view=Signal factor=H3K04me3 cellType=HEPG2
         type bigWig 0.040000 4277.000000
@@ -328,7 +346,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF CTCF S
+        shortLabel NHLF  CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in NHLF cells)
         subGroups view=Signal factor=CTCF cellType=NHLF
         type bigWig 0.040000 14121.160156
@@ -338,7 +356,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K9ac S
+        shortLabel NHLF  H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in NHLF cells)
         subGroups view=Signal factor=H3K09ac cellType=NHLF
         type bigWig 0.040000 8105.680176
@@ -348,7 +366,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3CtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 CTCF S
+        shortLabel HeLaS CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in HeLa-S3 cells)
         subGroups view=Signal factor=CTCF cellType=HELA
         type bigWig 0.040000 32444.480469
@@ -359,7 +377,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF Control S
+        shortLabel NHLF  Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in NHLF cells)
         subGroups view=Signal factor=zCTRL cellType=NHLF
         type bigWig 0.040000 13342.759766
@@ -369,7 +387,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H4K20me1 S
+        shortLabel HeLaS H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in HeLa-S3 cells)
         subGroups view=Signal factor=H4K20me1 cellType=HELA
         type bigWig 0.040000 25408.839844
@@ -380,7 +398,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel K562 H3K27me3 S
+        shortLabel K562  H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in K562 cells)
         subGroups view=Signal factor=H3K27me3 cellType=K562
         type bigWig 0.040000 13777.200195
@@ -391,7 +409,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K4me1 S
+        shortLabel HSMM  H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in HSMM cells)
         subGroups view=Signal factor=H3K04me1 cellType=HSMM
         type bigWig 0.040000 9619.360352
@@ -401,7 +419,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 H3K4me2 S
+        shortLabel K562  H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in K562 cells)
         subGroups view=Signal factor=H3K04me2 cellType=K562
         type bigWig 0.040000 4060.560059
@@ -412,7 +430,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H4K20me1 S
+        shortLabel HSMM  H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in HSMM cells)
         subGroups view=Signal factor=H4K20me1 cellType=HSMM
         type bigWig 0.040000 13583.440430
@@ -422,7 +440,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K4me3 S
+        shortLabel HSMMt H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in HSMMtube cells)
         subGroups view=Signal factor=H3K04me3 cellType=HSMMt
         type bigWig 0.040000 12015.919922
@@ -432,7 +450,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k9me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K9me3 S
+        shortLabel HSMM  H3K9me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9me3 in HSMM cells)
         subGroups view=Signal factor=H3K09me3 cellType=HSMM
         type bigWig 0.040000 53900.359375
@@ -442,7 +460,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K27ac S
+        shortLabel HSMM  H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in HSMM cells)
         subGroups view=Signal factor=H3K27ac cellType=HSMM
         type bigWig 0.040000 7472.680176
@@ -452,7 +470,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2ControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 Control S
+        shortLabel HepG2 Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in HepG2 cells)
         subGroups view=Signal factor=zCTRL cellType=HEPG2
         type bigWig 0.040000 9153.400391
@@ -463,7 +481,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k9me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 H3K9me1 S
+        shortLabel K562  H3K9me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9me1 in K562 cells)
         subGroups view=Signal factor=H3K09me1 cellType=K562
         type bigWig 0.040000 22709.759766
@@ -474,7 +492,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel H1-hESC H3K27me3 S
+        shortLabel H1hES H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in H1-hESC cells)
         subGroups view=Signal factor=H3K27me3 cellType=H1
         type bigWig 0.040000 10269.200195
@@ -485,7 +503,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K36me3 S
+        shortLabel HUVEC H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in HUVEC cells)
         subGroups view=Signal factor=H3K36me3 cellType=HUVEC
         type bigWig 0.040000 6577.279785
@@ -496,7 +514,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K4me3 S
+        shortLabel NHEK  H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in NHEK cells)
         subGroups view=Signal factor=H3K04me3 cellType=NHEK
         type bigWig 0.040000 9976.839844
@@ -507,7 +525,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k79me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K79me2 S
+        shortLabel HSMMt H3K79me2 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K79me2 in HSMMtube cells)
         subGroups view=Signal factor=H3K79me2 cellType=HSMMt
         type bigWig 0.040000 10657.519531
@@ -517,7 +535,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K4me1 S
+        shortLabel NHEK  H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in NHEK cells)
         subGroups view=Signal factor=H3K04me1 cellType=NHEK
         type bigWig 0.040000 3680.399902
@@ -528,7 +546,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel K562 H3K36me3 S
+        shortLabel K562  H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in K562 cells)
         subGroups view=Signal factor=H3K36me3 cellType=K562
         type bigWig 0.040000 9564.440430
@@ -539,7 +557,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecPol2bStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC Pol2(b) S
+        shortLabel HUVEC Pol2(b)  Sg
         longLabel ENCODE Broad Histone Mods Signal (Pol2(b) in HUVEC cells)
         subGroups view=Signal factor=POL2B cellType=HUVEC
         type bigWig 0.040000 8296.240234
@@ -550,7 +568,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H4K20me1 S
+        shortLabel HSMMt H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in HSMMtube cells)
         subGroups view=Signal factor=H4K20me1 cellType=HSMMt
         type bigWig 0.040000 16533.359375
@@ -560,7 +578,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k9me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K9me1 S
+        shortLabel HUVEC H3K9me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9me1 in HUVEC cells)
         subGroups view=Signal factor=H3K09me1 cellType=HUVEC
         type bigWig 0.040000 6102.680176
@@ -571,7 +589,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k79me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K79me2 S
+        shortLabel HSMM  H3K79me2 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K79me2 in HSMM cells)
         subGroups view=Signal factor=H3K79me2 cellType=HSMM
         type bigWig 0.040000 12545.360352
@@ -581,7 +599,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K27ac S
+        shortLabel HUVEC H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in HUVEC cells)
         subGroups view=Signal factor=H3K27ac cellType=HUVEC
         type bigWig 0.040000 4396.560059
@@ -592,7 +610,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K4me2 S
+        shortLabel HUVEC H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in HUVEC cells)
         subGroups view=Signal factor=H3K04me2 cellType=HUVEC
         type bigWig 0.040000 5846.080078
@@ -603,7 +621,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K27me3 S
+        shortLabel NHEK  H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in NHEK cells)
         subGroups view=Signal factor=H3K27me3 cellType=NHEK
         type bigWig 0.040000 3975.879883
@@ -614,7 +632,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel H1-hESC H3K36me3 S
+        shortLabel H1hES H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in H1-hESC cells)
         subGroups view=Signal factor=H3K36me3 cellType=H1
         type bigWig 0.040000 16712.320312
@@ -625,7 +643,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel K562 H3K4me1 S
+        shortLabel K562  H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in K562 cells)
         subGroups view=Signal factor=H3K04me1 cellType=K562
         type bigWig 0.040000 7340.479980
@@ -636,7 +654,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekPol2bStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK Pol2(b) S
+        shortLabel NHEK  Pol2(b)  Sg
         longLabel ENCODE Broad Histone Mods Signal (Pol2(b) in NHEK cells)
         subGroups view=Signal factor=POL2B cellType=NHEK
         type bigWig 0.040000 3405.360107
@@ -647,7 +665,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K27ac S
+        shortLabel NHLF  H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in NHLF cells)
         subGroups view=Signal factor=H3K27ac cellType=NHLF
         type bigWig 0.040000 7016.200195
@@ -657,7 +675,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K4me2 S
+        shortLabel NHLF  H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in NHLF cells)
         subGroups view=Signal factor=H3K04me2 cellType=NHLF
         type bigWig 0.040000 12378.839844
@@ -667,7 +685,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K27ac S
+        shortLabel HepG2 H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in HepG2 cells)
         subGroups view=Signal factor=H3K27ac cellType=HEPG2
         type bigWig 0.040000 1918.119995
@@ -678,7 +696,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC CTCF S
+        shortLabel HMEC  CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in HMEC cells)
         subGroups view=Signal factor=CTCF cellType=HMEC
         type bigWig 0.040000 12888.919922
@@ -688,7 +706,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3Pol2bStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 Pol2(b) S
+        shortLabel HeLaS Pol2(b)  Sg
         longLabel ENCODE Broad Histone Mods Signal (Pol2(b) in HeLa-S3 cells)
         subGroups view=Signal factor=POL2B cellType=HELA
         type bigWig 0.040000 48100.679688
@@ -699,7 +717,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H3k79me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H3K79me2 S
+        shortLabel HeLaS H3K79me2 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K79me2 in HeLa-S3 cells)
         subGroups view=Signal factor=H3K79me2 cellType=HELA
         type bigWig 0.040000 20610.480469
@@ -710,7 +728,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel H1-hESC H3K4me3 S
+        shortLabel H1hES H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in H1-hESC cells)
         subGroups view=Signal factor=H3K04me3 cellType=H1
         type bigWig 0.040000 9565.759766
@@ -721,7 +739,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K9ac S
+        shortLabel HSMMt H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in HSMMtube cells)
         subGroups view=Signal factor=H3K09ac cellType=HSMMt
         type bigWig 0.040000 20191.000000
@@ -731,7 +749,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k79me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K79me2 S
+        shortLabel HepG2 H3K79me2 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K79me2 in HepG2 cells)
         subGroups view=Signal factor=H3K79me2 cellType=HEPG2
         type bigWig 0.040000 14792.160156
@@ -742,7 +760,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562H3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 H3K9ac S
+        shortLabel K562  H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in K562 cells)
         subGroups view=Signal factor=H3K09ac cellType=K562
         type bigWig 0.040000 14247.200195
@@ -753,7 +771,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K27ac S
+        shortLabel HSMMt H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in HSMMtube cells)
         subGroups view=Signal factor=H3K27ac cellType=HSMMt
         type bigWig 0.040000 3866.080078
@@ -763,7 +781,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K36me3 S
+        shortLabel NHLF  H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in NHLF cells)
         subGroups view=Signal factor=H3K36me3 cellType=NHLF
         type bigWig 0.040000 15557.639648
@@ -773,7 +791,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H3K4me3 S
+        shortLabel HeLaS H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in HeLa-S3 cells)
         subGroups view=Signal factor=H3K04me3 cellType=HELA
         type bigWig 0.040000 25109.240234
@@ -784,7 +802,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562ControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 Control S
+        shortLabel K562  Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in K562 cells)
         subGroups view=Signal factor=zCTRL cellType=K562
         type bigWig 0.040000 17321.439453
@@ -795,7 +813,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel H1-hESC H3K27ac S
+        shortLabel H1hES H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in H1-hESC cells)
         subGroups view=Signal factor=H3K27ac cellType=H1
         type bigWig 0.040000 19690.599609
@@ -806,7 +824,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K36me3 S
+        shortLabel NHEK  H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in NHEK cells)
         subGroups view=Signal factor=H3K36me3 cellType=NHEK
         type bigWig 0.040000 4187.120117
@@ -817,7 +835,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H3K4me2 S
+        shortLabel HeLaS H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in HeLa-S3 cells)
         subGroups view=Signal factor=H3K04me2 cellType=HELA
         type bigWig 0.040000 35817.640625
@@ -828,7 +846,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K4me3 S
+        shortLabel HSMM  H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in HSMM cells)
         subGroups view=Signal factor=H3K04me3 cellType=HSMM
         type bigWig 0.040000 37810.921875
@@ -838,7 +856,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K4me2 S
+        shortLabel HMEC  H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in HMEC cells)
         subGroups view=Signal factor=H3K04me2 cellType=HMEC
         type bigWig 0.040000 9754.000000
@@ -848,7 +866,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H4K20me1 S
+        shortLabel HepG2 H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in HepG2 cells)
         subGroups view=Signal factor=H4K20me1 cellType=HEPG2
         type bigWig 0.040000 12546.959961
@@ -859,7 +877,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K4me1 S
+        shortLabel HMEC  H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in HMEC cells)
         subGroups view=Signal factor=H3K04me1 cellType=HMEC
         type bigWig 0.040000 12081.799805
@@ -869,7 +887,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel H1-hESC Control S
+        shortLabel H1hES Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in H1-hESC cells)
         subGroups view=Signal factor=zCTRL cellType=H1
         type bigWig 0.040000 10153.759766
@@ -880,7 +898,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K4me2 S
+        shortLabel HepG2 H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in HepG2 cells)
         subGroups view=Signal factor=H3K04me2 cellType=HEPG2
         type bigWig 0.040000 4438.439941
@@ -891,7 +909,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K36me3 S
+        shortLabel HSMM  H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in HSMM cells)
         subGroups view=Signal factor=H3K36me3 cellType=HSMM
         type bigWig 0.040000 11937.519531
@@ -901,7 +919,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H4K20me1 S
+        shortLabel HUVEC H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in HUVEC cells)
         subGroups view=Signal factor=H4K20me1 cellType=HUVEC
         type bigWig 0.040000 13583.559570
@@ -912,7 +930,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K4me1 S
+        shortLabel HSMMt H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in HSMMtube cells)
         subGroups view=Signal factor=H3K04me1 cellType=HSMMt
         type bigWig 0.040000 6873.759766
@@ -922,7 +940,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K9ac S
+        shortLabel HepG2 H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in HepG2 cells)
         subGroups view=Signal factor=H3K09ac cellType=HEPG2
         type bigWig 0.040000 10882.879883
@@ -933,7 +951,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube H3K4me2 S
+        shortLabel HSMMt H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in HSMMtube cells)
         subGroups view=Signal factor=H3K04me2 cellType=HSMMt
         type bigWig 0.040000 7831.160156
@@ -943,7 +961,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmtCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMMtube CTCF S
+        shortLabel HSMMt CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in HSMMtube cells)
         subGroups view=Signal factor=CTCF cellType=HSMMt
         type bigWig 0.040000 15696.320312
@@ -953,7 +971,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562CtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel K562 CTCF S
+        shortLabel K562  CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in K562 cells)
         subGroups view=Signal factor=CTCF cellType=K562
         type bigWig 0.040000 11319.440430
@@ -964,7 +982,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K27me3 S
+        shortLabel HMEC  H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in HMEC cells)
         subGroups view=Signal factor=H3K27me3 cellType=HMEC
         type bigWig 0.040000 10112.240234
@@ -974,7 +992,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3ControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 Control S
+        shortLabel HeLaS Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in HeLa-S3 cells)
         subGroups view=Signal factor=zCTRL cellType=HELA
         type bigWig 0.040000 94318.796875
@@ -985,7 +1003,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K27ac S
+        shortLabel NHEK  H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in NHEK cells)
         subGroups view=Signal factor=H3K27ac cellType=NHEK
         type bigWig 0.040000 36868.121094
@@ -996,7 +1014,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM Control S
+        shortLabel HSMM  Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in HSMM cells)
         subGroups view=Signal factor=zCTRL cellType=HSMM
         type bigWig 0.040000 15504.480469
@@ -1006,7 +1024,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel H1-hESC H4K20me1 S
+        shortLabel H1hES H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in H1-hESC cells)
         subGroups view=Signal factor=H4K20me1 cellType=H1
         type bigWig 0.040000 23103.880859
@@ -1017,7 +1035,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK Control S
+        shortLabel NHEK  Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in NHEK cells)
         subGroups view=Signal factor=zCTRL cellType=NHEK
         type bigWig 0.040000 10613.160156
@@ -1028,7 +1046,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k27acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K27ac S
+        shortLabel HMEC  H3K27ac  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27ac in HMEC cells)
         subGroups view=Signal factor=H3K27ac cellType=HMEC
         type bigWig 0.040000 7273.600098
@@ -1038,7 +1056,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me2StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel H1-hESC H3K4me2 S
+        shortLabel H1hES H3K4me2  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in H1-hESC cells)
         subGroups view=Signal factor=H3K04me2 cellType=H1
         type bigWig 0.040000 9300.160156
@@ -1049,7 +1067,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC H3K4me1 S
+        shortLabel HUVEC H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in HUVEC cells)
         subGroups view=Signal factor=H3K04me1 cellType=HUVEC
         type bigWig 0.040000 4498.640137
@@ -1060,7 +1078,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhlfH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHLF H3K4me3 S
+        shortLabel NHLF  H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in NHLF cells)
         subGroups view=Signal factor=H3K04me3 cellType=NHLF
         type bigWig 0.040000 25393.160156
@@ -1070,7 +1088,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H3k36me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H3K36me3 S
+        shortLabel HeLaS H3K36me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in HeLa-S3 cells)
         subGroups view=Signal factor=H3K36me3 cellType=HELA
         type bigWig 0.040000 40261.800781
@@ -1081,7 +1099,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel H1-hESC CTCF S
+        shortLabel H1hES CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in H1-hESC cells)
         subGroups view=Signal factor=CTCF cellType=H1
         type bigWig 0.040000 23906.279297
@@ -1092,7 +1110,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHsmmH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HSMM H3K9ac S
+        shortLabel HSMM  H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in HSMM cells)
         subGroups view=Signal factor=H3K09ac cellType=HSMM
         type bigWig 0.040000 7519.040039
@@ -1102,7 +1120,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneH1hescH3k4me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal
-        shortLabel H1-hESC H3K4me1 S
+        shortLabel H1hES H3K4me1  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in H1-hESC cells)
         subGroups view=Signal factor=H3K04me1 cellType=H1
         type bigWig 0.040000 10892.639648
@@ -1113,7 +1131,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H4K20me1 S
+        shortLabel NHEK  H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in NHEK cells)
         subGroups view=Signal factor=H4K20me1 cellType=NHEK
         type bigWig 0.040000 6310.120117
@@ -1124,7 +1142,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH4k20me1StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H4K20me1 S
+        shortLabel HMEC  H4K20me1 Sg
         longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in HMEC cells)
         subGroups view=Signal factor=H4K20me1 cellType=HMEC
         type bigWig 0.040000 18010.759766
@@ -1134,7 +1152,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecControlStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC Control S
+        shortLabel HMEC  Control  Sg
         longLabel ENCODE Broad Histone Mods Signal (Control in HMEC cells)
         subGroups view=Signal factor=zCTRL cellType=HMEC
         type bigWig 0.040000 12705.320312
@@ -1144,7 +1162,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2CtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 CTCF S
+        shortLabel HepG2 CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in HepG2 cells)
         subGroups view=Signal factor=CTCF cellType=HEPG2
         type bigWig 0.040000 10767.599609
@@ -1155,7 +1173,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H3k27me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H3K27me3 S
+        shortLabel HepG2 H3K27me3 Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in HepG2 cells)
         subGroups view=Signal factor=H3K27me3 cellType=HEPG2
         type bigWig 0.040000 12507.360352
@@ -1166,7 +1184,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneK562Pol2bStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel K562 Pol2(b) S
+        shortLabel K562  Pol2(b)  Sg
         longLabel ENCODE Broad Histone Mods Signal (Pol2(b) in K562 cells)
         subGroups view=Signal factor=POL2B cellType=K562
         type bigWig 0.040000 16058.919922
@@ -1177,7 +1195,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHuvecCtcfStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HUVEC CTCF S
+        shortLabel HUVEC CTCF     Sg
         longLabel ENCODE Broad Histone Mods Signal (CTCF in HUVEC cells)
         subGroups view=Signal factor=CTCF cellType=HUVEC
         type bigWig 0.040000 5654.680176
@@ -1188,7 +1206,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHelas3H3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HeLa-S3 H3K9ac S
+        shortLabel HeLaS H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in HeLa-S3 cells)
         subGroups view=Signal factor=H3K09ac cellType=HELA
         type bigWig 0.040000 22466.119141
@@ -1199,7 +1217,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHepg2H2azStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HepG2 H2A.Z S
+        shortLabel HepG2 H2A.Z    Sg
         longLabel ENCODE Broad Histone Mods Signal (H2A.Z in HepG2 cells)
         subGroups view=Signal factor=H2AZ cellType=HEPG2
         type bigWig 0.040000 25146.679688
@@ -1210,7 +1228,7 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneHmecH3k4me3StdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel HMEC H3K4me3 S
+        shortLabel HMEC  H3K4me3  Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in HMEC cells)
         subGroups view=Signal factor=H3K04me3 cellType=HMEC
         type bigWig 0.040000 14119.879883
@@ -1220,11 +1238,191 @@ dataVersion through the ENCODE Jun 2010 Freeze
         track wgEncodeBroadHistoneNhekH3k9acStdSig
         release alpha
         parent wgEncodeBroadHistoneViewSignal off
-        shortLabel NHEK H3K9ac S
+        shortLabel NHEK  H3K9ac   Sg
         longLabel ENCODE Broad Histone Mods Signal (H3K9ac in NHEK cells)
         subGroups view=Signal factor=H3K09ac cellType=NHEK
         type bigWig 0.040000 3178.360107
         origAssembly hg18
         color 179,0,134
         # subId=1794 dateSubmitted=2010-06-21
+
+        track wgEncodeBroadHistoneGm12878CtcfStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 CTCF     Sg
+        longLabel ENCODE Broad Histone Mods Signal (CTCF in GM12878 cells)
+        subGroups view=Signal factor=CTCF cellType=GM12878
+        type bigWig 0.040000 16386.560547
+        origAssembly hg18
+        color 153,38,0
+        # subId=1878 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878ControlStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 Control  Sg
+        longLabel ENCODE Broad Histone Mods Signal (Control in GM12878 cells)
+        subGroups view=Signal factor=zCTRL cellType=GM12878
+        type bigWig 0.040000 10034.400391
+        origAssembly hg18
+        color 153,38,0
+        # subId=1879 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k27acStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K27ac  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K27ac in GM12878 cells)
+        subGroups view=Signal factor=H3K27ac cellType=GM12878
+        type bigWig 0.040000 355227.000000
+        origAssembly hg18
+        color 153,38,0
+        # subId=1880 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k27me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K27me3 Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in GM12878 cells)
+        subGroups view=Signal factor=H3K27me3 cellType=GM12878
+        type bigWig 0.040000 51675.199219
+        origAssembly hg18
+        color 153,38,0
+        # subId=1881 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k36me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K36me3 Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in GM12878 cells)
+        subGroups view=Signal factor=H3K36me3 cellType=GM12878
+        type bigWig 0.040000 11943.519531
+        origAssembly hg18
+        color 153,38,0
+        # subId=1882 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k4me1StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K4me1  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in GM12878 cells)
+        subGroups view=Signal factor=H3K04me1 cellType=GM12878
+        type bigWig 0.040000 6971.479980
+        origAssembly hg18
+        color 153,38,0
+        # subId=1883 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k4me2StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K4me2  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K4me2 in GM12878 cells)
+        subGroups view=Signal factor=H3K04me2 cellType=GM12878
+        type bigWig 0.040000 6559.600098
+        origAssembly hg18
+        color 153,38,0
+        # subId=1884 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k4me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K4me3  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in GM12878 cells)
+        subGroups view=Signal factor=H3K04me3 cellType=GM12878
+        type bigWig 0.040000 77082.320312
+        origAssembly hg18
+        color 153,38,0
+        # subId=1885 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H3k9acStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H3K9ac   Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K9ac in GM12878 cells)
+        subGroups view=Signal factor=H3K09ac cellType=GM12878
+        type bigWig 0.040000 6293.839844
+        origAssembly hg18
+        color 153,38,0
+        # subId=1886 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneGm12878H4k20me1StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel GM878 H4K20me1 Sg
+        longLabel ENCODE Broad Histone Mods Signal (H4K20me1 in GM12878 cells)
+        subGroups view=Signal factor=H4K20me1 cellType=GM12878
+        type bigWig 0.040000 8058.640137
+        origAssembly hg18
+        color 153,38,0
+        # subId=1887 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaCtcfStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  CTCF     Sg
+        longLabel ENCODE Broad Histone Mods Signal (CTCF in NH-A cells)
+        subGroups view=Signal factor=CTCF cellType=NHA
+        type bigWig 0.040000 15242.480469
+        origAssembly hg19
+        # subId=1888 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaControlStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  Control  Sg
+        longLabel ENCODE Broad Histone Mods Signal (Control in NH-A cells)
+        subGroups view=Signal factor=zCTRL cellType=NHA
+        type bigWig 0.040000 54769.359375
+        origAssembly hg19
+        # subId=1889 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaH3k27acStdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  H3K27ac  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K27ac in NH-A cells)
+        subGroups view=Signal factor=H3K27ac cellType=NHA
+        type bigWig 0.040000 6466.680176
+        origAssembly hg19
+        # subId=1890 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaH3k27me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  H3K27me3 Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K27me3 in NH-A cells)
+        subGroups view=Signal factor=H3K27me3 cellType=NHA
+        type bigWig 0.040000 15338.599609
+        origAssembly hg19
+        # subId=1891 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaH3k36me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  H3K36me3 Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K36me3 in NH-A cells)
+        subGroups view=Signal factor=H3K36me3 cellType=NHA
+        type bigWig 0.040000 14461.040039
+        origAssembly hg19
+        # subId=1892 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaH3k4me1StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  H3K4me1  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K4me1 in NH-A cells)
+        subGroups view=Signal factor=H3K04me1 cellType=NHA
+        type bigWig 0.040000 7228.799805
+        origAssembly hg19
+        # subId=1893 dateSubmitted=2010-07-12
+
+        track wgEncodeBroadHistoneNhaH3k4me3StdSig
+        release alpha
+        parent wgEncodeBroadHistoneViewSignal off
+        shortLabel NH-A  H3K4me3  Sg
+        longLabel ENCODE Broad Histone Mods Signal (H3K4me3 in NH-A cells)
+        subGroups view=Signal factor=H3K04me3 cellType=NHA
+        type bigWig 0.040000 18680.640625
+        origAssembly hg19
+        # subId=1894 dateSubmitted=2010-07-12
 

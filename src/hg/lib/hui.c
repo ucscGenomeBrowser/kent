@@ -23,6 +23,7 @@
 #include "customTrack.h"
 #include "encode/encodePeak.h"
 #include "mdb.h"
+#include "web.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -69,6 +70,22 @@ boolean makeDownloadsLink(char *database, struct trackDb *tdb)
 return makeNamedDownloadsLink(database, tdb,"Downloads");
 }
 
+#ifdef BIG_UI_NAV_LINKS
+void makeTopLink(struct trackDb *tdb)
+/* Link to top of UI page */
+{
+if (trackDbSetting(tdb, "dimensions"))
+    {
+    char *upArrow = "&uArr;";
+    enum browserType browser = cgiBrowser();
+    if (browser == btIE || browser == btFF)
+        upArrow = "&uarr;";
+    // Note: the nested spans are so that javascript can determine position and selectively display the link when appropriate
+    printf("<span><span class='navUp' style='float:right; display:none'>&nbsp;&nbsp;<A HREF='#' TITLE='Return to top of page'>Top%s</A></span></span>\n",upArrow);
+    }
+}
+#endif///def BIG_UI_NAV_LINKS
+
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 // Make a table schema link (if appropriate and then returns TRUE)
 {
@@ -108,7 +125,8 @@ mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitt
 struct mdbVar *mdbVar;
 for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if(sameString(mdbVar->var,"fileName"))
+    if (sameString(mdbVar->var,"fileName")
+    && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
         makeNamedDownloadsLink(db, trackDbTopLevelSelfOrParent(tdb), mdbVar->val);
@@ -162,6 +180,7 @@ if (metadataLink)
 
 if(moreThanOne)
     printf("</td></tr></table>");
+
 puts("</P>");
 }
 
@@ -2406,6 +2425,7 @@ typedef struct _membersForAll {
     dimensions_t *dimensions;
     members_t* members[27];
     char* checkedTags[27];  // FIXME: Should move checkedTags into membersForAll->members[ix]->selected;
+    char letters[27];
 } membersForAll_t;
 
 static char* abcMembersChecked(struct trackDb *parentTdb, struct cart *cart, members_t* members, char letter)
@@ -2442,10 +2462,7 @@ for(mIx=0;mIx<members->count;mIx++)
         if(currentlyCheckedTags == NULL)
             currentlyCheckedTags = dyStringCreate(members->tags[mIx]);
         else
-            {
-            dyStringAppendC(currentlyCheckedTags,',');
-            dyStringAppend(currentlyCheckedTags,members->tags[mIx]);
-            }
+            dyStringPrintf(currentlyCheckedTags,",%s",members->tags[mIx]);
         }
     }
 if(currentlyCheckedTags)
@@ -2480,6 +2497,7 @@ for(ixIn=ixOut;ixIn<membersForAll->dimMax;ixIn++)
             { // NOTE: Don't I wish I had made these as an slList ages ago! (tim)
             membersForAll->members[ixOut]     = membersForAll->members[ixIn];
             membersForAll->checkedTags[ixOut] = membersForAll->checkedTags[ixIn];
+            membersForAll->letters[ixOut]     = membersForAll->letters[ixIn];
             }
         ixOut++;
         }
@@ -2501,6 +2519,7 @@ if(membersForAll != NULL)
 int ix;
 membersForAll = needMem(sizeof(membersForAll_t));
 membersForAll->members[dimV]=subgroupMembersGet(parentTdb,"view");
+membersForAll->letters[dimV]='V';
 membersForAll->dimMax=dimA;  // This can expand, depending upon ABC dimensions
 membersForAll->dimensions = dimensionSettingsGet(parentTdb);
 if(membersForAll->dimensions != NULL)
@@ -2511,14 +2530,21 @@ if(membersForAll->dimensions != NULL)
         if(letter != 'X' && letter != 'Y')
             {
             membersForAll->members[membersForAll->dimMax]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            membersForAll->letters[membersForAll->dimMax]=letter;
             if(cart != NULL)
                 membersForAll->checkedTags[membersForAll->dimMax] = abcMembersChecked(parentTdb,cart,membersForAll->members[membersForAll->dimMax],letter);
             membersForAll->dimMax++;
             }
         else if(letter == 'X')
+            {
             membersForAll->members[dimX]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            membersForAll->letters[dimX]=letter;
+            }
         else
+            {
             membersForAll->members[dimY]=subgroupMembersGet(parentTdb, membersForAll->dimensions->subgroups[ix]);
+            membersForAll->letters[dimY]=letter;
+            }
         }
     }
 membersForAll->abcCount = membersForAll->dimMax - dimA;
@@ -2549,10 +2575,14 @@ if(filtering && !sameWord(filtering,"off"))
         for(ix=0;ix<count;ix++)
             {
             char *dim = cloneNextWordByDelimiter(&filterGroups[ix],'=');
-            int abcIx = dimA + lastChar(dim) - 'A';
-            if(sameWord(filterGroups[ix],"one"))
+            char letter = lastChar(dim);
+            int abcIx = dimA;
+            for (;abcIx < membersForAll->dimMax && membersForAll->letters[abcIx] != letter;abcIx++) ; // Advance to correct letter
+            if (abcIx >= membersForAll->dimMax)
+                errAbort("Invalid 'filterComposite' trackDb setting. Dimension '%s' not found.",dim);
+            if (sameWord(filterGroups[ix],"one"))
                 membersForAll->members[abcIx]->fcType = fctOne;
-            else if(sameWord(filterGroups[ix],"onlyOne") || sameWord(filterGroups[ix],"oneOnly"))
+            else if (sameWord(filterGroups[ix],"onlyOne") || sameWord(filterGroups[ix],"oneOnly"))
                 membersForAll->members[abcIx]->fcType = fctOneOnly;
             }
         }
@@ -3635,6 +3665,12 @@ sortOrder_t* sortOrder = sortOrderGet(cart,parentTdb);
 boolean preSorted = FALSE;
 boolean useDragAndDrop = sameOk("subTracks",trackDbSetting(parentTdb, "dragAndDrop"));
 
+#ifdef BIG_UI_NAV_LINKS
+printf("<table><tr><td class='windowSize'>");
+printf("<A NAME='DISPLAY_SUBTRACKS'></A>");
+makeTopLink(parentTdb);
+#endif//def BIG_UI_NAV_LINKS
+
 // Now we can start in on the table of subtracks
 printf("\n<TABLE CELLSPACING='2' CELLPADDING='0' border='0'");
 if(sortOrder != NULL)
@@ -3682,7 +3718,8 @@ if (!primarySubtrack)
     printf("<TR");
     if(useDragAndDrop)
         printf(" id=\"noDrag\" class='nodrop nodrag'");
-    printf("><TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
+    printf(">");
+    printf("<TD colspan='%d'><B>List subtracks:&nbsp;", colspan);
     safef(javascript, sizeof(javascript), "onclick=\"showOrHideSelectedSubtracks(true);\"");
     cgiMakeOnClickRadioButton("displaySubtracks", "selected", !displayAll,javascript);
     puts("only selected/visible &nbsp;&nbsp;");
@@ -3876,6 +3913,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     }
 puts("</TBODY><TFOOT></TFOOT>");
 puts("</TABLE>");
+#ifdef BIG_UI_NAV_LINKS
+printf("</td></tr></table>");
+#endif//def BIG_UI_NAV_LINKS
 if(slCount(subtrackRefList) > 5)
     puts("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='subCBcount'></font>");
 puts("<P>");
@@ -5523,7 +5563,7 @@ for (ix = 0; ix < membersOfView->count; ix++)
         enum trackVisibility tv =
             hTvFromString(cartUsualString(cart, varName,hStringFromTv(visCompositeViewDefault(parentTdb,viewName))));
 
-        safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\"", viewName);
+        safef(javascript, sizeof(javascript), "onchange=\"matSelectViewForSubTracks(this,'%s');\" onfocus='this.lastIndex=this.selectedIndex;'", viewName);
 
         printf("<TD>");
         safef(classes, sizeof(classes), "viewDD normalText %s", membersOfView->tags[ix]);
@@ -5589,7 +5629,7 @@ char *rootLabel = labelRoot(label,&suffix);
 
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
         int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
@@ -5661,9 +5701,9 @@ if(dimensionX)
     {
     int ixX,cntX=0;
     if(dimensionY)
-        printf("<TH align=RIGHT><EM><B>%s</EM></B></TH>", dimensionX->groupTitle);
+        printf("<TH align=RIGHT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
     else
-        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<EM><B>%s</EM></B></TH>",(top?"TOP":"BOTTOM"), dimensionX->groupTitle);
+        printf("<TH ALIGN=RIGHT valign=%s>&nbsp;&nbsp;<B><EM>%s</EM></B></TH>",(top?"TOP":"BOTTOM"), dimensionX->groupTitle);
 
     for (ixX = 0; ixX < dimensionX->count; ixX++)
         {
@@ -5680,19 +5720,19 @@ if(dimensionX)
         {
         if(dimensionY)
             {
-            printf("<TH align=LEFT><EM><B>%s</B></EM></TH>", dimensionX->groupTitle);
+            printf("<TH align=LEFT><B><EM>%s</EM></B></TH>", dimensionX->groupTitle);
             printf("<TH ALIGN=RIGHT valign=%s>All&nbsp;",top?"TOP":"BOTTOM");
             buttonsForAll();
             puts("</TH>");
             }
         else
-            printf("<TH ALIGN=LEFT valign=%s><EM><B>%s</EM></B>&nbsp;&nbsp;</TH>",top?"TOP":"BOTTOM", dimensionX->groupTitle);
+            printf("<TH ALIGN=LEFT valign=%s><B><EM>%s</EM></B>&nbsp;&nbsp;</TH>",top?"TOP":"BOTTOM", dimensionX->groupTitle);
         }
     }
 else if(dimensionY)
     {
     printf("<TH ALIGN=RIGHT WIDTH=100 nowrap>");
-    printf("<EM><B>%s</EM></B>", dimensionY->groupTitle);
+    printf("<B><EM>%s</EM></B>", dimensionY->groupTitle);
     printf("</TH><TH ALIGN=CENTER WIDTH=60>");
     buttonsForAll();
     puts("</TH>");
@@ -5710,7 +5750,7 @@ members_t *dimensionY = membersForAll->members[dimY];
 if(dimensionX && dimensionY)
     {
     int ixX,cntX=0;
-    printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
+    printf("<TR ALIGN=CENTER BGCOLOR=\"%s\"><TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>",COLOR_BG_ALTDEFAULT, dimensionY->groupTitle);
     for (ixX = 0; ixX < dimensionX->count; ixX++)    // Special row of +- +- +-
         {
         if(dimensionX->subtrackList && dimensionX->subtrackList[ixX] && dimensionX->subtrackList[ixX]->val)
@@ -5725,7 +5765,7 @@ if(dimensionX && dimensionY)
         }
     // If dimension is big enough, then add Y buttons to right as well
     if(cntX>MATRIX_RIGHT_BUTTONS_AFTER)
-        printf("<TH ALIGN=CENTER colspan=2><EM><B>%s</EM></B></TH>", dimensionY->groupTitle);
+        printf("<TH ALIGN=CENTER colspan=2><B><EM>%s</EM></B></TH>", dimensionY->groupTitle);
     puts("</TR>\n");
     }
 }
@@ -5802,7 +5842,7 @@ for(ix=dimA;ix<membersForAll->dimMax;ix++)
             boolean alreadySet=FALSE;
             if(membersForAll->members[ix]->selected != NULL)
                 alreadySet = membersForAll->members[ix]->selected[aIx];
-            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,membersForAll->members[ix]->tags[aIx], 'A' + (ix - dimA));
+            safef(objName, sizeof(objName), "%s.mat_%s_dim%c_cb",parentTdb->track,membersForAll->members[ix]->tags[aIx],membersForAll->letters[ix]);
             safef(javascript,sizeof(javascript),"onclick='matCbClick(this);' class=\"matCB abc %s\"",membersForAll->members[ix]->tags[aIx]);
             // TODO Set classes properly (if needed!!!)  The class abc works but what about a b or c?
             cgiMakeCheckBoxJS(objName,alreadySet,javascript);
@@ -5846,7 +5886,7 @@ boolean found=FALSE;
 if((count = chopByWhite(vocab, words,15)) <= 1) // vocab now contains just the file name
     return cloneString(members->groupTitle);
 
-#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=/usr/local/apache/cgi-bin/%s&term=\""
+#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=%s&term=\""
 #define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
 struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab);
 char *mdbVar = NULL;
@@ -6110,7 +6150,7 @@ for (ixY = 0; ixY < sizeOfY; ixY++)
                     }
                 if(cells[ixX][ixY] > 0)
                     {
-                    boolean halfChecked = (chked[ixX][ixY] > 0 && chked[ixX][ixY] != enabd[ixX][ixY]);
+                    boolean halfChecked = (chked[ixX][ixY] > 0 && chked[ixX][ixY] < enabd[ixX][ixY]);
 
                     struct dyString *dyJS = dyStringCreate("onclick='matCbClick(this);'");
                     if(dimensionX && dimensionY)
@@ -6212,7 +6252,7 @@ puts ("<TABLE>");
 if (hasSubgroups)
     {
     puts("<TR><B>Select subtracks:</B></TR>");
-    puts("<TR><TD><EM><B>&nbsp; &nbsp; All</B></EM>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
+    puts("<TR><TD><B><EM>&nbsp; &nbsp; All</EM></B>&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; </TD><TD>");
     }
 else
     {
@@ -6274,7 +6314,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
     if(sameWord(subGroup,"view"))
         continue;  // Multi-view should have taken care of "view" subgroup already
     puts ("<TABLE>");
-    printf("<TR><TD><EM><B>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
+    printf("<TR><TD><B><EM>&nbsp; &nbsp; %s</EM></B></TD></TR>", words[1]);
     for (j = 2; j < wordCnt; j++)
         {
         if (!parseAssignment(words[j], &name, &value))
@@ -6542,5 +6582,27 @@ if (differentWord(normScoreTest, "no"))
         normScoreAvailable = TRUE;
 
 return normScoreAvailable;
+}
+
+void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label)
+/* Print out table of abbreviations. */
+{
+char query[256];
+safef(query, sizeof(query), "select name,description from %s order by name", sourceTable);
+struct sqlResult *sr = sqlGetResult(conn, query);
+webPrintLinkTableStart();
+webPrintLabelCell("Symbol");
+webPrintLabelCell(label);
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    printf("</TR><TR>\n");
+    char *name = row[0];
+    char *description = row[1];
+    webPrintLinkCell(name);
+    webPrintLinkCell(description);
+    }
+sqlFreeResult(&sr);
+webPrintLinkTableEnd();
 }
 
