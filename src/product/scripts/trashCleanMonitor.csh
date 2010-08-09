@@ -35,8 +35,6 @@ if [ "$1" != "searchAndDestroy" ]; then
     exit 255
 fi
 
-exit 0
-
 $trashCleaner searchAndDestroy > "${cleanerLog}" 2>&1
 returnCode=$?
 if [ "${returnCode}" -eq "0" ]; then
