@@ -498,6 +498,7 @@ if(doSearch)
 
 if(tracksFound)
     {
+    struct hash *tdbHash = makeTrackHash(database, chromName);
 #ifndef CB_SELECTION
     hPrintf("&nbsp;&nbsp;&nbsp;<i>%d tracks found</i>\n", tracksFound);
 #endif///ndef CB_SELECTION
@@ -581,10 +582,10 @@ if(tracksFound)
 #ifdef CB_SELECTION
         hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
-        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE);
+        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
 #else///ifndef CB_SELECTION
         hPrintf("<td>%s", track->shortLabel);
-        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE);
+        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
         hPrintf("</td>\n");
         hPrintf("<td><a target='_top' href='%s'>%s</a>", trackUrl(track->track, NULL), track->longLabel);
 #endif///ndef CB_SELECTION

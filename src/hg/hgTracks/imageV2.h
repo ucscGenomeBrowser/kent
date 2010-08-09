@@ -8,7 +8,7 @@
 //   FLAT_TRACK_LIST (depends on IMAGEv2_DRAG_REORDER) to allow reordering of subtracks
 //   SUBTRACKS_HAVE_VIS (depends on FLAT_TRACK_LIST) to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
 
-//#define IMAGEv2_DRAG_REORDER
+#define IMAGEv2_DRAG_REORDER
 //#define USE_NAVIGATION_LINKS
 
 // UNCOMMENT CONTEXT_MENU to allow right-click funtionality

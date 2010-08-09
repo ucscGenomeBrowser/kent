@@ -1440,31 +1440,14 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
                                                 MgFont *font, int y)
 /* Track draws it own, custom left labels */
 {
-int pixWidth = tl.picWidth;
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
-if (track->limitedVis == tvPack)
-    { /*XXX This needs to be looked at, no example yet*/
-    hvGfxSetClip(hvg, gfxBorder+trackTabWidth+1, y,
-              pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
-    track->drawLeftLabels(track, winStart, winEnd,
-                          hvg, leftLabelX, y, leftLabelWidth, tHeight,
-                          isWithCenterLabels(track), font, labelColor,
-                          track->limitedVis);
-    }
-else
-    {
-    hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
-
-    /* when the limitedVis == tvPack is correct above,
-     *  this should be outside this else clause
-     */
-    track->drawLeftLabels(track, winStart, winEnd,
-                          hvg, leftLabelX, y, leftLabelWidth, tHeight,
-                          isWithCenterLabels(track), font, labelColor,
-                          track->limitedVis);
-    }
+hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
+track->drawLeftLabels(track, winStart, winEnd,
+		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
+		      isWithCenterLabels(track), font, labelColor,
+		      track->limitedVis);
 hvGfxUnclip(hvg);
 y += tHeight;
 return y;
