@@ -608,14 +608,14 @@ html hg19mammalChainNet
         type chain loxAfr3
         otherDb loxAfr3
 
-        track chainFelCat3
-    #replaces record chainFelCat3 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
+        track chainFelCat4
+    #replaces record chainFelCat4 in parent dir missing/extra group,priority,visibility,color,altColor,spectrum,matrix,matrixHeader
         subTrack placentalChainNetViewchain off
         subGroups view=chain species=Cat clade=bLaura
         shortLabel $o_Organism Chain
         longLabel $o_Organism ($o_date) Chained Alignments
-        type chain felCat3
-        otherDb felCat3
+        type chain felCat4
+        otherDb felCat4
 
         track chainCanFam2
     #replaces record chainCanFam2 in parent dir missing/extra priority
@@ -821,14 +821,14 @@ html hg19mammalChainNet
         type netAlign loxAfr3 chainLoxAfr3
         otherDb loxAfr3
 
-        track netFelCat3
-    #replaces record netFelCat3 in parent dir missing/extra group,priority,visibility,spectrum
+        track netFelCat4
+    #replaces record netFelCat4 in parent dir missing/extra group,priority,visibility,spectrum
         subTrack placentalChainNetViewnet off
         subGroups view=net species=Cat clade=bLaura
         shortLabel $o_Organism Net
         longLabel $o_Organism ($o_date) Alignment Net
-        type netAlign felCat3 chainFelCat3
-        otherDb felCat3
+        type netAlign felCat4 chainFelCat4
+        otherDb felCat4
 
         track netCanFam2
     #replaces record netCanFam2 in parent dir missing/extra priority
