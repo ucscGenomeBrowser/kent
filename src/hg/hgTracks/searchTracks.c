@@ -236,9 +236,9 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
-
 webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
+
+hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
@@ -640,6 +640,7 @@ else
 
 hPrintf("<p><b>Recently Done</b></p><ul>\n"
         "<li>Deleting/Adding selection criteria with [-][+] buttons in 'Advanced Search'.</li>"
+        "<li>Clicks in menu bar up top now work correctly.</li>\n"
 #ifdef CB_SELECTION
         "<li>Found tracks are selected by checkboxes.</li>"
         "<li>Checkbox state should be persistent.  Subtracks selected will be checked in their composite.</li>"
@@ -648,7 +649,6 @@ hPrintf("<p><b>Recently Done</b></p><ul>\n"
         "</ul>"
         "<p><b>Known Problems</b></p><ul>"
         "<li>Search results should be cleared when switching between simple and advanced tabs (do we agree on that?)</li>"
-        "<li>Menu bar up top doesn't work (clicks are ignored).</li>\n"
         "<li>subtracks often come up with the wrong visibility (but saving visibility for subtracks does work).</li>"
         "<li>Too large of found track list results in slow scripts.</li>"
         "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found (is that a bug? REM that description search is NOT inherited.</li>"
