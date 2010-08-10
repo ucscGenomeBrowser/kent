@@ -1185,8 +1185,8 @@ $(document).ready(function()
         jQuery.jStore.load();
     }
 
-    // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date
-    if($("FORM").length > 0) {
+    // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
+    if($("FORM").length > 0 && $('#searchTracks').length == 0) {
         var allLinks = $('a');
         $( allLinks ).unbind('click');
         $( allLinks ).click( postToSaveSettings );
@@ -2037,4 +2037,18 @@ function findTracksCounts()
         var selCbs =  $("input.selCb");
         $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
     }
+}
+
+function delSearchSelect(obj, rowNum)
+{
+    obj = $(obj);
+    $("input[name=hgt.delRow]").val(rowNum);
+    return true;
+}
+
+function addSearchSelect(obj, rowNum)
+{
+    obj = $(obj);
+    $("input[name=hgt.addRow]").val(rowNum);
+    return true;
 }
