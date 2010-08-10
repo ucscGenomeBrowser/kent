@@ -43,7 +43,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter",
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 #ifdef TRACK_SEARCH
-	    searchTracks,
+	    searchTracks, "hgt.delRow", "hgt.addRow",
 #endif
             NULL };
 
