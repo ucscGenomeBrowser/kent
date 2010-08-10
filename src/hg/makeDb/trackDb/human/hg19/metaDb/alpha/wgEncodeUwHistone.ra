@@ -5,7 +5,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -32,7 +32,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -59,7 +59,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -85,7 +85,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -111,7 +111,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -137,7 +137,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
@@ -163,7 +163,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -188,7 +188,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -214,7 +214,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -240,7 +240,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -267,7 +267,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-20
@@ -294,7 +294,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -320,7 +320,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-20
@@ -346,7 +346,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -372,7 +372,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -398,7 +398,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -424,7 +424,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-20
@@ -450,7 +450,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
@@ -477,7 +477,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
@@ -504,7 +504,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -530,7 +530,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -556,7 +556,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-22
@@ -582,7 +582,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -608,7 +608,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -634,7 +634,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -660,7 +660,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
@@ -687,7 +687,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -714,7 +714,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
@@ -740,7 +740,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -766,7 +766,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
@@ -792,7 +792,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -818,7 +818,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-13
@@ -844,7 +844,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -863,59 +863,6 @@ subId 1328
 tableName wgEncodeUwHistoneBjH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneBjInputStdAlnRep1
-objType file
-antibody Input
-cell BJ
-composite wgEncodeUwHistone
-control std
-controlId BJ/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneBjInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneBjInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneBjInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1283
-view Alignments
-
-metaObject wgEncodeUwHistoneBjInputStdRawRep1
-objType table
-antibody Input
-cell BJ
-composite wgEncodeUwHistone
-control std
-controlId BJ/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneBjInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1283
-tableName wgEncodeUwHistoneBjInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneCaco2CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -923,7 +870,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -950,7 +897,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -977,7 +924,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -1003,7 +950,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -1029,7 +976,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -1055,7 +1002,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -1081,7 +1028,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -1107,7 +1054,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -1133,7 +1080,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
@@ -1160,7 +1107,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -1187,7 +1134,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
@@ -1213,7 +1160,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -1239,7 +1186,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
@@ -1265,7 +1212,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -1291,7 +1238,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-20
@@ -1317,7 +1264,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -1343,7 +1290,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1370,7 +1317,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1397,7 +1344,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1423,7 +1370,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1449,7 +1396,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1475,7 +1422,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
@@ -1501,7 +1448,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1527,7 +1474,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -1553,7 +1500,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1580,7 +1527,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1607,7 +1554,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1633,7 +1580,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1659,7 +1606,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1685,7 +1632,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
@@ -1711,7 +1658,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1737,7 +1684,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-09-29
@@ -1756,59 +1703,6 @@ subId 1333
 tableName wgEncodeUwHistoneCaco2H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneCaco2InputStdAlnRep1
-objType file
-antibody Input
-cell Caco-2
-composite wgEncodeUwHistone
-control std
-controlId Caco-2/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneCaco2InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneCaco2InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1287
-view Alignments
-
-metaObject wgEncodeUwHistoneCaco2InputStdRawRep1
-objType table
-antibody Input
-cell Caco-2
-composite wgEncodeUwHistone
-control std
-controlId Caco-2/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneCaco2InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1287
-tableName wgEncodeUwHistoneCaco2InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm06990CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -1816,7 +1710,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -1843,7 +1737,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -1870,7 +1764,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -1896,7 +1790,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -1922,7 +1816,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -1948,7 +1842,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -1974,7 +1868,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -2000,7 +1894,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -2026,7 +1920,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -2053,7 +1947,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -2080,7 +1974,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -2106,7 +2000,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -2132,7 +2026,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -2158,7 +2052,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
@@ -2184,7 +2078,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -2210,7 +2104,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-19
@@ -2236,7 +2130,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
@@ -2263,7 +2157,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
@@ -2290,7 +2184,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -2316,7 +2210,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -2342,7 +2236,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
@@ -2368,7 +2262,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -2394,7 +2288,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -2420,7 +2314,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -2446,7 +2340,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
@@ -2473,7 +2367,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-12
@@ -2500,7 +2394,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
@@ -2526,7 +2420,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-12
@@ -2552,7 +2446,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
@@ -2578,7 +2472,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2010-06-11
@@ -2604,7 +2498,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-13
@@ -2630,7 +2524,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-11
 dateSubmitted 2009-10-12
@@ -2649,59 +2543,6 @@ subId 1337
 tableName wgEncodeUwHistoneGm06990H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm06990InputStdAlnRep1
-objType file
-antibody Input
-cell GM06990
-composite wgEncodeUwHistone
-control std
-controlId GM06990/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm06990InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm06990InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1288
-view Alignments
-
-metaObject wgEncodeUwHistoneGm06990InputStdRawRep1
-objType table
-antibody Input
-cell GM06990
-composite wgEncodeUwHistone
-control std
-controlId GM06990/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm06990InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1288
-tableName wgEncodeUwHistoneGm06990InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12801CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -2709,7 +2550,7 @@ cell GM12801
 composite wgEncodeUwHistone
 control std
 controlId GM12801/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2736,7 +2577,7 @@ cell GM12801
 composite wgEncodeUwHistone
 control std
 controlId GM12801/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2762,7 +2603,7 @@ cell GM12801
 composite wgEncodeUwHistone
 control std
 controlId GM12801/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2788,7 +2629,7 @@ cell GM12801
 composite wgEncodeUwHistone
 control std
 controlId GM12801/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2807,59 +2648,6 @@ subId 1270
 tableName wgEncodeUwHistoneGm12801CtcfStdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12801InputStdAlnRep1
-objType file
-antibody Input
-cell GM12801
-composite wgEncodeUwHistone
-control std
-controlId GM12801/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12801InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12801InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12801InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1289
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12801InputStdRawRep1
-objType table
-antibody Input
-cell GM12801
-composite wgEncodeUwHistone
-control std
-controlId GM12801/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12801InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1289
-tableName wgEncodeUwHistoneGm12801InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12864CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -2867,7 +2655,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2894,7 +2682,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2921,7 +2709,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2947,7 +2735,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2973,7 +2761,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2999,7 +2787,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -3025,7 +2813,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3051,7 +2839,7 @@ cell GM12864
 composite wgEncodeUwHistone
 control std
 controlId GM12864/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3070,59 +2858,6 @@ subId 1273
 tableName wgEncodeUwHistoneGm12864CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12864InputStdAlnRep1
-objType file
-antibody Input
-cell GM12864
-composite wgEncodeUwHistone
-control std
-controlId GM12864/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12864InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12864InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12864InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1290
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12864InputStdRawRep1
-objType table
-antibody Input
-cell GM12864
-composite wgEncodeUwHistone
-control std
-controlId GM12864/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12864InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1290
-tableName wgEncodeUwHistoneGm12864InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12865CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -3130,7 +2865,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3157,7 +2892,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3184,7 +2919,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3210,7 +2945,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3236,7 +2971,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3262,7 +2997,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -3288,7 +3023,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3314,7 +3049,7 @@ cell GM12865
 composite wgEncodeUwHistone
 control std
 controlId GM12865/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3333,59 +3068,6 @@ subId 1274
 tableName wgEncodeUwHistoneGm12865CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12865InputStdAlnRep1
-objType file
-antibody Input
-cell GM12865
-composite wgEncodeUwHistone
-control std
-controlId GM12865/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12865InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12865InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12865InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1291
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12865InputStdRawRep1
-objType table
-antibody Input
-cell GM12865
-composite wgEncodeUwHistone
-control std
-controlId GM12865/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12865InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1291
-tableName wgEncodeUwHistoneGm12865InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12872CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -3393,7 +3075,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3420,7 +3102,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3447,7 +3129,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3473,7 +3155,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3499,7 +3181,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3525,7 +3207,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -3551,7 +3233,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3577,7 +3259,7 @@ cell GM12872
 composite wgEncodeUwHistone
 control std
 controlId GM12872/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3596,59 +3278,6 @@ subId 1278
 tableName wgEncodeUwHistoneGm12872CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12872InputStdAlnRep1
-objType file
-antibody Input
-cell GM12872
-composite wgEncodeUwHistone
-control std
-controlId GM12872/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12872InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12872InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12872InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1292
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12872InputStdRawRep1
-objType table
-antibody Input
-cell GM12872
-composite wgEncodeUwHistone
-control std
-controlId GM12872/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12872InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1292
-tableName wgEncodeUwHistoneGm12872InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12873CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -3656,7 +3285,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3683,7 +3312,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3710,7 +3339,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3736,7 +3365,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3762,7 +3391,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3788,7 +3417,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -3814,7 +3443,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3840,7 +3469,7 @@ cell GM12873
 composite wgEncodeUwHistone
 control std
 controlId GM12873/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3859,59 +3488,6 @@ subId 1279
 tableName wgEncodeUwHistoneGm12873CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12873InputStdAlnRep1
-objType file
-antibody Input
-cell GM12873
-composite wgEncodeUwHistone
-control std
-controlId GM12873/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12873InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12873InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12873InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1481
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12873InputStdRawRep1
-objType table
-antibody Input
-cell GM12873
-composite wgEncodeUwHistone
-control std
-controlId GM12873/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-06-15
-dateUnrestricted 2011-03-15
-fileName wgEncodeUwHistoneGm12873InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1481
-tableName wgEncodeUwHistoneGm12873InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12874CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -3919,7 +3495,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3946,7 +3522,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3973,7 +3549,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3999,7 +3575,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -4025,7 +3601,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -4051,7 +3627,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -4077,7 +3653,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -4103,7 +3679,7 @@ cell GM12874
 composite wgEncodeUwHistone
 control std
 controlId GM12874/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -4122,59 +3698,6 @@ subId 1280
 tableName wgEncodeUwHistoneGm12874CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12874InputStdAlnRep1
-objType file
-antibody Input
-cell GM12874
-composite wgEncodeUwHistone
-control std
-controlId GM12874/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12874InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12874InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12874InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1416
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12874InputStdRawRep1
-objType table
-antibody Input
-cell GM12874
-composite wgEncodeUwHistone
-control std
-controlId GM12874/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2010-06-14
-dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneGm12874InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1416
-tableName wgEncodeUwHistoneGm12874InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12875CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -4182,7 +3705,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4209,7 +3732,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4236,7 +3759,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4262,7 +3785,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4288,7 +3811,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4314,7 +3837,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
@@ -4340,7 +3863,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4366,7 +3889,7 @@ cell GM12875
 composite wgEncodeUwHistone
 control std
 controlId GM12875/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4385,59 +3908,6 @@ subId 1484
 tableName wgEncodeUwHistoneGm12875CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12875InputStdAlnRep1
-objType file
-antibody Input
-cell GM12875
-composite wgEncodeUwHistone
-control std
-controlId GM12875/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12875InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12875InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12875InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1485
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12875InputStdRawRep1
-objType table
-antibody Input
-cell GM12875
-composite wgEncodeUwHistone
-control std
-controlId GM12875/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-06-16
-dateUnrestricted 2011-03-15
-fileName wgEncodeUwHistoneGm12875InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1485
-tableName wgEncodeUwHistoneGm12875InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneGm12878CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -4445,7 +3915,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4472,7 +3942,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4499,7 +3969,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4525,7 +3995,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4551,7 +4021,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-29
@@ -4577,7 +4047,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4603,7 +4073,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4629,7 +4099,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4655,7 +4125,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -4682,7 +4152,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -4709,7 +4179,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -4735,7 +4205,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -4761,7 +4231,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -4787,7 +4257,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -4813,7 +4283,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -4839,7 +4309,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -4865,7 +4335,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
@@ -4892,7 +4362,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
@@ -4919,7 +4389,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -4945,7 +4415,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -4971,7 +4441,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-22
@@ -4997,7 +4467,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -5023,7 +4493,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -5049,7 +4519,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -5075,7 +4545,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
@@ -5102,7 +4572,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-12
@@ -5129,7 +4599,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
@@ -5155,7 +4625,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-12
@@ -5181,7 +4651,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
@@ -5207,7 +4677,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
@@ -5233,7 +4703,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-06-30
@@ -5259,7 +4729,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-12
@@ -5278,66 +4748,13 @@ subId 1417
 tableName wgEncodeUwHistoneGm12878H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneGm12878InputStdAlnRep1
-objType file
-antibody Input
-cell GM12878
-composite wgEncodeUwHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneGm12878InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneGm12878InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1293
-view Alignments
-
-metaObject wgEncodeUwHistoneGm12878InputStdRawRep1
-objType table
-antibody Input
-cell GM12878
-composite wgEncodeUwHistone
-control std
-controlId GM12878/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneGm12878InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1293
-tableName wgEncodeUwHistoneGm12878InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneH7esH3k27me3StdAlnRep1
 objType file
 antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5363,7 +4780,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5389,7 +4806,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5414,7 +4831,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5439,7 +4856,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5464,7 +4881,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5489,7 +4906,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5513,7 +4930,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5537,7 +4954,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5562,7 +4979,7 @@ antibody H3K27me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5587,7 +5004,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5613,7 +5030,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5639,7 +5056,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5664,7 +5081,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5689,7 +5106,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5714,7 +5131,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5739,7 +5156,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5763,7 +5180,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5787,7 +5204,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5812,7 +5229,7 @@ antibody H3K36me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5837,7 +5254,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5863,7 +5280,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5889,7 +5306,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5914,7 +5331,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5939,7 +5356,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5964,7 +5381,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5989,7 +5406,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -6013,7 +5430,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -6037,7 +5454,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -6062,7 +5479,7 @@ antibody H3K4me3
 cell H7-hESC
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -6081,81 +5498,6 @@ subId 2034
 tableName wgEncodeUwHistoneH7esH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneH7esInputStdAlnRep1
-objType file
-antibody Input
-cell H7-hESC
-composite wgEncodeUwHistone
-control std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwHistoneH7esInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-inputType H7-hESC/Input/std
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg19
-parentTable wgEncodeUwHistoneH7esInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 2033
-view Alignments
-
-metaObject wgEncodeUwHistoneH7esInputStdRawDataRep1
-objType file
-antibody Input
-cell H7-hESC
-composite wgEncodeUwHistone
-control std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwHistoneH7esInputStdRawDataRep1.fastq.gz
-fragLength 350
-grant Stam
-inputType H7-hESC/Input/std
-lab UW
-origAssembly hg19
-parentTable wgEncodeUwHistoneH7esInputStdRawSignalRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 2033
-view RawData
-
-metaObject wgEncodeUwHistoneH7esInputStdRawRep1
-objType table
-antibody Input
-cell H7-hESC
-composite wgEncodeUwHistone
-control std
-dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwHistoneH7esInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-inputType H7-hESC/Input/std
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 2033
-tableName wgEncodeUwHistoneH7esInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHek293CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -6163,7 +5505,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6190,7 +5532,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -6217,7 +5559,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6243,7 +5585,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -6269,7 +5611,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6295,7 +5637,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -6321,7 +5663,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6347,7 +5689,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -6366,59 +5708,6 @@ subId 1486
 tableName wgEncodeUwHistoneHek293CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneHek293InputStdAlnRep1
-objType file
-antibody Input
-cell HEK293
-composite wgEncodeUwHistone
-control std
-controlId HEK293/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHek293InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHek293InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHek293InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1295
-view Alignments
-
-metaObject wgEncodeUwHistoneHek293InputStdRawRep1
-objType table
-antibody Input
-cell HEK293
-composite wgEncodeUwHistone
-control std
-controlId HEK293/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneHek293InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1295
-tableName wgEncodeUwHistoneHek293InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHelas3CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -6426,7 +5715,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -6453,7 +5742,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -6480,7 +5769,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6506,7 +5795,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -6532,7 +5821,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6558,7 +5847,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6584,7 +5873,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6610,7 +5899,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -6636,7 +5925,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6663,7 +5952,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6690,7 +5979,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6716,7 +6005,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6742,7 +6031,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6768,7 +6057,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -6794,7 +6083,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6820,7 +6109,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-20
@@ -6846,7 +6135,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -6873,7 +6162,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -6900,7 +6189,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -6926,7 +6215,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -6952,7 +6241,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -6978,7 +6267,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -7004,7 +6293,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -7030,7 +6319,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-19
@@ -7056,7 +6345,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7083,7 +6372,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7110,7 +6399,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7136,7 +6425,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7162,7 +6451,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7188,7 +6477,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -7214,7 +6503,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7240,7 +6529,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-10-13
@@ -7259,59 +6548,6 @@ subId 1424
 tableName wgEncodeUwHistoneHelas3H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneHelas3InputStdAlnRep1
-objType file
-antibody Input
-cell HeLa-S3
-composite wgEncodeUwHistone
-control std
-controlId HeLa-S3/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHelas3InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHelas3InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1423
-view Alignments
-
-metaObject wgEncodeUwHistoneHelas3InputStdRawRep1
-objType table
-antibody Input
-cell HeLa-S3
-composite wgEncodeUwHistone
-control std
-controlId HeLa-S3/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-14
-dateSubmitted 2010-06-14
-dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHelas3InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1423
-tableName wgEncodeUwHistoneHelas3InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHepg2CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -7319,7 +6555,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7346,7 +6582,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7373,7 +6609,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7399,7 +6635,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7425,7 +6661,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7451,7 +6687,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7477,7 +6713,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7503,7 +6739,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -7529,7 +6765,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7556,7 +6792,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7583,7 +6819,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7609,7 +6845,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7635,7 +6871,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7661,7 +6897,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -7687,7 +6923,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7713,7 +6949,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -7739,7 +6975,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
@@ -7765,7 +7001,7 @@ antibody H3K36me3
 cell HepG2
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -7792,7 +7028,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -7817,7 +7053,7 @@ antibody H3K36me3
 cell HepG2
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -7843,7 +7079,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
@@ -7868,7 +7104,7 @@ antibody H3K36me3
 cell HepG2
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -7893,7 +7129,7 @@ antibody H3K36me3
 cell HepG2
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -7918,7 +7154,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -7943,7 +7179,7 @@ antibody H3K36me3
 cell HepG2
 composite wgEncodeUwHistone
 control std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -7969,7 +7205,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -7996,7 +7232,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -8023,7 +7259,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -8049,7 +7285,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -8075,7 +7311,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -8101,7 +7337,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -8127,7 +7363,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -8153,7 +7389,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-29
@@ -8172,59 +7408,6 @@ subId 1430
 tableName wgEncodeUwHistoneHepg2H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneHepg2InputStdAlnRep1
-objType file
-antibody Input
-cell HepG2
-composite wgEncodeUwHistone
-control std
-controlId HepG2/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHepg2InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHepg2InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1435
-view Alignments
-
-metaObject wgEncodeUwHistoneHepg2InputStdRawRep1
-objType table
-antibody Input
-cell HepG2
-composite wgEncodeUwHistone
-control std
-controlId HepG2/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-06-15
-dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHepg2InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1435
-tableName wgEncodeUwHistoneHepg2InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHl60CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -8232,7 +7415,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -8259,7 +7442,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -8285,7 +7468,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -8311,7 +7494,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -8337,7 +7520,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8364,7 +7547,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8391,7 +7574,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8417,7 +7600,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8443,7 +7626,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8469,7 +7652,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -8495,7 +7678,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8521,7 +7704,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -8540,59 +7723,6 @@ subId 1437
 tableName wgEncodeUwHistoneHl60H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneHl60InputStdAlnRep1
-objType file
-antibody Input
-cell HL-60
-composite wgEncodeUwHistone
-control std
-controlId HL-60/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHl60InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHl60InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHl60InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1438
-view Alignments
-
-metaObject wgEncodeUwHistoneHl60InputStdRawRep1
-objType table
-antibody Input
-cell HL-60
-composite wgEncodeUwHistone
-control std
-controlId HL-60/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-15
-dateSubmitted 2010-06-15
-dateUnrestricted 2011-03-14
-fileName wgEncodeUwHistoneHl60InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1438
-tableName wgEncodeUwHistoneHl60InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHmecCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -8600,7 +7730,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -8627,7 +7757,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -8653,7 +7783,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -8679,7 +7809,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -8705,7 +7835,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -8732,7 +7862,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -8758,7 +7888,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -8784,7 +7914,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -8803,59 +7933,6 @@ subId 1439
 tableName wgEncodeUwHistoneHmecH3k27me3StdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwHistoneHmecInputStdAlnRep1
-objType file
-antibody Input
-cell HMEC
-composite wgEncodeUwHistone
-control std
-controlId HMEC/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHmecInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHmecInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHmecInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1302
-view Alignments
-
-metaObject wgEncodeUwHistoneHmecInputStdRawRep1
-objType table
-antibody Input
-cell HMEC
-composite wgEncodeUwHistone
-control std
-controlId HMEC/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneHmecInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1302
-tableName wgEncodeUwHistoneHmecInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHreCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -8863,7 +7940,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8890,7 +7967,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8917,7 +7994,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8943,7 +8020,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8969,7 +8046,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8995,7 +8072,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -9021,7 +8098,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -9047,7 +8124,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -9073,7 +8150,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
@@ -9100,7 +8177,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9127,7 +8204,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9153,7 +8230,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9179,7 +8256,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
@@ -9205,7 +8282,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9231,7 +8308,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9257,7 +8334,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9283,7 +8360,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9310,7 +8387,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9337,7 +8414,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9363,7 +8440,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9389,7 +8466,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9415,7 +8492,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9441,7 +8518,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9467,7 +8544,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -9493,7 +8570,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -9520,7 +8597,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -9547,7 +8624,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -9573,7 +8650,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -9599,7 +8676,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -9625,7 +8702,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9651,7 +8728,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -9677,7 +8754,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -9696,59 +8773,6 @@ subId 1440
 tableName wgEncodeUwHistoneHreH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneHreInputStdAlnRep1
-objType file
-antibody Input
-cell HRE
-composite wgEncodeUwHistone
-control std
-controlId HRE/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHreInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHreInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHreInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1303
-view Alignments
-
-metaObject wgEncodeUwHistoneHreInputStdRawRep1
-objType table
-antibody Input
-cell HRE
-composite wgEncodeUwHistone
-control std
-controlId HRE/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneHreInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1303
-tableName wgEncodeUwHistoneHreInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneHuvecCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -9756,7 +8780,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -9783,7 +8807,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9810,7 +8834,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -9836,7 +8860,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9862,7 +8886,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -9888,7 +8912,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9914,7 +8938,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -9940,7 +8964,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9966,7 +8990,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -9993,7 +9017,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -10020,7 +9044,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10046,7 +9070,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -10072,7 +9096,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10098,7 +9122,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -10124,7 +9148,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10150,7 +9174,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -10176,7 +9200,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10203,7 +9227,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-22
@@ -10230,7 +9254,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10256,7 +9280,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -10282,7 +9306,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10308,7 +9332,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -10334,7 +9358,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10360,7 +9384,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -10386,7 +9410,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10413,7 +9437,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -10440,7 +9464,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10466,7 +9490,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -10492,7 +9516,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10518,7 +9542,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -10544,7 +9568,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -10570,7 +9594,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -10589,59 +9613,6 @@ subId 1446
 tableName wgEncodeUwHistoneHuvecH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneHuvecInputStdAlnRep1
-objType file
-antibody Input
-cell HUVEC
-composite wgEncodeUwHistone
-control std
-controlId HUVEC/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneHuvecInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneHuvecInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1316
-view Alignments
-
-metaObject wgEncodeUwHistoneHuvecInputStdRawRep1
-objType table
-antibody Input
-cell HUVEC
-composite wgEncodeUwHistone
-control std
-controlId HUVEC/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneHuvecInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1316
-tableName wgEncodeUwHistoneHuvecInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneK562CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -10649,7 +9620,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -10676,7 +9647,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -10703,7 +9674,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -10729,7 +9700,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -10755,7 +9726,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -10781,7 +9752,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -10807,7 +9778,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -10833,7 +9804,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -10859,7 +9830,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10886,7 +9857,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10913,7 +9884,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10939,7 +9910,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10965,7 +9936,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -10991,7 +9962,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -11017,7 +9988,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11043,7 +10014,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11069,7 +10040,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11096,7 +10067,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11123,7 +10094,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11149,7 +10120,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11175,7 +10146,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11201,7 +10172,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -11227,7 +10198,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11253,7 +10224,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11279,7 +10250,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -11306,7 +10277,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -11333,7 +10304,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -11359,7 +10330,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -11385,7 +10356,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -11411,7 +10382,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -11437,7 +10408,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -11463,7 +10434,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -11482,59 +10453,6 @@ subId 1455
 tableName wgEncodeUwHistoneK562H3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneK562InputStdAlnRep1
-objType file
-antibody Input
-cell K562
-composite wgEncodeUwHistone
-control std
-controlId K562/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneK562InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneK562InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneK562InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1308
-view Alignments
-
-metaObject wgEncodeUwHistoneK562InputStdRawRep1
-objType table
-antibody Input
-cell K562
-composite wgEncodeUwHistone
-control std
-controlId K562/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-09
-fileName wgEncodeUwHistoneK562InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1308
-tableName wgEncodeUwHistoneK562InputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneNhekCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -11542,7 +10460,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -11569,7 +10487,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -11596,7 +10514,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -11622,7 +10540,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -11648,7 +10566,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -11674,7 +10592,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -11700,7 +10618,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -11726,7 +10644,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -11752,7 +10670,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11779,7 +10697,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11806,7 +10724,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11832,7 +10750,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11858,7 +10776,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11884,7 +10802,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
@@ -11910,7 +10828,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11936,7 +10854,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -11962,7 +10880,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -11989,7 +10907,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -12016,7 +10934,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12042,7 +10960,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12068,7 +10986,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12094,7 +11012,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -12120,7 +11038,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12146,7 +11064,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12172,7 +11090,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12199,7 +11117,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -12226,7 +11144,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12252,7 +11170,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -12278,7 +11196,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12304,7 +11222,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -12330,7 +11248,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -12356,7 +11274,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-13
@@ -12375,59 +11293,6 @@ subId 1460
 tableName wgEncodeUwHistoneNhekH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneNhekInputStdAlnRep1
-objType file
-antibody Input
-cell NHEK
-composite wgEncodeUwHistone
-control std
-controlId NHEK/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneNhekInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneNhekInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneNhekInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1317
-view Alignments
-
-metaObject wgEncodeUwHistoneNhekInputStdRawRep1
-objType table
-antibody Input
-cell NHEK
-composite wgEncodeUwHistone
-control std
-controlId NHEK/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneNhekInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1317
-tableName wgEncodeUwHistoneNhekInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneSaecCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -12435,7 +11300,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12462,7 +11327,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12489,7 +11354,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12515,7 +11380,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12541,7 +11406,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12567,7 +11432,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -12593,7 +11458,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12619,7 +11484,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -12645,7 +11510,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -12672,7 +11537,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12699,7 +11564,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -12725,7 +11590,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12751,7 +11616,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -12777,7 +11642,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -12803,7 +11668,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -12829,7 +11694,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12855,7 +11720,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12882,7 +11747,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12909,7 +11774,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12935,7 +11800,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12961,7 +11826,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -12987,7 +11852,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -13013,7 +11878,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13039,7 +11904,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13065,7 +11930,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13092,7 +11957,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13119,7 +11984,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13145,7 +12010,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13171,7 +12036,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13197,7 +12062,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -13223,7 +12088,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13249,7 +12114,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13268,59 +12133,6 @@ subId 1467
 tableName wgEncodeUwHistoneSaecH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneSaecInputStdAlnRep1
-objType file
-antibody Input
-cell SAEC
-composite wgEncodeUwHistone
-control std
-controlId SAEC/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneSaecInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneSaecInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneSaecInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1318
-view Alignments
-
-metaObject wgEncodeUwHistoneSaecInputStdRawRep1
-objType table
-antibody Input
-cell SAEC
-composite wgEncodeUwHistone
-control std
-controlId SAEC/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneSaecInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1318
-tableName wgEncodeUwHistoneSaecInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneSknshraCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -13328,7 +12140,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -13355,7 +12167,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
@@ -13382,7 +12194,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -13408,7 +12220,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -13434,7 +12246,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -13460,7 +12272,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -13486,7 +12298,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -13512,7 +12324,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -13538,7 +12350,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13565,7 +12377,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
@@ -13592,7 +12404,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13618,7 +12430,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
@@ -13644,7 +12456,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13670,7 +12482,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -13696,7 +12508,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13722,7 +12534,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-20
@@ -13748,7 +12560,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13775,7 +12587,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13802,7 +12614,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13828,7 +12640,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13854,7 +12666,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13880,7 +12692,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -13906,7 +12718,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13932,7 +12744,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-19
@@ -13958,7 +12770,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -13985,7 +12797,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -14012,7 +12824,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -14038,7 +12850,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -14064,7 +12876,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -14090,7 +12902,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -14116,7 +12928,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -14142,7 +12954,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-10-12
@@ -14161,59 +12973,6 @@ subId 1473
 tableName wgEncodeUwHistoneSknshraH3k4me3StdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneSknshraInputStdAlnRep1
-objType file
-antibody Input
-cell SK-N-SH_RA
-composite wgEncodeUwHistone
-control std
-controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneSknshraInputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneSknshraInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1319
-view Alignments
-
-metaObject wgEncodeUwHistoneSknshraInputStdRawRep1
-objType table
-antibody Input
-cell SK-N-SH_RA
-composite wgEncodeUwHistone
-control std
-controlId SK-N-SH_RA/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneSknshraInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1319
-tableName wgEncodeUwHistoneSknshraInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwHistoneWerirb1CtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -14221,7 +12980,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -14248,7 +13007,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -14275,7 +13034,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -14301,7 +13060,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -14327,7 +13086,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -14353,7 +13112,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -14379,7 +13138,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -14405,7 +13164,7 @@ cell WERI-Rb-1
 composite wgEncodeUwHistone
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChipSeq
+dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -14424,57 +13183,4 @@ subId 1492
 tableName wgEncodeUwHistoneWerirb1CtcfStdRawRep2
 view RawSignal
 
-metaObject wgEncodeUwHistoneWerirb1InputStdAlnRep1
-objType file
-antibody Input
-cell WERI-Rb-1
-composite wgEncodeUwHistone
-control std
-controlId WERI-Rb-1/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-02-18
-dateUnrestricted 2010-11-18
-fileIndex wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam.bai
-fileName wgEncodeUwHistoneWerirb1InputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg18
-parentTable wgEncodeUwHistoneWerirb1InputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1320
-view Alignments
-
-metaObject wgEncodeUwHistoneWerirb1InputStdRawRep1
-objType table
-antibody Input
-cell WERI-Rb-1
-composite wgEncodeUwHistone
-control std
-controlId WERI-Rb-1/Input/std
-dataType ChipSeq
-dataVersion ENCODE June 2010 Freeze
-dateResubmitted 2010-06-10
-dateSubmitted 2010-06-10
-dateUnrestricted 2011-03-10
-fileName wgEncodeUwHistoneWerirb1InputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg18
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 1320
-tableName wgEncodeUwHistoneWerirb1InputStdRawRep1
-view RawSignal
-
-# MAGIC: -1261730747
+# MAGIC: -1693313902

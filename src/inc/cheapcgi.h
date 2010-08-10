@@ -100,6 +100,7 @@ enum osType
 enum browserType cgiClientBrowser(char **browserQualifier, enum osType *clientOs, char **clientOsQualifier);
 /* These routines abort the html output if the input isn't
  * there or is misformatted. */
+#define cgiBrowser() cgiClientBrowser(NULL,NULL,NULL)
 
 char *cgiString(char *varName);
 int cgiInt(char *varName);

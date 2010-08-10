@@ -10617,10 +10617,10 @@ hgsql mm9 < ~/kent/src/hg/lib/knownToKeggEntrez.sql
 hgsql mm9 -e 'load data local infile "knownToKeggEntrez.tab" into table knownToKeggEntrez'
 
 #############################################################################
-#  Update BLASTTAB blast tables 	(DONE - 2010-07-22 - Fan)
+#  Update BLASTTAB blast tables 	(DONE - 2010-08-06 - Fan)
     ssh hgwdev
-    mkdir -p /hive/data/genomes/mm9/bed/hgNearBlastp/100722
-    cd /hive/data/genomes/mm9/bed/hgNearBlastp/100722
+    mkdir -p /hive/data/genomes/mm9/bed/hgNearBlastp/100806
+    cd /hive/data/genomes/mm9/bed/hgNearBlastp/100806
     # Get the proteins used by all hgNear organisms:
     pepPredToFa hg19 knownGenePep hg19.known.faa
     pepPredToFa mm9 knownGenePep mm9.known.faa
@@ -10639,16 +10639,16 @@ targetDb mm9
 queryDbs hg19 rn4 danRer6 dm3 ce6 sacCer2
 recipBest         danRer6 dm3 ce6 sacCer2
 
-mm9Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100722/mm9.known.faa
-hg19Fa    /hive/data/genomes/mm9/bed/hgNearBlastp/100722/hg19.known.faa
-rn4Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100722/rn4.known.faa
-danRer6Fa /hive/data/genomes/mm9/bed/hgNearBlastp/100722/danRer6.ensPep.faa
-dm3Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100722/dm3.flyBasePep.faa
-ce6Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100722/ce6.sangerPep.faa
-sacCer2Fa /hive/data/genomes/mm9/bed/hgNearBlastp/100722/sacCer2.sgdPep.faa
+mm9Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100806/mm9.known.faa
+hg19Fa    /hive/data/genomes/mm9/bed/hgNearBlastp/100806/hg19.known.faa
+rn4Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100806/rn4.known.faa
+danRer6Fa /hive/data/genomes/mm9/bed/hgNearBlastp/100806/danRer6.ensPep.faa
+dm3Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100806/dm3.flyBasePep.faa
+ce6Fa     /hive/data/genomes/mm9/bed/hgNearBlastp/100806/ce6.sangerPep.faa
+sacCer2Fa /hive/data/genomes/mm9/bed/hgNearBlastp/100806/sacCer2.sgdPep.faa
 
-buildDir /hive/data/genomes/mm9/bed/hgNearBlastp/100722
-scratchDir /hive/data/genomes/mm9/bed/hgNearBlastp/100722/tmp
+buildDir /hive/data/genomes/mm9/bed/hgNearBlastp/100806
+scratchDir /hive/data/genomes/mm9/bed/hgNearBlastp/100806/tmp
 '_EOF_'
 
 doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log

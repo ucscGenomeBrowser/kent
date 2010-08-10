@@ -52,6 +52,7 @@ char *freezeName;	/* Date of assembly. */
 struct grp *fullGroupList;	/* List of all groups. */
 struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
+struct hash *fullTrackHash;     /* Hash of all tracks in fullTrackList keyed by ->track field. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
@@ -1722,10 +1723,21 @@ cartRemovePrefix(cart, hgtaDo);
 
 char *excludeVars[] = {"Submit", "submit", NULL};
 
+static struct hash *hashTrackList(struct trackDb *tdbList)
+/* Return hash full of trackDb's from list, keyed by tdb->track */
+{
+struct hash *hash = hashNew(0);
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    hashAdd(hash, tdb->track, tdb);
+return hash;
+}
+
 void initGroupsTracksTables()
 /* Get list of groups that actually have something in them. */
 {
 fullTrackList = getFullTrackList();
+fullTrackHash = hashTrackList(fullTrackList);
 curTrack = findSelectedTrack(fullTrackList, NULL, hgtaTrack);
 fullGroupList = makeGroupList(fullTrackList, allowAllTables());
 curGroup = findSelectedGroup(fullGroupList, hgtaGroup);
