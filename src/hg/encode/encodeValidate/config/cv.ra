@@ -5636,52 +5636,52 @@ term Illumina_GA
 tag IlluminaGA
 geo Illumina Genome Analyzer
 type seqPlatform
-description Other
+description Illumina Genome Analyzer
 # Matches GA that Kate initially indicated as the term
 
 term Illumina_GA2
 tag IlluminaGA2
 geo Illumina Genome Analyzer II
 type seqPlatform
-description High-throughput sequencing
+description Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
 term Illumina_GA2x
 tag IlluminaGA2x
 geo Illumina Genome Analyzer II
 type seqPlatform
-description High-throughput sequencing
+description Illumina Genome Analyzer IIx
 # Matches GA2x that Kate initally indicated as the term
 
 term 454_GS
 tag 454GS
 geo 454 GS
 type seqPlatform
-description High-throughput sequencing
+description Roche 454 Genome Sequencer
 
 term 454_GS_20
 tag 454GS20
 geo 454 GS 20
 type seqPlatform
-description High-throughput sequencing
+description Roche 454 Genome Sequencer 20
 
 term 454_GS_FLX
 tag 454GSFLX
 geo 454 GS FLX
 type seqPlatform
-description High-throughput sequencing
+description  Roche 454 Genome Sequencer FLX
 
 term AB_SOLiD
 tag ABSOLiD
 geo AB SOLiD System
 type seqPlatform
-description High-throughput sequencing
+description Applied Biosystems SOLiD System
 
 term AB_SOLiD_2.0
 tag ABSOLiD2
 geo AB_SOLiD System 2.0
 type seqPlatform
-description High-throughput sequencing
+description Applied Biosystems SOLiD System 2.0
 
 
 #Project CV

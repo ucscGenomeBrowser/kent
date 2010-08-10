@@ -9,6 +9,7 @@ fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
 project wgEncode
+subId 2094
 submittedDataVersion V3
 tableName wgEncodeGencode2wayConsPseudoV4
 
@@ -25,6 +26,7 @@ grant Hubbard
 lab Sanger
 level 3
 project wgEncode
+subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodeAutoV4
 
@@ -39,6 +41,7 @@ fileName wgEncodeGencodeClassesV4.tab.gz
 grant Hubbard
 lab Sanger
 project wgEncode
+subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodeClassesV4
 
@@ -55,6 +58,7 @@ grant Hubbard
 lab Sanger
 level 1-2
 project wgEncode
+subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodeManualV4
 
@@ -69,6 +73,7 @@ fileName wgEncodeGencodePolyAV4.gtf.gz
 grant Hubbard
 lab Sanger
 project wgEncode
+subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodePolyAV4
 
@@ -83,7 +88,8 @@ fileName wgEncodeGencodeYalePseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
 project wgEncode
+subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: -540353561
+# MAGIC: -540090485
