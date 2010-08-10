@@ -5708,7 +5708,7 @@ switch(colorMode)
 	    }
 	break;
     case 2: /* black */
-	col = 1;
+	col = MG_BLACK;
 	break;
     }
 

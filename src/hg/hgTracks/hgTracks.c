@@ -1440,31 +1440,14 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
                                                 MgFont *font, int y)
 /* Track draws it own, custom left labels */
 {
-int pixWidth = tl.picWidth;
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
-if (track->limitedVis == tvPack)
-    { /*XXX This needs to be looked at, no example yet*/
-    hvGfxSetClip(hvg, gfxBorder+trackTabWidth+1, y,
-              pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
-    track->drawLeftLabels(track, winStart, winEnd,
-                          hvg, leftLabelX, y, leftLabelWidth, tHeight,
-                          isWithCenterLabels(track), font, labelColor,
-                          track->limitedVis);
-    }
-else
-    {
-    hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
-
-    /* when the limitedVis == tvPack is correct above,
-     *  this should be outside this else clause
-     */
-    track->drawLeftLabels(track, winStart, winEnd,
-                          hvg, leftLabelX, y, leftLabelWidth, tHeight,
-                          isWithCenterLabels(track), font, labelColor,
-                          track->limitedVis);
-    }
+hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
+track->drawLeftLabels(track, winStart, winEnd,
+		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
+		      isWithCenterLabels(track), font, labelColor,
+		      track->limitedVis);
 hvGfxUnclip(hvg);
 y += tHeight;
 return y;
@@ -4315,8 +4298,7 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
-#ifdef CONTEXT_MENU
-
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
 {
 // add entry for given track to the trackDbJson string
@@ -4331,8 +4313,7 @@ if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != 
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
-
-#endif
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 void printTrackInitJavascript(struct track *trackList)
 {
@@ -4410,11 +4391,11 @@ boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
-#ifdef CONTEXT_MENU
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 struct dyString *trackDbJson = newDyString(1000);
 int trackDbJsonCount = 1;
 dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
-#endif
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4533,7 +4514,7 @@ for (track = trackList; track != NULL; track = track->next)
 	    thisTime = clock1000();
 	    track->loadTime = thisTime - lastTime;
 	    }
-#ifdef CONTEXT_MENU
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 	trackJson(trackDbJson, track, trackDbJsonCount++);
 	if (trackIsCompositeWithSubtracks(track))
 	    {
@@ -4545,15 +4526,15 @@ for (track = trackList; track != NULL; track = track->next)
 		    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
 		}
 	    }
-#endif
+#endif///defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 	}
     }
 
-#ifdef CONTEXT_MENU
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 dyStringAppend(trackDbJson, "}\n</script>\n");
 if(!trackImgOnly)
     hPrintf(dyStringContents(trackDbJson));
-#endif
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 printTrackInitJavascript(trackList);
 
@@ -5673,17 +5654,18 @@ jsIncludeFile("hgTracks.js", NULL);
 jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
-#ifdef CONTEXT_MENU
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 hPrintf("<link href='../style/jquery.contextmenu.css' rel='stylesheet' type='text/css' />\n");
 hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
-
-jsIncludeFile("jquery-ui.js", NULL);
+#ifdef CONTEXT_MENU
 jsIncludeFile("jquery.contextmenu.js", NULL);
+#endif/// def CONTEXT_MENU
+jsIncludeFile("jquery-ui.js", NULL);
 
 hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
-#endif
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 if (cartVarExists(cart, "chromInfoPage"))
     {
