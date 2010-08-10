@@ -16,6 +16,7 @@ wgEncodeHudsonalphaCnv.ra\
 wgEncodeHudsonalphaMethyl27.ra\
 wgEncodeHudsonalphaMethylSeq.ra\
 wgEncodeHudsonalphaRnaSeq.ra\
+wgEncodeReg.ra\
 wgEncodeRikenCage.ra\
 wgEncodeSangerGencode.ra\
 wgEncodeSunyalbanyRnaGeneChip.ra\
