@@ -242,6 +242,8 @@ webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, 
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
+hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
+hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
 
 hPrintf("<div id='tabs'>\n"
         "<ul>\n"
@@ -261,19 +263,22 @@ hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
         "<table>\n");
 
-hPrintf("<tr><td></td><td></td><td><b>Description:</b></td><td align='right'>contains</td>\n");
+hPrintf("<tr><td></td><td></td><td></td><td><b>Description:</b></td><td align='right'>contains</td>\n");
 hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
 
-hPrintf("<tr><td></td><td>and</td><td><b>Track Name:</b></td><td align='right'>\n");
+hPrintf("<tr><td></td><td></td><td>and</td><td><b>Track Name:</b></td><td align='right'>\n");
 cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
 hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
 
-hPrintf("<tr><td></td><td>and</td>\n");
+hPrintf("<tr><td></td><td></td><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td align='right'>is</td>\n<td>\n");
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
 hPrintf("</td></tr>\n");
 
 // figure out how many metadata selects are visible.
+
+int delSearchSelect = cartUsualInt(cart, "hgt.delRow", 0);   // 1-based row to delete
+int addSearchSelect = cartUsualInt(cart, "hgt.addRow", 0);   // 1-based row to insert after
 
 for(numMetadataSelects = 0;;)
     {
@@ -286,6 +291,11 @@ for(numMetadataSelects = 0;;)
         numMetadataSelects++;
     }
 
+if(delSearchSelect)
+    numMetadataSelects--;
+if(addSearchSelect)
+    numMetadataSelects++;
+
 if(numMetadataSelects)
     {
     metadataName = needMem(sizeof(char *) * numMetadataSelects);
@@ -294,17 +304,32 @@ if(numMetadataSelects)
     for(i = 0; i < numMetadataSelects; i++)
         {
         char buf[256];
-        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + 1);
+        int offset;   // used to handle additions/deletions
+        if(addSearchSelect > 0 && i >= addSearchSelect)
+            offset = 0; // do nothing to offset (i.e. copy data from previous row)
+        else if(delSearchSelect > 0 && i + 1 >= delSearchSelect)
+            offset = 2;
+        else
+            offset = 1;
+        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
         metadataName[i] = cartOptionalString(cart, buf);
         if(!simpleSearch)
             {
-            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + 1);
+            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
             metadataValue[i] = cartOptionalString(cart, buf);
             if(sameString(metadataValue[i], ANYLABEL))
                 metadataValue[i] = NULL;
             if(!isEmpty(metadataValue[i]))
                 numMetadataNonEmpty++;
             }
+        }
+    if(delSearchSelect > 0)
+        {
+        char buf[255];
+        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
+        cartRemove(cart, buf);
+        safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, numMetadataSelects + 1);
+        cartRemove(cart, buf);
         }
     }
 else
@@ -332,11 +357,16 @@ if(metaDbExists)
         int len;
 
         hPrintf("<tr><td>\n");
-
-        if(i == 0)
-            hPrintf("&nbsp;\n");
+        if(numMetadataSelects > 2 || i >= 2)
+            {
+            safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
+            hButtonWithOnClick(searchTracks, "-", "delete this row", buf);
+            }
         else
-            hButtonWithOnClick("hgt.ignoreme", "+", "add a select", "warn('add a select is not yet implemented'); return false;");
+            hPrintf("&nbsp;");
+        hPrintf("</td><td>\n");
+        safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
+        hButtonWithOnClick(searchTracks, "+", "add another row after this row", buf);
 
         hPrintf("</td><td>and</td>\n");
         hPrintf("</td><td colspan=2 nowrap>\n");
@@ -609,17 +639,19 @@ else
     }
 
 hPrintf("<p><b>Recently Done</b></p><ul>\n"
+        "<li>Deleting/Adding selection criteria with [-][+] buttons in 'Advanced Search'.</li>"
 #ifdef CB_SELECTION
         "<li>Found tracks are selected by checkboxes.</li>"
         "<li>Checkbox state should be persistent.  Subtracks selected will be checked in their composite.</li>"
 #endif///def CB_SELECTION
         "<li>Full descriptions of metadata items are indexed in simple search index (e.g. cell descriptions).</li>"
         "</ul>"
-        "<p><b>Known Problems</b></p><ul><li>Menu bar up top doesn't work (clicks are ignored).</li>\n"
+        "<p><b>Known Problems</b></p><ul>"
+        "<li>Search results should be cleared when switching between simple and advanced tabs (do we agree on that?)</li>"
+        "<li>Menu bar up top doesn't work (clicks are ignored).</li>\n"
         "<li>subtracks often come up with the wrong visibility (but saving visibility for subtracks does work).</li>"
-        "<li>Adding selection criteria with [+] button in 'Advanced Search' is not yet implemented.</li>"
         "<li>Too large of found track list results in slow scripts.</li>"
-        "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found.</li>"
+        "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found (is that a bug? REM that description search is NOT inherited.</li>"
         "</ul>"
         "<p><b>Suggested improvments:</b></p><ul><li>Found track list should be limited to 100 tracks with warning: \"Found 237 tracks... Please narrow search criteria to find fewer tracks.\"</li>\n"
         "<li>Only data tracks should be seen in found track list.  Found superTracks/composites should be converted into their children.</li>"
