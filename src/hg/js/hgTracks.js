@@ -1254,6 +1254,7 @@ $(document).ready(function()
                                 $('#currentSearchTab').val(ui.panel.id);
                             }
                         });
+        $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
