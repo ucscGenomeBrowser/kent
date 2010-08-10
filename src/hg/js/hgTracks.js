@@ -1247,13 +1247,6 @@ $(document).ready(function()
         }
     }
 
-    // Tim, LRM doesn't like the following code (which set's focus to the position box), b/c in many browser (e.g. FF) this means
-    // PgUp/PgDown doesn't work when you load hgTracks (perhaps we should discuss with QA).
-    {
-        var pos = $("input[name='position']");
-        if( pos != undefined)
-            $( pos ).focus();
-    }
     if($("#tabs").length > 0) {
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
@@ -1710,8 +1703,6 @@ function parseMap(ele, reset)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-
-    alert(response);
     $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
@@ -1943,4 +1934,107 @@ function changeSearchVisibilityPopups(cmd)
                                                                  $(this).val(cmd);
                                                              });
     return false;
+}
+
+/////////////////////////////////////////////////////
+// findTracks functions
+function findTracksClickedOne(selCb,justClicked)
+{ // When a found track CB is clicked, do this
+    var name = $(selCb).attr('name');
+    var trackName = name.substring(0,name.length - "_sel".length)
+    var vis = $('select[name="'+trackName+'"]');
+    if($(selCb).attr('checked')) {
+        $(vis).attr('disabled', false);
+        if($(vis).attr('selectedIndex') == 0)
+            $(vis).attr('selectedIndex',1);
+    } else {
+        $(vis).attr('disabled', true);
+        if(justClicked) {
+            // should ajax over the removal of this cart setting just to be sure.
+            setCartVar(trackName,"n/a");
+        }
+    }
+
+    // The "view in browser" button should be enabled/disabled
+    if(justClicked) {
+        var selCbsChecked = $('input.selCb:checked');
+        //$('input.viewBtn').attr('disabled', ($(selCbsChecked).length == 0) );
+        if($(selCbsChecked).length > 0)
+            $('input.viewBtn').val('View in Browser');
+        else
+            $('input.viewBtn').val('Return to Browser');
+    }
+
+    findTracksCounts();
+}
+
+function findTracksNormalizeFound()
+{ // Normalize the page based upon current state of all found tracks
+    var selCbs = $('input.selCb');
+
+    // All should have their vis enabled/disabled appropriately (false means don't update cart)
+    $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
+
+    // The "view in browser" button should be enabled/disabled
+    var disabled = ($(selCbs).length == 0 || $(selCbs).filter(':checked').length == 0);
+    //$('input.viewBtn').attr('disabled',disabled);
+    if(disabled == false)
+        $('input.viewBtn').val('View in Browser');
+    else
+        $('input.viewBtn').val('Return to Browser');
+
+    findTracksCounts();
+}
+
+function findTracksCheckAll(check)
+{
+    var selCbs = $('input.selCb');
+    $(selCbs).attr('checked',check);
+
+    // All should have their vis enabled/disabled appropriately (false means don't update cart)
+    $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
+
+    if(check == false) {
+        // make a single ajax call to remove all vis vars
+        // FIXME: I think we have now changed the paradigm for subtrack vis:
+        // There must be a {trackName}_sel to have subtrack level vis override.
+        // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
+        // AND hgTracks.c should now be keyed off the "_sel" for subtrack without composite.
+        // THIS would make these ajax calls to clean up vis uneeded.
+        // ONE MORE COMPLICATION: non-subtracks do not currently have a "_sel" setting!
+        //     Distinguish here?  Only subtracks get "_sel" CB set here?  Control by "name" of CB?
+        var vars = [];
+        var vals = [];
+        $(selCbs).each(function(i) {
+            var name = $(this).attr('name');
+            vars.push(name.substring(0,name.length - "_sel".length));
+            vals.push("n/a");
+        });
+        if(vars.length > 0)
+            setCartVars(vars,vals);
+    }
+
+    //$('input.viewBtn').attr('disabled',(check == false));
+    if(check)
+        $('input.viewBtn').val('View in Browser');
+    else
+        $('input.viewBtn').val('Return to Browser');
+
+    findTracksCounts();
+    return false;  // Pressing button does nothing more
+}
+
+function findTracksCheckAllWithWait(check)
+{
+    waitOnFunction( findTracksCheckAll, check);  // FIXME: wait cursor not working for some reason
+}
+
+function findTracksCounts()
+{
+// Displays visible and checked track count
+    var counter = $('.selCbCount');
+    if(counter != undefined) {
+        var selCbs =  $("input.selCb");
+        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+    }
 }

@@ -19,8 +19,8 @@ static char *markovTable;
 static boolean originalCoordinates = FALSE;
 static int topOnly = 0;
 struct chromInfo *chromInfo;
-#define PRIOR 0.5                 // our prior belief that there is at least one binding site in a peak
-#define PRIORBACKOFF 0.01         // our prior belief that there are > 1 binding sites in a given peak = PRIOR * PRIORBACKOFF^n)
+static float prior = 0.5;                 // our prior belief that there is at least one binding site in a peak
+static float priorBackoff = 0.01;         // our prior belief that there are > 1 binding sites in a given peak = PRIOR * priorBackoff^n)
 
 void usage()
 /* Explain usage and exit. */
@@ -40,6 +40,8 @@ errAbort(
 static struct optionSpec options[] = {
     {"markovTable", OPTION_STRING},
     {"originalCoordinates", OPTION_BOOLEAN},
+    {"prior", OPTION_FLOAT},
+    {"priorBackoff", OPTION_FLOAT},
     {"topOnly", OPTION_INT},
     {NULL, 0},
 };
@@ -172,12 +174,15 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
                     // Watch out for overlapping hits (on either strand; yes, I've seen that happen);
                     // we report only the highest scoring hit in this case.
                     // O(n^2) where n == number of motifs in a peak, but I expect n to be almost always very small.
-                    for (hit = hits; hit != NULL; hit = hit->next)
+                    if(!originalCoordinates)
                         {
-                        if(hit->chromEnd > start && hit->chromStart <= (start + motif->columnCount))
+                        for (hit = hits; hit != NULL; hit = hit->next)
                             {
-                            verbose(3, "found overlapping hits: %d-%d overlaps with %d-%d\n", start, start + motif->columnCount, hit->chromStart, hit->chromEnd);
-                            break;
+                            if(hit->chromEnd > start && hit->chromStart <= (start + motif->columnCount))
+                                {
+                                verbose(3, "found overlapping hits: %d-%d overlaps with %d-%d\n", start, start + motif->columnCount, hit->chromStart, hit->chromEnd);
+                                break;
+                                }
                             }
                         }
                     if(hit == NULL || hit->score < score)
@@ -199,18 +204,18 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
             }
         slSort(&hits, bed6FloatCmpDesc);
         int count;
-        float prior = PRIOR;
+        float currentPrior = prior;
         for(count = 1; hits != NULL; count++, hits = hits->next)
             {
             if(topOnly && count > topOnly)
                 break;
             // Use a progressively weaker prior for hits with lower scores
-            verbose(3, "count: %d; score: %.2f; prior: %.2f; log2(prior / (1 - prior)): %.2f\n", count, hits->score, prior, log2(prior / (1 - prior)));
-            if(hits->score >= minScoreCutoff - log2(prior / (1 - prior)))
+            verbose(3, "count: %d; score: %.2f; prior: %.2f; log2(prior / (1 - prior)): %.2f\n", count, hits->score, currentPrior, log2(currentPrior / (1 - currentPrior)));
+            if(hits->score >= minScoreCutoff - log2(currentPrior / (1 - currentPrior)))
                 {
                 printf("%s\t%d\t%d\t%s\t%.2f\t%c\n", chrom, originalCoordinates ? chromStart : hits->chromStart, 
                        originalCoordinates ? chromEnd : hits->chromStart + motif->columnCount, name, hits->score, hits->strand[0]);
-                prior = count == 1 ? PRIORBACKOFF : prior * PRIORBACKOFF;
+                currentPrior = count == 1 ? priorBackoff : currentPrior * priorBackoff;
                 if(count > 2)
                     verbose(3, "hit for count: %d at %s:%d-%d\n", count, chrom, hits->chromStart, hits->chromStart + motif->columnCount);
                 }
@@ -232,6 +237,8 @@ optionInit(&argc, argv, options);
 markovTable = optionVal("markovTable", NULL);
 originalCoordinates = optionExists("originalCoordinates");
 minScoreCutoff = optionFloat("minScoreCutoff", 0);
+prior = optionFloat("prior", prior);
+priorBackoff = optionFloat("priorBackoff", priorBackoff);
 topOnly = optionInt("topOnly", topOnly);
 if (argc < 4)
     usage();

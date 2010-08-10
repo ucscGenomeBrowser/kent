@@ -11,7 +11,7 @@ use lib "$Bin";
 # new genomes since the 46-way construction.  This will keep
 #	the priority numbers the same for the previous 46 and place
 #	these new ones in between the previous ones.
-my $newAssemblies = "ailMel susScr oviAra";
+my $newAssemblies = "ailMel susScr oviAri";
 my $newAssemblyOffset = 5;
 my $offset46way = 10;
 my $reroot = "$Bin/rerootTree.pl";

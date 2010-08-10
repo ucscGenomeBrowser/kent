@@ -7,6 +7,9 @@
 
 #define TXCLUSTER_NUM_COLS 8
 
+// Turn this on to show high-confidence binding sites within clusters.
+// #define TXCLUSTER_MOTIFS_TABLE "wgEncodeRegTfbsClusteredMotifs"
+
 struct txCluster
 /* A cluster of transcripts or coding regions */
     {
