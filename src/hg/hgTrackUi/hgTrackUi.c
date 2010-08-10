@@ -2510,7 +2510,7 @@ if (!tdbIsSuper(tdb))
         if (trackDbSetting(tdb, "wgEncode"))
             {
             printf("&nbsp;&nbsp;");
-            makeDownloadsLink(database, tdb);
+            makeDownloadsLink(database, tdb, trackHash);
             }
         char *downArrow = "&dArr;";
         enum browserType browser = cgiBrowser();
