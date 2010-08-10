@@ -10,6 +10,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 247
@@ -28,6 +29,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 74
@@ -46,6 +48,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 73
@@ -64,6 +67,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 452
@@ -82,6 +86,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 75
@@ -100,6 +105,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 246
@@ -118,6 +124,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 339
@@ -136,6 +143,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 340
@@ -154,6 +162,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 451
@@ -172,6 +181,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 430
@@ -190,6 +200,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 431
@@ -208,6 +219,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562CellTotal.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 90
@@ -226,6 +238,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal.wig.gz
 grant Gingeras
 lab Affy
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 186
@@ -244,6 +257,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 78
@@ -262,6 +276,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 77
@@ -280,6 +295,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 187
@@ -298,6 +314,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 248
@@ -316,6 +333,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 81
@@ -334,6 +352,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 82
@@ -352,6 +371,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 76
@@ -370,6 +390,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 341
@@ -388,6 +409,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 342
@@ -406,6 +428,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 375
@@ -424,6 +447,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 376
@@ -442,6 +466,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 89
@@ -460,6 +485,7 @@ fileName wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 88
@@ -478,6 +504,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 247
@@ -496,6 +523,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya.broadPeak.g
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 74
@@ -514,6 +542,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 73
@@ -532,6 +561,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 452
@@ -550,6 +580,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya.broadPeak.g
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 75
@@ -568,6 +599,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 246
@@ -586,6 +618,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 339
@@ -604,6 +637,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 340
@@ -622,6 +656,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 451
@@ -640,6 +675,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 430
@@ -658,6 +694,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 431
@@ -676,6 +713,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562CellTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 90
@@ -694,6 +732,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 186
@@ -712,6 +751,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 78
@@ -730,6 +770,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 77
@@ -748,6 +789,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 187
@@ -766,6 +808,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 248
@@ -784,6 +827,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 81
@@ -802,6 +846,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 82
@@ -820,6 +865,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 76
@@ -838,6 +884,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya.broadP
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 341
@@ -856,6 +903,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya.broadPeak
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 342
@@ -874,6 +922,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya.broadP
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 375
@@ -892,6 +941,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya.broadPeak
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 376
@@ -910,6 +960,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 89
@@ -928,6 +979,7 @@ fileName wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 88
@@ -946,6 +998,7 @@ fileName wgEncodeAffyRnaChipRawSignalGm12878CellTotal.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 247
@@ -964,6 +1017,7 @@ fileName wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 74
@@ -982,6 +1036,7 @@ fileName wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 73
@@ -1000,6 +1055,7 @@ fileName wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 452
@@ -1018,6 +1074,7 @@ fileName wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 75
@@ -1036,6 +1093,7 @@ fileName wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 246
@@ -1054,6 +1112,7 @@ fileName wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 339
@@ -1072,6 +1131,7 @@ fileName wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 340
@@ -1090,6 +1150,7 @@ fileName wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 451
@@ -1108,6 +1169,7 @@ fileName wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 430
@@ -1126,6 +1188,7 @@ fileName wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 431
@@ -1144,6 +1207,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562CellTotal.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 90
@@ -1162,6 +1226,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562ChromatinTotal.wig.gz
 grant Gingeras
 lab Affy
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 186
@@ -1180,6 +1245,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 78
@@ -1198,6 +1264,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 77
@@ -1216,6 +1283,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562NucleolusTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 187
@@ -1234,6 +1302,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal.wig.gz
 grant Gingeras
 lab Affy
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 188
@@ -1252,6 +1321,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 81
@@ -1270,6 +1340,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 82
@@ -1288,6 +1359,7 @@ fileName wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 76
@@ -1306,6 +1378,7 @@ fileName wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 341
@@ -1324,6 +1397,7 @@ fileName wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 342
@@ -1342,6 +1416,7 @@ fileName wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 375
@@ -1360,6 +1435,7 @@ fileName wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 376
@@ -1378,6 +1454,7 @@ fileName wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 89
@@ -1396,6 +1473,7 @@ fileName wgEncodeAffyRnaChipRawSignalProstateCellLongpolya.wig.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 88
@@ -1414,6 +1492,7 @@ fileName wgEncodeAffyRnaChipTransfragsGm12878CellTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 247
@@ -1432,6 +1511,7 @@ fileName wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 74
@@ -1450,6 +1530,7 @@ fileName wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 73
@@ -1468,6 +1549,7 @@ fileName wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 452
@@ -1486,6 +1568,7 @@ fileName wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 75
@@ -1504,6 +1587,7 @@ fileName wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 246
@@ -1522,6 +1606,7 @@ fileName wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 339
@@ -1540,6 +1625,7 @@ fileName wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 340
@@ -1558,6 +1644,7 @@ fileName wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 451
@@ -1576,6 +1663,7 @@ fileName wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 430
@@ -1594,6 +1682,7 @@ fileName wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 431
@@ -1612,6 +1701,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562CellTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 90
@@ -1630,6 +1720,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562ChromatinTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 186
@@ -1648,6 +1739,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 78
@@ -1666,6 +1758,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 77
@@ -1684,6 +1777,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562NucleolusTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 187
@@ -1702,6 +1796,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 188
@@ -1720,6 +1815,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 81
@@ -1738,6 +1834,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 82
@@ -1756,6 +1853,7 @@ fileName wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 76
@@ -1774,6 +1872,7 @@ fileName wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya.broadPeak.
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 341
@@ -1792,6 +1891,7 @@ fileName wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 342
@@ -1810,6 +1910,7 @@ fileName wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya.broadPeak.
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 375
@@ -1828,6 +1929,7 @@ fileName wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 376
@@ -1846,6 +1948,7 @@ fileName wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 89
@@ -1864,10 +1967,11 @@ fileName wgEncodeAffyRnaChipTransfragsProstateCellLongpolya.broadPeak.gz
 grant Gingeras
 lab Affy
 localization cell
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 88
 tableName wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
 view Transfrags
 
-# MAGIC: -2038901360
+# MAGIC: -1871134272
