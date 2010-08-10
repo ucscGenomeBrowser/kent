@@ -2038,3 +2038,17 @@ function findTracksCounts()
         $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
     }
 }
+
+function delSearchSelect(obj, rowNum)
+{
+    obj = $(obj);
+    $("input[name=hgt.delRow]").val(rowNum);
+    return true;
+}
+
+function addSearchSelect(obj, rowNum)
+{
+    obj = $(obj);
+    $("input[name=hgt.addRow]").val(rowNum);
+    return true;
+}
