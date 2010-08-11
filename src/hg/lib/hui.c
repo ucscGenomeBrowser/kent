@@ -60,6 +60,23 @@ if (!sameString(tdb->table, tdb->track))
 return trackDbTopLevelSelfOrParent(tdb);
 }
 
+static boolean makeFileDownloadsLink(char *database, struct trackDb *tdb,char *name, 
+	struct hash *trackHash)
+// Make a downloads link (if appropriate and then returns TRUE)
+{
+// Downloads directory if this is ENCODE
+if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
+            hDownloadsServer(),
+            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
+            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name, name);
+    return TRUE;
+    }
+return FALSE;
+}
+
 static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name, 
 	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
@@ -140,7 +157,8 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
-        makeNamedDownloadsLink(db, tdb, mdbVar->val, trackHash);
+
+        makeFileDownloadsLink(db, tdb, mdbVar->val, trackHash);
         printf("</td></tr>");
         }
     else
