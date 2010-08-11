@@ -8,6 +8,12 @@
 ############################################################################
 # ensembl 59 update (WORKING - 2010-08-09 - Hiram)
 
+# to finish off the v59 update after all were complete:
+     hgsql -e \
+'update trackVersion set dateReference="may2010" where version="58";' hgFixed
+     hgsql -e \
+'update trackVersion set dateReference="current" where version="59";' hgFixed
+
 ############################################################################
 #  hg19 - Human - Ensembl Genes version 59  (DONE - 2010-08-10 - hiram)
     ssh hgwdev
@@ -294,6 +300,39 @@ nameTranslation "s/^\([IVX]\)/chr\1/; s/^MtDNA/chrM/"
     cd /hive/data/genomes/ce9/bed/ensGene.59
     featureBits ce9 ensGene
     # 30249205 bases of 100286004 (30.163%) in intersection
+
+############################################################################
+#  susScr2 - Pig - lifted susScr1 v59 genes to susScr2 (DONE - 2010-08-11 - Hiram)
+    mkdir /hive/data/genomes/susScr2/bed/ensGene.59
+    cd /hive/data/genomes/susScr2/bed/ensGene.59
+    ln -s ../../../susScr1/bed/ensGene.59/process/susScr1.allGenes.gp.gz .
+    zcat susScr1.allGenes.gp.gz > susScr1.allGenes.genePred
+    ln -s ../../../susScr1/bed/liftOver/susScr1ToSusScr2.over.chain.gz
+    zcat susScr1ToSusScr2.over.chain.gz > susScr1ToSusScr2.over.chain
+    liftOver -genePred susScr1.allGenes.genePred \
+        susScr1ToSusScr2.over.chain \
+        susScr2.allGenes.gp susScr1.liftOver.unMapped.txt
+    gzip susScr2.allGenes.gp
+    hgLoadGenePred  -genePredExt susScr2 \
+	ensGene susScr2.allGenes.gp.gz > loadGenePred.errors.txt 2>&1
+
+    zcat \
+../../../susScr1/bed/ensGene.59/download/Sus_scrofa.Sscrofa9.59.pep.all.fa.gz \
+        | sed -e 's/^>.* transcript:/>/; s/ CCDS.*$//;' \
+	| gzip > ensPep.txt.gz
+    zcat ensPep.txt.gz \
+	| ~/kent/src/utils/faToTab/faToTab.pl /dev/null /dev/stdin \
+	     | sed -e '/^$/d; s/*$//' | sort > ensPep.susScr2.fa.tab
+    hgPepPred susScr2 tab ensPep ensPep.susScr2.fa.tab
+    ln -s ../../../susScr1/bed/ensGene.59/process/ensGtp.tab .
+    hgLoadSqlTab susScr2 ensGtp ~/kent/src/hg/lib/ensGtp.sql ensGtp.tab
+    hgsql -e 'INSERT INTO trackVersion \
+	(db, name, who, version, updateTime, comment, source, dateReference) \
+	VALUES("susScr2", "ensGene", "hiram", "59", now(), \
+        "with peptides Sus_scrofa.Sscrofa9.59.pep.all.fa.gz", \
+        "lifted susScr1 to susScr2 ftp://ftp.ensembl.org/pub/release-59/gtf/sus_scrofa/Sus_scrofa.Sscrofa9.59.gtf.gz", \
+        "current" );' hgFixed
+
 
 ############################################################################
 #  anoCar1 - Lizard - Ensembl Genes version 59  (DONE - 2010-08-09 - hiram)
