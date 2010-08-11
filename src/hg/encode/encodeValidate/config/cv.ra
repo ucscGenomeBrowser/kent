@@ -5419,7 +5419,7 @@ label ChIP-seq
 term Exon-array
 tag AffyExonArray
 type dataType
-label Affy_Exon_Array
+label Exon-array
 
 term BIP
 tag bip
@@ -5501,7 +5501,8 @@ label RNA-seq
 term shRNA-seq
 tag shortrnaseq
 type dataType
-label RNA-seq
+# NOTE: add label later
+#label RNA-seq
 
 term TFBS-valid
 tag tfbsvalid
