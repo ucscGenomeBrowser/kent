@@ -1262,15 +1262,16 @@ $(document).ready(function()
     if($(".tableWithDragAndDrop").length > 0) {
         $(".tableWithDragAndDrop").tableDnD({
             onDragClass: "trDrag",
-            onDrop: function(table, row) {
+            //dragHandle: "dragHandle",
+            onDrop: function(table, row, dragStartIndex) {
                     if(tableSetPositions) {
                         tableSetPositions(table);
                     }
                 }
             });
         $(".trDraggable").hover(
-            function(){if($(this).hasClass('trDrag') == false) $(this).addClass('pale');},
-            function(){$(this).removeClass('pale');}
+            function(){ $(this).addClass('trDrag'); },
+            function(){ $(this).removeClass('trDrag'); }
         );
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!
