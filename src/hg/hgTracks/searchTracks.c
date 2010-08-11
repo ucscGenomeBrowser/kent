@@ -236,14 +236,16 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
-
 webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
+
+hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
+hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
+hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
 
-hPrintf("<div id='tabs'>\n"
+hPrintf("<div id='tabs' style='display:none;'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
         "<li><a href='#advancedTab'><span>Advanced Search</span></a></li>\n"
@@ -252,28 +254,28 @@ hPrintf("<div id='tabs'>\n"
 
 hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80'>\n", descSearch == NULL ? "" : descSearch);
 
-#define CB_SELECTION
-#ifdef CB_SELECTION
-hPrintf("<br><input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:12px;'>\n", searchTracks);
-hPrintf("<input type='submit' name='submit' value='Cancel' style='font-size:12px;'>\n");
-#endif///def CB_SELECTION
+hPrintf("<br><input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='submit' name='submit' value='Cancel' style='font-size:14px;'>\n");
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
         "<table>\n");
 
-hPrintf("<tr><td></td><td></td><td><b>Description:</b></td><td align='right'>contains</td>\n");
+hPrintf("<tr><td></td><td></td><td></td><td><b>Description:</b></td><td align='right'>contains</td>\n");
 hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
 
-hPrintf("<tr><td></td><td>and</td><td><b>Track Name:</b></td><td align='right'>\n");
+hPrintf("<tr><td></td><td></td><td>and</td><td><b>Track Name:</b></td><td align='right'>\n");
 cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
 hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
 
-hPrintf("<tr><td></td><td>and</td>\n");
+hPrintf("<tr><td></td><td></td><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td align='right'>is</td>\n<td>\n");
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
 hPrintf("</td></tr>\n");
 
 // figure out how many metadata selects are visible.
+
+int delSearchSelect = cartUsualInt(cart, "hgt.delRow", 0);   // 1-based row to delete
+int addSearchSelect = cartUsualInt(cart, "hgt.addRow", 0);   // 1-based row to insert after
 
 for(numMetadataSelects = 0;;)
     {
@@ -286,6 +288,11 @@ for(numMetadataSelects = 0;;)
         numMetadataSelects++;
     }
 
+if(delSearchSelect)
+    numMetadataSelects--;
+if(addSearchSelect)
+    numMetadataSelects++;
+
 if(numMetadataSelects)
     {
     metadataName = needMem(sizeof(char *) * numMetadataSelects);
@@ -294,17 +301,32 @@ if(numMetadataSelects)
     for(i = 0; i < numMetadataSelects; i++)
         {
         char buf[256];
-        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + 1);
+        int offset;   // used to handle additions/deletions
+        if(addSearchSelect > 0 && i >= addSearchSelect)
+            offset = 0; // do nothing to offset (i.e. copy data from previous row)
+        else if(delSearchSelect > 0 && i + 1 >= delSearchSelect)
+            offset = 2;
+        else
+            offset = 1;
+        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
         metadataName[i] = cartOptionalString(cart, buf);
         if(!simpleSearch)
             {
-            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + 1);
+            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
             metadataValue[i] = cartOptionalString(cart, buf);
             if(sameString(metadataValue[i], ANYLABEL))
                 metadataValue[i] = NULL;
             if(!isEmpty(metadataValue[i]))
                 numMetadataNonEmpty++;
             }
+        }
+    if(delSearchSelect > 0)
+        {
+        char buf[255];
+        safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, numMetadataSelects + 1);
+        cartRemove(cart, buf);
+        safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, numMetadataSelects + 1);
+        cartRemove(cart, buf);
         }
     }
 else
@@ -332,11 +354,16 @@ if(metaDbExists)
         int len;
 
         hPrintf("<tr><td>\n");
-
-        if(i == 0)
-            hPrintf("&nbsp;\n");
+        if(numMetadataSelects > 2 || i >= 2)
+            {
+            safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
+            hButtonWithOnClick(searchTracks, "-", "delete this row", buf);
+            }
         else
-            hButtonWithOnClick("hgt.ignoreme", "+", "add a select", "warn('add a select is not yet implemented'); return false;");
+            hPrintf("&nbsp;");
+        hPrintf("</td><td>\n");
+        safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
+        hButtonWithOnClick(searchTracks, "+", "add another row after this row", buf);
 
         hPrintf("</td><td>and</td>\n");
         hPrintf("</td><td colspan=2 nowrap>\n");
@@ -353,16 +380,10 @@ if(metaDbExists)
 
 hPrintf("</table>\n");
 
-#ifdef CB_SELECTION
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:12px;'>\n", searchTracks);
-hPrintf("<input type='submit' name='submit' value='Cancel' style='font-size:12px;'>\n");
-#endif///def CB_SELECTION
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='submit' name='submit' value='Cancel' style='font-size:14px;'>\n");
 hPrintf("</div>\n</div>\n");
 
-#ifndef CB_SELECTION
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search'>\n", searchTracks);
-hPrintf("<input type='submit' name='submit' value='Cancel'>\n");
-#endif///ndef CB_SELECTION
 hPrintf("</form>\n");
 
 if(descSearch != NULL && !strlen(descSearch))
@@ -496,46 +517,48 @@ if(doSearch)
         }
     }
 
-if(tracksFound)
+if(tracksFound < 1)
     {
-#ifndef CB_SELECTION
-    hPrintf("&nbsp;&nbsp;&nbsp;<i>%d tracks found</i>\n", tracksFound);
-#endif///ndef CB_SELECTION
+    if(doSearch)
+        hPrintf("<p>No tracks found</p>\n");
+    }
+else
+    {
+    struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
-#ifdef CB_SELECTION
-    hPrintf("<BR>");
-    if(tracksFound > 9)
+    #define MAX_FOUND_TRACKS 100
+    if(tracksFound > MAX_FOUND_TRACKS)
+        {
+        hPrintf("<table class='redBox'><tr><td>Found %d tracks, but only the first %d are displayed.",tracksFound,MAX_FOUND_TRACKS);
+        hPrintf("<BR><B><I>Please narrow search criteria to find fewer tracks.</I></B></div></td></tr></table>\n");
+        }
+
+    #define ENOUGH_FOUND_TRACKS 10
+    if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
-        //hPrintf("&nbsp;&nbsp;&nbsp;<i>%d tracks found</i>\n", tracksFound);
         }
-#endif///def CB_SELECTION
     hPrintf("<table><tr><td colspan='2'>\n");
-#ifdef CB_SELECTION
     hPrintf("</td><td align='right'>\n");
     #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracksCheckAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf("</td></tr><tr bgcolor='%s'><td>",HG_COL_HEADER);
     printf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
     printf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
     hPrintf("</td><td><b>Visibility</b></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
-#else///ifndef CB_SELECTION
-    hButton("submit", "View in Browser");
-    hPrintf("</td><td align='right'>\n");
-    hButtonWithOnClick("hgt.ignoreme", "Select All", "show all found tracks", "changeSearchVisibilityPopups('full'); return false;");
-    hButtonWithOnClick("hgt.ignoreme", "Unselect All", "show all found tracks", "changeSearchVisibilityPopups('hide'); return false;");
-    hPrintf("</td></tr><tr bgcolor='#666666'>");
-    hPrintf("<td><br /></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
-#endif///ndef CB_SELECTION
     // FIXME: I believe that only data tracks should appear in found tracks.  If composite is found, show its children instead
-    // FIXME: I believe if the fount track list is too large, a warning should be shown instead: "Found 237 tracks... Please narrow search criteria to find fewer tracks."
+
+    int trackCount=0;
     struct slRef *ptr;
     while((ptr = slPopHead(&tracks)))
         {
+        if(++trackCount > MAX_FOUND_TRACKS)
+            break;
+
         struct track *track = (struct track *) ptr->val;
         // trackDbOutput(track->tdb, stderr, ',', '\n');
         hPrintf("<tr bgcolor='%s' valign='top'>\n",COLOR_BG_ALTDEFAULT);
-#ifdef CB_SELECTION
+
         // FIXME: I think we have now changed the paradigm for subtrack vis:
         // There must be a {trackName}_sel to have subtrack level vis override.
         // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
@@ -559,7 +582,7 @@ if(tracksFound)
 
         cgiMakeCheckBoxIdAndJS(name,checked,name,"class='selCb' onchange=\"findTracksClickedOne(this,true);\"");
         hPrintf("</td>\n");
-#endif///def CB_SELECTION
+
         hPrintf("<td>\n");
         if (tdbIsSuper(track->tdb))
             {
@@ -570,62 +593,46 @@ if(tracksFound)
             {
             hTvDropDownClassVisOnly(track->track, track->visibility,
                                     track->canPack,
-#ifdef CB_SELECTION
-                                    "normalText",
-#else///ifndef CB_SELECTION
-                                    (track->visibility == tvHide) ? "hiddenText" : "normalText",
-#endif///ndef CB_SELECTION
+                                    "normalText", // Show hide as normal text too!     (track->visibility == tvHide) ? "hiddenText" : "normalText",
                                     trackDbSetting(track->tdb, "onlyVisibility"));
             }
         hPrintf("</td>\n");
-#ifdef CB_SELECTION
         hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
-        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE);
-#else///ifndef CB_SELECTION
-        hPrintf("<td>%s", track->shortLabel);
-        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE);
-        hPrintf("</td>\n");
-        hPrintf("<td><a target='_top' href='%s'>%s</a>", trackUrl(track->track, NULL), track->longLabel);
-#endif///ndef CB_SELECTION
+        compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");
         }
     hPrintf("</table>\n");
-#ifdef CB_SELECTION
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
-    //hPrintf("&nbsp;&nbsp;&nbsp;<i>%d tracks found</i>\n", tracksFound);
     hPrintf("<script type='text/javascript'>findTracksNormalizeFound();</script>\n");
-#else///ifndef CB_SELECTION
-    hButton("submit", "View in Browser");
-#endif///ndef CB_SELECTION
     hPrintf("\n</form>\n");
     }
-else
-    {
-    if(doSearch)
-        hPrintf("<p>No tracks found</p>\n");
-    }
 
-hPrintf("<p><b>Recently Done</b></p><ul>\n"
-#ifdef CB_SELECTION
+hPrintf("<p><b>Recently Done</b><ul>\n"
+        "<li>Deleting/Adding selection criteria with [-][+] buttons in 'Advanced Search'.</li>"
+        "<li>Found track list shows only the first 100 tracks with warning to narrow search.\"</li>\n"
+        "<li>Clicks in menu bar up top now work correctly.</li>\n"
         "<li>Found tracks are selected by checkboxes.</li>"
         "<li>Checkbox state should be persistent.  Subtracks selected will be checked in their composite.</li>"
-#endif///def CB_SELECTION
         "<li>Full descriptions of metadata items are indexed in simple search index (e.g. cell descriptions).</li>"
-        "</ul>"
-        "<p><b>Known Problems</b></p><ul><li>Menu bar up top doesn't work (clicks are ignored).</li>\n"
-        "<li>subtracks often come up with the wrong visibility (but saving visibility for subtracks does work).</li>"
-        "<li>Adding selection criteria with [+] button in 'Advanced Search' is not yet implemented.</li>"
+        "</ul></p>"
+        "<p><b>Known Problems</b><ul>"
+        "<li>Search results should be cleared when switching between simple and advanced tabs (do we agree on that?)</li>"
+        "<li>Subtracks often come up with the wrong visibility (but saving visibility for subtracks does work)."
+        "<BR>QUESTION: Upon selecting with checkbox, what is correct default vis for any track?  Perhaps 'full' for wigs, 'pack' for others?</li>"
         "<li>Too large of found track list results in slow scripts.</li>"
-        "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found.</li>"
-        "</ul>"
-        "<p><b>Suggested improvments:</b></p><ul><li>Found track list should be limited to 100 tracks with warning: \"Found 237 tracks... Please narrow search criteria to find fewer tracks.\"</li>\n"
+        "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found."
+        "<BR>QUESTION: Is that a bug? REM that description search is NOT inherited. (* Suggestions below.)</li>"
+        "</ul></p>"
+        "<p><b>Suggested improvments:</b><ul>\n"
         "<li>Only data tracks should be seen in found track list.  Found superTracks/composites should be converted into their children.</li>"
         "<li>Configuring found tracks should be by pop-up dialog box.</li>"
         "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.</li>"
         "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites.</li>"
-        "</ul>\n");
+        "<li>* 'Descrtiption' and 'Track Name' should be merged into a single search term.</li>"
+        "<li>* 'Descrtiption' should be inherited by subtracks?</li>"
+        "</ul></p>\n");
 
 webEndSectionTables();
 }

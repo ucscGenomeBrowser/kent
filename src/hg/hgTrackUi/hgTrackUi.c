@@ -42,7 +42,8 @@ static char const rcsid[] = "$Id: hgTrackUi.c,v 1.527 2010/06/04 21:54:56 angie 
 
 struct cart *cart = NULL;	/* Cookie cart with UI settings */
 char *database = NULL;		/* Current database. */
-char *chromosome = NULL;	        /* Chromosome. */
+char *chromosome = NULL;        /* Chromosome. */
+struct hash *trackHash = NULL;	/* Hash of all tracks in database. */
 
 void tfbsConsSitesUi(struct trackDb *tdb)
 {
@@ -2411,9 +2412,9 @@ if (tdbIsSuperTrack(tdb))
     }
 else if (tdbIsComposite(tdb))  // for the moment generalizing this to include other containers...
     {
-    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM);
+    hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
     }
-extraUiLinks(database,tdb);
+extraUiLinks(database,tdb, trackHash);
 }
 
 
@@ -2509,7 +2510,7 @@ if (!tdbIsSuper(tdb))
         if (trackDbSetting(tdb, "wgEncode"))
             {
             printf("&nbsp;&nbsp;");
-            makeDownloadsLink(database, tdb);
+            makeDownloadsLink(database, tdb, trackHash);
             }
         char *downArrow = "&dArr;";
         enum browserType browser = cgiBrowser();
@@ -2629,6 +2630,7 @@ cart = theCart;
 track = cartString(cart, "g");
 getDbAndGenome(cart, &database, &ignored, NULL);
 chromosome = cartUsualString(cart, "c", hDefaultChrom(database));
+trackHash = makeTrackHash(database, chromosome);
 if (sameWord(track, WIKI_TRACK_TABLE))
     tdb = trackDbForWikiTrack();
 else if (sameWord(track, RULER_TRACK_NAME))
@@ -2657,8 +2659,12 @@ else
     tdb = hTrackDbForTrack(database, track);
     }
 if (tdb == NULL)
+   {
+   uglyAbort("Can't find %s in track database %s chromosome %s.  TrackHash has %d els",
+	    track, database, chromosome, trackHash->elCount);
    errAbort("Can't find %s in track database %s chromosome %s",
 	    track, database, chromosome);
+   }
 char *super = trackDbGetSupertrackName(tdb);
 if (super)
     {

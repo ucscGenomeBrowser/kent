@@ -21,6 +21,7 @@
 
 int debug = 0;
 char *outputExtension = NULL;
+boolean bindingSites = FALSE;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 float minDelta = -1;
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
@@ -71,6 +72,7 @@ boolean oneBased = FALSE;
 
 
 static struct optionSpec optionSpecs[] = {
+    {"bindingSites", OPTION_BOOLEAN},
     {"clusterTable", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
     {"minDelta", OPTION_FLOAT},
@@ -362,6 +364,8 @@ lineFileClose(&lf);
 
 static void printLine(FILE *stream, char *chrom, int chromStart, int chromEnd, char *name, char *code, char *additional, char *key)
 {
+if(bindingSites)
+    return;
 if(oneBased)
     {
     chromStart++;
@@ -490,27 +494,35 @@ freeHash(&geneHash);
 return(retVal);
 }
 
-static DNA parseSnp(char *name, DNA *refCall)
+static DNA parseSnp(char *name, DNA *before, DNA *refCall)
 {
 int len = strlen(name);
 if(len == 1)
     {
+    if(before != NULL)
+        *before = 0;
     return name[0];
     }
 else if(strlen(name) == 3)
     {
     // N>N
+    if(before != NULL)
+        *before = name[0];
     return name[2];
     }
 else if(strlen(name) == 7)
     {
     // we arbitrarily favor the first listed SNP in unusual case of hetero snp
+    DNA snp = 0;
     if(refCall)
         *refCall = name[0];
     if(name[5] != name[0])
-        return name[5];
+        snp = name[5];
     else if(name[6] != name[0])
-        return name[6];
+        snp = name[6];
+    if(before != NULL)
+        *before = name[2] == snp ? name[3] : name[2];
+    return snp;
     }
 else
     {
@@ -591,7 +603,7 @@ boolean markovTableExists = markovTable != NULL && sqlTableExists(conn, markovTa
 long time;
 struct genePred *genes = NULL;
 
-if(!skipGeneModel)
+if(!skipGeneModel || bindingSites)
     {
     time = clock1000();
     genes = readGenes(database, conn);
@@ -673,7 +685,7 @@ while(!done)
                 }
             else
                 {
-                DNA snp = parseSnp(overlapA->name, NULL);
+                DNA snp = parseSnp(overlapA->name, NULL, NULL);
                 if(snp)
                     {
                     unsigned codonStart;
@@ -805,119 +817,190 @@ while(!done)
         for (site = sites; site != NULL; site = site->next)
             {
             struct range *range = genomeRangeTreeAllOverlapping(tree, site->chrom, site->chromStart, site->chromEnd);
-            for (; range != NULL; range = range->next)
+            // fprintf(stderr, "%s\t%d\t%d\t%s\n", site->chrom, site->chromStart, site->chromEnd, site->name);
+            if(bindingSites)
                 {
-                DNA snp = 0;
-                DNA refCall = 0;
-                char line[256];
-                char *code = NULL;
-                safef(line, sizeof(line), ".");
-                struct bed7 *bed = (struct bed7 *) range->val;
-                snp = parseSnp(bed->name, &refCall);
-            
-                // XXXX && motifTableExists)
-                if(snp)
+                if(markovTable != NULL)
+                    errAbort("markovTables not supported for -bindingSites");
+                if(range)
                     {
-                    struct dnaSeq *seq = NULL;
+                    struct dnaSeq *beforeSeq, *afterSeq = NULL;
                     char beforeDna[256], afterDna[256];
-                    int pos;
                     float delta, before, after, maxDelta = 0;
-                    boolean cacheHit;
-                    struct dnaMotif *motif = loadMotif(database, site->name, &cacheHit);
-                    double mark2[5][5][5];
+                    int count = 0;
 
-                    // XXXX cache markov models? (we should be processing them in manner where we can use the same one repeatedly).
-                    if(markovTableExists && loadMark2(conn2, markovTable, bed->chrom, bed->chromStart, bed->chromStart + 1, mark2))
+                    struct dnaMotif *motif = loadMotif(database, site->name, NULL);
+                    beforeSeq = hDnaFromSeq(database, site->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                    afterSeq = hDnaFromSeq(database, site->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                    if(*site->strand == '-')
                         {
-                        if(!cacheHit)
-                            dnaMotifMakeLog2(motif);
-                        dnaMarkMakeLog2(mark2);
-
-                        seq = hDnaFromSeq(database, bed->chrom, site->chromStart - 2, site->chromEnd + 2, dnaUpper);
-                        if(refCall && seq->dna[bed->chromStart - site->chromStart + 2] != refCall)
-                            errAbort("Actual reference doesn't match what is reported in input file");
-                        if(*site->strand == '-')
-                            {
-                            reverseComplement(seq->dna, seq->size);
-                            reverseComplement(&snp, 1);
-                            // XXXX is the following correct?
-                            pos = site->chromEnd - (bed->chromStart + 1);
-                            }
-                        else
-                            pos = bed->chromStart - site->chromStart;
-                        before = dnaMotifBitScoreWithMarkovBg(motif, seq->dna, mark2);
-                        seq->dna[pos + 2] = snp;
-                        after = dnaMotifBitScoreWithMarkovBg(motif, seq->dna, mark2);
-                        delta = after - before;
-                        verbose(2, "markov before/after: %.2f>%.2f (%.2f)\n", before, after, site->score);
+                        reverseComplement(beforeSeq->dna, beforeSeq->size);
+                        reverseComplement(afterSeq->dna, afterSeq->size);
                         }
-                    else
+                    for (; range != NULL; range = range->next)
                         {
-                        seq = hDnaFromSeq(database, bed->chrom, site->chromStart, site->chromEnd, dnaUpper);
-                        if(refCall && seq->dna[bed->chromStart - site->chromStart] != refCall)
-                            errAbort("Actual reference doesn't match what is reported in input file");
-                        if(*site->strand == '-')
-                            {
-                            reverseComplement(seq->dna, seq->size);
-                            reverseComplement(&snp, 1);
-                            // XXXX is the following correct?
-                            pos = site->chromEnd - (bed->chromStart + 1);
-                            }
-                        else
-                            pos = bed->chromStart - site->chromStart;
+                        DNA snp, beforeSnp = 0;
+                        int pos;
+                        struct bed7 *bed = (struct bed7 *) range->val;
 
-                        before = dnaMotifBitScore(motif, seq->dna);
-                        strncpy(beforeDna, seq->dna, seq->size);
-                        beforeDna[seq->size] = 0;
-                        seq->dna[pos] = snp;
-                        after = dnaMotifBitScore(motif, seq->dna);
-                        strncpy(afterDna, seq->dna, seq->size);
-                        afterDna[seq->size] = 0;
-                        delta = after - before;
+                        count++;
+                        snp = parseSnp(bed->name, &beforeSnp, NULL);
+                        if(beforeSnp && snp)
+                            {
+                            if(*site->strand == '-')
+                                {
+                                reverseComplement(&snp, 1);
+                                reverseComplement(&beforeSnp, 1);
+                                pos = site->chromEnd - (bed->chromStart + 1);
+                                }
+                            else
+                                pos = bed->chromStart - site->chromStart;
+                            beforeSeq->dna[pos] = beforeSnp;
+                            afterSeq->dna[pos] = snp;
+                            }
                         }
+                    before = dnaMotifBitScore(motif, beforeSeq->dna);
+                    strncpy(beforeDna, beforeSeq->dna, beforeSeq->size);
+                    beforeDna[beforeSeq->size] = 0;
+                    after = dnaMotifBitScore(motif, afterSeq->dna);
+                    strncpy(afterDna, afterSeq->dna, afterSeq->size);
+                    afterDna[afterSeq->size] = 0;
+                    delta = after - before;
+                    freeDnaSeq(&beforeSeq);
+                    freeDnaSeq(&afterSeq);
                     if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
                         {
                         int minDistance = 0;
-                        maxDelta = delta;
-                        if(debug)
-                            fprintf(stderr, "%s:%d-%d: %s\t%c-%c: %d == %d ?; %.2f -> %.2f\n\t%s\t%s\n",
-                                    bed->chrom, bed->chromStart, bed->chromEnd,
-                                    bed->name, seq->dna[pos], snp,
-                                    seq->size, motif->columnCount, before, after, beforeDna, afterDna);
-                        struct genePred *nearestGene = findNearestGene((struct bed *) bed, genes, maxNearestGene, &minDistance);
+                        char buf[256];
+                        struct genePred *nearestGene = findNearestGene((struct bed *) site, genes, maxNearestGene, &minDistance);
                         if(nearestGene == NULL)
-                            safef(line, sizeof(line), "%s;%.2f>%.2f;%s%d", site->name, before, after, site->strand, pos + 1);
+                            sprintf(buf, "\t");
                         else
-                            safef(line, sizeof(line), "%s;%.2f>%.2f;%s%d;%s;%d", site->name, before, after, site->strand, pos + 1, nearestGene->name, minDistance);
-                        code = REGULATORY;
-                        // XXXX record (somehow) that we have used this record?
+                            safef(buf, sizeof(buf), "%s\t%d", nearestGene->name, minDistance);
+                        fprintf(output, "%s\t%d\t%d\t%s\t%d\t%.2f>%.2f\t%s\n", 
+                                site->chrom, site->chromStart, site->chromEnd, site->name, count, before, after, buf);
                         }
-                    freeDnaSeq(&seq);
                     }
-                if(code != NULL)
+                }
+            else
+                {
+                for (; range != NULL; range = range->next)
                     {
-                    char key[256];
-                    printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", code, line, bed->key);
-                    safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
-                    if (hashLookup(used, key) == NULL)
-                        hashAddInt(used, key, 1);
+                    DNA snp = 0;
+                    DNA refCall = 0;
+                    char line[256];
+                    char *code = NULL;
+                    safef(line, sizeof(line), ".");
+                    struct bed7 *bed = (struct bed7 *) range->val;
+                    snp = parseSnp(bed->name, NULL, &refCall);
+            
+                    // XXXX && motifTableExists)
+                    if(snp)
+                        {
+                        struct dnaSeq *seq = NULL;
+                        char beforeDna[256], afterDna[256];
+                        int pos;
+                        float delta, before, after, maxDelta = 0;
+                        boolean cacheHit;
+                        struct dnaMotif *motif = loadMotif(database, site->name, &cacheHit);
+                        double mark2[5][5][5];
+
+                        // XXXX cache markov models? (we should be processing them in manner where we can use the same one repeatedly).
+                        if(markovTableExists && loadMark2(conn2, markovTable, bed->chrom, bed->chromStart, bed->chromStart + 1, mark2))
+                            {
+                            if(!cacheHit)
+                                dnaMotifMakeLog2(motif);
+                            dnaMarkMakeLog2(mark2);
+
+                            seq = hDnaFromSeq(database, bed->chrom, site->chromStart - 2, site->chromEnd + 2, dnaUpper);
+                            if(refCall && seq->dna[bed->chromStart - site->chromStart + 2] != refCall)
+                                errAbort("Actual reference doesn't match what is reported in input file");
+                            if(*site->strand == '-')
+                                {
+                                reverseComplement(seq->dna, seq->size);
+                                reverseComplement(&snp, 1);
+                                // XXXX is the following correct?
+                                pos = site->chromEnd - (bed->chromStart + 1);
+                                }
+                            else
+                                pos = bed->chromStart - site->chromStart;
+                            before = dnaMotifBitScoreWithMarkovBg(motif, seq->dna, mark2);
+                            seq->dna[pos + 2] = snp;
+                            after = dnaMotifBitScoreWithMarkovBg(motif, seq->dna, mark2);
+                            delta = after - before;
+                            verbose(2, "markov before/after: %.2f>%.2f (%.2f)\n", before, after, site->score);
+                            }
+                        else
+                            {
+                            seq = hDnaFromSeq(database, bed->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                            if(refCall && seq->dna[bed->chromStart - site->chromStart] != refCall)
+                                errAbort("Actual reference doesn't match what is reported in input file");
+                            if(*site->strand == '-')
+                                {
+                                reverseComplement(seq->dna, seq->size);
+                                reverseComplement(&snp, 1);
+                                // XXXX is the following correct?
+                                pos = site->chromEnd - (bed->chromStart + 1);
+                                }
+                            else
+                                pos = bed->chromStart - site->chromStart;
+
+                            before = dnaMotifBitScore(motif, seq->dna);
+                            strncpy(beforeDna, seq->dna, seq->size);
+                            beforeDna[seq->size] = 0;
+                            seq->dna[pos] = snp;
+                            after = dnaMotifBitScore(motif, seq->dna);
+                            strncpy(afterDna, seq->dna, seq->size);
+                            afterDna[seq->size] = 0;
+                            delta = after - before;
+                            }
+                        if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
+                            {
+                            int minDistance = 0;
+                            maxDelta = delta;
+                            if(debug)
+                                fprintf(stderr, "%s:%d-%d: %s\t%c-%c: %d == %d ?; %.2f -> %.2f\n\t%s\t%s\n",
+                                        bed->chrom, bed->chromStart, bed->chromEnd,
+                                        bed->name, seq->dna[pos], snp,
+                                        seq->size, motif->columnCount, before, after, beforeDna, afterDna);
+                            struct genePred *nearestGene = findNearestGene((struct bed *) bed, genes, maxNearestGene, &minDistance);
+                            if(nearestGene == NULL)
+                                safef(line, sizeof(line), "%s;%.2f>%.2f;%s%d", site->name, before, after, site->strand, pos + 1);
+                            else
+                                safef(line, sizeof(line), "%s;%.2f>%.2f;%s%d;%s;%d", site->name, before, after, site->strand, pos + 1, nearestGene->name, minDistance);
+                            code = REGULATORY;
+                            // XXXX record (somehow) that we have used this record?
+                            }
+                        freeDnaSeq(&seq);
+                        }
+                    if(code != NULL)
+                        {
+                        char key[256];
+                        printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", code, line, bed->key);
+                        safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
+                        if (hashLookup(used, key) == NULL)
+                            hashAddInt(used, key, 1);
+                        }
                     }
                 }
             }
         bed6FloatScoreFreeList(&sites);
         }
-    
-    for(bed = unusedA; bed != NULL; bed = bed->next)
+
+    if(!bindingSites)
         {
-        char key[256];
-        safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
-        genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
-        if (hashLookup(used, key) == NULL)
+        for(bed = unusedA; bed != NULL; bed = bed->next)
             {
-            if(bed->code == NULL)
-                printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
-            else
-                printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, bed->code, NONCODING, ".", bed->key);
+            char key[256];
+            safef(key, sizeof(key), "%s:%d:%d", bed->chrom, bed->chromStart, bed->chromEnd);
+            genomeRangeTreeAddVal(tree, bed->chrom, bed->chromStart, bed->chromEnd, (void *) bed, NULL);
+            if (hashLookup(used, key) == NULL)
+                {
+                if(bed->code == NULL)
+                    printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, ".", INTERGENIC, ".", bed->key);
+                else
+                    printLine(output, bed->chrom, bed->chromStart, bed->chromEnd, bed->code, NONCODING, ".", bed->key);
+                }
             }
         }
     
@@ -938,6 +1021,7 @@ sqlDisconnect(&conn2);
 int main(int argc, char** argv)
 {
 optionInit(&argc, argv, optionSpecs);
+bindingSites = optionExists("bindingSites");
 clusterTable = optionVal("clusterTable", clusterTable);
 lazyLoading = optionExists("lazyLoading");
 markovTable = optionVal("markovTable", NULL);
@@ -946,7 +1030,10 @@ minDelta = optionFloat("minDelta", minDelta);
 outputExtension = optionVal("outputExtension", NULL);
 skipGeneModel = optionExists("skipGeneModel");
 oneBased = optionExists("oneBased");
-
+if(bindingSites)
+    {
+    lazyLoading = TRUE;
+    }
 if (argc < 3)
     usage();
 mutationClassifier(argv[1], argv + 2, argc - 2);

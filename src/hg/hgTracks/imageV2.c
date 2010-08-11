@@ -1556,23 +1556,10 @@ imgBoxTracksNormalizeOrder(imgBox);
 //    imgBoxShow(NULL,imgBox,0);
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
-//commonCssStyles();
 #ifdef IMAGEv2_DRAG_REORDER
 jsIncludeFile("jquery.tablednd.js", NULL);
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
-#ifdef IMAGEv2_DRAG_REORDER
-hPrintf(".trDrag {background-color:#ccFFcc;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
-hPrintf(".dragHandle {cursor: s-resize;}\n");
-#endif//def IMAGEv2_DRAG_REORDER
-#ifdef FLAT_TRACK_LIST
-hPrintf(".btn  {border-style:outset; background-color:#cccccc; border-color:#dddddd;}\n");
-hPrintf(".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // connect none
-hPrintf(".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
-hPrintf(".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
-hPrintf(".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
-hPrintf(".btnBlue {background-color:#91B3E6; border-color:#91B3E6;}\n");
-#endif//def FLAT_TRACK_LIST
 hPrintf("div.dragZoom {cursor: text;}\n");
 //#ifndef FLAT_TRACK_LIST
 hPrintf("img.button {position:relative; border:0;}\n");

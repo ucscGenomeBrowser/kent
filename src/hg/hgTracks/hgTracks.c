@@ -1440,31 +1440,14 @@ static int doOwnLeftLabels(struct track *track, struct hvGfx *hvg,
                                                 MgFont *font, int y)
 /* Track draws it own, custom left labels */
 {
-int pixWidth = tl.picWidth;
 int fontHeight = mgFontLineHeight(font);
 int tHeight = trackPlusLabelHeight(track, fontHeight);
 Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
-if (track->limitedVis == tvPack)
-    { /*XXX This needs to be looked at, no example yet*/
-    hvGfxSetClip(hvg, gfxBorder+trackTabWidth+1, y,
-              pixWidth-2*gfxBorder-trackTabWidth-1, track->height);
-    track->drawLeftLabels(track, winStart, winEnd,
-                          hvg, leftLabelX, y, leftLabelWidth, tHeight,
-                          isWithCenterLabels(track), font, labelColor,
-                          track->limitedVis);
-    }
-else
-    {
-    hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
-
-    /* when the limitedVis == tvPack is correct above,
-     *  this should be outside this else clause
-     */
-    track->drawLeftLabels(track, winStart, winEnd,
-                          hvg, leftLabelX, y, leftLabelWidth, tHeight,
-                          isWithCenterLabels(track), font, labelColor,
-                          track->limitedVis);
-    }
+hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
+track->drawLeftLabels(track, winStart, winEnd,
+		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
+		      isWithCenterLabels(track), font, labelColor,
+		      track->limitedVis);
 hvGfxUnclip(hvg);
 y += tHeight;
 return y;
@@ -1570,22 +1553,32 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
 #ifdef SUBTRACKS_HAVE_VIS
-char *var = cartOptionalString(cart, subtrack->track);
-if (var)
+if (tdbIsCompositeChild(subtrack->tdb))
     {
-    subtrack->visibility = hTvFromString(var);
-
-    if (subtrack->limitedVisSet)
-        subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
-    else
+    char setting[512];
+    safef(setting,sizeof(setting),"%s_sel",subtrack->track);  // Must have "{trackName}_sel" to use subtrack level vis!
+    // FIXME: four state logic is for subtracks only and exists as static in hui.c.  When time is right, make this logic non-static
+    #define FOURSTATE_CHECKED           1
+    if (FOURSTATE_CHECKED == cartUsualInt(cart, setting, 0)) // Don't need all 4 states here.  Just checked/not
         {
-        if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
-            subtrack->loadItems(subtrack);
+        char *var = cartOptionalString(cart, subtrack->track);
+        if (var)
+            {
+            subtrack->visibility = hTvFromString(var);
 
-        limitVisibility(subtrack);
+            if (subtrack->limitedVisSet)
+                subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
+            else
+                {
+                if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
+                    subtrack->loadItems(subtrack);
+
+                limitVisibility(subtrack);
+                }
+
+            return hTvFromString(var);
+            }
         }
-
-    return hTvFromString(var);
     }
 #endif///def SUBTRACKS_HAVE_VIS
 
@@ -4360,38 +4353,12 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
-void subtrackVisCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
-/* When composite/view vis changes, remove subtrack specific vis */
+void subtrackCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view settings changes, remove subtrack specific vis */
 {
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
-    {
-    if(!tdbIsComposite(track->tdb))
-        continue;
-    boolean compositeWide = cartValueHasChanged(newCart,oldVars,track->track,TRUE);
-
-    boolean hasViews = FALSE;
-    struct trackDb *tdbView = track->tdb->subtracks;
-    for (;tdbView != NULL; tdbView = tdbView->next)
-        {
-        char * view = NULL;
-        if (!tdbIsView(tdbView,&view))
-            break;
-
-        hasViews = TRUE;
-        boolean viewLevel = FALSE;
-        if(!compositeWide)
-            {
-            char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
-            safef(settingName,sizeof(settingName),"%s.%s.vis",track->track,view);
-            viewLevel = cartValueHasChanged(newCart,oldVars,settingName,TRUE);
-            }
-        if(compositeWide || viewLevel)
-            cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE); // clean up children, skipping view
-        }
-    if (compositeWide && !hasViews)
-        cartRemoveFromTdbTree(newCart,track->tdb,NULL,TRUE); // clean up children, skipping composite
-    }
+    cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4463,8 +4430,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     }
 #endif///def IMAGEv2_DRAG_REORDER
 #ifdef SUBTRACKS_HAVE_VIS
-// Here is where subtrack vis override must be removed when composite vis is updated
-subtrackVisCartCleanup(trackList,cart,oldVars);
+subtrackCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
@@ -5655,6 +5621,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 
+hPrintf(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 if(dragZooming)

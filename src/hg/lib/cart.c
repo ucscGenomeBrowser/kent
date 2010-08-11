@@ -763,6 +763,22 @@ unsigned int cartUserId(struct cart *cart)
 return cart->userInfo->id;
 }
 
+static int cartRemoveAndCount(struct cart *cart, char *var)
+/* Remove variable from cart, returning count of removed vars. */
+{
+int removed = 0;
+struct hashEl *hel = hashLookup(cart->hash, var);
+while (hel != NULL)
+    {
+    struct hashEl *nextHel = hashLookupNext(hel);
+    freez(&hel->val);
+    hashRemove(cart->hash, var);
+    removed++;
+    hel = nextHel;
+    }
+return removed;
+}
+
 void cartRemove(struct cart *cart, char *var)
 /* Remove variable from cart. */
 {
@@ -1923,11 +1939,66 @@ if (oldValue == NULL)
 return (differentString(newValue,oldValue));
 }
 
+struct slRef *cartNamesLike(struct cart *cart, char *wildCard)
+/* Returns reference list of all variable names that match wildCard. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+struct slRef *matches = NULL;
 
-void cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent)
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (wildMatch(wildCard, el->name))
+        slAddHead(&matches,slRefNew(el->name));
+    }
+hashElFreeList(&elList);
+return matches;
+}
+
+struct slRef *cartNamesPrefixedBy(struct cart *cart, char *prefix)
+/* Returns reference list of all variable names with given prefix. */
+{
+struct hashEl *el, *elList = hashElListHash(cart->hash);
+struct slRef *matches = NULL;
+
+for (el = elList; el != NULL; el = el->next)
+    {
+    if (startsWith(prefix, el->name))
+        slAddHead(&matches,slRefNew(el->name));
+    }
+hashElFreeList(&elList);
+return matches;
+}
+
+int cartNamesPruneChanged(struct cart *newCart,struct hash *oldVars,
+                          struct slRef **cartNames,boolean ignoreRemoved,boolean unChanged)
+/* Prunes a list of cartNames if the settings have changed between new and old cart.
+   Returns pruned count */
+{
+int pruned = 0;
+struct slRef *oldList = *cartNames;
+struct slRef *newList = NULL;
+struct slRef *oneName = NULL;
+while ((oneName = slPopHead(&oldList)) != NULL)
+    {
+    boolean thisOneChanged = cartValueHasChanged(newCart,oldVars,oneName->val,ignoreRemoved);
+    if (unChanged != thisOneChanged)
+        slAddHead(&newList,oneName);
+    else
+        {
+        freeMem(oneName);
+        pruned++;
+        }
+    }
+*cartNames = newList;
+return pruned;
+}
+
+
+int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent)
 /* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
    If suffix NULL then removes 'trackName' which holds visibility */
 {
+int removed = 0;
 struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?tdb->subtracks:tdb);
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
@@ -1937,8 +2008,92 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
         safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
     else
         safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
-    cartRemove(cart,settingName);
+    removed += cartRemoveAndCount(cart,settingName);
     }
+return removed;
+}
+
+
+boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars)
+/* When composite/view settings changes, remove subtrack specific settings
+   Returns TRUE if any cart vars are removed */
+{
+if (!tdbIsComposite(tdb))
+    return FALSE;
+
+// Build list of current settings for composite
+char setting[512];
+safef(setting,sizeof(setting),"%s.",tdb->track);
+struct slRef *changedSettings = cartNamesPrefixedBy(newCart, setting);
+if (changedSettings == NULL)
+    return FALSE;
+
+// Prune list to only those which have changed
+(void)cartNamesPruneChanged(newCart,oldVars,&changedSettings,TRUE,FALSE);
+if (changedSettings == NULL)
+    return FALSE;
+
+struct slRef *oneName = NULL;
+char * var = NULL;
+boolean clensed = FALSE;
+
+// vis is a special additive case! composite or view level changes then remove subtrack vis
+boolean compositeVisChanged = cartValueHasChanged(newCart,oldVars,tdb->track,TRUE);
+
+
+// Walk through views
+boolean hasViews = FALSE;
+struct trackDb *tdbView = tdb->subtracks;
+for (;tdbView != NULL; tdbView = tdbView->next)
+    {
+    boolean viewVisChanged = FALSE;
+    char * view = NULL;
+    if (!tdbIsView(tdbView,&view))
+        break;
+
+    hasViews = TRUE;
+    safef(setting,sizeof(setting),"%s.%s.",tdb->track,view);
+    struct slRef *leftOvers = NULL;
+    // Walk through settings that match this view
+    while ((oneName = slPopHead(&changedSettings)) != NULL)
+        {
+        if(!startsWith(setting,oneName->val))
+            slAddHead(&leftOvers,oneName);
+        else
+            {
+            var = oneName->val + strlen(setting);
+            if (sameString(var,"vis"))
+                viewVisChanged = TRUE;
+            else {
+                if (cartRemoveFromTdbTree(newCart,tdbView,var,TRUE) > 0)
+                    clensed = TRUE;
+            }
+            freeMem(oneName);
+            }
+        }
+    if  (compositeVisChanged || viewVisChanged)
+        { // vis is a special additive case!
+        if (cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE) > 0)
+            clensed = TRUE;
+        }
+    changedSettings = leftOvers;
+    }
+
+// Now deal with anything remaining at the composite level
+while ((oneName = slPopHead(&changedSettings)) != NULL)
+    {
+    var = oneName->val + strlen(tdb->track) + 1;
+    if(cartRemoveFromTdbTree(newCart,tdb,var,TRUE) > 0)
+        clensed = TRUE;
+    freeMem(oneName);
+    }
+if  (compositeVisChanged || !hasViews)
+    { // vis is a special additive case!
+    if (cartRemoveFromTdbTree(newCart,tdb,NULL,TRUE) > 0)
+        clensed = TRUE;
+    }
+
+return clensed;
 }
 
 
