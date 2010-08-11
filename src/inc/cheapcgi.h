@@ -22,7 +22,10 @@
 #define COLOR_BG_GHOST          "#EEEEEE"
 #define COLOR_BG_PALE           "#F8F8F8"
 #define COLOR_DARKGREEN         "#008800"
+#define COLOR_LTGREEN           "#CCFFCC"
 #define COLOR_DARKBLUE          "#000088"
+#define COLOR_BLUE_BUTTON       "#91B3E6"
+#define COLOR_DARKGREY          "#DDDDDD"
 #define COLOR_LTGREY            "#CCCCCC"
 #define COLOR_YELLOW            "#FFFF00"
 #define COLOR_LTYELLOW          "#FFF380"
@@ -442,8 +445,8 @@ void cgiResetState();
 /* This is for reloading CGI settings multiple times in the same program
  * execution.  No effect if state has not yet been initialized. */
 
-void commonCssStyles();
-/* Defines a few common styles to use through CSS */
+char *commonCssStyles();
+/* Returns a string of common CSS styles */
 
 char *javaScriptLiteralEncode(char *inString);
 /* Use backslash escaping on newline
