@@ -512,9 +512,24 @@ double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double
 boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved);
 /* Returns TRUE if new cart setting has changed from old cart setting */
 
-void cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent);
+struct slRef *cartNamesLike(struct cart *cart, char *wildCard);
+/* Returns reference list of all variable names that match wildCard. */
+
+struct slRef *cartNamesPrefixedBy(struct cart *cart, char *prefix);
+/* Returns reference list of all variable names with given prefix. */
+
+int cartNamesPruneChanged(struct cart *newCart,struct hash *oldVars,
+                          struct slRef **cartNames,boolean ignoreRemoved,boolean unChanged);
+/* Prunes a list of cartNames if the settings have changed between new and old cart.
+   Returns pruned count */
+
+int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent);
 /* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
    If suffix NULL then removes 'trackName' which holds visibility */
+
+boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars);
+/* When composite/view settings changes, remove subtrack specific settings
+   Returns TRUE if any cart vars are removed */
 
 #endif /* CART_H */
 

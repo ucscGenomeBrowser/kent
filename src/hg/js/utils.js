@@ -721,7 +721,7 @@ function _launchWaitOnFunction()
         else
             warn("_launchWaitOnFunction called with " + funcArgs.length + " arguments.  Only 5 are supported.");
     }
-    // Special if the first var is an obj
+    // Special if the first var is a button that can visually be inset
     if(funcArgs.length > 0 && funcArgs[0].type != undefined) {
         if(funcArgs[0].type == 'button' && $(funcArgs[0]).hasClass('inOutButton')) {
             $(funcArgs[0]).css('borderStyle',"outset");
@@ -754,7 +754,7 @@ function waitOnFunction(func)
     }
     $(waitMask).css('display','block');
 
-    // Special if the first var is an obj
+    // Special if the first var is a button that can visually be inset
     if(arguments.length > 1 && arguments[1].type != undefined) {
         if(arguments[1].type == 'button' && $(arguments[1]).hasClass('inOutButton')) {
             $(arguments[1]).css( 'borderStyle',"inset");
@@ -767,6 +767,6 @@ function waitOnFunction(func)
     }
     gWaitFunc = func;
 
-    setTimeout('_launchWaitOnFunction();',50); // Necessary incase the selectEnd was over a map item. select takes precedence.
+    setTimeout('_launchWaitOnFunction();',50);
 
 }
