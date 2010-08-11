@@ -277,6 +277,25 @@ nameTranslation "s/^\([0-9XYU][0-9]*\)/chr\1/; s/^dmel_mitochondrion_genome/chrM
     # 30276468 bases of 162367812 (18.647%) in intersection
 
 ############################################################################
+#  ce9 - C. elegans - Ensembl Genes version 59  (DONE - 2010-08-10 - hiram)
+    ssh hgwdev
+    cd /hive/data/genomes/ce9
+    cat << '_EOF_' > ce9.ensGene.ra
+# required db variable
+db ce9
+# optional nameTranslation, the sed command that will transform
+#       Ensemble names to UCSC names.  With quotes just to make sure.
+nameTranslation "s/^\([IVX]\)/chr\1/; s/^MtDNA/chrM/"
+'_EOF_'
+#  << happy emacs
+
+    doEnsGeneUpdate.pl  -ensVersion=59 ce9.ensGene.ra
+    ssh hgwdev
+    cd /hive/data/genomes/ce9/bed/ensGene.59
+    featureBits ce9 ensGene
+    # 30249205 bases of 100286004 (30.163%) in intersection
+
+############################################################################
 #  anoCar1 - Lizard - Ensembl Genes version 59  (DONE - 2010-08-09 - hiram)
     ssh hgwdev
     cd /hive/data/genomes/anoCar1
