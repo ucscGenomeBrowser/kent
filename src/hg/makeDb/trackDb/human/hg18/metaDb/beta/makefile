@@ -8,5 +8,6 @@ wgEncodeUwDGF.ra\
 wgEncodeUwDnaseSeq.ra\
 wgEncodeCaltechRnaSeq.ra\
 wgEncodeReg.ra\
+wgEncodeUwAffyExonArray.ra\
 
 include ../../../../makefile.metaDb
