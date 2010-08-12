@@ -7,5 +7,6 @@ wgEncodeUwChIPSeq.ra\
 wgEncodeUwDGF.ra\
 wgEncodeUwDnaseSeq.ra\
 wgEncodeCaltechRnaSeq.ra\
+wgEncodeReg.ra\
 
 include ../../../../makefile.metaDb
