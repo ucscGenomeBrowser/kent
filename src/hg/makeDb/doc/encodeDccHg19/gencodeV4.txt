@@ -104,3 +104,25 @@ echo "rename table wgEncodeGencode2wayConsPseudo to wgEncodeGencode2wayConsPseud
 
 cat gencode.v3.2wayconspseudos.GRCh37.gtf | gzip -c > /hive/groups/encode/dcc/pipeline/downloads/hg19/wgEncodeGencode/wgEncodeGencode2wayConsPseudoV4.gtf.gz
 
+# build metadata
+for i in YalePseudo 2wayConsPseudo Manual Auto Classes PolyA
+do
+table="wgEncodeGencode"$i"V4"
+
+echo "metaObject $table"
+echo "objType table"
+echo "annotation Automatic"
+echo "composite wgEncodeGencode"
+echo "dataType Gencode"
+echo "dataVersion ENCODE May 2010 Freeze"
+echo "dateSubmitted 2010-05-01"
+echo "dateUnrestricted 2011-02-01"
+echo "fileName "$table".gtf.gz"
+echo "grant Hubbard"
+echo "lab Sanger"
+echo "level 3"
+echo "project wgEncode"
+echo "submittedDataVersion V4"
+echo "tableName "$table
+echo 
+done

@@ -97,7 +97,7 @@ for (displayGroup = displayGroupList; displayGroup != NULL; displayGroup = displ
     }
 webPrintLinkCellStart();
 printf("%s ", tdb->longLabel);
-compositeMetadataToggle(database, tdb, "...", TRUE, FALSE);
+compositeMetadataToggle(database, tdb, "...", TRUE, FALSE, trackHash);
 webPrintLinkCellEnd();
 }
 

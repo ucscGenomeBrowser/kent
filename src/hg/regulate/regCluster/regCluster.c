@@ -81,8 +81,8 @@ for (range = rangeList; range != NULL; range = range->next)
 	    }
 	double score = clScoreScale * cluster->maxSubScore;
 	if (score > 1000) score = 1000;
-	fprintf(fBed, "%s\t%d\t%d\t%d\t%g\n", chrom, 
-		cluster->chromStart, cluster->chromEnd, uniqHash->elCount, score);
+	fprintf(fBed, "%s\t%d\t%d\t%d\t%d\n", chrom, 
+		cluster->chromStart, cluster->chromEnd, uniqHash->elCount, round(score));
 	hashFree(&uniqHash);
 	}
     }
