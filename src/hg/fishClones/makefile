@@ -5,19 +5,14 @@ MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 A = fishClones
-
 O = $A.o
 
-compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
-	${STRIP} $A${EXE}
-	chmod a+rx $A
-	cp $A ${BINDIR}
+$A: $O 
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-debug: $O
-	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
-	mv ${AOUT} $A${EXE}
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 lib:
 	cd ../../lib && ${MAKE}
@@ -26,4 +21,4 @@ tags:
 	ctags *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
 
 clean::
-	rm -f fishClones ${O}
+	rm -f ${A} ${O}
