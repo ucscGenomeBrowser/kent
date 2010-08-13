@@ -346,7 +346,7 @@ closeWibFile(wds);	/*	closes only if it is open	*/
 if (wds->conn)
     {
     sqlFreeResult(&wds->sr);
-    sqlDisconnect(&wds->conn);
+    hFreeConn(&wds->conn);
     }
 if (wds->sqlConstraint)
     freez(&wds->sqlConstraint);	/*	always reconstructed at open time */
@@ -411,12 +411,7 @@ else
 
     verbose(VERBOSE_SQL_ROW_LEVEL, "#\t%s\n", query->string);
     if (!wds->conn)
-	{
-	if (sameString(CUSTOM_TRASH,wds->db))
-	    wds->conn = sqlConnect(CUSTOM_TRASH);
-	else
-	    wds->conn = sqlConnect(wds->db);
-	}
+	wds->conn = hAllocConn(wds->db);
     wds->sr = sqlGetResult(wds->conn,query->string);
     }
 }

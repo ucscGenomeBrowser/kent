@@ -48,7 +48,17 @@ type             bam
 hasReplicates    yes
 required         yes
 
-view             RawData
+# Solexa paired sequence
+view             FastqRd1
 type             fastq
 hasReplicates    yes
 required         no
+downloadOnly    yes
+
+view             FastqRd2
+type             fastq
+hasReplicates    yes
+required         no
+downloadOnly    yes
+
+

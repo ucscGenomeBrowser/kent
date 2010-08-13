@@ -194,6 +194,12 @@ nameTranslation "s/^VIII/chrVIII/; s/^VII/chrVII/; s/^VI/chrVI/; s/^V/chrV/; s/^
     cd /hive/data/genomes/sacCer2/bed/ensGene.59
     featureBits sacCer2 ensGene
     # 8917060 bases of 12162995 (73.313%) in intersection
+    #####################################################################
+    # the sacCer2 sequence at Ensembl is a different version.  A liftOver
+    # chain file was constructed, the genes lifted and reloaded.
+    # Genes on chrX and chrXIV moved a single base after the single difference
+    # on each chromosome.  Note the scripts used in:
+# /hive/data/genomes/sacCer2/ensembl.versions.sequence/blat.2010-08-11/*.sh
 
 ############################################################################
 #  gasAcu1 - Stickleback - Ensembl Genes version 59  (DONE - 2010-08-10 - hiram)

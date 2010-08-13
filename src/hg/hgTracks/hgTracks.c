@@ -1555,11 +1555,7 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 #ifdef SUBTRACKS_HAVE_VIS
 if (tdbIsCompositeChild(subtrack->tdb))
     {
-    char setting[512];
-    safef(setting,sizeof(setting),"%s_sel",subtrack->track);  // Must have "{trackName}_sel" to use subtrack level vis!
-    // FIXME: four state logic is for subtracks only and exists as static in hui.c.  When time is right, make this logic non-static
-    #define FOURSTATE_CHECKED           1
-    if (FOURSTATE_CHECKED == cartUsualInt(cart, setting, 0)) // Don't need all 4 states here.  Just checked/not
+    if (fourStateVisible(subtrackFourStateChecked(subtrack->tdb,cart))) // Don't need all 4 states here.  Visible=checked&&enabled
         {
         char *var = cartOptionalString(cart, subtrack->track);
         if (var)
@@ -1575,10 +1571,11 @@ if (tdbIsCompositeChild(subtrack->tdb))
 
                 limitVisibility(subtrack);
                 }
-
             return hTvFromString(var);
             }
         }
+    else
+        return tvHide;
     }
 #endif///def SUBTRACKS_HAVE_VIS
 
@@ -1588,22 +1585,28 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
+    struct trackDb *parentTdb = trackDbCompositeParent(tdb);
+    assert(parentTdb != NULL);
+    struct track *parentTrack = tdbExtrasGetOrDefault(parentTdb,"track",NULL);
+    assert(parentTrack != NULL);
+    vis = tvMin(vis,(parentTrack->limitedVisSet?parentTrack->limitedVis:parentTrack->visibility));
+    if (vis == tvHide) // short curcuit this effort
+        return vis;
+
     char *viewName = NULL;
     if (subgroupFind(tdb,"view",&viewName))
 	{
-	struct trackDb *parent = trackDbCompositeParent(tdb);
-	assert(parent != NULL);
-        int len = strlen(parent->track) + strlen(viewName) + 10;
+        int len = strlen(parentTdb->track) + strlen(viewName) + 10;
 
 	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
 	// in the middle for the javascript to work.
 	char ddName[len];
-        safef(ddName,len,"%s.%s.vis", parent->track,viewName);
+        safef(ddName,len,"%s.%s.vis", parentTdb->track,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
-            vis = hTvFromString(fromParent);
+            vis = tvMin(vis,hTvFromString(fromParent));
         else
-            vis = visCompositeViewDefault(parent,viewName);
+            vis = tvMin(vis,visCompositeViewDefault(parentTdb,viewName));
         subgroupFree(&viewName);
 	}
     }
@@ -4308,23 +4311,6 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
-{
-// add entry for given track to the trackDbJson string
-if(count)
-    dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
-}
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
@@ -4375,11 +4361,6 @@ boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-struct dyString *trackDbJson = newDyString(1000);
-int trackDbJsonCount = 1;
-dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4497,27 +4478,8 @@ for (track = trackList; track != NULL; track = track->next)
 	    thisTime = clock1000();
 	    track->loadTime = thisTime - lastTime;
 	    }
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-	trackJson(trackDbJson, track, trackDbJsonCount++);
-	if (trackIsCompositeWithSubtracks(track))
-	    {
-	    struct track *subtrack;
-	    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-		{
-		// isSubtrackVisible is causing a problem in panTro2
-		if (isSubtrackVisible(subtrack))
-		    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
-		}
-	    }
-#endif///defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 	}
     }
-
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-dyStringAppend(trackDbJson, "}\n</script>\n");
-if(!trackImgOnly)
-    hPrintf(dyStringContents(trackDbJson));
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 printTrackInitJavascript(trackList);
 
