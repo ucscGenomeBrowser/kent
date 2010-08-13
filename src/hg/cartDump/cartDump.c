@@ -8,6 +8,8 @@
 
 static char const rcsid[] = "$Id: cartDump.c,v 1.14 2008/12/09 00:41:20 angie Exp $";
 
+#define CART_DUMP_REMOVE_VAR "n/a"
+
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
 {
@@ -25,7 +27,7 @@ if (cgiVarExists("submit"))
         {
 	varName = skipLeadingSpaces(varName);
 	eraseTrailingSpaces(varName);
-	if (sameString(newValue, "n/a"))
+	if (sameString(newValue, CART_DUMP_REMOVE_VAR) || sameString(newValue, CART_VAR_EMPTY))
 	    cartRemove(cart, varName);
 	else
 	    cartSetString(cart, varName, newValue);
@@ -53,7 +55,7 @@ cgiMakeTextVar(vVal, "", 24);
 printf(" ");
 cgiMakeButton("submit", "submit");
 printf("<BR>\n");
-printf("Put n/a in for the new value to clear a variable.");
+printf("Put '%s' in for the new value to clear a variable.",CART_DUMP_REMOVE_VAR);
 printf("<P>Cookies passed to %s:<BR>\n%s\n</P>\n",
        cgiServerName(), getenv("HTTP_COOKIE"));
 }

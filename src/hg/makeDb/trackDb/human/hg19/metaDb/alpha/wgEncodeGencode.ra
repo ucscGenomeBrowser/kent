@@ -2,7 +2,7 @@ metaObject wgEncodeGencode2wayConsPseudoV4
 objType table
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
 dateUnrestricted 2011-02-01
 fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
@@ -18,7 +18,7 @@ objType table
 annotation Automatic
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
 dateUnrestricted 2011-02-01
 fileName wgEncodeGencodeAutoV4.gtf.gz
@@ -34,7 +34,7 @@ metaObject wgEncodeGencodeClassesV4
 objType table
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
 dateUnrestricted 2011-02-01
 fileName wgEncodeGencodeClassesV4.tab.gz
@@ -50,7 +50,7 @@ objType table
 annotation Manual
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
 dateUnrestricted 2011-02-01
 fileName wgEncodeGencodeManualV4.gtf.gz
@@ -66,7 +66,7 @@ metaObject wgEncodeGencodePolyAV4
 objType table
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
 dateUnrestricted 2011-02-01
 fileName wgEncodeGencodePolyAV4.gtf.gz
@@ -81,7 +81,7 @@ metaObject wgEncodeGencodeYalePseudoV4
 objType table
 composite wgEncodeGencode
 dataType Gencode
-dataVersion ENCODE May 2010 Freeze
+dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
 dateUnrestricted 2011-02-01
 fileName wgEncodeGencodeYalePseudoV4.gtf.gz
@@ -92,4 +92,4 @@ subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: -540090485
+# MAGIC: -1613831667

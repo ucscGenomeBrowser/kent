@@ -1939,35 +1939,70 @@ function changeSearchVisibilityPopups(cmd)
 
 /////////////////////////////////////////////////////
 // findTracks functions
+
+function findTracksChangeVis(seenVis)
+{
+    var trackName = $(seenVis).attr('id');
+    hiddenVis = $("input[name='"+trackName+"']");
+    $(hiddenVis).attr('disabled',false);
+    $(hiddenVis).val($(seenVis).val());
+}
+
 function findTracksClickedOne(selCb,justClicked)
-{ // When a found track CB is clicked, do this
-    var name = $(selCb).attr('name');
-    var trackName = name.substring(0,name.length - "_sel".length)
-    var vis = $('select[name="'+trackName+'"]');
-    if($(selCb).attr('checked')) {
-        $(vis).attr('disabled', false);
-        if($(vis).attr('selectedIndex') == 0)
-            $(vis).attr('selectedIndex',1);
-    } else {
-        $(vis).attr('disabled', true);
-        if(justClicked) {
-            // should ajax over the removal of this cart setting just to be sure.
-            setCartVar(trackName,"n/a");
+{
+    var selName = $(selCb).attr('id');
+    var trackName = selName.substring(0,selName.length - "_sel".length)
+    hiddenSel = $("input[name='"+selName+"']");
+    var seenVis = $('select#' + trackName);
+    hiddenVis = $("input[name='"+trackName+"']");
+    var tr = $(selCb).parents('tr.found');
+    var subtrack = $(tr).hasClass('subtrack');
+    var canPack = $(tr).hasClass('canPack');
+    var checked = $(selCb).attr('checked');
+
+    // First deal with seenVis control
+    if(checked) {
+        $(seenVis).attr('disabled', false);
+        if($(seenVis).attr('selectedIndex') == 0) {
+            if(canPack)
+                $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
+            else
+                $(seenVis).attr('selectedIndex',2);  // full
+        }
+    } else
+        $(seenVis).attr('disabled', true );
+
+    if(justClicked) {
+        // Deal with hiddenSel so that submit does the right thing
+        if(subtrack) {
+            $(hiddenSel).attr('disabled',false);
+            if(checked)
+                $(hiddenSel).val('on');
+            else
+                $(hiddenSel).val('[]');
+        }
+
+        // Deal with hiddenVis so that submit does the right thing
+        if(checked) {
+            findTracksChangeVis(seenVis);
+            //$(hiddenVis).val('value',seenVisVal);
+        } else {
+            $(hiddenVis).attr('disabled',false);
+            $(hiddenVis).val('[]');
         }
     }
 
     // The "view in browser" button should be enabled/disabled
     if(justClicked) {
-        var selCbsChecked = $('input.selCb:checked');
-        //$('input.viewBtn').attr('disabled', ($(selCbsChecked).length == 0) );
-        if($(selCbsChecked).length > 0)
+        if(checked)
             $('input.viewBtn').val('View in Browser');
-        else
+        else if($('input.selCb:checked').length == 0)
             $('input.viewBtn').val('Return to Browser');
     }
 
     findTracksCounts();
 }
+
 
 function findTracksNormalizeFound()
 { // Normalize the page based upon current state of all found tracks
@@ -1989,33 +2024,26 @@ function findTracksNormalizeFound()
 
 function findTracksCheckAll(check)
 {
+    // NOTE: Difficulties with "_sel" and "vis" controls:
+    // 1) subtracks need both "sel" and "vis", but non-subtracks need only "vis"
+    // 2) Submit of form instead of ajax is nice (because it allows cancelling changes), but do not want to set any vars, unless specifically changed on form
+    // 3) When unchecked, need to delete vars instead of set them
+    // Solution to "sel", "vis" difficulties
+    // 1) findTracks remains a submit but:
+    // 2) 'sel' and 'vis' input are not named (won't be submitted)
+    // 3) hidden disabled and named 'sel' and 'vis' vars exist
+    // 4a) check subtrack: enable hidden 'sel' and 'vis' track, set to 'on' and pack/full
+    // 4b) check non-track: enable hidden 'vis', set to pack/full
+    // 5a) uncheck subtrack: enable hidden 'sel' and 'vis' track, set to '[]' and '[]'
+    // 5b) uncheck non-track: enable hidden 'vis', set to '[]'
+    // 6) Change vis: enable hidden 'vis', set to non-hidden vis
+
     var selCbs = $('input.selCb');
     $(selCbs).attr('checked',check);
 
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    if(check == false) {
-        // make a single ajax call to remove all vis vars
-        // FIXME: I think we have now changed the paradigm for subtrack vis:
-        // There must be a {trackName}_sel to have subtrack level vis override.
-        // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
-        // AND hgTracks.c should now be keyed off the "_sel" for subtrack without composite.
-        // THIS would make these ajax calls to clean up vis uneeded.
-        // ONE MORE COMPLICATION: non-subtracks do not currently have a "_sel" setting!
-        //     Distinguish here?  Only subtracks get "_sel" CB set here?  Control by "name" of CB?
-        var vars = [];
-        var vals = [];
-        $(selCbs).each(function(i) {
-            var name = $(this).attr('name');
-            vars.push(name.substring(0,name.length - "_sel".length));
-            vals.push("n/a");
-        });
-        if(vars.length > 0)
-            setCartVars(vars,vals);
-    }
-
-    //$('input.viewBtn').attr('disabled',(check == false));
     if(check)
         $('input.viewBtn').val('View in Browser');
     else

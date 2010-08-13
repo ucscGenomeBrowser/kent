@@ -2,18 +2,15 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkweb.a ${MYSQLLIBS}
 
 H = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h polyASize.h hapRegions.h usage.msg algo.msg
 O = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o polyASize.o hapRegions.o pslCDnaFilter.o
-B =  ${DESTDIR}${BINDIR}/pslCDnaFilter
+A =  pslCDnaFilter
 
-$B: pslCDnaFilter
-	@${MKDIR} `dirname $B`
-	cp -f pslCDnaFilter $B
-
-pslCDnaFilter: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o pslCDnaFilter $O ${MYLIBS} ${MYSQLLIBS} $L
+$A: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 pslCDnaFilter.o: pslCDnaFilter.c $H
 cDnaAligns.o: cDnaAligns.c $H

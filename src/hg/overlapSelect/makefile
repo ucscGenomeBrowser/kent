@@ -2,19 +2,16 @@ include ../../inc/common.mk
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYSQLLIBS}
 
 
 H = rowReader.h chromAnn.h chromAnnMap.h selectTable.h coordCols.h
 O = rowReader.o chromAnn.o chromAnnMap.o selectTable.o coordCols.o  overlapSelect.o
-B =  ${BINDIR}/overlapSelect
+A =  overlapSelect
 
-$B: overlapSelect
-	@${MKDIR} `dirname $B`
-	cp -f overlapSelect $B
-
-overlapSelect: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o overlapSelect $O ${MYLIBS} ${MYSQLLIBS} $L
+$A: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 chromAnn.o: rowReader.c rowReader.h
 chromAnn.o: chromAnn.c chromAnn.h rowReader.h

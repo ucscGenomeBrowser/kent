@@ -1555,11 +1555,7 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 #ifdef SUBTRACKS_HAVE_VIS
 if (tdbIsCompositeChild(subtrack->tdb))
     {
-    char setting[512];
-    safef(setting,sizeof(setting),"%s_sel",subtrack->track);  // Must have "{trackName}_sel" to use subtrack level vis!
-    // FIXME: four state logic is for subtracks only and exists as static in hui.c.  When time is right, make this logic non-static
-    #define FOURSTATE_CHECKED           1
-    if (FOURSTATE_CHECKED == cartUsualInt(cart, setting, 0)) // Don't need all 4 states here.  Just checked/not
+    if (fourStateVisible(subtrackFourStateChecked(subtrack->tdb,cart))) // Don't need all 4 states here.  Visible=checked&&enabled
         {
         char *var = cartOptionalString(cart, subtrack->track);
         if (var)
@@ -1575,10 +1571,11 @@ if (tdbIsCompositeChild(subtrack->tdb))
 
                 limitVisibility(subtrack);
                 }
-
             return hTvFromString(var);
             }
         }
+    else
+        return tvHide;
     }
 #endif///def SUBTRACKS_HAVE_VIS
 
@@ -1588,22 +1585,28 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
+    struct trackDb *parentTdb = trackDbCompositeParent(tdb);
+    assert(parentTdb != NULL);
+    struct track *parentTrack = tdbExtrasGetOrDefault(parentTdb,"track",NULL);
+    assert(parentTrack != NULL);
+    vis = tvMin(vis,(parentTrack->limitedVisSet?parentTrack->limitedVis:parentTrack->visibility));
+    if (vis == tvHide) // short curcuit this effort
+        return vis;
+
     char *viewName = NULL;
     if (subgroupFind(tdb,"view",&viewName))
 	{
-	struct trackDb *parent = trackDbCompositeParent(tdb);
-	assert(parent != NULL);
-        int len = strlen(parent->track) + strlen(viewName) + 10;
+        int len = strlen(parentTdb->track) + strlen(viewName) + 10;
 
 	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
 	// in the middle for the javascript to work.
 	char ddName[len];
-        safef(ddName,len,"%s.%s.vis", parent->track,viewName);
+        safef(ddName,len,"%s.%s.vis", parentTdb->track,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
-            vis = hTvFromString(fromParent);
+            vis = tvMin(vis,hTvFromString(fromParent));
         else
-            vis = visCompositeViewDefault(parent,viewName);
+            vis = tvMin(vis,visCompositeViewDefault(parentTdb,viewName));
         subgroupFree(&viewName);
 	}
     }

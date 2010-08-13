@@ -557,44 +557,64 @@ else
 
         struct track *track = (struct track *) ptr->val;
         // trackDbOutput(track->tdb, stderr, ',', '\n');
-        hPrintf("<tr bgcolor='%s' valign='top'>\n",COLOR_BG_ALTDEFAULT);
+        hPrintf("<tr bgcolor='%s' valign='top' class='found%s%s'>\n",COLOR_BG_ALTDEFAULT,
+                (tdbIsCompositeChild(track->tdb)?" subtrack":""),
+                (track->canPack?" canPack":""));
 
-        // FIXME: I think we have now changed the paradigm for subtrack vis:
+        // NOTE: We have now changed the paradigm for subtrack vis:
         // There must be a {trackName}_sel to have subtrack level vis override.
         // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
-        // AND hgTracks.c should now be keyed off the "_sel" for subtrack without composite.
-        // THIS would make ajax calls to clean up vis (currently in hgTracks.js) uneeded.
-        // ONE MORE COMPLICATION: non-subtracks do not currently have a "_sel" setting!
-        //     Distinguish here?  Only subtracks get "_sel" CB set here?  Control by "name" of CB?
+        // AND hgTracks.c now relies upon "_sel" even with subtrack-level vis.
+
+        // NOTE: Difficulties with "sel" and "vis" controls:
+        // 1) subtracks need both "sel" and "vis", but non-subtracks need only "vis"
+        // 2) Submit of form instead of ajax is nice (because it allows cancelling changes), but do not want to set any vars, unless specifically changed on form
+        // 3) When unchecked, need to delete vars instead of set them
+        // Solution to "sel", "vis" difficulties
+        // 1) findTracks remains a submit but:
+        // 2) 'sel' and 'vis' input are not named (won't be submitted)
+        // 3) hidden disabled and named 'sel' and 'vis' vars exist
+        // 4a) check subtrack: enable hidden 'sel' and 'vis' track, set to 'on' and pack/full
+        // 4b) check non-track: enable hidden 'vis', set to pack/full
+        // 5a) uncheck subtrack: enable hidden 'sel' and 'vis' track, set to '[]' and '[]'
+        // 5b) uncheck non-track: enable hidden 'vis', set to '[]'
+        // 6) Change vis: enable hidden 'vis', set to non-hidden vis
+
         hPrintf("<td align='center' valign='center'>\n");
         char name[256];
         safef(name,sizeof(name),"%s_sel",track->track);
         boolean checked = FALSE;
         if(tdbIsCompositeChild(track->tdb))
             {
-            // FIXME: four state logic is for subtracks only and exists as static in hui.c.  When time is right, make this logic non-static
-            #define FOURSTATE_CHECKED           1
-            checked = (FOURSTATE_CHECKED == cartUsualInt(cart, name, 0)); // Don't need all 4 states here.  Just checked/not
-            // FIXME: four state logic is for subtracks only and exists as static in hui.c.  When time is right, make this logic non-static
+            checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
+            track->visibility = limitedVisFromComposite(track);
+            checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
+            // Only subtracks get "_sel" var
+            #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
+            hPrintf(CB_HIDDEN_VAR,track->track,CART_VAR_EMPTY);
             }
         else
-            checked = track->visibility != tvHide;
+            checked = ( track->visibility != tvHide );
 
-        cgiMakeCheckBoxIdAndJS(name,checked,name,"class='selCb' onchange=\"findTracksClickedOne(this,true);\"");
-        hPrintf("</td>\n");
+        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel' VALUE='on' class='selCb' onchange='findTracksClickedOne(this,true);'%s>"
+        hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
 
-        hPrintf("<td>\n");
+        hPrintf("</td><td>\n");
+
+        #define VIS_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s' VALUE='%s'>"
+        hPrintf(VIS_HIDDEN_VAR,track->track,CART_VAR_EMPTY); // All tracks get vis hidden var
         if (tdbIsSuper(track->tdb))
             {
-            superTrackDropDown(cart, track->tdb,
-                               superTrackHasVisibleMembers(track->tdb));
+            // FIXME: Replace this with select box WITHOUT NAME but with id
+            // HOWEVER, I haven't seen a single supertrack in found tracks so I think they are excluded and this is dead code
+            warn("superTrack: %s '%s' doesn't work yet.",track->track,track->longLabel);
+            superTrackDropDown(cart, track->tdb, superTrackHasVisibleMembers(track->tdb));
             }
         else
             {
-            hTvDropDownClassVisOnly(track->track, track->visibility,
-                                    track->canPack,
-                                    "normalText", // Show hide as normal text too!     (track->visibility == tvHide) ? "hiddenText" : "normalText",
-                                    trackDbSetting(track->tdb, "onlyVisibility"));
+            char extra[512];
+            safef(extra,sizeof(extra),"id='%s' onchange='findTracksChangeVis(this)'",track->track);
+            hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,"normalText seenVis",extra);
             }
         hPrintf("</td>\n");
         hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
