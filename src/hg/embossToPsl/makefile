@@ -14,8 +14,10 @@ embossToPsl: $O $(MYLIBS)
 compile:: ${O}
 	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
-test:: embossToPsl
+test:: compile
 	cd tests && ${MAKE} test
+	rm -f ${A}${EXE}
+
 clean::
-	rm -f ${O} embossToPsl
+	rm -f ${O} ${A}${EXE}
 	cd tests && ${MAKE} clean

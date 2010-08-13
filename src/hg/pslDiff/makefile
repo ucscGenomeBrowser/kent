@@ -18,8 +18,9 @@ compile:: ${O}
 
 pslDiff.o: pslDiff.c pslSets.h
 
-test:
+test: compile
 	cd tests && ${MAKE} test
+	rm -f ${A}${EXE}
 
 clean:
 	rm -f $O $B pslDiff
