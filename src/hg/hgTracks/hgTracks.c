@@ -301,11 +301,9 @@ char *url = trackUrl(name, chromName);
 
 if(theImgBox && curImgTrack)
     {
-    char title[256];
-    safef(title,sizeof(title),"%s controls", shortLabel);
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
     if(curSlice)
-        sliceAddLink(curSlice,url,title);
+        sliceAddLink(curSlice,url,shortLabel);
     }
 else
     {
@@ -3539,6 +3537,10 @@ else
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%u\" class=\"topbar\">Genomes</A></TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
     }
+if (cgiVarExists("hgt.psOutput"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSetorg=%s&db=%s&%s=%u\" class='topbar'>Genome Browser</A></TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
+    }
 if (gotBlat)
     {
     hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
@@ -3779,8 +3781,11 @@ if (sameString(database, "ce2"))
     hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
         skipChr(chromName), winStart+1, winEnd, "WormBase");
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A></TD>\n",cartSessionVarName(),
-       cartSessionId(cart), "PDF/PS");
+if (!cgiVarExists("hgt.psOutput"))
+    {
+    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A></TD>\n",cartSessionVarName(),
+        cartSessionId(cart), "PDF/PS");
+    }
 if (wikiLinkEnabled())
     {
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgSession?%s=%u"
@@ -5115,6 +5120,8 @@ struct tempName psTn, ideoPsTn;
 char *pdfFile = NULL, *ideoPdfFile = NULL;
 ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
+
+hotLinks();
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
@@ -5148,6 +5155,9 @@ if(pdfFile != NULL)
     }
 else
     printf("<BR><BR>PDF format not available");
+
+    #define RETURN_BUTTON "<FORM ACTION='../cgi-bin/hgTracks' NAME='TrackHeaderForm' id='TrackHeaderForm' METHOD='GET'><INPUT TYPE=SUBMIT ID='ChangeToNameToSetSomething' VALUE='Return to Browser'></FORM>"
+    printf(RETURN_BUTTON);
 }
 
 boolean isGenome(char *pos)
