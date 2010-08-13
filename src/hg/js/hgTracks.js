@@ -1519,16 +1519,14 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // Change visibility settings:
         //
         // First change the select on our form:
-
         var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
-        if(rec && rec.parentTrack) {
-            // currently we fall back to the parentTrack
-            id = rec.parentTrack;
-        }
         $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
                 });
+        if(rec) {
+            rec.localVisibility = cmd;
+        }
 
         // Now change the track image
         if(imageV2 && cmd == 'hide')
@@ -1566,6 +1564,14 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     }
 }
 
+function makeContextMenuHitCallback(title)
+{
+// stub to avoid problem with a function closure w/n a loop
+    return function(menuItemClicked, menuObject) {
+        contextMenuHit(menuItemClicked, menuObject, title); return true;
+    };
+}
+
 function loadContextMenu(img)
 {
     var menu = img.contextMenu(
@@ -1580,13 +1586,8 @@ function loadContextMenu(img)
                     isGene = href.match("hgGene");
                     isHgc = href.match("hgc");
                 }
-                var rec = trackDbJson[id];
                 var id = selectedMenuItem.id;
                 var rec = trackDbJson[id];
-                if(rec && rec.parentTrack) {
-                    // currently we fall back to the parentTrack
-                    id = rec.parentTrack;
-                }
                 // XXXX what if select is not available (b/c trackControlsOnMain is off)?
                 // Move functionality to a hidden variable?
                 var select = $("select[name=" + id + "]");
@@ -1604,7 +1605,6 @@ function loadContextMenu(img)
                                            });
                     done = true;
                 } else {
-                    // XXXX currently dead code (unless JSON is enabled in hgTracks.c)
                     if(rec) {
                         // XXXX check current state from a hidden variable.
                         var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");
@@ -1614,10 +1614,14 @@ function loadContextMenu(img)
                             var o = new Object();
                             var str = visibilityStrs[i];
                             if(rec.canPack || (str != "pack" && str != "squish")) {
-                                if(str == visibilityStrsOrder[rec.visibility]) {
+                                if(rec.localVisibility) {
+                                    if(rec.localVisibility == str) {
+                                        str += selectedImg;
+                                    }
+                                } else if(str == visibilityStrsOrder[rec.visibility]) {
                                     str += selectedImg;
                                 }
-                                o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, visibilityStrs[i]); return true; }};
+                                o[str] = {onclick: makeContextMenuHitCallback(visibilityStrs[i])};
                                 menu.push(o);
                             }
                         }
@@ -1750,10 +1754,6 @@ function handleUpdateTrackMap(response, status)
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
           var id = selectedMenuItem.id;
           var rec = trackDbJson[id];
-          if(rec && rec.parentTrack) {
-              // currently we fall back to the parentTrack
-              id = rec.parentTrack;
-          }
           var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
           var reg = new RegExp(str);
           a = reg.exec(response);
