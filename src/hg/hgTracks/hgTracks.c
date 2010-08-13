@@ -301,11 +301,9 @@ char *url = trackUrl(name, chromName);
 
 if(theImgBox && curImgTrack)
     {
-    char title[256];
-    safef(title,sizeof(title),"%s controls", shortLabel);
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
     if(curSlice)
-        sliceAddLink(curSlice,url,title);
+        sliceAddLink(curSlice,url,shortLabel);
     }
 else
     {
