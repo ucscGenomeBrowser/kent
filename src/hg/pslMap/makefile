@@ -4,17 +4,15 @@ MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 LIBS= ${MYLIBS} -lm
 
-OBJS = pslMap.o
+A = pslMap
+O = pslMap.o
 
 all: ${BINDIR}/pslMap
 
-${BINDIR}/pslMap: pslMap
-	${MKDIR} ${BINDIR}
-	cp -f pslMap ${BINDIR}
-	${STRIP} ${BINDIR}/pslMap${EXE}
 
-pslMap: ${OBJS} ${MYLIBS}
-	${CC} ${CFLAGS} ${COPT} -o pslMap ${OBJS} ${LIBS} 
+pslMap: ${O} ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 pslMap.o: usage.msg
 
@@ -23,6 +21,9 @@ usage.msg: usage.txt
 	echo '/* GENERATED CODE, DO NOT EDIT */' > $@.tmp
 	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
+
+compile:: ${O} usage.msg
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 test::
 	(cd tests && ${MAKE} test)
