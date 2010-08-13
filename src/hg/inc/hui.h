@@ -1130,4 +1130,16 @@ boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
 /* Print out table of abbreviations. */
 
+// Four State checkboxes can be checked/unchecked by enable/disabled
+// NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
+#define FOUR_STATE_UNCHECKED         0
+#define FOUR_STATE_CHECKED           1
+#define FOUR_STATE_CHECKED_DISABLED  -1
+#define fourStateChecked(fourState) ((fourState) == FOUR_STATE_CHECKED || (fourState) == FOUR_STATE_CHECKED_DISABLED)
+#define fourStateEnabled(fourState) ((fourState) >= FOUR_STATE_UNCHECKED)
+#define fourStateVisible(fourState) ((fourState) == FOUR_STATE_CHECKED)
+
+int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
+/* Returns the four state checked state of the subtrack */
+
 #endif /* HUI_H */
