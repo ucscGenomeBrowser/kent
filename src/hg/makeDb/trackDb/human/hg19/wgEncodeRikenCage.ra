@@ -52,14 +52,15 @@ superTrack wgEncodeRnaSeqSuper
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageGm12878NucleusTotalPlusClusters
-        release alpha
-        parent wgEncodeRikenCageView1-PlusClusters off
-        shortLabel GM12878 nucleus total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleus)
-        subGroups view=1-PlusClusters cellType=GM12878 localization=30-nucleus rnaExtract=total
-        type bedGraph 4
-        color 153,38,0
+#        track wgEncodeRikenCageGm12878NucleusTotalPlusClusters
+#        release alpha
+#        parent wgEncodeRikenCageView1-PlusClusters off
+#        shortLabel GM12878 nucleus total
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleus)
+#        subGroups view=1-PlusClusters cellType=GM12878 localization=30-nucleus rnaExtract=total
+#        type bedGraph 4
+#        color 153,38,0
+#       retracted due to nameing confusion on part of the lab
         # subId=1798 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageH1hescCellTotalPlusClusters
@@ -102,14 +103,15 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageHepg2NucleusTotalPlusClusters
-        release alpha
-        parent wgEncodeRikenCageView1-PlusClusters off
-        shortLabel HepG2 nucleus total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in HepG2 nucleus)
-        subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=total
-        type bedGraph 4
-        color 189,0,157
+#        track wgEncodeRikenCageHepg2NucleusTotalPlusClusters
+#        release alpha
+#        parent wgEncodeRikenCageView1-PlusClusters off
+#        shortLabel HepG2 nucleus total
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in HepG2 nucleus)
+#        subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=total
+#        type bedGraph 4
+#        color 189,0,157
+#       retracted due to nameing confusion on part of the lab
         # subId=1803 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562ChromatinTotalPlusClusters
@@ -162,14 +164,15 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleusTotalPlusClusters
-        release alpha
-        parent wgEncodeRikenCageView1-PlusClusters off
-        shortLabel K562 nucleus total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleus)
-        subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=total
-        type bedGraph 4
-        color 46,0,184
+#        track wgEncodeRikenCageK562NucleusTotalPlusClusters
+#        release alpha
+#        parent wgEncodeRikenCageView1-PlusClusters off
+#        shortLabel K562 nucleus total
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleus)
+#        subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=total
+#        type bedGraph 4
+#        color 46,0,184
+#        retracted due to naming confusion on the part of the lab
         # subId=1809 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
@@ -235,14 +238,15 @@ superTrack wgEncodeRnaSeqSuper
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageGm12878NucleusTotalMinusClusters
-        release alpha
-        parent wgEncodeRikenCageView3-MinusClusters off
-        shortLabel GM12878 nucleus total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleus)
-        subGroups view=3-MinusClusters cellType=GM12878 localization=30-nucleus rnaExtract=total
-        type bedGraph 4
-        color 153,38,0
+#        track wgEncodeRikenCageGm12878NucleusTotalMinusClusters
+#        release alpha
+#        parent wgEncodeRikenCageView3-MinusClusters off
+#        shortLabel GM12878 nucleus total
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleus)
+#        subGroups view=3-MinusClusters cellType=GM12878 localization=30-nucleus rnaExtract=total
+#        type bedGraph 4
+#        color 153,38,0
+#       retracted due to nameing confusion on part of the lab
         # subId=1798 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageH1hescCellTotalMinusClusters
@@ -285,14 +289,15 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageHepg2NucleusTotalMinusClusters
-        release alpha
-        parent wgEncodeRikenCageView3-MinusClusters off
-        shortLabel HepG2 nucleus total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in HepG2 nucleus)
-        subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=total
-        type bedGraph 4
-        color 189,0,157
+#        track wgEncodeRikenCageHepg2NucleusTotalMinusClusters
+#        release alpha
+#        parent wgEncodeRikenCageView3-MinusClusters off
+#        shortLabel HepG2 nucleus total
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in HepG2 nucleus)
+#        subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=total
+#        type bedGraph 4
+#        color 189,0,157
+#       retracted due to nameing confusion on part of the lab
         # subId=1803 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562ChromatinTotalMinusClusters
@@ -345,14 +350,15 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleusTotalMinusClusters
-        release alpha
-        parent wgEncodeRikenCageView3-MinusClusters off
-        shortLabel K562 nucleus total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleus)
-        subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=total
-        type bedGraph 4
-        color 46,0,184
+#        track wgEncodeRikenCageK562NucleusTotalMinusClusters
+#        release alpha
+#        parent wgEncodeRikenCageView3-MinusClusters off
+#        shortLabel K562 nucleus total
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleus)
+#        subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=total
+#        type bedGraph 4
+#        color 46,0,184
+#	retracted due to nameing confusion on part of the lab
         # subId=1809 dateSubmitted=2010-06-21
 
         track wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
@@ -413,14 +419,15 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1797 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageGm12878NucleusTotalAln
-        release alpha
-        parent wgEncodeRikenCageView5-Alignments off
-        shortLabel GM12878 nucleus total Aln
-        longLabel ENCODE RIKEN CAGE Tags (total in GM12878 nucleus)
-        subGroups view=5-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=total
-        type bam
-        color 153,38,0
+#        track wgEncodeRikenCageGm12878NucleusTotalAln
+#        release alpha
+#        parent wgEncodeRikenCageView5-Alignments off
+#        shortLabel GM12878 nucleus total Aln
+#        longLabel ENCODE RIKEN CAGE Tags (total in GM12878 nucleus)
+#        subGroups view=5-Alignments cellType=GM12878 localization=30-nucleus rnaExtract=total
+#        type bam
+#        color 153,38,0
+#       retracted due to nameing confusion on part of the lab
         # subId=1798 dateSubmitted=2010-06-21
 
 
@@ -468,14 +475,15 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1802 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageHepg2NucleusTotalAln
-        release alpha
-        parent wgEncodeRikenCageView5-Alignments off
-        shortLabel HepG2 nucleus total Aln
-        longLabel ENCODE RIKEN CAGE Tags (total in HepG2 nucleus)
-        subGroups view=5-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=total
-        type bam
-        color 189,0,157
+#        track wgEncodeRikenCageHepg2NucleusTotalAln
+#        release alpha
+#        parent wgEncodeRikenCageView5-Alignments off
+#        shortLabel HepG2 nucleus total Aln
+#        longLabel ENCODE RIKEN CAGE Tags (total in HepG2 nucleus)
+#        subGroups view=5-Alignments cellType=HepG2 localization=30-nucleus rnaExtract=total
+#        type bam
+#        color 189,0,157
+#       retracted due to nameing confusion on part of the lab
         # subId=1803 dateSubmitted=2010-06-21
 
 
@@ -534,14 +542,15 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1808 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562NucleusTotalAln
-        release alpha
-        parent wgEncodeRikenCageView5-Alignments off
-        shortLabel K562 nucleus total Aln
-        longLabel ENCODE RIKEN CAGE Tags (total in K562 nucleus)
-        subGroups view=5-Alignments cellType=K562 localization=30-nucleus rnaExtract=total
-        type bam
-        color 46,0,184
+#        track wgEncodeRikenCageK562NucleusTotalAln
+#        release alpha
+#        parent wgEncodeRikenCageView5-Alignments off
+#        shortLabel K562 nucleus total Aln
+#        longLabel ENCODE RIKEN CAGE Tags (total in K562 nucleus)
+#        subGroups view=5-Alignments cellType=K562 localization=30-nucleus rnaExtract=total
+#        type bam
+#        color 46,0,184
+#       retracted due to nameing confusion on part of the lab
         # subId=1809 dateSubmitted=2010-06-21
 
 
