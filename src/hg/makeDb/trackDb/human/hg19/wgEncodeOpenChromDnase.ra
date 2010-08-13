@@ -343,6 +343,16 @@ wgEncode 1
         origAssembly hg18
         # subId=1679 dateSubmitted=2010-06-20
 
+        track wgEncodeOpenChromDnaseMelanoPk
+        release alpha
+        parent wgEncodeOpenChromDnaseViewPeaks off
+        shortLabel Melano  Pk tx:Non
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Melano cells)
+        subGroups view=Peaks cellType=MELANO treatment=AANONE
+        type narrowPeak
+        origAssembly hg18
+        # subId=2096 dateSubmitted=2010-08-11
+
 
     track wgEncodeOpenChromDnaseViewSignal
     shortLabel Signal (F-Seq Density)
@@ -644,6 +654,16 @@ wgEncode 1
         origAssembly hg18
         # subId=1679 dateSubmitted=2010-06-20
 
+        track wgEncodeOpenChromDnaseMelanoSig
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSignal off
+        shortLabel Melano  Sg tx:Non
+        longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Melano cells)
+        subGroups view=SIG cellType=MELANO treatment=AANONE
+        type bigWig 0.000000 1.470500
+        origAssembly hg18
+        # subId=2096 dateSubmitted=2010-08-11
+
 
     track wgEncodeOpenChromDnaseViewSigBo
     shortLabel Signal (Base Overlap)
@@ -944,4 +964,14 @@ wgEncode 1
         type bigWig 0.000000 328.000000
         origAssembly hg18
         # subId=1679 dateSubmitted=2010-06-20
+
+        track wgEncodeOpenChromDnaseMelanoBaseOverlapSignal
+        release alpha
+        parent wgEncodeOpenChromDnaseViewSigBo off
+        shortLabel Melano  Sb tx:Non
+        longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Melano cells)
+        subGroups view=SIGBO cellType=MELANO treatment=AANONE
+        type bigWig 0.000000 412.000000
+        origAssembly hg18
+        # subId=2096 dateSubmitted=2010-08-11
 
