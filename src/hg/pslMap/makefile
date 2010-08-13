@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS = $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
-LIBS= ${MYLIBS} -lm
+L += -lm
 
 A = pslMap
 O = pslMap.o
@@ -25,9 +25,10 @@ usage.msg: usage.txt
 compile:: ${O} usage.msg
 	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
-test::
+test:: compile
 	(cd tests && ${MAKE} test)
+	rm -f ${A}${EXE}
 
 clean::
-	rm -f pslMap *.o usage.msg
+	rm -f ${A} ${O} usage.msg
 	(cd tests && ${MAKE} clean)
