@@ -14,8 +14,9 @@ $A: $O $(MYLIBS)
 compile:: ${O}
 	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
-test:
+test: compile
 	(cd tests && ${MAKE} test)
+	rm -f ${A}${EXE}
 
 clean::
 	rm -f pslPartition ${O}
