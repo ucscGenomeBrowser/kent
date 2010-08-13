@@ -68,7 +68,7 @@ static boolean makeFileDownloadsLink(char *database, struct trackDb *tdb,char *n
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
             trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
             ENCODE_DCC_DOWNLOADS, dirKeeper->table, name, name);
