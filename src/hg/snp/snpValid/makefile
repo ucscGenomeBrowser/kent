@@ -4,19 +4,21 @@ L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-X = snpValid
-O = ${X}.o
+A = snpValid
+O = ${A}.o
 
-${X}: $O ${MYLIBS}
-	${CC} ${COPT} -o ${X} $O ${MYLIBS} $L
-	${STRIP} ${X}${EXE}
-	cp ${X} ${BINDIR}/${X} 
+${A}: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 test:
-	${X} hg16 /cluster/data/hg16/bed/snp/build122/seq -chr=chr22 > hg16-chr22.log 
+	${A} hg16 /cluster/data/hg16/bed/snp/build122/seq -chr=chr22 > hg16-chr22.log 
 
 test2:
-	${X} hg17 /cluster/data/hg17/bed/snp/build123/seq -chr=chr22 > hg17-chr22.log 
+	${A} hg17 /cluster/data/hg17/bed/snp/build123/seq -chr=chr22 > hg17-chr22.log 
 
 
 backup: clean
@@ -29,6 +31,6 @@ backup: clean
 
 clean:
 	rm -f $O
-	rm -f $X
+	rm -f $A
 	rm -f *.log
 	rm -f dump

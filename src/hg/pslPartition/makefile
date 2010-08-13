@@ -4,11 +4,15 @@ L += -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkweb.a
 
+A = pslPartition
 O = pslPartition.o
 
-${BINDIR}/pslPartition: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o pslPartition $O $(MYLIBS) $L
-	cp -f pslPartition $@
+$A: $O $(MYLIBS)
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 test:
 	(cd tests && ${MAKE} test)
