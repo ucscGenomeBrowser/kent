@@ -1540,9 +1540,32 @@ if(slice->parentImg)
     hPrintf("</div>");
 }
 
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
+{
+// add entry for given track to the trackDbJson string
+if(count)
+    dyStringAppend(trackDbJson, "\n,");
+dyStringPrintf(trackDbJson, "\t%s: {", track->track);
+if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
+dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
+if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+}
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+
 void imageBoxDraw(struct imgBox *imgBox)
 /* writes a entire imgBox including all tracksas HTML */
 {
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+struct dyString *trackDbJson = newDyString(1000);
+int trackDbJsonCount = 1;
+dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+
 if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
     return;
 imgBoxDropEmpties(imgBox);
@@ -1556,23 +1579,10 @@ imgBoxTracksNormalizeOrder(imgBox);
 //    imgBoxShow(NULL,imgBox,0);
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
-//commonCssStyles();
 #ifdef IMAGEv2_DRAG_REORDER
 jsIncludeFile("jquery.tablednd.js", NULL);
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
-#ifdef IMAGEv2_DRAG_REORDER
-hPrintf(".trDrag {background-color:#ccFFcc;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
-hPrintf(".dragHandle {cursor: s-resize;}\n");
-#endif//def IMAGEv2_DRAG_REORDER
-#ifdef FLAT_TRACK_LIST
-hPrintf(".btn  {border-style:outset; background-color:#cccccc; border-color:#dddddd;}\n");
-hPrintf(".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // connect none
-hPrintf(".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
-hPrintf(".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
-hPrintf(".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
-hPrintf(".btnBlue {background-color:#91B3E6; border-color:#91B3E6;}\n");
-#endif//def FLAT_TRACK_LIST
 hPrintf("div.dragZoom {cursor: text;}\n");
 //#ifndef FLAT_TRACK_LIST
 hPrintf("img.button {position:relative; border:0;}\n");
@@ -1620,6 +1630,13 @@ struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+    struct track *track = hashFindVal(trackHash, trackName);
+    if(track)
+        {
+	trackJson(trackDbJson, track, trackDbJsonCount++);
+        }
+#endif
     //if(verbose && imgTrack->order == 3)
     //    imgTrackShow(NULL,imgTrack,0);
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s'>\n",trackName,imgTrack->order,
@@ -1674,4 +1691,10 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     }
 hPrintf("</TABLE>\n");
 hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
+
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+dyStringAppend(trackDbJson, "}\n</script>\n");
+if(!trackImgOnly)
+    hPrintf(dyStringContents(trackDbJson));
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }

@@ -60,7 +60,24 @@ if (!sameString(tdb->table, tdb->track))
 return trackDbTopLevelSelfOrParent(tdb);
 }
 
-static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name, 
+static boolean makeFileDownloadsLink(char *database, struct trackDb *tdb,char *name,
+	struct hash *trackHash)
+// Make a downloads link (if appropriate and then returns TRUE)
+{
+// Downloads directory if this is ENCODE
+if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
+            hDownloadsServer(),
+            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
+            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name, name);
+    return TRUE;
+    }
+return FALSE;
+}
+
+static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name,
 	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
@@ -140,7 +157,8 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
-        makeNamedDownloadsLink(db, tdb, mdbVar->val, trackHash);
+
+        makeFileDownloadsLink(db, tdb, mdbVar->val, trackHash);
         printf("</td></tr>");
         }
     else
@@ -2075,41 +2093,39 @@ return hStringFromTv(vis);
 
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
-#define FOURSTATE_KEY               "fourState"
-#define FOURSTATE_EMPTY             666
-#define FOURSTATE_UNCHECKED         0
-#define FOURSTATE_CHECKED           1
-#define FOURSTATE_DISABLE(val)      {while((val) >= 0) (val) -= 2;}
-#define FOURSTATE_ENABLE(val)       {while((val) < 0) (val) += 2;}
-#define fourStateChecked(fourState) ((fourState) == 1 || (fourState) == -1)
-#define fourStateEnabled(fourState) ((fourState) >= 0)
-#define fourStateVisible(fourState) ((fourState) == 1)
+#define FOUR_STATE_KEY               "fourState"
+#define FOUR_STATE_EMPTY             666
+//#define FOUR_STATE_UNCHECKED         0
+//#define FOUR_STATE_CHECKED           1
+//#define FOUR_STATE_CHECKED_DISABLED  -1
+#define FOUR_STATE_DISABLE(val)      {while((val) >= 0) (val) -= 2;}
+#define FOUR_STATE_ENABLE(val)       {while((val) < 0) (val) += 2;}
 
-static int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
+int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
 /* Returns the four state checked state of the subtrack */
 {
 char * setting = NULL;
 char objName[SMALLBUF];
-int fourState = (int)(long)tdbExtrasGetOrDefault(subtrack,FOURSTATE_KEY,(void *)FOURSTATE_EMPTY);
-if(fourState != FOURSTATE_EMPTY)
+int fourState = (int)(long)tdbExtrasGetOrDefault(subtrack,FOUR_STATE_KEY,(void *)FOUR_STATE_EMPTY);
+if(fourState != FOUR_STATE_EMPTY)
     return fourState;
 
-fourState = FOURSTATE_UNCHECKED;  // default to unchecked, enabled
+fourState = FOUR_STATE_UNCHECKED;  // default to unchecked, enabled
 if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     {
     if(findWordByDelimiter("off",' ',setting) == NULL)
-        fourState = FOURSTATE_CHECKED;
+        fourState = FOUR_STATE_CHECKED;
     }
 // Now check visibility
 setting = tdbResolveVis(cart,subtrack,FALSE);
 
 // If subtrack's view is hide then fourstate includes disabled
 if(sameWord(setting,TV_HIDE) && subtracksViewIsHidden(cart,subtrack))
-    FOURSTATE_DISABLE(fourState);
+    FOUR_STATE_DISABLE(fourState);
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 fourState = cartUsualInt(cart, objName, fourState);
-tdbExtrasAddOrUpdate(subtrack,FOURSTATE_KEY,(void *)(long)fourState);
+tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
 return fourState;
 }
 

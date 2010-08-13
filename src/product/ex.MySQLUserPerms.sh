@@ -55,11 +55,18 @@ fi
 #
 for DB in cb1 hgcentral hgFixed hg17 proteins040315
 do
-    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, FILE, \
+    ${MYSQL} -e "GRANT SELECT, INSERT, UPDATE, \
 	DELETE, CREATE, DROP, ALTER on ${DB}.* TO browser@localhost \
 	IDENTIFIED BY 'genome';" mysql
 done
-
+# FILE permission for this user to all databases to allow DB table loading with
+#	statements such as: "LOAD DATA INFILE file.tab"
+#	Considerations to allow LOCAL in such a load statement should
+#	be investigated with MySQL documentation, for example:
+#	http://dev.mysql.com/doc/refman/5.1/en/load-data.html
+#	http://dev.mysql.com/doc/refman/5.1/en/load-data-local.html
+${MYSQL} -e "GRANT FILE on *.* TO browser@localhost \
+	IDENTIFIED BY 'genome';" mysql
 #
 #	Read only access to genome databases for the browser CGI binaries
 #

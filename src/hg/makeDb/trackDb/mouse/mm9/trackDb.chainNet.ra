@@ -27,6 +27,15 @@ shortLabel $o_db Chain/Net
     track netEquCab1 override
     shortLabel $o_db Net
 
+track chainNetFelCat3 override
+shortLabel $o_db Chain/Net
+
+    track chainFelCat3 override
+    shortLabel $o_db Chain
+
+    track netFelCat3 override
+    shortLabel $o_db Net
+
 track chainNetTetNig1 override
 shortLabel $o_db Chain/Net
 

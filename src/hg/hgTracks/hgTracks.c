@@ -1553,22 +1553,29 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
 #ifdef SUBTRACKS_HAVE_VIS
-char *var = cartOptionalString(cart, subtrack->track);
-if (var)
+if (tdbIsCompositeChild(subtrack->tdb))
     {
-    subtrack->visibility = hTvFromString(var);
-
-    if (subtrack->limitedVisSet)
-        subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
-    else
+    if (fourStateVisible(subtrackFourStateChecked(subtrack->tdb,cart))) // Don't need all 4 states here.  Visible=checked&&enabled
         {
-        if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
-            subtrack->loadItems(subtrack);
+        char *var = cartOptionalString(cart, subtrack->track);
+        if (var)
+            {
+            subtrack->visibility = hTvFromString(var);
 
-        limitVisibility(subtrack);
+            if (subtrack->limitedVisSet)
+                subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
+            else
+                {
+                if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
+                    subtrack->loadItems(subtrack);
+
+                limitVisibility(subtrack);
+                }
+            return hTvFromString(var);
+            }
         }
-
-    return hTvFromString(var);
+    else
+        return tvHide;
     }
 #endif///def SUBTRACKS_HAVE_VIS
 
@@ -1578,22 +1585,28 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
+    struct trackDb *parentTdb = trackDbCompositeParent(tdb);
+    assert(parentTdb != NULL);
+    struct track *parentTrack = tdbExtrasGetOrDefault(parentTdb,"track",NULL);
+    assert(parentTrack != NULL);
+    vis = tvMin(vis,(parentTrack->limitedVisSet?parentTrack->limitedVis:parentTrack->visibility));
+    if (vis == tvHide) // short curcuit this effort
+        return vis;
+
     char *viewName = NULL;
     if (subgroupFind(tdb,"view",&viewName))
 	{
-	struct trackDb *parent = trackDbCompositeParent(tdb);
-	assert(parent != NULL);
-        int len = strlen(parent->track) + strlen(viewName) + 10;
+        int len = strlen(parentTdb->track) + strlen(viewName) + 10;
 
 	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
 	// in the middle for the javascript to work.
 	char ddName[len];
-        safef(ddName,len,"%s.%s.vis", parent->track,viewName);
+        safef(ddName,len,"%s.%s.vis", parentTdb->track,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
-            vis = hTvFromString(fromParent);
+            vis = tvMin(vis,hTvFromString(fromParent));
         else
-            vis = visCompositeViewDefault(parent,viewName);
+            vis = tvMin(vis,visCompositeViewDefault(parentTdb,viewName));
         subgroupFree(&viewName);
 	}
     }
@@ -4298,23 +4311,6 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
-{
-// add entry for given track to the trackDbJson string
-if(count)
-    dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
-}
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
@@ -4343,38 +4339,12 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
-void subtrackVisCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
-/* When composite/view vis changes, remove subtrack specific vis */
+void subtrackCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view settings changes, remove subtrack specific vis */
 {
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
-    {
-    if(!tdbIsComposite(track->tdb))
-        continue;
-    boolean compositeWide = cartValueHasChanged(newCart,oldVars,track->track,TRUE);
-
-    boolean hasViews = FALSE;
-    struct trackDb *tdbView = track->tdb->subtracks;
-    for (;tdbView != NULL; tdbView = tdbView->next)
-        {
-        char * view = NULL;
-        if (!tdbIsView(tdbView,&view))
-            break;
-
-        hasViews = TRUE;
-        boolean viewLevel = FALSE;
-        if(!compositeWide)
-            {
-            char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
-            safef(settingName,sizeof(settingName),"%s.%s.vis",track->track,view);
-            viewLevel = cartValueHasChanged(newCart,oldVars,settingName,TRUE);
-            }
-        if(compositeWide || viewLevel)
-            cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE); // clean up children, skipping view
-        }
-    if (compositeWide && !hasViews)
-        cartRemoveFromTdbTree(newCart,track->tdb,NULL,TRUE); // clean up children, skipping composite
-    }
+    cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4391,11 +4361,6 @@ boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-struct dyString *trackDbJson = newDyString(1000);
-int trackDbJsonCount = 1;
-dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4446,8 +4411,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     }
 #endif///def IMAGEv2_DRAG_REORDER
 #ifdef SUBTRACKS_HAVE_VIS
-// Here is where subtrack vis override must be removed when composite vis is updated
-subtrackVisCartCleanup(trackList,cart,oldVars);
+subtrackCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
@@ -4514,27 +4478,8 @@ for (track = trackList; track != NULL; track = track->next)
 	    thisTime = clock1000();
 	    track->loadTime = thisTime - lastTime;
 	    }
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-	trackJson(trackDbJson, track, trackDbJsonCount++);
-	if (trackIsCompositeWithSubtracks(track))
-	    {
-	    struct track *subtrack;
-	    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-		{
-		// isSubtrackVisible is causing a problem in panTro2
-		if (isSubtrackVisible(subtrack))
-		    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
-		}
-	    }
-#endif///defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 	}
     }
-
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-dyStringAppend(trackDbJson, "}\n</script>\n");
-if(!trackImgOnly)
-    hPrintf(dyStringContents(trackDbJson));
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 printTrackInitJavascript(trackList);
 
@@ -5638,6 +5583,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 
+hPrintf(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 if(dragZooming)
