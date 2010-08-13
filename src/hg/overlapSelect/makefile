@@ -25,8 +25,12 @@ usage.msg: usage.txt
 	${STRINGIFY} $< >> $@.tmp
 	mv -f $@.tmp $@
 
-test:
+compile: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
+
+test: compile
 	cd tests && ${MAKE} test
+	rm -f ${A}${EXE} 
 
 clean:
 	rm -f $O $B usage.msg overlapSelect
