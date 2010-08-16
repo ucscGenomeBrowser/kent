@@ -16,7 +16,7 @@ compile:: ${O}
 
 test: compile
 	(cd tests && ${MAKE} test)
-	rm -f ${A}${EXE}
+	rm -fr tests/output ${A}${EXE}
 
 clean::
 	rm -f pslPartition ${O}
