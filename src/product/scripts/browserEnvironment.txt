@@ -34,9 +34,6 @@ export GBDB="/scratch/tmp/gbdb"
 #	file hierarchy
 export DOCHOME="/scratch/tmp/htdocs"
 export MACHTYPE=`uname -m`
-#	CVS server is the UCSC public server
-export CVSROOT=:pserver:anonymous@genome-test.cse.ucsc.edu:/cbse
-export CVS_RSH=ssh
 # BAM and PNG optional behavior for the genome browser, see also:
 #	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
 # export USE_BAM=1
