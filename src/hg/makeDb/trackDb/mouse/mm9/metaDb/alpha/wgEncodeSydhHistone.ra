@@ -4,6 +4,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
@@ -11,7 +12,6 @@ dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1.bam
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 parentTable wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep1
 project wgEncode
@@ -27,6 +27,7 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
@@ -34,7 +35,6 @@ dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2.bam
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 parentTable wgEncodeSydhHistCh12H3k4me3IggyaleAlnRep2
 project wgEncode
@@ -50,13 +50,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 labVersion PeakSeq1.0
 project wgEncode
@@ -72,13 +72,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 parentTable wgEncodeSydhHistCh12H3k4me3IggyaleRawSignalRep1
 project wgEncode
@@ -94,13 +94,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 parentTable wgEncodeSydhHistCh12H3k4me3IggyaleRawSignalRep2
 project wgEncode
@@ -116,13 +116,13 @@ antibody H3K4me3
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12H3k4me3IggyaleSig.bigWig
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 labVersion PeakSeq1.0
 project wgEncode
@@ -138,6 +138,7 @@ antibody Input
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
@@ -145,7 +146,6 @@ dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhHistCh12InputIggyaleAln.bam.bai
 fileName wgEncodeSydhHistCh12InputIggyaleAln.bam
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 parentTable wgEncodeSydhHistCh12InputIggyaleAln
 project wgEncode
@@ -160,13 +160,13 @@ antibody Input
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12InputIggyaleRawData.fastq.gz
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 parentTable wgEncodeSydhHistCh12InputIggyaleRawSignal
 project wgEncode
@@ -181,13 +181,13 @@ antibody Input
 cell CH12
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId CH12/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhHistCh12InputIggyaleSig.bigWig
 grant Snyder
-inputType CH12/None/Input/IgG-Yale
 lab Yale
 labVersion PeakSeq1.0
 project wgEncode
@@ -203,6 +203,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/DMSO-5D/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
@@ -210,7 +211,6 @@ dateUnrestricted 2011-04-09
 fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1.bam
 grant Snyder
-inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep1
 project wgEncode
@@ -226,6 +226,7 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/DMSO-5D/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
@@ -233,7 +234,6 @@ dateUnrestricted 2011-04-09
 fileIndex wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2.bam
 grant Snyder
-inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleAlnRep2
 project wgEncode
@@ -249,13 +249,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/DMSO-5D/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyalePk.narrowPeak.gz
 grant Snyder
-inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
@@ -271,13 +271,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/DMSO-5D/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep1.fastq.gz
 grant Snyder
-inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawSignalRep1
 project wgEncode
@@ -293,13 +293,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/DMSO-5D/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawDataRep2.fastq.gz
 grant Snyder
-inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3Dmso20IggyaleRawSignalRep2
 project wgEncode
@@ -315,13 +315,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/DMSO-5D/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhHistMelH3k4me3Dmso20IggyaleSig.bigWig
 grant Snyder
-inputType MEL/DMSO-5D/Input/IgG-Yale
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
@@ -337,13 +337,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1.tagAlign.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3IggyaleAlnRep1
 project wgEncode
@@ -359,13 +359,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2.tagAlign.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3IggyaleAlnRep2
 project wgEncode
@@ -381,13 +381,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyalePk.narrowPeak.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
@@ -403,13 +403,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep1.fastq.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3IggyaleRawSignalRep1
 project wgEncode
@@ -425,13 +425,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleRawDataRep2.fastq.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelH3k4me3IggyaleRawSignalRep2
 project wgEncode
@@ -447,13 +447,13 @@ antibody H3K4me3
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhHistMelH3k4me3IggyaleSig.bigWig
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
@@ -469,13 +469,13 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhHistMelInputIggyaleAln.tagAlign.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelInputIggyaleAln
 project wgEncode
@@ -490,13 +490,13 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhHistMelInputIggyaleRawData.fastq.gz
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 parentTable wgEncodeSydhHistMelInputIggyaleRawSignal
 project wgEncode
@@ -511,13 +511,13 @@ antibody Input
 cell MEL
 composite wgEncodeSydhHist
 control IgG-Yale
+controlId MEL/None/Input/IgG-Yale
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhHistMelInputIggyaleSig.bigWig
 grant Snyder
-inputType MEL/None/Input/IgG-Yale
 lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
@@ -527,4 +527,4 @@ tableName wgEncodeSydhHistMelInputIggyaleSig
 treatment None
 view Signal
 
-# MAGIC: 315183653
+# MAGIC: 305938061

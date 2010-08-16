@@ -1232,7 +1232,7 @@ lab HudsonAlpha
 labExpId SL1035
 parentTable wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 1
 setType input
 subId 1254
@@ -1256,7 +1256,7 @@ lab HudsonAlpha
 labExpId SL1087
 parentTable wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 2
 setType input
 subId 1254
@@ -1424,7 +1424,7 @@ lab HudsonAlpha
 labExpId SL1012
 parentTable wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 1
 setType exp
 subId 1254
@@ -1448,7 +1448,7 @@ lab HudsonAlpha
 labExpId SL1088
 parentTable wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 2
 setType exp
 subId 1254
@@ -1465,12 +1465,12 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
-fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep1.broadPeak.gz
+fileName .broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 1
 setType exp
 softwareVersion MACS
@@ -1494,7 +1494,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1088
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 2
 setType exp
 softwareVersion MACS
@@ -4276,7 +4276,7 @@ lab HudsonAlpha
 labExpId SL1662
 parentTable wgEncodeHaibTfbsGm12891Pax5c20Pcr1xAlnRep1
 project wgEncode
-protocol v041610.1
+protocol PCR1x
 replicate 1
 setType exp
 subId 1510
@@ -4942,7 +4942,7 @@ lab HudsonAlpha
 labExpId SL1664
 parentTable wgEncodeHaibTfbsGm12892Pax5c20Pcr1xAlnRep1
 project wgEncode
-protocol v041610.1
+protocol PCR1x
 replicate 1
 setType exp
 subId 1512
@@ -7320,7 +7320,7 @@ labExpId SL632
 origAssembly hg18
 parentTable wgEncodeHaibTfbsHepg2Fosl2Pcr1xAlnRep1
 project wgEncode
-protocol v041610.1
+protocol PCR1x
 replicate 1
 setType exp
 subId 1239
@@ -9631,7 +9631,7 @@ labExpId SL1218
 labVersion Genestein 100nM treatment
 parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 1
 setType exp
 subId 1826
@@ -9656,7 +9656,7 @@ labExpId SL1492
 labVersion Genestein 100nM treatment
 parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 2
 setType exp
 subId 1826
@@ -9727,7 +9727,7 @@ lab HudsonAlpha
 labExpId SL1218
 labVersion Genestein 100nM treatment
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 1
 setType exp
 softwareVersion MACS
@@ -9752,7 +9752,7 @@ lab HudsonAlpha
 labExpId SL1492
 labVersion Genestein 100nM treatment
 project wgEncode
-protocol PCR2x
+protocol v041610.2
 replicate 2
 setType exp
 softwareVersion MACS
@@ -9906,4 +9906,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -1877435762
+# MAGIC: -1883126424

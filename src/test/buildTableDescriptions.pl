@@ -20,7 +20,8 @@ use strict;
 # Default behaviors, changeable by command line args:
 #
 my $kentSrc   = "/cluster/home/galt/kentclean/src";
-my $gbdDPath  = "/cluster/home/galt/browser/goldenPath/gbdDescriptions.html";
+  # currently does not get checked-in to git:
+my $gbdDPath  = "/cluster/home/galt/kentclean/src/hg/htdocs/goldenPath/gbdDescriptions.html";  
 my $noLoad    = 0;
 my $verbose   = 0;
 

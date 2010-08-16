@@ -6,10 +6,9 @@ MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(L)
 
 O = findStanAlignments  stanToBedAndExpRecs
 
-
 %: %.c 
-	${CC} ${COPT} ${CFLAGS}  -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
-	cp $@ ${BINDIR}/
+	${CC} ${COPT} ${CFLAGS}  -Wimplicit  -I../inc -I../../inc  -o ${DESTDIR}${BINDIR}/$@ $(addsuffix .c,$@) $(MYLIBS)
+	${STRIP} ${DESTDIR}${BINDIR}/$@
 
 all: $(O)
 
