@@ -596,7 +596,6 @@ fileIndex wgEncodeUwHistoneH7esInputStdAlnRep1.bam.bai
 fileName wgEncodeUwHistoneH7esInputStdAlnRep1.bam
 fragLength 350
 grant Stam
-inputType H7-hESC/Input/std
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
@@ -622,7 +621,6 @@ dateUnrestricted 2011-04-23
 fileName wgEncodeUwHistoneH7esInputStdRawDataRep1.fastq.gz
 fragLength 350
 grant Stam
-inputType H7-hESC/Input/std
 lab UW
 origAssembly hg19
 parentTable wgEncodeUwHistoneH7esInputStdRawSignalRep1
@@ -647,7 +645,6 @@ dateUnrestricted 2011-04-23
 fileName wgEncodeUwHistoneH7esInputStdRawRep1.bigWig
 fragLength 350
 grant Stam
-inputType H7-hESC/Input/std
 lab UW
 labVersion WindowDensity-bin20-win+/-75
 origAssembly hg19
@@ -1295,4 +1292,4 @@ subId 1320
 tableName wgEncodeUwHistoneWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: -1487093215
+# MAGIC: -127575512
