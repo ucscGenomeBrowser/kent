@@ -1413,7 +1413,7 @@ noInherit on
         origAssembly hg18
         # subId=1288 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSGm12801InputStdRawRep1
+	track wgEncodeUwTFBSGm12801InputStdRawRep1
         table wgEncodeUwHistoneGm12801InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1425,7 +1425,7 @@ noInherit on
         # subId=1289 dateSubmitted=2010-06-10
 
         track wgEncodeUwTFBSGm12864InputStdRawRep1
-		table wgEncodeUwHistoneGm12864InputStdRawRep1
+	table wgEncodeUwHistoneGm12864InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM864 Input   Ra1
@@ -1446,7 +1446,7 @@ noInherit on
         origAssembly hg18
         # subId=1291 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSGm12872InputStdRawRep1
+	track wgEncodeUwTFBSGm12872InputStdRawRep1
         table wgEncodeUwHistoneGm12872InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1457,8 +1457,8 @@ noInherit on
         origAssembly hg18
         # subId=1292 dateSubmitted=2010-06-10
         
-		track wgEncodeUwTFBSGm12878InputStdRawRep1
-		table wgEncodeUwHistoneGm12878InputStdRawRep1
+	track wgEncodeUwTFBSGm12878InputStdRawRep1
+	table wgEncodeUwHistoneGm12878InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig
         shortLabel GM878 Input   Ra1
@@ -1469,7 +1469,7 @@ noInherit on
         color 153,38,0
         # subId=1293 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSHek293InputStdRawRep1
+	track wgEncodeUwTFBSHek293InputStdRawRep1
         table wgEncodeUwHistoneHek293InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1480,7 +1480,7 @@ noInherit on
         origAssembly hg18
         # subId=1295 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSHmecInputStdRawRep1
+	track wgEncodeUwTFBSHmecInputStdRawRep1
         table wgEncodeUwHistoneHmecInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1491,7 +1491,7 @@ noInherit on
         origAssembly hg18
         # subId=1302 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSHreInputStdRawRep1
+	track wgEncodeUwTFBSHreInputStdRawRep1
         table wgEncodeUwHistoneHreInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1502,7 +1502,7 @@ noInherit on
         origAssembly hg18
         # subId=1303 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSK562InputStdRawRep1
+	track wgEncodeUwTFBSK562InputStdRawRep1
         table wgEncodeUwHistoneK562InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig
@@ -1514,7 +1514,7 @@ noInherit on
         color 46,0,184
         # subId=1308 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSHuvecInputStdRawRep1
+	track wgEncodeUwTFBSHuvecInputStdRawRep1
         table wgEncodeUwHistoneHuvecInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1526,7 +1526,7 @@ noInherit on
         color 224,75,0
         # subId=1316 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSNhekInputStdRawRep1
+	track wgEncodeUwTFBSNhekInputStdRawRep1
         table wgEncodeUwHistoneNhekInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1538,7 +1538,7 @@ noInherit on
         color 179,0,134
         # subId=1317 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSSaecInputStdRawRep1
+	track wgEncodeUwTFBSSaecInputStdRawRep1
         table wgEncodeUwHistoneSaecInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1549,7 +1549,7 @@ noInherit on
         origAssembly hg18
         # subId=1318 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSSknshraInputStdRawRep1
+	track wgEncodeUwTFBSSknshraInputStdRawRep1
         table wgEncodeUwHistoneSknshraInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1560,7 +1560,7 @@ noInherit on
         origAssembly hg18
         # subId=1319 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSWerirb1InputStdRawRep1
+	track wgEncodeUwTFBSWerirb1InputStdRawRep1
         table wgEncodeUwHistoneWerirb1InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1571,7 +1571,7 @@ noInherit on
         origAssembly hg18
         # subId=1320 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSGm12874InputStdRawRep1
+	track wgEncodeUwTFBSGm12874InputStdRawRep1
         table wgEncodeUwHistoneGm12874InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1582,7 +1582,7 @@ noInherit on
         origAssembly hg18
         # subId=1416 dateSubmitted=2010-06-14
 
-		track wgEncodeUwTFBSHelas3InputStdRawRep1
+	track wgEncodeUwTFBSHelas3InputStdRawRep1
         table wgEncodeUwHistoneHelas3InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1594,7 +1594,7 @@ noInherit on
         color 0,119,158
         # subId=1423 dateSubmitted=2010-06-14
 
-		track wgEncodeUwTFBSHepg2InputStdRawRep1
+	track wgEncodeUwTFBSHepg2InputStdRawRep1
         table wgEncodeUwHistoneHepg2InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1606,7 +1606,7 @@ noInherit on
         color 189,0,157
         # subId=1435 dateSubmitted=2010-06-15
 
-		track wgEncodeUwTFBSHl60InputStdRawRep1
+	track wgEncodeUwTFBSHl60InputStdRawRep1
         table wgEncodeUwHistoneHl60InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1617,7 +1617,7 @@ noInherit on
         origAssembly hg18
         # subId=1438 dateSubmitted=2010-06-15
 
-		track wgEncodeUwTFBSGm12873InputStdRawRep1
+	track wgEncodeUwTFBSGm12873InputStdRawRep1
         table wgEncodeUwHistoneGm12873InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1628,7 +1628,7 @@ noInherit on
         origAssembly hg18
         # subId=1481 dateSubmitted=2010-06-15
 
-		track wgEncodeUwTFBSGm12875InputStdRawRep1
+	track wgEncodeUwTFBSGm12875InputStdRawRep1
         table wgEncodeUwHistoneGm12875InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
@@ -1639,14 +1639,3 @@ noInherit on
         origAssembly hg18
         # subId=1485 dateSubmitted=2010-06-16
 
-# Commenting out track due to input not coordinating with any CTCF (TFBS) data
-#		 track wgEncodeUwTFBSH7esInputStdRawRep1
-#        table wgEncodeUwHistoneH7esInputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwTFBSViewRawSig off
-#        shortLabel H7hESC Input   Ra1
-#        longLabel ENCODE UW TFBS by ChIP-Seq Raw Signal - 1st (Input in H7-hESC cells)
-#        subGroups view=zRSig factor=zInput cellType=H7es rank=1st
-#        type bigWig 1.000000 9907.000000
-#        origAssembly hg19
-#        # subId=2033 dateSubmitted=2010-07-24
