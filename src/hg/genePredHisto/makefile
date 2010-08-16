@@ -19,4 +19,4 @@ test: compile
 	rm -fr tests/output ${A}${EXE} ${A}.o
 
 clean::
-	rm -f ${O} ${A}
+	rm -fr tests/output ${A}${EXE} ${A}.o

@@ -26,7 +26,8 @@ test:: compile
 	rm -fr tests/output blastXmlToPsl${EXE} blastToPsl${EXE}
 
 clean::
-	rm -f ${blastToPsl_objs} ${blastXmlToPsl_objs}
+	rm -f tests/output ${blastToPsl_objs} ${blastXmlToPsl_objs}
+	rm -f blastXmlToPsl${EXE} blastToPsl${EXE}
 
 ncbiBlast.o: ncbiBlast.c ncbiBlast.h
 pslBuild.o: pslBuild.c pslBuild.h

@@ -25,4 +25,4 @@ savebak:
 	savebak genePredSingleCover  *.[ch] makefile tests/makefile tests/input
 
 clean:
-	rm -f  *.o
+	rm -fr tests/output ${A}${EXE} *.o
