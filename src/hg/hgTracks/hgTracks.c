@@ -1585,7 +1585,7 @@ if(tdbIsCompositeChild(tdb))
     {
     struct trackDb *parentTdb = trackDbCompositeParent(tdb);
     assert(parentTdb != NULL);
-    struct track *parentTrack = tdbExtrasGetOrDefault(parentTdb,"track",NULL);
+    struct track *parentTrack = hashFindVal(trackHash, parentTdb->track);
     assert(parentTrack != NULL);
     vis = tvMin(vis,(parentTrack->limitedVisSet?parentTrack->limitedVis:parentTrack->visibility));
     if (vis == tvHide) // short curcuit this effort
