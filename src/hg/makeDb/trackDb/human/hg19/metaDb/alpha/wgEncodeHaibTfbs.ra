@@ -6019,7 +6019,7 @@ dateUnrestricted 2010-09-24
 fileName wgEncodeHaibTfbsH1hescPol2Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
-labExpIdn SL980
+labExpId SL980
 labVersion (Pol2 8WG16)
 origAssembly hg18
 project wgEncode
@@ -9906,4 +9906,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -1883126424
+# MAGIC: -1890010636
