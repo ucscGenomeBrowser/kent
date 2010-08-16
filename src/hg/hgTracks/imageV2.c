@@ -1479,6 +1479,12 @@ else
     }
 }
 
+// FF does not support newline code and '...' looks bad without newlines
+#define NEWLINE_ENCODED " &#x0A;"
+#define NEWLINE_NOT_SUPPORTED " - "
+#define NEWLINE_TO_USE(browser) ((browser) == btFF ? NEWLINE_NOT_SUPPORTED : NEWLINE_ENCODED)
+#define ELLIPSIS_TO_USE(browser) ((browser) == btFF ? "" : "...")
+
 static void sliceAndMapDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,enum sliceType sliceType,char *name,boolean scrollHandle)
 /* writes a slice of an image and any assocated image map as HTML */
 {
@@ -1518,13 +1524,16 @@ else if(slice->link != NULL)
         hPrintf("  <A HREF='%s'",slice->link);
     if (slice->title != NULL)
         {
-        if (imgTrack->reorderable && sliceType == stButton)
+        if (sliceType == stButton)
             {
-            char *newLine = " &#x0A;";
-            if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-                newLine = " - "; // FF does not support newline code!
-            hPrintf(" TITLE='Click for:%s%s%s(drag to reorder%s)'", newLine,htmlEncode(slice->title),
-                    newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+            enum browserType browser = cgiClientBrowser(NULL,NULL,NULL);
+            char *newLine = NEWLINE_TO_USE(browser);
+            char *ellipsis = ELLIPSIS_TO_USE(browser);
+            if(imgTrack->reorderable)
+                hPrintf(" TITLE='%s%sclick to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
+                    ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+            else
+                hPrintf(" TITLE='%s%sclick to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
             }
         else
             hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
@@ -1626,6 +1635,7 @@ hPrintf(" class='tableWithDragAndDrop'");
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
+char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
@@ -1652,7 +1662,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle' title='Drag to reorder: &#x0A;%s'>\n",name,htmlEncode(imgTrack->tdb->longLabel));
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
@@ -1677,8 +1687,10 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         {
         // rightLabel
         safef(name, sizeof(name), "side_%s", trackName);
-        hPrintf(" <TD id='td_%s'%s>\n", name,
-            (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
+        if (imgTrack->reorderable)
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+        else
+            hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
         hPrintf("</TD>\n");
         // button

@@ -7,7 +7,7 @@ HTDOCS_USER=${HTDOCS}-${USER}
 
 
 GIT = git
-GITUP = ${GIT} pull -q
+GITUP = ${GIT} pull
 FIND=gitFiles
 
 user:
