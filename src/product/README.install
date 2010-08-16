@@ -84,7 +84,7 @@ The sequence of instructions here are similar to the Mirror site
 		scripts/trashCleaner.csh
 
 5.  Download static WEB page content:
-	rsync -avzP rsync://hgdownload.cse.ucsc.edu/htdocs/ $WEBROOT/html/
+	See also: scripts/updateHtml.sh
 
 6.  Copy CGI binaries:
 	rsync -avzP rsync://hgdownload.cse.ucsc.edu/cgi-bin/ ${WEBROOT}/cgi-bin/
