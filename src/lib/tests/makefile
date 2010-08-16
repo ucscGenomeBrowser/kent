@@ -6,7 +6,7 @@ BIN_DIR = bin/${MACHTYPE}
 
 test: errCatchTest htmlPageTest htmlExpandUrlTest pipelineTests dyStringTest \
     mimeTests base64Tests quotedPTests safeTest hashTest fetchUrlTest gff3Test
-	rm -r output
+	rm -r output fetchUrlTest
 	@echo tested all
 
 mkdirs:
@@ -231,4 +231,4 @@ ${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
 	${CC} ${COPT} -o ${BIN_DIR}/gff3Tester gff3Tester.o ${MYLIBS}
 
 clean:
-	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out
+	rm -rf *.o bin output *.tmp mimeTester.tmp mimeTester.out fetchUrlTest
