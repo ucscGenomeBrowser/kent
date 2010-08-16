@@ -40,6 +40,7 @@ pslReaderTest: ${BIN_DIR}/pslReaderTester mkdirs
 
 customTrackTest: ${BIN_DIR}/customTrackTester loaders mkdirs
 	${MAKE} -f customTrackTests.mk test BIN_DIR=${BIN_DIR} OUT_DIR=output
+	rm -f loader
 
 binTest: mkdirs ${BIN_DIR}/binTest
 	@./binTest.sh
