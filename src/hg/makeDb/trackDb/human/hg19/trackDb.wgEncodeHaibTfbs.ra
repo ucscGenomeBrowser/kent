@@ -1729,6 +1729,61 @@ nextItemButton on
         color 189,0,157
     # subId=1227 dateSubmitted=2010-06-07
 
+        track wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel PANC1 NRSF   Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (NRSF in PANC-1 cells)
+        subGroups view=Peaks factor=NRSF cellType=PANC1 protocol=PCR2x treatment=None rep=rep2
+        type broadPeak
+        # subId=1848 dateSubmitted=2010-08-06
+
+        track wgEncodeHaibTfbsA549GrPcr2xEtoh02PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel A549  GR     Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (GR in A549 cells)
+        subGroups view=Peaks factor=GR cellType=A549 protocol=PCR2x treatment=ETOH02 rep=rep2
+        type broadPeak
+        # subId=1848 dateSubmitted=2010-08-06
+
+        track wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel HTB11 NRSF   Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (NRSF in HTB-11 cells)
+        subGroups view=Peaks factor=NRSF cellType=HTB11 protocol=PCR2x treatment=None rep=rep1
+        type broadPeak
+        # subId=1848 dateSubmitted=2010-08-06
+
+        track wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks 
+        shortLabel GM878 NRSF   Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (NRSF in GM12878 cells)
+        subGroups view=Peaks factor=NRSF cellType=GM12878 protocol=PCR2x treatment=None rep=rep1
+        type broadPeak
+        color 153,38,0
+        # subId=1848 dateSubmitted=2010-08-06
+
+        track wgEncodeHaibTfbsU87NrsfPcr2xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel U87   NRSF   Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (NRSF in U87 cells)
+        subGroups view=Peaks factor=NRSF cellType=U87 protocol=PCR2x treatment=None rep=rep1
+        type broadPeak
+        # subId=1848 dateSubmitted=2010-08-06
+
+        track wgEncodeHaibTfbsPfsk1NrsfPcr2xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel PFSK1 NRSF  Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (NRSF in PFSK-1 cells)
+        subGroups view=Peaks factor=NRSF cellType=PFSK1 protocol=PCR2x treatment=None rep=rep1
+        type broadPeak
+        # subId=1848 dateSubmitted=2010-08-06
+
 
 
  

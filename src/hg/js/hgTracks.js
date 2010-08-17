@@ -808,7 +808,14 @@ var handle = $("td.dragHandle");
 function imgTblDragHandleMouseOver()
 {
 // Highlights a single row when mouse over a dragHandle column (sideLabel and buttons)
-    if(jQuery.tableDnD.dragObject == null) {
+    if(jQuery.tableDnD == undefined) {
+        //var handle = $("td.dragHandle");
+        //$(handle)
+        //    .unbind('mouseenter')//, jQuery.tableDnD.mousemove);
+        //    .unbind('mouseleave');//, jQuery.tableDnD.mouseup);
+        return;
+    }
+    if (jQuery.tableDnD.dragObject == null) {
         $( this ).parents("tr").addClass("trDrag");
     }
 }
@@ -822,7 +829,7 @@ function imgTblDragHandleMouseOut()
 function imgTblButtonMouseOver()
 {
 // Highlights a composite set of buttons, regarless of whether tracks are adjacent
-    if(jQuery.tableDnD.dragObject == null) {
+    if(jQuery.tableDnD == undefined || jQuery.tableDnD.dragObject == null) {
         var classList = $( this ).attr("class").split(" ");
         var btns = $( "p." + classList[0] );
         $( btns ).removeClass('btnGrey');
@@ -1943,7 +1950,7 @@ function changeSearchVisibilityPopups(cmd)
 function findTracksChangeVis(seenVis)
 {
     var trackName = $(seenVis).attr('id');
-    hiddenVis = $("input[name='"+trackName+"']");
+    hiddenVis = $("input[name='"+trackName.substring(0,trackName.length - "_id".length)+"']");
     $(hiddenVis).attr('disabled',false);
     $(hiddenVis).val($(seenVis).val());
 }
@@ -1951,14 +1958,15 @@ function findTracksChangeVis(seenVis)
 function findTracksClickedOne(selCb,justClicked)
 {
     var selName = $(selCb).attr('id');
-    var trackName = selName.substring(0,selName.length - "_sel".length)
-    hiddenSel = $("input[name='"+selName+"']");
-    var seenVis = $('select#' + trackName);
-    hiddenVis = $("input[name='"+trackName+"']");
+    var trackName = selName.substring(0,selName.length - "_sel_id".length)
+    var hiddenSel = $("input[name='"+trackName+"_sel']");
+    var seenVis = $('select#' + trackName + "_id");
+    var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
     var subtrack = $(tr).hasClass('subtrack');
     var canPack = $(tr).hasClass('canPack');
     var checked = $(selCb).attr('checked');
+    //warn(trackName +" selName:"+selName +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" canPack:"+canPack);
 
     // First deal with seenVis control
     if(checked) {
@@ -1977,7 +1985,7 @@ function findTracksClickedOne(selCb,justClicked)
         if(subtrack) {
             $(hiddenSel).attr('disabled',false);
             if(checked)
-                $(hiddenSel).val('on');
+                $(hiddenSel).val('1');
             else
                 $(hiddenSel).val('[]');
         }
