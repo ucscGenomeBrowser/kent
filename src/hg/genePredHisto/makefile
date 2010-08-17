@@ -1,17 +1,22 @@
 include ../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 
-MYLIBDIR = ../../lib/$(MACHTYPE)
-L += $(MYSQLLIBS) -lm
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
+MYLIBDIR = ../../lib/${MACHTYPE}
+L += ${MYSQLLIBS} -lm
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = genePredHisto.o
+A = genePredHisto
+O = ${A}.o
 
-genePredHisto: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o ${BINDIR}/genePredHisto $O $(MYLIBS) $L
+genePredHisto: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 
-test:
+compile:
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} $L
+
+test: compile
 	(cd tests && ${MAKE} test)
+	rm -fr tests/output ${A}${EXE} ${A}.o
 
 clean::
-	rm -f ${O}
+	rm -fr tests/output ${A}${EXE} ${A}.o
