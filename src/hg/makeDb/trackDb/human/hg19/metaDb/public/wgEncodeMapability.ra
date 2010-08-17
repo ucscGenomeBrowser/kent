@@ -1,0 +1,85 @@
+metaObject wgEncodeCrgMapabilityAlign100mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion January 2010
+fileName wgEncodeCrgMapabilityAlign100mer.bigWig
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 100mer
+tableName wgEncodeCrgMapabilityAlign100mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign24mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion April 2010
+fileName wgEncodeCrgMapabilityAlign24mer.bigWig
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 24mer
+tableName wgEncodeCrgMapabilityAlign24mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign36mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion January 2010
+fileName wgEncodeCrgMapabilityAlign36mer.bigWig
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 36mer
+tableName wgEncodeCrgMapabilityAlign36mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign40mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion January 2010
+fileName wgEncodeCrgMapabilityAlign40mer.bigWig
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 40mer
+tableName wgEncodeCrgMapabilityAlign40mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign50mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion January 2010
+fileName wgEncodeCrgMapabilityAlign50mer.bigWig
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 50mer
+tableName wgEncodeCrgMapabilityAlign50mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+metaObject wgEncodeCrgMapabilityAlign75mer
+objType table
+composite wgEncodeMapability
+dataType Mapability
+dataVersion January 2010
+fileName wgEncodeCrgMapabilityAlign75mer.bigWig
+grant Gingeras
+lab CRG-Guigo
+project wgEncode
+size 75mer
+tableName wgEncodeCrgMapabilityAlign75mer
+uniqueness no more than 2 mismatches
+view Alignability
+
+# MAGIC: 1275319966
