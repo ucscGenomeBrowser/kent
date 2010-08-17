@@ -3,25 +3,22 @@ HG_WARN = ${HG_WARN_ERR}
 
 L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYSQLLIBS}
 
 
+A = estOrient
 O = estOrient.o
-B =  ${BINDIR}/estOrient
-
-$B: estOrient
-	@${MKDIR} `dirname $B`
-	cp -f estOrient $B
 
 estOrient: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o estOrient $O ${MYLIBS} ${MYSQLLIBS} $L
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-estOrient.o: estOrient.c $H
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 test:
 	cd tests && ${MAKE} test
 
 clean:
-	rm -f $O $B estOrient
+	rm -f $O $A estOrient
 	cd tests && ${MAKE} clean
-

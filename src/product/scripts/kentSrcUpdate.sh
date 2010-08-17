@@ -23,20 +23,6 @@ else
     usage
 fi
 
-# before we move out of this user's cwd, we need to find out
-#	where this command is and the adjacent beta.cvsup.pl
-#	script
-HERE=`pwd`
-TOOLDIR=`dirname $0`
-export HERE TOOLDIR
-# assume relative reference from HERE, fixup if absolute
-CVSUP="${HERE}/${TOOLDIR}/beta.cvsup.pl"
-export CVSUP
-
-if [[ "${TOOLDIR}" =~ "^/" ]]; then	# absolute reference to this script
-    CVSUP="${TOOLDIR}/beta.cvsup.pl"
-fi
-
 # this umask will allow all group members to write on files of other
 # group members
 umask 002
@@ -44,18 +30,20 @@ umask 002
 mkdir -p "${kentSrc}"
 
 #	clean the source tree before updating it, this will lead
-#	to a cleaner report from cvsup
+#	to a cleaner report from git pull
 if [ -d "${kentSrc}/src" ]; then
     cd "${kentSrc}/src"
     make clean > /dev/null 2> /dev/null
     rm -f tags daily.log utils.log blatSuite.log
-    cd "${kentSrc}/src/hg"
-    make clean_utils > /dev/null 2> /dev/null
 else
     #	first time, needs to establish the source tree
     cd "${kentSrc}"
     cd ..
-    cvs -Q co -P -rbeta kent
+    rmdir kent
+    time git clone git://genome-source.cse.ucsc.edu/kent.git
+    cd kent
+    git checkout -t -b beta origin/beta
+    cd ..
 fi
 
 # not necessary, but this is where it is happening
@@ -66,7 +54,7 @@ if [ "X${testHere}Y" != "X${kentSrc}Y" ]; then
     echo "ERROR: kentSrcUpdate.sh failed to chdir to ${kentSrc}"
     exit 255;
 fi
-${CVSUP} . 2>&1 | mail -s 'CVS update report kent' "${LOGNAME}"
+/usr/bin/git pull 2>&1 | mail -s 'GIT update report kent' "${LOGNAME}"
 
 #	And then, let's build it all
 cd "${kentSrc}/src"

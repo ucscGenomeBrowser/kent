@@ -5180,8 +5180,9 @@ description Input library was prepared at UC Davis.
 ### Treatments
 term androgen
 tag ANDRO
-description 1 nM treatment for 12 hours (Crawford)
+description 12hrs, 1nM Methyltrienolone (R1881) (Crawford)
 type treatment
+label Methyltrienolone
 
 term Betamethasone_100nM
 tag BMETH
@@ -5245,8 +5246,9 @@ type treatment
 
 term estrogen
 tag ESTRO
-description 100 nM treatment for 45 minutes (Crawford)
+description 45min, 100nM Estradiol (Crawford)
 type treatment
+label Estradiol_100nM
 
 term EtOH_0.02pct
 tag ETOH02

@@ -156,7 +156,7 @@ if (withHtmlHeader)
            "<BODY BGCOLOR=\"#%s\" LINK=\"#0000CC\" VLINK=\"#330066\" ALINK=\"#6600FF\">",
            hgColOutside());
     htmlWarnBoxSetup(stdout);// Sets up a warning box which can be filled with errors as they occur
-    commonCssStyles();
+    puts(commonCssStyles());
     }
 puts(
     "<A NAME=\"TOP\"></A>" "\n"

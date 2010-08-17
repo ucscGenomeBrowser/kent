@@ -2,7 +2,7 @@ name human
 db hg19
 
 name zebrafish
-db danRer4
+db danRer6
 
 name drosophila
 db dm3
@@ -11,7 +11,7 @@ name rat
 db rn4
 
 name cElegans
-db ce4
+db ce6
 
 name yeast
 db sacCer2

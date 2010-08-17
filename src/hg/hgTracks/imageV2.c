@@ -58,7 +58,38 @@ return (a->order - b->order);
 void flatTracksSort(struct flatTracks **flatTracks)
 // This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
 {
-if(flatTracks && *flatTracks)
+// flatTracks list has 2 sets of "order": those already dragReordered (below IMG_ORDEREND)
+// and those not yet reordered (above).  It has been decided that adding new tracks to an
+// existing order should always put the new tracks below existing and treat them as if they
+// were reordered there.  Thus all new tracks should get an imgOrd below IMG_ORDEREND.
+// The result is turning on a successive set of new tracks will have them appear below all others.
+int imgOrdSet = 0;
+boolean notYetOrdered = FALSE;
+struct flatTracks *oneTrack = *flatTracks;
+for(;oneTrack!=NULL;oneTrack = oneTrack->next)
+    {
+    if (oneTrack->order <= IMG_ORDEREND
+    &&  imgOrdSet < oneTrack->order )
+        imgOrdSet = oneTrack->order;
+    else
+        notYetOrdered = TRUE;
+    }
+if (imgOrdSet > 0 && notYetOrdered) // Image order has previously been set, so givem all imgOrds
+    {
+    imgOrdSet = (IMG_ORDEREND - imgOrdSet);  // This difference should be removed from any with imgOrdSet
+    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
+        {
+        if (oneTrack->order >= imgOrdSet)
+            {
+            oneTrack->order -= imgOrdSet;
+            char var[256];
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        }
+    }
+
+if (flatTracks && *flatTracks)
     slSort(flatTracks, flatTracksCmp);
 }
 
@@ -1479,6 +1510,12 @@ else
     }
 }
 
+// FF does not support newline code and '...' looks bad without newlines
+#define NEWLINE_ENCODED " &#x0A;"
+#define NEWLINE_NOT_SUPPORTED " - "
+#define NEWLINE_TO_USE(browser) ((browser) == btFF ? NEWLINE_NOT_SUPPORTED : NEWLINE_ENCODED)
+#define ELLIPSIS_TO_USE(browser) ((browser) == btFF ? "" : "...")
+
 static void sliceAndMapDraw(struct imgBox *imgBox,struct imgTrack *imgTrack,enum sliceType sliceType,char *name,boolean scrollHandle)
 /* writes a slice of an image and any assocated image map as HTML */
 {
@@ -1518,13 +1555,16 @@ else if(slice->link != NULL)
         hPrintf("  <A HREF='%s'",slice->link);
     if (slice->title != NULL)
         {
-        if (imgTrack->reorderable && sliceType == stButton)
+        if (sliceType == stButton)
             {
-            char *newLine = " &#x0A;";
-            if (cgiClientBrowser(NULL,NULL,NULL) == btFF)
-                newLine = " - "; // FF does not support newline code!
-            hPrintf(" TITLE='Click for:%s%s%s(drag to reorder%s)'", newLine,htmlEncode(slice->title),
-                    newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+            enum browserType browser = cgiClientBrowser(NULL,NULL,NULL);
+            char *newLine = NEWLINE_TO_USE(browser);
+            char *ellipsis = ELLIPSIS_TO_USE(browser);
+            if(imgTrack->reorderable)
+                hPrintf(" TITLE='%s%sclick to configure%s%sdrag to reorder%s'",htmlEncode(slice->title), newLine,
+                    ellipsis, newLine,(tdbIsCompositeChild(imgTrack->tdb)?" highlighted subtrack":"") );
+            else
+                hPrintf(" TITLE='%s%sclick to configure%s'",htmlEncode(slice->title), newLine, ellipsis);
             }
         else
             hPrintf(" TITLE='Click for: &#x0A;%s'", htmlEncode(slice->title) );
@@ -1540,9 +1580,32 @@ if(slice->parentImg)
     hPrintf("</div>");
 }
 
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
+{
+// add entry for given track to the trackDbJson string
+if(count)
+    dyStringAppend(trackDbJson, "\n,");
+dyStringPrintf(trackDbJson, "\t%s: {", track->track);
+if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
+dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
+if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+}
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+
 void imageBoxDraw(struct imgBox *imgBox)
 /* writes a entire imgBox including all tracksas HTML */
 {
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+struct dyString *trackDbJson = newDyString(1000);
+int trackDbJsonCount = 1;
+dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+
 if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
     return;
 imgBoxDropEmpties(imgBox);
@@ -1556,23 +1619,10 @@ imgBoxTracksNormalizeOrder(imgBox);
 //    imgBoxShow(NULL,imgBox,0);
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
-//commonCssStyles();
 #ifdef IMAGEv2_DRAG_REORDER
 jsIncludeFile("jquery.tablednd.js", NULL);
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
-#ifdef IMAGEv2_DRAG_REORDER
-hPrintf(".trDrag {background-color:#ccFFcc;}\n");// outline:red solid thin;}\n"); // opacity for FF, padding/bg for IE
-hPrintf(".dragHandle {cursor: s-resize;}\n");
-#endif//def IMAGEv2_DRAG_REORDER
-#ifdef FLAT_TRACK_LIST
-hPrintf(".btn  {border-style:outset; background-color:#cccccc; border-color:#dddddd;}\n");
-hPrintf(".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // connect none
-hPrintf(".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
-hPrintf(".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
-hPrintf(".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
-hPrintf(".btnBlue {background-color:#91B3E6; border-color:#91B3E6;}\n");
-#endif//def FLAT_TRACK_LIST
 hPrintf("div.dragZoom {cursor: text;}\n");
 //#ifndef FLAT_TRACK_LIST
 hPrintf("img.button {position:relative; border:0;}\n");
@@ -1616,10 +1666,18 @@ hPrintf(" class='tableWithDragAndDrop'");
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
+char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+    struct track *track = hashFindVal(trackHash, trackName);
+    if(track)
+        {
+	trackJson(trackDbJson, track, trackDbJsonCount++);
+        }
+#endif
     //if(verbose && imgTrack->order == 3)
     //    imgTrackShow(NULL,imgTrack,0);
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s'>\n",trackName,imgTrack->order,
@@ -1635,7 +1693,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         // leftLabel
         safef(name,sizeof(name),"side_%s",trackName);
         if (imgTrack->reorderable)
-            hPrintf(" <TD id='td_%s' class='dragHandle' title='Drag to reorder: &#x0A;%s'>\n",name,htmlEncode(imgTrack->tdb->longLabel));
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
         else
             hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
@@ -1660,8 +1718,10 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
         {
         // rightLabel
         safef(name, sizeof(name), "side_%s", trackName);
-        hPrintf(" <TD id='td_%s'%s>\n", name,
-            (imgTrack->reorderable?" class='dragHandle' title='Drag to reorder'":""));
+        if (imgTrack->reorderable)
+            hPrintf(" <TD id='td_%s' class='dragHandle' title='%s%sdrag to reorder'>\n",name,htmlEncode(imgTrack->tdb->longLabel),newLine);
+        else
+            hPrintf(" <TD id='td_%s'>\n",name);
         sliceAndMapDraw(imgBox,imgTrack,stSide,name,FALSE);
         hPrintf("</TD>\n");
         // button
@@ -1674,4 +1734,10 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     }
 hPrintf("</TABLE>\n");
 hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
+
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+dyStringAppend(trackDbJson, "}\n</script>\n");
+if(!trackImgOnly)
+    hPrintf(dyStringContents(trackDbJson));
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }

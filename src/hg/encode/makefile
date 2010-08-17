@@ -7,7 +7,8 @@ DIRS = \
 	mkEncodeFrameset \
 	hgEncodeVocab \
 	validateFiles \
-        encodeMkChangeNotes
+        encodeMkChangeNotes \
+        paraMd5sum
 
 # broken
 	#ldGencodeIntron \

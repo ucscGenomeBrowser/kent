@@ -301,11 +301,9 @@ char *url = trackUrl(name, chromName);
 
 if(theImgBox && curImgTrack)
     {
-    char title[256];
-    safef(title,sizeof(title),"%s controls", shortLabel);
     struct imgSlice *curSlice = imgTrackSliceGetByType(curImgTrack,stButton);
     if(curSlice)
-        sliceAddLink(curSlice,url,title);
+        sliceAddLink(curSlice,url,shortLabel);
     }
 else
     {
@@ -1553,22 +1551,29 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
 #ifdef SUBTRACKS_HAVE_VIS
-char *var = cartOptionalString(cart, subtrack->track);
-if (var)
+if (tdbIsCompositeChild(subtrack->tdb))
     {
-    subtrack->visibility = hTvFromString(var);
-
-    if (subtrack->limitedVisSet)
-        subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
-    else
+    if (fourStateVisible(subtrackFourStateChecked(subtrack->tdb,cart))) // Don't need all 4 states here.  Visible=checked&&enabled
         {
-        if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
-            subtrack->loadItems(subtrack);
+        char *var = cartOptionalString(cart, subtrack->track);
+        if (var)
+            {
+            subtrack->visibility = hTvFromString(var);
 
-        limitVisibility(subtrack);
+            if (subtrack->limitedVisSet)
+                subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
+            else
+                {
+                if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
+                    subtrack->loadItems(subtrack);
+
+                limitVisibility(subtrack);
+                }
+            return hTvFromString(var);
+            }
         }
-
-    return hTvFromString(var);
+    else
+        return tvHide;
     }
 #endif///def SUBTRACKS_HAVE_VIS
 
@@ -1578,22 +1583,28 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
+    struct trackDb *parentTdb = trackDbCompositeParent(tdb);
+    assert(parentTdb != NULL);
+    struct track *parentTrack = hashFindVal(trackHash, parentTdb->track);
+    assert(parentTrack != NULL);
+    vis = tvMin(vis,(parentTrack->limitedVisSet?parentTrack->limitedVis:parentTrack->visibility));
+    if (vis == tvHide) // short curcuit this effort
+        return vis;
+
     char *viewName = NULL;
     if (subgroupFind(tdb,"view",&viewName))
 	{
-	struct trackDb *parent = trackDbCompositeParent(tdb);
-	assert(parent != NULL);
-        int len = strlen(parent->track) + strlen(viewName) + 10;
+        int len = strlen(parentTdb->track) + strlen(viewName) + 10;
 
 	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
 	// in the middle for the javascript to work.
 	char ddName[len];
-        safef(ddName,len,"%s.%s.vis", parent->track,viewName);
+        safef(ddName,len,"%s.%s.vis", parentTdb->track,viewName);
         char * fromParent = cartOptionalString(cart, ddName);
         if(fromParent)
-            vis = hTvFromString(fromParent);
+            vis = tvMin(vis,hTvFromString(fromParent));
         else
-            vis = visCompositeViewDefault(parent,viewName);
+            vis = tvMin(vis,visCompositeViewDefault(parentTdb,viewName));
         subgroupFree(&viewName);
 	}
     }
@@ -3497,18 +3508,20 @@ void hotLinks()
 boolean gotBlat = hIsBlatIndexedDatabase(database);
 struct dyString *uiVars = uiStateUrlPart(NULL);
 char *orgEnc = cgiEncode(organism);
+boolean psOutput = cgiVarExists("hgt.psOutput");
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A></TD>",
+hPrintf("<TD><TABLE BORDER=\"0\"><TR nowrap>\n");
+hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A>&nbsp;&nbsp;</TD>",
     orgEnc, database, cartSessionVarName(), cartSessionId(cart));
 
 if (hIsGisaidServer())
     {
     /* disable hgGateway for gisaid for now */
-    //hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
+    //hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A>&nbsp;&nbsp;</TD>", orgEnc, database);
     hPrintf(
-    "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks&%s=%u\" class=\"topbar\">%s</A></TD>",
+    "<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gisaidTable?gisaidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
     '%', '%',
     cartSessionVarName(),
     cartSessionId(cart),
@@ -3517,22 +3530,26 @@ if (hIsGisaidServer())
 else
 if (hIsGsidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A></TD>", orgEnc, database);
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s\" class=\"topbar\">Sequence View Gateway</A>&nbsp;&nbsp;</TD>", orgEnc, database);
     hPrintf(
-    "<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable?gsidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A></TD>",
+    "<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gsidTable?gsidTable.do.advFilter=filter+%c28now+on%c29&fromProg=hgTracks\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
     '%', '%', "Select Subjects");
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%u\" class=\"topbar\">Genomes</A></TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgGateway?org=%s&db=%s&%s=%u\" class=\"topbar\">Genomes</A>&nbsp;&nbsp;</TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
+    }
+if (psOutput)
+    {
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSetorg=%s&db=%s&%s=%u\" class='topbar'>Genome Browser</A>&nbsp;&nbsp;</TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
     }
 if (gotBlat)
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A></TD>", uiVars->string);
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgBlat?%s\" class=\"topbar\">Blat</A>&nbsp;&nbsp;</TD>", uiVars->string);
     }
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A></TD>",
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
        database,
        cartSessionVarName(),
        cartSessionId(cart),
@@ -3540,7 +3557,7 @@ if (hIsGisaidServer())
     }
 else if (hIsGsidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A></TD>",
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
        database, "Table View");
     }
 else
@@ -3548,7 +3565,7 @@ else
     /* disable TB for CGB servers */
     if (!hIsCgbServer())
 	{
-	    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A></TD>",
+	    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTables?db=%s&position=%s:%d-%d&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
 	    database, chromName, winStart+1, winEnd,
 	cartSessionVarName(),
 	    cartSessionId(cart),
@@ -3558,25 +3575,31 @@ else
 
 if (hgNearOk(database))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A></TD>",
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
                  uiVars->string, "Gene Sorter");
     }
 if (hgPcrOk(database))
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A></TD>", uiVars->string);
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgPcr?%s\" class=\"topbar\">PCR</A>&nbsp;&nbsp;</TD>", uiVars->string);
     }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
-      " %s </A></TD>",  hgcNameAndSettings(),
-      winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
-
-/* disable Convert function for CGB servers for the time being */
-if (!hIsCgbServer())
-if (liftOverChainForDb(database) != NULL)
+if (!psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"");
-    hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d",
-        uiVars->string, database, chromName, winStart+1, winEnd);
-    hPrintf("\" class=\"topbar\">Convert</A></TD>");
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"%s&o=%d&g=getDna&i=mixed&c=%s&l=%d&r=%d&db=%s&%s\" class=\"topbar\">"
+        " %s </A>&nbsp;&nbsp;</TD>",  hgcNameAndSettings(),
+        winStart, chromName, winStart, winEnd, database, uiVars->string, "DNA");
+    }
+
+if (!psOutput)
+    {
+    /* disable Convert function for CGB servers for the time being */
+    if (!hIsCgbServer())
+    if (liftOverChainForDb(database) != NULL)
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"");
+        hPrintf("../cgi-bin/hgConvert?%s&db=%s&position=%s:%d-%d",
+            uiVars->string, database, chromName, winStart+1, winEnd);
+        hPrintf("\" class=\"topbar\">Convert</A>&nbsp;&nbsp;</TD>");
+        }
     }
 
 /* see if hgFixed.trackVersion exists */
@@ -3604,190 +3627,205 @@ if (trackVersionExists)
     hFreeConn(&conn);
     }
 
-if (differentWord(database,"susScr2"))
-{
-/* Print Ensembl anchor for latest assembly of organisms we have
- * supported by Ensembl == if versionString from trackVersion exists */
-if (sameWord(database,"hg19"))
+if (!psOutput)
     {
-    hPuts("<TD ALIGN=CENTER>");
-    printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
-    hPrintf("%s</A></TD>", "Ensembl");
-    }
-else if (sameWord(database,"hg18"))
-    {
-    hPuts("<TD ALIGN=CENTER>");
-    printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
-    hPrintf("%s</A></TD>", "Ensembl");
-    }
-else if (ensVersionString[0])
-    {
-    char *archive = NULL;
-    if (ensDateReference[0] && differentWord("current", ensDateReference))
-        archive = cloneString(ensDateReference);
-    /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
-    if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
-	{
-	//	which table to check
-	char *ctgPos = "ctgPos";
-	if (sameWord(database,"oryCun2"))
-	    ctgPos = "ctgPos2";
+    if (differentWord(database,"susScr2"))
+        {
+        /* Print Ensembl anchor for latest assembly of organisms we have
+        * supported by Ensembl == if versionString from trackVersion exists */
+        if (sameWord(database,"hg19"))
+            {
+            hPuts("<TD ALIGN=CENTER>");
+            printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
+            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            }
+        else if (sameWord(database,"hg18"))
+            {
+            hPuts("<TD ALIGN=CENTER>");
+            printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
+            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+            }
+        else if (ensVersionString[0])
+            {
+            char *archive = NULL;
+            if (ensDateReference[0] && differentWord("current", ensDateReference))
+                archive = cloneString(ensDateReference);
+            /*  Can we perhaps map from a UCSC random chrom to an Ensembl contig ? */
+            if (sameWord(database,"oryCun2") || isUnknownChrom(database, chromName))
+                {
+                //	which table to check
+                char *ctgPos = "ctgPos";
+                if (sameWord(database,"oryCun2"))
+                    ctgPos = "ctgPos2";
 
-	if (sameWord(database,"fr2"))
-	    fr2ScaffoldEnsemblLink(archive);
-	else if (hTableExists(database, ctgPos))
-	    /* see if we are entirely within a single contig */
-	    {
-	    struct sqlConnection *conn = hAllocConn(database);
-	    struct sqlResult *sr = NULL;
-	    char **row = NULL;
-	    char query[256];
-	    safef(query, sizeof(query),
-    "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
-	    ctgPos, chromName, winEnd, winStart);
-	    sr = sqlGetResult(conn, query);
+                if (sameWord(database,"fr2"))
+                    fr2ScaffoldEnsemblLink(archive);
+                else if (hTableExists(database, ctgPos))
+                    /* see if we are entirely within a single contig */
+                    {
+                    struct sqlConnection *conn = hAllocConn(database);
+                    struct sqlResult *sr = NULL;
+                    char **row = NULL;
+                    char query[256];
+                    safef(query, sizeof(query),
+            "select * from %s where chrom = '%s' and chromStart<%u and chromEnd>%u",
+                    ctgPos, chromName, winEnd, winStart);
+                    sr = sqlGetResult(conn, query);
 
-	    int itemCount = 0;
-	    struct ctgPos *ctgItem = NULL;
-	    while ((row = sqlNextRow(sr)) != NULL)
-		{
-		ctgPosFree(&ctgItem);   // if there is a second one
-		ctgItem = ctgPosLoad(row);
-		++itemCount;
-		if (itemCount > 1)
-		    break;
-		}
-	    sqlFreeResult(&sr);
-	    hFreeConn(&conn);
-	    if (1 == itemCount)
-		{   // verify *entirely* within single contig
-		if ((winEnd <= ctgItem->chromEnd) &&
-		    (winStart >= ctgItem->chromStart))
-		    {
-		    int ctgStart = winStart - ctgItem->chromStart;
-		    int ctgEnd = ctgStart + winEnd - winStart;
-		    hPuts("<TD ALIGN=CENTER>");
-		    printEnsemblAnchor(database, archive, ctgItem->contig,
-		    ctgStart, ctgEnd);
-		    hPrintf("%s</A></TD>", "Ensembl");
-		    }
-		}
-	    ctgPosFree(&ctgItem);   // the one we maybe used
-	    }
-	}
-    else
-	{
-	hPuts("<TD ALIGN=CENTER>");
-	printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
-	hPrintf("%s</A></TD>", "Ensembl");
-	}
+                    int itemCount = 0;
+                    struct ctgPos *ctgItem = NULL;
+                    while ((row = sqlNextRow(sr)) != NULL)
+                        {
+                        ctgPosFree(&ctgItem);   // if there is a second one
+                        ctgItem = ctgPosLoad(row);
+                        ++itemCount;
+                        if (itemCount > 1)
+                            break;
+                        }
+                    sqlFreeResult(&sr);
+                    hFreeConn(&conn);
+                    if (1 == itemCount)
+                        {   // verify *entirely* within single contig
+                        if ((winEnd <= ctgItem->chromEnd) &&
+                            (winStart >= ctgItem->chromStart))
+                            {
+                            int ctgStart = winStart - ctgItem->chromStart;
+                            int ctgEnd = ctgStart + winEnd - winStart;
+                            hPuts("<TD ALIGN=CENTER>");
+                            printEnsemblAnchor(database, archive, ctgItem->contig,
+                            ctgStart, ctgEnd);
+                            hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+                            }
+                        }
+                    ctgPosFree(&ctgItem);   // the one we maybe used
+                    }
+                }
+            else
+                {
+                hPuts("<TD ALIGN=CENTER>");
+                printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
+                hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
+                }
+            }
+        }
     }
-}
 
-/* Print NCBI MapView anchor */
-if (sameString(database, "hg18"))
+if (!psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=36\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
+    /* Print NCBI MapView anchor */
+    if (sameString(database, "hg18"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=36\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "hg19"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=37\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "mm8"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "danRer2"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "galGal3"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "canFam2"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "rheMac2"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "panTro2"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (sameString(database, "anoGam1"))
+        {
+        hPrintf("<TD ALIGN=CENTER>");
+        hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
+            skipChr(chromName), winStart+1, winEnd);
+        hPrintf("%s</A>&nbsp;&nbsp;</TD>", "NCBI");
+        }
+    if (startsWith("oryLat", database))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "UTGB");
+        }
+    if (sameString(database, "cb3"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        }
+    if (sameString(database, "ce4"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        }
+    if (sameString(database, "ce2"))
+        {
+        hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+            skipChr(chromName), winStart+1, winEnd, "WormBase");
+        }
     }
-if (sameString(database, "hg19"))
+
+if (!psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9606&CHR=%s&BEG=%d&END=%d&build=37\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n",cartSessionVarName(),
+        cartSessionId(cart), "PDF/PS");
     }
-if (sameString(database, "mm8"))
+
+if (!psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=10090&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (sameString(database, "danRer2"))
-    {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7955&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (sameString(database, "galGal3"))
-    {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9031&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (sameString(database, "canFam2"))
-    {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9615&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (sameString(database, "rheMac2"))
-    {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9544&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (sameString(database, "panTro2"))
-    {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=9598&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (sameString(database, "anoGam1"))
-    {
-    hPrintf("<TD ALIGN=CENTER>");
-    hPrintf("<A HREF=\"http://www.ncbi.nlm.nih.gov/mapview/maps.cgi?taxid=7165&CHR=%s&BEG=%d&END=%d\" TARGET=_blank class=\"topbar\">",
-        skipChr(chromName), winStart+1, winEnd);
-    hPrintf("%s</A></TD>", "NCBI");
-    }
-if (startsWith("oryLat", database))
-    {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://medaka.utgenome.org/browser_ens_jump.php?revision=version1.0&chr=chromosome%s&start=%d&end=%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
-        skipChr(chromName), winStart+1, winEnd, "UTGB");
-    }
-if (sameString(database, "cb3"))
-    {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://www.wormbase.org/db/seq/gbrowse/briggsae?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
-        skipChr(chromName), winStart+1, winEnd, "WormBase");
-    }
-if (sameString(database, "ce4"))
-    {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws170.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
-        skipChr(chromName), winStart+1, winEnd, "WormBase");
-    }
-if (sameString(database, "ce2"))
-    {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"http://ws120.wormbase.org/db/seq/gbrowse/wormbase?name=%s:%d-%d\" TARGET=_blank class=\"topbar\">%s</A></TD>",
-        skipChr(chromName), winStart+1, winEnd, "WormBase");
-    }
-hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A></TD>\n",cartSessionVarName(),
-       cartSessionId(cart), "PDF/PS");
-if (wikiLinkEnabled())
-    {
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgSession?%s=%u"
-       "&hgS_doMainPage=1\" class=\"topbar\">Session</A></TD>",
-       cartSessionVarName(), cartSessionId(cart));
+    if (wikiLinkEnabled())
+        {
+        printf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgSession?%s=%u"
+        "&hgS_doMainPage=1\" class=\"topbar\">Session</A>&nbsp;&nbsp;</TD>",
+        cartSessionVarName(), cartSessionId(cart));
+        }
     }
 if (hIsGisaidServer())
     {
-    //hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgNotYet\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    //hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"/goldenPath/help/gisaidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgNotYet\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
     }
 else
 if (hIsGsidServer())
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"/goldenPath/help/gsidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"/goldenPath/help/gsidTutorial.html#SequenceView\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
     }
 else
     {
-    hPrintf("<TD ALIGN=CENTER><A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A></TD>\n", "Help");
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
     }
+hPuts("<TD colspan=20>&nbsp;</TD></TABLE></TD>");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }
@@ -4298,23 +4336,6 @@ else if (maxWinToDraw > 1 && (winEnd - winStart) > maxWinToDraw)
     }
 }
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
-{
-// add entry for given track to the trackDbJson string
-if(count)
-    dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
-}
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 void printTrackInitJavascript(struct track *trackList)
 {
 hPrintf("<input type='hidden' id='%s' name='%s' value=''>\n", hgtJsCommand, hgtJsCommand);
@@ -4343,38 +4364,12 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
-void subtrackVisCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
-/* When composite/view vis changes, remove subtrack specific vis */
+void subtrackCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view settings changes, remove subtrack specific vis */
 {
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
-    {
-    if(!tdbIsComposite(track->tdb))
-        continue;
-    boolean compositeWide = cartValueHasChanged(newCart,oldVars,track->track,TRUE);
-
-    boolean hasViews = FALSE;
-    struct trackDb *tdbView = track->tdb->subtracks;
-    for (;tdbView != NULL; tdbView = tdbView->next)
-        {
-        char * view = NULL;
-        if (!tdbIsView(tdbView,&view))
-            break;
-
-        hasViews = TRUE;
-        boolean viewLevel = FALSE;
-        if(!compositeWide)
-            {
-            char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
-            safef(settingName,sizeof(settingName),"%s.%s.vis",track->track,view);
-            viewLevel = cartValueHasChanged(newCart,oldVars,settingName,TRUE);
-            }
-        if(compositeWide || viewLevel)
-            cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE); // clean up children, skipping view
-        }
-    if (compositeWide && !hasViews)
-        cartRemoveFromTdbTree(newCart,track->tdb,NULL,TRUE); // clean up children, skipping composite
-    }
+    cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4391,11 +4386,6 @@ boolean showedRuler = FALSE;
 boolean showTrackControls = cartUsualBoolean(cart, "trackControlsOnMain", TRUE);
 long thisTime = 0, lastTime = 0;
 char *clearButtonJavascript;
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-struct dyString *trackDbJson = newDyString(1000);
-int trackDbJsonCount = 1;
-dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
@@ -4446,8 +4436,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     }
 #endif///def IMAGEv2_DRAG_REORDER
 #ifdef SUBTRACKS_HAVE_VIS
-// Here is where subtrack vis override must be removed when composite vis is updated
-subtrackVisCartCleanup(trackList,cart,oldVars);
+subtrackCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
@@ -4514,27 +4503,8 @@ for (track = trackList; track != NULL; track = track->next)
 	    thisTime = clock1000();
 	    track->loadTime = thisTime - lastTime;
 	    }
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-	trackJson(trackDbJson, track, trackDbJsonCount++);
-	if (trackIsCompositeWithSubtracks(track))
-	    {
-	    struct track *subtrack;
-	    for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-		{
-		// isSubtrackVisible is causing a problem in panTro2
-		if (isSubtrackVisible(subtrack))
-		    trackJson(trackDbJson, subtrack, trackDbJsonCount++);
-		}
-	    }
-#endif///defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 	}
     }
-
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-dyStringAppend(trackDbJson, "}\n</script>\n");
-if(!trackImgOnly)
-    hPrintf(dyStringContents(trackDbJson));
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 printTrackInitJavascript(trackList);
 
@@ -5170,6 +5140,8 @@ struct tempName psTn, ideoPsTn;
 char *pdfFile = NULL, *ideoPdfFile = NULL;
 ZeroVar(&ideoPsTn);
 trashDirFile(&psTn, "hgt", "hgt", ".eps");
+
+hotLinks();
 printf("<H1>PostScript/PDF Output</H1>\n");
 printf("PostScript images can be printed at high resolution "
        "and edited by many drawing programs such as Adobe "
@@ -5203,6 +5175,9 @@ if(pdfFile != NULL)
     }
 else
     printf("<BR><BR>PDF format not available");
+
+    #define RETURN_BUTTON "<FORM ACTION='../cgi-bin/hgTracks' NAME='TrackHeaderForm' id='TrackHeaderForm' METHOD='GET'><INPUT TYPE=SUBMIT ID='ChangeToNameToSetSomething' VALUE='Return to Browser'></FORM>"
+    printf(RETURN_BUTTON);
 }
 
 boolean isGenome(char *pos)
@@ -5638,6 +5613,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 
+hPrintf(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 if(dragZooming)
