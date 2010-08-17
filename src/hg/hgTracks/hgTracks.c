@@ -1585,7 +1585,7 @@ if(tdbIsCompositeChild(tdb))
     {
     struct trackDb *parentTdb = trackDbCompositeParent(tdb);
     assert(parentTdb != NULL);
-    struct track *parentTrack = tdbExtrasGetOrDefault(parentTdb,"track",NULL);
+    struct track *parentTrack = hashFindVal(trackHash, parentTdb->track);
     assert(parentTrack != NULL);
     vis = tvMin(vis,(parentTrack->limitedVisSet?parentTrack->limitedVis:parentTrack->visibility));
     if (vis == tvHide) // short curcuit this effort
@@ -3512,7 +3512,7 @@ boolean psOutput = cgiVarExists("hgt.psOutput");
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
-hPrintf("<TD><TABLE BORDER=\"0\"><TR nowrap>\n");
+hPrintf("<TD><TABLE BORDER=\"0\"><TR>\n");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A>&nbsp;&nbsp;</TD>",
     orgEnc, database, cartSessionVarName(), cartSessionId(cart));
 
@@ -3541,7 +3541,7 @@ else
     }
 if (psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSetorg=%s&db=%s&%s=%u\" class='topbar'>Genome Browser</A>&nbsp;&nbsp;</TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
+    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSetorg=%s&db=%s&%s=%u\" class='topbar'>Genome Browser</A>&nbsp;&nbsp;</TD>", orgEnc, database, cartSessionVarName(), cartSessionId(cart));
     }
 if (gotBlat)
     {
@@ -3549,7 +3549,7 @@ if (gotBlat)
     }
 if (hIsGisaidServer())
     {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gisaidTable?db=%s&%s=%u\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
        database,
        cartSessionVarName(),
        cartSessionId(cart),
@@ -3557,7 +3557,7 @@ if (hIsGisaidServer())
     }
 else if (hIsGsidServer())
     {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/gsidTable?db=%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
        database, "Table View");
     }
 else
@@ -3575,7 +3575,7 @@ else
 
 if (hgNearOk(database))
     {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
+    hPrintf("<TD ALIGN=CENTER nowrap>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgNear?%s\" class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",
                  uiVars->string, "Gene Sorter");
     }
 if (hgPcrOk(database))
@@ -3635,13 +3635,13 @@ if (!psOutput)
         * supported by Ensembl == if versionString from trackVersion exists */
         if (sameWord(database,"hg19"))
             {
-            hPuts("<TD ALIGN=CENTER>");
+            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
             printEnsemblAnchor(database, NULL, chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
         else if (sameWord(database,"hg18"))
             {
-            hPuts("<TD ALIGN=CENTER>");
+            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
             printEnsemblAnchor(database, "ncbi36", chromName, winStart, winEnd);
             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
             }
@@ -3691,7 +3691,7 @@ if (!psOutput)
                             {
                             int ctgStart = winStart - ctgItem->chromStart;
                             int ctgEnd = ctgStart + winEnd - winStart;
-                            hPuts("<TD ALIGN=CENTER>");
+                            hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
                             printEnsemblAnchor(database, archive, ctgItem->contig,
                             ctgStart, ctgEnd);
                             hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
@@ -3702,7 +3702,7 @@ if (!psOutput)
                 }
             else
                 {
-                hPuts("<TD ALIGN=CENTER>");
+                hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;");
                 printEnsemblAnchor(database, archive, chromName, winStart, winEnd);
                 hPrintf("%s</A>&nbsp;&nbsp;</TD>", "Ensembl");
                 }
@@ -3798,7 +3798,7 @@ if (!psOutput)
 
 if (!psOutput)
     {
-    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n",cartSessionVarName(),
+    hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../cgi-bin/hgTracks?%s=%u&hgt.psOutput=on\" id='pdfLink' class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>",cartSessionVarName(),
         cartSessionId(cart), "PDF/PS");
     }
 
@@ -3825,7 +3825,7 @@ else
     {
     hPrintf("<TD ALIGN=CENTER>&nbsp;&nbsp;<A HREF=\"../goldenPath/help/hgTracksHelp.html\" TARGET=_blank class=\"topbar\">%s</A>&nbsp;&nbsp;</TD>\n", "Help");
     }
-hPuts("<TD colspan=20>&nbsp;</TD></TABLE></TD>");
+hPuts("<TD colspan=20>&nbsp;</TD></TR></TABLE></TD>");
 hPuts("</TR></TABLE>");
 hPuts("</TD></TR></TABLE>\n");
 }

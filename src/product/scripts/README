@@ -8,7 +8,7 @@ and maintaining a mirror site for the UCSC Genome Browser.
 These scripts are helpful and useful, but they are not the entire
 story.
 
-They expect that commands for rsync, cvs, and mysql, for example,
+They expect that commands for rsync, git, and mysql, for example,
 are installed on your system.  Instructions for the installation
 of MySQL and the Apache WEB server are not included here.
 Those products have excellent How-To resources on the internet.
@@ -72,39 +72,36 @@ to view their full help messages:
 3. kentSrcUpdate.sh - fetches and/or updates a local copy of the 'kent'
 	source tree and builds that source tree with resulting binaries
 	into directories of your specification in your copy of the
-	browserEnvironment.txt file.  Requires the use of the
-	beta.cvsup.pl script.  Can be run as a cron job about every two
+	browserEnvironment.txt file.  Can be run as a cron job about every two
 	weeks to keep your source tree, CGI binaries, and kent utilities
 	up to date.
-4. beta.cvsup.pl - used by kentSrcUpdate.sh to run a 'cvs up' command on
-	an existing 'kent' source tree.
-5. fetchHgCentral.sh - fetches a copy of the hgcentral.sql definition of
+4. fetchHgCentral.sh - fetches a copy of the hgcentral.sql definition of
 	the hgcentral database
-6. updateHtml.sh - rsync fetch the static HTML hierarchy of
+5. updateHtml.sh - rsync fetch the static HTML hierarchy of
 	the UCSC Genome Browser into your specified documentRoot
-7. fetchMinimalGbdb.sh - rsync fetch of a minimal set of files in the /gbdb/
+6. fetchMinimalGbdb.sh - rsync fetch of a minimal set of files in the /gbdb/
 	hierarchy to operate a genome browser with the smallest set of files
-8. fetchMinimalGoldenPath.sh - rsync fetch of a minimal set of files in the
+7. fetchMinimalGoldenPath.sh - rsync fetch of a minimal set of files in the
 	goldenPath/ hierarchy to be used to load a genome datase
-9. loadDb.sh - can perform an initial load of a database from the
+8. loadDb.sh - can perform an initial load of a database from the
 	goldenPath/ database MySQL text dumps
-10. fetchFullGbdb.sh - rsync fetch of all files for a given database into
+9. fetchFullGbdb.sh - rsync fetch of all files for a given database into
 	the local /gbdb/ hierarchy
-11. fetchFullGoldenPath.sh - rsync fetch of all files for a given database
+10. fetchFullGoldenPath.sh - rsync fetch of all files for a given database
 	into the local goldenPath/ database MySQL text dump directory
-12. tagGoldenPath.sh - after everything is loaded successfully in
+11. tagGoldenPath.sh - after everything is loaded successfully in
 	goldenPath/*/database this script will touch a lastUpdate file
 	to be used by loadUpdateGoldenPath.sh
-13. loadUpdateGoldenPath.sh - after goldenPath/*/database download are updated,
+12. loadUpdateGoldenPath.sh - after goldenPath/*/database download are updated,
 	this script will load any new tables since the last timeStamp
-14. dbTrashCleaner.sh - run as a cron job periodically to clean
+13. dbTrashCleaner.sh - run as a cron job periodically to clean
 	database tables in the customTrash database
-15. trashCleaning.sh - run as a cron job periodically to clean files
+14. trashCleaning.sh - run as a cron job periodically to clean files
 	in your genome browser .../trash/ directory.
-16. allDatabaseUpdate.sh - this attempts to put all db updates together into
+15. allDatabaseUpdate.sh - this attempts to put all db updates together into
 	one script.  It runs the four different fetch scripts and the
 	database update script.  It needs to have lists of databases
 	to update minimally or fully.  The logs of update activities need
 	to be checked to verify it is working OK.
-17. printEnv.pl - script to verify your cgi-bin directory is functioning
+16. printEnv.pl - script to verify your cgi-bin directory is functioning
 	correctly.  Note comments in that script.

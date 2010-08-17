@@ -596,7 +596,7 @@ else
         else
             checked = ( track->visibility != tvHide );
 
-        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel' VALUE='on' class='selCb' onchange='findTracksClickedOne(this,true);'%s>"
+        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onchange='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
 
         hPrintf("</td><td>\n");
@@ -613,7 +613,7 @@ else
         else
             {
             char extra[512];
-            safef(extra,sizeof(extra),"id='%s' onchange='findTracksChangeVis(this)'",track->track);
+            safef(extra,sizeof(extra),"id='%s_id' onchange='findTracksChangeVis(this)'",track->track);
             hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,"normalText seenVis",extra);
             }
         hPrintf("</td>\n");

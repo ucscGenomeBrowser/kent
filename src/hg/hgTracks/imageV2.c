@@ -58,7 +58,38 @@ return (a->order - b->order);
 void flatTracksSort(struct flatTracks **flatTracks)
 // This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end
 {
-if(flatTracks && *flatTracks)
+// flatTracks list has 2 sets of "order": those already dragReordered (below IMG_ORDEREND)
+// and those not yet reordered (above).  It has been decided that adding new tracks to an
+// existing order should always put the new tracks below existing and treat them as if they
+// were reordered there.  Thus all new tracks should get an imgOrd below IMG_ORDEREND.
+// The result is turning on a successive set of new tracks will have them appear below all others.
+int imgOrdSet = 0;
+boolean notYetOrdered = FALSE;
+struct flatTracks *oneTrack = *flatTracks;
+for(;oneTrack!=NULL;oneTrack = oneTrack->next)
+    {
+    if (oneTrack->order <= IMG_ORDEREND
+    &&  imgOrdSet < oneTrack->order )
+        imgOrdSet = oneTrack->order;
+    else
+        notYetOrdered = TRUE;
+    }
+if (imgOrdSet > 0 && notYetOrdered) // Image order has previously been set, so givem all imgOrds
+    {
+    imgOrdSet = (IMG_ORDEREND - imgOrdSet);  // This difference should be removed from any with imgOrdSet
+    for(oneTrack = *flatTracks;oneTrack!=NULL;oneTrack = oneTrack->next)
+        {
+        if (oneTrack->order >= imgOrdSet)
+            {
+            oneTrack->order -= imgOrdSet;
+            char var[256];
+            safef(var,sizeof(var),"%s_%s",oneTrack->track->track,IMG_ORDER_VAR);
+            cartSetInt(cart, var, oneTrack->order);
+            }
+        }
+    }
+
+if (flatTracks && *flatTracks)
     slSort(flatTracks, flatTracksCmp);
 }
 

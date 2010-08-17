@@ -23,7 +23,7 @@ endif
 
 # libssl: disabled by default
 ifeq (${USE_SSL},1)
-    L+=-lssl
+    L+=-lssl -lcrypto
     HG_DEFS+=-DUSE_SSL
 endif
 
