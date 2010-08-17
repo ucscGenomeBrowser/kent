@@ -447,36 +447,6 @@ if (!(sameString(gl->seq, gp->chrom) && (gl->strand == gp->strand[0])))
     }
 }
 
-static void fixStopFrame(struct genePred *gp)
-/* Nasty corner case: GTF with the all or part of the stop codon as the only
- * codon in an exon, we must set the frame on this exon.  */
-{
-int stopPos = (gp->strand[0] == '+') ? gp->cdsEnd-1 : gp->cdsStart;
-int iStop = -1, i;
-
-/* find position containing last base */
-for (i = 0; (i < gp->exonCount) && (iStop < 0); i++)
-    {
-    if ((gp->exonStarts[i] <= stopPos) && (stopPos < gp->exonEnds[i]))
-        iStop = i;
-    }
-if ((iStop >= 0) && (gp->exonFrames[iStop] < 0))
-    {
-    if (gp->strand[0] == '+')
-        {
-        /* pos, compute from previous exon */
-        assert(iStop > 0);
-        gp->exonFrames[iStop] = (gp->exonFrames[iStop-1]+(gp->exonEnds[iStop-1]-gp->exonStarts[iStop-1])) % 3;
-        }
-    else
-        {
-        /* neg, compute from next exon */
-        assert(iStop < gp->exonCount-1);
-        gp->exonFrames[iStop] = (gp->exonFrames[iStop+1]+(gp->exonEnds[iStop+1]-gp->exonStarts[iStop+1])) % 3;
-        }
-    }
-}
-
 static int phaseToFrame(char phase)
 /* convert GTF/GFF phase to frame */
 {
@@ -492,6 +462,37 @@ switch (phase)
 return -1;
 }
 
+#ifdef NOT_CURRENTLY_USED
+static char frameToPhase(int frame)
+/* convert GTF/GFF frame to phase */
+{
+switch (frame)
+    {
+    case 0:
+        return '0';
+    case 1:
+        return '2';
+    case 2:
+        return '1';
+    }
+return -1;
+}
+#endif
+
+static int incrFrame(int frame, int amt)
+/* increment frame, no-op if frame is -1 */
+{
+if (frame < 0)
+    return frame;
+else if (amt >= 0)
+    return (frame+amt) % 3;
+else
+    {
+    int amt3 = (-amt) % 3;
+    return (frame - (amt - amt3)) % 3;
+    }
+}
+
 static int findPosExon(struct genePred *gp, int pos)
 /* find exon containing the specified position */
 {
@@ -503,6 +504,67 @@ for (i = 0; i < gp->exonCount; i++)
     }
 errAbort("bug: position %d not found in exon of %s genePred", pos, gp->name);
 return 0;
+}
+
+static int findLastFramedExon(struct genePred *gp)
+/* locate the last exon with frame */
+{
+int iStart = (gp->strand[0] == '+') ? 0 : gp->exonCount-1;
+int iStop = (gp->strand[0] == '+') ? gp->exonCount : -1;
+int dir =  (gp->strand[0] == '+') ? +1 : -1;
+int iPrevExon = -1, iExon;
+
+// find beginning of frames
+for (iExon = iStart; (iExon != iStop) && (gp->exonFrames[iExon] == -1); iExon += dir)
+    continue;
+// find last with frame
+for (; (iExon != iStop) && (gp->exonFrames[iExon] != -1); iExon += dir)
+    iPrevExon = iExon;
+if (iPrevExon < 0)
+    errAbort("bug: findLastFramedExon should have found an exon with frame");
+return iPrevExon;
+}
+
+static void extendFramePos(struct genePred *gp)
+/* extend frame missing from last exon(s) for positive strand genes, normally
+ * caused by GTF stop_codon */
+{
+int iExon = findLastFramedExon(gp);
+int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+for (iExon++; (iExon < gp->exonCount) && (gp->exonStarts[iExon] < gp->cdsEnd); iExon++)
+    {
+    assert(gp->exonFrames[iExon] < 0);
+    gp->exonFrames[iExon] = frame;
+    frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+    }
+}
+
+static void extendFrameNeg(struct genePred *gp)
+/* extend frame missing from last exon(s) for negative strand genes, normally
+ * caused by GTF stop_codon */
+{
+int iExon = findLastFramedExon(gp);
+int frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+for (iExon--; (iExon >= 0) && (gp->exonEnds[iExon] > gp->cdsStart); iExon--)
+    {
+    assert(gp->exonFrames[iExon] < 0);
+    gp->exonFrames[iExon] = frame;
+    frame = incrFrame(gp->exonFrames[iExon], (gp->exonEnds[iExon]-gp->exonStarts[iExon]));
+    }
+}
+
+static void fixStopFrame(struct genePred *gp)
+/* Handle nasty corner case: GTF with the all or part of the stop codon as the
+ * only codon in an exon, we must set the frame on these exons.  Some ENSEMBL
+ * GTFs have single base `exons' with just a base of the stop codon, so must
+ * check every base.  While less than ideal, we just extend the frame past the
+ * last exon with frame, so a conflicting frame on the stop codon will be
+ * missed.  Just switching to GFF3 fixes this mess. */
+{
+if (gp->strand[0] == '+')
+    extendFramePos(gp);
+else
+    extendFrameNeg(gp);
 }
 
 static boolean adjImpliedStopPos(struct genePred *gp)
@@ -638,7 +700,8 @@ else
 
 static struct gffLine *assignFrameForCdsExon(int start, int end, int *framePtr,
                                              struct gffLine *gl, boolean isGtf)
-/* set the frame for an exon, advancing gl past end of this exon */
+/* set frame from any overlapping records with frame. Don't include
+ * start/stop_codon, as it isn't a full exon. */
 {
 /* skip lines preceeding this exon */
 while (gl != NULL)
@@ -647,8 +710,7 @@ while (gl != NULL)
         break;
     gl = gl->next;
 }
-/* set frame from any overlapping records with frame. Don't include
- * start/stop_codon, as it isn't a full exon. */
+/* set frame from any overlapping records with frame. */
 while ((gl != NULL) && (rangeIntersection(gl->start, gl->end, start, end) > 0))
     {
     if (allowedFrameFeature(gl, isGtf))
@@ -678,7 +740,7 @@ for (i = 0; i < gp->exonCount; i++)
         }
     }
 
-/* make sure stop has face if some exons in the gene had frame */
+/* make sure stop has frame if some exons in the gene had frame */
 if (haveFrame)
     fixStopFrame(gp);
 checkForNoFrames(gp);
@@ -776,9 +838,17 @@ gp->optFields = optFields;
 
 if (optFields & genePredName2Fld)
     {
-    if (group->lineList->geneId != NULL)
-        gp->name2 = cloneString(group->lineList->geneId);
+    if (options & genePredGxfGeneNameAsName2)
+        {
+        if (group->lineList->geneName != NULL)
+            gp->name2 = cloneString(group->lineList->geneName);
+        }
     else
+        {
+        if (group->lineList->geneId != NULL)
+            gp->name2 = cloneString(group->lineList->geneId);
+        }
+    if (gp->name2 == NULL)
         gp->name2 = cloneString("");
     }
 if (optFields & genePredCdsStatFld)

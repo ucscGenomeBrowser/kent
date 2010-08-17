@@ -41,8 +41,10 @@ enum genePredFromGxfOpts
 /* bit set of options for genePredFromGroupedGff/genePredFromGroupedGtf */
 {
     genePredGxfDefaults = 0x00,            /* used if nothing special */
-    genePredGxfImpliedStopAfterCds = 0x01  /* stop codon is implied outside of
+    genePredGxfImpliedStopAfterCds = 0x01, /* stop codon is implied outside of
                                             * the annotated CDS bounds  */
+    genePredGxfGeneNameAsName2 = 0x02      /* use gene_name instead of gene_id
+                                            * for name2 */
 };
 
 enum genePredFields
@@ -171,7 +173,8 @@ struct genePred *genePredFromGroupedGff(struct gffFile *gff, struct gffGroup *gr
  * If genePredExonFramesFld is set, then frame is set as specified in the GTF.
  * Options are from genePredFromGxfOpts.  If genePredGxfImpliedStopAfterCds
  * is specified, it is treated as if a stop_codon annotation was found,
- * if there isn't one.
+ * if there isn't one.  If genePredGxfGeneNameAsName2 is specified, use
+ * gene_name for the name2 field otherwise gene_id.
  */
 
 struct genePred *genePredFromGroupedGtf(struct gffFile *gff, struct gffGroup *group, char *name,

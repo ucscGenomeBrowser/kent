@@ -5,11 +5,11 @@ featTypes = 5utr cds 3utr
 test: exonLenTest exonCntTest ${featTypes:%=%ExonLenTest} ${featTypes:%=%ExonCntTest}
 
 exon%Test: mkdirs
-	genePredHisto -ids exon$* input/basic.gp output/$@.histo
+	../genePredHisto -ids exon$* input/basic.gp output/$@.histo
 	diff expected/$@.histo output/$@.histo
 
 %Test: mkdirs
-	genePredHisto $* input/basic.gp output/$@.histo
+	../genePredHisto $* input/basic.gp output/$@.histo
 	diff expected/$@.histo output/$@.histo
 
 mkdirs:
