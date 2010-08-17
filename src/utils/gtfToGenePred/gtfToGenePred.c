@@ -22,7 +22,9 @@ errAbort(
   "     -infoOut=file - write a file with information on each transcript\n"
   "     -sourcePrefix=pre - only process entries where the source name has the\n"
   "      specified prefix.  May be repeated.\n"
-  "     -impliedStopAfterCds - implied stop codon in after CDS\n");
+  "     -impliedStopAfterCds - implied stop codon in after CDS\n"
+  "     -geneNameAsName2 - if specified, use gene_name for the name2 field\n"
+  "      instead of gene_id.\n");
 }
 
 static struct optionSpec options[] = {
@@ -31,6 +33,7 @@ static struct optionSpec options[] = {
     {"infoOut", OPTION_STRING},
     {"sourcePrefix", OPTION_STRING|OPTION_MULTI},
     {"impliedStopAfterCds", OPTION_BOOLEAN},
+    {"geneNameAsName2", OPTION_BOOLEAN},
     {NULL, 0},
 };
 boolean clGenePredExt = FALSE;  /* include frame and geneName */
@@ -175,6 +178,8 @@ clAllErrors = optionExists("allErrors");
 clSourcePrefixes = optionMultiVal("sourcePrefix", NULL);
 if (optionExists("impliedStopAfterCds"))
     clGxfOptions |= genePredGxfImpliedStopAfterCds;
+if (optionExists("geneNameAsName2"))
+    clGxfOptions |= genePredGxfGeneNameAsName2;
 
 gtfToGenePred(argv[1], argv[2], optionVal("infoOut", NULL));
 if (badGroupCount > 0)
