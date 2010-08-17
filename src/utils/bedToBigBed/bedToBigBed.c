@@ -157,9 +157,23 @@ for (;;)
 	if (stream->stringSize > maxBlockSize)
 	    maxBlockSize = stream->stringSize;
 	if (doCompress)
-	    {
+            {
 	    size_t maxCompSize = zCompBufSize(stream->stringSize);
-	    char compBuf[maxCompSize];
+
+            // keep around an area of scratch memory
+            static int compBufSize = 0;
+            static char *compBuf = NULL;
+            // check to see if buffer needed for compression is big enough
+            if (compBufSize < maxCompSize)
+                {
+                // free up the old not-big-enough piece
+                freez(&compBuf); // freez knows bout NULL
+
+                // get new scratch area
+                compBufSize = maxCompSize;
+                compBuf = needMem(compBufSize);
+                }
+
 	    int compSize = zCompress(stream->string, stream->stringSize, compBuf, maxCompSize);
 	    mustWrite(f, compBuf, compSize);
 	    }

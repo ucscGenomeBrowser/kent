@@ -11,7 +11,7 @@ if ( -e $zip ) then
  rm $zip
 endif
 echo "Dumping branch $BRANCHNN to zip file. [${0}: `date`]"
-git archive --format=zip --remote=$GITSHAREDREPO v${BRANCHNN}_branch > $zip
+git archive --format=zip --prefix=kent/ --remote=$GITSHAREDREPO v${BRANCHNN}_branch > $zip
 chmod 664 $zip
 echo "Done. [${0}: `date`]"
 exit 0
