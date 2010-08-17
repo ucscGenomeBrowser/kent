@@ -11,6 +11,8 @@ subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5
 subGroup6 rep Rank rep1=1st rep2=2nd rep3=3rd rep4=4th rep5=5th rep6=6th
 dimensions dimensionX=cellType dimensionY=age dimensionA=strain dimensionB=rep
+dimensionAchecked C57BL6,S129
+dimensionBchecked rep1
 sortOrder cellType=+ strain=+ age=+ sex=+ rep=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell strain=strain age=age sex=sex
 dragAndDrop subTracksi
@@ -31,7 +33,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksHotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots
         shortLabel Cerebellum 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Cerebellum cells)
         subGroups view=Hotspots age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep1
@@ -61,7 +63,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots 
         shortLabel B-cell_(CD19+) 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in B-cell_(CD19+) cells)
         subGroups view=Hotspots age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
@@ -81,7 +83,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseEscj7S129ME0HotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots 
         shortLabel ES-CJ7 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in ES-CJ7 cells)
         subGroups view=Hotspots age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep1
@@ -191,7 +193,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots 
         shortLabel MEL 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in MEL cells)
         subGroups view=Hotspots age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep1
@@ -281,7 +283,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots 
         shortLabel WholeBrain 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in WholeBrain cells)
         subGroups view=Hotspots age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
@@ -291,7 +293,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWholebrainC57bl6ME14halfHotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots 
         shortLabel WholeBrain 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in WholeBrain cells)
         subGroups view=Hotspots age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
@@ -331,7 +333,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksHotspotsRep1
         release alpha
-        parent wgEncodeUwDnaseViewHotspots off
+        parent wgEncodeUwDnaseViewHotspots 
         shortLabel Cerebrum 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Cerebrum cells)
         subGroups view=Hotspots age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep1
@@ -361,7 +363,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksPkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks 
         shortLabel Cerebellum Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in Cerebellum cells)
         subGroups view=Peaks age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep1
@@ -391,7 +393,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks 
         shortLabel B-cell_(CD19+) Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in B-cell_(CD19+) cells)
         subGroups view=Peaks age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
@@ -411,7 +413,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseEscj7S129ME0PkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks 
         shortLabel ES-CJ7 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in ES-CJ7 cells)
         subGroups view=Peaks age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep1
@@ -521,7 +523,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks 
         shortLabel MEL Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in MEL cells)
         subGroups view=Peaks age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep1
@@ -611,7 +613,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks
         shortLabel WholeBrain Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in WholeBrain cells)
         subGroups view=Peaks age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
@@ -621,7 +623,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWholebrainC57bl6ME14halfPkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks 
         shortLabel WholeBrain Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in WholeBrain cells)
         subGroups view=Peaks age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
@@ -661,7 +663,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksPkRep1
         release alpha
-        parent wgEncodeUwDnaseViewPeaks off
+        parent wgEncodeUwDnaseViewPeaks 
         shortLabel Cerebrum Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in Cerebrum cells)
         subGroups view=Peaks age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep1
@@ -694,7 +696,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal
         shortLabel Cerebellum Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Cerebellum cells)
         subGroups view=RawSignal age=adult8wks cellType=Cerebellum sex=M strain=C57BL6 rep=rep1
@@ -724,7 +726,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal 
         shortLabel B-cell_(CD19+) Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in B-cell_(CD19+) cells)
         subGroups view=RawSignal age=adult8wks cellType=BCellCD19p sex=M strain=C57BL6 rep=rep1
@@ -744,7 +746,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseEscj7S129ME0RawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal 
         shortLabel ES-CJ7 Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in ES-CJ7 cells)
         subGroups view=RawSignal age=E0 cellType=ESCJ7 sex=M strain=S129 rep=rep1
@@ -854,7 +856,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal 
         shortLabel MEL Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in MEL cells)
         subGroups view=RawSignal age=adult8wks cellType=MEL sex=M strain=C57BL6 rep=rep1
@@ -944,7 +946,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal 
         shortLabel WholeBrain Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in WholeBrain cells)
         subGroups view=RawSignal age=adult8wks cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
@@ -954,7 +956,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal 
         shortLabel WholeBrain Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in WholeBrain cells)
         subGroups view=RawSignal age=E14half cellType=WholeBrain sex=M strain=C57BL6 rep=rep1
@@ -994,7 +996,7 @@ wgEncode 1
 
         track wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1
         release alpha
-        parent wgEncodeUwDnaseViewRawSignal off
+        parent wgEncodeUwDnaseViewRawSignal 
         shortLabel Cerebrum Raw 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Cerebrum cells)
         subGroups view=RawSignal age=adult8wks cellType=Cerebrum sex=M strain=C57BL6 rep=rep1
