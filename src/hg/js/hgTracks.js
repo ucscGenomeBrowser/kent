@@ -1693,13 +1693,13 @@ function loadContextMenu(img)
             }
 
             // Add cfg options at just shy of end...
+            var o = new Object();
+            o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
             if(rec.parentTrack != undefined) {
-                var o = new Object();
-                o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
                 o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-                menu.push($.contextMenu.separator);
-                menu.push(o);
             }
+            menu.push($.contextMenu.separator);
+            menu.push(o);
 
             // Add view image at end
             menu.push($.contextMenu.separator);
@@ -1745,11 +1745,26 @@ function parseMap(ele, reset)
     return mapItems;
 }
 
+function updateTrackImg(trackName)
+{
+    jQuery('body').css('cursor', 'wait');
+    var data = "hgt.trackImgOnly=1&&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
+    $.ajax({
+                type: "GET",
+                url: "../cgi-bin/hgTracks",
+                data: data,
+                dataType: "html",
+                trueSuccess: handleUpdateTrackMap,
+                success: catchErrorOrDispatch,
+                cmd: 'refresh',
+                cache: false
+            });
+}
+
 var popUpTrackName;
 function _hgTrackUiPopUp(trackName)
 { // popup cfg dialog
     popUpTrackName = trackName;
-    jQuery('body').css('cursor', 'wait');
     $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
@@ -1769,7 +1784,7 @@ function hgTrackUiPopUp(trackName)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-    $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
+    $('#hgTrackUiDialog').html("<div style='font-size:60%' id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -1784,6 +1799,12 @@ function handleTrackUi(response, status)
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
+                               buttons: { "Ok": function() {
+                                    setAllVars($('#pop'));
+                                    $(this).dialog("close");
+                                    if($('#imgTbl') != undefined)
+                                    updateTrackImg(popUpTrackName);
+                               }},
                                close: function() {
                                    // clear out html after close to prevent problems caused by duplicate html elements
                                    $('#hgTrackUiDialog').html("");

@@ -89,6 +89,39 @@ function setCartVar(name, value)
     setCartVars( [ name ], [ value ] );
 }
 
+function setAllVars(obj)
+{
+// Set all enabled inputs and selects found as children obj with names to cart with ajax
+// If obj is undefined then obj is document!
+    var names = [];
+    var values = [];
+    if($(obj) == undefined)
+        obj = $('document');
+    var inp = $(obj).find('input');
+    var sel = $(obj).find('select');
+    //warn("obj:"+$(obj).attr('id') + " inputs:"+$(inp).length+ " selects:"+$(sel).length);
+    $(inp).filter('[name]:enabled').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if(name != undefined && name != "Submit" && val != undefined) {
+            names.push(name);
+            values.push(val);
+        }
+    });
+    $(sel).filter('[name]:enabled').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if(name != undefined && val != undefined) {
+            names.push(name);
+            values.push(val);
+        }
+    });
+    if(names.length > 0) {
+        //warn("variables:"+names+"  values:"+values);
+        setCartVars(names,values);
+    }
+}
+
 function submitMain()
 {
     $('form[name="mainForm"]').submit();

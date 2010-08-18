@@ -635,7 +635,7 @@ else
         else
             checked = ( track->visibility != tvHide );
 
-        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onchange='findTracksClickedOne(this,true);'%s>"
+        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
 
         hPrintf("</td><td>\n");
