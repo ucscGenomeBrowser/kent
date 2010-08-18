@@ -306,7 +306,7 @@ else if (sameString(type,"Cell Line"))
 
     // pathBuffer for new protocols not in human    
     char pathBuffer[PATH_LEN];
-    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s",organismOptLower);
+    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/",organismOptLower);
 
     if (s && sameString(organismOpt, "Human"))
 	{

@@ -232,27 +232,52 @@ if (ptr != NULL)
 return string;
 }
 
+static void hashAddSlName(struct hash *hash, char *key, char *val)
+/* If key is already in hash, add an slName for val to the head of the list;
+ * otherwise just store key -> slName for val. */
+{
+struct slName *sln = slNameNew(val);
+struct hashEl *hel = hashLookup(hash, key);
+if (hel == NULL)
+    hashAdd(hash, key, sln);
+else
+    slAddHead(&(hel->val), sln);
+}
+
 static struct hash *accessControlInit(char *db, struct sqlConnection *conn)
 /* Return a hash associating restricted table/track names in the given db/conn
- * with virtual hosts, or NULL if there is no tableAccessControl table. */
+ * with virtual hosts, or NULL if there is no tableAccessControl table and no
+ * forbiddenTrackList (see getFullTrackList). */
 {
 struct hash *acHash = NULL;
 if (sqlTableExists(conn, "tableAccessControl"))
     {
     struct sqlResult *sr = NULL;
     char **row = NULL;
-    acHash = newHash(8);
+    acHash = newHash(0);
     sr = sqlGetResult(conn, "select name,host from tableAccessControl");
     while ((row = sqlNextRow(sr)) != NULL)
-	{
-	struct slName *sln = slNameNew(chopAtFirstDot(row[1]));
-	struct hashEl *hel = hashLookup(acHash, row[0]);
-	if (hel == NULL)
-	    hashAdd(acHash, row[0], sln);
-	else
-	    slAddHead(&(hel->val), sln);
-	}
+	hashAddSlName(acHash, row[0], chopAtFirstDot(row[1]));
     sqlFreeResult(&sr);
+    }
+if (forbiddenTrackList != NULL)
+    {
+    if (acHash == NULL)
+	acHash = newHash(0);
+    struct trackDb *tdb;
+    for (tdb = forbiddenTrackList;  tdb != NULL;  tdb = tdb->next)
+	{
+	char *tbOff = trackDbSetting(tdb, "tableBrowser");
+	if (isEmpty(tbOff))
+	    errAbort("bug: tdb for %s is in forbiddenTrackList without 'tableBrowser off' setting",
+		     tdb->track);
+	hashAddSlName(acHash, tdb->table, "-");
+	// skip "off" and look for additional table names:
+	nextWord(&tbOff);
+	char *tbl;
+	while ((tbl = nextWord(&tbOff)) != NULL)
+	    hashAddSlName(acHash, tbl, "-");
+	}
     }
 return acHash;
 }

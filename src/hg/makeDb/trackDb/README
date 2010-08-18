@@ -556,6 +556,9 @@ Some settings used by various tracks:
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.
+    o tableBrowser off [otherTable1 otherTable2] -- prevents this track from 
+      appearing in hgTables.  If other tables are named after "off", they will be
+      excluded in "All Tables" mode along with the track table.
 
 Specific, optional settings used only by snp125, snp126, and so on:
     o chimpMacaqueOrthoTable table - table contains orthologous
