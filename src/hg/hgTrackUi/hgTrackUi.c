@@ -2421,10 +2421,13 @@ extraUiLinks(database,tdb, trackHash);
 void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
-jsIncludeFile("jquery.js", NULL);
-printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("utils.js",NULL);
+if (!ajax)
+    {
+    jsIncludeFile("jquery.js", NULL);
+    printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("utils.js",NULL);
+    }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];
 
@@ -2452,7 +2455,7 @@ printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLab
 
 /* Print link for parent track */
 struct trackDb *parentTdb = tdb->parent;
-if (parentTdb)
+if (parentTdb && !ajax)
     {
     char *encodedMapName = cgiEncode(parentTdb->track);
     printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
@@ -2678,8 +2681,11 @@ if (super)
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
+    {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
     trackUi(tdb, ct, TRUE);
+    cartRemove(cart,"ajax");
+    }
 else
     {
     cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);
