@@ -1820,9 +1820,10 @@ function handleTrackUi(response, status)
         var myWidth =  $(window).width() - 300;
         $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
         $('#hgTrackUiDialog').dialog("option", "width", myWidth);
+        $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
+    } else {
+        $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
     }
-    // Apparently the options above to dialog take only once, so we set title explicitly.
-    $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
     jQuery('body').css('cursor', '');
     $('#hgTrackUiDialog').dialog('open');
 }
@@ -2175,4 +2176,3 @@ function addSearchSelect(obj, rowNum)
     $("input[name=hgt.addRow]").val(rowNum);
     return true;
 }
-                                            
