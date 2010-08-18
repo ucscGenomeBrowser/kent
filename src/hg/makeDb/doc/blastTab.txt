@@ -9,6 +9,10 @@
 
 ############################################################################
 # DONE 2010-08-18 in this case in this danRer6 directory
+#	where you can find this procedure encapsulated in scripts.
+#	the copy here is merely the contents of the scripts that run
+#	these procedures.
+
 mkdir /hive/data/genomes/danRer6/bed/ensGene.59/blastTab
 cd /hive/data/genomes/danRer6/bed/ensGene.59/blastTab
 
