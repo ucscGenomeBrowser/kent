@@ -41,6 +41,7 @@ extern char *database;		/* Current database, often but not always dbDatabase. */
 extern char *freezeName;	/* Date of assembly. */
 extern struct trackDb *fullTrackList;	/* List of all tracks in database. */
 extern struct hash *fullTrackHash;     /* Hash of tracks in fullTrackList keyed by ->track field. */
+extern struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 extern struct trackDb *curTrack;	/* Currently selected track. */
 extern struct customTrack *theCtList;	/* List of custom tracks. */
 extern char *curTable;	/* Current selected table. */
