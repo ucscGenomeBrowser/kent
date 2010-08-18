@@ -9,7 +9,7 @@
 #cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
 #restrictionEnzyme: Free text field to keep track of the restriction enzyme used in the experiment
 #protocol: The specific PCR protocol used. The protocol registered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Protocols
-#treatment: The treatment used to treat a specific cell
+#treatment: The treatment used to treat a specific cell.The treatment registered vocabulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Treatments
 #replicate: The Replicate number. The replication number of a given experiment.
 #origAssembly: The assembly that the data was originally released on (hg18 or hg19)
 #seqPlatform: The sequencing platform.The sequence platformregistered vocbulary is found at: http://encodewiki.ucsc.edu/EncodeDCC/index.php/Controlled_vocabularies_for_ENCODE_data_reporting#Sequence_Platforms
