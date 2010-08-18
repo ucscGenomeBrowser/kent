@@ -1587,8 +1587,17 @@ static void trackJson(struct dyString *trackDbJson, struct track *track, int cou
 if(count)
     dyStringAppend(trackDbJson, "\n,");
 dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb) || tdbIsCompositeChild(track->tdb))
+if(tdbIsSuperTrackChild(track->tdb))
+    {
     dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
+    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
+    }
+else if(tdbIsCompositeChild(track->tdb))
+    {
+    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", parentTdb->track);
+    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
+    }
 dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
 if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
