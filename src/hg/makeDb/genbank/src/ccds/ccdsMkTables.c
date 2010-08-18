@@ -848,11 +848,13 @@ freeMem(ccdsGeneSql);
 sqlLoadTabFile(conn, ccdsGeneFile, ccdsGeneTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
 ccdsRenameTable(conn, ccdsInfoTmpTbl, ccdsInfoTbl);
+ccdsRenameTable(conn, ccdsNotesTmpTbl, ccdsNotesTbl);
 ccdsRenameTable(conn, ccdsGeneTmpTbl, ccdsGeneTbl);
 
 if (!keep)
     {
     unlink(ccdsInfoFile);
+    unlink(ccdsNotesFile);
     unlink(ccdsGeneFile);
     }
 sqlDisconnect(&conn);
