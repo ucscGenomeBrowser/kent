@@ -132,6 +132,10 @@ jQuery.tableDnD = {
             cells.each(function() {
                 // The cell is bound to "this"
                 jQuery(this).mousedown(function(ev) {
+                    if(ev.button != 0)
+                        return true;
+                    if(jQuery.tableDnD == undefined)
+                        return false;
                     jQuery.tableDnD.dragObject = this.parentNode;
                     jQuery.tableDnD.currentTable = table;
                     jQuery.tableDnD.mouseOffset = jQuery.tableDnD.getMouseOffset(this, ev);
@@ -229,6 +233,12 @@ jQuery.tableDnD = {
     },
 
     mousemove: function(ev) {
+        if(jQuery.tableDnD == undefined) {
+            jQuery(document)
+                .unbind('mousemove')//, jQuery.tableDnD.mousemove);
+                .unbind('mouseup');//, jQuery.tableDnD.mouseup);
+            return;
+        }
         if (jQuery.tableDnD.dragObject == null) {
             return;
         }
@@ -330,6 +340,12 @@ jQuery.tableDnD = {
     },
 
     mouseup: function(e) {
+        if(jQuery.tableDnD == undefined) {
+            jQuery(document)
+                .unbind('mousemove')//, jQuery.tableDnD.mousemove);
+                .unbind('mouseup');//, jQuery.tableDnD.mouseup);
+            return;
+        }
         if (jQuery.tableDnD.currentTable && jQuery.tableDnD.dragObject) {
             var droppedRow = jQuery.tableDnD.dragObject;
             var config = jQuery.tableDnD.currentTable.tableDnDConfig;
