@@ -13,7 +13,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 247
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalGm12878CellTotal
 view FiltRawSignal
 
@@ -32,7 +32,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 74
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongnonpolya
 view FiltRawSignal
 
@@ -51,7 +51,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 73
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalGm12878CytosolLongpolya
 view FiltRawSignal
 
@@ -70,7 +70,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 452
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
 view FiltRawSignal
 
@@ -89,7 +89,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 75
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongnonpolya
 view FiltRawSignal
 
@@ -108,7 +108,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 246
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalGm12878NucleusLongpolya
 view FiltRawSignal
 
@@ -127,7 +127,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 339
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongnonpolya
 view FiltRawSignal
 
@@ -146,7 +146,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 340
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalHepg2CytosolLongpolya
 view FiltRawSignal
 
@@ -165,7 +165,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 451
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleolusTotal
 view FiltRawSignal
 
@@ -184,7 +184,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 430
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongnonpolya
 view FiltRawSignal
 
@@ -203,7 +203,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 431
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalHepg2NucleusLongpolya
 view FiltRawSignal
 
@@ -222,7 +222,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 90
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562CellTotal
 view FiltRawSignal
 
@@ -241,7 +241,7 @@ localization chromatin
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 186
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562ChromatinTotal
 view FiltRawSignal
 
@@ -260,7 +260,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 78
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongnonpolya
 view FiltRawSignal
 
@@ -279,7 +279,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 77
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562CytosolLongpolya
 view FiltRawSignal
 
@@ -298,7 +298,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 187
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562NucleolusTotal
 view FiltRawSignal
 
@@ -317,7 +317,7 @@ localization nucleoplasm
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 248
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562NucleoplasmTotal
 view FiltRawSignal
 
@@ -336,7 +336,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 81
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongnonpolya
 view FiltRawSignal
 
@@ -355,7 +355,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 82
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562NucleusLongpolya
 view FiltRawSignal
 
@@ -374,7 +374,7 @@ localization polysome
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 76
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalK562PolysomeLongnonpolya
 view FiltRawSignal
 
@@ -393,7 +393,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 341
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongnonpolya
 view FiltRawSignal
 
@@ -412,7 +412,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 342
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteCytosolLongpolya
 view FiltRawSignal
 
@@ -431,7 +431,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 375
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongnonpolya
 view FiltRawSignal
 
@@ -450,7 +450,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 376
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalKeratinocyteNucleusLongpolya
 view FiltRawSignal
 
@@ -469,7 +469,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 89
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalProstateCellLongnonpolya
 view FiltRawSignal
 
@@ -488,7 +488,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 88
+subId 2121
 tableName wgEncodeAffyRnaChipFiltRawSignalProstateCellLongpolya
 view FiltRawSignal
 
@@ -507,7 +507,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 247
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsGm12878CellTotal
 view FiltTransfrags
 
@@ -526,7 +526,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 74
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongnonpolya
 view FiltTransfrags
 
@@ -545,7 +545,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 73
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsGm12878CytosolLongpolya
 view FiltTransfrags
 
@@ -564,7 +564,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 452
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleolusTotal
 view FiltTransfrags
 
@@ -583,7 +583,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 75
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongnonpolya
 view FiltTransfrags
 
@@ -602,7 +602,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 246
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsGm12878NucleusLongpolya
 view FiltTransfrags
 
@@ -621,7 +621,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 339
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongnonpolya
 view FiltTransfrags
 
@@ -640,7 +640,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 340
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsHepg2CytosolLongpolya
 view FiltTransfrags
 
@@ -659,7 +659,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 451
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleolusTotal
 view FiltTransfrags
 
@@ -678,7 +678,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 430
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongnonpolya
 view FiltTransfrags
 
@@ -697,7 +697,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 431
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsHepg2NucleusLongpolya
 view FiltTransfrags
 
@@ -716,7 +716,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 90
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562CellTotal
 view FiltTransfrags
 
@@ -735,7 +735,7 @@ localization chromatin
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 186
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562ChromatinTotal
 view FiltTransfrags
 
@@ -754,7 +754,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 78
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongnonpolya
 view FiltTransfrags
 
@@ -773,7 +773,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 77
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562CytosolLongpolya
 view FiltTransfrags
 
@@ -792,7 +792,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 187
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562NucleolusTotal
 view FiltTransfrags
 
@@ -811,7 +811,7 @@ localization nucleoplasm
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 248
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562NucleoplasmTotal
 view FiltTransfrags
 
@@ -830,7 +830,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 81
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongnonpolya
 view FiltTransfrags
 
@@ -849,7 +849,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 82
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562NucleusLongpolya
 view FiltTransfrags
 
@@ -868,7 +868,7 @@ localization polysome
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 76
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsK562PolysomeLongnonpolya
 view FiltTransfrags
 
@@ -887,7 +887,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 341
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongnonpolya
 view FiltTransfrags
 
@@ -906,7 +906,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 342
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteCytosolLongpolya
 view FiltTransfrags
 
@@ -925,7 +925,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 375
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongnonpolya
 view FiltTransfrags
 
@@ -944,7 +944,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 376
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsKeratinocyteNucleusLongpolya
 view FiltTransfrags
 
@@ -963,7 +963,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 89
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya
 view FiltTransfrags
 
@@ -982,7 +982,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 88
+subId 2121
 tableName wgEncodeAffyRnaChipFiltTransfragsProstateCellLongpolya
 view FiltTransfrags
 
@@ -1001,7 +1001,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 247
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalGm12878CellTotal
 view RawSignal
 
@@ -1020,7 +1020,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 74
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalGm12878CytosolLongnonpolya
 view RawSignal
 
@@ -1039,7 +1039,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 73
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalGm12878CytosolLongpolya
 view RawSignal
 
@@ -1058,7 +1058,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 452
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
 view RawSignal
 
@@ -1077,7 +1077,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 75
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalGm12878NucleusLongnonpolya
 view RawSignal
 
@@ -1096,7 +1096,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 246
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalGm12878NucleusLongpolya
 view RawSignal
 
@@ -1115,7 +1115,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 339
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalHepg2CytosolLongnonpolya
 view RawSignal
 
@@ -1134,7 +1134,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 340
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalHepg2CytosolLongpolya
 view RawSignal
 
@@ -1153,7 +1153,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 451
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalHepg2NucleolusTotal
 view RawSignal
 
@@ -1172,7 +1172,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 430
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalHepg2NucleusLongnonpolya
 view RawSignal
 
@@ -1191,7 +1191,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 431
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalHepg2NucleusLongpolya
 view RawSignal
 
@@ -1210,7 +1210,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 90
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562CellTotal
 view RawSignal
 
@@ -1229,7 +1229,7 @@ localization chromatin
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 186
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562ChromatinTotal
 view RawSignal
 
@@ -1248,7 +1248,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 78
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562CytosolLongnonpolya
 view RawSignal
 
@@ -1267,7 +1267,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 77
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562CytosolLongpolya
 view RawSignal
 
@@ -1286,7 +1286,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 187
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562NucleolusTotal
 view RawSignal
 
@@ -1305,7 +1305,7 @@ localization nucleoplasm
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 188
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562NucleoplasmTotal
 view RawSignal
 
@@ -1324,7 +1324,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 81
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562NucleusLongnonpolya
 view RawSignal
 
@@ -1343,7 +1343,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 82
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562NucleusLongpolya
 view RawSignal
 
@@ -1362,7 +1362,7 @@ localization polysome
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 76
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalK562PolysomeLongnonpolya
 view RawSignal
 
@@ -1381,7 +1381,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 341
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongnonpolya
 view RawSignal
 
@@ -1400,7 +1400,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 342
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalKeratinocyteCytosolLongpolya
 view RawSignal
 
@@ -1419,7 +1419,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 375
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongnonpolya
 view RawSignal
 
@@ -1438,7 +1438,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 376
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalKeratinocyteNucleusLongpolya
 view RawSignal
 
@@ -1457,7 +1457,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 89
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalProstateCellLongnonpolya
 view RawSignal
 
@@ -1476,7 +1476,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 88
+subId 2121
 tableName wgEncodeAffyRnaChipRawSignalProstateCellLongpolya
 view RawSignal
 
@@ -1495,7 +1495,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 247
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsGm12878CellTotal
 view Transfrags
 
@@ -1514,7 +1514,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 74
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
 view Transfrags
 
@@ -1533,7 +1533,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 73
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
 view Transfrags
 
@@ -1552,7 +1552,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 452
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
 view Transfrags
 
@@ -1571,7 +1571,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 75
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
 view Transfrags
 
@@ -1590,7 +1590,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 246
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
 view Transfrags
 
@@ -1609,7 +1609,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 339
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
 view Transfrags
 
@@ -1628,7 +1628,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 340
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
 view Transfrags
 
@@ -1647,7 +1647,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 451
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
 view Transfrags
 
@@ -1666,7 +1666,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 430
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
 view Transfrags
 
@@ -1685,7 +1685,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 431
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya
 view Transfrags
 
@@ -1704,7 +1704,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 90
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562CellTotal
 view Transfrags
 
@@ -1723,7 +1723,7 @@ localization chromatin
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 186
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
 view Transfrags
 
@@ -1742,7 +1742,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 78
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
 view Transfrags
 
@@ -1761,7 +1761,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 77
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
 view Transfrags
 
@@ -1780,7 +1780,7 @@ localization nucleolus
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 187
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
 view Transfrags
 
@@ -1799,7 +1799,7 @@ localization nucleoplasm
 origAssembly hg18
 project wgEncode
 rnaExtract total
-subId 188
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
 view Transfrags
 
@@ -1818,7 +1818,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 81
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
 view Transfrags
 
@@ -1837,7 +1837,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 82
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
 view Transfrags
 
@@ -1856,7 +1856,7 @@ localization polysome
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 76
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
 view Transfrags
 
@@ -1875,7 +1875,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 341
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
 view Transfrags
 
@@ -1894,7 +1894,7 @@ localization cytosol
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 342
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
 view Transfrags
 
@@ -1913,7 +1913,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 375
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
 view Transfrags
 
@@ -1932,7 +1932,7 @@ localization nucleus
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 376
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
 view Transfrags
 
@@ -1951,7 +1951,7 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
-subId 89
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
 view Transfrags
 
@@ -1970,8 +1970,8 @@ localization cell
 origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
-subId 88
+subId 2121
 tableName wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
 view Transfrags
 
-# MAGIC: -1871134272
+# MAGIC: -1870764246

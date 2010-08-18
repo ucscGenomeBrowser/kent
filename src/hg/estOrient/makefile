@@ -1,9 +1,9 @@
 include ../../inc/common.mk
 HG_WARN = ${HG_WARN_ERR}
 
-L += -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a ${MYSQLLIBS}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
 A = estOrient
