@@ -177,6 +177,34 @@ for (el = varList, i = 0; el != NULL; el = el->next, i++)
 return i;
 }
 
+// FIXME: This code is duplicated in imageV2!!!
+// FIXME: This code is duplicated in imageV2!!!
+static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
+{
+// add entry for given track to the trackDbJson string
+if(count)
+    dyStringAppend(trackDbJson, "\n,");
+dyStringPrintf(trackDbJson, "\t%s: {", track->track);
+if(tdbIsSuperTrackChild(track->tdb))
+    {
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
+    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
+    }
+else if(tdbIsCompositeChild(track->tdb))
+    {
+    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
+    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", parentTdb->track);
+    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
+    }
+dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
+if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+}
+// FIXME: This code is duplicated in imageV2!!!
+// FIXME: This code is duplicated in imageV2!!!
+
 void doSearchTracks(struct group *groupList)
 {
 struct group *group;
@@ -539,10 +567,16 @@ else
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
         }
+
+    // Set up json for js functionality
+    struct dyString *trackDbJson = newDyString(1000);
+    int trackDbJsonCount = 1;
+    dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
+
     hPrintf("<table><tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
     #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracksCheckAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
-    hPrintf("</td></tr><tr bgcolor='%s'><td>",HG_COL_HEADER);
+    hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
     printf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
     printf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
     hPrintf("</td><td><b>Visibility</b></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
@@ -556,6 +590,8 @@ else
             break;
 
         struct track *track = (struct track *) ptr->val;
+        trackJson(trackDbJson, track, trackDbJsonCount++);
+
         // trackDbOutput(track->tdb, stderr, ',', '\n');
         hPrintf("<tr bgcolor='%s' valign='top' class='found%s%s'>\n",COLOR_BG_ALTDEFAULT,
                 (tdbIsCompositeChild(track->tdb)?" subtrack":""),
@@ -617,7 +653,10 @@ else
             hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,"normalText seenVis",extra);
             }
         hPrintf("</td>\n");
-        hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
+        if(tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
+            hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
+        else
+            hPrintf("<td><a target='_top' onclick='hgTrackUiPopUp(\"%s\"); return false;' href='%s' title='Configure track...'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
         compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");
@@ -627,6 +666,10 @@ else
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
     hPrintf("<script type='text/javascript'>findTracksNormalizeFound();</script>\n");
     hPrintf("\n</form>\n");
+
+    // be done with json
+    dyStringAppend(trackDbJson, "}\n</script>\n");
+    hPrintf(dyStringCannibalize(&trackDbJson));
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"
