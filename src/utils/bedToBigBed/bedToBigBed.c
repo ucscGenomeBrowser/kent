@@ -171,7 +171,7 @@ for (;;)
 
                 // get new scratch area
                 compBufSize = maxCompSize;
-                compBuf = needMem(compBufSize);
+                compBuf = needLargeMem(compBufSize);
                 }
 
 	    int compSize = zCompress(stream->string, stream->stringSize, compBuf, maxCompSize);
