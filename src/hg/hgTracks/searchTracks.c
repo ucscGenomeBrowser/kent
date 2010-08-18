@@ -624,6 +624,9 @@ else
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             track->visibility = limitedVisFromComposite(track);
+            struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
+            track->visibility = tvMin(track->visibility,parentTdb->visibility);
+
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
             #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
@@ -632,7 +635,7 @@ else
         else
             checked = ( track->visibility != tvHide );
 
-        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onchange='findTracksClickedOne(this,true);'%s>"
+        #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
 
         hPrintf("</td><td>\n");

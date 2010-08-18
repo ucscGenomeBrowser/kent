@@ -1585,9 +1585,6 @@ if(tdbIsCompositeChild(tdb))
     {
     struct trackDb *parentTdb = trackDbCompositeParent(tdb);
     assert(parentTdb != NULL);
-    vis = tvMin(vis,parentTdb->visibility);
-    if (vis == tvHide) // short curcuit this effort
-        return vis;
 
     char *viewName = NULL;
     if (subgroupFind(tdb,"view",&viewName))
