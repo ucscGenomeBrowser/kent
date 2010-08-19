@@ -1487,7 +1487,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             }
     } else if (cmd == 'hgTrackUi_popup') {
 
-        hgTrackUiPopUp( selectedMenuItem.id );  // Launches the popup but shields the ajax with a waitOnFunction
+        hgTrackUiPopUp( selectedMenuItem.id, false );  // Launches the popup but shields the ajax with a waitOnFunction
 
     } else if (cmd == 'hgTrackUi_follow') {
 
@@ -1747,7 +1747,6 @@ function parseMap(ele, reset)
 
 function updateTrackImg(trackName)
 {
-    jQuery('body').css('cursor', 'wait');
     var data = "hgt.trackImgOnly=1&&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
     $.ajax({
                 type: "GET",
@@ -1762,12 +1761,18 @@ function updateTrackImg(trackName)
 }
 
 var popUpTrackName;
-function _hgTrackUiPopUp(trackName)
+var popUpTrackDescriptionOnly = false;
+function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
+    var myLink = "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
+    popUpTrackDescriptionOnly = descriptionOnly;
+    if(popUpTrackDescriptionOnly)
+        myLink += "&descriptionOnly=1";
+
     $.ajax({
                 type: "GET",
-                url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
+                url: myLink,
                 dataType: "html",
                 trueSuccess: handleTrackUi,
                 success: catchErrorOrDispatch,
@@ -1776,15 +1781,15 @@ function _hgTrackUiPopUp(trackName)
             });
 }
 
-function hgTrackUiPopUp(trackName)
+function hgTrackUiPopUp(trackName,descriptionOnly)
 {
-    waitOnFunction( _hgTrackUiPopUp, trackName );  // Launches the popup but shields the ajax with a waitOnFunction
+    waitOnFunction( _hgTrackUiPopUp, trackName, descriptionOnly );  // Launches the popup but shields the ajax with a waitOnFunction
 }
 
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-    $('#hgTrackUiDialog').html("<div style='font-size:60%' id='pop'>" + response + "</div>");
+    $('#hgTrackUiDialog').html("<div style='font-size:60% background: #FFFEE8' id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -1795,23 +1800,30 @@ function handleTrackUi(response, status)
                                height: 'auto',
                                width: 'auto',
                                minHeight: 200,
-                               minWidth: 400,
+                               minWidth: 700,
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
                                buttons: { "Ok": function() {
-                                    setAllVars($('#pop'));
+                                    if(popUpTrackDescriptionOnly == false)
+                                        setAllVars($('#pop'));
                                     $(this).dialog("close");
-                                    if($('#imgTbl') != undefined)
-                                    updateTrackImg(popUpTrackName);
+                                    if($('#imgTbl') != undefined && popUpTrackDescriptionOnly == false)
+                                        updateTrackImg(popUpTrackName);
                                }},
                                close: function() {
                                    // clear out html after close to prevent problems caused by duplicate html elements
                                    $('#hgTrackUiDialog').html("");
                                }
                            });
-    // Apparently the options above to dialog take only once, so we set title explicitly.
-    $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
+    if(popUpTrackDescriptionOnly) {
+        var myWidth =  $(window).width() - 300;
+        $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
+        $('#hgTrackUiDialog').dialog("option", "width", myWidth);
+        $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
+    } else {
+        $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
+    }
     jQuery('body').css('cursor', '');
     $('#hgTrackUiDialog').dialog('open');
 }
