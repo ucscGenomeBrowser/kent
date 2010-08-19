@@ -19,6 +19,7 @@ include wgEncodeUwDnase.ra
 include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra
 include wgEncodeGisRnaSeq.ra
+include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
 include trackDb.wgEncodeCshlLongRnaSeq.ra
