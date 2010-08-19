@@ -6,15 +6,14 @@ MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 #COPT = -ggdb
 
 A = pslFilterPrimers
-
 O = $A.o
 
-compile: $O 
-	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L} 
-	mv ${AOUT} $A${EXE}
-	chmod a+rx $A
-	cp -f $A ${BINDIR}/$A
-	${STRIP} ${BINDIR}/$A${EXE}
+$A: $O 
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 debug: $O
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}

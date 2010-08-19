@@ -11,6 +11,10 @@
 #include "linefile.h"
 #include "trackDb.h"
 
+// If cgi set as CART_VAR_EMPTY, then removed from cart
+// If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
+#define CART_VAR_EMPTY "[]"
+
 typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
 
@@ -509,7 +513,7 @@ int cartOrTdbInt(struct cart *cart, struct trackDb *tdb, char *var, int defaultV
 double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double defaultVal);
 /* Look first in cart, then in trackDb for var.  Return defaultVal if not found. */
 
-boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved);
+boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved,boolean ignoreCreated);
 /* Returns TRUE if new cart setting has changed from old cart setting */
 
 struct slRef *cartNamesLike(struct cart *cart, char *wildCard);

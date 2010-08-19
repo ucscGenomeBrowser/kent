@@ -4,21 +4,21 @@ L += -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-PROG = ${BINDIR}/pslSwap${EXE}
-OBJS = pslSwap.o
+A = pslSwap
+O = pslSwap.o
 
-all: ${PROG}
+all: ${A}
 
-${PROG}: pslSwap
-	@${MKDIR} ${BINDIR}
-	cp -f pslSwap ${PROG}
-	${STRIP} ${PROG}${EXE}
+${A}: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-pslSwap: ${OBJS} ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o pslSwap ${OBJS} ${MYLIBS} ${MYSQLLIBS} $L
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
-test:
+test: compile
 	cd tests && ${MAKE} test
+	rm -f ${A}${EXE}
 
 clean:
 	rm -f pslSwap ${OBJS}

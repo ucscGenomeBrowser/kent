@@ -1419,4 +1419,138 @@ tableName wgEncodeSydhHistoneNt2d1InputStdSig
 treatment None
 view Signal
 
-# MAGIC: -216154953
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
+objType file
+antibody H3K9me3
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-16
+dateUnrestricted 2011-05-16
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1.bam
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2108
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2
+objType file
+antibody H3K9me3
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-16
+dateUnrestricted 2011-05-16
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2.bam
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2108
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdPk
+objType table
+antibody H3K9me3
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-16
+dateUnrestricted 2011-05-16
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdPk.narrowPeak.gz
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0.  Submitted even though replicate peak overlap below threshold because data visually looks good, but calling peaks for H3K9me3 is very difficult due to the nature of the signal and not the quality of the data.  When we call peaks using our program that has been modified for histones, we get a ~60% overlap. That's about as good as it gets with H3K9me3 peak calling.
+project wgEncode
+setType exp
+subId 2108
+tableName wgEncodeSydhHistoneU2osH3k9me3UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1
+objType file
+antibody H3K9me3
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-16
+dateUnrestricted 2011-05-16
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
+parentTable wgEncodeSydhHistoneU2osH3k9me3UcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2108
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2
+objType file
+antibody H3K9me3
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-16
+dateUnrestricted 2011-05-16
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Staph A.
+parentTable wgEncodeSydhHistoneU2osH3k9me3UcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2108
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneU2osH3k9me3UcdSig
+objType table
+antibody H3K9me3
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-16
+dateUnrestricted 2011-05-16
+fileName wgEncodeSydhHistoneU2osH3k9me3UcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2108
+tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
+treatment None
+view Signal
+
+# MAGIC: -2143005510
