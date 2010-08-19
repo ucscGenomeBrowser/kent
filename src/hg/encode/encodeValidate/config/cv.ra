@@ -5684,350 +5684,375 @@ type seqPlatform
 description High-throughput sequencing
 
 
-#Project CV
-#
-#
-#
+#LABS          This is the CV for naming the labs.
+#term:
+#tag:
+#type:         We use the phrase lab as a source of data
+#labInst:      This is the full name of the Institution where the lab is housed
+#labPi:        This is the shortened name that we refer to the PI, usually just last name
+#labPiFull:    The full name of the PI
+#grantPI:      Shortened name of the head PI for the grant
+#grantInst:    Term that we use to refer to the project or grant like (SYDH or HAIB)
+#organism:     human or mouse
 
 term Broad
 tag Broad
-type project
-projectNameFull Broad Institute
-organism Human
-labName Broad
-pi Bernstein
-piFull Bradley Bernstein
-grant Bernstein
+type lab
+labInst Broad Institute
+labPi Bernstein
+labPiFull Bradley Bernstein
+grantPi Bernstein
+grantInst Broad Institute
+organism human
 
-term Duke
-tag Duke
-type project
-projectNameFull Duke University
-organism Human
-labName Duke
-pi Crawford
-piFull Greg Crawford
-grant Crawford
-
-term Caltech    
-tag Caltech    
-type project
-projectNameFull California Institute of Technology (Wold Lab)
-organism Human
-labName Caltech
-pi Wold
-piFull Barbara Wold
-grant Myers
-
-term HudsonAlpha
-tag HudsomAlpha
-type project
-project HAIB
-projectNameFull HudsonAlpha Institute for Biotechnology
-organism Human
-labName HudsonAlpha
-pi Myers
-piFull Richard Myers
-grant Myers
-
-
-
-term NHGRI-Elnitski
-tag NHGRI-Elnitski
-type project
-projectNameFull National Human Genome Research Institute Elnitski
-organism Human
-labName NHGRI-Elnitski
-pi Elnitski
-piFull Laura Elnitski
-grant Elnitski
-
-term CSHL
-tag CSHL
-type project
-project Transcriptome
-projectNameFull Transcriptome Cold Spring Harbor Laboratory
-organism Human
-labName Cshl
-pi Gingeras
-piFull Thomas Gingeras
-grant Gingeras
-
-term GIS
-tag  GIS
-type project
-project Transcriptome
-projectNameFull Transcriptome  Genome Institute of Singapore
-organism Human
-labName GIS
-pi Ruan
-piFull Yijun Ruan
-grant Gingeras
-
-term Helicos       
-tag Helicos      
-type project
-project Transcriptome
-projectNameFull Transcriptome Helicos BioScience Corporation
-organism Human
-labName Helicos
-pi Kapranov
-piFull Philipp Kapranov
-grant Gingeras
-
-
-#synonym
-term Duke
-tag Duke
-type project
-projectNameFull Duke University
-organism Human
-labName UNC
-pi Lieb
-piFull Jason Lieb
-grant Crawford
-
-term Duke 
-tag Duke
-type project
-projectNameFull Duke University
-organism Human
-labName UT-A
-pi Iyer
-piFull Tara Iyer
-grant Crawford
-
-term Genecode
-tag Genecode
-type project
-projectNameFull Genecode Sanger Institute
-organism Human
-labName Sanger
-pi Hubbard
-piFull Tim Hubbard
-grant Hubbard
-
-term NHGRI-Margulies
-tag NHGRI-Marigulies
-type project
-projectNameFull National Human Genome Research Institute Margulies
-organism Human
-labName Margulies
-pi Margulies
-piFull Elliott Margulies
-grant Margulies
-
-term SUNY
-tag SUNY
-type project
-projectNameFull State University of New York at Albany
-organism Human
-labName SunyAlbany
-pi Tenenbaum
-piFull Scott Tenebaum
-grant Tenenbaum
-
-term Transcriptome - Affy
-tag Transcriptome - Affy
-type project
-projectNameFull Transcriptome Affymetrix
-organism Human
-labName Affy
-pi Gingeras
-piFull Thomas Gingeras
-grant Gingeras
-
-term Riken
-tag  Riken
-type project
-projectNameFull Transcriptome Riken Lab
-organism Human
-labName Riken
-pi Carninci
-piFull Piero Carninci
-grant Gingeras
-
-term UMass-Dekker
-tag UMass-Dekker
-type project
-projectNameFull University of Massachusetts Amherst Dekker
-organism Human
-labName UMass-Dekker
-pi Dekker
-piFull Job Dekker
-grant Dekker
-
-term UMass-Weng
-tag UMass-Weng
-type project
-projectNameFull University of Massachusetts Amherst Weng Lab 
-organism Human
-labName UMassHA
-pi Weng
-piFull Zhiping Weng
-grant Weng
-
-term UW
-tag UW
-type project
-projectNameFull University of Washington
-organism Human
-labName Uw
-pi Stam
-piFull George Stamatoyannopoulos??
-grant Stam
-
-term SYDH-Stanford
-tag  SYDH-Stanford
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName Stanford
-pi Snyder
-piFull Michael Snyder
-grant Snyder
-
-term SYDH-Yale
-tag  SYDH-Yale
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName Yale
-pi Snyder
-piFull Michael Snyder
-grant Snyder
-
-term SYDH-Harvard 
-tag  SYDH-Harvard 
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName Harvard
-pi Weissman
-piFull Sherman Weissman
-grant Snyder
-
-term SYDH - UCD
-tag SYDH - UCD 
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName UCD
-pi Farnham
-piFull Peggy Farnham
-grant Snyder
-
-
-
-
-
-
-
-# Mouse and ARRA grants
-
-term LICR-m
-tag LICR 
-type project
-projectNameFull Ludwig Institue for Cancer Research
-organism Mouse
-labName LICR
-pi Ren
-piFull Bing Ren
-grant Ren
-
-
-term PSU-m
-tag PSU 
-type project
-projectNameFull Penn State University
-organism Mouse
-labName Caltech-Mouse
-pi Wold
-piFull Barbara Wold
-grant Hardison
-
-
-
-term PSU-m
-tag  PSU
-type project
-projectNameFull Penn State University
-organism Mouse
-labName UMass-Mouse
-pi Dekker
-piFull Job Dekker
-grant Hardison
-
-
-
-
-term PSU-m
-tag PSU 
-type project
-projectNameFull Penn State University 
-organism Mouse
-labName Duke-Mouse
-pi Crawford
-piFull Greg Crawford
-grant Hardison
-
-term Caltech-m
-tag Caltech-m
-type project
-projectNameFull Caltech  
-organism Mouse
-labName Caltech-mouse
-pi Wold
-piFull Barbara Wold
-grant Hardison
-
-term UChicago-m
-tag UChicago 
-type project
-projectNameFull University of Chicago 
-organism Mouse
-labName UChicago
-pi White
-piFull Kevin White
-grant White
-
-term UNC-m
-tag UNC 
-type project
-projectNameFull University of North Carolina
-organism Mouse
-labName UNC-Giddings
-pi Giddings
-piFull Morgan Giddings
-grant Giddings
-
-term UW-m
-tag UW 
-type project
-projectNameFull University of Washington 
-organism Mouse
-labName UW-Mouse
-pi Stam
-piFull George Stamatoyannopoulos??
-grant Stam
+term UNC
+tag UNC
+type lab
+labInst Univeristy of North Carolina
+labPi Lieb
+labPiFull Jason Lieb
+grantPi Crawford
+grantInst UNC
+organism human
 
 term BU
 tag BU 
-type project
-projectNameFull Boston University
-organism human
+type lab
+grantInst Boston University
 labName BU
-pi Tullius
-piFull Thomas Tullius
-grant Tullius
-
-# Tech development
-term GIS
-tag GIS 
-type project
-projectNameFull Gene Identification Signature 
+labPi Tullius
+labPiFull Thomas Tullius
+grantPi Tullius
 organism human
+
+term GIS-Chia
+tag GIS-Chia 
+type lab
+labInst Genome Institute of Singapore (Chia)
 labName GIS-Chia
-pi Ruan
-piFull Yijun Ruan
-grant Ruan
+labPi Ruan
+labPiFull Yijun Ruan
+grantPi Ruan
+organism human
+
+term Genecode
+tag Genecode
+type lab
+labInst Genecode 
+labPi Hubbard
+labPiFull Tim Hubbard
+grantPi Hubbard
+grantInst Sanger Institute
+organism human
+
+term SUNY
+tag SUNY
+type lab
+labInst State University of New York at Albany
+labName SunyAlbany
+labPi Tenenbaum
+labPiFull Scott Tenebaum
+grantPi Tenenbaum
+grantInst SUNY-Albany
+organism human
+
+term UW
+tag UW
+type lab    
+labInst University of Washington
+labPi Stam
+labPiFull George Stamatoyannopoulos??
+grantPi Stam
+grantInst UW
+organism human
+
+
+### Duke Labs         
+### Crawford and Iyer
+
+term Duke
+tag Duke
+type lab
+labInst Duke University
+labPi Crawford
+labPiFull Greg Crawford
+grantPi Crawford
+grantInst Duke University
+organism human
+
+term Duke-Iyer
+tag Duke-Iyer
+type lab
+labName UT-A
+labPi Iyer
+labPiFull Tara Iyer
+grantPi Crawford
+grantInst Duke 
+organism human
+
+### HAIB Project Labs         
+### Caltech and HudsonAlpha
+
+term Caltech    
+tag Caltech    
+type lab
+grantInst California Institute of Technology (Wold Lab)
+labPi Wold
+labPiFull Barbara Wold
+grantPi Myers
+grantInst  HAIB
+organism human
+
+term HudsonAlpha
+tag HAIB
+type lab
+labInst Hudson Alpha Institute for Biotechnology
+labPi Myers
+labPiFull Richard Myers
+grantPi Myers
+grantInst HAIB
+organism human
+
+### NHGRI Labs                 
+### 
+
+term NHGRI-Elnitski
+tag NHGRI-Elnitski
+type lab
+labInst National Human Genome Research Institute Elnitski
+labPi Elnitski
+labPiFull Laura Elnitski
+grantPi Elnitski
+grantInst National Human Genome Research Institute Elnitski
+organism human
+
+term NHGRI-Margulies
+tag NHGRI-Marigulies
+type lab
+labInst National Human Genome Research Institute Margulies
+labPi Margulies
+labPiFull Elliott Margulies
+grantPi Margulies
+labInst National Human Genome Research Institute Margulies
+organism human
+
+
+### Transcriptome Project Labs
+### GIS, Riken, CHSL, CSHL, Affy, Helicos
+
+term CSHL
+tag CSHL
+type lab
+project Transcriptome
+labInst Cold Spring Harbor Laboratory
+labPi Gingeras
+labpiFull Thomas Gingeras
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term GIS
+tag  GIS
+type lab
+labInst Genome Institute of Singapore
+labPi Ruan
+labPiFull Yijun Ruan
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term Helicos       
+tag Helicos      
+type lab
+labInst Helicos BioScience Corporation
+labPi Kapranov
+labPiFull Philipp Kapranov
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term Affy
+tag  Affy
+type lab
+labInst Affymetrix
+labPi Gingeras
+labPiFull Thomas Gingeras
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term Riken
+tag  Riken
+type lab
+labInst Riken Lab
+labName Riken
+labPi Carninci
+labPiFull Piero Carninci
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+
+### UMass Labs
+### Dekker and Weng
+
+term UMass-Dekker
+tag UMass-Dekker
+type lab
+labInst UMass
+labPi Dekker
+labPiFull Job Dekker
+grantPi Dekker
+grantInst University of Massachusetts Amherst 
+organism human
+
+term UMass-Weng
+tag UMass-Weng
+type lab
+labInst UMass
+labPi Weng
+labPiFull Zhiping Weng
+grantPi Weng
+grantInst University of Massachusetts Amherst  
+organism human
+
+
+#### The SYDH Project 
+####  Stanford, Yale, Davis, Harvard
+
+term Stanford
+tag  Stanford
+type lab
+labInst Stanford
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst SYDH
+organism human
+
+term Yale
+tag  Yale
+type lab
+labInst Yale
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst  SYDH
+organism human
+#grantInst  Stanford Yale UCDavis Harvard
+
+term Harvard 
+tag  Harvard 
+type lab
+labInst Harvard
+labPi Weissman
+labPiFull Sherman Weissman
+grantPi Snyder
+grantInst SYDH
+organism human
+
+term UCD
+tag UCD 
+type lab
+labName UCD
+labPi Farnham
+labPiFull Peggy Farnham
+grantPi Snyder
+grantInst SYDH
+organism human
+
+
+
+### Mouse labs 
+###
+
+term LICR-m
+tag LICR 
+type lab
+labInst Ludwig Institue for Cancer Research
+labPi Ren
+labPiFull Bing Ren
+grantPi Ren
+grantInst LICR
+organism mouse
+
+term Caltech-m
+tag Caltech
+type lab
+labInst Caltech
+labPi Wold
+labPiFull Barbara Wold
+grantPi Hardison
+grantInst PSU
+organism mouse
+
+term UMass-m
+tag  UMass 
+type lab
+labInst University of Massachusettes 
+labPi Dekker
+labPiFull Job Dekker
+grantPi Hardison
+grantInst PSU
+organism mouse
+
+term Duke-m
+tag Duke
+type lab
+labInst Duke University 
+labPi Crawford
+labPiFull Greg Crawford
+grantPi Hardison
+grantInst PSU
+organism mouse
+
+term UChicago-m
+tag UChicago 
+type lab
+grantInst University of Chicago 
+labName UChicago
+labPi White
+labPiFull Kevin White
+grantPi White
+organism mouse
+
+term UNC-m
+tag UNC 
+type lab
+labInst University of North Carolina
+labName UNC-Giddings
+labPi Giddings
+labPiFull Morgan Giddings
+grantPi Giddings
+organism mouse
+
+term UW-m
+tag UW 
+type lab
+labInst University of Washington 
+labPi Stam
+labpiFull George Stamatoyannopoulous
+grantPi Stam
+grantInst UW
+organism mouse
+
+term Stanford-m
+tag  Stanford
+type lab
+labInst Stanford
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst StanfordYale
+organism human
+
+term Yale-m
+tag  Yale
+type lab
+labInst Yale    
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst StanfordYale
+organism human
+
