@@ -127,7 +127,7 @@ sub ccdsLoad($$) {
     # use profile ccds:ccds except for hgwdev.  This allows any user
     # to load hgwdev without requiring update of .hg.conf files
     my $ccdsDb = ($gbCommon::hostName eq "hgwdev") ? "ccds" : "ccds:ccds";
-    runProg("ccdsMkTables -loadDb $ccdsDb $db $ccdsNcbiBuild ccdsInfo ccdsGene");
+    runProg("ccdsMkTables -loadDb $ccdsDb $db $ccdsNcbiBuild ccdsInfo ccdsNotes ccdsGene");
     if (haveMysqlTbl($db, "knownGene")) {
         runProg("mkCcdsGeneMap -db=$db -loadDb ccdsGene knownGene ccdsKgMap");
     }
