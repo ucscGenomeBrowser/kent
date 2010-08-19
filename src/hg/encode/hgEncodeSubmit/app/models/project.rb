@@ -2,7 +2,7 @@ class Project < ActiveRecord::Base
 
   belongs_to :user
   belongs_to :project_type
-  has_many :project_archives, :dependent => :destroy
+  has_many :project_archives, :order => 'archive_no', :dependent => :destroy
 
   validates_presence_of :name
   validates_presence_of :project_type_id
