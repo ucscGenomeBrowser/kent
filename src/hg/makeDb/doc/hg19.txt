@@ -11036,7 +11036,7 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     hgPepPred hg19 generic genscanPep pep/genscanPep.pep
 
 ################################################################
-# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (working 2010-08-03 - Chin)
+# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (DONE 2010-08-03 - Chin)
 # Note from Andy: All primary data files were lost, The table
 # has all of the original data. 
 # The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should 
