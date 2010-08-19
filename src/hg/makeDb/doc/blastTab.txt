@@ -5,7 +5,8 @@
 
 # Run on the occassion of Ensembl v59 release to update danRer6 ensembl
 #	blast tabs on all other organisms.  In the process, discovered
-#	some confusion in previous builds of blastTabs
+#	some confusion in previous builds of blastTabs, therefore everything
+#	rebuilt
 
 ############################################################################
 # DONE 2010-08-18 in this case in this danRer6 directory
@@ -322,3 +323,86 @@ do
     echo hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
     hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
 done
+
+export TARGET=ce
+export TARGET_DB=ce6
+for DB in dm3 sacCer2
+do
+    echo $DB
+    aToB=run.${TARGET_DB}.$DB
+    bToA=run.$DB.${TARGET_DB}
+    mkdir $aToB $bToA
+    cat ../${DB}/$aToB/out/*.tab > $aToB/all.tab
+    cat ../${DB}/$bToA/out/*.tab > $bToA/all.tab
+    echo blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    dbBlastTab=xxBlastTab
+    case $DB in
+        ce6) dbBlastTab=ceBlastTab;;
+        dm3) dbBlastTab=dmBlastTab;;
+        danRer6) dbBlastTab=drBlastTab;;
+        sacCer2) dbBlastTab=scBlastTab;;
+    esac
+    echo hgLoadBlastTab ${TARGET_DB} $dbBlastTab $aToB/recipBest.tab
+    hgLoadBlastTab ${TARGET_DB} $dbBlastTab $aToB/recipBest.tab
+    echo hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
+    hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
+done
+
+
+export TARGET=sc
+export TARGET_DB=sacCer2
+for DB in dm3 ce6
+do
+    echo $DB
+    aToB=run.${TARGET_DB}.$DB
+    bToA=run.$DB.${TARGET_DB}
+    mkdir $aToB $bToA
+    cat ../${DB}/$aToB/out/*.tab > $aToB/all.tab
+    cat ../${DB}/$bToA/out/*.tab > $bToA/all.tab
+    echo blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    dbBlastTab=xxBlastTab
+    case $DB in
+        ce6) dbBlastTab=ceBlastTab;;
+        dm3) dbBlastTab=dmBlastTab;;
+        danRer6) dbBlastTab=drBlastTab;;
+        sacCer2) dbBlastTab=scBlastTab;;
+    esac
+    echo hgLoadBlastTab ${TARGET_DB} $dbBlastTab $aToB/recipBest.tab
+    hgLoadBlastTab ${TARGET_DB} $dbBlastTab $aToB/recipBest.tab
+    echo hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
+    hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
+done
+
+export TARGET=dm
+export TARGET_DB=dm3
+for DB in sacCer2 ce6
+do
+    echo $DB
+    aToB=run.${TARGET_DB}.$DB
+    bToA=run.$DB.${TARGET_DB}
+    mkdir $aToB $bToA
+    cat ../${DB}/$aToB/out/*.tab > $aToB/all.tab
+    cat ../${DB}/$bToA/out/*.tab > $bToA/all.tab
+    echo blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    dbBlastTab=xxBlastTab
+    case $DB in
+        ce6) dbBlastTab=ceBlastTab;;
+        dm3) dbBlastTab=dmBlastTab;;
+        danRer6) dbBlastTab=drBlastTab;;
+        sacCer2) dbBlastTab=scBlastTab;;
+    esac
+    echo hgLoadBlastTab ${TARGET_DB} $dbBlastTab $aToB/recipBest.tab
+    hgLoadBlastTab ${TARGET_DB} $dbBlastTab $aToB/recipBest.tab
+    echo hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
+    hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
+done
+
