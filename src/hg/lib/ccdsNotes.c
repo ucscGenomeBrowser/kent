@@ -131,7 +131,7 @@ fputc(lastSep,f);
 
 static char *createSql =
     /* SQL to create ccdsNotes format table */
-    "CREATE TABLE % (\n"
+    "CREATE TABLE %s (\n"
     "    ccds char(12) not null,	# CCDS id\n"
     "    createDate char(10) not null,	# date note was added\n"
     "    note longblob not null,	# text of note\n"

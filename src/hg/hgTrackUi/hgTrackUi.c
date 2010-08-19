@@ -2171,7 +2171,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
 printf("</TABLE>");
 }
 
-void specificUi(struct trackDb *tdb, struct customTrack *ct)
+void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 	/* Draw track specific parts of UI. */
 {
 char *track = tdb->track;
@@ -2414,7 +2414,8 @@ else if (tdbIsComposite(tdb))  // for the moment generalizing this to include ot
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
     }
-extraUiLinks(database,tdb, trackHash);
+if (!ajax)
+    extraUiLinks(database,tdb, trackHash);
 }
 
 
@@ -2447,6 +2448,25 @@ if(tdbIsComposite(tdb))
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     }
+if(ajax && cartOptionalString(cart, "descriptionOnly"))
+    {
+    //printf("<table><tr valign='top'><td>");
+    char * html = tdb->html;
+    struct trackDb *thisTdb = tdb;
+    // FIXME: children need to get their parents filled in before this works!
+    while(html == NULL && html[0] != 0 && thisTdb->parent != NULL)
+        {
+        thisTdb = thisTdb->parent;
+        html = thisTdb->html;
+        }
+    if (html != NULL && html[0] != 0)
+        puts(html);
+    else
+        puts("<h2>No description found.</h2>");
+    //printf("</td></table>");
+    cartRemove(cart,"descriptionOnly");
+    return;
+    }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
@@ -2469,29 +2489,32 @@ if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 /* Display visibility menu */
-if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
-    printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
-else
-    printf("<B>Display&nbsp;mode:&nbsp;</B>");
-if (tdbIsSuper(tdb))
+    if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
+        printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+    else
+        printf("<B>Display&nbsp;mode:&nbsp;</B>");
+    if (tdbIsSuper(tdb))
+        {
+        /* This is a supertrack -- load its members and show hide/show dropdown */
+        hTrackDbLoadSuper(database, tdb);
+        superTrackDropDown(cart, tdb, 1);
+        }
+    else
+        {
+        /* normal visibility control dropdown */
+        char *vis = hStringFromTv(tdb->visibility);
+        hTvDropDownClassVisOnly(tdb->track,
+            hTvFromString(cartUsualString(cart,tdb->track, vis)),
+            tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
+        }
+if (!ajax)
     {
-    /* This is a supertrack -- load its members and show hide/show dropdown */
-    hTrackDbLoadSuper(database, tdb);
-    superTrackDropDown(cart, tdb, 1);
-    }
-else
-    {
-    /* normal visibility control dropdown */
-    char *vis = hStringFromTv(tdb->visibility);
-    hTvDropDownClassVisOnly(tdb->track,
-        hTvFromString(cartUsualString(cart,tdb->track, vis)),
-        tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
-    }
-printf("&nbsp;");
-cgiMakeButton("Submit", "Submit");
+    printf("&nbsp;");
+    cgiMakeButton("Submit", "Submit");
 
-if(tdbIsComposite(tdb))
-    printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+    if(tdbIsComposite(tdb))
+        printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+    }
 
 if (ct)
     {
@@ -2526,7 +2549,7 @@ if (!tdbIsSuper(tdb))
     }
 printf("<BR>\n");
 
-specificUi(tdb, ct);
+specificUi(tdb, ct, ajax);
 puts("</FORM>");
 
 if (ct)
@@ -2537,7 +2560,11 @@ if (ct)
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
     }
-else
+
+if (ajax)
+    return;
+
+if (!ct)
     {
     /* Print data version trackDB setting, if any */
     char *version = trackDbSetting(tdb, "dataVersion");
@@ -2559,9 +2586,6 @@ else
 	hFreeConn(&conn);
 	}
     }
-
-if(ajax)
-    return;
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
