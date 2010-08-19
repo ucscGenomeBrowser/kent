@@ -3,6 +3,7 @@
 #include "hgc.h"
 #include "ccdsClick.h"
 #include "ccdsInfo.h"
+#include "ccdsNotes.h"
 #include "ccdsGeneMap.h"
 #include "geneSimilarities.h"
 #include "genbank.h"
@@ -296,39 +297,20 @@ for (mgc = geneSims->genes; mgc != NULL; mgc = mgc->next)
 geneSimilaritiesFreeList(&geneSims);
 }
 
-void doCcdsGene(struct trackDb *tdb, char *ccdsId)
-/* Process click on a CCDS gene. */
-{
-struct sqlConnection *conn = hAllocConn(database);
-struct ccdsInfo *rsCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoNcbi);
-struct ccdsInfo *vegaCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoVega);
-struct ccdsInfo *ensCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoEnsembl);
-char *geneSym, *desc, *summary;
-
-if (rsCcds == NULL)
-    errAbort("database inconsistency: no NCBI ccdsInfo entries found for %s", ccdsId);
-if ((vegaCcds == NULL) && (ensCcds == NULL))
-    errAbort("database inconsistency: no Hinxton ccdsInfo entries found for %s", ccdsId);
-
-ccdsInfoMRnaSort(&rsCcds);
-ccdsInfoMRnaSort(&vegaCcds);
-ccdsInfoMRnaSort(&ensCcds);
-
-cartWebStart(cart, database, "CCDS Gene");
-
-printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
-
-/* table with basic information about the CCDS (2 columns) */
+static void writeBasicInfoHtml(struct sqlConnection *conn, char *ccdsId, struct ccdsInfo *rsCcds,
+                               struct ccdsInfo *vegaCcds, struct ccdsInfo *ensCcds)
+/* write table with basic information about the CCDS (2 columns) */
+{                               {
 printf("<TABLE class=\"hgcCcds\"><TBODY>\n");
 
 /* gene symbol */
-geneSym = getCcdsGeneSymbol(conn, rsCcds);
+char *geneSym = getCcdsGeneSymbol(conn, rsCcds);
 if (geneSym != NULL)
     printf("<TR><TH>Gene<TD>%s</TR>\n", geneSym);
 freez(&geneSym);
 
 /* description */
-desc = hGenBankGetDesc(database, rsCcds->mrnaAcc, TRUE);
+char *desc = hGenBankGetDesc(database, rsCcds->mrnaAcc, TRUE);
 if (desc != NULL)
     printf("<TR><TH>Description<TD>%s</TR>\n", desc);
 freez(&desc);
@@ -354,10 +336,14 @@ printf("</TR>\n");
 
 printf("</TBODY></TABLE>\n");
 printf("<BR>\n");
+}                               }
 
-/* table with links to other browser apps or external databases (3 columns) */
+static void writeLinksHtml(struct sqlConnection *conn, char *ccdsId, struct ccdsInfo *rsCcds,
+                           struct ccdsInfo *vegaCcds, struct ccdsInfo *ensCcds)
+/* write table with links to other browser apps or external databases (3 columns) */
+{
+printf("<H3>Associated Sequences</H3>\n");
 printf("<TABLE class=\"hgcCcds\">\n");
-printf("<CAPTION>Associated Sequences</CAPTION>\n");
 printf("<THEAD>\n");
 printf("<TR><TH>&nbsp;<TH>mRNA<TH>Protein</TR>\n");
 printf("</THEAD><TBODY>\n");
@@ -374,9 +360,33 @@ if (sqlTableExists(conn, "mgcGenes"))
 printf("</TBODY></TABLE>\n");
 
 printf("<P><EM>Note: mRNA and protein sequences in other gene collections "
-       "may differ from the CCDS sequences.</EM>\n");
+       "may differ from the CCDS sequences.</EM><br>\n");
+}
 
-summary = getCcdsRefSeqSummary(conn, rsCcds);
+static void writePublicNotesHtml(struct sqlConnection *conn, char *ccdsId)
+/* write public notes if available */
+{
+struct ccdsNotes *ccdsNotes = sqlQueryObjs(conn, (sqlLoadFunc)ccdsNotesLoad, sqlQueryMulti,
+                                           "select * from ccdsNotes where ccds = \"%s\" order by createDate", ccdsId);
+if (ccdsNotes != NULL)
+    {
+    htmlHorizontalLine();
+    printf("<H3>Annotator Notes</H3>\n");
+    printf("<TABLE class=\"hgcCcds\">\n");
+    printf("<THEAD>\n");
+    printf("<TR><TH>Date<TH>Note</TR>\n");
+    printf("</THEAD><TBODY>\n");
+    struct ccdsNotes *note;
+    for (note = ccdsNotes; note != NULL; note = note->next)
+        printf("<TR><TD style=\"white-space: nowrap;\">%s<TD>%s</TR>", note->createDate, note->note);
+    printf("</TBODY></TABLE>\n");
+    }
+}
+
+static void writeRefSeqSummaryHtml(struct sqlConnection *conn, char *ccdsId, struct ccdsInfo *rsCcds)
+/* write refseq summary HTML, if a summary is available */
+{
+char *summary = getCcdsRefSeqSummary(conn, rsCcds);
 if (summary != NULL)
     {
     htmlHorizontalLine();
@@ -384,6 +394,34 @@ if (summary != NULL)
     printf("<P>%s</P>\n", summary);
     freez(&summary);
     }
+}
+
+void doCcdsGene(struct trackDb *tdb, char *ccdsId)
+/* Process click on a CCDS gene. */
+{
+struct sqlConnection *conn = hAllocConn(database);
+struct ccdsInfo *rsCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoNcbi);
+struct ccdsInfo *vegaCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoVega);
+struct ccdsInfo *ensCcds = ccdsInfoSelectByCcds(conn, ccdsId, ccdsInfoEnsembl);
+
+if (rsCcds == NULL)
+    errAbort("database inconsistency: no NCBI ccdsInfo entries found for %s", ccdsId);
+if ((vegaCcds == NULL) && (ensCcds == NULL))
+    errAbort("database inconsistency: no Hinxton ccdsInfo entries found for %s", ccdsId);
+
+ccdsInfoMRnaSort(&rsCcds);
+ccdsInfoMRnaSort(&vegaCcds);
+ccdsInfoMRnaSort(&ensCcds);
+
+cartWebStart(cart, database, "CCDS Gene");
+
+printf("<H2>Consensus CDS Gene %s</H2>\n", ccdsId);
+
+writeBasicInfoHtml(conn, ccdsId, rsCcds, vegaCcds, ensCcds);
+writeLinksHtml(conn, ccdsId, rsCcds, vegaCcds, ensCcds);
+writePublicNotesHtml(conn, ccdsId);
+writeRefSeqSummaryHtml(conn, ccdsId, rsCcds);
+htmlHorizontalLine();
 
 printTrackHtml(tdb);
 ccdsInfoFreeList(&rsCcds);
