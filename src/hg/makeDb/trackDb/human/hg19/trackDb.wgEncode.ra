@@ -19,6 +19,7 @@ include wgEncodeUwDnase.ra
 include wgEncodeHaibMethylSeq.ra
 include wgEncodeHaibMethyl27.ra
 include wgEncodeGisRnaSeq.ra
+include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
 include trackDb.wgEncodeCshlLongRnaSeq.ra
@@ -48,7 +49,6 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 24mers with no more than 2 mismatches
     color 0,100,0
     priority 1
-    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=24mer uniqueness="no more than 2 mismatches" dataVersion="April 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign24mer fileName=wgEncodeCrgMapabilityAlign24mer.bw.gz
     
     track wgEncodeCrgMapabilityAlign36mer
     subTrack wgEncodeMapability
@@ -56,7 +56,6 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 36mers with no more than 2 mismatches
     color 0,100,0
     priority 2
-    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=36mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign36mer fileName=wgEncodeCrgMapabilityAlign36mer.bw.gz
 
     track wgEncodeCrgMapabilityAlign40mer
     subTrack wgEncodeMapability
@@ -64,7 +63,6 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 40mers with no more than 2 mismatches
     color 0,100,0
     priority 3
-    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=40mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign40mer fileName=wgEncodeCrgMapabilityAlign40mer.bw.gz
     
     track wgEncodeCrgMapabilityAlign50mer
     subTrack wgEncodeMapability
@@ -72,7 +70,6 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 50mers with no more than 2 mismatches
     color 0,100,0
     priority 4
-    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=50mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign50mer fileName=wgEncodeCrgMapabilityAlign50mer.bw.gz
 
     track wgEncodeCrgMapabilityAlign75mer
     subTrack wgEncodeMapability
@@ -80,7 +77,6 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 75mers with no more than 2 mismatches
     color 0,100,0
     priority 5
-    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=75mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign75mer fileName=wgEncodeCrgMapabilityAlign75mer.bw.gz
 
     track wgEncodeCrgMapabilityAlign100mer
     subTrack wgEncodeMapability
@@ -88,7 +84,6 @@ origAssembly hg19
     longLabel Mapability - CRG GEM Alignability of 100mers with no more than 2 mismatches
     color 0,100,0
     priority 6
-    metadata project=wgEncode grant=Gingeras lab=CRG-Guigo dataType=Mapability view=Alignability size=100mer uniqueness="no more than 2 mismatches" dataVersion="January 2010" composite=wgEncodeMapability tableName=wgEncodeCrgMapabilityAlign100mer fileName=wgEncodeCrgMapabilityAlign100mer.bw.gz
 
 #  GENCODE genes (wrangler: braney )
 

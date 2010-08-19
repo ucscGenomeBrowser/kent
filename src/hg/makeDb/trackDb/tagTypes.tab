@@ -305,6 +305,7 @@ superTrack *
 symbolTable bed genePred
 thickDrawItem bed
 table *
+tableBrowser *
 tdbType customTracks
 track *
 transMapGene psl

@@ -15040,7 +15040,7 @@ else
 	    if (--exonIx >= 0)
 		{
 		exonStart = gene->exonStarts[exonIx];
-		snpPlusOffset = gene->exonEnds[exonIx];
+		snpPlusOffset = gene->exonEnds[exonIx] - 1;
 		}
 	    else
 		ranOffEnd = TRUE;

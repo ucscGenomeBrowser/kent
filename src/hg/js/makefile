@@ -1,7 +1,5 @@
 include ../../inc/common.mk
 
-GITUP = git pull -q
-
 # recursive target to do install to DEST, with extra excludes EXCL.
 
 JQUERY_FILES=jquery-1.2.6.pack.js jquery.js jquery.tablednd.js jquery.imgareaselect.js jquery-ui.js jquery.contextmenu.js jquery.autocomplete.js ui.core.js ui.dropdownchecklist.js

@@ -1,13 +1,20 @@
 include ../../inc/common.mk
 
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS = ${MYLIBDIR}/jkOwnLib.a ${MYLIBDIR}/jkweb.a
+L += -lm
 
+
+A = dynAlign
 O = dynAlign.o 
 
-dynAlign: $(O)
-	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkOwnLib.a ../../lib/$(MACHTYPE)/jkweb.a -lm
-	chmod a+x ${AOUT}
-	chmod g-w ${AOUT}
+$A: $(O)
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 	
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
+
 push:	
 	mv ${AOUT} ${CGI_BIN}-${USER}/dynAlign.exe
 
