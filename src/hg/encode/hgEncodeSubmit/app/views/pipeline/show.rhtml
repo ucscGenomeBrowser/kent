@@ -96,13 +96,12 @@ needShowDdfLink = false
 if (not busy) and authorized and ((not nonActive) or current_user.role == "admin")
 
 
-  if @project.status == "validated" or advancedView
+  if @project.status == "validated" 
     needLoadLink = true
   end
 
   if @project.status == "uploaded" \
   or @project.status == "validate failed" 
-  or advancedView
     needValidateLink = true
   end
 
