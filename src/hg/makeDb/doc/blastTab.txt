@@ -406,3 +406,43 @@ do
     hgLoadBlastTab $DB ${TARGET}BlastTab $bToA/recipBest.tab
 done
 
+DB=danRer6
+for tDB in hg19 mm9 rn4 ce6 dm3 sacCer2
+do
+    echo $DB
+    aToB=run.${DB}.${tDB}
+    bToA=run.${tDB}.${DB}
+    mkdir -p $aToB
+    cat ../${tDB}/$aToB/out/*.tab > $aToB/all.tab
+    cat ../${tDB}/$bToA/out/*.tab > $bToA/all.tab
+    blastRecipBest $aToB/all.tab $bToA/all.tab \
+        $aToB/recipBest.tab $bToA/recipBest.tab
+    dbBlastTab=xxBlastTab
+    case $DB in
+        ce6) dbBlastTab=ceBlastTab;;
+        dm3) dbBlastTab=dmBlastTab;;
+        danRer6) dbBlastTab=drBlastTab;;
+        sacCer2) dbBlastTab=scBlastTab;;
+    esac
+    echo "hgLoadBlastTab ${tDB} $dbBlastTab $aToB/recipBest.tab"
+    hgLoadBlastTab ${tDB} $dbBlastTab $aToB/recipBest.tab
+done
+
+# hgLoadBlastTab hg19 drBlastTab run.danRer6.hg19/recipBest.tab
+# Loading database with 12146 rows
+
+# hgLoadBlastTab mm9 drBlastTab run.danRer6.mm9/recipBest.tab
+# Loading database with 11997 rows
+
+# hgLoadBlastTab rn4 drBlastTab run.danRer6.rn4/recipBest.tab
+# Loading database with 5142 rows
+
+# hgLoadBlastTab ce6 drBlastTab run.danRer6.ce6/recipBest.tab
+# Loading database with 4865 rows
+
+# hgLoadBlastTab dm3 drBlastTab run.danRer6.dm3/recipBest.tab
+# Loading database with 5765 rows
+
+# hgLoadBlastTab sacCer2 drBlastTab run.danRer6.sacCer2/recipBest.tab
+# Loading database with 2174 rows
+
