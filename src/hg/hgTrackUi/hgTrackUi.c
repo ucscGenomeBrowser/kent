@@ -2448,6 +2448,25 @@ if(tdbIsComposite(tdb))
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     }
+if(ajax && cartOptionalString(cart, "descriptionOnly"))
+    {
+    //printf("<table><tr valign='top'><td>");
+    char * html = tdb->html;
+    struct trackDb *thisTdb = tdb;
+    // FIXME: children need to get their parents filled in before this works!
+    while(html == NULL && html[0] != 0 && thisTdb->parent != NULL)
+        {
+        thisTdb = thisTdb->parent;
+        html = thisTdb->html;
+        }
+    if (html != NULL && html[0] != 0)
+        puts(html);
+    else
+        puts("<h2>No description found.</h2>");
+    //printf("</td></table>");
+    cartRemove(cart,"descriptionOnly");
+    return;
+    }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));

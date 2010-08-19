@@ -208,8 +208,6 @@ dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\t
 void doSearchTracks(struct group *groupList)
 {
 struct group *group;
-char *ops[] = {"is", "contains"};
-char *op_labels[] = {"is", "contains"};
 char *groups[128];
 char *labels[128];
 int numGroups = 1;
@@ -217,7 +215,6 @@ groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
 char *currentTab = cartUsualString(cart, "hgt.currentSearchTab", "simpleTab");
 char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
-char *nameOp = cartOptionalString(cart, "hgt.nameOp");
 char *descSearch;
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
 boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
@@ -288,12 +285,15 @@ hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
         "<table>\n");
 
-hPrintf("<tr><td></td><td></td><td></td><td><b>Description:</b></td><td align='right'>contains</td>\n");
-hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
-
-hPrintf("<tr><td></td><td></td><td>and</td><td><b>Track Name:</b></td><td align='right'>\n");
-cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
+hPrintf("<tr><td></td><td></td><td></td><td><b>Track Name:</b></td><td align='right'>contains</td>\n");
+//char *ops[] = {"is", "contains"};
+//char *op_labels[] = {"is", "contains"};
+//char *nameOp = cartOptionalString(cart, "hgt.nameOp");
+//cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
 hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
+
+hPrintf("<tr><td></td><td></td><td>and</td><td><b>Description:</b></td><td align='right'>contains</td>\n");
+hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
 
 hPrintf("<tr><td></td><td></td><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td align='right'>is</td>\n<td>\n");
@@ -514,7 +514,7 @@ if(doSearch)
                     for (tr = group->trackList; tr != NULL; tr = tr->next)
                         {
                         struct track *track = tr->track;
-                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, nameOp)) &&
+                        if((isEmpty(nameSearch) || isNameMatch(track, nameSearch, "contains")) &&
                            (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
                            (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                             {
@@ -526,7 +526,7 @@ if(doSearch)
                             struct track *subTrack;
                             for (subTrack = track->subtracks; subTrack != NULL; subTrack = subTrack->next)
                                 {
-                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, nameOp)) &&
+                                if((isEmpty(nameSearch) || isNameMatch(subTrack, nameSearch, "contains")) &&
                                    (isEmpty(descSearch) || isDescriptionMatch(subTrack, descWords, descWordCount)) &&
                                    (!numMetadataNonEmpty || hashLookup(matchingTracks, subTrack->track) != NULL))
                                     {
@@ -579,7 +579,7 @@ else
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
     printf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
     printf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
-    hPrintf("</td><td><b>Visibility</b></td><td><b>Name</b></td><td><b>Description</b></td></tr>\n");
+    hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b></td></tr>\n");
     // FIXME: I believe that only data tracks should appear in found tracks.  If composite is found, show its children instead
 
     int trackCount=0;
@@ -625,7 +625,8 @@ else
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             track->visibility = limitedVisFromComposite(track);
             struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-            track->visibility = tvMin(track->visibility,parentTdb->visibility);
+            if(parentTdb != NULL)
+                track->visibility = tvMin(track->visibility,parentTdb->visibility);
 
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
@@ -656,10 +657,10 @@ else
             hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,"normalText seenVis",extra);
             }
         hPrintf("</td>\n");
-        if(tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
-            hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
-        else
-            hPrintf("<td><a target='_top' onclick='hgTrackUiPopUp(\"%s\"); return false;' href='%s' title='Configure track...'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
+        //if(tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
+        //    hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
+        //else
+            hPrintf("<td><a target='_top' onclick=\"hgTrackUiPopUp('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);
         hPrintf("<td>%s", track->longLabel);
         compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");
