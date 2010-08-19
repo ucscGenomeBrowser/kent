@@ -5,25 +5,31 @@
 #include "options.h"
 #include "jksql.h"
 
-static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
-
 void usage()
 /* Explain usage and exit. */
 {
 errAbort(
   "validateCv - validate controlled vocabulary file and metadata\n"
   "usage:\n"
-  "   validateCv XXX\n"
+  "   validateCv cv.ra\n"
   "options:\n"
-  "   -xxx=XXX\n"
+  "   -metaTbl=name       specify a metadata table to validate against cv.ra\n"
+  "   -setMeta=file.lst   specify a file.lst that has name=val pairs to select\n"
+  "                       a subset of metadata to validate\n"
+  "   -checkMeta=file.lst specify a file.list that list metavariables to validate\n"
   );
 }
 
+char *setMetaName = NULL;
+char *checkMetaName = NULL;
+
 static struct optionSpec options[] = {
+   {"setMeta", OPTION_STRING},
+   {"checkMeta", OPTION_STRING},
    {NULL, 0},
 };
 
-void validateCv(char *XXX)
+void validateCv(char *cvName)
 /* validateCv - validate controlled vocabulary file and metadata. */
 {
 }
@@ -34,6 +40,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
+setMetaName = optionVal("setMeta", setMetaName);
+checkMetaName = optionVal("checkMeta", checkMetaName);
 validateCv(argv[1]);
 return 0;
 }
