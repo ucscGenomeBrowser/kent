@@ -1630,7 +1630,7 @@ priority 25
 color 0,0,0
 url http:/cgi-bin/hgTracks?position=$$
 urlLabel Haplotype sequence:
-chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM,chrM_NC_012920
+chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM,chrM_rCRS
 
 searchTable haplotypeLocations
 searchMethod exact
@@ -1656,3 +1656,24 @@ color 128,0,0
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
+track patch2Chain
+shortLabel patch2 Chain 
+longLabel GRCh37 Patch2 Chained Alignments
+group map
+priority 933
+visibility hide
+color 100,50,0
+altColor 255,240,200
+spectrum on
+type chain hg19
+otherDb hg19
+
+track patch2Psl
+shortLabel patch2 PSL
+longLabel GRCh37 Patch2 PSL alignments
+group map
+priority 934
+visibility hide
+color 0,100,0
+altColor 255,240,200
+type psl .
