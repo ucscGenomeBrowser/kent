@@ -1612,11 +1612,12 @@ noInherit on
     visibility dense
     type bed 12
     
-track haplotypeLocations
-shortLabel HapsLocate
-longLabel Haplotype locations on reference sequence
+track altSequence
+shortLabel Alt Sequence
+longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
 visibility hide
-type bed 4
+type bed 9
+itemRgb on
 group map
 priority 25
 color 0,0,0
