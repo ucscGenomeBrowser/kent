@@ -5252,6 +5252,18 @@ tg->itemColor   = decipherColor;
 tg->drawItemAt 	= decipherDrawAt;
 }
 
+char *emptyName(struct track *tg, void *item)
+/* Return name of item. */
+{
+return("");
+}
+
+void rdmrMethods(struct track *tg)
+/* Methods for R-DMR track. */
+{
+tg->itemName = emptyName;
+}
+
 void gadMethods(struct track *tg)
 /* Methods for GAD track. */
 {
@@ -11317,6 +11329,7 @@ registerTrackHandler("h1n1b_0514Seq", h1n1SeqMethods);
 registerTrackHandler("hg17Kg", hg17KgMethods);
 registerTrackHandler("superfamily", superfamilyMethods);
 registerTrackHandler("gad", gadMethods);
+registerTrackHandler("rdmr", rdmrMethods);
 registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);

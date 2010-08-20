@@ -21619,7 +21619,7 @@ row = sqlNextRow(sr);
     relation2island = row[ii];ii++;
     fdr		= row[ii];
 
-    printf("<B>Gene:</B> %s\n", gene);fflush(stdout);
+    printf("<B>Closest Gene:</B> %s\n", gene);fflush(stdout);
     printf("<BR><B>Genomic Position:</B> %s:%s-%s", chrom, chromStart, chromEnd);
 
     printf("<BR><B>Fibroblast M value:</B> %s\n", fibroblast);
