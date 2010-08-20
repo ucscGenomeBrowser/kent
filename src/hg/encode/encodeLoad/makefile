@@ -16,7 +16,7 @@ install:
 scripts:
 	@for F in ${SCRIPT_FILES}; do \
 	    chmod +x $$F; \
-            perl -c $$F && cp -upv $$F ${SCRIPTS}; \
+            perl -c $$F && cp $$F ${SCRIPTS}; \
 	done
 
 schemas: 
