@@ -9624,6 +9624,38 @@ EOF
 
 
 ############################################################################
+# SPLIT SNP131 INTO CLINICAL / NON-CLINICAL (DONE 8/19/10 angie)
+# http://redmine.soe.ucsc.edu/issues/559
+    cd /hive/data/outside/dbSNP/131/human/data
+    wget --timestamping ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_data/human_9606/SNP_bitfield.bcp.gz
+    # I did a little analysis of the bitfields -- see file 
+    # /hive/data/outside/dbSNP/131/human/data/bitfield_breakdown.txt .
+    cd /hive/data/outside/dbSNP/131/human
+    zcat data/SNP_bitfield.bcp.gz \
+    | perl -wpe '@w = split;  if ($w[3] & 0x40) { $_ = "rs$w[0]\n" } else { $_ = ""; }' \
+      > clinicalRsIds.txt
+    wc -l clinicalRsIds.txt
+#16605 clinicalRsIds.txt
+    grep -Fwf clinicalRsIds.txt snp131.bed > snp131Clinical.bed
+    wc -l snp131Clinical.bed
+#14907 snp131Clinical.bed
+    # Wow, just a subset have been mapped to hg19, bummer.
+    grep -vFwf clinicalRsIds.txt snp131.bed > snp131NonClinical.bed
+    wc -l snp131*Clinical.bed
+#     14907 snp131Clinical.bed
+#  26018146 snp131NonClinical.bed
+#  26033053 total
+    # Good, 26033053 is the right total.
+    # Edit snp131.sql to use table name "snp131Tmp" so we don't nuke snp131.
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp131Clinical -sqlTable=snp131.sql -renameSqlTable snp131Clinical.bed
+#Loaded 14907 elements of size 17
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp131NonClinical -sqlTable=snp131.sql -renameSqlTable snp131NonClinical.bed
+#Loaded 26018146 elements of size 17
+
+
+############################################################################
 # ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP131 (DONE 6/3/10 angie)
 # First done 4/15/10.  Then found that SNPs that appeared on both a main chrom
 # (like chr6) and on a haplo chrom (like chr6_cox_hap2) were being flagged
