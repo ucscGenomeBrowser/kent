@@ -3,7 +3,7 @@
 # an object which can be loaded and saved from RAM in a fairly 
 # automatic way.
 
-#Protein abundance data from http://yeastgfp.ucsf.edu via SGD
+#Protein abundance data from http://yeastgfp.yeastgenome.org via SGD
 CREATE TABLE sgdAbundance (
     name varchar(10) not null,	# ORF name in sgdGene table
     abundance float not null,	# Absolute abundance from 41 to 1590000
