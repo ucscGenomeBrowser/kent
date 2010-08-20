@@ -48,7 +48,7 @@ view             Signal
 longLabelPrefix  LICR Histone Signal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             Alignments
 longLabelPrefix  LICR Histone Alignments

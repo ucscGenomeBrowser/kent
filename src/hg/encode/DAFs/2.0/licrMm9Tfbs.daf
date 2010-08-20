@@ -46,7 +46,7 @@ view             Signal
 longLabelPrefix  LICR TFBS Signal
 type             bigWig
 hasReplicates    yes
-required         yes
+required         no
 
 view             Alignments
 longLabelPrefix  LICR TFBS Alignments
