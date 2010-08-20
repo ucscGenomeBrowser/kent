@@ -15487,13 +15487,21 @@ printSnp125CodingAnnotations(tdb, &snp);
 printSnp125Function(tdb, &snp);
 }
 
-void writeSnpExceptionWithVersion(char *table, char *itemName, int version)
+void writeSnpExceptionWithVersion(struct trackDb *tdb, char *itemName, int version)
 /* Print out exceptions, if any, for this snp. */
 {
+char *exceptionsTableSetting = trackDbSetting(tdb, "snpExceptions");
 char exceptionsTable[128];
+if (exceptionsTableSetting)
+    safecpy(exceptionsTable, sizeof(exceptionsTable), exceptionsTableSetting);
+else
+    safef(exceptionsTable, sizeof(exceptionsTable), "%sExceptions", tdb->table);
+char *excDescTableSetting = trackDbSetting(tdb, "snpExceptionDesc");
 char excDescTable[128];
-safef(exceptionsTable, sizeof(exceptionsTable), "%sExceptions", table);
-safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", table);
+if (excDescTableSetting)
+    safecpy(excDescTable, sizeof(excDescTable), excDescTableSetting);
+else
+    safef(excDescTable, sizeof(excDescTable), "%sExceptionDesc", tdb->table);
 if (hTableExists(database, exceptionsTable) && hTableExists(database, excDescTable))
     {
     struct sqlConnection *conn = hAllocConn(database);
@@ -15737,7 +15745,7 @@ else
     errAbort("SNP %s not found at %s base %d", itemName, seqName, start);
 sqlFreeResult(&sr);
 
-writeSnpExceptionWithVersion(table, itemName, version);
+writeSnpExceptionWithVersion(tdb, itemName, version);
 
 safef(query, sizeof(query), "select * from %s where name='%s'",
       table, itemName);
