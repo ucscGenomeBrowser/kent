@@ -1410,7 +1410,15 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp131Clinical override
+snpSeqFile /gbdb/hg19/snp/snp131.fa
+
+track snp131NonClinical override
+snpSeqFile /gbdb/hg19/snp/snp131.fa
+
 track snp131 override
+release alpha
+visibility hide
 chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
 chimpDb panTro2
 orangDb ponAbe2
