@@ -120,8 +120,8 @@ if (sqlTablesExist(conn, "sgdLocalization sgdAbundance"))
 	    "Protein abundance data from "
 	    "Ghaemmaghami et al. (2003) Nature 425:737-741<BR>"
 	    "For more information see "
-	    "<A HREF=\"http://yeastgfp.ucsf.edu\" TARGET=_blank>"
-	    "http://yeastgfp.ucsf.edu</A>.");
+	    "<A HREF=\"http://yeastgfp.yeastgenome.org\" TARGET=_blank>"
+	    "http://yeastgfp.yeastgenome.org</A>.");
     }
 }
 
