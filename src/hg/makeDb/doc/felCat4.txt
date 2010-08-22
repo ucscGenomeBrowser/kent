@@ -1207,6 +1207,7 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/felCat4/felCat4.2bit $outMaf
     awk '{if ($2 > 1000000) print $1}' chrom.sizes > 1meg.lst
     twoBitToFa -seqList=1meg.lst  felCat4.2bit temp.fa
     faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+# 2478 pieces of 2478 written
     rm temp.fa 1meg.lst
 
     awk '{if ($2 <= 1000000) print $1}' chrom.sizes > less1meg.lst
@@ -1299,12 +1300,12 @@ exit 1
 
     para time
 
-# Completed: 351155 of 351155 jobs
-# CPU time in finished jobs:   15303249s  255054.15m  4250.90h  177.12d  0.485 y
-# IO & Wait Time:               2843300s   47388.34m   789.81h   32.91d  0.090 y
-# Average job time:                  52s       0.86m     0.01h    0.00d
-# Longest finished job:             134s       2.23m     0.04h    0.00d
-# Submission to last job:         19084s     318.07m     5.30h    0.22d
+#Completed: 351155 of 351155 jobs
+# CPU time in finished jobs:   15263537s  254392.28m  4239.87h  176.66d  0.484 y
+# IO & Wait Time:               1999082s   33318.04m   555.30h   23.14d  0.063 y
+# Average job time:                  49s       0.82m     0.01h    0.00d
+# Longest finished job:             128s       2.13m     0.04h    0.00d
+# Submission to last job:         21587s     359.78m     6.00h    0.25d
 
     ssh swarm
     cd /cluster/data/felCat4/bed/tblastn.hg18KG
@@ -1328,12 +1329,11 @@ chainOne $(path1)
     para try, check, push, check etc.
 
 # Completed: 127 of 127 jobs
-# CPU time in finished jobs:     544804s    9080.07m   151.33h    6.31d  0.017 y
-# IO & Wait Time:                 82233s    1370.55m    22.84h    0.95d  0.003 y
-# Average job time:                4937s      82.29m     1.37h    0.06d
-# Longest finished job:           24063s     401.05m     6.68h    0.28d
-# Submission to last job:         24074s     401.23m     6.69h    0.28d
-
+# CPU time in finished jobs:     548201s    9136.68m   152.28h    6.34d  0.017 y
+# IO & Wait Time:                 87455s    1457.59m    24.29h    1.01d  0.003 y
+# Average job time:                5005s      83.42m     1.39h    0.06d
+# Longest finished job:           24309s     405.15m     6.75h    0.28d
+# Submission to last job:         24318s     405.30m     6.75h    0.28d
 
     cd /cluster/data/felCat4/bed/tblastn.hg18KG/blastOut
     for i in kg??
@@ -1358,10 +1358,10 @@ chainOne $(path1)
 # 23826621 bases of 1990635005 (1.197%) in intersection
 
     featureBits felCat4 blastHg18KG refGene  -enrichment
-# blastHg18KG 1.197%, refGene 0.021%, both 0.013%, cover 1.12%, enrich 52.73x
+# blastHg18KG 1.197%, refGene 0.021%, both 0.013%, cover 1.12%, enrich 52.66x
 
     featureBits felCat4 blastHg18KG xenoRefGene  -enrichment
-# blastHg18KG 1.197%, xenoRefGene 2.066%, both 1.010%, cover 84.36%, enrich 40.83x
+# blastHg18KG 1.197%, xenoRefGene 2.088%, both 1.011%, cover 84.43%, enrich  40.44x
     rm -rf blastOut
 #end tblastn
 

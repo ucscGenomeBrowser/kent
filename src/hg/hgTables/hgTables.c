@@ -53,6 +53,7 @@ struct grp *fullGroupList;	/* List of all groups. */
 struct grp *curGroup;	/* Currently selected group. */
 struct trackDb *fullTrackList;	/* List of all tracks in database. */
 struct hash *fullTrackHash;     /* Hash of all tracks in fullTrackList keyed by ->track field. */
+struct trackDb *forbiddenTrackList; /* List of tracks with 'tableBrowser off' setting. */
 struct trackDb *curTrack;	/* Currently selected track. */
 char *curTable;		/* Currently selected table. */
 struct joiner *allJoiner;	/* Info on how to join tables. */
@@ -230,6 +231,20 @@ static struct trackDb *getFullTrackList()
 {
 struct trackDb *list = hTrackDb(database, NULL);
 struct customTrack *ctList, *ct;
+
+/* exclude any track with a 'tableBrowser off' setting */
+struct trackDb *tdb, *nextTdb, *newList = NULL;
+for (tdb = list;  tdb != NULL;  tdb = nextTdb)
+    {
+    nextTdb = tdb->next;
+    char *tbOff = trackDbSetting(tdb, "tableBrowser");
+    if (tbOff != NULL && startsWithWord("off", tbOff))
+	slAddHead(&forbiddenTrackList, tdb);
+    else
+	slAddHead(&newList, tdb);
+    }
+slReverse(&newList);
+list = newList;
 
 /* add wikiTrack if enabled */
 if (wikiTrackEnabled(database, NULL))

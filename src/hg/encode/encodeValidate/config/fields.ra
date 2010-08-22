@@ -3,50 +3,80 @@
 
 # DDF fields
 
+
+# This is the name of the file that is being submitted. 
+# It can be a comma separated list
 field files
 file ddf
 type string
 required yes
 
+# This is the view of the data that this field contains.
+# The view listed here needs to have been listed in the associated DAF file.
+# Examples are: Alignments, RawData, MinusRawSignal
+# Cricket asks: Why can't this be controlled vocabulary?
 field view
 file ddf
 type string
 required yes
 
+# This is a free text catch all
+# It is meant for the lab to indicate anything that is not in another field
 field labVersion
 file ddf
 type string
 required no
 
+# This is the specific growth protocol used for the cell line
+# It is verified against the list of protocols in the cell line
 field growthProtocol
 file ddf
 type string
 required no
 
+# This is mostly GEO accession numbers
+# Krish would like to have a GEO accession 
+# Currently there are lots of softwareVersion notes in hg18 in this field
 field accession
 file ddf
 type string
 required no
 
+# This is replicate number as you would expect
+# It would be nice to verify that you have a rep 1 if you have a rep 2. etc
 field replicate
 file ddf
 type int
 required no
 
+# This field is used by UW 
+# It is sort of like replicate
+# It would be great if someone in the know could explain this
 field rank
 file ddf
 type int
 required no
 
+# This is a ChIP-seq variable
+# Cricket wonders if it is redundant with medianFragLength 
+# Cricket wonders how it relates to fragSize
 field fragLength
 file ddf
 type int
 required no
 
+
+# This is a free text field
+# It is intended to track software version information
+# It currently has a large variety of different notes in it
 field softwareVersion
 file ddf
 type string
 required no
+
+#The following fields are in the cv.ra already
+# Cricket thinks that they do not need to be in both
+#We will try to comment out and test
 
 field restrictionEnzyme
 file ddf
@@ -63,37 +93,7 @@ file ddf
 type string
 required no
 
-field protocolID
-file ddf
-type string
-required no
-
 field phase
-file ddf
-type string
-required no
-
-field input
-file ddf
-type string
-required no
-
-field setType
-file ddf
-type string
-required no
-
-field controlId
-file ddf
-type string
-required no
-
-field labExpId
-file ddf
-type string
-required no
-
-field origAssembly
 file ddf
 type string
 required no
@@ -107,6 +107,44 @@ field seqPlatform
 file ddf
 type string
 required no
+
+
+# This is the field where you can enter which type of control is being used
+# It seems that this is redundant with the the cv.ra term control
+field input
+file ddf
+type string
+required no
+
+# This field is to indicate whether the file represents an experiment or input.
+# The values should be exp or input 
+field setType
+file ddf
+type string
+required no
+
+# This is a way to specify the specific file to be used for input.
+# The value could be a labExpID or an expID or a combination of vars that specify a file
+field controlId
+file ddf
+type string
+required no
+
+# This field is for the lab to enter thier own internal tracking numbers
+# These experiment ID's can be used by the labs to specify which input files to use
+field labExpId
+file ddf
+type string
+required no
+
+# This field is to track data that was originally submitted
+# on another assembly, but has been lifted over or remapped.
+# The values should be restricted to hg18, hg19, mm8, mm9
+field origAssembly
+file ddf
+type string
+required no
+
 
 # required DAF header fields
 
@@ -141,9 +179,9 @@ type string
 required yes
 
 # In v.1, composite name was: wgEncode<lab><dataType>
-# In v.2, composite name is: enc<compositeNameSuffix>
+# In v.2, composite name is: wgEncode<compositeNameSuffix>
 # Generally, composites should still include lab and dataType
-
+# Cricket notes that this is now uncontrolled
 field compositeSuffix
 file dafHeader
 type string
@@ -161,43 +199,56 @@ required no
 
 # optional DAF header fields
 
+# This is a list of variables that will be used in the naming of the file
+# They need to be in the cv.ra???
 field variables
 file dafHeader
 type string
 required no
 
+# This is in the DAF and not the DDF
+# It seems to represent the same information as fragLength
+# Is it redundant
 field medianFragmentLength
 file dafHeader
 type int
 required no
 
-field dataVersion
-file dafHeader
-type int
-required no
-
-field dataVersionComment
-file dafHeader
-type string
-required no
-
+# ???????
 field fragmentLengthRange
 file dafHeader
 type int
 required no
 
+# This is where we list things like Freeze date
+# Cricket also wonders if this should be controlled
+field dataVersion
+file dafHeader
+type int
+required no
+
+# This doesn't seem to be used in any DAF nor is it
+# in the metaData.  Can we get rid of it?
+field dataVersionComment
+file dafHeader
+type string
+required no
+
+# This specifies which grouping the composite will fall into
+# The values will be expression, regulation, mapping, variation, genes
 field group
 file dafHeader
 type string
 required no
 
+# ??????
+# I have no idea
 field noAutoCreate
 file dafHeader
 type bool
 required no
 
-# DAF list fields
-
+# DAF view fields
 field longLabelPrefix
 file dafList
 type string
@@ -218,6 +269,8 @@ file dafList
 type string
 required yes
 
+# This specifes if the view is required to successfully submit
+# It is used by ????
 field required
 file dafList
 type bool
@@ -228,6 +281,8 @@ file dafList
 type int
 required no
 
+# This specifies if the view is download only
+# It is used by ????
 field downloadOnly
 file dafList
 type bool
@@ -238,10 +293,19 @@ file dafList
 type string
 required no
 
+# This is made by Kate and is only used in one DAF
+# 
 field sql
 file dafList
 type string
 required no
+
+
+
+
+
+
+
 
 # cv.ra fields
 #field term
