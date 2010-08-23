@@ -1,20 +1,21 @@
 include ../../inc/common.mk
 
-L += -lm $(MYSQLLIBS)
-MYLIBDIR = ../../lib/$(MACHTYPE)
-MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a $(L)
+L += -lm ${MYSQLLIBS}
+MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
-O = addAveMedScoreToPsls  createSageSummary
+A1 = addAveMedScoreToPsls
+A2 = createSageSummary
 
-%: %.c 
-	${CC} ${COPT} ${CFLAGS}  -Wimplicit  -I../inc -I../../inc  -o $@ $(addsuffix .c,$@) $(MYLIBS)
-	cp $@ ${BINDIR}/
+all::	compile
+	rm -f ${DESTDIR}${BINDIR}/${A1}${EXE}
+	mv ${A1}${EXE} ${DESTDIR}${BINDIR}/
+	rm -f ${DESTDIR}${BINDIR}/${A2}${EXE}
+	mv ${A2}${EXE} ${DESTDIR}${BINDIR}/
 
-all : $(O)
-
-#$(O) : %: %.c ../lib/$(ARCHTYPE)/libsugnet.a 
-#	${CC} ${COPT} ${CFLAGS} -Wimplicit  -I../inc -I$(KENT_DIR)/inc -I$(KENT_DIR)/hg/inc -o $@ $(addsuffix .c,$@)  $(SUGNET_LIBS) $(KENT_LIBS)
+compile:: ${A1}.o ${A2}.o
+	${CC} ${COPT} ${CFLAGS} -o ${A1}${EXE} ${A1}.o ${MYLIBS} ${L}
+	${CC} ${COPT} ${CFLAGS} -o ${A2}${EXE} ${A2}.o ${MYLIBS} ${L}
 
 clean::
-	rm -f $(O)
-	rm -rf $(ARCHTYPE) 
+	rm -f ${A1}.o ${A2}.o ${A1} ${A2}

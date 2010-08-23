@@ -17,7 +17,6 @@
  *    type=TypeName  : Type to display
  *    tier=N         : If type="Cell Line" then this is the tier to display
  *    bgcolor=RRGGBB : Change background color (hex digits)
- *    organism=Human|Mouse : If type="Cell Line", then set 'Mouse' to override default Human
  *    term=a         : Display row for a single term
  *    TODO: terms=a,b,c    : Display rows for listed terms.  Must use with 'type'.
  *    tag=a          : Display row for a single term, using tag as identifier
@@ -303,14 +302,14 @@ else if (sameString(type,"Cell Line"))
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
     s = hashFindVal(ra, "organism");
     if (s && differentString(s, organismOpt))
-        return FALSE;
+      return FALSE;
+
     // pathBuffer for new protocols not in human    
     char pathBuffer[PATH_LEN];
-    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/", organismOptLower);
+    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/",organismOptLower);
 
     if (s && sameString(organismOpt, "Human"))
 	{
-
 	if (cgiOptionalInt("tier",0))
 	    {
 	    if (hashFindVal(ra,"tier") == NULL)

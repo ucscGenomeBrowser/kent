@@ -1,10 +1,10 @@
 include ../../../inc/common.mk
 
 #blastToPsl = valgrind --tool=memcheck ../blastToPsl
-blastToPsl = blastToPsl
+blastToPsl = ../blastToPsl
 
 #blastXmlToPsl = valgrind --tool=memcheck ../blastToPsl
-blastXmlToPsl = blastXmlToPsl
+blastXmlToPsl = ../blastXmlToPsl
 
 all:
 

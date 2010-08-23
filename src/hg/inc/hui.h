@@ -875,7 +875,7 @@ void acemblyDropDown(char *var, char *curVal);
 /* Make drop down of options. */
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
-		  char *primarySubtrack, char *fakeSubmit, char *formName);
+		  char *primarySubtrack, char *fakeSubmit, char *formName, struct hash *trackHash);
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -893,7 +893,7 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
 boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
-	boolean embeddedInText,boolean showLongLabel);
+        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash);
 /* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
 
 boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
@@ -1112,7 +1112,7 @@ struct dyString *dyAddFilterByClause(struct cart *cart, struct trackDb *tdb,
    if 'column' is provided, and there are multiple filterBy columns, only the named column's clause is returned.
    The 'and' param and dyString in/out allows stringing multiple where clauses together
 */
-boolean makeDownloadsLink(char *database, struct trackDb *tdb);
+boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trackHash);
 // Make a downloads link (if appropriate and then returns TRUE)
 
 boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
@@ -1121,7 +1121,7 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label);
 void makeTopLink(struct trackDb *tdb);
 /* Link to top of UI page */
 
-void extraUiLinks(char *db,struct trackDb *tdb);
+void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash);
 /* Show downloads, schema and metadata links where appropriate */
 
 boolean chainDbNormScoreAvailable(struct trackDb *tdb);
@@ -1129,5 +1129,17 @@ boolean chainDbNormScoreAvailable(struct trackDb *tdb);
 
 void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char *label);
 /* Print out table of abbreviations. */
+
+// Four State checkboxes can be checked/unchecked by enable/disabled
+// NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
+#define FOUR_STATE_UNCHECKED         0
+#define FOUR_STATE_CHECKED           1
+#define FOUR_STATE_CHECKED_DISABLED  -1
+#define fourStateChecked(fourState) ((fourState) == FOUR_STATE_CHECKED || (fourState) == FOUR_STATE_CHECKED_DISABLED)
+#define fourStateEnabled(fourState) ((fourState) >= FOUR_STATE_UNCHECKED)
+#define fourStateVisible(fourState) ((fourState) == FOUR_STATE_CHECKED)
+
+int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
+/* Returns the four state checked state of the subtrack */
 
 #endif /* HUI_H */

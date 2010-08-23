@@ -12,7 +12,12 @@
  * This file is copyright 2002 Jim Kent, but license is hereby
  * granted for all use - public, private or commercial. */
 
+// developer: this include is for an occasionally useful means of getting stack info without crashing
+// however, it is not supported on cygwin.  Conditionally compile this in when desired.
+//#define BACKTRACE_EXISTS
+#ifdef BACKTRACE_EXISTS
 #include <execinfo.h>
+#endif///def BACKTRACE_EXISTS
 #include "common.h"
 #include "dystring.h"
 #include "errabort.h"
@@ -67,7 +72,7 @@ int count = 0;
 
 // developer: this is an occasionally useful means of getting stack info without crashing
 // however, it is not supported on cygwin.  Conditionally compile this in when desired.
-//#ifdef BACKTRACE_EXISTS
+// The define is at top to include execinfo.h
 #ifdef BACKTRACE_EXISTS
 void *buffer[STACK_LIMIT];
 count = backtrace(buffer, STACK_LIMIT);

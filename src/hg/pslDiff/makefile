@@ -1,25 +1,26 @@
 include ../../inc/common.mk
 
-L += -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
 
 
 O = pslSets.o pslDiff.o
 # pslDiff.o
-B =  ${BINDIR}/pslDiff
+A =  pslDiff
 
-$B: pslDiff
-	@${MKDIR} `dirname $B`
-	cp -f pslDiff $B
+$A: $O ${MYLIBS}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
-pslDiff: $O ${MYLIBS}
-	${CC} ${COPT} ${CFLAGS} -o pslDiff $O ${MYLIBS} ${MYSQLLIBS} $L
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 pslDiff.o: pslDiff.c pslSets.h
 
-test:
+test: compile
 	cd tests && ${MAKE} test
+	rm -f ${A}${EXE}
 
 clean:
 	rm -f $O $B pslDiff

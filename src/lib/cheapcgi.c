@@ -1525,11 +1525,13 @@ void cgiMakeDropListClassWithStyleAndJavascript(char *name, char *menu[],
 int i;
 char *selString;
 if (checked == NULL) checked = menu[0];
-printf("<SELECT NAME=\"%s\"", name);
+printf("<SELECT");
+if (name)
+    printf(" NAME='%s'", name);
 if (class)
-    printf(" class=\"%s\"", class);
+    printf(" class='%s'", class);
 if (style)
-    printf(" style=\"%s\"", style);
+    printf(" style='%s'", style);
 if (javascript)
     printf(" %s", javascript);
 printf(">\n");
@@ -1944,26 +1946,56 @@ cookieHash = NULL;
 cookieList = NULL;
 }
 
-void commonCssStyles()
-/* Defines a few common styles to use through CSS */
+char *commonCssStyles()
+/* Returns a string of common CSS styles */
 {
-    printf("\n<style type='text/css'>\n");
-    printf(".trDrag {background-color:%s;} .pale {background-color:%s;}\n",COLOR_BG_GHOST,COLOR_BG_PALE);
-    printf(".inputBox {border: 2px inset %s;}\n",COLOR_LTGREY);
-    printf(".greenRoof {border-top: 3px groove %s;}\n",COLOR_DARKGREEN);
-    //printf(".greenFloor {border-bottom: 3px ridge %s;}\n",COLOR_DARKGREEN);      // Unused
-    //printf(".hiddenRoof {border-top: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT);     // Doesn't work
-    //printf(".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
-    printf(".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN);
-    printf(".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);
-    //printf(".slantUp {-moz-transform:rotate(-75deg); -moz-transform-origin: bottom left; -webkit-transform:rotate(-75deg); -webkit-transform-origin: bottom left; white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
-    //printf(".slantDn {-moz-transform:rotate( 75deg); -moz-transform-origin: top left;    -webkit-transform:rotate( 75deg); -webkit-transform-origin: top left;    white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
-    //printf(".rotate90 {-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);}\n");
-    printf(".hintCol {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
-    printf(".hintRow {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
-    //printf(".halfVis {opacity: 0.5; filters.alpha.opacity=50;}\n");   // not ready for prime time because ff and ie can't agree
-    printf(".inOutButton {height:24px; width:24px; border-style: outset;}\n");
-    printf(".waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%%; width: 100%%; background-color: #fff; opacity: 0;}");
-    puts("</style>");
+static boolean commonStylesWritten = FALSE;
+if(commonStylesWritten)
+    return "";
+commonStylesWritten = TRUE;
+
+struct dyString *style = newDyString(256);
+
+dyStringPrintf(style,"\n<style type='text/css'>\n");
+dyStringPrintf(style,".ghost {background-color:%s;}\n",COLOR_BG_GHOST);
+dyStringPrintf(style,".pale {background-color:%s;}\n",COLOR_BG_PALE);
+
+// These are for dreagReorder: both in imageV2 and in hgTrackUi subtrack list
+dyStringPrintf(style,".trDrag {background-color:%s;}\n",COLOR_LTGREEN);
+dyStringPrintf(style,".dragHandle {cursor: s-resize;}\n");
+
+// These are for imageV2 sideButtons:
+dyStringPrintf(style,".btn  {border-style:outset; background-color:%s; border-color:%s;}\n",COLOR_LTGREY,COLOR_DARKGREY);
+dyStringPrintf(style,".btnN {border-width:1px 1px 1px 1px; margin:1px 1px 0px 1px;}\n"); // connect none
+dyStringPrintf(style,".btnU {border-width:0px 1px 1px 1px; margin:0px 1px 0px 1px;}\n"); // connect up
+dyStringPrintf(style,".btnD {border-width:1px 1px 0px 1px; margin:1px 1px 0px 1px;}\n"); // connect down
+dyStringPrintf(style,".btnL {border-width:0px 1px 0px 1px; margin:0px 1px 0px 1px;}\n"); // connect linear
+dyStringPrintf(style,".btnBlue {background-color:#91B3E6; border-color:%s;}\n",COLOR_BLUE_BUTTON);
+
+// Common boxes
+dyStringPrintf(style,".inputBox {border: 2px inset %s;}\n",COLOR_LTGREY);
+dyStringPrintf(style,".greenRoof {border-top: 3px groove %s;}\n",COLOR_DARKGREEN);
+//dyStringPrintf(style,".greenFloor {border-bottom: 3px ridge %s;}\n",COLOR_DARKGREEN);      // Unused
+//dyStringPrintf(style,".hiddenRoof {border-top: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT);     // Doesn't work
+//dyStringPrintf(style,".hiddenFloor {border-bottom: 0px solid %s;}\n",COLOR_BG_ALTDEFAULT); // Doesn't work
+dyStringPrintf(style,".greenBox {border: 5px outset %s;}\n",COLOR_DARKGREEN); // Matrix
+dyStringPrintf(style,".blueBox {border: 4px inset %s;}\n",COLOR_DARKBLUE);    // cfg box
+dyStringPrintf(style,".redBox {border: 3px ridge %s; background:Beige; padding:10px; margin:10px; text-align:left;}\n",COLOR_RED); // Special alert
+
+// Experiments with squeezing giant matrices
+//dyStringPrintf(style,".slantUp {-moz-transform:rotate(-75deg); -moz-transform-origin: bottom left; -webkit-transform:rotate(-75deg); -webkit-transform-origin: bottom left; white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
+//dyStringPrintf(style,".slantDn {-moz-transform:rotate( 75deg); -moz-transform-origin: top left;    -webkit-transform:rotate( 75deg); -webkit-transform-origin: top left;    white-space:nowrap; position:relative;left: 16px; filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3)}\n");
+//dyStringPrintf(style,".rotate90 {-webkit-transform: rotate(-90deg); -moz-transform: rotate(-90deg);}\n");
+
+dyStringPrintf(style,".hintCol {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
+dyStringPrintf(style,".hintRow {font-size:70%%; line-height:80%%; border-style: hidden; background-color:%s;}\n",COLOR_BG_ALTDEFAULT);
+//dyStringPrintf(style,".halfVis {opacity: 0.5; filters.alpha.opacity=50;}\n");   // not ready for prime time because ff and ie can't agree
+
+// waitMask allows waiting on long running javascript using utils.js::waitOnFunction
+dyStringPrintf(style,".waitMask {display: none; cursor: wait; z-index: 9999; position: absolute; top: 0; left: 0; height: 100%%; width: 100%%; background-color: #fff; opacity: 0;}\n");
+dyStringPrintf(style,".inOutButton {height:24px; width:24px; border-style: outset;}\n"); // A [+][-] button can be toggled by waitOnFunction during long running scripts
+
+dyStringPrintf(style,"</style>\n");
+return dyStringCannibalize(&style);
 }
 

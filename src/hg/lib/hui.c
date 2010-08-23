@@ -47,27 +47,57 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 
+struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
+/* Look up through self and parents, looking for someone responsible for handling
+ * where the downloads are. */
+{
+if (!sameString(tdb->table, tdb->track))
+    {
+    tdb = hashFindVal(trackHash, tdb->table);
+    if (tdb == NULL)
+        errAbort("Can't find track for table %s in wgEncodeDownloadDirKeeper", tdb->table);
+    }
+return trackDbTopLevelSelfOrParent(tdb);
+}
 
-static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name)
+static boolean makeFileDownloadsLink(char *database, struct trackDb *tdb,char *name,
+	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
+    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
-            trackDbSettingOrDefault(tdb, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS,
-            tdb->track,name);
+            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
+            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name, name);
     return TRUE;
     }
 return FALSE;
 }
 
-boolean makeDownloadsLink(char *database, struct trackDb *tdb)
+static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name,
+	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-return makeNamedDownloadsLink(database, tdb,"Downloads");
+// Downloads directory if this is ENCODE
+if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
+    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
+            hDownloadsServer(),
+            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
+            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name);
+    return TRUE;
+    }
+return FALSE;
+}
+
+boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trackHash)
+// Make a downloads link (if appropriate and then returns TRUE)
+{
+return makeNamedDownloadsLink(database, tdb,"Downloads", trackHash);
 }
 
 void makeTopLink(struct trackDb *tdb)
@@ -102,7 +132,7 @@ return FALSE;
 }
 
 boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
-        boolean embeddedInText,boolean showLongLabel)
+        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash)
 /* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
 {
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
@@ -127,7 +157,8 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
-        makeNamedDownloadsLink(db, trackDbTopLevelSelfOrParent(tdb), mdbVar->val);
+
+        makeFileDownloadsLink(db, tdb, mdbVar->val, trackHash);
         printf("</td></tr>");
         }
     else
@@ -144,14 +175,14 @@ printf("</table>--></div>");
 return TRUE;
 }
 
-void extraUiLinks(char *db,struct trackDb *tdb)
+void extraUiLinks(char *db,struct trackDb *tdb, struct hash *trackHash)
 /* Show downlaods, schema and metadata links where appropriate */
 {
 boolean schemaLink = (isCustomTrack(tdb->table) == FALSE)
                   && (hTableOrSplitExists(db, tdb->table));
 boolean metadataLink = (!tdbIsComposite(tdb)
                   && metadataForTable(db, tdb, NULL) != NULL);
-boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL);
+boolean downloadLink = (trackDbSetting(tdb, "wgEncode") != NULL && !tdbIsSuperTrack(tdb));
 boolean moreThanOne = (schemaLink && metadataLink)
                    || (schemaLink && downloadLink)
                    || (downloadLink && metadataLink);
@@ -168,13 +199,12 @@ if(schemaLink)
     }
 if(downloadLink)
     {
-    struct trackDb *trueTdb = trackDbTopLevelSelfOrParent(tdb);
-    makeNamedDownloadsLink(db, trueTdb,(moreThanOne ? "downloads":"Downloads"));
+    makeNamedDownloadsLink(db, tdb, (moreThanOne ? "downloads":"Downloads"), trackHash);
     if(metadataLink)
         printf(",");
     }
 if (metadataLink)
-    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE);
+    compositeMetadataToggle(db,tdb,"metadata", TRUE, TRUE, trackHash);
 
 if(moreThanOne)
     printf("</td></tr></table>");
@@ -2063,41 +2093,39 @@ return hStringFromTv(vis);
 
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
-#define FOURSTATE_KEY               "fourState"
-#define FOURSTATE_EMPTY             666
-#define FOURSTATE_UNCHECKED         0
-#define FOURSTATE_CHECKED           1
-#define FOURSTATE_DISABLE(val)      {while((val) >= 0) (val) -= 2;}
-#define FOURSTATE_ENABLE(val)       {while((val) < 0) (val) += 2;}
-#define fourStateChecked(fourState) ((fourState) == 1 || (fourState) == -1)
-#define fourStateEnabled(fourState) ((fourState) >= 0)
-#define fourStateVisible(fourState) ((fourState) == 1)
+#define FOUR_STATE_KEY               "fourState"
+#define FOUR_STATE_EMPTY             666
+//#define FOUR_STATE_UNCHECKED         0
+//#define FOUR_STATE_CHECKED           1
+//#define FOUR_STATE_CHECKED_DISABLED  -1
+#define FOUR_STATE_DISABLE(val)      {while((val) >= 0) (val) -= 2;}
+#define FOUR_STATE_ENABLE(val)       {while((val) < 0) (val) += 2;}
 
-static int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
+int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart)
 /* Returns the four state checked state of the subtrack */
 {
 char * setting = NULL;
 char objName[SMALLBUF];
-int fourState = (int)(long)tdbExtrasGetOrDefault(subtrack,FOURSTATE_KEY,(void *)FOURSTATE_EMPTY);
-if(fourState != FOURSTATE_EMPTY)
+int fourState = (int)(long)tdbExtrasGetOrDefault(subtrack,FOUR_STATE_KEY,(void *)FOUR_STATE_EMPTY);
+if(fourState != FOUR_STATE_EMPTY)
     return fourState;
 
-fourState = FOURSTATE_UNCHECKED;  // default to unchecked, enabled
+fourState = FOUR_STATE_UNCHECKED;  // default to unchecked, enabled
 if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     {
     if(findWordByDelimiter("off",' ',setting) == NULL)
-        fourState = FOURSTATE_CHECKED;
+        fourState = FOUR_STATE_CHECKED;
     }
 // Now check visibility
 setting = tdbResolveVis(cart,subtrack,FALSE);
 
 // If subtrack's view is hide then fourstate includes disabled
 if(sameWord(setting,TV_HIDE) && subtracksViewIsHidden(cart,subtrack))
-    FOURSTATE_DISABLE(fourState);
+    FOUR_STATE_DISABLE(fourState);
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 fourState = cartUsualInt(cart, objName, fourState);
-tdbExtrasAddOrUpdate(subtrack,FOURSTATE_KEY,(void *)(long)fourState);
+tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
 return fourState;
 }
 
@@ -3632,7 +3660,7 @@ if(tdbIsComposite(tdb)) // FIXME: Only when some subtracks are configurable
 }
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
-                 boolean selectedOnly, char *primarySubtrack)
+                 boolean selectedOnly, char *primarySubtrack, struct hash *trackHash)
 /* Display list of subtracks and descriptions with checkboxes to control visibility and possibly other
  * nice things including links to schema and metadata and a release date. */
 {
@@ -3878,7 +3906,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
-            compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE);
+            compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
             printf("</div>");
 
             if(cType != cfgNone)
@@ -3925,17 +3953,17 @@ hierarchyFree(&hierarchy);
 }
 
 static void compositeUiAllSubtracks(char *db, struct cart *cart, struct trackDb *tdb,
-				    char *primarySubtrack)
+				    char *primarySubtrack, struct hash *trackHash)
 /* Show checkboxes for all subtracks, not just selected ones. */
 {
-compositeUiSubtracks(db, cart, tdb, FALSE, primarySubtrack);
+compositeUiSubtracks(db, cart, tdb, FALSE, primarySubtrack, trackHash);
 }
 
 static void compositeUiSelectedSubtracks(char *db, struct cart *cart, struct trackDb *tdb,
-					 char *primarySubtrack)
+					 char *primarySubtrack, struct hash *trackHash)
 /* Show checkboxes only for selected subtracks. */
 {
-compositeUiSubtracks(db, cart, tdb, TRUE, primarySubtrack);
+compositeUiSubtracks(db, cart, tdb, TRUE, primarySubtrack, trackHash);
 }
 
 static void makeAddClearSubmitTweak(char javascript[JBUFSIZE], char *formName,
@@ -4996,7 +5024,8 @@ struct sqlResult *sr;
 char *words[MAX_SP_SIZE];
 int defaultOffSpeciesCnt = 0;
 
-jsIncludeFile("utils.js",NULL);
+if(cartOptionalString(cart, "ajax") == NULL)
+    jsIncludeFile("utils.js",NULL);
 //jsInit();
 puts("\n<P><B>Species selection:</B>&nbsp;");
 
@@ -6376,7 +6405,7 @@ for (i = 0; i < MAX_SUBGROUP; i++)
 }
 
 void hCompositeUi(char *db, struct cart *cart, struct trackDb *tdb,
-		  char *primarySubtrack, char *fakeSubmit, char *formName)
+		  char *primarySubtrack, char *fakeSubmit, char *formName, struct hash *trackHash)
 /* UI for composite tracks: subtrack selection.  If primarySubtrack is
  * non-NULL, don't allow it to be cleared and only offer subtracks
  * that have the same type.  If fakeSubmit is non-NULL, add a hidden
@@ -6388,19 +6417,21 @@ boolean displayAll =
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-if(trackDbSetting(tdb, "dragAndDrop") != NULL)
-    jsIncludeFile("jquery.tablednd.js", NULL);
+if(cartOptionalString(cart, "ajax") == NULL)
+    {
+    if(trackDbSetting(tdb, "dragAndDrop") != NULL)
+        jsIncludeFile("jquery.tablednd.js", NULL);
+    jsIncludeFile("ajax.js",NULL);
+    #ifdef TABLE_SCROLL
+    jsIncludeFile("jquery.fixedtable.js",NULL);
+    #endif//def TABLE_SCROLL
+    }
 jsIncludeFile("hui.js",NULL);
-jsIncludeFile("ajax.js",NULL);
-#ifdef TABLE_SCROLL
-jsIncludeFile("jquery.fixedtable.js",NULL);
-#endif//def TABLE_SCROLL
-
 
 puts("<P>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
-    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
+    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack, trackHash);
     return;
     }
 if (fakeSubmit)
@@ -6436,11 +6467,11 @@ cgiContinueHiddenVar("g");
 
 if(displayAll)
     {
-    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack);
+    compositeUiAllSubtracks(db, cart, tdb, primarySubtrack, trackHash);
     }
 else
     {
-    compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack);
+    compositeUiSelectedSubtracks(db, cart, tdb, primarySubtrack, trackHash);
     }
 
 if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not hgTrackUi

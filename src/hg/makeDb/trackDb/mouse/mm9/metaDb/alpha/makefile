@@ -1,6 +1,6 @@
 
 LIST=\
 wgEncodeSydhHistone.ra \
-wgEncodeSydhTfbs.ra
-
+wgEncodeSydhTfbs.ra \
+wgEncodeUwDnase.ra
 include ../../../../makefile.metaDb
