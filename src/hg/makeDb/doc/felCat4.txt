@@ -1695,6 +1695,19 @@ rm -f $c.gp $c.maf $c.ss
     # Writing model to phyloFit.mod ...
     # Done.
 
+############################################################################
+# LIFTOVER TO FelCat3 (working - 2010-08-23 - Chin )
+    mkdir /hive/data/genomes/felCat4/bed/blat.felCat3.2010-08-23
+    cd /hive/data/genomes/felCat4/bed/blat.felCat3.2010-08-23
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug -ooc /scratch/data/felCat4/felCat4.11.ooc \
+       felCat4 felCat3
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+         -ooc /scratch/data/felCat4/felCat4.11.ooc \
+        -bigClusterHub=swarm -dbHost=hgwdev -workhorse=hgwdev \
+         felCat4 felCat3 > do.log 2>&1 &
+    # real    ???? 2093m9.263s
 
 
 

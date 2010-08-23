@@ -1419,6 +1419,28 @@ function contextMenuHit(menuItemClicked, menuObject, cmd)
     setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
 }
 
+function showLoadingImage(id)
+{
+// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
+// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
+    var loadingId = id + "LoadingOverlay";
+    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    overlay.appendTo("body");
+    overlay.css("top", $('#'+ id).position().top);
+    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("left",divLeft);
+    var width = $('#'+ id).width() - 5;
+    var height = $('#'+ id).height();
+    overlay.width(width);
+    overlay.height(height);
+    overlay.css("background", "white");
+    overlay.css("opacity", 0.75);
+    var imgLeft = (width / 2) - 110;
+    var imgTop = (height / 2 ) - 10;
+    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    return loadingId;
+}
+
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
@@ -1568,7 +1590,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             if(imageV2) {
 	        data += "&hgt.trackNameFilter=" + id;
             }
-            jQuery('body').css('cursor', 'wait');
+            //var center = $("#img_data_" + id);
+            //center.attr('src', "../images/loading.gif")
+            //center.attr('style', "text-align: center; display: block;");
+            var loadingId = showLoadingImage("tr_" + id);
             $.ajax({
                        type: "GET",
                        url: "../cgi-bin/hgTracks",
@@ -1577,6 +1602,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                        trueSuccess: handleUpdateTrackMap,
                        success: catchErrorOrDispatch,
                        cmd: cmd,
+                       id: id,
+                       loadingId: loadingId,
                        cache: false
                    });
         }
@@ -1843,10 +1870,13 @@ function handleUpdateTrackMap(response, status)
             $('#chrom').attr('src', b[1]);
         }
     }
-    if(imageV2 && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
+    if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
-          var id = selectedMenuItem.id;
+          var id = this.id;
+          if(this.loadingId) {
+	          $('#' + this.loadingId).remove();
+          }
           var rec = trackDbJson[id];
           var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
           var reg = new RegExp(str);
