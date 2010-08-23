@@ -96,7 +96,7 @@ filterBy level:Level=+Validated,Manual_annotation,Automatic_annotation class:Cla
     track wgEncodeGencode2wayConsPseudoV4
     subTrack wgEncodeGencode off
     shortLabel Gencode Pseudo
-    longLabel ENCODE Gencode 2way Pseudogenes
+    longLabel ENCODE Gencode 2way Pseudogenes (level 3) (May 2010)
     type genePred
     priority 5
 
