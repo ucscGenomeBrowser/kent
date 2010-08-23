@@ -1267,6 +1267,7 @@ $(document).ready(function()
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
+        findTracksNormalize();
     }
 
     if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
@@ -1816,7 +1817,7 @@ function hgTrackUiPopUp(trackName,descriptionOnly)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-    $('#hgTrackUiDialog').html("<div style='font-size:60% background: #FFFEE8' id='pop'>" + response + "</div>");
+    $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -1836,6 +1837,7 @@ function handleTrackUi(response, status)
                                         setAllVars($('#pop'));
                                     $(this).dialog("close");
                                     if($('#imgTbl') != undefined && popUpTrackDescriptionOnly == false)
+                                        setTimeout('updateTrackImg(popUpTrackName);',50); // Necessary because ajax settings need to be done first
                                         updateTrackImg(popUpTrackName);
                                }},
                                close: function() {
@@ -2129,7 +2131,7 @@ function findTracksClickedOne(selCb,justClicked)
 }
 
 
-function findTracksNormalizeFound()
+function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
     var selCbs = $('input.selCb');
 
@@ -2145,6 +2147,11 @@ function findTracksNormalizeFound()
         $('input.viewBtn').val('Return to Browser');
 
     findTracksCounts();
+}
+
+function findTracksNormalizeWaitOn()
+{ // Put up wait mask then Normalize the page based upon current state of all found tracks
+    waitOnFunction( findTracksNormalize );
 }
 
 function findTracksCheckAll(check)
