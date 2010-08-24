@@ -213,16 +213,16 @@ foreach spec (\$specList)
   set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
   set chunkEnd = '0'
   while (\$chunkEnd < \$end)
-    set chunkEnd = `expr \$start + $size`
+    set chunkEnd = `echo \$start $size | awk '{print \$1+\$2}'`
     if (\$chunkEnd > \$end) set chunkEnd = \$end
-    set chunkSize = `expr \$chunkEnd - \$start`
+    set chunkSize = `echo \$chunkEnd \$start | awk '{print \$1-\$2}'`
     echo \$file\\:\$seq\\:\$start-\$chunkEnd >> reSplitQuery.lst
     if ((\$start == 0) && (\$chunkEnd == \$seqSize)) then
       echo "\$start	\$seq	\$seqSize	\$seq	\$seqSize" >> query.lft
     else
       echo "\$start	\$seq"":\$start-\$chunkEnd	\$chunkSize	\$seq	\$seqSize" >> query.lft
     endif
-    set start = `expr \$chunkEnd - $splitOverlap`
+    set start = `echo \$chunkEnd $splitOverlap | awk '{print \$1-\$2}'`
   end
 end
 
