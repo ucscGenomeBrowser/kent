@@ -2035,7 +2035,7 @@ function findTracksMdbVarChanged(obj)
                    cmd: "hgt.metadataValue" + num
                });
     }
-    findTracksSearchButtonsEnable(false);
+    findTracksSearchButtonsEnable(true);
 }
 
 function findTracksHandleNewMdbVals(response, status)
