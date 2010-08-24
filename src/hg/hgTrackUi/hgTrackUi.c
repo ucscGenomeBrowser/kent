@@ -2448,23 +2448,25 @@ if(tdbIsComposite(tdb))
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     }
-if(ajax && cartOptionalString(cart, "descriptionOnly"))
+if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
-    //printf("<table><tr valign='top'><td>");
-    char * html = tdb->html;
-    struct trackDb *thisTdb = tdb;
-    // FIXME: children need to get their parents filled in before this works!
-    while(html == NULL && html[0] != 0 && thisTdb->parent != NULL)
-        {
-        thisTdb = thisTdb->parent;
-        html = thisTdb->html;
-        }
-    if (html != NULL && html[0] != 0)
-        puts(html);
+    //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+        puts(tdb->html);
     else
-        puts("<h2>No description found.</h2>");
-    //printf("</td></table>");
-    cartRemove(cart,"descriptionOnly");
+        {
+        struct trackDb *tdbParent = tdb->parent;
+        for (;tdbParent && (tdbParent->html == NULL || tdbParent->html[0] == 0); tdbParent = tdbParent->parent )
+            ; // Get the first parent that has html
+        if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
+            {
+            printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",COLOR_DARKGREEN,tdbParent->shortLabel);
+            puts(tdbParent->html);
+            }
+        else
+            printf("<h2>No description found for: %s.</h2>",tdbParent?tdbParent->track:tdb->track);
+        }
+    cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
 
