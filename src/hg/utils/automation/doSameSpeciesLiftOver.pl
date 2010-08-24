@@ -213,7 +213,7 @@ foreach spec (\$specList)
   set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
   set chunkEnd = '0'
   while (\$chunkEnd < \$end)
-    set chunkEnd = `expr \$start + $size`
+    set chunkEnd = `echo \$start $size | awk '{print \$1+\$2}'`
     if (\$chunkEnd > \$end) set chunkEnd = \$end
     set chunkSize = `expr \$chunkEnd - \$start`
     echo \$file\\:\$seq\\:\$start-\$chunkEnd >> reSplitQuery.lst
