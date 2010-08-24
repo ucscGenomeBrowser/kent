@@ -668,7 +668,6 @@ else
     hPrintf("</table>\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
-    hPrintf("<script type='text/javascript'>findTracksNormalizeFound();</script>\n");
     hPrintf("\n</form>\n");
 
     // be done with json
