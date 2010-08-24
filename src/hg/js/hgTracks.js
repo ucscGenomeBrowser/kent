@@ -1992,45 +1992,6 @@ function jumpButtonOnClick()
     return true;
 }
 
-function metadataSelectChanged(obj)
-{
-    var newVar = $(obj).val();
-    var a = /metadataName(\d+)/.exec(obj.name)
-    if(newVar != undefined && a && a[1]) {
-        var num = a[1];
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
-                   trueSuccess: handleNewMetadataVar,
-                   success: catchErrorOrDispatch,
-                   cache: true,
-                   cmd: "hgt.metadataValue" + num
-               });
-    }
-}
-
-function handleNewMetadataVar(response, status)
-// Handle ajax response (repopulate a metadata select)
-{
-    var list = eval(response);
-    var ele = $('select[name=' + this.cmd + ']');
-    ele.empty();
-    ele.append("<option>Any</option>");
-    for (var i = 0; i < list.length; i++) {
-        ele.append("<option>" + list[i] + "</option>");
-    }
-}
-
-function searchKeydown(event)
-{
-    if (event.which == 13) {
-        $('#searchSubmit').click();
-        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
-        // $('#searchTracks').submit();
-    }
-}
-
 function remoteTrackCallback(rec)
 // jsonp callback to load a remote track.
 {
@@ -2055,16 +2016,56 @@ function remoteTrackCallback(rec)
     }
 }
 
-function changeSearchVisibilityPopups(cmd)
-{
-    $("#searchResultsForm select").each(function(i) {
-                                                                 $(this).val(cmd);
-                                                             });
-    return false;
-}
-
 /////////////////////////////////////////////////////
 // findTracks functions
+
+function findTracksMdbVarChanged(obj)
+{ // Ajax call to repopulate a metadata vals select when mdb var changes
+    var newVar = $(obj).val();
+    var a = /metadataName(\d+)/.exec(obj.name)
+    if(newVar != undefined && a && a[1]) {
+        var num = a[1];
+        $.ajax({
+                   type: "GET",
+                   url: "../cgi-bin/hgApi",
+                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
+                   trueSuccess: findTracksHandleNewMdbVals,
+                   success: catchErrorOrDispatch,
+                   cache: true,
+                   cmd: "hgt.metadataValue" + num
+               });
+    }
+    findTracksSearchButtonsEnable(false);
+}
+
+function findTracksHandleNewMdbVals(response, status)
+// Handle ajax response (repopulate a metadata val select)
+{
+    var list = eval(response);
+    var ele = $('select[name=' + this.cmd + ']');
+    ele.empty();
+    ele.append("<option>Any</option>");
+    for (var i = 0; i < list.length; i++) {
+        ele.append("<option>" + list[i] + "</option>");
+    }
+}
+
+function searchKeydown(event)
+{
+    if (event.which == 13) {
+        $('#searchSubmit').click();
+        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
+        // $('#searchTracks').submit();
+    }
+}
+
+function changeSearchVisibilityPopups(cmd)
+{  // ??? Larry?
+    $("#searchResultsForm select").each(function(i) {
+        $(this).val(cmd);
+    });
+    return false;
+}
 
 function findTracksChangeVis(seenVis)
 {
@@ -2099,8 +2100,10 @@ function findTracksClickedOne(selCb,justClicked)
     } else
         $(seenVis).attr('disabled', true );
 
-    if(justClicked) {
-        // Deal with hiddenSel so that submit does the right thing
+    // Deal with hiddenSel so that submit does the right thing
+    // Setting these requires justClicked OR seen vs. hidden to be different
+    var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
+    if(setHiddenInputs) {
         if(subtrack) {
             $(hiddenSel).attr('disabled',false);
             if(checked)
@@ -2133,6 +2136,7 @@ function findTracksClickedOne(selCb,justClicked)
 
 function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
+    $('#foundTracks').show()
     var selCbs = $('input.selCb');
 
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
@@ -2199,6 +2203,34 @@ function findTracksCounts()
         $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
     }
 }
+
+function findTracksSearchButtonsEnable(enable)
+{
+// Displays visible and checked track count
+    var searchButton = $('input[name="hgt_searchTracks"]');
+    var clearButton  = $('input.clear');
+    if(enable) {
+        $(searchButton).attr('disabled',false);
+        $(clearButton).attr('disabled',false);
+    } else {
+        $(searchButton).attr('disabled',true);
+        $(clearButton).attr('disabled',true);
+    }
+}
+
+function findTracksClear()
+{// Clear found tracks and all input controls
+    var foundTracks = $('#foundTracks');
+    if(foundTracks != undefined)
+        $(foundTracks).remove();
+    $('input[type="text"]').val(''); // This will always be found
+    //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
+    $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
+    $('select.groupSearch').attr('selectedIndex',0);
+    findTracksSearchButtonsEnable(false);
+    return false;
+}
+/////////////////////////////////////////////////////
 
 function delSearchSelect(obj, rowNum)
 {
