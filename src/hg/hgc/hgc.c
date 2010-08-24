@@ -22236,7 +22236,7 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
     }
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
-    printf("<PRE><TT>");
+    
     while ((row = sqlNextRow(sr)) != NULL)
         {
         printf("<PRE><TT>");
@@ -22244,10 +22244,6 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
             {
             firstTime = FALSE;
         printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
-        /* printf("<H2>Click 'browser' link below to display item  %s in
- * %s track</H2><BR>", itemName, clickMsg); */
-        /* printf ("table name: %s  itemName: %s\n<BR>", table,
- * itemName); */
 
             printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
             printf("--------|--------------------------------------------------------------------------------------------\n");
@@ -22271,7 +22267,7 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
         }
 
 
- /* printTrackHtml(tdb); */
+ printTrackHtml(tdb); 
  hFreeConn(&conn);
 }
 
