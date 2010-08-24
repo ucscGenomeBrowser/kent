@@ -4431,110 +4431,295 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
 
 
-###  These Antibodies are from the Rip Target Protien Table and are being intigrated into this table ####
-### They will be commented out until we are ready to get rid of the original Table
-#term ripInput
-#tag ripInput
-#tag ripInput
-#type Antibody
-#targetDescription RIP CHIP Total input for comparison for RIP experiments
-#antibodyDescription
-#vendorName
-#vendorId
-#orderUrl
-#lab Tenebaum
-#lots
-#targetId
-#targetUrl
-#validation
+### RIP CHIP Antibodies
+### These are all for the RIP CHIP experiments. 
+### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
 
 
-#term T7Tag
-#tag T7Tag
-#type Antibody
-#targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
-#antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
-#vendorName Millipore; Novagen
-#vendorId Mil_AB3790; Nov_69522
-#orderUrl
-#lab Tenebaum
-#lots
-#targetId
-#targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
-#validation
+#*term CBX5
+#*tag CBX5
+#*type Antibody
+#*targetDescription Chromobox homolog 5 (HP1 alpha homolog, Drosophila) 
+#*antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH,IP,and WB.
+#*vendorName Millipore
+#*vendorId 05-689
+#*orderUrl http://www.millipore.com/catalogue/item/05-689
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
+#*validation RipChip
 
-#term ELAVL1
-#tag ELAVL1
-#type Antibody
-#targetDescription RIP CHIP  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens); #Alternative Symbols HUR; Hua; MelG; ELAV1; ELAVL1
-#antibodyDescription Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
-#vendorName Santa Cruz Biotech
-#vendorId SC-5261
-#orderUrl
-#lab Tenebaum
-#lots B2508(Nov2008)
-#targetId
-#targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-#validation
 
-#term IGF2BP1
-#tag IGF2BP1
-#type Antibody
-#targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; #ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-#antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
-#vendorName Santa Cruz Biotech
-#vendorId SC-21027
-#orderUrl
-#lab Tenebaum
-#lots I0607(Nov2008)
-#targetId
-#targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-#validation
+#*term CELF1
+#*tag CELF1
+#*type Antibody
+#*targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); ###Alternative Symbols CUG-BP1; BRUNOL2
+#*antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA.
+#*vendorName Millipore
+#*vendorId 05621
+#*orderUrl
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+#*validation RipChip
 
-#term PABPC1
-#tag PABPC1
-#type Antibody
-#targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) Alternative Symbols PAB1; PABP; PABP1; #PABPC2; PABPL1; PABPC
-#antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
-#lab Tenebaum
-#vendorName Sigma Chemical Co.
-#vendorId Sig_P6246
-#orderUrl
-#lab Tenebaum
-#lots 044K4810 (Nov 2008)
-#targetId
-#targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-#validation
+#*term CELF2
+#*tag CELF2
+#*type Antibody
+#*targetDescription CUGBP, Elav-like family member 2
+#*antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CELF2 of human origin by WB.
+#*vendorName Millipore
+#*vendorId 04-047
+#*orderUrl http://www.millipore.com/catalogue/item/04-047
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
+#*validation RipChip
 
-#term SLBP
-#tag SLBP
-#type Antibody
-#targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
-#antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin.   #2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and r
-#at origin.
-#vendorName Millipore; Santa Cruz Biotech
-#vendorId Mil 06-1376; SC-26522
-#orderUrl
-#lab Tenebaum
-#lots
-#targetId
-#targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-#validation
+#*term EEF1A1
+#*tag EEF1A1
+#*type Antibody
+#*targetDescription Eukaryotic translation elongation factor 1 alpha 1
+#*antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
+#*vendorName Millipore
+#*vendorId 05-235
+#*orderUrl http://www.millipore.com/catalogue/item/05-235
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
+#*validation RipChip
 
-#term CELF1
-#tag CELF1
-#type Antibody
-#targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
-#antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also #known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detec
-#tion of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
-#vendorName Millipore
-#vendorId Mil-05621
-#orderUrl
-#lab Tenebaum
-#lots
-#targetId
-#targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
-#validation
+#*term EIF4E
+#*tag EIF4E
+#*type Antibody
+#*targetDescription Eukaryotic initiation factor 4E
+#*antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP.
+#*vendorName Millipore
+#*vendorId 04-1058
+#*orderUrl http://www.millipore.com/catalogue/item/04-1058
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
+#*validation RipChip
+
+#*term EIF4EBP1
+#*tag EIF4EBP1
+#*type Antibody
+#*targetDescription Eukaryotic translation initiation factor 4E binding protein 1
+#*antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanEIF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
+#*vendorName Millipore
+#*vendorId 04-1010
+#*orderUrl http://www.millipore.com/catalogue/item/04-1010
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
+#*validation RipChip
+
+#*term ELAVL1
+#*tag ELAVL1
+#*type Antibody
+#*targetDescription RIP CHIP (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
+#*antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
+#*vendorName 1) Santa Cruz Biotech; 2) Millipore
+#*vendorId SC-5261; Mil ab5831
+#*orderUrl http://www.santacruzbiotech.com
+#*lab Tenenbaum
+#*lots 1) B2508(Nov2008)
+#*targetId
+#*targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+#*validation RipChip
+
+#*term FXR1
+#*tag FXR1
+#*type Antibody
+#*targetDescription Fragile X mental retardation, autosomal homolog 1
+#*antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+#*vendorName Millipore
+#*vendorId 05-1529
+#*orderUrl http://www.millipore.com/catalogue/item/05-1529
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
+#*validation RipChip
+
+#*term Hexim1
+#*tag Hexim1
+#*type Antibody
+#*targetDescription Hexamethylene bis-acetamide inducible 1
+#*antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+#*vendorName Millipore
+#*vendorId 07-955
+#*orderUrl http://www.millipore.com/catalogue/item/07-955
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
+#*validation RipChip
+
+#*term HNRNPD
+#*tag HNRNPD
+#*type Antibody
+#*targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
+#*antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP
+#*vendorName Millipore
+#*vendorId 07-260
+#*orderUrl http://www.millipore.com/catalogue/item/07-260
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
+#*validation RipChip
+
+#*term hnRNPM
+#*tag hnRNPM
+#*type Antibody
+#*targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+#*vendorName Millipore
+#*vendorId 05-620
+#*orderUrl http://www.millipore.com/catalogue/item/05-620
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
+#*validation RipChip
+
+
+#*term IGF2BP1
+#*tag IGF2BP1
+#*type Antibody
+#*targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; #ZBP1; CRDBP;IMP-1; CRD-BP; VICKZ1; IGF2BP1
+#*antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+#*vendorName Santa Cruz Biotech
+#*vendorId SC-21027
+#*orderUrl
+#*lab Tenenbaum
+#*lots I0607(Nov2008)
+#*targetId
+#*targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+#*validation RipChip
+
+#*term NONO
+#*tag NONO
+#*type Antibody
+#*targetDescription Non-POU domain containing, octamer-binding
+#*antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of NONO of H, R origin by IP, WB, IH.
+#*vendorName Millipore
+#*vendorId 05-950
+#*orderUrl http://www.millipore.com/catalogue/item/05-950
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/4841
+#*validation RipChip
+
+#*term PABP
+#*tag PABP
+#*type Antibody
+#*targetDescription PolyA-binding protein
+#*antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
+#*vendorName Millipore
+#*vendorId 04-1467
+#*orderUrl http://www.millipore.com/catalogue/item/04-1467
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
+#*Validation RipChip
+
+#*term PABPC1
+#*tag PABPC1
+#*type Antibody
+#*targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) ###Alternative Symbols PAB1; PABP; PABP1; #PABPC2; PABPL1; PABPC
+#*antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+#*lab Tenenbaum
+#*vendorName Sigma Chemical Co.
+#*vendorId P6246
+#*orderUrl
+#*lab Tenenbaum
+#*lots 044K4810 (Nov 2008)
+#*targetId 26986
+#*targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+#*validation RipChip
+
+#*term QKI
+#*tag QKI
+#*type Antibody
+#*targetDescription Quaking homolog, KH domain RNA binding (mouse)
+#*antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB.
+#*vendorName Millipore
+#*vendorId AB9904
+#*orderUrl http://www.millipore.com/catalogue/item/ab9904
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
+#*validation RipChip
+
+
+#*term RPS6KA1
+#*tag RPS6KA1
+#*type Antibody
+#*targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
+#*antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA.
+#*vendorName Millipore
+#*vendorId 07-1477
+#*orderUrl http://www.millipore.com/catalogue/item/07-1477
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
+#*validation RipChip
+
+
+#*term ripInput
+#*tag ripInput
+#*type Antibody
+#*targetDescription RIP CHIP Total input for comparison for RIP experiments
+#*antibodyDescription
+#*vendorName
+#*vendorId
+#*orderUrl
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl
+#*validation RipChip
+
+#*term SLBP
+#*tag SLBP
+#*type Antibody
+#*targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols ###HBP; SLBP
+#*antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
+#*vendorName Millipore; Santa Cruz Biotech; Affinity Bioreagents
+#*vendorId 06-1376; 26522; MA156353 lot 7308-S2
+#*orderUrl
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+#*validation RipChip
+
+#*term T7Tag
+#*tag T7Tag
+#*type Antibody
+#*targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
+#*antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+#*vendorName Millipore; Novagen
+#*vendorId AB3790; Nov_69522
+#*orderUrl
+#*lab Tenenbaum
+#*lots
+#*targetId
+#*targetUrl ###http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
+#*validation RipChip
+
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 ### We will be replacing this.
@@ -5686,350 +5871,375 @@ type seqPlatform
 description Applied Biosystems SOLiD System 2.0
 
 
-#Project CV
-#
-#
-#
+#LABS          This is the CV for naming the labs.
+#term:
+#tag:
+#type:         We use the phrase lab as a source of data
+#labInst:      This is the full name of the Institution where the lab is housed
+#labPi:        This is the shortened name that we refer to the PI, usually just last name
+#labPiFull:    The full name of the PI
+#grantPI:      Shortened name of the head PI for the grant
+#grantInst:    Term that we use to refer to the project or grant like (SYDH or HAIB)
+#organism:     human or mouse
 
 term Broad
 tag Broad
-type project
-projectNameFull Broad Institute
-organism Human
-labName Broad
-pi Bernstein
-piFull Bradley Bernstein
-grant Bernstein
+type lab
+labInst Broad Institute
+labPi Bernstein
+labPiFull Bradley Bernstein
+grantPi Bernstein
+grantInst Broad Institute
+organism human
 
-term Duke
-tag Duke
-type project
-projectNameFull Duke University
-organism Human
-labName Duke
-pi Crawford
-piFull Greg Crawford
-grant Crawford
-
-term Caltech    
-tag Caltech    
-type project
-projectNameFull California Institute of Technology (Wold Lab)
-organism Human
-labName Caltech
-pi Wold
-piFull Barbara Wold
-grant Myers
-
-term HudsonAlpha
-tag HudsomAlpha
-type project
-project HAIB
-projectNameFull HudsonAlpha Institute for Biotechnology
-organism Human
-labName HudsonAlpha
-pi Myers
-piFull Richard Myers
-grant Myers
-
-
-
-term NHGRI-Elnitski
-tag NHGRI-Elnitski
-type project
-projectNameFull National Human Genome Research Institute Elnitski
-organism Human
-labName NHGRI-Elnitski
-pi Elnitski
-piFull Laura Elnitski
-grant Elnitski
-
-term CSHL
-tag CSHL
-type project
-project Transcriptome
-projectNameFull Transcriptome Cold Spring Harbor Laboratory
-organism Human
-labName Cshl
-pi Gingeras
-piFull Thomas Gingeras
-grant Gingeras
-
-term GIS
-tag  GIS
-type project
-project Transcriptome
-projectNameFull Transcriptome  Genome Institute of Singapore
-organism Human
-labName GIS
-pi Ruan
-piFull Yijun Ruan
-grant Gingeras
-
-term Helicos       
-tag Helicos      
-type project
-project Transcriptome
-projectNameFull Transcriptome Helicos BioScience Corporation
-organism Human
-labName Helicos
-pi Kapranov
-piFull Philipp Kapranov
-grant Gingeras
-
-
-#synonym
-term Duke
-tag Duke
-type project
-projectNameFull Duke University
-organism Human
-labName UNC
-pi Lieb
-piFull Jason Lieb
-grant Crawford
-
-term Duke 
-tag Duke
-type project
-projectNameFull Duke University
-organism Human
-labName UT-A
-pi Iyer
-piFull Tara Iyer
-grant Crawford
-
-term Genecode
-tag Genecode
-type project
-projectNameFull Genecode Sanger Institute
-organism Human
-labName Sanger
-pi Hubbard
-piFull Tim Hubbard
-grant Hubbard
-
-term NHGRI-Margulies
-tag NHGRI-Marigulies
-type project
-projectNameFull National Human Genome Research Institute Margulies
-organism Human
-labName Margulies
-pi Margulies
-piFull Elliott Margulies
-grant Margulies
-
-term SUNY
-tag SUNY
-type project
-projectNameFull State University of New York at Albany
-organism Human
-labName SunyAlbany
-pi Tenenbaum
-piFull Scott Tenebaum
-grant Tenenbaum
-
-term Transcriptome - Affy
-tag Transcriptome - Affy
-type project
-projectNameFull Transcriptome Affymetrix
-organism Human
-labName Affy
-pi Gingeras
-piFull Thomas Gingeras
-grant Gingeras
-
-term Riken
-tag  Riken
-type project
-projectNameFull Transcriptome Riken Lab
-organism Human
-labName Riken
-pi Carninci
-piFull Piero Carninci
-grant Gingeras
-
-term UMass-Dekker
-tag UMass-Dekker
-type project
-projectNameFull University of Massachusetts Amherst Dekker
-organism Human
-labName UMass-Dekker
-pi Dekker
-piFull Job Dekker
-grant Dekker
-
-term UMass-Weng
-tag UMass-Weng
-type project
-projectNameFull University of Massachusetts Amherst Weng Lab 
-organism Human
-labName UMassHA
-pi Weng
-piFull Zhiping Weng
-grant Weng
-
-term UW
-tag UW
-type project
-projectNameFull University of Washington
-organism Human
-labName Uw
-pi Stam
-piFull George Stamatoyannopoulos??
-grant Stam
-
-term SYDH-Stanford
-tag  SYDH-Stanford
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName Stanford
-pi Snyder
-piFull Michael Snyder
-grant Snyder
-
-term SYDH-Yale
-tag  SYDH-Yale
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName Yale
-pi Snyder
-piFull Michael Snyder
-grant Snyder
-
-term SYDH-Harvard 
-tag  SYDH-Harvard 
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName Harvard
-pi Weissman
-piFull Sherman Weissman
-grant Snyder
-
-term SYDH - UCD
-tag SYDH - UCD 
-type project
-projectNameFull  Stanford Yale UCDavis Harvard
-organism Human
-labName UCD
-pi Farnham
-piFull Peggy Farnham
-grant Snyder
-
-
-
-
-
-
-
-# Mouse and ARRA grants
-
-term LICR-m
-tag LICR 
-type project
-projectNameFull Ludwig Institue for Cancer Research
-organism Mouse
-labName LICR
-pi Ren
-piFull Bing Ren
-grant Ren
-
-
-term PSU-m
-tag PSU 
-type project
-projectNameFull Penn State University
-organism Mouse
-labName Caltech-Mouse
-pi Wold
-piFull Barbara Wold
-grant Hardison
-
-
-
-term PSU-m
-tag  PSU
-type project
-projectNameFull Penn State University
-organism Mouse
-labName UMass-Mouse
-pi Dekker
-piFull Job Dekker
-grant Hardison
-
-
-
-
-term PSU-m
-tag PSU 
-type project
-projectNameFull Penn State University 
-organism Mouse
-labName Duke-Mouse
-pi Crawford
-piFull Greg Crawford
-grant Hardison
-
-term Caltech-m
-tag Caltech-m
-type project
-projectNameFull Caltech  
-organism Mouse
-labName Caltech-mouse
-pi Wold
-piFull Barbara Wold
-grant Hardison
-
-term UChicago-m
-tag UChicago 
-type project
-projectNameFull University of Chicago 
-organism Mouse
-labName UChicago
-pi White
-piFull Kevin White
-grant White
-
-term UNC-m
-tag UNC 
-type project
-projectNameFull University of North Carolina
-organism Mouse
-labName UNC-Giddings
-pi Giddings
-piFull Morgan Giddings
-grant Giddings
-
-term UW-m
-tag UW 
-type project
-projectNameFull University of Washington 
-organism Mouse
-labName UW-Mouse
-pi Stam
-piFull George Stamatoyannopoulos??
-grant Stam
+term UNC
+tag UNC
+type lab
+labInst Univeristy of North Carolina
+labPi Lieb
+labPiFull Jason Lieb
+grantPi Crawford
+grantInst UNC
+organism human
 
 term BU
 tag BU 
-type project
-projectNameFull Boston University
-organism human
+type lab
+grantInst Boston University
 labName BU
-pi Tullius
-piFull Thomas Tullius
-grant Tullius
-
-# Tech development
-term GIS
-tag GIS 
-type project
-projectNameFull Gene Identification Signature 
+labPi Tullius
+labPiFull Thomas Tullius
+grantPi Tullius
 organism human
+
+term GIS-Chia
+tag GIS-Chia 
+type lab
+labInst Genome Institute of Singapore (Chia)
 labName GIS-Chia
-pi Ruan
-piFull Yijun Ruan
-grant Ruan
+labPi Ruan
+labPiFull Yijun Ruan
+grantPi Ruan
+organism human
+
+term Genecode
+tag Genecode
+type lab
+labInst Genecode 
+labPi Hubbard
+labPiFull Tim Hubbard
+grantPi Hubbard
+grantInst Sanger Institute
+organism human
+
+term SUNY
+tag SUNY
+type lab
+labInst State University of New York at Albany
+labName SunyAlbany
+labPi Tenenbaum
+labPiFull Scott Tenebaum
+grantPi Tenenbaum
+grantInst SUNY-Albany
+organism human
+
+term UW
+tag UW
+type lab    
+labInst University of Washington
+labPi Stam
+labPiFull George Stamatoyannopoulos??
+grantPi Stam
+grantInst UW
+organism human
+
+
+### Duke Labs         
+### Crawford and Iyer
+
+term Duke
+tag Duke
+type lab
+labInst Duke University
+labPi Crawford
+labPiFull Greg Crawford
+grantPi Crawford
+grantInst Duke University
+organism human
+
+term Duke-Iyer
+tag Duke-Iyer
+type lab
+labName UT-A
+labPi Iyer
+labPiFull Tara Iyer
+grantPi Crawford
+grantInst Duke 
+organism human
+
+### HAIB Project Labs         
+### Caltech and HudsonAlpha
+
+term Caltech    
+tag Caltech    
+type lab
+grantInst California Institute of Technology (Wold Lab)
+labPi Wold
+labPiFull Barbara Wold
+grantPi Myers
+grantInst  HAIB
+organism human
+
+term HudsonAlpha
+tag HAIB
+type lab
+labInst Hudson Alpha Institute for Biotechnology
+labPi Myers
+labPiFull Richard Myers
+grantPi Myers
+grantInst HAIB
+organism human
+
+### NHGRI Labs                 
+### 
+
+term NHGRI-Elnitski
+tag NHGRI-Elnitski
+type lab
+labInst National Human Genome Research Institute Elnitski
+labPi Elnitski
+labPiFull Laura Elnitski
+grantPi Elnitski
+grantInst National Human Genome Research Institute Elnitski
+organism human
+
+term NHGRI-Margulies
+tag NHGRI-Marigulies
+type lab
+labInst National Human Genome Research Institute Margulies
+labPi Margulies
+labPiFull Elliott Margulies
+grantPi Margulies
+labInst National Human Genome Research Institute Margulies
+organism human
+
+
+### Transcriptome Project Labs
+### GIS, Riken, CHSL, CSHL, Affy, Helicos
+
+term CSHL
+tag CSHL
+type lab
+project Transcriptome
+labInst Cold Spring Harbor Laboratory
+labPi Gingeras
+labpiFull Thomas Gingeras
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term GIS
+tag  GIS
+type lab
+labInst Genome Institute of Singapore
+labPi Ruan
+labPiFull Yijun Ruan
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term Helicos       
+tag Helicos      
+type lab
+labInst Helicos BioScience Corporation
+labPi Kapranov
+labPiFull Philipp Kapranov
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term Affy
+tag  Affy
+type lab
+labInst Affymetrix
+labPi Gingeras
+labPiFull Thomas Gingeras
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+term Riken
+tag  Riken
+type lab
+labInst Riken Lab
+labName Riken
+labPi Carninci
+labPiFull Piero Carninci
+grantPi Gingeras
+grantInst Transcriptome
+organism human
+
+
+### UMass Labs
+### Dekker and Weng
+
+term UMass-Dekker
+tag UMass-Dekker
+type lab
+labInst UMass
+labPi Dekker
+labPiFull Job Dekker
+grantPi Dekker
+grantInst University of Massachusetts Amherst 
+organism human
+
+term UMass-Weng
+tag UMass-Weng
+type lab
+labInst UMass
+labPi Weng
+labPiFull Zhiping Weng
+grantPi Weng
+grantInst University of Massachusetts Amherst  
+organism human
+
+
+#### The SYDH Project 
+####  Stanford, Yale, Davis, Harvard
+
+term Stanford
+tag  Stanford
+type lab
+labInst Stanford
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst SYDH
+organism human
+
+term Yale
+tag  Yale
+type lab
+labInst Yale
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst  SYDH
+organism human
+#grantInst  Stanford Yale UCDavis Harvard
+
+term Harvard 
+tag  Harvard 
+type lab
+labInst Harvard
+labPi Weissman
+labPiFull Sherman Weissman
+grantPi Snyder
+grantInst SYDH
+organism human
+
+term UCD
+tag UCD 
+type lab
+labName UCD
+labPi Farnham
+labPiFull Peggy Farnham
+grantPi Snyder
+grantInst SYDH
+organism human
+
+
+
+### Mouse labs 
+###
+
+term LICR-m
+tag LICR 
+type lab
+labInst Ludwig Institue for Cancer Research
+labPi Ren
+labPiFull Bing Ren
+grantPi Ren
+grantInst LICR
+organism mouse
+
+term Caltech-m
+tag Caltech
+type lab
+labInst Caltech
+labPi Wold
+labPiFull Barbara Wold
+grantPi Hardison
+grantInst PSU
+organism mouse
+
+term UMass-m
+tag  UMass 
+type lab
+labInst University of Massachusettes 
+labPi Dekker
+labPiFull Job Dekker
+grantPi Hardison
+grantInst PSU
+organism mouse
+
+term Duke-m
+tag Duke
+type lab
+labInst Duke University 
+labPi Crawford
+labPiFull Greg Crawford
+grantPi Hardison
+grantInst PSU
+organism mouse
+
+term UChicago-m
+tag UChicago 
+type lab
+grantInst University of Chicago 
+labName UChicago
+labPi White
+labPiFull Kevin White
+grantPi White
+organism mouse
+
+term UNC-m
+tag UNC 
+type lab
+labInst University of North Carolina
+labName UNC-Giddings
+labPi Giddings
+labPiFull Morgan Giddings
+grantPi Giddings
+organism mouse
+
+term UW-m
+tag UW 
+type lab
+labInst University of Washington 
+labPi Stam
+labpiFull George Stamatoyannopoulous
+grantPi Stam
+grantInst UW
+organism mouse
+
+term Stanford-m
+tag  Stanford
+type lab
+labInst Stanford
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst StanfordYale
+organism human
+
+term Yale-m
+tag  Yale
+type lab
+labInst Yale    
+labPi Snyder
+labPiFull Michael Snyder
+grantPi Snyder
+grantInst StanfordYale
+organism human
+

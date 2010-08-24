@@ -41,6 +41,7 @@ priority 29.6
 visibility hide
 color 0,0,0
 type bed 4
+tableBrowser off decipherRaw knownToDecipher knownCanonToDecipher
 
 track caseControl
 compositeTrack on
@@ -869,6 +870,50 @@ priority 206
 visibility hide
 type bed 3 +
 otherDb panTro1
+
+track snp131Clinical
+shortLabel Clin SNPs (131)
+longLabel Clinically Associated Simple Nucleotide Polymorphisms (dbSNP build 131)
+group varRep
+priority 100.092
+visibility hide
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
+snpExceptions snp131Exceptions
+snpExceptionDesc snp131ExceptionDesc
+snpSeq snp131Seq
+
+track snp131NonClinical
+shortLabel SNPs (131)
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) Not Clinically Associated
+group varRep
+priority 100.093
+visibility dense
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
+snpExceptions snp131Exceptions
+snpExceptionDesc snp131ExceptionDesc
+snpSeq snp131Seq
 
 track hgdpGeo
 shortLabel HGDP Allele Freq
@@ -3553,3 +3598,20 @@ searchMethod prefix
 xrefTable ensGtp
 xrefQuery select transcript,protein from %s where protein like '%s%%'
 termRegex ENS([A-Z]{3})?P[0-9]+(\.[0-9]+)?
+
+searchTable snp131Clinical
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.990
+padding 250
+
+searchTable snp131NonClinical
+searchMethod exact
+searchType bed
+semiShortCircuit 1
+termRegex rs[0-9]+
+searchPriority 12.991
+padding 250
+

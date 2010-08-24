@@ -9624,6 +9624,38 @@ EOF
 
 
 ############################################################################
+# SPLIT SNP131 INTO CLINICAL / NON-CLINICAL (DONE 8/19/10 angie)
+# http://redmine.soe.ucsc.edu/issues/559
+    cd /hive/data/outside/dbSNP/131/human/data
+    wget --timestamping ftp://ftp.ncbi.nlm.nih.gov/snp/database/organism_data/human_9606/SNP_bitfield.bcp.gz
+    # I did a little analysis of the bitfields -- see file 
+    # /hive/data/outside/dbSNP/131/human/data/bitfield_breakdown.txt .
+    cd /hive/data/outside/dbSNP/131/human
+    zcat data/SNP_bitfield.bcp.gz \
+    | perl -wpe '@w = split;  if ($w[3] & 0x40) { $_ = "rs$w[0]\n" } else { $_ = ""; }' \
+      > clinicalRsIds.txt
+    wc -l clinicalRsIds.txt
+#16605 clinicalRsIds.txt
+    grep -Fwf clinicalRsIds.txt snp131.bed > snp131Clinical.bed
+    wc -l snp131Clinical.bed
+#14907 snp131Clinical.bed
+    # Wow, just a subset have been mapped to hg19, bummer.
+    grep -vFwf clinicalRsIds.txt snp131.bed > snp131NonClinical.bed
+    wc -l snp131*Clinical.bed
+#     14907 snp131Clinical.bed
+#  26018146 snp131NonClinical.bed
+#  26033053 total
+    # Good, 26033053 is the right total.
+    # Edit snp131.sql to use table name "snp131Tmp" so we don't nuke snp131.
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp131Clinical -sqlTable=snp131.sql -renameSqlTable snp131Clinical.bed
+#Loaded 14907 elements of size 17
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp131NonClinical -sqlTable=snp131.sql -renameSqlTable snp131NonClinical.bed
+#Loaded 26018146 elements of size 17
+
+
+############################################################################
 # ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP131 (DONE 6/3/10 angie)
 # First done 4/15/10.  Then found that SNPs that appeared on both a main chrom
 # (like chr6) and on a haplo chrom (like chr6_cox_hap2) were being flagged
@@ -11036,7 +11068,7 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     hgPepPred hg19 generic genscanPep pep/genscanPep.pep
 
 ################################################################
-# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (working 2010-08-03 - Chin)
+# HUMAN FETAL BRAIN EXON ARRAYS (YALE) (DONE 2010-08-03 - Chin)
 # Note from Andy: All primary data files were lost, The table
 # has all of the original data. 
 # The "kent/src/hg/makeDb/hgCgiData/Human/microarrayGroups.ra" file should 
@@ -11087,5 +11119,491 @@ cp new/$1.lft /hive/data/genomes/hg19/bed/genscan/newTry/lift/$1/$1.lft
     # track stuff done from hg18 days: 
     # kent/src/hg/makeDb/trackDb/human/sestanBrainAtlas.html
     # kent/src/hg/makeDb/trackDb/human/trackDb.ra
+
+#############################################################################
+# Updating to patch2 sequence (DONE - 2010-08-18 - Hiram)
+#	Most of this business is encapsulated into .sh or .pl scripts in
+#	these directories.  They can be used next time with slight alterations.
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patches/patch_release_2
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patches/patch_release_2
+    wget --cut-dirs=6 --no-parent --timestamping --no-remove-listing -m \
+        -nH --ftp-user=anonymous --ftp-password=yourEmail@your.domain \
+"ftp://ftp.ncbi.nlm.nih.gov/genbank/genomes/Eukaryotes/vertebrates_mammals/Homo_sapiens/GRCh37.p2/"
+
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patches
+    #	construct a script that can gather the names from the delivered
+    #	files and generate UCSC names.  May be useful next time.
+    cat << '_EOF_' > gatherNames.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    print STDERR "usage: ./gatherNames.pl patch_release_2\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 1) {
+    usage;
+    exit 255;
+}
+
+my $patchDir = shift;
+
+if ( ! -d $patchDir ) {
+    print STDERR "ERROR: given directory $patchDir is not a directory or does not exist";
+    usage;
+    exit 255;
+}
+
+my %ctgToChr;
+my %ctgToFastaName;
+my $fasta = "$patchDir/PATCHES/alt_scaffolds/FASTA/alt.scaf.fa.gz";
+open (FH, "zcat $fasta | grep '^>' |")
+	or die "ERROR: can not read $fasta";
+while ( my $line = <FH> ) {
+    chomp $line;
+    my ($gi, $rest) = split('\s+',$line,2);
+    my ($x, $acc, $y, $gl, $z) = split('\|', $gi);
+    my $chr = $rest;
+    $chr =~ s/Homo sapiens chromosome //;
+    $chr =~ s/ genomic contig.*//;
+    $ctgToChr{$gl} = $chr;
+    $ctgToFastaName{$gl} = $gi;
+    $ctgToFastaName{$gl} =~ s/\|$//;
+    $ctgToFastaName{$gl} =~ s/^>//;
+#    printf "%s\t%s\n", $gl, $chr;
+}
+close (FH);
+
+my $placement = "$patchDir/PATCHES/alt_scaffolds/alt_scaffold_placement.txt";
+open (FH, "sort -t'\t' -k6,6n $placement|") or die "ERROR: can not read $placement";
+while (my $line = <FH>) {
+    chomp $line;
+    next if ($line =~ m/^\s*#/);
+    my ($altAsmName, $primAsmName, $altScafName, $altScafAcc, $parentType,
+	$parentName, $parentAcc, $regionName, $ori, $altScafStart,
+	$altScafStop, $parentStart, $parentStop, $altStartTail, $altStopTail) =
+	split('\t',$line);
+    my $chr = $ctgToChr{$altScafAcc};
+    die "ERROR: chrom name here does not match: $chr != $parentName"
+	if ($chr ne $parentName);
+#    printf "chr%s %s\t%s\t%s\t%s\t%s\n", $chr, $parentName, $altScafAcc,
+#	$altScafName, $parentAcc, $regionName;
+    my $ucscChrName = lc($altScafName);
+    if ($ucscChrName =~ m/_patch$/) {
+	$ucscChrName = sprintf("chr%d_%s", $parentName, lc($altScafAcc));
+	$ucscChrName =~ s/\.1$//;
+    } else {
+	$ucscChrName =~ s/^hs//;
+	$ucscChrName =~ s/_1$//;
+	my ($chrNum, $hapNum, $ctgName) = split('_', $ucscChrName, 3);
+	$ucscChrName = sprintf("%s_%s_%s", $chrNum, $ctgName, lc($altScafAcc));
+	$ucscChrName =~ s/\.1$//;
+    }
+    printf "%s %s %s %s\n", $ctgToFastaName{$altScafAcc}, $altScafName,
+	$parentAcc, $ucscChrName;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./gatherNames.pl
+    ./gatherNames.pl patch_release_2 > ucscNames.patch2.txt
+
+    # with that name translation file in place, begin to put the sequences
+    #	together:
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch2
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch2
+    cat << '_EOF_' > addSequence.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    print STDERR "usage: ./addSequence.pl ../patches/ucscNames.patch2.txt \\\n";
+    print STDERR "\t../patches/patch_release_2/PATCHES/alt_scaffolds/FASTA/alt.scaf.fa.gz\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+    usage;
+    exit 255;
+}
+
+my %skipSequence;
+$skipSequence{"chr9_gl339450"} = 1;
+$skipSequence{"chr5_ctg1_gl339449"} = 1;
+
+my $names = shift;
+my $fasta = shift;
+
+my %fastaToChrNames;
+open(FH, "<$names") or die "ERROR: can not read $names";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($fa, $ctg, $cm, $chr) = split('\s+', $line);
+    $fastaToChrNames{$fa} = $chr;
+}
+close (FH);
+
+open(PA, ">patch2.ucsc.fa") or die "ERROR: can not write to patch2.ucsc.fa";
+open(FH, "zcat $fasta|") or die "ERROR: can not zcat $fasta";
+my $skipToNext = 0;
+while (my $line = <FH>) {
+    if ($line =~ m/^>/) {
+	my ($fa, $rest) = split('\s+', $line, 2);
+	$fa =~ s/\|$//;
+	$fa =~ s/^>//;
+	die "can not find $fa" if (!exists($fastaToChrNames{$fa}));
+	my $chr = $fastaToChrNames{$fa};
+	if (exists($skipSequence{$chr})) {
+	    $skipToNext = 1;
+	} else {
+	    printf PA ">%s\n", $chr;
+	    $skipToNext = 0;
+	}
+    } else {
+	next if($skipToNext);
+	print PA $line;
+    }
+}
+close (FH);
+close (PA);
+
+my $here=`pwd`;
+chomp $here;
+print `twoBitToFa ../patch1/hg19.patch1.2bit hg19.existing.fa`;
+print `faToTwoBit hg19.existing.fa patch2.ucsc.fa hg19.patch2.2bit`;
+print `rm -f /gbdb/hg19/hg19.patch2.2bit`;
+print `ln -s $here/hg19.patch2.2bit /gbdb/hg19`;
+print `twoBitInfo hg19.patch2.2bit stdout | sort -k2nr > patch2.chrom.sizes`;
+'_EOF_'
+    # << happy emacs
+    chmod +x addSequence.pl
+    ./addSequence.pl ../patches/ucscNames.patch2.txt \
+      ../patches/patch_release_2/PATCHES/alt_scaffolds/FASTA/alt.scaf.fa.gz
+
+    sort patch2.chrom.sizes ../patch1/patch1.chrom.sizes | uniq -c \
+        | sort -rn | awk '$1 == 1' | awk '{printf "%s\t%s\n", $2, $3}' \
+        | sort -k2,2nr > patches.chrom.sizes
+
+    cat << '_EOF_' > mkTables.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: ./mkTables.pl patches.chrom.sizes \\\n";
+    printf STDERR " ../patches/ucscNames.patch2.txt ../patches/patch_release_2/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 3) {
+    usage;
+    exit 255;
+}
+
+my %skipSequence;
+$skipSequence{"GL339449.1"} = 1;
+$skipSequence{"GL339450.1"} = 1;
+
+my $sizes = shift;	# patches.chrom.sizes
+my $names = shift;	# patches/ucscNames.txt
+my $agpFile = shift;	# alt.scaf.agp.gz
+
+my %glToChr;
+my %chrToCtg;
+my %fastaToChr;
+my %chrToSize;
+
+open(FH, "<$sizes") or die "can not read $sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrToSize{$chr} = $size;
+}
+close (FH);
+
+open(CI, ">chromInfo.txt") or die "can not write to chromInfo.txt";
+open(CT, ">ctgPos.txt") or die "can not write to ctgPos.txt";
+open(FH, "<$names");
+while (my $line = <FH>) {
+    chomp $line;
+    my ($faName, $ctg, $cmName, $chr) = split('\s+', $line);
+    $faName =~ s/.*gb.GL/GL/;
+    next if (exists($skipSequence{$faName}));
+    my $size = $chrToSize{$chr};
+    if (exists($glToChr{$faName})) {
+	if ($glToChr{$faName} ne $chr) {
+	    printf STDERR "ERROR: contig name: $faName was chr name: $glToChr{$faName}\n";
+	    printf STDERR " now claiming to be chr name: $chr\n";
+	    exit 255;
+	}
+    } else {
+	$glToChr{$faName} = $chr;
+    }
+    die "not defined faName" if (!defined($faName));
+    die "not defined $faName $chr size" if (!defined($size));
+    printf CT "%s\t%d\t%s\t0\t%d\n", $faName, $size, $chr, $size;
+    printf CI "%s\t%d\t/gbdb/hg19/hg19.patch2.2bit\n", $chr, $size;
+}
+close (FH);
+close (CT);
+close (CI);
+
+my $prevObj = "";
+my $newIx = 1;
+open (GP,">gap.txt") or die "can not write to gap.txt";
+open (GL,">gold.txt") or die "can not write to gold.txt";
+open (FH,"zcat $agpFile|") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^\s*#/);
+    chomp $line;
+    my ($object, $objStart, $objEnd, $ix, $type, $frag, $fragStart, $fragEnd, $strand) = split('\s+', $line);
+    next if (exists($skipSequence{$object}));
+    die "ERROR: can not find contig $object to chr name"
+	if (!exists($glToChr{$object}));
+    $newIx = 1 if ($prevObj ne $object);
+    my $chr = $glToChr{$object};
+    if ($type eq "N") {
+	# frag is size, fragStart is type of gap, and fragEnd is bridged y/n
+	printf GP "%s\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+	    $chr, $objStart-1, $objEnd, $newIx, $type, $frag, $fragStart,
+	    $fragEnd;
+    } else {
+	printf GL "%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+	    $chr, $objStart-1, $objEnd, $newIx, $type, $frag, $fragStart-1,
+	    $fragEnd, $strand;
+    }
+    ++$newIx;
+    $prevObj = $object;
+    printf "%s\n", $line;
+}
+close (FH);
+close (GL);
+close (GP);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkTables.pl
+    ./mkTables.pl patches.chrom.sizes \
+    	../patches/ucscNames.patch2.txt \
+	../patches/patch_release_2/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz
+
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=/cluster/home/hiram/kent/src/hg/lib/agpFrag.sql \
+        hg19 tGold gold.txt
+    rm -f gold.tab
+    mv bed.tab gold.tab
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=/cluster/home/hiram/kent/src/hg/lib/gap.sql \
+        hg19 tGap gap.txt
+    rm -f gap.tab
+    mv bed.tab gap.tab
+
+    hgsql -e 'load data local infile "gap.tab" into table gap;' hg19
+    hgsql -e 'load data local infile "gold.tab" into table gold;' hg19
+    hgsql -e 'load data local infile "ctgPos.txt" into table ctgPos;' hg19
+
+    cat << '_EOF_' > mkCtgPos2.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    print STDERR "usage: ./mkCtgPos2.pl ../patches/ucscNames.patch2.txt \\\n";
+    print STDERR "\tpatch2.chrom.sizes\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+    usage;
+    exit 255;
+}
+
+my %skipSequence;
+$skipSequence{"chr9_gl339450"} = 1;
+$skipSequence{"chr5_ctg1_gl339449"} = 1;
+
+my $names = shift;
+my $sizes = shift;
+
+my %chrSize;
+open(FH, "<$sizes") or die "ERROR: can not read $sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrSize{$chr} = $size;
+}
+close (FH);
+
+open(FH, "<$names") or die "ERROR: can not read $names";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($fa, $ctg, $cm, $chr) = split('\s+', $line);
+    next if (exists($skipSequence{$chr}));
+    if (exists($chrSize{$chr})) {
+	my $size = $chrSize{$chr};
+	printf "%s\t%d\t%s\t0\t%d\tF\n", $ctg, $size, $chr, $size;
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkCtgPos2.pl
+    ./mkCtgPos2.pl ../patches/ucscNames.patch2.txt patch2.chrom.sizes \
+	> ctgPos2.txt
+    hgsql -e 'load data local infile "ctgPos2.txt" into table ctgPos2;' hg19
+
+    cat << '_EOF_' > mkHapLocate.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    print STDERR "usage: ./mkHapLocate.pl ctgPos.txt \\\n";
+    print STDERR "\t../patches/patch_release_2/PATCHES/alt_scaffolds/alt_scaffold_placement.txt\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc != 2) {
+    usage;
+    exit 255;
+}
+
+my %skipSequence;
+$skipSequence{"chr9_gl339450"} = 1;
+$skipSequence{"chr5_ctg1_gl339449"} = 1;
+
+my $ctgPos = shift;
+my $placement = shift;
+
+my %ctgToHap;
+open(FH, "<$ctgPos") or die "ERROR: can not read $ctgPos";
+while (my $line = <FH>) {
+    my ($ctg, $size, $hapName, $rest) = split('\s+', $line, 4);
+    $ctgToHap{$ctg} = $hapName;
+}
+close (FH);
+
+open(FH,"<$placement") or die "ERROR: can not read $placement";
+while (my $line = <FH>) {
+    next if ($line =~ m/^#/);
+    chomp $line;
+    my ($altAsmName, $primAsmName, $altScafName, $altScafAcc, $parentType,
+	$parentName, $parentAcc, $regionName, $ori, $altScafStart,
+	$altScafStop, $parentStart, $parentStop, $altStartTail,
+	$altStopTail) = split('\t', $line);
+    if (exists($ctgToHap{$altScafAcc})) {
+	my $hapName = $ctgToHap{$altScafAcc};
+	printf "chr%s\t%d\t%d\t%s\n", $parentName, $parentStart-1,
+	    $parentStop, $hapName;
+    } else {
+	print STDERR "not found: $altScafAcc $altScafName\n";
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x mkHapLocate.pl
+    ./mkHapLocate.pl ctgPos.txt \
+../patches/patch_release_2/PATCHES/alt_scaffolds/alt_scaffold_placement.txt \
+    > haplotypeLocations.bed
+    hgLoadBed -oldTable hg19 haplotypeLocations haplotypeLocations.bed 
+
+    mkdir simpleRepeat
+    cd simpleRepeat
+    ln -s ../patch2.ucsc.fa
+    /cluster/bin/$MACHTYPE/trfBig -trf=/cluster/bin/$MACHTYPE/trf \
+      patch2.ucsc.fa /dev/null -bedAt=patch2.ucsc.bed -tempDir=.
+    awk '$5 <= 12' patch2.ucsc.bed > trfMask.bed
+    splitFileByColumn trfMask.bed trfMaskChrom/
+    hgLoadBed -oldTable hg19 simpleRepeat patch2.ucsc.bed \
+        -sqlTable=$HOME/kent/src/hg/lib/simpleRepeat.sql
+
+    mkdir ../RMRun
+    cd ../RMRun
+    ln -s ../patch2.ucsc.fa
+    faSplit byname patch2.ucsc.fa ctgs/
+
+    cat << '_EOF_' > runOne
+#!/bin/csh -fe
+
+set ctg = $1
+
+set runDir = /hive/data/genomes/hg19/bed/additionalSequence/patch2/RMRun
+set src = ${runDir}/ctgs/${ctg}.fa
+mkdir -p ${runDir}/out/${ctg}
+cd ${runDir}/out/${ctg}
+
+cp -p ${src} .
+/scratch/data/RepeatMasker/RepeatMasker -align -s -species 'Homo sapiens' ${ctg}.fa
+rm -f ${ctg}.fa
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+    
+    ls ctgs > ctg.list
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) {check out line+ out/$(root1)/$(root1).fa.out}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+    gensub2 ctg.list single template jobList
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch2/RMRun
+    para create jobList
+    mkdir out
+    para try
+    para push
+# Completed: 68 of 68 jobs
+# CPU time in finished jobs:      88730s    1478.83m    24.65h    1.03d  0.003 y
+# IO & Wait Time:                  6277s     104.62m     1.74h    0.07d  0.000 y
+# Average job time:                1397s      23.29m     0.39h    0.02d
+# Longest finished job:            4154s      69.23m     1.15h    0.05d
+# Submission to last job:          4291s      71.52m     1.19h    0.05d
+
+    find ./out -type f -name "*.fa.out" | head -1 | xargs head -3 \
+	> hg19.patch2.out
+    find ./out -type f -name "*.fa.out" | xargs -L 1 headRest 3 \
+	| sort -k5,5 -k6,6n | sed -e "s/  *$//" >> hg19.patch2.out
+
+    extractNestedRepeats.pl hg19.patch2.out > hg19.nestedRepeats.patch2.bed
+    hgLoadBed -noLoad -maxChromNameLength=14 \
+        -sqlTable=$HOME/kent/src/hg/lib/nestedRepeats.sql \
+        hg19 tNest hg19.nestedRepeats.patch2.bed
+    rm -f hg19.nestedRepeats.patch2.tab
+    mv bed.tab hg19.nestedRepeats.patch2.tab
+
+    hgLoadOut -tabFile=hg19.patch2.rmsk.tab -nosplit hg19 hg19.patch2.out
+
+    hgsql -e 'load data local infile "hg19.nestedRepeats.patch2.tab" into table nestedRepeats;' hg19
+    hgsql -e 'load data local infile "hg19.patch2.rmsk.tab" into table rmsk;' \
+	hg19
+
+    mv hg19.patch2.2bit hg19.patch2.0.2bit
+    twoBitMask -add hg19.patch2.0.2bit RMRun/hg19.patch2.out hg19.patch2.1.2bit
+    twoBitMask -add hg19.patch2.1.2bit \
+        simpleRepeat/trfMask.bed hg19.patch2.2bit
+    twoBitToFa hg19.patch2.2bit stdout | faSize stdin \
+	> faSize.hg19.patch2.2bit.txt
+    
+#############################################################################
+# new blat server for the hg19.patch2 sequence (DONE - 2010-08-18 - Hiram)
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg19", "blat4", "17792", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("hg19", "blat4", "17793", "0", "1");' \
+	    hgcentraltest
 
 #############################################################################

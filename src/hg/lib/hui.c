@@ -5024,7 +5024,8 @@ struct sqlResult *sr;
 char *words[MAX_SP_SIZE];
 int defaultOffSpeciesCnt = 0;
 
-jsIncludeFile("utils.js",NULL);
+if(cartOptionalString(cart, "ajax") == NULL)
+    jsIncludeFile("utils.js",NULL);
 //jsInit();
 puts("\n<P><B>Species selection:</B>&nbsp;");
 
@@ -6416,14 +6417,16 @@ boolean displayAll =
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-if(trackDbSetting(tdb, "dragAndDrop") != NULL)
-    jsIncludeFile("jquery.tablednd.js", NULL);
+if(cartOptionalString(cart, "ajax") == NULL)
+    {
+    if(trackDbSetting(tdb, "dragAndDrop") != NULL)
+        jsIncludeFile("jquery.tablednd.js", NULL);
+    jsIncludeFile("ajax.js",NULL);
+    #ifdef TABLE_SCROLL
+    jsIncludeFile("jquery.fixedtable.js",NULL);
+    #endif//def TABLE_SCROLL
+    }
 jsIncludeFile("hui.js",NULL);
-jsIncludeFile("ajax.js",NULL);
-#ifdef TABLE_SCROLL
-jsIncludeFile("jquery.fixedtable.js",NULL);
-#endif//def TABLE_SCROLL
-
 
 puts("<P>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)

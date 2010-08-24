@@ -1729,7 +1729,7 @@ done
 
     cat << '_EOF_' > 4d.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
 set r = "/hive/data/genomes/calJac3/bed/multiz13way"
 set c = $1
 set infile = $r/mafSplit/$2
@@ -1740,7 +1740,7 @@ perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf
 awk -v C=$c '$2 == C {print}' $r/4d/nscanGene.gp > $c.gp
 set NL=`wc -l $c.gp| gawk '{print $1}'`
 if ("$NL" != "0") then
-    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+    set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
     $PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
     $PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/run/$outfile
 else
@@ -1786,7 +1786,7 @@ rm -f $c.gp $c.maf $c.ss
     cd /hive/data/genomes/calJac3/bed/multiz13way/4d
 
     #want comma-less species.list
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/msa_view \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_view \
         --aggregate "`cat ../species.list`" mfa/*.mfa | sed s/"> "/">"/ \
         > 4d.all.mfa
 
@@ -1794,7 +1794,7 @@ rm -f $c.gp $c.maf $c.ss
     #((calJac3,(tetNig2,gasAcu1)),(xenTro2,(mm9,hg19)))
 
     # use phyloFit to create tree model (output is phyloFit.mod)
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/phyloFit \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloFit \
         --EM --precision MED --msa-format FASTA --subst-mod REV \
         --tree ../tree-commas.nh 4d.all.mfa
     # Reading alignment from 4d.all.mfa ...
@@ -1808,14 +1808,15 @@ rm -f $c.gp $c.maf $c.ss
 
 
 #############################################################################
-# phastCons 13-way (DONE 2010-05-24 - Chin)
+# phastCons 13-way (DONE 2010-08-11 - Chin)
+#   rerun with 2010-08-09 version of phast suite (DONE 2010-08-11 - Chin
     #   was unable to split the full chrom MAF files, now working on the
     #   maf files as they were split up during multiz
     
     # re-split the with new -useFullSequenceName option
     cd /hive/data/genomes/calJac3/bed/multiz13way/run
-    mkdir mafSplit-2010-05-24
-    cd mafSplit-2010-05-24
+    mkdir mafSplit-2010-08-11
+    cd mafSplit-2010-08-11
     mafSplit -byTarget -useFullSequenceName /dev/null . ../calJac3.13way.maf
 
     # split 13way mafs into 10M chunks and generate sufficient
@@ -1823,14 +1824,14 @@ rm -f $c.gp $c.maf $c.ss
     # files for # phastCons
     ssh swarm
     mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split
-    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss
+    mkdir -p /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-08-11/ss
     cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split
     
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf 
-set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss/$c
+set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-08-11/$c.maf 
+set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-08-11/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
 if ( -s $2 ) then
@@ -1846,7 +1847,7 @@ rm -fr $WINDOWS
 mkdir $WINDOWS
 pushd $WINDOWS > /dev/null
 if ( $WC != $NL ) then
-/cluster/bin/phast.build/cornellCVS/phast.2009-10-19/bin/msa_split \
+/cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split \
     $MAF -i MAF -o SS -r $WINDOWS/$c -w 10000000,0 -I 1000 -B 5000
 endif
 popd > /dev/null
@@ -1864,23 +1865,22 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
     # << happy emacs
 
     #   do the easy ones first to see some immediate results
-    ls -1S -r ../../run/mafSplit-2010-05-24 \
+    ls -1S -r ../../run/mafSplit-2010-08-11 \
         | sed -e "s/.maf//; s/calJac3_//" > maf.list
 
     gensub2 maf.list single template jobList
     para -ram=8g create jobList
     para try ... check ... etc
-    # Completed: 10769 of 10770 jobs
-    # Crashed: 1 jobs (chrUn_GL286217, rerun OK)
-    # CPU time in finished jobs:   4171s      69.52m     1.16h    0.05d  0.000 y
-    # IO & Wait Time:            147369s    2456.15m    40.94h    1.71d  0.005 y
-    # Average job time:                  14s       0.23m     0.00h    0.00d
-    # Longest finished job:             570s       9.50m     0.16h    0.01d
-    # Submission to last job:          1351s      22.52m     0.38h    0.02d
+    # Completed: 10770 of 10770 jobs
+    # CPU time in finished jobs:  4074s      67.89m     1.13h    0.05d  0.000 y
+    # IO & Wait Time:            29881s     498.02m     8.30h    0.35d  0.001 y
+    # Average job time:              3s       0.05m     0.00h    0.00d
+    # Longest finished job:        439s       7.32m     0.12h    0.01d
+    # Submission to last job:      690s      11.50m     0.19h    0.01d
 
     # some scaffolds were too small to produce output. 
     # expected 10769, found 4749
-    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-05-24/ss
+    cd /hive/data/genomes/calJac3/bed/multiz13way/cons/msa.split/2010-08-11/ss
     find -type f | wc -l
     #  4749
     cd ../..
@@ -1902,7 +1902,7 @@ doSplit.csh $(root1) {check out line+ $(root1).done}
 
     cat << '_EOF_' > doPhast.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
 set c = $1
 set cX = $1:r
 set f = $2
@@ -1915,7 +1915,7 @@ set tmp = $cons/tmp/$f
 mkdir -p $tmp
 set ssSrc = $cons
 set useGrp = "$grp.mod"
-ln -s $ssSrc/msa.split/2010-05-24/ss/$c/$f.ss $tmp
+ln -s $ssSrc/msa.split/2010-08-11/ss/$c/$f.ss $tmp
 ln -s $cons/$grp/$grp.mod $tmp
 pushd $tmp > /dev/null
 $PHASTBIN/phastCons $f.ss $useGrp \
@@ -1943,7 +1943,7 @@ rm -fr $tmp
 '_EOF_'
     # << happy emacs
 
-    ls -1S ../msa.split/2010-05-24/ss/*/* | sed -e 's/.ss$//' > ss.list
+    ls -1S ../msa.split/2010-08-11/ss/*/* | sed -e 's/.ss$//' > ss.list
 
     # Create parasol batch and run it
     # run for all species
@@ -1956,22 +1956,12 @@ rm -fr $tmp
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para -ram=8g create jobList
     para try ... check ... push ... etc.
-Completed: 4749 of 4749 jobs
-CPU time in finished jobs:       7452s     124.21m     2.07h    0.09d  0.000 y
-IO & Wait Time:                 69529s    1158.81m    19.31h    0.80d  0.002 y
-Average job time:                  16s       0.27m     0.00h    0.00d
-Longest finished job:             100s       1.67m     0.03h    0.00d
-Submission to last job:           381s       6.35m     0.11h    0.00d
-
-# Completed: 4273 of 4273 jobs
-# CPU time in finished jobs:       2323s      38.72m     0.65h    0.03d
-# 0.000 y
-# IO & Wait Time:                 68627s    1143.78m    19.06h    0.79d
-# 0.002 y
-# Average job time:                  17s       0.28m     0.00h    0.00d
-# Longest finished job:              37s       0.62m     0.01h    0.00d
-# Submission to last job:           338s       5.63m     0.09h    0.00d
-
+    # Completed: 4749 of 4749 jobs
+    # CPU time in finished jobs:   7469s     124.48m     2.07h    0.09d  0.000 y
+    # IO & Wait Time:             34600s     576.67m     9.61h    0.40d  0.001 y
+    # Average job time:               9s       0.15m     0.00h    0.00d
+    # Longest finished job:          47s       0.78m     0.01h    0.00d
+    # Submission to last job:       403s       6.72m     0.11h    0.00d
 
     # create Most Conserved track
     ssh hgwdev
@@ -1986,7 +1976,7 @@ Submission to last job:           381s       6.35m     0.11h    0.00d
     # load into database
     nice hgLoadBed calJac3 phastConsElements13way mostConserved.bed
     # Reading mostConserved.bed
-    # Loaded 1725260 elements of size 5
+    # Loaded 1725324 elements of size 5
     # Sorted
     # Creating table definition for phastConsElements13way
     # Saving bed.tab
@@ -2009,24 +1999,11 @@ Submission to last job:           381s       6.35m     0.11h    0.00d
     cat pp/*/*.pp | sed "s/start=0/start=1/" \ 
          |  gzip > downloads/phastCons13way.wigFix.gz
 
-
     #   encode those files into wiggle data
     zcat downloads/phastCons13way.wigFix.gz \
         | wigEncode stdin phastCons13way.wig phastCons13way.wib
     # Converted stdin, upper limit 1.00, lower limit 0.00
-    #Ignore the following comments
-    # Found start=0 at line 1192229703, the first chrom position is 1, not 0
-    # So we have the same problem as danRer6, may need to fix it before reach
-    # this step. Use:
-    #     zcat downloads/phastCons13way.wigFix.gz | grep start=0
-    #   found only one problem: 
-    #     fixedStep chrom=chr20_GL285852_random start=0 step=1
-    #   Back and fixed pp/chr20_GL285852_random/ first line
-    #    fixedStep chrom=chr20_GL285852_random start=0 step=1
-    #  or we can use the filter sed "s/start=0/start=1/" in the step above
 
-
-    #   Converted stdin, upper limit 1.00, lower limit 0.00
     du -hsc *.wi?
     # 2.2G    phastCons13way.wib
     # 257M    phastCons13way.wig
@@ -2045,9 +2022,9 @@ Submission to last job:           381s       6.35m     0.11h    0.00d
   # use to set trackDb.ra entries for wiggle min and max
 
     wigTableStats.sh calJac3 phastCons13way
-    # # db.table      min max mean count sumData stdDev viewLimits
-    # calJac3.phastCons13way  0 1 0.128672 2299091936 2.95829e+08 0.24795 
-    #     viewLimits=0:1
+    ## db.table      min max mean count sumData stdDev viewLimits
+    # calJac3.phastCons13way  0 1 0.128671 2299265285 2.95849e+08 0.247948 
+    #   viewLimits=0:1
 
     #  Create histogram to get an overview of all the data
     hgWiggle -doHistogram -db=calJac3 \
@@ -2255,7 +2232,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
     cat << '_EOF_' > doSplit.csh
 #!/bin/csh -ef
 set c = $1
-set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-05-24/$c.maf 
+set MAF = /hive/data/genomes/calJac3/bed/multiz13way/run/mafSplit-2010-08-11/$c.maf 
 set WINDOWS = /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/run.split/ss/$c
 set WC = `cat $MAF | wc -l`
 set NL = `grep "^#" $MAF | wc -l`
@@ -2318,12 +2295,12 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
     # representative of the chromosomes in play
     grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
     #   0.566
-    /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin/modFreqs \
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/modFreqs \
         ../../cons/all/all.mod 0.566 > all.mod
 
     cat << '_EOF_' > doPhyloP.csh
 #!/bin/csh -fe
-set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2009-10-21/bin
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
 set f = $1
 set out = $2
 set cName = $f:r:r
@@ -2374,12 +2351,14 @@ rm -fr $tmp
     para create jobList
     para try ... check ... push ... etc ...
     para time
-# Completed: 7247 of 7247 jobs
-# CPU time in finished jobs:      78451s    1307.52m    21.79h    0.91d  0.002 y
-# IO & Wait Time:                306130s    5102.16m    85.04h    3.54d  0.010 y
-# Average job time:                  53s       0.88m     0.01h    0.00d
-# Longest finished job:             122s       2.03m     0.03h    0.00d
-# Submission to last job:           485s       8.08m     0.13h    0.01d
+    # Completed: 7246 of 7247 jobs
+    # Crashed: 1 jobs <==XXXX need to go back even further
+    # CPU time in finished jobs:  80001s    1333.34m    22.22h    0.93d  0.003 y
+    # IO & Wait Time:             63359s    1055.99m    17.60h    0.73d  0.002 y
+    # Average job time:                  20s       0.33m     0.01h    0.00d
+    # Longest finished job:              62s       1.03m     0.02h    0.00d
+    # Submission to last job:           659s      10.98m     0.18h    0.01d
+
 
     ssh hgwdev
     cd /hive/data/genomes/calJac3/bed/multiz13way/consPhyloP/all
