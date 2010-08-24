@@ -413,7 +413,7 @@ if(metaDbExists)
         len = getTermArray(conn, &terms, metadataName[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
         cgiMakeDropListFull(buf, terms, terms, len, metadataValue[i], "class='mdbVal' onchange='findTracksSearchButtonsEnable(true)'");
-        if(!simpleSearch && metadataValue[i])
+        if (!simpleSearch && metadataValue[i])
             searchTermsExist = TRUE;
         hPrintf("</td></tr>\n");
         }
@@ -475,7 +475,7 @@ if(doSearch)
         for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
-            if(track != NULL)
+            if (track != NULL)
                 {
                 refAdd(&tracks, track);
                 tracksFound++;
@@ -537,7 +537,7 @@ if(doSearch)
                            (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
                            (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                             {
-                            if(track != NULL)
+                            if (track != NULL)
                                 {
                                 tracksFound++;
                                 refAdd(&tracks, track);
@@ -556,7 +556,7 @@ if(doSearch)
                                     {
                                     // XXXX to parent hash. - use tdb->parent instead.
                                     hashAdd(parents, subTrack->track, track);
-                                    if(track != NULL)
+                                    if (track != NULL)
                                         {
                                         tracksFound++;
                                         refAdd(&tracks, subTrack);
@@ -730,7 +730,6 @@ hPrintf("<p><b>Recently Done</b><ul>\n"
         "<li>Full descriptions of metadata items are indexed in simple search index (e.g. cell descriptions).</li>"
         "</ul></p>"
         "<p><b>Known Problems</b><ul>"
-        "<li>Updating the value drop-down when a new variable is chosen is only working in Larry's browser."
         "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found."
         "<BR>QUESTION: Is that a bug? REM that description search is NOT inherited. (* Suggestions below.)</li>"
         "</ul></p>"
