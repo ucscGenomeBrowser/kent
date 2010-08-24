@@ -3900,79 +3900,79 @@ visibility hide
 #itemRgb on
 type bed 3
 
-#    track ucsfBrainMethylViewALN
-#    shortLabel Alignments
-#    view ALN
-#    parent ucsfBrainMethyl
-#    visibility hide
-#
-#        track ucsfMedipSeqBrainReads
-#        shortLabel MeDIP Reads
-#        longLabel MeDIP-seq Reads
-#        parent ucsfBrainMethylViewALN
-#        subGroups view=ALN sampleType=Brain assayType=MeDIP1
-#        baseColorDefault diffBases
-#        baseColorUseSequence nameIsSequence
-#        baseColorTickColor lighterShade
-#        showDiffBasesAllScales .
-#        showDiffBasesMaxZoom 10000.0
-#        type bed 9
-#        noInherit on
-#        itemRgb on
-#        configurable on
-#        spectrum on
-#        priority 1
-#
-#        track ucsfMreSeqBrainReads
-#        shortLabel MRE Reads
-#        longLabel MRE-seq Reads
-#        parent ucsfBrainMethylViewALN
-#        subGroups view=ALN sampleType=Brain assayType=MRE1
-#        baseColorDefault diffBases
-#        baseColorUseSequence nameIsSequence
-#        baseColorTickColor lighterShade
-#        showDiffBasesAllScales .
-#        showDiffBasesMaxZoom 10000.0
-#        type bed 9
-#        noInherit on
-#        itemRgb on
-#        configurable on
-#        spectrum on
-#        priority 2
-#
-#        track ucsfRnaSeqBrainSmartReads
-#        shortLabel Smart Reads
-#        longLabel RNA-seq Smart-Tagged Reads
-#        parent ucsfBrainMethylViewALN
-#        subGroups view=ALN sampleType=Brain assayType=RNA2
-#        baseColorDefault diffBases
-#        baseColorUseSequence nameIsSequence
-#        baseColorTickColor lighterShade
-#        showDiffBasesAllScales .
-#        showDiffBasesMaxZoom 10000.0
-#        type bed 9
-#        noInherit on
-#        itemRgb on
-#        configurable on
-#        spectrum on
-#        priority 3
-#
-#        track ucsfRnaSeqBrainAllReads
-#        shortLabel RNA-seq Reads
-#        longLabel RNA-seq Reads
-#        parent ucsfBrainMethylViewALN
-#        subGroups view=ALN sampleType=Brain assayType=RNA1
-#        type bed 9
-#        noInherit on
-#        configurable on
-#        baseColorDefault diffBases
-#        baseColorUseSequence nameIsSequence
-#        baseColorTickColor lighterShade
-#        showDiffBasesAllScales .
-#        showDiffBasesMaxZoom 10000.0
-#        itemRgb on
-#        spectrum on
-#        priority 4
+    track ucsfBrainMethylViewALN
+    shortLabel Alignments
+    view ALN
+    parent ucsfBrainMethyl
+    visibility hide
+
+        track ucsfMedipSeqBrainReads
+        shortLabel MeDIP Reads
+        longLabel MeDIP-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MeDIP1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 1
+
+        track ucsfMreSeqBrainReads
+        shortLabel MRE Reads
+        longLabel MRE-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=MRE1
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 2
+
+        track ucsfRnaSeqBrainSmartReads
+        shortLabel Smart Reads
+        longLabel RNA-seq Smart-Tagged Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA2
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        type bed 9
+        noInherit on
+        itemRgb on
+        configurable on
+        spectrum on
+        priority 3
+
+        track ucsfRnaSeqBrainAllReads
+        shortLabel RNA-seq Reads
+        longLabel RNA-seq Reads
+        parent ucsfBrainMethylViewALN
+        subGroups view=ALN sampleType=Brain assayType=RNA1
+        type bed 9
+        noInherit on
+        configurable on
+        baseColorDefault diffBases
+        baseColorUseSequence nameIsSequence
+        baseColorTickColor lighterShade
+        showDiffBasesAllScales .
+        showDiffBasesMaxZoom 10000.0
+        itemRgb on
+        spectrum on
+        priority 4
 
     track ucsfBrainMethylViewCOV
     shortLabel Raw Signal
@@ -4132,3 +4132,59 @@ group map
 priority 25
 color 0,0,0
 chromosomes  chr4,chr5,chr6,chr17
+
+track NumtSeq
+compositeTrack on
+shortLabel NumtSeq
+longLabel NumtS mitochondrial sequence
+group varRep
+priority 500.5
+visibility hide
+noInherit on
+type bed 3 .
+html numtSeq
+
+    track numtSAssembled
+    parent NumtSeq
+    shortLabel NumtS assembled
+    longLabel NumtS assembled
+    color 0,60,120
+    priority 1
+    useScore 1
+    type bed 12 .
+    
+
+    track numtS
+    parent NumtSeq
+    shortLabel NumtS
+    longLabel NumtS mitochondrial sequences
+    color 0,60,120
+     #itemRgb on
+    useScore 1
+    priority 2
+    type bed 6 .
+
+    track numtSMitochondrion
+    parent NumtSeq
+    shortLabel NumtS on mitochondrion
+    longLabel NumtS on mitochondrion
+    useScore 1
+    color 0,60,120
+    priority 3
+    type bed 6 .
+
+    track numtSMitochondrionChrPlacement
+    parent NumtSeq
+    shortLabel NumtS on mitochondrion with chr placement
+    longLabel NumtS on mitochondrion with chr placement
+    priority 4
+    itemRgb on    
+    type bed 9 .
+
+searchTable numtSMitochondrion
+searchMethod exact
+searchType bed
+shortCircuit 1
+searchPriority 15
+
+

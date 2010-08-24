@@ -1,8 +1,8 @@
 include ../../inc/common.mk
 
-L += -lm
+L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../lib/${MACHTYPE}
-MYLIBS =  ${MYLIBDIR}/jkweb.a ${MYSQLLIBS}
+MYLIBS =  ${MYLIBDIR}/jkweb.a
 
 H = cDnaAligns.h cDnaStats.h cDnaReader.h overlapFilter.h polyASize.h hapRegions.h usage.msg algo.msg
 O = cDnaAligns.o cDnaStats.o cDnaReader.o overlapFilter.o polyASize.o hapRegions.o pslCDnaFilter.o

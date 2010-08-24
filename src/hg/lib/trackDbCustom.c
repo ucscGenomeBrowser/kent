@@ -162,7 +162,7 @@ static void overrideField(struct trackDb *td, struct trackDb *overTd,
                           char *var)
 /* Update override one field from override. */
 {
-if (sameString(var, "track"))
+if (sameString(var, "track") || sameString(var, "release"))
     return;
 char *val = hashMustFindVal(overTd->settingsHash, var);
 struct hashEl *hel = hashStore(td->settingsHash, var);

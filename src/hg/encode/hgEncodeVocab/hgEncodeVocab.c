@@ -30,8 +30,8 @@ static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.34 2010/05/28 23:28:06 tdr
 static char *termOpt = NULL;
 static char *tagOpt = NULL;
 static char *typeOpt = NULL;
-static char *organismOpt = "Human"; // default, uses naming convention from dbDb table
-static char *organismOptLower; //  version of above used for path names
+static char *organismOpt = NULL; // we default to human if nothing else is set
+static char *organismOptLower = NULL; //  version of above used for path names
 static char *cv_file()
 {
 /* return default location of cv.ra (can specify as cgi var: ra=cv.ra) */
@@ -104,12 +104,16 @@ if(ret != 0)
 return (strcasecmp(termA, termB));
 }
 
-void doTypeHeader(char *type)
+void doTypeHeader(char *type, char *cellOrg)
 {
+if ((organismOptLower != NULL) && !sameString(cellOrg, organismOptLower))
+    errAbort("specified organism %s not consistent with cell type which is org %s\n",
+        organismOpt, cellOrg);
+
 if (sameString(type,"Cell Line"))
    {
     /* Venkat: To differentiate between the print statments of Mouse and Human Cell Lines */
-    if(sameString(organismOpt,"Human"))
+    if(sameString(cellOrg,"human"))
          {
    	 printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>",type);
    	 }
@@ -147,7 +151,7 @@ else
     }
 }
 
-boolean doTypeRow(struct hash *ra)
+boolean doTypeRow(struct hash *ra, char *org)
 {
 char *term = (char *)hashMustFindVal(ra, "term");
 char *type = (char *)hashMustFindVal(ra, "type");
@@ -300,15 +304,12 @@ else if (sameString(type,"localization"))
 else if (sameString(type,"Cell Line"))
     {
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
-    s = hashFindVal(ra, "organism");
-    if (s && differentString(s, organismOpt))
-      return FALSE;
 
     // pathBuffer for new protocols not in human    
     char pathBuffer[PATH_LEN];
-    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s",organismOptLower);
+    safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/",org);
 
-    if (s && sameString(organismOpt, "Human"))
+    if (sameString(org, "human"))
 	{
 	if (cgiOptionalInt("tier",0))
 	    {
@@ -458,7 +459,7 @@ else if (sameWord(type,"Factor"))
 return type;
 }
 
-static char *findType(struct hash *cvHash,char **requested,int requestCount,char *termOrTag)
+static char *findType(struct hash *cvHash,char **requested,int requestCount,char *termOrTag, char **org)
 /* returns the type that was requested or else the type associated with the term requested */
 {
 struct hashCookie hc = hashFirst(cvHash);
@@ -475,8 +476,17 @@ if (requested != NULL) // if no type, finds it from requested terms.  Will valid
         if(ix != -1) // found
             {
             char *thisType = hashMustFindVal(ra, "type");
+            char *thisOrg = hashFindVal(ra, "organism");
             if(type == NULL)
+                {
+                if (thisOrg != NULL)
+                    {
+                    char *retOrg = cloneString(thisOrg);
+                    *org = strLower(retOrg);
+                    }
                 type = thisType;
+                }
+
             else if(differentWord(type,thisType) && differentWord("control",thisType))  // ignores terms not in hash, but catches this:
                 errAbort("Error: Requested %ss of type '%s'.  But '%s' has type '%s'\n",
                          termOrTag,type,requested[ix],thisType);
@@ -518,8 +528,17 @@ if (requestVal)
 
 puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
 puts("<TR style=\"background:#D9E4F8\">");
-type = findType(cvHash,requested,requestCount,termOrTag);
-doTypeHeader(type);
+char *org = NULL;
+// if the org is specified in the type (eg. cell line)
+// then use that for the org, otherwise use the command line option,
+// otherwise use human.
+type = findType(cvHash,requested,requestCount,termOrTag, &org);
+if (org == NULL)
+    org = organismOptLower;
+if (org == NULL)
+    org = "human";
+
+doTypeHeader(type, org);
 puts("</TR>");
 
 // Get just the terms that match type and requested, then sort them
@@ -539,7 +558,7 @@ slSort(&termList, termCmp);
 // Print out the terms
 while((ra = slPopHead(&termList)) != NULL)
     {
-    if(doTypeRow( ra ))
+    if(doTypeRow( ra, org ))
         totalPrinted++;
     }
 puts("</TABLE><BR>");
@@ -555,8 +574,11 @@ termOpt = cgiOptionalString("term");
 tagOpt = cgiOptionalString("tag");
 typeOpt = cgiOptionalString("type");
 organismOpt = cgiUsualString("organism", organismOpt);
-organismOptLower=cloneString(organismOpt);
-strLower(organismOptLower);
+if (organismOpt != NULL)
+    {
+    organismOptLower=cloneString(organismOpt);
+    strLower(organismOptLower);
+    }
 char *bgColor = cgiOptionalString("bgcolor");
 if (bgColor)
     htmlSetBgColor(strtol(bgColor, 0, 16));

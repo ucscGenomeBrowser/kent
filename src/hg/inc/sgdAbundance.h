@@ -8,7 +8,7 @@
 #define SGDABUNDANCE_NUM_COLS 3
 
 struct sgdAbundance
-/* Protein abundance data from http://yeastgfp.ucsf.edu via SGD */
+/* Protein abundance data from http://yeastgfp.yeastgenome.org via SGD */
     {
     struct sgdAbundance *next;  /* Next in singly linked list. */
     char *name;	/* ORF name in sgdGene table */

@@ -270,7 +270,8 @@ $(window).load(function () {
         originalImgTitle = trackImg.attr("title");
         if(imageV2) {
             loadContextMenu(trackImgTbl);
-            $(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
+            //$(".trDraggable,.nodrop").each( function(t) { loadContextMenu($(this)); });
+            // FIXME: why isn't rightClick for sideLabel working??? Probably because there is no link!
         } else {
             loadContextMenu(trackImg);
             trackImg.mousemove(
@@ -285,7 +286,7 @@ $(window).load(function () {
             );
         }
     }
-    });
+});
 
 function loadImgAreaSelect(firstTime)
 {
@@ -1266,6 +1267,7 @@ $(document).ready(function()
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
+        findTracksNormalize();
     }
 
     if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
@@ -1418,6 +1420,28 @@ function contextMenuHit(menuItemClicked, menuObject, cmd)
     setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
 }
 
+function showLoadingImage(id)
+{
+// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
+// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
+    var loadingId = id + "LoadingOverlay";
+    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    overlay.appendTo("body");
+    overlay.css("top", $('#'+ id).position().top);
+    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("left",divLeft);
+    var width = $('#'+ id).width() - 5;
+    var height = $('#'+ id).height();
+    overlay.width(width);
+    overlay.height(height);
+    overlay.css("background", "white");
+    overlay.css("opacity", 0.75);
+    var imgLeft = (width / 2) - 110;
+    var imgTop = (height / 2 ) - 10;
+    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    return loadingId;
+}
+
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
@@ -1484,18 +1508,26 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                     }
                 }
             }
-    } else if (cmd == 'hgTrackUi') {
-        // data: ?
-        jQuery('body').css('cursor', 'wait');
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgTrackUi?ajax=1&g=" + selectedMenuItem.id + "&hgsid=" + getHgsid(),
-                   dataType: "html",
-                   trueSuccess: handleTrackUi,
-                   success: catchErrorOrDispatch,
-                   cmd: selectedMenuItem,
-                   cache: false
-               });
+    } else if (cmd == 'hgTrackUi_popup') {
+
+        hgTrackUiPopUp( selectedMenuItem.id, false );  // Launches the popup but shields the ajax with a waitOnFunction
+
+    } else if (cmd == 'hgTrackUi_follow') {
+
+        var link = $('td#td_btn_'+ selectedMenuItem.id).children('a').attr('href'); // The button already has the ref
+        if( $(link) != undefined) {
+            location.assign($(link).attr('href'));
+        } else {
+            var url = "../cgi-bin/hgTrackUi?hgsid=" + getHgsid() + "&g=";
+            var id = selectedMenuItem.id;
+            var rec = trackDbJson[id];
+            if (rec.parentTrack)
+                url += rec.parentTrack
+            else
+                url = selectedMenuItem.id;
+            location.assign($(link).attr('href'));
+        }
+
     } else if (cmd == 'dragZoomMode') {
         autoHideSetting = true;
         var obj = imgAreaSelect.data('imgAreaSelect');
@@ -1522,6 +1554,9 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'openLink') {
         // XXXX This is blocked by Safari's popup blocker (without any warning message).
         window.open(selectedMenuItem.href);
+    } else if (cmd == 'followLink') {
+        // XXXX This is blocked by Safari's popup blocker (without any warning message).
+        location.assign(selectedMenuItem.href);
     } else {
         // Change visibility settings:
         //
@@ -1556,7 +1591,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             if(imageV2) {
 	        data += "&hgt.trackNameFilter=" + id;
             }
-            jQuery('body').css('cursor', 'wait');
+            //var center = $("#img_data_" + id);
+            //center.attr('src', "../images/loading.gif")
+            //center.attr('style', "text-align: center; display: block;");
+            var loadingId = showLoadingImage("tr_" + id);
             $.ajax({
                        type: "GET",
                        url: "../cgi-bin/hgTracks",
@@ -1565,6 +1603,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                        trueSuccess: handleUpdateTrackMap,
                        success: catchErrorOrDispatch,
                        cmd: cmd,
+                       id: id,
+                       loadingId: loadingId,
                        cache: false
                    });
         }
@@ -1636,17 +1676,24 @@ function loadContextMenu(img)
                     }
                 }
                 if(done) {
-                    menu.push($.contextMenu.separator);
                     var o = new Object();
+                    var any = false;
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
                         o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
                         o["Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
                         o["Open details page in new window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
-                    } else {
-                        o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi"); return true; }};
+                        any = true;
                     }
-                    menu.push(o);
+                    if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
+                    && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
+                        o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                        any = true;
+                    }
+                    if(any) {
+                        menu.push($.contextMenu.separator);
+                        menu.push(o);
+                    }
                 }
             }
             if(!done) {
@@ -1670,8 +1717,22 @@ function loadContextMenu(img)
                     o[str] = { onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hilightMode"); return true; }};
                     menu.push(o);
                 }
-                menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
+                //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
+
+            // Add cfg options at just shy of end...
+            var o = new Object();
+            o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+            if(rec.parentTrack != undefined) {
+                o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+            }
+            menu.push($.contextMenu.separator);
+            menu.push(o);
+
+            // Add view image at end
+            menu.push($.contextMenu.separator);
+            menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
+
             return menu;
         },
         {
@@ -1712,10 +1773,51 @@ function parseMap(ele, reset)
     return mapItems;
 }
 
+function updateTrackImg(trackName)
+{
+    var data = "hgt.trackImgOnly=1&&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
+    $.ajax({
+                type: "GET",
+                url: "../cgi-bin/hgTracks",
+                data: data,
+                dataType: "html",
+                trueSuccess: handleUpdateTrackMap,
+                success: catchErrorOrDispatch,
+                cmd: 'refresh',
+                cache: false
+            });
+}
+
+var popUpTrackName;
+var popUpTrackDescriptionOnly = false;
+function _hgTrackUiPopUp(trackName,descriptionOnly)
+{ // popup cfg dialog
+    popUpTrackName = trackName;
+    var myLink = "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
+    popUpTrackDescriptionOnly = descriptionOnly;
+    if(popUpTrackDescriptionOnly)
+        myLink += "&descriptionOnly=1";
+
+    $.ajax({
+                type: "GET",
+                url: myLink,
+                dataType: "html",
+                trueSuccess: handleTrackUi,
+                success: catchErrorOrDispatch,
+                cmd: selectedMenuItem,
+                cache: false
+            });
+}
+
+function hgTrackUiPopUp(trackName,descriptionOnly)
+{
+    waitOnFunction( _hgTrackUiPopUp, trackName, descriptionOnly );  // Launches the popup but shields the ajax with a waitOnFunction
+}
+
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-    $('#hgTrackUiDialog').html("<div style='font-size:80%'>" + response + "</div>");
+    $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
@@ -1726,17 +1828,31 @@ function handleTrackUi(response, status)
                                height: 'auto',
                                width: 'auto',
                                minHeight: 200,
-                               minWidth: 400,
+                               minWidth: 700,
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
+                               buttons: { "Ok": function() {
+                                    if(popUpTrackDescriptionOnly == false)
+                                        setAllVars($('#pop'));
+                                    $(this).dialog("close");
+                                    if($('#imgTbl') != undefined && popUpTrackDescriptionOnly == false)
+                                        setTimeout('updateTrackImg(popUpTrackName);',50); // Necessary because ajax settings need to be done first
+                                        updateTrackImg(popUpTrackName);
+                               }},
                                close: function() {
                                    // clear out html after close to prevent problems caused by duplicate html elements
                                    $('#hgTrackUiDialog').html("");
                                }
                            });
-    // Apparently the options above to dialog take only once, so we set title explicitly.
-    $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[this.cmd.id].shortLabel + " Track Settings");
+    if(popUpTrackDescriptionOnly) {
+        var myWidth =  $(window).width() - 300;
+        $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
+        $('#hgTrackUiDialog').dialog("option", "width", myWidth);
+        $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
+    } else {
+        $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
+    }
     jQuery('body').css('cursor', '');
     $('#hgTrackUiDialog').dialog('open');
 }
@@ -1756,10 +1872,13 @@ function handleUpdateTrackMap(response, status)
             $('#chrom').attr('src', b[1]);
         }
     }
-    if(imageV2 && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
+    if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
-          var id = selectedMenuItem.id;
+          var id = this.id;
+          if(this.loadingId) {
+	          $('#' + this.loadingId).remove();
+          }
           var rec = trackDbJson[id];
           var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
           var reg = new RegExp(str);
@@ -2012,7 +2131,7 @@ function findTracksClickedOne(selCb,justClicked)
 }
 
 
-function findTracksNormalizeFound()
+function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
     var selCbs = $('input.selCb');
 
@@ -2028,6 +2147,11 @@ function findTracksNormalizeFound()
         $('input.viewBtn').val('Return to Browser');
 
     findTracksCounts();
+}
+
+function findTracksNormalizeWaitOn()
+{ // Put up wait mask then Normalize the page based upon current state of all found tracks
+    waitOnFunction( findTracksNormalize );
 }
 
 function findTracksCheckAll(check)
