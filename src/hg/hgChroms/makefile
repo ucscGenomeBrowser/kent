@@ -4,14 +4,16 @@ L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../lib/$(MACHTYPE)
 MYLIBS =  $(MYLIBDIR)/jkhgap.a $(MYLIBDIR)/jkweb.a
 
-O = hgChroms.o
+A = hgChroms
+O = $A.o
 
 hgChroms: $O $(MYLIBS)
-	${CC} ${COPT} ${CFLAGS} -o hgChroms $O $(MYLIBS) $L
-	${MKDIR} ${BINDIR}
-	cp -f hgChroms ${BINDIR}
-	${STRIP} ${BINDIR}/hgChroms${EXE}
+	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
+	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+
+compile:: ${O}
+	${CC} ${COPT} ${CFLAGS} -o ${A}${EXE} $O ${MYLIBS} ${L}
 
 clean::
-	rm -f ${O} hgChroms ${BINDIR}/hgChroms
+	rm -f ${O} ${A} ${BINDIR}/hgChroms
 #	cd tests && ${MAKE} clean

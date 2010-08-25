@@ -2171,7 +2171,7 @@ for (tdb = superTdb->subtracks; tdb != NULL; tdb = tdb->next)
 printf("</TABLE>");
 }
 
-void specificUi(struct trackDb *tdb, struct customTrack *ct)
+void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 	/* Draw track specific parts of UI. */
 {
 char *track = tdb->track;
@@ -2414,17 +2414,21 @@ else if (tdbIsComposite(tdb))  // for the moment generalizing this to include ot
     {
     hCompositeUi(database, cart, tdb, NULL, NULL, MAIN_FORM, trackHash);
     }
-extraUiLinks(database,tdb, trackHash);
+if (!ajax)
+    extraUiLinks(database,tdb, trackHash);
 }
 
 
 void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 /* Put up track-specific user interface. */
 {
-jsIncludeFile("jquery.js", NULL);
-printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
-jsIncludeFile("jquery-ui.js", NULL);
-jsIncludeFile("utils.js",NULL);
+if (!ajax)
+    {
+    jsIncludeFile("jquery.js", NULL);
+    printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+    jsIncludeFile("jquery-ui.js", NULL);
+    jsIncludeFile("utils.js",NULL);
+    }
 #define RESET_TO_DEFAULTS "defaults"
 char setting[128];
 
@@ -2444,6 +2448,27 @@ if(tdbIsComposite(tdb))
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     }
+if (ajax && cartOptionalString(cart, "descriptionOnly"))
+    {
+    //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+        puts(tdb->html);
+    else
+        {
+        struct trackDb *tdbParent = tdb->parent;
+        for (;tdbParent && (tdbParent->html == NULL || tdbParent->html[0] == 0); tdbParent = tdbParent->parent )
+            ; // Get the first parent that has html
+        if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
+            {
+            printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",COLOR_DARKGREEN,tdbParent->shortLabel);
+            puts(tdbParent->html);
+            }
+        else
+            printf("<h2>No description found for: %s.</h2>",tdbParent?tdbParent->track:tdb->track);
+        }
+    cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
+    return;
+    }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
        hgTracksName(), cartUsualString(cart, "formMethod", "POST"));
@@ -2452,7 +2477,7 @@ printf("<B style='font-family:serif; font-size:200%%;'>%s%s</B>\n", tdb->longLab
 
 /* Print link for parent track */
 struct trackDb *parentTdb = tdb->parent;
-if (parentTdb)
+if (parentTdb && !ajax)
     {
     char *encodedMapName = cgiEncode(parentTdb->track);
     printf("&nbsp;&nbsp;<B style='font-family:serif; font-size:100%%;'>(<A HREF=\"%s?%s=%u&c=%s&g=%s\" title='Link to parent track'><IMG height=12 src='../images/ab_up.gif'>%s</A>)</B>",
@@ -2466,29 +2491,32 @@ if (ct && sameString(tdb->type, "maf"))
     tdb->canPack = TRUE;
 
 /* Display visibility menu */
-if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
-    printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
-else
-    printf("<B>Display&nbsp;mode:&nbsp;</B>");
-if (tdbIsSuper(tdb))
+    if (tdbIsComposite(tdb) && multViewCount(tdb) > 0)
+        printf("<B>Maximum&nbsp;display&nbsp;mode:&nbsp;</B>");
+    else
+        printf("<B>Display&nbsp;mode:&nbsp;</B>");
+    if (tdbIsSuper(tdb))
+        {
+        /* This is a supertrack -- load its members and show hide/show dropdown */
+        hTrackDbLoadSuper(database, tdb);
+        superTrackDropDown(cart, tdb, 1);
+        }
+    else
+        {
+        /* normal visibility control dropdown */
+        char *vis = hStringFromTv(tdb->visibility);
+        hTvDropDownClassVisOnly(tdb->track,
+            hTvFromString(cartUsualString(cart,tdb->track, vis)),
+            tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
+        }
+if (!ajax)
     {
-    /* This is a supertrack -- load its members and show hide/show dropdown */
-    hTrackDbLoadSuper(database, tdb);
-    superTrackDropDown(cart, tdb, 1);
-    }
-else
-    {
-    /* normal visibility control dropdown */
-    char *vis = hStringFromTv(tdb->visibility);
-    hTvDropDownClassVisOnly(tdb->track,
-        hTvFromString(cartUsualString(cart,tdb->track, vis)),
-        tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
-    }
-printf("&nbsp;");
-cgiMakeButton("Submit", "Submit");
+    printf("&nbsp;");
+    cgiMakeButton("Submit", "Submit");
 
-if(tdbIsComposite(tdb))
-    printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+    if(tdbIsComposite(tdb))
+        printf("\n&nbsp;&nbsp;<a href='#' onclick='setVarAndPostForm(\"%s\",\"1\",\"mainForm\"); return false;'>Reset to defaults</a>\n",setting);
+    }
 
 if (ct)
     {
@@ -2523,7 +2551,7 @@ if (!tdbIsSuper(tdb))
     }
 printf("<BR>\n");
 
-specificUi(tdb, ct);
+specificUi(tdb, ct, ajax);
 puts("</FORM>");
 
 if (ct)
@@ -2534,7 +2562,11 @@ if (ct)
     cgiMakeHiddenVar(CT_SELECTED_TABLE_VAR, tdb->track);
     puts("</FORM>\n");
     }
-else
+
+if (ajax)
+    return;
+
+if (!ct)
     {
     /* Print data version trackDB setting, if any */
     char *version = trackDbSetting(tdb, "dataVersion");
@@ -2556,9 +2588,6 @@ else
 	hFreeConn(&conn);
 	}
     }
-
-if(ajax)
-    return;
 
 if (tdb->html != NULL && tdb->html[0] != 0)
     {
@@ -2678,8 +2707,11 @@ if (super)
     }
 char *title = (tdbIsSuper(tdb) ? "Super-track Settings" : "Track Settings");
 if(cartOptionalString(cart, "ajax"))
+    {
     // html is going to be used w/n a dialog in hgTracks.js so serve up stripped down html
     trackUi(tdb, ct, TRUE);
+    cartRemove(cart,"ajax");
+    }
 else
     {
     cartWebStart(cart, database, "%s %s", tdb->shortLabel, title);

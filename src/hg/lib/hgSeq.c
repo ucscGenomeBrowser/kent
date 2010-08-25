@@ -19,7 +19,7 @@ int hgSeqChromSize(char *db, char *chromName)
  * otherwise just return 0 */
 {
 int thisSize = 0;
-if (sqlDatabaseExists(db))
+if (hDbExists(db))
     thisSize = hChromSize(db, chromName);
 return thisSize;
 }

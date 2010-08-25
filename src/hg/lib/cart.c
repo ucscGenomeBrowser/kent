@@ -287,6 +287,15 @@ static void storeInOldVars(struct cart *cart, struct hash *oldVars, char *var)
 if (oldVars == NULL)
     return;
 struct hashEl *hel = hashLookup(cart->hash, var);
+
+#define CART_DIFFS_INCLUDE_EMPTIES
+#ifdef CART_DIFFS_INCLUDE_EMPTIES
+// NOTE: New cgi vars not in old cart cannot be distinguished from vars not newly set by cgi.
+//       Solution: Add 'empty' var to old vars for cgi vars not already in cart
+if (hel == NULL)
+    hashAdd(oldVars, var, cloneString(CART_VAR_EMPTY));
+#endif///def CART_DIFFS_INCLUDE_EMPTIES
+
 while (hel != NULL)
     {
     hashAdd(oldVars, var, cloneString(hel->val));
@@ -313,8 +322,7 @@ for (el = list; el != NULL; el = el->next)
         char *suffix = el->name + suffixOffset;
         if(sameString(suffix,POSITION_SUFFIX))
             {
-            struct hashEl *old = hashLookup(oldVars, el->name);
-            if(old != NULL && differentString((char *)old->val,(char *)el->val)) // NOTE: It seems NULL is only seen when cart is cleared and this is not important
+            if (cartValueHasChanged(cart,oldVars,el->name,TRUE,TRUE))
                 {
                 char *name = cloneString(el->name);
                 safecpy(name+suffixOffset,strlen(POSITION_SUFFIX),IMGORD_SUFFIX); // We know that POSITION_SUFFIX is longer than IMGORD_SUFFIX
@@ -349,7 +357,7 @@ for (cv = cvList; cv != NULL; cv = cv->next)
 	char *val = (cgiVarExists(booVar) ? "1" : cv->val);
 	storeInOldVars(cart, oldVars, booVar);
 	cartRemove(cart, booVar);
-	hashAdd(cgiHash, booVar, val);
+        hashAdd(cgiHash, booVar, val);
 	hashAdd(booHash, booVar, NULL);
 	}
     else if (startsWith(multShadow, cv->name))
@@ -374,7 +382,8 @@ for (cv = cgiVarList(); cv != NULL; cv = cv->next)
 	{
 	storeInOldVars(cart, oldVars, cv->name);
 	cartRemove(cart, cv->name);
-	hashAdd(cgiHash, cv->name, cv->val);
+        if (differentString(cv->val, CART_VAR_EMPTY))  // NOTE: CART_VAR_EMPTY logic not implemented for boolShad or multiShad
+            hashAdd(cgiHash, cv->name, cv->val);
 	}
     }
 
@@ -1926,16 +1935,31 @@ else
 }
 
 
-boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved)
+boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved,boolean ignoreCreated)
 /* Returns TRUE if new cart setting has changed from old cart setting */
 {
-char *newValue = cartOptionalString(newCart,setting);
 char *oldValue = hashFindVal(oldVars,setting);
-
-if (newValue == NULL)
-    return (!ignoreRemoved && oldValue != NULL);
 if (oldValue == NULL)
-    return FALSE;  // FIXME: This seems strange but it is what works in practice.
+#ifdef CART_DIFFS_INCLUDE_EMPTIES
+    return FALSE;  // All vars changed by cgi will be found in old vars
+#else///ifndef CART_DIFFS_INCLUDE_EMPTIES
+    return (!ignoreCreated);
+#endif///ndef CART_DIFFS_INCLUDE_EMPTIES
+
+char *newValue = cartOptionalString(newCart,setting);
+if (newValue == NULL)
+    return (!ignoreRemoved);
+
+#ifdef CART_DIFFS_INCLUDE_EMPTIES
+if (sameString(oldValue,CART_VAR_EMPTY))
+    {
+    if (sameString(newValue,"hide")
+    ||  sameString(newValue,"off")
+    ||  sameString(newValue,"0"))   // Special cases DANGER!
+        return FALSE;
+    }
+#endif///def CART_DIFFS_INCLUDE_EMPTIES
+
 return (differentString(newValue,oldValue));
 }
 
@@ -1980,7 +2004,7 @@ struct slRef *newList = NULL;
 struct slRef *oneName = NULL;
 while ((oneName = slPopHead(&oldList)) != NULL)
     {
-    boolean thisOneChanged = cartValueHasChanged(newCart,oldVars,oneName->val,ignoreRemoved);
+    boolean thisOneChanged = cartValueHasChanged(newCart,oldVars,oneName->val,ignoreRemoved,TRUE);
     if (unChanged != thisOneChanged)
         slAddHead(&newList,oneName);
     else
@@ -1999,15 +2023,16 @@ int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boo
    If suffix NULL then removes 'trackName' which holds visibility */
 {
 int removed = 0;
+boolean vis = (suffix == NULL || *suffix == '\0');
 struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendants(skipParent?tdb->subtracks:tdb);
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
     struct trackDb *descendentTdb = tdbRef->val;
     char settingName[512];  // wgEncodeOpenChromChip.Peaks.vis
-    if (suffix != NULL)
-        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
-    else
+    if (vis)
         safef(settingName,sizeof(settingName),"%s",descendentTdb->track);
+    else
+        safef(settingName,sizeof(settingName),"%s.%s",descendentTdb->track,suffix);
     removed += cartRemoveAndCount(cart,settingName);
     }
 return removed;
@@ -2021,25 +2046,43 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 if (!tdbIsComposite(tdb))
     return FALSE;
 
+// vis is a special additive case! composite or view level changes then remove subtrack vis
+boolean compositeVisChanged = cartValueHasChanged(newCart,oldVars,tdb->track,TRUE,TRUE);
+//boolean compositeVisHidden  = FALSE;
+//if(compositeVisChanged)
+//    compositeVisHidden = (cartUsualInt(cart,tdb->track,tvFull) == tvHide);
+
+
+// FIXME: Big problem in persistence of changed state.
+boolean debug = FALSE;//sameString(tdb->track,"wgEncodeBroadChipSeq");
+if(debug)
+    {
+    char *newValue = cartOptionalString(newCart,tdb->track);
+    char *oldValue = hashFindVal(oldVars,tdb->track);
+    warn("Cleanup: wgEncodeBroadChipSeq  compositeVisChanged:%s  new:%s  old:%s",
+         (compositeVisChanged?"yes":"no"),(newValue!=NULL?newValue:"(null)"),(oldValue!=NULL?oldValue:"(null)"));
+    }
+
 // Build list of current settings for composite
 char setting[512];
 safef(setting,sizeof(setting),"%s.",tdb->track);
 struct slRef *changedSettings = cartNamesPrefixedBy(newCart, setting);
-if (changedSettings == NULL)
+if (changedSettings == NULL && !compositeVisChanged)
     return FALSE;
 
 // Prune list to only those which have changed
-(void)cartNamesPruneChanged(newCart,oldVars,&changedSettings,TRUE,FALSE);
-if (changedSettings == NULL)
-    return FALSE;
+if(changedSettings != NULL)
+    {
+    if(debug) warn("Cleanup: settings:%d",slCount(changedSettings));
+    (void)cartNamesPruneChanged(newCart,oldVars,&changedSettings,TRUE,FALSE);
+    if (changedSettings == NULL && !compositeVisChanged)
+        return FALSE;
+    if(debug) warn("Cleanup: changed:%d",changedSettings==NULL?0:slCount(changedSettings));
+    }
 
 struct slRef *oneName = NULL;
 char * var = NULL;
 boolean clensed = FALSE;
-
-// vis is a special additive case! composite or view level changes then remove subtrack vis
-boolean compositeVisChanged = cartValueHasChanged(newCart,oldVars,tdb->track,TRUE);
-
 
 // Walk through views
 boolean hasViews = FALSE;
@@ -2047,6 +2090,7 @@ struct trackDb *tdbView = tdb->subtracks;
 for (;tdbView != NULL; tdbView = tdbView->next)
     {
     boolean viewVisChanged = FALSE;
+//    boolean viewVisHidden  = FALSE;
     char * view = NULL;
     if (!tdbIsView(tdbView,&view))
         break;
@@ -2063,7 +2107,10 @@ for (;tdbView != NULL; tdbView = tdbView->next)
             {
             var = oneName->val + strlen(setting);
             if (sameString(var,"vis"))
+                {
                 viewVisChanged = TRUE;
+//                viewVisHidden = (cartUsualInt(cart,oneName->val,tvFull) == tvHide);
+                }
             else {
                 if (cartRemoveFromTdbTree(newCart,tdbView,var,TRUE) > 0)
                     clensed = TRUE;

@@ -1402,3 +1402,17 @@ see doc/builds.txt for specific details.
     #   real    36m16.693s
 
 ############################################################################
+# LIFTOVER TO FelCat4 (DONE - 2010-08-20 - Chin )
+    mkdir /hive/data/genomes/felCat3/bed/blat.felCat4.2010-08-20
+    cd /hive/data/genomes/felCat3/bed/blat.felCat4.2010-08-20
+    # -debug run to create run dir, preview scripts...
+    doSameSpeciesLiftOver.pl -debug -ooc /scratch/data/felCat3/11.ooc \
+       felCat3 felCat4
+    # Real run:
+    time nice -n +19 doSameSpeciesLiftOver.pl -verbose=2 \
+         -ooc /scratch/data/felCat3/11.ooc \
+        -bigClusterHub=pk -dbHost=hgwdev -workhorse=hgwdev \
+         felCat3 felCat4 > do.log 2>&1 &
+    # real    2093m9.263s
+
+############################################################################

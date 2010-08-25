@@ -9,6 +9,7 @@
 #include "hash.h"
 #include "binRange.h"
 #include "ccdsInfo.h"
+#include "ccdsNotes.h"
 #include "verbose.h"
 #include "ccdsLocationsJoin.h"
 #include "ccdsCommon.h"
@@ -44,7 +45,7 @@ errAbort(
   "ccdsMkTables - create tables for hg db from imported CCDS database\n"
   "\n"
   "Usage:\n"
-  "   ccdsMkTables [options] ccdsDb hgDb ncbiBuild ccdsInfoOut ccdsGeneOut\n"
+  "   ccdsMkTables [options] ccdsDb hgDb ncbiBuild ccdsInfoOut ccdsNotesOut ccdsGeneOut\n"
   "\n"
   "ccdsDb is the database created by ccdsImport. If the name is in the form\n"
   "'profile:ccdsDb', then hg.conf variables starting with 'profile.' are\n"
@@ -380,8 +381,8 @@ static char *mkCcdsInfoSelect(struct genomeInfo *genome, struct sqlConnection *c
 /* Construct select to get data for ccdsInfo table.  WARNING: static
  * return. */
 {
-boolean inclStatus = selectByStatus();
 static char select[4096];
+boolean inclStatus = selectByStatus();
 safef(select, sizeof(select),
       "SELECT "
       "CcdsUids.ccds_uid, GroupVersions.ccds_version, "
@@ -476,33 +477,144 @@ slReverse(&newList);
 *ccdsInfoList = newList;
 }
 
+static struct ccdsInfo *loadCcdsInfoRecs(struct sqlConnection *conn, struct genomeInfo *genome,
+                                         struct hash* ignoreTbl, struct hash *gotCcds,
+                                         int *cnt, int *ignoreCnt)
+/* select and load ccdsInfo records into memory */
+{
+char *query = mkCcdsInfoSelect(genome, conn);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct ccdsInfo *ccdsInfoList = NULL;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (!processCcdsInfoRow(row, &ccdsInfoList, ignoreTbl, gotCcds))
+        (*ignoreCnt)++;
+    (*cnt)++;
+    }
+sqlFreeResult(&sr);
+return ccdsInfoList;
+}
+
+static void writeCcdsInfoRecs(char *ccdsInfoFile, struct ccdsInfo *ccdsInfoList)
+/* write ccdsInfo records to file */
+{
+struct ccdsInfo *ci;
+FILE *fh = mustOpen(ccdsInfoFile, "w");
+for (ci = ccdsInfoList; ci != NULL; ci = ci->next)
+    ccdsInfoTabOut(ci, fh);
+carefulClose(&fh);
+}
+
 static void createCcdsInfo(struct sqlConnection *conn, char *ccdsInfoFile,
                            struct genomeInfo *genome, struct hash* ignoreTbl,
                            struct hash *gotCcds)
 /* create ccdsInfo table file */
 {
 verbose(2, "begin createCcdsInfo\n");
-char *query = mkCcdsInfoSelect(genome, conn);
-struct sqlResult *sr = sqlGetResult(conn, query);
-struct ccdsInfo *ccdsInfoList = NULL, *ci;
-char **row;
 int cnt = 0, ignoreCnt = 0;
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    if (!processCcdsInfoRow(row, &ccdsInfoList, ignoreTbl, gotCcds))
-        ignoreCnt++;
-    cnt++;
-    }
-sqlFreeResult(&sr);
-
+struct ccdsInfo *ccdsInfoList = loadCcdsInfoRecs(conn, genome, ignoreTbl, gotCcds, &cnt, &ignoreCnt);
 ccdsFilterDupAccessions(&ccdsInfoList);
-
-FILE *fh = mustOpen(ccdsInfoFile, "w");
-for (ci = ccdsInfoList; ci != NULL; ci = ci->next)
-    ccdsInfoTabOut(ci, fh);
-carefulClose(&fh);
+writeCcdsInfoRecs(ccdsInfoFile, ccdsInfoList);
 ccdsInfoFreeList(&ccdsInfoList);
 verbose(2, "end createCcdsInfo: %d processed, %d ignored, %d kept\n",
+        cnt, ignoreCnt, cnt-ignoreCnt);
+}
+
+static char *mkCcdsNotesSelect(struct genomeInfo *genome, struct sqlConnection *conn)
+/* Construct select to get data for ccdsNotes table.  WARNING: static
+ * return. */
+{
+static char select[4096];
+#if NOT_WORKING
+/* FIXME: this is suppose to get the notes, only for the current CCDS, however, it
+ * doesn't work as-is.  Really need to work with NCBI to get some of the select
+ * right in all our, to avoid the special-case some post-filtering.  In the mean time,
+ * get them all and rely on post-filtering.  There are not that many public notes.
+ */
+boolean inclStatus = selectByStatus();
+
+safef(select, sizeof(select),
+      "SELECT "
+      "Interpretations.ccds_uid, Interpretations.integer_val, date_format(Interpretations.date_time, \"%%Y-%%m-%%d\"), Interpretations.comment "
+      "FROM %s, Interpretations, InterpretationSubtypes "
+      "WHERE %s "
+      "AND (CcdsStatusVals.ccds_status_val_uid = GroupVersions.ccds_status_val_uid) "
+      "AND (Interpretations.group_version_uid = GroupVersions.group_version_uid) "
+      "AND (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
+      "AND (InterpretationSubtypes.interpretation_subtype = \"Public note\")",
+      mkCommonFrom(inclStatus), mkCommonWhere(genome, conn, inclStatus));
+#else
+safef(select, sizeof(select),
+      "SELECT "
+      "Interpretations.ccds_uid, Interpretations.integer_val, date_format(Interpretations.date_time, \"%%Y-%%m-%%d\"), Interpretations.comment "
+      "FROM Interpretations, InterpretationSubtypes "
+      "WHERE "
+      "    (Interpretations.interpretation_subtype_uid = InterpretationSubtypes.interpretation_subtype_uid) "
+      "AND (InterpretationSubtypes.interpretation_subtype = \"Public note\")");
+#endif
+return select;
+}
+
+static boolean processCcdsNotesRow(char **row, struct ccdsNotes **ccdsNotesList,
+                                   struct hash *gotCcds)
+/* Process a row from ccdsNoteSelect and add to the list of ccdsNotes rows.
+ * only keep ones in gotCcds hash.  Returns True if processed, False if
+ * ignored.
+ */
+{
+int ccdsId = sqlSigned(row[0]);
+int ccdsVersion = sqlSigned(row[1]);
+char *ccdsIdVer = ccdsMkId(ccdsId, ccdsVersion);
+if (hashLookup(gotCcds, ccdsIdVer) == NULL)
+    return FALSE;
+struct ccdsNotes *ccdsNotes;
+AllocVar(ccdsNotes);
+safecpy(ccdsNotes->ccds, sizeof(ccdsNotes->ccds), ccdsIdVer);
+safecpy(ccdsNotes->createDate, sizeof(ccdsNotes->createDate), row[2]);
+ccdsNotes->note = cloneString(row[3]);
+slAddHead(ccdsNotesList, ccdsNotes);
+return TRUE;
+}
+
+static struct ccdsNotes *loadCcdsNotesRecs(struct sqlConnection *conn, struct genomeInfo *genome,
+                                           struct hash *gotCcds, int *cnt, int *ignoreCnt)
+/* select and load ccdsNotes records into memory */
+{
+char *query = mkCcdsNotesSelect(genome, conn);
+struct sqlResult *sr = sqlGetResult(conn, query);
+struct ccdsNotes *ccdsNotesList = NULL;
+char **row;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (!processCcdsNotesRow(row, &ccdsNotesList, gotCcds))
+        (*ignoreCnt)++;
+    (*cnt)++;
+    }
+sqlFreeResult(&sr);
+return ccdsNotesList;
+}
+
+static void writeCcdsNotesRecs(char *ccdsNotesFile, struct ccdsNotes *ccdsNotesList)
+/* write ccdsNotes records to file */
+{
+struct ccdsNotes *ci;
+FILE *fh = mustOpen(ccdsNotesFile, "w");
+for (ci = ccdsNotesList; ci != NULL; ci = ci->next)
+    ccdsNotesTabOut(ci, fh);
+carefulClose(&fh);
+}
+
+static void createCcdsNotes(struct sqlConnection *conn, char *ccdsNotesFile,
+                           struct genomeInfo *genome, struct hash *gotCcds)
+/* create ccdsNotes table file */
+{
+verbose(2, "begin createCcdsNotes\n");
+int cnt = 0, ignoreCnt = 0;
+struct ccdsNotes *ccdsNotesList = loadCcdsNotesRecs(conn, genome, gotCcds, &cnt, &ignoreCnt);
+writeCcdsNotesRecs(ccdsNotesFile, ccdsNotesList);
+ccdsNotesFreeList(&ccdsNotesList);
+verbose(2, "end createCcdsNotes: %d processed, %d ignored, %d kept\n",
         cnt, ignoreCnt, cnt-ignoreCnt);
 }
 
@@ -701,20 +813,32 @@ carefulClose(&genesFh);
 genePredFreeList(&genes);
 }
 
-static void loadTables(char *hgDb, char *ccdsInfoTbl, char *ccdsInfoFile,
-                       char *ccdsGeneTbl, char *ccdsGeneFile)
+static void loadTables(char *hgDb,
+                       char *ccdsInfoTbl, char *ccdsInfoFile,
+                       char *ccdsGeneTbl, char *ccdsGeneFile,
+                       char *ccdsNotesTbl, char *ccdsNotesFile)
 /* load tables into database */
 {
 struct sqlConnection *conn = sqlConnect(hgDb);
-char ccdsInfoTmpTbl[512], ccdsGeneTmpTbl[512];
-char *ccdsInfoSql, *ccdsGeneSql;
 
-/* create tables with _tmp extension, then rename after both are loaded */
+/* create tables with _tmp extension, then rename after all5B are loaded */
+
+// ccdsInfo
+char ccdsInfoTmpTbl[512], *ccdsInfoSql;
 safef (ccdsInfoTmpTbl, sizeof(ccdsInfoTmpTbl), "%s_tmp", ccdsInfoTbl);
 ccdsInfoSql = ccdsInfoGetCreateSql(ccdsInfoTmpTbl);
 sqlRemakeTable(conn, ccdsInfoTmpTbl, ccdsInfoSql);
 sqlLoadTabFile(conn, ccdsInfoFile, ccdsInfoTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
+// ccdsNotes
+char ccdsNotesTmpTbl[512], *ccdsNotesSql;
+safef (ccdsNotesTmpTbl, sizeof(ccdsNotesTmpTbl), "%s_tmp", ccdsNotesTbl);
+ccdsNotesSql = ccdsNotesGetCreateSql(ccdsNotesTmpTbl);
+sqlRemakeTable(conn, ccdsNotesTmpTbl, ccdsNotesSql);
+sqlLoadTabFile(conn, ccdsNotesFile, ccdsNotesTmpTbl, SQL_TAB_FILE_ON_SERVER);
+
+// ccdsGene
+char ccdsGeneTmpTbl[512], *ccdsGeneSql;
 safef(ccdsGeneTmpTbl, sizeof(ccdsGeneTmpTbl), "%s_tmp", ccdsGeneTbl);
 ccdsGeneSql = genePredGetCreateSql(ccdsGeneTmpTbl, genePredAllFlds,
                                    genePredWithBin, hGetMinIndexLength(hgDb));
@@ -724,11 +848,13 @@ freeMem(ccdsGeneSql);
 sqlLoadTabFile(conn, ccdsGeneFile, ccdsGeneTmpTbl, SQL_TAB_FILE_ON_SERVER);
 
 ccdsRenameTable(conn, ccdsInfoTmpTbl, ccdsInfoTbl);
+ccdsRenameTable(conn, ccdsNotesTmpTbl, ccdsNotesTbl);
 ccdsRenameTable(conn, ccdsGeneTmpTbl, ccdsGeneTbl);
 
 if (!keep)
     {
     unlink(ccdsInfoFile);
+    unlink(ccdsNotesFile);
     unlink(ccdsGeneFile);
     }
 sqlDisconnect(&conn);
@@ -755,39 +881,43 @@ else
 return sqlConnectProfile(profile, db);
 }
 
-static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ncbiBuild, char *ccdsInfoOut, char *ccdsGeneOut)
+static void ccdsMkTables(char *ccdsDb, char *hgDb, char *ncbiBuild, char *ccdsInfoOut, char *ccdsNotesOut, char *ccdsGeneOut)
 /* create tables for hg db from imported CCDS database */
 {
 if (verboseLevel() >= 2)
     sqlMonitorEnable(JKSQL_TRACE);
 struct sqlConnection *ccdsConn = ccdsSqlConn(ccdsDb);
-char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
-char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
 struct genomeInfo *genome = getGenomeInfo(hgDb, ncbiBuild);
 struct hash *infoCcds = hashNew(20);
 struct hash *geneCcds = hashNew(20);
-
-ccdsGetTblFileNames(ccdsInfoOut, ccdsInfoTbl, ccdsInfoFile);
-ccdsGetTblFileNames(ccdsGeneOut, ccdsGeneTbl, ccdsGeneFile);
-
 struct hash* ignoreTbl = buildIgnoreTbl(ccdsConn, genome);
 
+char ccdsInfoFile[PATH_LEN], ccdsInfoTbl[PATH_LEN];
+ccdsGetTblFileNames(ccdsInfoOut, ccdsInfoTbl, ccdsInfoFile);
 createCcdsInfo(ccdsConn, ccdsInfoFile, genome, ignoreTbl, infoCcds);
+
+char ccdsNotesFile[PATH_LEN], ccdsNotesTbl[PATH_LEN];
+ccdsGetTblFileNames(ccdsNotesOut, ccdsNotesTbl, ccdsNotesFile);
+createCcdsNotes(ccdsConn, ccdsNotesFile, genome, infoCcds);
+
+char ccdsGeneFile[PATH_LEN], ccdsGeneTbl[PATH_LEN];
+ccdsGetTblFileNames(ccdsGeneOut, ccdsGeneTbl, ccdsGeneFile);
 createCcdsGene(ccdsConn, ccdsGeneFile, genome, ignoreTbl, geneCcds);
+
 sqlDisconnect(&ccdsConn);
 sqlMonitorDisable();
 
 gotCcdsValidate(infoCcds, geneCcds);
 
 if (loadDb)
-    loadTables(hgDb, ccdsInfoTbl, ccdsInfoFile, ccdsGeneTbl, ccdsGeneFile);
+    loadTables(hgDb, ccdsInfoTbl, ccdsInfoFile, ccdsGeneTbl, ccdsGeneFile, ccdsNotesTbl, ccdsNotesFile);
 }
 
 int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, optionSpecs);
-if (argc != 6)
+if (argc != 7)
     usage();
 keep = optionExists("keep");
 loadDb = optionExists("loadDb");
@@ -798,7 +928,7 @@ if (statVals == NULL)
     for (i = 0; statValDefaults[i] != NULL; i++)
         slSafeAddHead(&statVals, slNameNew(statValDefaults[i]));
     }
-ccdsMkTables(argv[1], argv[2], argv[3], argv[4], argv[5]);
+ccdsMkTables(argv[1], argv[2], argv[3], argv[4], argv[5], argv[6]);
 return 0;
 }
 /*

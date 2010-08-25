@@ -273,6 +273,8 @@ showTopScorers bed5FloatScoreWithFdr bed5FloatScore bed
 signalFilter bed narrowPeak
 signalFilterLimits bed narrowPeak
 smoothingWindow wig bed5FloatScore bedGraph
+snpExceptions bed
+snpExceptionDesc bed
 snpSeq bed
 snpSeqFile bed
 snpTable bed
@@ -305,6 +307,7 @@ superTrack *
 symbolTable bed genePred
 thickDrawItem bed
 table *
+tableBrowser *
 tdbType customTracks
 track *
 transMapGene psl

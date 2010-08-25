@@ -408,6 +408,8 @@ extern boolean chromosomeColorsMade; /* Have the 3 shades of 8 chromosome colors
 extern boolean exprBedColorsMade; /* Have the shades of Green, Red, and Blue been allocated? */
 extern int maxRGBShade;
 
+extern boolean trackImgOnly;           /* caller wants just the track image and track table html */
+
 /* used in MAF display */
 #define UNALIGNED_SEQ 'o'
 #define MAF_DOUBLE_GAP '='
