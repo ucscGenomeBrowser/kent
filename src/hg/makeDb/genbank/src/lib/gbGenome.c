@@ -80,7 +80,7 @@ static char *gasAcuNames[] = {"Gasterosteus aculeatus", NULL};
 static char *oryLatNames[] = {"Oryzias latipes", NULL};
 static char *equCabNames[] = {"Equus caballus", NULL};
 static char *oviAriNames[] = {"Ovis aries", NULL};
-static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus",
+static char *susScrNames[] = {"Sus scrofa", "Sus scrofa coreanus", "Sus scrofa domesticus",
                               "Sus scrofa domestica", "Sus scrofa ussuricus", NULL};
 static char *ornAnaNames[] = {"Ornithorhynchus anatinus", NULL};
 static char *petMarNames[] = {"Petromyzon marinus", NULL};
