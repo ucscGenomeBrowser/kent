@@ -122,20 +122,29 @@ sub getClusterSeqs {
   my @okFilesystems =
     &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
   my ($tSeqScratch, $qSeqScratch);
-  foreach my $fs (@okFilesystems) {
-    if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
-      $tSeqScratch = "$fs/$tDb/$tDb.2bit";
-      last;
+  if ( -e "/scratch/data/$tDb/$tDb.2bit" ) {
+      $tSeqScratch = "/scratch/data/$tDb/$tDb.2bit";
+  } else {
+    foreach my $fs (@okFilesystems) {
+&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
+      if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
+        $tSeqScratch = "$fs/$tDb/$tDb.2bit";
+        last;
+      }
     }
   }
   if (! defined $tSeqScratch) {
     die "align: can't find $tDb/$tDb.2bit in " .
       join("/, ", @okFilesystems) . "/ -- please distribute.\n";
   }
-  foreach my $fs (@okFilesystems) {
-    if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
-      $qSeqScratch = "$fs/$qDb/$qDb.2bit";
-      last;
+  if ( -e "/scratch/data/$qDb/$qDb.2bit" ) {
+      $qSeqScratch = "/scratch/data/$qDb/$qDb.2bit";
+  } else {
+    foreach my $fs (@okFilesystems) {
+      if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
+        $qSeqScratch = "$fs/$qDb/$qDb.2bit";
+        last;
+      }
     }
   }
   if (! defined $qSeqScratch) {
