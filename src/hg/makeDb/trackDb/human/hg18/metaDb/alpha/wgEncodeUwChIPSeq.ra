@@ -631,10 +631,10 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 controlId GM06990/Input
-dataSubmitted 2009-06-29
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
+dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990Ctcf.tagAlign.gz
 fragLength 350
@@ -7679,10 +7679,10 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 controlId GM06990/Input
-dataSubmitted 2009-06-29
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
+dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990Ctcf.fastq.gz
 fragLength 350
@@ -10300,7 +10300,6 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 controlId GM06990/Input
-dataSubmitted 2009-06-29
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
@@ -12793,4 +12792,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: 590374191
+# MAGIC: -1664404115
