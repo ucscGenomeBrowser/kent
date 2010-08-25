@@ -631,10 +631,10 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 controlId GM06990/Input
-dataSubmitted 2009-06-29
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
+dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm06990Ctcf.tagAlign.gz
 fragLength 350
@@ -957,7 +957,7 @@ composite wgEncodeUwChIPSeq
 controlId GM12878/Input
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
-dateReubmitted 2009-10-19
+dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqAlignmentsRep1Gm12878H3k4me3.tagAlign.gz
@@ -2916,13 +2916,13 @@ view Alignments
 metaObject wgEncodeUwChIPSeqAlignmentsRep2NhekH3k36me3
 objType file
 antibody H3K36me3
-ateSubmitted 2009-09-29
 cell NHEK
 composite wgEncodeUwChIPSeq
 controlId NHEK/Input
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
+dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqAlignmentsRep2NhekH3k36me3.tagAlign.gz
 fragLength 350
@@ -7679,10 +7679,10 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 controlId GM06990/Input
-dataSubmitted 2009-06-29
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
+dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm06990Ctcf.fastq.gz
 fragLength 350
@@ -7992,7 +7992,7 @@ composite wgEncodeUwChIPSeq
 controlId GM12878/Input
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
-dateReubmitted 2009-10-19
+dateResubmitted 2009-10-19
 dateSubmitted 2009-06-30
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwChIPSeqRawDataRep1Gm12878H3k4me3.fastq.gz
@@ -9869,13 +9869,13 @@ view RawData
 metaObject wgEncodeUwChIPSeqRawDataRep2NhekH3k36me3
 objType file
 antibody H3K36me3
-ateSubmitted 2009-09-29
 cell NHEK
 composite wgEncodeUwChIPSeq
 controlId NHEK/Input
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-19
+dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
 fileName wgEncodeUwChIPSeqRawDataRep2NhekH3k36me3.fastq.gz
 fragLength 350
@@ -10300,7 +10300,6 @@ antibody CTCF
 cell GM06990
 composite wgEncodeUwChIPSeq
 controlId GM06990/Input
-dataSubmitted 2009-06-29
 dataType ChIPSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-20
@@ -12793,4 +12792,4 @@ subId 407
 tableName wgEncodeUwChIPSeqRawSignalRep2Werirb1Ctcf
 view RawSignal
 
-# MAGIC: -698588287
+# MAGIC: -1664404115

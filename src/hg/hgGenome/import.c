@@ -325,7 +325,8 @@ if (trackDupe != NULL && trackDupe[0] != 0)
             hashAdd(uniqHash, wig->table, NULL);
             }
         }
-    if (tdbIsComposite(track))
+    if (track->subtracks) // was tdbIsComposite(track)) but missed Jim's new
+                          // regulation track which isn't quite a composite
         {
         struct slName *subList = NULL;
         struct slRef *tdbRefList = trackDbListGetRefsToDescendantLeaves(track->subtracks);
