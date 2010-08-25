@@ -154,31 +154,102 @@ sqlFreeResult(&sr);
 return retVal;
 }
 
-static int metaDbVars(struct sqlConnection *conn, char *** metaValues)
+static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** metaLabels)
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
 {
 char query[256];
+#define WHITE_LIST_COUNT 30
+#ifdef WHITE_LIST_COUNT
+#define WHITE_LIST_VAR 0
+#define WHITE_LIST_LABEL 1
+char *whiteList[WHITE_LIST_COUNT][2] = {
+    {"age",              "Age of experimental organism"},
+    {"accession",        "Accession - external"},
+    {"antibody",         "Antibody - targetting protein"},
+    {"cell",             "Cell Line"},
+    {"localization",     "Cell compartment"},
+    {"control",          "Control or Input for ChIPseq"},
+//    {"controlId",        "ControlId - explicit relationship"},
+    {"dataType",         "Experiment type"},
+    {"dataVersion",      "ENCODE release"},
+//    {"fragLength",       "Fragment Length for ChIPseq"},
+//    {"freezeDate",       "Gencode freeze date"},
+//    {"level",            "Gencode level"},
+//    {"annotation",       "Gencode annotation"},
+    {"lab",              "Lab producing data"},
+    {"labVersion",       "Lab specific details"},
+    {"labExpId",         "Lab specific identifier"},
+    {"softwareVersion",  "Lab specific informatics"},
+    {"mapAlgorithm",     "Mapping algorithm"},
+    {"grant",            "Priniple Investigator"},
+    {"readType",         "Paired/Single reads lengths"},
+    {"replicate",        "Replicate number"},
+    {"restrictionEnzyme","Restriction Enzyme used"},
+    {"ripAntibody",      "RIP Antibody"},
+    {"ripTgtProtein",    "RIP Target Protein"},
+    {"rnaExtract",       "RNA Extract"},
+    {"setType",          "Experiment or Input"},
+    {"sex",              "Sex of organism"},
+    {"strain",           "Strain of organism"},
+    {"treatment",        "Treatment"},
+    {"view",             "View - Peaks or Signals"},
+};
+// FIXME: The whitelist should be a table or ra
+// FIXME: The whitelist should be in list order
+// FIXME: Should read in list, then verify that an mdb val exists.
+
+char **retVar = needMem(sizeof(char *) * WHITE_LIST_COUNT);
+char **retLab = needMem(sizeof(char *) * WHITE_LIST_COUNT);
+int ix,count;
+for(ix=0,count=0;ix<WHITE_LIST_COUNT;ix++)
+    {
+    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",whiteList[ix][WHITE_LIST_VAR]);
+    if(sqlQuickNum(conn,query) > 0)
+        {
+        retVar[count] = whiteList[ix][WHITE_LIST_VAR];
+        retLab[count] = whiteList[ix][WHITE_LIST_LABEL];
+        count++;
+        }
+    }
+if(count == 0)
+    {
+    freez(&retVar);
+    freez(&retLab);
+    }
+*metaVars = retVar;
+*metaLabels = retLab;
+return count;
+
+#else///ifndef WHITE_LIST_COUNT
+
+char **retVar;
+char **retLab;
+struct slName *el, *varList = NULL;
 struct sqlResult *sr = NULL;
 char **row = NULL;
-int i;
-struct slName *el, *varList = NULL;
-char **retVal;
 
-safef(query, sizeof(query), "select distinct var from metaDb");
+safef(query, sizeof(query), "select distinct var from metaDb order by var");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&varList, row[0]);
 sqlFreeResult(&sr);
-retVal = needMem(sizeof(char *) * slCount(varList));
-slNameSort(&varList);
-for (el = varList, i = 0; el != NULL; el = el->next, i++)
-    retVal[i] = el->name;
-*metaValues = retVal;
-return i;
+retVar = needMem(sizeof(char *) * slCount(varList));
+retLab = needMem(sizeof(char *) * slCount(varList));
+slReverse(&varList);
+//slNameSort(&varList);
+int count = 0;
+for (el = varList; el != NULL; el = el->next)
+    {
+    retVar[count] = el->name;
+    retLab[count] = el->name;
+    count++;
+    }
+*metaVars = retVar;
+*whiteLabels = retLab;
+return count;
+#endif///ndef WHITE_LIST_COUNT
 }
 
-// FIXME: This code is duplicated in imageV2!!!
-// FIXME: This code is duplicated in imageV2!!!
 static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
 {
 // add entry for given track to the trackDbJson string
@@ -202,8 +273,33 @@ if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != 
 dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
-// FIXME: This code is duplicated in imageV2!!!
-// FIXME: This code is duplicated in imageV2!!!
+
+void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
+    int count, char *selected, char *extra)
+/* Make a drop-down list with both text and values. */
+{
+int i;
+char *selString;
+assert(values != NULL && text != NULL);
+if (selected == NULL)
+    selected = values[0];
+printf("<SELECT");
+if (name)
+    printf(" NAME='%s'", name);
+if (extra)
+    printf("%s", extra);
+printf(">\n");
+for (i=0; i<count; ++i)
+    {
+    if (sameWord(values[i], selected))
+        selString = " SELECTED";
+    else
+        selString = "";
+    printf("<OPTION%s value='%s'>%s</OPTION>\n", selString, values[i], text[i]);
+    }
+printf("</SELECT>\n");
+}
+
 
 void doSearchTracks(struct group *groupList)
 {
@@ -223,8 +319,8 @@ boolean metaDbExists = sqlTableExists(conn, "metaDb");
 struct slRef *tracks = NULL;
 int numMetadataSelects, tracksFound = 0;
 int numMetadataNonEmpty = 0;
-char **metadataName;
-char **metadataValue;
+char **mdbVar;
+char **mdbVal;
 struct hash *parents = newHash(4);
 boolean simpleSearch;
 struct trix *trix;
@@ -334,8 +430,8 @@ if(addSearchSelect)
 
 if(numMetadataSelects)
     {
-    metadataName = needMem(sizeof(char *) * numMetadataSelects);
-    metadataValue = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
     int i;
     for(i = 0; i < numMetadataSelects; i++)
         {
@@ -348,14 +444,14 @@ if(numMetadataSelects)
         else
             offset = 1;
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
-        metadataName[i] = cartOptionalString(cart, buf);
+        mdbVar[i] = cartOptionalString(cart, buf);
         if(!simpleSearch)
             {
             safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            metadataValue[i] = cartOptionalString(cart, buf);
-            if(sameString(metadataValue[i], ANYLABEL))
-                metadataValue[i] = NULL;
-            if(!isEmpty(metadataValue[i]))
+            mdbVal[i] = cartOptionalString(cart, buf);
+            if(sameString(mdbVal[i], ANYLABEL))
+                mdbVal[i] = NULL;
+            if(!isEmpty(mdbVal[i]))
                 numMetadataNonEmpty++;
             }
         }
@@ -372,19 +468,20 @@ else
     {
     // create defaults
     numMetadataSelects = 2;
-    metadataName = needMem(sizeof(char *) * numMetadataSelects);
-    metadataValue = needMem(sizeof(char *) * numMetadataSelects);
-    metadataName[0] = "cell";
-    metadataName[1] = "antibody";
-    metadataValue[0] = ANYLABEL;
-    metadataValue[1] = ANYLABEL;
+    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVar[0] = "cell";
+    mdbVar[1] = "antibody";
+    mdbVal[0] = ANYLABEL;
+    mdbVal[1] = ANYLABEL;
     }
 
 if(metaDbExists)
     {
     int i;
-    char **metaValues = NULL;
-    int count = metaDbVars(conn, &metaValues);
+    char **mdbVars = NULL;
+    char **mdbVarLabels = NULL;
+    int count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
 
     for(i = 0; i < numMetadataSelects; i++)
         {
@@ -407,13 +504,14 @@ if(metaDbExists)
         hPrintf("</td><td>and</td>\n");
         hPrintf("</td><td colspan=2 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metadataName[i],
-                                                   "mdbVar", NULL, "onchange=findTracksMdbVarChanged(this)");
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
+        //cgiMakeDropListClassWithStyleAndJavascript(buf, mdbVars, count, mdbVar[i],
+        //                                           "mdbVar", NULL, "onchange=findTracksMdbVarChanged(this)");
         hPrintf("is</td>\n<td>\n");
-        len = getTermArray(conn, &terms, metadataName[i]);
+        len = getTermArray(conn, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, terms, terms, len, metadataValue[i], "class='mdbVal' onchange='findTracksSearchButtonsEnable(true)'");
-        if (!simpleSearch && metadataValue[i])
+        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' onchange='findTracksSearchButtonsEnable(true)'");
+        if (!simpleSearch && mdbVal[i])
             searchTermsExist = TRUE;
         hPrintf("</td></tr>\n");
         }
@@ -495,9 +593,9 @@ if(doSearch)
 
         for(i = 0; i < numMetadataSelects; i++)
             {
-            if(!isEmpty(metadataValue[i]))
+            if(!isEmpty(mdbVal[i]))
                 {
-                struct slName *tmp = metaDbSearch(conn, metadataName[i], metadataValue[i], "is");
+                struct slName *tmp = metaDbSearch(conn, mdbVar[i], mdbVal[i], "is");
                 if(metaTracks == NULL)
                     metaTracks = tmp;
                 else
