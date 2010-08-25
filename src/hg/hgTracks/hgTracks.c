@@ -72,9 +72,9 @@ boolean hasCustomTracks = FALSE;  /* whether any custom tracks are for this db*/
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
 boolean withNextItemArrows = FALSE; /* Display next feature (gene) navigation buttons near center labels? */
-#ifndef IMAGEv2_DRAG_REORDER
+#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 boolean withPriorityOverride = FALSE;   /* Display priority for each track to allow reordering */
-#endif//ndef IMAGEv2_DRAG_REORDER
+#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 
 int gfxBorder = hgDefaultGfxBorder; /* Width of graphics border. */
 int guidelineSpacing = 12;  /* Pixels between guidelines. */
@@ -224,27 +224,27 @@ for (group = groupList; group != NULL; group = group->next)
                     {
                     assert(tdb->parent != NULL && tdb->parent->track);
                     cartRemove(cart, tdb->parent->track);
-                    #ifndef IMAGEv2_DRAG_REORDER
+                    #if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                     if (withPriorityOverride)
                         {
                         safef(pname, sizeof(pname), "%s.priority",tdb->parent->track);
                         cartRemove(cart, pname);
                         }
-                    #endif//ndef IMAGEv2_DRAG_REORDER
+                    #endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                     }
 
                 track->visibility = tdb->visibility;
                 cartRemove(cart, track->track);
 
                 /* set the track priority back to the default value */
-                #ifndef IMAGEv2_DRAG_REORDER
+                #if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                 if (withPriorityOverride)
                     {
                     safef(pname, sizeof(pname), "%s.priority",track->track);
                     cartRemove(cart, pname);
                     track->priority = track->defaultPriority;
                     }
-                #endif//ndef IMAGEv2_DRAG_REORDER
+                #endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                 }
             else
                 {
@@ -3859,7 +3859,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
     {
     /* deal with group reordering */
     float priority = grp->priority;
-    #ifndef IMAGEv2_DRAG_REORDER
+    #if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     if (withPriorityOverride)
         {
         char cartVar[512];
@@ -3869,7 +3869,7 @@ for (grp = grps; grp != NULL; grp = grp->next)
         if (priority == grp->priority)
             cartRemove(cart, cartVar);
         }
-    #endif//ndef IMAGEv2_DRAG_REORDER
+    #endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     /* create group object; add to list and hash */
     AllocVar(group);
     group->name = cloneString(grp->name);
@@ -3886,7 +3886,7 @@ grpFreeList(&grps);
  * If necessary make up an unknown group. */
 for (track = *pTrackList; track != NULL; track = track->next)
     {
-#ifndef IMAGEv2_DRAG_REORDER
+#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     /* handle track reordering feature -- change group assigned to track */
     if (withPriorityOverride)
         {
@@ -3937,7 +3937,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
 */
         track->priority = priority;
         }
-#endif//ndef IMAGEv2_DRAG_REORDER
+#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 
     /* assign group object to track */
     if (track->groupName == NULL)
@@ -5207,9 +5207,9 @@ if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
     }
-#ifndef IMAGEv2_DRAG_REORDER
+#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
-#endif//ndef IMAGEv2_DRAG_REORDER
+#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 
