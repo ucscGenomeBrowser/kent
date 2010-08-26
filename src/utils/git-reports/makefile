@@ -19,10 +19,10 @@ clean::
 install:
 	${MAKE} BINDIR=/cluster/bin/${MACHTYPE}
 
-test: $(EXE)
+test: ${A}$(EXE)
 	rm -fr ${HOME}/public_html/git-reports
 	mkdir ${HOME}/public_html/git-reports
-	$(EXE) origin/v223_branch origin/v224_branch 2010-01-05 2010-01-19 v224 /cluster/bin/build/buildrepo ${HOME}/public_html/git-reports branch
+	${A}$(EXE) origin/v223_branch origin/v224_branch 2010-01-19 2010-02-02 v224 /cluster/bin/build/buildrepo ${HOME}/public_html/git-reports branch
 	# note can use -verbose=2
 
 
