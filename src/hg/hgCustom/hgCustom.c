@@ -19,6 +19,8 @@
 #include "udc.h"
 #endif//def USE_BAM && KNETFILE_HOOKS
 
+static long loadTime = 0;
+
 static char const rcsid[] = "$Id: hgCustom.c,v 1.142 2010/05/28 23:04:56 kuhn Exp $";
 
 void usage()
@@ -30,6 +32,9 @@ errAbort(
   "   hgCustom <CGI settings>\n"
   );
 }
+
+/* DON'T EDIT THIS -- use CGI param "&measureTiming=." */
+static boolean measureTiming = FALSE;
 
 #define TEXT_ENTRY_ROWS 7
 #define TEXT_ENTRY_COLS 73
@@ -619,7 +624,7 @@ for (hel = hels; hel != NULL; hel = hel->next)
 return dbList;
 }
 
-void manageCustomForm(char *warn)
+static void manageCustomForm(char *warn)
 /* list custom tracks and display checkboxes so user can select for delete */
 {
 
@@ -673,6 +678,8 @@ else
     printf("<B>genome:</B> %s &nbsp;&nbsp;&nbsp;<B>assembly:</B> %s &nbsp;&nbsp;&nbsp;[%s]\n", 
             organism, hFreezeDate(database), database);
 
+if (measureTiming && (loadTime > 0))
+    printf("\n<BR>load time: %ld ms<BR>\n", loadTime);
 /* place for warning messages to appear */
 if (isNotEmpty(warn))
     {
@@ -839,7 +846,7 @@ helpCustom();
 cartWebEnd(cart);
 }
 
-void doManageCustom(char *warn)
+static void doManageCustom(char *warn)
 /* display form for deleting & updating custom tracks.
  * Include warning message, if any */
 {
@@ -1001,7 +1008,10 @@ struct customTrack *ct = NULL;
 boolean ctUpdated = FALSE;
 char *initialDb = NULL; 
 
+long thisTime = clock1000();
+
 cart = theCart;
+measureTiming = isNotEmpty(cartOptionalString(cart, "measureTiming"));
 initialDb = cloneString(cartString(cart, "db"));
 getDbAndGenome(cart, &database, &organism, oldVars);
 
@@ -1205,6 +1215,11 @@ else
 
 	}
     warn = dyStringCannibalize(&dsWarn);
+    if (measureTiming)
+	{
+	long lastTime = clock1000();
+	loadTime = lastTime - thisTime;
+	}
     if (!initialDb || ctList || cartVarExists(cart, hgCtDoDelete))
         doManageCustom(warn);
     else if (ctParseError)

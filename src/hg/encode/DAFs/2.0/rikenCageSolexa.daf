@@ -1,6 +1,6 @@
 # Data Agreement File for SOLEXA CAGE project $Revision: 1.3 $
 
-# This file specifies the data agreement between your lab and 
+# This file specifies the data agreement between your lab and
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated .ddf should look like this:
@@ -13,33 +13,34 @@ dafVersion        2.0
 grant             Gingeras
 lab               RIKEN
 dataType          CAGE
-compositeSuffix	  RikenCage
+compositeSuffix   RikenCage
 group             expression
 variables         cell, localization, rnaExtract
 assembly          hg19
+noAutoCreate      yes
 
-validationSettings	validateFiles.fastq.quick=1000
+validationSettings      validateFiles.bam:mismatches=8
 
 # Track/view definition
 view             PlusClusters
 longLabelPrefix  RIKEN CAGE Plus Strand Predicted Start Sites
-type             bigWig
+type             bedGraph 4
 required         yes
 hasReplicates    no
 
 view             MinusClusters
 longLabelPrefix  RIKEN CAGE Minus Strand Predicted Start Sites
-type             bigWig
+type             bedGraph 4
 required         yes
 hasReplicates    no
 
-view		 PlusRawSignal
+view             PlusRawSignal
 longLabelPrefix  RIKEN CAGE Plus Raw Signal
 type             bigWig
 required         no
 hasReplicates    no
 
-view		 MinusRawSignal
+view             MinusRawSignal
 longLabelPrefix  RIKEN CAGE Minus Raw Signal
 type             bigWig
 required         no
@@ -55,4 +56,3 @@ view             RawData
 type             fastq
 hasReplicates    no
 required         no
-

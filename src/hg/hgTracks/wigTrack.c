@@ -1321,14 +1321,22 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	/*	let's check end point screen coordinates.  If they are
  	 *	the same, then this entire data block lands on one pixel,
  	 *	no need to walk through it, just use the block's specified
- 	 *	max/min.  It is OK if these end up + or -, we do want to
+ 	 *	max/min.  It is OK if these end up + or - values, we do want to
  	 *	keep track of pixels before and after the screen for
- 	 *	later smoothing operations
+ 	 *	later smoothing operations.
 	 */
-	x1 = (wi->start - seqStart) * pixelsPerBase;
-	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
+double x1d = (double)(wi->start - seqStart) * pixelsPerBase;
+	x1 = round(x1d);
+double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
+	x2 = round(x2d);
 
-	if (x2 > x1)
+        /* this used to be if (x2 > x1) which often caused reading of blocks
+	 * when they were merely x2 = x1 + 1 due to rounding errors as
+	 * they became integers.  This double comparison for something over
+	 * 0.5 will account for rounding errors that are really small, but
+	 * still handle a slipping window size as it walks across the screen
+	 */
+	if ((x2d - x1d) > 0.5)
 	    {
 	    unsigned char *readData;	/* the bytes read in from the file */
 	    lseek(wibFH, wi->offset, SEEK_SET);

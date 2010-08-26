@@ -216,7 +216,8 @@ while (lineFileNext(lf, &line, &lineSize))
 
     }
 lineFileClose(&lf);
-slReverse(&commits);
+/* We want to keep them chronological order,
+so do not need slReverse since the addHead reversed git log's rev chron order already */
 
 
 unlink("commits.tmp");
@@ -524,13 +525,13 @@ fclose(h);
 
 
 int slComFileCmp(const void *va, const void *vb)
-/* Compare two slNames. */
+/* Compare two comFiles. */
 {
 const struct comFile *a = *((struct comFile **)va);
 const struct comFile *b = *((struct comFile **)vb);
 int result = strcmp(a->f->path, b->f->path);
 if (result == 0)
-    result = a->commit->commitNumber - b->commit->commitNumber;
+    result = b->commit->commitNumber - a->commit->commitNumber;
 return result;
 }
 
@@ -591,8 +592,8 @@ for(c = commits; c; c = c->next)
 	    }
 	}
     }
-// sort by file path, and then by reverse commitNumber
-//  so that newest commit is on top.
+// sort by file path, and then by commitNumber
+//  so that newest commit is on the bottom.
 slSort(&comFiles, slComFileCmp);
 
 char *lastPath = "";
