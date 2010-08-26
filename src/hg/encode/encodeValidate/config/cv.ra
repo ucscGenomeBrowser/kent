@@ -5222,13 +5222,34 @@ term longPolyA
 tag pAP
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
-label PolyA+
+label longPolyA+
 
 term longNonPolyA
 tag longNonPolyA
 type rnaExtract
 description Poly(A)- RNA longer than 200 nt
+label longPolyA-
+
+## This is what Yale and Caltech are using
+term polyA
+tag polyA 
+type rnaExtract
+description Isolated Poly(A) RNA 
+label PolyA+
+
+term nonPolyARRna
+tag nonPolyARRna
+type rnaExtract
+description Depleted Poly(A) RNA and rRNA
+label PolyARRna-
+
+term nonPolyA
+tag nonPolyA 
+type rnaExtract
+description Depleted Poly(A) RNA 
 label PolyA-
+
+
 
 term proteinRnaExtracts
 tag proteinRnaExtracts
