@@ -5222,13 +5222,34 @@ term longPolyA
 tag pAP
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
-label PolyA+
+label longPolyA+
 
 term longNonPolyA
 tag longNonPolyA
 type rnaExtract
 description Poly(A)- RNA longer than 200 nt
+label longPolyA-
+
+## This is what Yale and Caltech are using
+term polyA
+tag polyA 
+type rnaExtract
+description Isolated Poly(A) RNA 
+label PolyA+
+
+term nonPolyARRna
+tag nonPolyARRna
+type rnaExtract
+description Depleted Poly(A) RNA and rRNA
+label PolyARRna-
+
+term nonPolyA
+tag nonPolyA 
+type rnaExtract
+description Depleted Poly(A) RNA 
 label PolyA-
+
+
 
 term proteinRnaExtracts
 tag proteinRnaExtracts
@@ -5879,7 +5900,8 @@ description Applied Biosystems SOLiD System 2.0
 #labPi:        This is the shortened name that we refer to the PI, usually just last name
 #labPiFull:    The full name of the PI
 #grantPI:      Shortened name of the head PI for the grant
-#grantInst:    Term that we use to refer to the project or grant like (SYDH or HAIB)
+#grantInst:    The name of the institution where the grant is administered from.
+#projectName:  
 #organism:     human or mouse
 
 term Broad
@@ -5890,36 +5912,30 @@ labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
 grantInst Broad Institute
+projectName Broad
 organism human
 
-term UNC
-tag UNC
-type lab
-labInst Univeristy of North Carolina
-labPi Lieb
-labPiFull Jason Lieb
-grantPi Crawford
-grantInst UNC
-organism human
 
 term BU
 tag BU 
 type lab
-grantInst Boston University
-labName BU
+labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
+grantInst Boston University
+projectName BU
 organism human
 
 term GIS-Chia
 tag GIS-Chia 
 type lab
 labInst Genome Institute of Singapore (Chia)
-labName GIS-Chia
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
+grantInst Genome Institute of Singapore
+projectName Chia PET??
 organism human
 
 term Genecode
@@ -5930,17 +5946,18 @@ labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
 grantInst Sanger Institute
+projectNmae
 organism human
 
 term SUNY
 tag SUNY
 type lab
 labInst State University of New York at Albany
-labName SunyAlbany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
 grantInst SUNY-Albany
+projectName SUNY
 organism human
 
 term UW
@@ -5948,9 +5965,10 @@ tag UW
 type lab    
 labInst University of Washington
 labPi Stam
-labPiFull George Stamatoyannopoulos??
+labPiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst UW
+grantInst University of Washington
+projectName UW
 organism human
 
 
@@ -5964,17 +5982,30 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-grantInst Duke University
+grantInst Duke
+projectName OpenChrom
 organism human
 
-term Duke-Iyer
-tag Duke-Iyer
+term UT-A
+tag UT-A
 type lab
-labName UT-A
+labInst Duke University
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
 grantInst Duke 
+projectName OpenChrom
+organism human
+
+term UNC
+tag UNC
+type lab
+labInst Univeristy of North Carolina
+labPi Lieb
+labPiFull Jason Lieb
+grantPi Crawford
+grantInst Duke
+projectName OpenChrom
 organism human
 
 ### HAIB Project Labs         
@@ -5987,7 +6018,8 @@ grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-grantInst  HAIB
+grantInst Hudson Alpha Institute of Biotechnology 
+projectName Caltech
 organism human
 
 term HudsonAlpha
@@ -5997,7 +6029,8 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-grantInst HAIB
+grantInst Hudson Alpha Institute for Biotechnology
+projectName HAIB
 organism human
 
 ### NHGRI Labs                 
@@ -6006,21 +6039,23 @@ organism human
 term NHGRI-Elnitski
 tag NHGRI-Elnitski
 type lab
-labInst National Human Genome Research Institute Elnitski
+labInst National Human Genome Research Institute 
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-grantInst National Human Genome Research Institute Elnitski
+grantInst National Human Genome Research Institute 
+projectName NHGRI-Elnitski
 organism human
 
 term NHGRI-Margulies
 tag NHGRI-Marigulies
 type lab
-labInst National Human Genome Research Institute Margulies
+labInst National Human Genome Research Institute 
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-labInst National Human Genome Research Institute Margulies
+labInst National Human Genome Research Institute 
+projectName NHGRI-Margulies
 organism human
 
 
@@ -6035,7 +6070,8 @@ labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term GIS
@@ -6045,7 +6081,8 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term Helicos       
@@ -6055,7 +6092,8 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term Affy
@@ -6065,7 +6103,8 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term Riken
@@ -6076,7 +6115,8 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 
@@ -6091,6 +6131,7 @@ labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
 grantInst University of Massachusetts Amherst 
+projectName
 organism human
 
 term UMass-Weng
@@ -6101,6 +6142,7 @@ labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
 grantInst University of Massachusetts Amherst  
+projectName
 organism human
 
 
@@ -6114,7 +6156,8 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst SYDH
+grantInst Stanford
+projectName SYDH
 organism human
 
 term Yale
@@ -6124,9 +6167,9 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst  SYDH
+grantInst Stanford
+projectName SYDH
 organism human
-#grantInst  Stanford Yale UCDavis Harvard
 
 term Harvard 
 tag  Harvard 
@@ -6135,7 +6178,8 @@ labInst Harvard
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-grantInst SYDH
+grantInst Stanford
+projectName SYDH
 organism human
 
 term UCD
@@ -6145,7 +6189,8 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-grantInst SYDH
+grantInst Stanford
+projectName SYDH
 organism human
 
 
@@ -6161,6 +6206,7 @@ labPi Ren
 labPiFull Bing Ren
 grantPi Ren
 grantInst LICR
+project LICR
 organism mouse
 
 term Caltech-m
@@ -6171,6 +6217,7 @@ labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
 grantInst PSU
+project
 organism mouse
 
 term UMass-m
@@ -6181,6 +6228,7 @@ labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
 grantInst PSU
+project
 organism mouse
 
 term Duke-m
@@ -6191,26 +6239,29 @@ labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
 grantInst PSU
+project
 organism mouse
 
 term UChicago-m
 tag UChicago 
 type lab
-grantInst University of Chicago 
-labName UChicago
+labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
+grantInst University of Chicago 
+project
 organism mouse
 
 term UNC-m
 tag UNC 
 type lab
 labInst University of North Carolina
-labName UNC-Giddings
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
+grantInst University of North Carolina
+projectName UNC-Giddings
 organism mouse
 
 term UW-m
@@ -6220,7 +6271,8 @@ labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst UW
+grantInst Univeristy of Washington
+projectName UW
 organism mouse
 
 term Stanford-m
@@ -6230,7 +6282,8 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst StanfordYale
+grantInst Stanford
+projectName StanfordYale
 organism human
 
 term Yale-m
@@ -6240,6 +6293,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst StanfordYale
+grantInst Stanford
+projectName StanfordYale
 organism human
 

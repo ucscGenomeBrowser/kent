@@ -165,17 +165,17 @@ char query[256];
 char *whiteList[WHITE_LIST_COUNT][2] = {
     {"age",              "Age of experimental organism"},
     {"accession",        "Accession - external"},
-    {"antibody",         "Antibody - targetting protein"},
+    {"antibody",         "Antibody or target protein"},
     {"cell",             "Cell Line"},
     {"localization",     "Cell compartment"},
     {"control",          "Control or Input for ChIPseq"},
-//    {"controlId",        "ControlId - explicit relationship"},
+    //{"controlId",        "ControlId - explicit relationship"},
     {"dataType",         "Experiment type"},
     {"dataVersion",      "ENCODE release"},
-//    {"fragLength",       "Fragment Length for ChIPseq"},
-//    {"freezeDate",       "Gencode freeze date"},
-//    {"level",            "Gencode level"},
-//    {"annotation",       "Gencode annotation"},
+    //{"fragLength",       "Fragment Length for ChIPseq"},
+    //{"freezeDate",       "Gencode freeze date"},
+    //{"level",            "Gencode level"},
+    //{"annotation",       "Gencode annotation"},
     {"lab",              "Lab producing data"},
     {"labVersion",       "Lab specific details"},
     {"labExpId",         "Lab specific identifier"},
@@ -818,6 +818,7 @@ else
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"
+        "<li>Metadata variables have been 'white-listed' to only include vetted items.  Short text descriptions and vetted list should be reviewed.</li>"
         "<li>'Clear' button added and search and clear buttons should be meaningfully enabled/disabled.</li>"
         "<li>Clicking on shortLabel for found track will popup the description text.  Subtracks should show their composite description.</li>"
         "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
@@ -832,7 +833,6 @@ hPrintf("<p><b>Recently Done</b><ul>\n"
         "<BR>QUESTION: Is that a bug? REM that description search is NOT inherited. (* Suggestions below.)</li>"
         "</ul></p>"
         "<p><b>Suggested improvments:</b><ul>\n"
-        "<li>The metadata variables should be 'white-listed' to only include vetted items.  Nicer text should be displayed for these.</li>"
         "<li>The metadata values will not be white-listed, but it would be nice to have more descriptive text for them.  A short label added to cv.ra?</li>"
         "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.  Jim suggests look and feel of hgTracks 'Configure Tracks...' list instead.</li>"
         "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
