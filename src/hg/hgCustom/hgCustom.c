@@ -624,7 +624,7 @@ for (hel = hels; hel != NULL; hel = hel->next)
 return dbList;
 }
 
-void manageCustomForm(char *warn)
+static void manageCustomForm(char *warn)
 /* list custom tracks and display checkboxes so user can select for delete */
 {
 
@@ -846,7 +846,7 @@ helpCustom();
 cartWebEnd(cart);
 }
 
-void doManageCustom(char *warn)
+static void doManageCustom(char *warn)
 /* display form for deleting & updating custom tracks.
  * Include warning message, if any */
 {
