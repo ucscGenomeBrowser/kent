@@ -506,14 +506,9 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     struct trackDb *tdbParent = trackDbCompositeParent(toggleGroup->tdb);
     char *parentName = tdbParent->track;
     // Find parent track (as opposed to trackDb)
-    struct track *tgParent = trackList;
-    for (;tgParent != NULL; tgParent = tgParent->next)
-        {
-        if (sameString(tgParent->track,parentName))
-            break;
-        }
-    // should be assertable assert(tgParent!=NULL);
-    char *encodedTableName = cgiEncode(toggleGroup->tdb->parent->track);
+    struct track *tgParent = hashFindVal(trackHash, parentName);
+    assert(tgParent!=NULL);
+    char *encodedTableName = cgiEncode(parentName);
     char *view = NULL;
     boolean setView = subgroupFind(toggleGroup->tdb,"view",&view);
     if(tgParent!=NULL && tvCompare(tgParent->visibility,vis) > 0)
@@ -3121,11 +3116,13 @@ void genericDrawItems(struct track *tg,
 {
 if (tg->mapItem == NULL)
     tg->mapItem = genericMapItem;
-if (vis != tvDense && baseColorCanDraw(tg))
+if (vis != tvDense && (! bedItemRgb(tg->tdb)) && baseColorCanDraw(tg))
     baseColorInitTrack(hvg, tg);
 if (vis == tvPack || vis == tvSquish)
+{
     genericDrawItemsPackSquish(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                                font, color, vis);
+}
 else
     genericDrawItemsFullDense(tg, seqStart, seqEnd, hvg, xOff, yOff, width,
                               font, color, vis);

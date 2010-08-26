@@ -655,7 +655,7 @@ composite wgEncodeHudsonalphaChipSeq
 controlId GM12878/None/Input/PCR1x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
-dateSubmited 2009-07-20
+dateSubmitted 2009-07-20
 dateUnrestricted 2010-04-20
 fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Gm12878Oct2.tagAlign.gz
 fragLength 225
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: -18502145
+# MAGIC: 1661937971
