@@ -1415,4 +1415,9 @@ see doc/builds.txt for specific details.
          felCat3 felCat4 > do.log 2>&1 &
     # real    2093m9.263s
 
+    # pushQ stuff
+    cd /usr/local/apache/htdocs-hgdownload/goldenPath/felCat3/liftOver/
+    md5sum felCat3ToFelCat4.over.chain.gz  >> md5sum.txt
+
+
 ############################################################################
