@@ -13,3 +13,15 @@ group map
 priority 10
 visibility hide
 type ctgPos
+
+track altSequence
+shortLabel Alt Sequence
+longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
+visibility hide
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+group map
+priority 25
+url http:/cgi-bin/hgTracks?db=hg19&position=$$
+urlLabel GRCh37 sequence:
