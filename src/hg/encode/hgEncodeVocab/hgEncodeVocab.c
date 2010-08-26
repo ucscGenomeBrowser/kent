@@ -305,6 +305,15 @@ else if (sameString(type,"Cell Line"))
     {
     printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
 
+    s = hashFindVal(ra, "organism");
+    if (s != NULL)
+        {
+        char *cellOrg = cloneString(s);
+        strLower(cellOrg);
+        if (differentString(cellOrg, org))
+            return FALSE;
+        }
+
     // pathBuffer for new protocols not in human    
     char pathBuffer[PATH_LEN];
     safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/",org);

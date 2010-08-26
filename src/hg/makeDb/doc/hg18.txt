@@ -30473,4 +30473,27 @@ done | sort -k4,4 > hg18.gold.bed
 	 hg18 hg17 > do.log 2>&1 &
     #	real    74m50.836s
 
+
+
+############################################################################
+# NUMTS TRACK (DONE 2010-08-09 - Chin)
+
+    mkdir /cluster/data/hg18/bed/NumtS
+    cd  /cluster/data/hg18/bed/NumtS
+    # download raw data from
+    wget http://193.204.182.50/files/all_UCSC_custom_tracks.txt 
+    wget http://193.204.182.50/files/NumtS_fragments_extlink.html
+    # split the all_UCSC_custom_tracks.txt into 4 bed files 
+    # numtSAssembled.bed, numtS.bed, numtSMitochondrion.bed and
+    # numtSMitochondrionChrPlacement.bed
+
+    cat all_UCSC_custom_tracks.txt | awk ' /^track name/ {print $_}' / 
+       > tracks.list
+    # load the bed files to hg18
+    hgLoadBed hg18  numtSAssembled  numtSAssembled.bed
+    hgLoadBed hg18 numtS numtS.bed
+    hgLoadBed hg18 numtSMitochondrion numtSMitochondrion.bed
+    hgLoadBed hg18 numtSMitochondrionChrPlacement numtSMitochondrionChrPlacement.bed
+
+
 ##############################################################################
