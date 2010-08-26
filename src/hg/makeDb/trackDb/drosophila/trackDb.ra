@@ -37,13 +37,167 @@ showDiffBasesAllScales .
 indelDoubleInsert on
 indelQueryInsert on
 
+track bdtnpDnase
+compositeTrack on
+shortLabel BDTNP DNase Accs
+longLabel Berkeley Drosophila Transcription Network Project Chromatin Accessibility (DNase)
+group regulation
+priority 70.9
+# Setting type to bed3, even though all subtracks are wig, to suppress composite-level
+# controls (per Tim).
+type bed 3
+noInherit on
+visibility pack
+boxedCfg on
+subGroup1 view Views acc=Accessibility regions=Regions_(FDR=5%)
+subGroup2 stage Stage s05=S5 s09=S9 s10=S10 s11=S11 s14=S14
+subGroup3 repl Replicate r1=DNase_Replicate_1 r2=DNase_Replicate_2 r3both=FDR_5%_Regions_(Intersection_of_Replicates)
+dimensions dimensionX=stage dimensionY=repl
+sortOrder stage=+ repl=+
+dragAndDrop subTracks
+
+    track bdtnpDnaseViewAcc
+    parent bdtnpDnase
+    view acc
+    shortLabel Accessibility
+    visibility full
+    viewLimits 0:600
+    maxHeightPixels 100:30:10
+    autoScale off
+
+        track bdtnpDnaseS5R9481
+	parent bdtnpDnaseViewAcc
+	subGroups view=acc stage=s05 repl=r1
+	shortLabel S5 repl. 1
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 5, Replicate 1
+	type bigWig 0 13029
+	color 47,168,64
+
+	track bdtnpDnaseS5R9482
+	parent bdtnpDnaseViewAcc off
+	subGroups view=acc stage=s05 repl=r2
+	shortLabel S5 repl. 2
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 5, Replicate 2
+	type bigWig 0 16274
+	color 47,168,64
+
+	track bdtnpDnaseS9R9127
+	parent bdtnpDnaseViewAcc
+	subGroups view=acc stage=s09 repl=r1
+	shortLabel S9 repl. 1
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 9, Replicate 1
+	type bigWig 0 15001
+	color 243,110,22
+
+	track bdtnpDnaseS9R9128
+	parent bdtnpDnaseViewAcc off
+	subGroups view=acc stage=s09 repl=r2
+	shortLabel S9 repl. 2
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 9, Replicate 2
+	type bigWig 0 6036
+	color 243,110,22
+
+	track bdtnpDnaseS10R8816
+	parent bdtnpDnaseViewAcc
+	subGroups view=acc stage=s10 repl=r1
+	shortLabel S10 repl. 1
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 10, Replicate 1
+	type bigWig 0 37738
+	color 141,24,29
+
+	track bdtnpDnaseS10R8820
+	parent bdtnpDnaseViewAcc off
+	subGroups view=acc stage=s10 repl=r2
+	shortLabel S10 repl. 2
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 10, Replicate 2
+	type bigWig 0 55440
+	color 141,24,29
+
+	track bdtnpDnaseS11R9485
+	parent bdtnpDnaseViewAcc
+	subGroups view=acc stage=s11 repl=r1
+	shortLabel S11 repl. 1
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 11, Replicate 1
+	type bigWig 0 19434
+	color 64,163,203
+
+	track bdtnpDnaseS11R9486
+	parent bdtnpDnaseViewAcc off
+	subGroups view=acc stage=s11 repl=r2
+	shortLabel S11 repl. 2
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 11, Replicate 2
+	type bigWig 0 19692
+	color 64,163,203
+
+	track bdtnpDnaseS14R9477
+	parent bdtnpDnaseViewAcc
+	subGroups view=acc stage=s14 repl=r1
+	shortLabel S14 repl. 1
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 14, Replicate 1
+	type bigWig 0 43730
+	color 109,57,160
+
+	track bdtnpDnaseS14R9478
+	parent bdtnpDnaseViewAcc off
+	subGroups view=acc stage=s14 repl=r2
+	shortLabel S14 repl. 2
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 14, Replicate 2
+	type bigWig 0 78676
+	color 109,57,160
+
+
+    track bdtnpDnaseViewRegions
+    parent bdtnpDnase
+    view regions
+    shortLabel Regions (FDR=5%)
+    visibility squish
+    type bed 3
+
+	track bdtnpDnaseAccS5
+	parent bdtnpDnaseViewRegions
+	subGroups view=regions stage=s05 repl=r3both
+	shortLabel S5 Regions
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 5, FDR 5% euchromatic accessible regions
+	color 47,168,64
+
+	track bdtnpDnaseAccS9
+	parent bdtnpDnaseViewRegions
+	subGroups view=regions stage=s09 repl=r3both
+	shortLabel S9 Regions
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 9, FDR 5% euchromatic accessible regions
+	color 243,110,22
+
+	track bdtnpDnaseAccS10
+	parent bdtnpDnaseViewRegions
+	subGroups view=regions stage=s10 repl=r3both
+	shortLabel S10 Regions
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 10, FDR 5% euchromatic accessible regions
+	color 141,24,29
+
+	track bdtnpDnaseAccS11
+	parent bdtnpDnaseViewRegions
+	subGroups view=regions stage=s11 repl=r3both
+	shortLabel S11 Regions
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 11, FDR 5% euchromatic accessible regions
+	color 64,163,203
+
+	track bdtnpDnaseAccS14
+	parent bdtnpDnaseViewRegions
+	subGroups view=regions stage=s14 repl=r3both
+	shortLabel S14 Regions
+	longLabel BDTNP Chromatin Accessibility (DNase) Stage 14, FDR 5% euchromatic accessible regions
+	color 109,57,160
+
+
 track bdtnpChipper
 compositeTrack on
 subGroup1 view Views best1=Best_Antibody_(FDR=1%) best25=Best_Antibody_(FDR=25%) other1=Other_Antibodies_(FDR=1%) other25=Other_Antibodies_(FDR=25%)
 subGroup2 factor Factor BCD=bcd CAD=cad GT=gt HB=hb KNI=kni KR=Kr HKB=huckebein TLL=tailless D=Dichaete FTZ=fushi_tarazu H=hairy PRD=paired RUN=runt SLP=sloppy_paired_1 DA=daughterless DL=dorsal MAD=Mothers_against_dpp MED=Medea  SHN=schnurri SNA=snail TWI=twist Z=zeste POLII=PolII TFIIB=Transcription_factor_IIB
 subGroup3 class Regulatory_class ape1m=Anterior-posterior_early_maternal ape2g=Anterior-posterior_early_gap ape3t=Anterior-posterior_early_terminal ape4gl=Anterior-posterior_early_gap-like app=Anterior-posterior_pair_rule dvm=Dorsal-ventral_maternal dvz=Dorsal-ventral_zygotic z=Zeste_stage_11 zzgen=General
-dimensions dimensionX=class dimensionY=factor
-sortOrder class=+ factor=+ view=+
+subGroup4 stage Stage s04=Stage_4-5 s09=Stage_9 s10=Stage_10 s11=Stage_11 s14=Stage_14
+dimensions dimensionX=class dimensionY=factor dimA=stage
+dimensionAchecked s04,s09,s10,s11,s14
+sortOrder class=+ factor=+ view=+ stage=+
 dragAndDrop subTracks
 shortLabel BDTNP ChIP/chip
 longLabel Berkeley Drosophila Transcription Network Project Transcription Factor ChIP/chip
@@ -67,81 +221,90 @@ boxedCfg on
 
         track bdtnpBcd2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=BCD class=ape1m view=best1
+        subGroups factor=BCD class=ape1m view=best1 stage=s04
         shortLabel bcd AB 2 FDR  1%
-        longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 3
 
         track bdtnpCad1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=CAD class=ape1m view=best1
+        subGroups factor=CAD class=ape1m view=best1 stage=s04
         shortLabel cad AB 1 FDR  1%
-        longLabel  caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 5
 
         track bdtnpGt2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=GT class=ape2g view=best1
+        subGroups factor=GT class=ape2g view=best1 stage=s04
         shortLabel gt AB 2 FDR  1%
-        longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 7
 
         track bdtnpHb1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=HB class=ape2g view=best1
+        subGroups factor=HB class=ape2g view=best1 stage=s04
         shortLabel hb AB 1 FDR  1%
-        longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 9
 
+        track bdtnpHb1S9Fdr1
+        parent bdtnpChipperViewbest1
+        subGroups factor=HB class=ape2g view=best1 stage=s09
+        shortLabel hb AB1 S9 FDR 1%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 1, stage 9 embryos, False Discovery Rate (FDR) 1%
+        color 0,150,0
+        type bigWig 0.0 24.5
+        priority 9
+
         track bdtnpKni2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=KNI class=ape2g view=best1
+        subGroups factor=KNI class=ape2g view=best1 stage=s04
         shortLabel kni AB 2 FDR  1%
-        longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 15
 
         track bdtnpKr2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=KR class=ape2g view=best1
+        subGroups factor=KR class=ape2g view=best1 stage=s04
         shortLabel Kr AB 2 FDR  1%
-        longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 19
 
         track bdtnpHkb1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=HKB class=ape3t view=best1
-        shortLabel hkb AB 1 FDR 1%
-        longLabel huckebein (hkb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=HKB class=ape3t view=best1 stage=s04
+        shortLabel hkb AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: huckebein (hkb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 21
 
         track bdtnpTll1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=TLL class=ape3t view=best1
-        shortLabel tll AB 1 FDR 1%
-        longLabel tailless (tll) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=TLL class=ape3t view=best1 stage=s04
+        shortLabel tll AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: tailless (tll) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 27
 
         track bdtnpD1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=D class=ape4gl view=best1
-        shortLabel D AB 1 FDR 1%
-        longLabel Dichaete (D) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=D class=ape4gl view=best1 stage=s04
+        shortLabel D AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: Dichaete (D) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 29
@@ -149,45 +312,45 @@ boxedCfg on
         # Anterior-posterior pair rule: orange
         track bdtnpFtz3Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=FTZ class=app view=best1
-        shortLabel ftz AB 3 FDR 1%
-        longLabel fushi tarazu (ftz) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=FTZ class=app view=best1 stage=s04
+        shortLabel ftz AB 3 FDR  1%
+        longLabel BDTNP ChIP/chip: fushi tarazu (ftz) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 31
 
         track bdtnpH2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=H class=app view=best1
-        shortLabel h AB 2 FDR 1%
-        longLabel hairy (h) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=H class=app view=best1 stage=s04
+        shortLabel h AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: hairy (h) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 35
 
         track bdtnpPrd1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=PRD class=app view=best1
-        shortLabel prd AB 1 FDR 1%
-        longLabel paired (prd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=PRD class=app view=best1 stage=s04
+        shortLabel prd AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: paired (prd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 37
 
         track bdtnpRun1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=RUN class=app view=best1
-        shortLabel run AB 1 FDR 1%
-        longLabel runt (run) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=RUN class=app view=best1 stage=s04
+        shortLabel run AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: runt (run) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 41
 
         track bdtnpSlp11Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=SLP class=app view=best1
-        shortLabel slp1 AB 1 FDR 1%
-        longLabel sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=SLP class=app view=best1 stage=s04
+        shortLabel slp1 AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 45
@@ -195,63 +358,81 @@ boxedCfg on
         # Dorsal-ventral: blue
         track bdtnpDa2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=DA class=dvm view=best1
-        shortLabel da AB 2 FDR 1%
-        longLabel daughterless (da) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=DA class=dvm view=best1 stage=s04
+        shortLabel da AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: daughterless (da) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 47
 
         track bdtnpDl3Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=DL class=dvm view=best1
-        shortLabel dl AB 3 FDR 1%
-        longLabel dorsal (dl) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=DL class=dvm view=best1 stage=s04
+        shortLabel dl AB 3 FDR  1%
+        longLabel BDTNP ChIP/chip: dorsal (dl) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 49
 
         track bdtnpMad2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=MAD class=dvz view=best1
-        shortLabel mad AB 2 FDR 1%
-        longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 1%
+        subGroups factor=MAD class=dvz view=best1 stage=s04
+        shortLabel mad AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 51
 
         track bdtnpMed2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=MED class=dvz view=best1
-        shortLabel med AB 2 FDR 1%
-        longLabel Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=MED class=dvz view=best1 stage=s04
+        shortLabel med AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 53
 
+        track bdtnpMed2S10Fdr1
+        parent bdtnpChipperViewbest1
+        subGroups factor=MED class=dvz view=best1 stage=s10
+        shortLabel med AB2 S10 FDR1%
+        longLabel BDTNP ChIP/chip: Medea (med) antibody 2, stage 10 embryos, False Discovery Rate (FDR) 1%
+        color 0,0,200
+        type bigWig 0.0 13.61
+        priority 53
+
+        track bdtnpMed2S14Fdr1
+        parent bdtnpChipperViewbest1
+        subGroups factor=MED class=dvz view=best1 stage=s14
+        shortLabel med AB2 S14 FDR1%
+        longLabel BDTNP ChIP/chip: Medea (med) antibody 2, stage 14 embryos, False Discovery Rate (FDR) 1%
+        color 0,0,200
+        type bigWig 0.0 5.36
+        priority 53
+
         track bdtnpShn2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=SHN class=dvz view=best1
-        shortLabel shn AB 2 FDR 1%
-        longLabel schnurri (shn) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=SHN class=dvz view=best1 stage=s04
+        shortLabel shn AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: schnurri (shn) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 55
 
         track bdtnpSna2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=SNA class=dvz view=best1
-        shortLabel sna AB 2 FDR 1%
-        longLabel snail (sna) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=SNA class=dvz view=best1 stage=s04
+        shortLabel sna AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: snail (sna) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 61
 
         track bdtnpTwi2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=TWI class=dvz view=best1
-        shortLabel twi AB 2 FDR 1%
-        longLabel twist (twi) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        subGroups factor=TWI class=dvz view=best1 stage=s04
+        shortLabel twi AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: twist (twi) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 65
@@ -259,9 +440,9 @@ boxedCfg on
         # zeste: brown
         track bdtnpZ2Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=Z class=z view=best1
+        subGroups factor=Z class=z view=best1 stage=s11
         shortLabel z AB 2 FDR  1%
-        longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 1%
         color 100,75,0
         type wig 0.0 40.39
         priority 67
@@ -269,18 +450,18 @@ boxedCfg on
         # general tx factors: red
         track bdtnpPolIIFdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=POLII class=zzgen view=best1
+        subGroups factor=POLII class=zzgen view=best1 stage=s04
         shortLabel PolII AB FDR  1%
-        longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,0,0
         type wig 0.0 40.39
         priority 69
 
         track bdtnpTFIIB1Fdr1
         parent bdtnpChipperViewbest1
-        subGroups factor=TFIIB class=zzgen view=best1
+        subGroups factor=TFIIB class=zzgen view=best1 stage=s04
         shortLabel TFIIB AB 1 FDR 1%
-        longLabel Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 1%
         color 200,0,0
         type wig 0.0 40.39
         priority 71
@@ -295,217 +476,244 @@ boxedCfg on
     autoScale off
 
         track bdtnpBcd2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=BCD class=ape1m view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=BCD class=ape1m view=best25 stage=s04
         shortLabel bcd AB 2 FDR 25%
-        longLabel bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: bicoid (bcd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 4
 
         track bdtnpCad1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=CAD class=ape1m view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=CAD class=ape1m view=best25 stage=s04
         shortLabel cad AB 1 FDR 25%
-        longLabel caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: caudal (cad) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 6
 
         track bdtnpGt2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=GT class=ape2g view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=GT class=ape2g view=best25 stage=s04
         shortLabel gt AB 2 FDR 25%
-        longLabel giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: giant (gt) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 8
 
         track bdtnpHb1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=HB class=ape2g view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=HB class=ape2g view=best25 stage=s04
         shortLabel hb AB 1 FDR 25%
-        longLabel hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 10
 
+        track bdtnpHb1S9Fdr25
+        parent bdtnpChipperViewbest25
+        subGroups factor=HB class=ape2g view=best25 stage=s09
+        shortLabel hb AB1 S9 FDR25%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 1, stage 9 embryos, False Discovery Rate (FDR) 25%
+        color 0,150,0
+        type bigWig 0.0 24.5
+        priority 10
+
         track bdtnpKni2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=KNI class=ape2g view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=KNI class=ape2g view=best25 stage=s04
         shortLabel kni AB 2 FDR 25%
-        longLabel knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: knirps (kni) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 16
 
         track bdtnpKr2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=KR class=ape2g view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=KR class=ape2g view=best25 stage=s04
         shortLabel Kr AB 2 FDR 25%
-        longLabel Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: Kruppel (Kr) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 20
 
         track bdtnpHkb1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=HKB class=ape3t view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=HKB class=ape3t view=best25 stage=s04
         shortLabel hkb AB 1 FDR 25%
-        longLabel huckebein (hkb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: huckebein (hkb) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 22
 
         track bdtnpTll1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=TLL class=ape3t view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=TLL class=ape3t view=best25 stage=s04
         shortLabel tll AB 1 FDR 25%
-        longLabel tailless (tll) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: tailless (tll) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 28
 
         track bdtnpD1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=D class=ape4gl view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=D class=ape4gl view=best25 stage=s04
         shortLabel D AB 1 FDR 25%
-        longLabel Dichaete (D) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: Dichaete (D) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 30
 
         track bdtnpFtz3Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=FTZ class=app view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=FTZ class=app view=best25 stage=s04
         shortLabel ftz AB 3 FDR 25%
-        longLabel fushi tarazu (ftz) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: fushi tarazu (ftz) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 32
 
         track bdtnpH2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=H class=app view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=H class=app view=best25 stage=s04
         shortLabel h AB 2 FDR 25%
-        longLabel hairy (h) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: hairy (h) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 36
 
         track bdtnpPrd1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=PRD class=app view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=PRD class=app view=best25 stage=s04
         shortLabel prd AB 1 FDR 25%
-        longLabel paired (prd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: paired (prd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 38
 
         track bdtnpRun1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=RUN class=app view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=RUN class=app view=best25 stage=s04
         shortLabel run AB 1 FDR 25%
-        longLabel runt (run) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: runt (run) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 42
 
         track bdtnpSlp11Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=SLP class=app view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=SLP class=app view=best25 stage=s04
         shortLabel slp1 AB 1 FDR 25%
-        longLabel sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: sloppy paired 1 (slp1) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 46
 
         track bdtnpDa2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=DA class=dvm view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=DA class=dvm view=best25 stage=s04
         shortLabel da AB 2 FDR 25%
-        longLabel daughterless (da) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: daughterless (da) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 48
 
         track bdtnpDl3Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=DL class=dvm view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=DL class=dvm view=best25 stage=s04
         shortLabel dl AB 3 FDR 25%
-        longLabel dorsal (dl) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: dorsal (dl) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 50
 
         track bdtnpMad2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=MAD class=dvz view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=MAD class=dvz view=best25 stage=s04
         shortLabel mad AB 2 FDR 25%
-        longLabel Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: Mothers against dpp (mad) antibody 2, stage 4-5 embryos, False Disc. Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 52
 
         track bdtnpMed2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=MED class=dvz view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=MED class=dvz view=best25 stage=s04
         shortLabel med AB 2 FDR 25%
-        longLabel Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: Medea (med) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 54
 
+        track bdtnpMed2S10Fdr25
+        parent bdtnpChipperViewbest25
+        subGroups factor=MED class=dvz view=best25 stage=s10
+        shortLabel med AB2 S10 FDR25%
+        longLabel BDTNP ChIP/chip: Medea (med) antibody 2, stage 10 embryos, False Discovery Rate (FDR) 25%
+        color 0,0,200
+        type bigWig 0.0 13.61
+        priority 54
+
+        track bdtnpMed2S14Fdr25
+        parent bdtnpChipperViewbest25
+        subGroups factor=MED class=dvz view=best25 stage=s14
+        shortLabel med AB2 S14 FDR25%
+        longLabel BDTNP ChIP/chip: Medea (med) antibody 2, stage 14 embryos, False Discovery Rate (FDR) 25%
+        color 0,0,200
+        type bigWig 0.0 5.36
+        priority 54
+
         track bdtnpShn2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=SHN class=dvz view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=SHN class=dvz view=best25 stage=s04
         shortLabel shn AB 2 FDR 25%
-        longLabel schnurri (shn) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: schnurri (shn) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 56
 
         track bdtnpSna2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=SNA class=dvz view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=SNA class=dvz view=best25 stage=s04
         shortLabel sna AB 2 FDR 25%
-        longLabel snail (sna) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: snail (sna) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 62
 
         track bdtnpTwi2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=TWI class=dvz view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=TWI class=dvz view=best25 stage=s04
         shortLabel twi AB 2 FDR 25%
-        longLabel twist (twi) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: twist (twi) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 66
 
         track bdtnpZ2Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=Z class=z view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=Z class=z view=best25 stage=s11
         shortLabel z AB 2 FDR 25%
-        longLabel zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: zeste (z) antibody 2, stage 11 embryos, False Discovery Rate (FDR) 25%
         color 100,75,0
         type wig 0.0 40.39
         priority 68
 
         track bdtnpPolIIFdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=POLII class=zzgen view=best25
+        parent bdtnpChipperViewbest25
+        subGroups factor=POLII class=zzgen view=best25 stage=s04
         shortLabel PolII AB FDR 25%
-        longLabel RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: RNA Polymerase II (PolII) antibody, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,0,0
         type wig 0.0 40.39
         priority 70
 
         track bdtnpTFIIB1Fdr25
-        parent bdtnpChipperViewbest25 off
-        subGroups factor=TFIIB class=zzgen view=best25
-        shortLabel TFIIB AB 1 FDR 25%
-        longLabel Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 25%
+        parent bdtnpChipperViewbest25
+        subGroups factor=TFIIB class=zzgen view=best25 stage=s04
+        shortLabel TFIIB AB 1 FDR25%
+        longLabel BDTNP ChIP/chip: Transc. factor IIB (TFIIB) antibody 1, stage 4-5 embryos, False Disc. Rate (FDR) 25%
         color 200,0,0
         type wig 0.0 40.39
         priority 72
@@ -521,109 +729,118 @@ boxedCfg on
 
         # Anterior-posterior early: green
         track bdtnpBcd1Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=BCD class=ape1m view=other1
+        parent bdtnpChipperViewother1
+        subGroups factor=BCD class=ape1m view=other1 stage=s04
         shortLabel bcd AB 1 FDR  1%
-        longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 1
 
         track bdtnpHb2Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=HB class=ape2g view=other1
+        parent bdtnpChipperViewother1
+        subGroups factor=HB class=ape2g view=other1 stage=s04
         shortLabel hb AB 2 FDR  1%
-        longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 11
 
+        track bdtnpHb2S9Fdr1
+        parent bdtnpChipperViewother1
+        subGroups factor=HB class=ape2g view=other1 stage=s09
+        shortLabel hb AB2 S9 FDR 1%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 2, stage 9 embryos, False Discovery Rate (FDR) 1%
+        color 0,150,0
+        type bigWig 0.0 17.4
+        priority 11
+
         track bdtnpKni1Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=KNI class=ape2g view=other1
+        parent bdtnpChipperViewother1
+        subGroups factor=KNI class=ape2g view=other1 stage=s04
         shortLabel kni AB 1 FDR  1%
-        longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 13
 
         track bdtnpKr1Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=KR class=ape2g view=other1
+        parent bdtnpChipperViewother1
+        subGroups factor=KR class=ape2g view=other1 stage=s04
         shortLabel Kr AB 1 FDR  1%
-        longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        longLabel BDTNP ChIP/chip: Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 17
 
         track bdtnpHkb2Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=HKB class=ape3t view=other1
-        shortLabel hkb AB 2 FDR 1%
-        longLabel huckebein (hkb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=HKB class=ape3t view=other1 stage=s04
+        shortLabel hkb AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: huckebein (hkb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 23
 
         track bdtnpHkb3Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=HKB class=ape3t view=other1
-        shortLabel hkb AB 3 FDR 1%
-        longLabel huckebein (hkb) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=HKB class=ape3t view=other1 stage=s04
+        shortLabel hkb AB 3 FDR  1%
+        longLabel BDTNP ChIP/chip: huckebein (hkb) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,150,0
         type wig 0.0 40.39
         priority 25
 
         track bdtnpH1Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=H class=app view=other1
-        shortLabel h AB 1 FDR 1%
-        longLabel hairy (h) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=H class=app view=other1 stage=s04
+        shortLabel h AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: hairy (h) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 33
 
         track bdtnpPrd2Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=PRD class=app view=other1
-        shortLabel prd AB 2 FDR 1%
-        longLabel paired (prd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=PRD class=app view=other1 stage=s04
+        shortLabel prd AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: paired (prd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 39
 
         track bdtnpRun2Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=RUN class=app view=other1
-        shortLabel run AB 2 FDR 1%
-        longLabel runt (run) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=RUN class=app view=other1 stage=s04
+        shortLabel run AB 2 FDR  1%
+        longLabel BDTNP ChIP/chip: runt (run) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 200,150,0
         type wig 0.0 40.39
         priority 43
 
         track bdtnpShn3Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=SHN class=dvz view=other1
-        shortLabel shn AB 3 FDR 1%
-        longLabel schnurri (shn) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=SHN class=dvz view=other1 stage=s04
+        shortLabel shn AB 3 FDR  1%
+        longLabel BDTNP ChIP/chip: schnurri (shn) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 57
 
         track bdtnpSna1Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=SNA class=dvz view=other1
-        shortLabel sna AB 1 FDR 1%
-        longLabel snail (sna) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=SNA class=dvz view=other1 stage=s04
+        shortLabel sna AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: snail (sna) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 59
 
         track bdtnpTwi1Fdr1
-        parent bdtnpChipperViewother1 off
-        subGroups factor=TWI class=dvz view=other1
-        shortLabel twi AB 1 FDR 1%
-        longLabel twist (twi) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
+        parent bdtnpChipperViewother1
+        subGroups factor=TWI class=dvz view=other1 stage=s04
+        shortLabel twi AB 1 FDR  1%
+        longLabel BDTNP ChIP/chip: twist (twi) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 1%
         color 0,0,200
         type wig 0.0 40.39
         priority 63
@@ -638,112 +855,122 @@ boxedCfg on
     autoScale off
 
         track bdtnpBcd1Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=BCD class=ape1m view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=BCD class=ape1m view=other25 stage=s04
         shortLabel bcd AB 1 FDR 25%
-        longLabel bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: bicoid (bcd) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 2
 
         track bdtnpHb2Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=HB class=ape2g view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=HB class=ape2g view=other25 stage=s04
         shortLabel hb AB 2 FDR 25%
-        longLabel hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 12
 
+        track bdtnpHb2S9Fdr25
+        parent bdtnpChipperViewother25
+        subGroups factor=HB class=ape2g view=other25 stage=s09
+        shortLabel hb AB2 S9 FDR25%
+        longLabel BDTNP ChIP/chip: hunchback (hb) antibody 2, stage 9 embryos, False Discovery Rate (FDR) 25%
+        color 0,150,0
+        type bigWig 0.0 17.4
+        priority 12
+
         track bdtnpKni1Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=KNI class=ape2g view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=KNI class=ape2g view=other25 stage=s04
         shortLabel kni AB 1 FDR 25%
-        longLabel knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: knirps (kni) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 14
 
         track bdtnpKr1Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=KR class=ape2g view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=KR class=ape2g view=other25 stage=s04
         shortLabel Kr AB 1 FDR 25%
-        longLabel Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: Kruppel (Kr) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 18
 
         track bdtnpHkb2Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=HKB class=ape3t view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=HKB class=ape3t view=other25 stage=s04
         shortLabel hkb AB 2 FDR 25%
-        longLabel huckebein (hkb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: huckebein (hkb) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 24
 
         track bdtnpHkb3Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=HKB class=ape3t view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=HKB class=ape3t view=other25 stage=s04
         shortLabel hkb AB 3 FDR 25%
-        longLabel huckebein (hkb) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: huckebein (hkb) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,150,0
         type wig 0.0 40.39
         priority 26
 
         track bdtnpH1Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=H class=app view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=H class=app view=other25 stage=s04
         shortLabel h AB 1 FDR 25%
-        longLabel hairy (h) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: hairy (h) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 34
 
         track bdtnpPrd2Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=PRD class=app view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=PRD class=app view=other25 stage=s04
         shortLabel prd AB 2 FDR 25%
-        longLabel paired (prd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: paired (prd) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 40
 
         track bdtnpRun2Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=RUN class=app view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=RUN class=app view=other25 stage=s04
         shortLabel run AB 2 FDR 25%
-        longLabel runt (run) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: runt (run) antibody 2, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 200,150,0
         type wig 0.0 40.39
         priority 44
 
         track bdtnpShn3Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=SHN class=dvz view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=SHN class=dvz view=other25 stage=s04
         shortLabel shn AB 3 FDR 25%
-        longLabel schnurri (shn) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: schnurri (shn) antibody 3, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 58
 
         track bdtnpSna1Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=SNA class=dvz view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=SNA class=dvz view=other25 stage=s04
         shortLabel sna AB 1 FDR 25%
-        longLabel snail (sna) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: snail (sna) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 60
 
         track bdtnpTwi1Fdr25
-        parent bdtnpChipperViewother25 off
-        subGroups factor=TWI class=dvz view=other25
+        parent bdtnpChipperViewother25
+        subGroups factor=TWI class=dvz view=other25 stage=s04
         shortLabel twi AB 1 FDR 25%
-        longLabel twist (twi) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
+        longLabel BDTNP ChIP/chip: twist (twi) antibody 1, stage 4-5 embryos, False Discovery Rate (FDR) 25%
         color 0,0,200
         type wig 0.0 40.39
         priority 64
+
 
 track mzDy1Dp2Ag1_phast
 shortLabel Conservation
