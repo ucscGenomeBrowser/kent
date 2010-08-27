@@ -14,7 +14,7 @@ type bam
 pairEndsByName on
 showNames off
 noColorTag .
-bamColorMode gray
+bamColorMode off
 bamGrayMode aliQual
 baseColorDefault diffBases
 baseColorUseSequence lfExtra
