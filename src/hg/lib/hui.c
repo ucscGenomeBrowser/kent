@@ -46,6 +46,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
+//#define SUBTRACK_CFG_POPUP
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -149,11 +150,11 @@ printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLa
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
-mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
+mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
 for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if (sameString(mdbVar->var,"fileName")
+    if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
@@ -3830,7 +3831,12 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
     else
         {
         eCfgType cType = cfgTypeFromTdb(subtrack,FALSE);
+#ifdef SUBTRACK_CFG_POPUP
+        // Turn this off only if configurable explicitly set to off
+        if (trackDbSettingClosestToHome(subtrack, "configurable") && trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
+#else///ifndef SUBTRACK_CFG_POPUP
         if(trackDbSettingClosestToHomeOn(subtrack, "configurable") == FALSE)
+#endif///ndef SUBTRACK_CFG_POPUP
             cType = cfgNone;
         membership_t *membership = subgroupMembershipGet(subtrack);
             {
@@ -3871,6 +3877,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 printf("<TD BGCOLOR='#%02X%02X%02X'>&nbsp;&nbsp;&nbsp;&nbsp;</TD>",
                         subtrack->colorR, subtrack->colorG, subtrack->colorB);
                 }
+#ifdef SUBTRACK_CFG_POPUP
+    #define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return popUpSubtrackCfg(\"%s\",\"%s\");' title='%s'>%s</A>\n"
+    #define MAKE_CFG_SUBTRACK_LINK(table,label,title) printf(CFG_SUBTRACK_LINK, (table),(table),(label),(label),(title))
+            struct dyString *dyLabel = newDyString(128);
+#else///ifndef SUBTRACK_CFG_POPUP
+    #define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Subtrack Configuration'>%s</A>\n"
+    #define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
+#endif///ndef SUBTRACK_CFG_POPUP
             if(sortOrder != NULL)
                 {
                 int sIx=0;
@@ -3880,12 +3894,18 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                     if(ix >= 0)
                         {
                         char *titleRoot=labelRoot(membership->titles[ix],NULL);
-
-#define CFG_SUBTRACK_LINK  "<A HREF='#a_cfg_%s' onclick='return subtrackCfgShow(\"%s\");' title='Subtrack Configuration'>%s</A>\n"
-#define MAKE_CFG_SUBTRACK_LINK(table,title) printf(CFG_SUBTRACK_LINK, (table),(table),(title))
                         printf ("<TD id='%s' nowrap abbr='%s' align='left'>&nbsp;",sortOrder->column[sIx],membership->membership[ix]);
+#ifdef SUBTRACK_CFG_POPUP
+                        dyStringPrintf(dyLabel,"%s ",titleRoot);
+                        if (cType != cfgNone && sameString("view",sortOrder->column[sIx]))
+                            {
+                            dyStringAppend(dyLabel,"Configuration");
+                            MAKE_CFG_SUBTRACK_LINK(subtrack->track,dyStringContents(dyLabel),titleRoot);
+                            }
+#else///ifndef SUBTRACK_CFG_POPUP
                         if(cType != cfgNone && sameString("view",sortOrder->column[sIx]))
                             MAKE_CFG_SUBTRACK_LINK(subtrack->track,titleRoot);  // FIXME: Currently configurable under sort only supported when multiview
+#endif///ndef SUBTRACK_CFG_POPUP
                         else
                             printf("%s\n",titleRoot);
                         puts ("</TD>");
@@ -3897,23 +3917,32 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 {
                 printf ("<TD nowrap='true'>&nbsp;");
                 indentIfNeeded(hierarchy,membership);
+#ifdef SUBTRACK_CFG_POPUP
+                if (cType != cfgNone && cType != cfgWigMaf)  // FIXME: wigMaf restriction is temporary unto configurable off is set
+                    MAKE_CFG_SUBTRACK_LINK(subtrack->track,subtrack->shortLabel,subtrack->shortLabel);
+#else///ifndef SUBTRACK_CFG_POPUP
                 if(cType != cfgNone)
                     MAKE_CFG_SUBTRACK_LINK(subtrack->track,subtrack->shortLabel);
+#endif///ndef SUBTRACK_CFG_POPUP
                 else
                     printf("%s\n",subtrack->shortLabel);
                 puts ("</TD>");
                 }
+#ifdef SUBTRACK_CFG_POPUP
+            dyStringFree(&dyLabel);
+#endif///def SUBTRACK_CFG_POPUP
             printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
             compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
             printf("</div>");
 
+#ifndef SUBTRACK_CFG_POPUP
             if(cType != cfgNone)
                 {
                 dependentCfgsNeedBinding = TRUE; // configurable subtrack needs to be bound to composite settings
-#define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
-#define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
+    #define CFG_SUBTRACK_DIV "<DIV id='div_%s_cfg'%s><INPUT TYPE=HIDDEN NAME='%s' value='%s'>\n"
+    #define MAKE_CFG_SUBTRACK_DIV(table,cfgVar,open) printf(CFG_SUBTRACK_DIV,(table),((open)?"":" style='display:none'"),(cfgVar),((open)?"on":"off"))
                 safef(htmlIdentifier,sizeof(htmlIdentifier),"%s.childShowCfg",subtrack->track);
                 boolean open = cartUsualBoolean(cart, htmlIdentifier,FALSE);
                 MAKE_CFG_SUBTRACK_DIV(subtrack->track,htmlIdentifier,open);
@@ -3921,6 +3950,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
                 cfgByCfgType(cType,db,cart,subtrack,htmlIdentifier,"Subtrack",TRUE);
                 puts("</DIV>\n");
                 }
+#endif///ndef SUBTRACK_CFG_POPUP
             printf("<TD nowrap>&nbsp;");
             makeSchemaLink(db,subtrack,"schema");
             puts("&nbsp;");
@@ -6428,6 +6458,10 @@ if(cartOptionalString(cart, "ajax") == NULL)
     }
 jsIncludeFile("hui.js",NULL);
 
+#ifdef SUBTRACK_CFG_POPUP
+printf("<div id='popit' style='display: none'></div>");
+cgiMakeHiddenVar("db", db);
+#endif
 puts("<P>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
     {
