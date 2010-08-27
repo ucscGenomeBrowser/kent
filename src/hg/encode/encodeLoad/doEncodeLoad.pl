@@ -482,7 +482,7 @@ for my $key (keys %ra) {
                 !system("/bin/ln $srcFile $target") || die "link failed: $?\n";
             } else {
                 HgAutomate::verbose(2, "copying/zipping $srcFile => $target\n");
-                !system("/cluster/bin/x86_64/pigz -c $srcFile > $target") || die "gzip: $?\n";
+                !system("/usr/bin/pigz -c $srcFile > $target") || die "gzip: $?\n";
             }
         } else {
             if ($type eq "bam") {
@@ -500,7 +500,7 @@ for my $key (keys %ra) {
                 if(Encode::isZipped($file)) {
                     $cmd = "/bin/cat $file >> $zippedTarget";
                 } else {
-                    $cmd = "/cluster/bin/x86_64/pigz -c $file >> $zippedTarget";
+                    $cmd = "/usr/bin/pigz -c $file >> $zippedTarget";
                 }
                 HgAutomate::verbose(2, "appending gzip of $file to $target\n");
                 !system($cmd) || die "system '$cmd' failed: $?\n";
