@@ -1572,6 +1572,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
+            initImgTblButtons();
             loadImgAreaSelect(false);
         } else if (false && browser == "safari") {
             // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
@@ -1847,6 +1848,7 @@ function handleTrackUi(response, status)
                                                 else
                                                     setAllVars($('#pop'));
                                                 $('#tr_' + popUpTrackName).remove();
+                                                initImgTblButtons();
                                                 loadImgAreaSelect(false);
                                             }
                                             else {
