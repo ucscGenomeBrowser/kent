@@ -1,0 +1,209 @@
+# for emacs: -*- mode: sh; -*-
+
+# This file describes how we made the browser database on
+# the Patch 2 release for the NCBI build 37 (February 2009 freeze) aka:
+#	GRCh37.p2 - Genome Reference Consortium Human Reference 37
+
+############################################################################
+# gather sequence and AGP definitions (DONE - 2010-08-26 - Hiram)
+    mkdir -p /hive/data/genomes/hg19Patch2/sequence
+    cd /hive/data/genomes/hg19Patch2/sequence
+    # a round about way here since patch2 sequence was already assembled.
+    # there are perl and shell scripts in
+    # ../../hg19/bed/additionalSequence/patch2
+    #	which created the fasta file with UCSC names
+    # see also in hg19.txt:
+    # Updating to patch2 sequence (DONE - 2010-08-18 - Hiram)
+
+    ln -s ../../hg19/bed/additionalSequence/patch2/patch2.ucsc.fa .
+    ln -s ../../hg19/17_ctg5_hap1/chr17_ctg5_hap1.fa .
+    ln -s ../../hg19/4_ctg9_hap1/chr4_ctg9_hap1.fa .
+    # the fasta files in hg19 have incorrect headers:
+for C in 6_apd_hap1 6_cox_hap2 6_dbb_hap3 6_mann_hap4 6_mcf_hap5 \
+        6_qbl_hap6 6_ssto_hap7
+do
+    rm -f chr${C}.fa
+    echo ">chr${C}" > chr${C}.fa
+    grep -v "^>" ../../hg19/${C}/*.fa >> chr${C}.fa
+done
+
+    cat << '_EOF_' > patch2Agp.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub usage() {
+    printf STDERR "usage: ./patch2Agp.pl ../../hg19/bed/additionalSequence/patch2/patches.chrom.sizes \\\n";
+    printf STDERR " ../../hg19/bed/additionalSequence/patches/ucscNames.patch2.txt \\\n";
+    printf STDERR " ../../hg19/bed/additionalSequence/patches/patch_release_2/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz\n";
+}
+
+my $argc = scalar(@ARGV);
+
+if ($argc < 3) {
+    usage;
+    exit 255;
+}
+
+my %skipSequence;
+$skipSequence{"GL339449.1"} = 1;
+$skipSequence{"GL339450.1"} = 1;
+
+my $sizes = shift;	# patches.chrom.sizes
+my $names = shift;	# patches/ucscNames.txt
+my $agpFile = shift;	# alt.scaf.agp.gz
+
+my %glToChr;
+my %chrToCtg;
+my %fastaToChr;
+my %chrToSize;
+
+open(FH, "<$sizes") or die "can not read $sizes";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($chr, $size) = split('\s+', $line);
+    $chrToSize{$chr} = $size;
+}
+close (FH);
+
+open(FH, "<$names");
+while (my $line = <FH>) {
+    chomp $line;
+    my ($faName, $ctg, $cmName, $chr) = split('\s+', $line);
+    $faName =~ s/.*gb.GL/GL/;
+    next if (exists($skipSequence{$faName}));
+    my $size = $chrToSize{$chr};
+    if (exists($glToChr{$faName})) {
+	if ($glToChr{$faName} ne $chr) {
+	    printf STDERR "ERROR: contig name: $faName was chr name: $glToChr{$faName}\n";
+	    printf STDERR " now claiming to be chr name: $chr\n";
+	    exit 255;
+	}
+    } else {
+	$glToChr{$faName} = $chr;
+    }
+    die "not defined faName" if (!defined($faName));
+    die "not defined $faName $chr size" if (!defined($size));
+}
+close (FH);
+
+my $prevObj = "";
+my $newIx = 1;
+open (FH,"zcat $agpFile|") or die "can not read $agpFile";
+while (my $line = <FH>) {
+    next if ($line =~ m/^\s*#/);
+    chomp $line;
+    my ($object, $objStart, $objEnd, $ix, $type, $frag, $fragStart, $fragEnd, $strand) = split('\s+', $line);
+    next if (exists($skipSequence{$object}));
+    die "ERROR: can not find contig $object to chr name"
+	if (!exists($glToChr{$object}));
+    $newIx = 1 if ($prevObj ne $object);
+    my $chr = $glToChr{$object};
+    if ($type eq "N") {
+	# frag is size, fragStart is type of gap, and fragEnd is bridged y/n
+	printf "%s\t%d\t%d\t%d\t%s\t%d\t%s\t%s\n",
+	    $chr, $objStart, $objEnd, $newIx, $type, $frag, $fragStart,
+	    $fragEnd;
+    } else {
+	printf "%s\t%d\t%d\t%d\t%s\t%s\t%d\t%d\t%s\n",
+	    $chr, $objStart, $objEnd, $newIx, $type, $frag, $fragStart,
+	    $fragEnd, $strand;
+    }
+    ++$newIx;
+    $prevObj = $object;
+#    printf "%s\n", $line;
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x patch2Agp.pl
+
+    zcat \
+../../hg19/bed/additionalSequence/patches/patch_release_1/AGP/alt.scaf.agp.gz \
+    | grep "^GL" | sed -e "s/GL339449.1/chr5_ctg1_gl339449/; s/GL339450.1/chr9_gl339450/" > hg19Patch2.agp
+
+    ./patch2Agp.pl \
+	../../hg19/bed/additionalSequence/patch2/patches.chrom.sizes \
+        ../../hg19/bed/additionalSequence/patches/ucscNames.patch2.txt \
+        ../../hg19/bed/additionalSequence/patches/patch_release_2/PATCHES/alt_scaffolds/AGP/alt.scaf.agp.gz \
+    >> hg19Patch2.agp
+
+for H in chr17_ctg5_hap1 chr4_ctg9_hap1 chr6_apd_hap1 chr6_cox_hap2 \
+        chr6_dbb_hap3 chr6_mann_hap4 chr6_mcf_hap5 chr6_qbl_hap6 \
+        chr6_ssto_hap7 chrM_rCRS
+do
+    grep "^${H}" /hive/data/genomes/hg19/hg19.agp
+done >> hg19Patch2.agp
+
+echo -e "chrM_rCRS\t1\t16569\t1\tF\tNC_012920\t1\t16569\t+" >> hg19Patch2.agp
+
+    # verify we have correct sequence and AGP file:
+    faToTwoBit *.fa patch2.2bit
+    checkAgpAndFa  hg19Patch2.agp patch2.2bit
+    # All AGP and FASTA entries agree - both files are valid
+
+###########################################################################
+# Build the browser (DONE - 2010-08-27 - Hiram)
+    cd /hive/data/genomes/hg19Patch2
+    cat << '_EOF_' > hg19Patch2.config.ra
+# Config parameters for makeGenomeDb.pl:
+db hg19Patch2
+scientificName Homo sapiens
+commonName GRCh37.p2
+assemblyDate Aug. 2009
+assemblyLabel GRCh37 Patch 2 Genome Reference Consortium Human Reference 37 (GCA_000001405.1)
+orderKey 14
+mitoAcc none
+fastaFiles /hive/data/genomes/hg19Patch2/sequence/*.fa
+agpFiles /hive/data/genomes/hg19Patch2/sequence/hg19Patch2.agp
+# qualFiles /dev/null
+dbDbSpeciesDir human
+taxId   9606
+clade haplotypes
+genomeCladePriority 139
+assemblyShortLabel GRCh37.p2
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -dbHost=hgwdev -fileServer=hgwdev -workhorse=hgwdev \
+	-noGoldGapSplit hg19Patch2.config.ra > makeGenomeDb.log 2>&1
+
+###########################################################################
+# RepeatMasker (DONE - 2010-08-27 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch2/bed/repeatMasker
+    cd /hive/data/genomes/hg19Patch2/bed/repeatMasker
+    doRepeatMasker.pl hg19Patch2 -buildDir=`pwd` -noSplit -bigClusterHub=pk \
+        -dbHost=hgwdev -workhorse=hgwdev > do.log 2>&1
+    cat faSize.rmsk.txt
+# 49709657 bases (5650322 N's 44059335 real 21233685 upper 22825650 lower)
+#	in 80 sequences in 1 files
+# %45.92 masked total, %51.81 masked real
+
+###########################################################################
+# TRF simple repeats (DONE - 2010-08-27 - Hiram)
+    mkdir /hive/data/genomes/hg19Patch2/bed/simpleRepeat
+    cd /hive/data/genomes/hg19Patch2/bed/simpleRepeat
+    doSimpleRepeat.pl hg19Patch2 -buildDir=`pwd` -dbHost=hgwdev \
+        -smallClusterHub=pk -workhorse=hgwdev > do.log 2>&1
+    cat fb.simpleRepeat 
+# 1328856 bases of 44059336 (3.016%) in intersection
+
+    twoBitMask hg19Patch2.rmsk.2bit \
+        -add bed/simpleRepeat/trfMask.bed hg19Patch2.2bit
+    twoBitToFa hg19Patch2.2bit stdout | faSize stdin \
+	> faSize.hg19Patch2.2bit.txt
+# 49709657 bases (5650322 N's 44059335 real 21214276 upper 22845059 lower)
+#	in 80 sequences in 1 files
+# %45.96 masked total, %51.85 masked real
+
+    time blat hg19Patch2.2bit \
+        /dev/null /dev/null -tileSize=11 -makeOoc=hg19Patch2.11.ooc \
+	-repMatch=1024
+# Wrote 41 overused 11-mers to hg19Patch2.11.ooc
+    mkdir /hive/data/staging/data/hg19Patch2
+    cp -p hg19Patch2.2bit /hive/data/staging/data/hg19Patch2
+    cp -p hg19Patch2.11.ooc /hive/data/staging/data/hg19Patch2
+    cp -p chrom.sizes /hive/data/staging/data/hg19Patch2
+
+###########################################################################
