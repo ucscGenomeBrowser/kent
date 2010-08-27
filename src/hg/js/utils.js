@@ -469,10 +469,13 @@ function warn(msg)
         alert(msg);
     else {
         $( warnList ).append('<li>'+msg+'</li>');
-        showWarnBox();
+        if(showWarnBox != undefined)
+            showWarnBox();
+        else
+            alert(msg);
     }
 }
-
+/*
 function popupBox(popit, content, popTitle)
 {
 // Kicks off a Modal Dialog for the provided content.
@@ -520,6 +523,7 @@ function popupBox(popit, content, popTitle)
     jQuery('body').css('cursor', '');
     $(popit).dialog('open');
 }
+*/
 
 function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
 {
@@ -622,6 +626,14 @@ function getHgsid()
         hgsid = getURLParam(window.location.href, "hgsid");
     }
     return hgsid;
+}
+
+function getDb()
+{
+    var db = document.getElementsByName("db");
+    if(db == undefined || db.length == 0)
+        return ""; // default?
+    return db[0].value;
 }
 
 function Rectangle()
