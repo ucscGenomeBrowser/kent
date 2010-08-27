@@ -506,8 +506,7 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     struct trackDb *tdbParent = trackDbCompositeParent(toggleGroup->tdb);
     char *parentName = tdbParent->track;
     // Find parent track (as opposed to trackDb)
-    struct track *tgParent = hashFindVal(trackHash, parentName);
-    assert(tgParent!=NULL);
+    struct track *tgParent =toggleGroup->parent;
     char *encodedTableName = cgiEncode(parentName);
     char *view = NULL;
     boolean setView = subgroupFind(toggleGroup->tdb,"view",&view);
