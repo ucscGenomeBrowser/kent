@@ -1572,6 +1572,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
+            initImgTblButtons();
             loadImgAreaSelect(false);
         } else if (false && browser == "safari") {
             // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
@@ -1769,10 +1770,13 @@ function parseMap(ele, reset)
     return mapItems;
 }
 
-function updateTrackImg(trackName)
+function updateTrackImg(trackName,extraData,loadingId)
 {
     var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
-    var loadingId = showLoadingImage("tr_" + trackName);
+    if(extraData != undefined && extraData != "")
+        data += "&" + extraData;
+    if(loadingId == undefined || loadingId == "")
+        loadingId = showLoadingImage("tr_" + trackName);
     $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
@@ -1832,12 +1836,31 @@ function handleTrackUi(response, status)
                                closeOnEscape: true,
                                autoOpen: false,
                                buttons: { "Ok": function() {
-                                    if(popUpTrackDescriptionOnly == false)
-                                        setAllVars($('#pop'));
+                                    var hide = false; // need to handle special case of vis going to hide!
+                                    var vis = $('#pop').find('select[name="'+popUpTrackName+'"]');
+                                    if(vis != undefined)
+                                        hide = ($(vis).val() == 'hide');
+                                    if(popUpTrackDescriptionOnly == false) {
+                                        if($('#imgTbl') != undefined) {
+                                            if(hide) {
+                                                if(trackDbJson[popUpTrackName].parentTrack)
+                                                    setAllVars($('#pop'),popUpTrackName);
+                                                else
+                                                    setAllVars($('#pop'));
+                                                $('#tr_' + popUpTrackName).remove();
+                                                initImgTblButtons();
+                                                loadImgAreaSelect(false);
+                                            }
+                                            else {
+                                                var urlData = getAllVarsAsUrlData($('#pop'));
+                                                updateTrackImg(popUpTrackName,urlData,"");
+                                            }
+                                        } else {
+                                            setAllVars($('#pop'));
+                                            //if(hide) // Need to set checkbox here
+                                        }
+                                    }
                                     $(this).dialog("close");
-                                    if($('#imgTbl') != undefined && popUpTrackDescriptionOnly == false)
-                                        setTimeout('updateTrackImg(popUpTrackName);',50); // Necessary because ajax settings need to be done first
-                                        updateTrackImg(popUpTrackName);
                                }},
                                close: function() {
                                    // clear out html after close to prevent problems caused by duplicate html elements
