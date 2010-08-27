@@ -28,7 +28,7 @@
 
 include ../../../inc/common.mk
 
-DBS = 	hg16 hg17 hg18 hg19 hg19Haps \
+DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	venter1 \
 	panTro1 panTro2 \
 	gorGor1 gorGor2 \
