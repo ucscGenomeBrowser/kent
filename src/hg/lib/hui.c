@@ -149,11 +149,11 @@ printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLa
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
-mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName",TRUE); // Send to back
+mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
 for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
-    if (sameString(mdbVar->var,"fileName")
+    if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
         printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
