@@ -370,9 +370,11 @@ extern struct slName *browserLines; /* Custom track "browser" lines. */
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
-#ifndef IMAGEv2_DRAG_REORDER
+//#define IMAGEv2_DRAG_REORDER_NOPRIORS
+#define IMAGEv2_DRAG_REORDER_NOPRIORITY
+#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 extern boolean withPriorityOverride;    /* enable track reordering? */
-#endif//ndef IMAGEv2_DRAG_REORDER
+#endif// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORS)
 extern boolean revCmplDisp;             /* reverse-complement display */
 extern boolean measureTiming;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */

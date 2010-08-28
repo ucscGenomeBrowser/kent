@@ -11607,3 +11607,179 @@ runOne $(root1) {check out line+ out/$(root1)/$(root1).fa.out}
 	    hgcentraltest
 
 #############################################################################
+# establish some liftover chains from reference sequence to new added sequence
+#	(WORKING - 2010-08-19 - Hiram)
+    mkdir /hive/data/genomes/hg19/bed/additionalSequence/patch2/blat.2010-08-11
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch2/blat.2010-08-11
+    twoBitInfo ../hg19.patch2.2bit stdout | sort > patch2.chrom.sizes
+    twoBitInfo ../../../../hg19.2bit stdout | sort > hg19.chrom.sizes
+    comm -13 hg19.chrom.sizes patch2.chrom.sizes > new.sequence.chrom.sizes
+for S in `awk '{print $1}' new.sequence.chrom.sizes`
+do
+    echo $S
+    mkdir -p $S
+    twoBitToFa ../hg19.patch2.2bit:${S} ${S}/${S}.fa
+done
+
+    faToTwoBit chr*/chr*.fa hg19.patch2.only.2bit
+    rm -fr chr*/chr*.fa
+    rmdir chr*
+
+    ssh swarm
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch2/blat.2010-08-11
+    cat << '_EOF_' > runOne
+#!/bin/csh -ef
+
+set hg19 = "/hive/data/genomes/hg19/bed/additionalSequence/patch2/hg19.patch2.2bit"
+set runJob = `pwd`/job.csh
+set target = $1
+set outPsl = $2
+set query = `echo $target | sed -e "s/_.*//"`
+set qSize = `twoBitInfo ${hg19}:${query} stdout | awk '{print $2}'`
+set tSequence = "${hg19}:${target}"
+set qSequence = "${hg19}:${query}:0-${qSize}"
+mkdir -p psl/${target}
+pushd psl/${target}
+# echo "${runJob} ${tSequence} ${qSequence} `pwd`/${target}.psl"
+${runJob} ${tSequence} ${qSequence} `pwd`/${target}.psl
+popd
+'_EOF_'
+    # << happy emacs
+    chmod +x runOne
+
+    cat << '_EOF_' > job.csh
+#!/bin/csh -ef
+
+set targetList = $1
+set queryListIn = $2
+set outPsl = $3
+
+if ($targetList:e == "lst") set targetList = /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26/run.blat/$targetList
+if ($queryListIn:e == "lst") set queryListIn = /hive/data/genomes/hg19/bed/blat.hg18.2010-07-26/run.blat/$queryListIn
+
+# Use local disk for output, and move the final result to $outPsl
+# when done, to minimize I/O.
+set tmpDir = `mktemp -d -p /scratch/tmp doSame.blat.XXXXXX`
+pushd $tmpDir
+
+# We might get a .lst or a 2bit spec here -- convert to (list of) 2bit spec:
+if ($queryListIn:e == "lst") then
+  set specList = `cat $queryListIn`
+else
+  set specList = $queryListIn
+endif
+
+# Further partition the query spec(s) into 5k coord ranges, building up
+# a .lst of 2bit specs for blat and a .lft liftUp spec for the results:
+cp /dev/null reSplitQuery.lst
+cp /dev/null query.lft
+foreach spec ($specList)
+  set file  = `echo $spec | awk -F: '{print $1;}'`
+  set seq   = `echo $spec | awk -F: '{print $2;}'`
+  set range = `echo $spec | awk -F: '{print $3;}'`
+  set start = `echo $range | awk -F- '{print $1;}'`
+  set end   = `echo $range | awk -F- '{print $2;}'`
+  if (! -e q.sizes) twoBitInfo $file q.sizes
+  set seqSize = `awk '$1 == "'$seq'" {print $2;}' q.sizes`
+  set chunkEnd = '0'
+  while ($chunkEnd < $end)
+    set chunkEnd = `expr $start + 5000`
+    if ($chunkEnd > $end) set chunkEnd = $end
+    set chunkSize = `expr $chunkEnd - $start`
+    echo $file\:$seq\:$start-$chunkEnd >> reSplitQuery.lst
+    if (($start == 0) && ($chunkEnd == $seqSize)) then
+      echo "$start	$seq	$seqSize	$seq	$seqSize" >> query.lft
+    else
+      echo "$start	$seq"":$start-$chunkEnd	$chunkSize	$seq	$seqSize" >> query.lft
+    endif
+    set start = `expr $chunkEnd - 500`
+  end
+end
+
+# Align unsplit target sequence(s) to .lst of 2bit specs for 5k chunks
+# of query:
+blat $targetList reSplitQuery.lst tmpUnlifted.psl \
+  -tileSize=11 -minScore=100 -minIdentity=98 -fastMap -noHead
+
+# Lift query coords back up:
+liftUp -pslQ -nohead tmpOut.psl query.lft warn tmpUnlifted.psl
+
+# Move final result into place:
+mv tmpOut.psl $outPsl
+
+popd
+rm -rf $tmpDir
+'_EOF_'
+    # << happy emacs
+    chmod +x job.csh
+
+    cat << '_EOF_' > template
+#LOOP
+runOne $(root1) {check out line+ psl/$(root1)/$(root1).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir psl
+    awk '{print $2}' new.sequence.chrom.sizes > target.list
+    gensub2 target.list single template jobList
+    para create jobList
+    para try ... check ... push
+    para time
+# Completed: 71 of 71 jobs
+# CPU time in finished jobs:      29233s     487.22m     8.12h    0.34d  0.001 y
+# IO & Wait Time:                  2567s      42.78m     0.71h    0.03d  0.000 y
+# Average job time:                 448s       7.46m     0.12h    0.01d
+# Longest finished job:            3757s      62.62m     1.04h    0.04d
+# Submission to last job:          4070s      67.83m     1.13h    0.05d
+
+    ssh hgwdev
+    cd /hive/data/genomes/hg19/bed/additionalSequence/patch2/blat.2010-08-11
+for C in `cat target.list`
+do
+    echo ${C}
+    mkdir chain/${C}
+    cd chain/${C}
+    ln -s ../../psl/${C}/${C}.psl
+    axtChain -linearGap=medium -psl ${C}.psl ../../../hg19.patch2.2bit ../../../hg19.patch2.2bit ${C}.chain
+    cd ../..
+done
+
+    cd chain
+    find . -type f | xargs cat | chainSort stdin patch2.sort.chain
+    hgLoadChain hg19 patch2Chain patch2.sort.chain
+    #	Loading 93897 chains into hg19.patch2Chain
+
+#########################################################################
+# Vega gene update (DONE - 2010-08-25 - Hiram)
+    #	lookup version number at the Vega WEB site:
+    #	http://vega.sanger.ac.uk/index.html
+    #	and FTP site:
+    #	ftp://ftp.sanger.ac.uk/pub/vega/
+    cd /hive/data/genomes/hg19
+    #	step wise to verify operation
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=39 -stop=download hg19.ensGene.ra
+    # they changed their naming convention again.  Look at the FTP site,
+    #	fix the download script:
+    cd bed/vega.39/download
+    ./doDownload.csh
+# -rw-rw-r-- 1 12399394 Aug 25 09:15 gtf_file.gz
+# -rw-rw-r-- 1  9329992 Aug 25 09:15 Homo_sapiens.VEGA.39.pep.all.fa.gz
+
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=39 \
+	-continue=process -stop=process hg19.ensGene.ra
+# genePredCheck -db=hg19 vegaPseudo.gp.gz
+# checked: 12012 failed: 0
+# genePredCheck -db=hg19 not.vegaPseudo.gp.gz
+# checked: 103437 failed: 0
+# genePredCheck -db=hg19 hg19.allGenes.gp.gz
+# checked: 115449 failed: 0
+
+    doEnsGeneUpdate.pl -vegaGene -ensVersion=39 \
+	-continue=load -stop=load hg19.ensGene.ra
+    featureBits hg19 vegaGene
+    # 78097231 bases of 2911519270 (2.682%) in intersection
+    featureBits hg19 vegaPseudoGene
+    #	8782198 bases of 2911519270 (0.302%) in intersection
+
+#########################################################################
