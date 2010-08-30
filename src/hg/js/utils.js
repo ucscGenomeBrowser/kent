@@ -411,18 +411,17 @@ function validateFloat(obj,min,max)
     }
 }
 
-function metadataShowHide(tableName)
+function metadataShowHide(tableName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_meta");
-    if($(divit).css('display') == 'none')
+    if($(divit).css('display') == 'none') {
         $("#div_"+tableName+"_cfg").hide();  // Hide any configuration when opening metadata
-    var htm = $(divit).html();
-    // Seems to be faster if this undisplayed junk is commented out.
-    if(htm.substring(0,4) == "<!--") {
-        htm = htm.substring(4,htm.length-7);
-        $(divit).html(htm);
+
+        if($(divit).find('table').length == 0) {
+            lookupMetadata(tableName,showLonglabel,showShortLabel);
+        }
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -469,10 +468,47 @@ function warn(msg)
         alert(msg);
     else {
         $( warnList ).append('<li>'+msg+'</li>');
-        showWarnBox();
+        if(showWarnBox != undefined)
+            showWarnBox();
+        else
+            alert(msg);
     }
 }
 
+function getAllVarsAsUrlData(obj)
+{
+// Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
+// If obj is undefined then obj is document!
+
+    var urlData = "";
+    var names = [];
+    var values = [];
+    if($(obj) == undefined)
+        obj = $('document');
+    var inp = $(obj).find('input');
+    var sel = $(obj).find('select');
+    //warn("obj:"+$(obj).attr('id') + " inputs:"+$(inp).length+ " selects:"+$(sel).length);
+    $(inp).filter('[name]:enabled').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if(name != undefined && name != "Submit" && val != undefined) {
+            urlData += "&"+name+"="+val;
+        }
+    });
+    $(sel).filter('[name]:enabled').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if(name != undefined && val != undefined) {
+            urlData += "&"+name+"="+val;
+        }
+    });
+    if(urlData.length > 0) {
+        return urlData.substring(1); // chop off the first '&'
+    }
+return "";
+}
+
+/*
 function popupBox(popit, content, popTitle)
 {
 // Kicks off a Modal Dialog for the provided content.
@@ -520,6 +556,7 @@ function popupBox(popit, content, popTitle)
     jQuery('body').css('cursor', '');
     $(popit).dialog('open');
 }
+*/
 
 function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
 {
@@ -622,6 +659,14 @@ function getHgsid()
         hgsid = getURLParam(window.location.href, "hgsid");
     }
     return hgsid;
+}
+
+function getDb()
+{
+    var db = document.getElementsByName("db");
+    if(db == undefined || db.length == 0)
+        return ""; // default?
+    return db[0].value;
 }
 
 function Rectangle()

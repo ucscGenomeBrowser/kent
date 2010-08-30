@@ -546,7 +546,8 @@ else if (lf->filterColor > 0)
     }
 else if (tg->colorShades)
     color = tg->colorShades[lf->grayIx];
-
+else
+    color = tg->ixColor;
 
 indelEnabled(cart, tg->tdb, basesPerPixel, &indelShowDoubleInsert, &indelShowQueryInsert,
 	     &indelShowPolyA);
@@ -687,7 +688,8 @@ if (!showNames)
 track->nextItemButtonable = track->nextExonButtonable = FALSE;
 track->nextPrevItem = NULL;
 track->nextPrevExon = NULL;
-track->colorShades = shadesOfGray;
+if (differentString(colorMode, "off"))
+    track->colorShades = shadesOfGray;
 }
 
 #else /* no USE_BAM */

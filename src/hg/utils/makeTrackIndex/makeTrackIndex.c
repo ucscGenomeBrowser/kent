@@ -53,9 +53,15 @@ if(metaDbExists && cvHash)
         struct hash *hash = hashFindVal(cvHash, row[0]);
         if(hash != NULL)
             {
-            char *str = hashFindVal(hash, "description");
-            if(str)
-                printf("%s ", str);
+            // hand-curated list of which cv.ra fields to include in fulltext index.
+            char *fields[] = {"description", "targetDescription", NULL};
+            int i;
+            for(i = 0; fields[i] != NULL; i++)
+                {
+                char *str = hashFindVal(hash, fields[i]);
+                if(str)
+                    printf("%s ", str);
+                }
             }
         }
     sqlFreeResult(&sr);
