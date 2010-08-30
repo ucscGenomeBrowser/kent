@@ -61,7 +61,7 @@ dragAndDrop subTracks
     view acc
     shortLabel Accessibility
     visibility full
-    viewLimits 0:600
+    viewLimits 0:150
     maxHeightPixels 100:30:10
     autoScale off
 
@@ -70,7 +70,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s05 repl=r1
 	shortLabel S5 repl. 1
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 5, Replicate 1
-	type bigWig 0 13029
+	type bigWig 0 4448.18
 	color 47,168,64
 
 	track bdtnpDnaseS5R9482
@@ -78,7 +78,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s05 repl=r2
 	shortLabel S5 repl. 2
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 5, Replicate 2
-	type bigWig 0 16274
+	type bigWig 0 5159.31
 	color 47,168,64
 
 	track bdtnpDnaseS9R9127
@@ -86,7 +86,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s09 repl=r1
 	shortLabel S9 repl. 1
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 9, Replicate 1
-	type bigWig 0 15001
+	type bigWig 0 5399.51
 	color 243,110,22
 
 	track bdtnpDnaseS9R9128
@@ -94,7 +94,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s09 repl=r2
 	shortLabel S9 repl. 2
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 9, Replicate 2
-	type bigWig 0 6036
+	type bigWig 0 1273.85
 	color 243,110,22
 
 	track bdtnpDnaseS10R8816
@@ -102,7 +102,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s10 repl=r1
 	shortLabel S10 repl. 1
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 10, Replicate 1
-	type bigWig 0 37738
+	type bigWig 0 21242.10
 	color 141,24,29
 
 	track bdtnpDnaseS10R8820
@@ -110,7 +110,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s10 repl=r2
 	shortLabel S10 repl. 2
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 10, Replicate 2
-	type bigWig 0 55440
+	type bigWig 0 21782.20
 	color 141,24,29
 
 	track bdtnpDnaseS11R9485
@@ -118,7 +118,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s11 repl=r1
 	shortLabel S11 repl. 1
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 11, Replicate 1
-	type bigWig 0 19434
+	type bigWig 0 6760.68
 	color 64,163,203
 
 	track bdtnpDnaseS11R9486
@@ -126,7 +126,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s11 repl=r2
 	shortLabel S11 repl. 2
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 11, Replicate 2
-	type bigWig 0 19692
+	type bigWig 0 7309.80
 	color 64,163,203
 
 	track bdtnpDnaseS14R9477
@@ -134,7 +134,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s14 repl=r1
 	shortLabel S14 repl. 1
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 14, Replicate 1
-	type bigWig 0 43730
+	type bigWig 0 15458.60
 	color 109,57,160
 
 	track bdtnpDnaseS14R9478
@@ -142,7 +142,7 @@ dragAndDrop subTracks
 	subGroups view=acc stage=s14 repl=r2
 	shortLabel S14 repl. 2
 	longLabel BDTNP Chromatin Accessibility (DNase) Stage 14, Replicate 2
-	type bigWig 0 78676
+	type bigWig 0 27690.70
 	color 109,57,160
 
 

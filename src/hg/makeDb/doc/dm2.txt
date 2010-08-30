@@ -5946,6 +5946,7 @@ chainOne $(path1)
     # Mark Biggins Aug. 9th, 13th and 16th 2010.
     # Download some additional DNase accessibility files:
     alias wg 'wget --timestamping --no-check-certificate --user=biggin --password=xxxx'
+    # NOTE: these files were replaced 8/30, see below...
     wg https://data.htseq.org/biggin/wig/s5_rep9481.wig
     wg https://data.htseq.org/biggin/wig/s5_rep9482.wig
     wg https://data.htseq.org/biggin/wig/s9_rep9127.wig
@@ -6005,6 +6006,28 @@ chainOne $(path1)
       echo $f:t
       ln -s `pwd`/$f /gbdb/dm2/bdtnp/$f
       hgBbiDbLink dm2 $f:r /gbdb/dm2/bdtnp/$f
+    end
+
+    # 8/30/10: new DNase data (normalized; password in email 8/27):
+    alias wg 'wget --timestamping --no-check-certificate --user=encode --password=xxxx'
+    wg http://www.uwencode.org/~sthomas/data/biggin/wiggle.tar.gz
+    tar xvzf wiggle.tar.gz
+    foreach f (wiggle/p5_S*_DS*.wig)
+      set t = `echo $f | perl -wpe 's/^wiggle\/p5_(S\d+)_DS(\d+).wig$/bdtnpDnase{$1}R$2/'`
+      echo $f --\> $t
+      wigToBigWig -clip $f /hive/data/genomes/dm2/chrom.sizes $t.bw
+    end
+    # again, all files have a few items that extend past end of chrom, NBD:
+#line 2243431 of wiggle/p5_S9_DS9128.wig: chromosome chr2h has 1694122 bases, but item ends at 1694124
+#line 3432024 of wiggle/p5_S9_DS9128.wig: chromosome chr3L has 23771897 bases, but item ends at 23771904
+#line 4975059 of wiggle/p5_S9_DS9128.wig: chromosome chr3h has 2955737 bases, but item ends at 2955744
+#line 5039139 of wiggle/p5_S9_DS9128.wig: chromosome chr4 has 1281640 bases, but item ends at 1281644
+    # No need to re-run hgBbiDbLink -- filenames are same.
+    # Get new max for trackDb bigWig specs:
+    foreach f ( bdtnpDnaseS*.bw )
+      echo $f
+      bigWigInfo $f | egrep '^(min|max)'
+      echo ""
     end
 
 
