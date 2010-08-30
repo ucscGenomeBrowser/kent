@@ -4369,13 +4369,13 @@ tag YY1
 type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
-vendorName Santa Cruz Biotech
-vendorId sc-1703X
-orderUrl http://www.scbt.com/product.php?datasheet=1703
+vendorName Santa Cruz Biotech;Sanata Cruz Biotech
+vendorId sc-1703X;sc-281
+orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
 lab Farnham
 targetId GeneCard:GC14P099774
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
-validation missing
+validation Myers_YY1:Myers_YY1_validation.pdf
 
 term ZBTB33
 tag ZBTB33
