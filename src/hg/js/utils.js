@@ -492,6 +492,9 @@ function getAllVarsAsUrlData(obj)
     $(inp).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
+        if($(this).attr('type') == 'checkbox' && !$(this).attr('checked')) {
+            val = undefined;
+        }
         if(name != undefined && name != "Submit" && val != undefined) {
             urlData += "&"+name+"="+val;
         }

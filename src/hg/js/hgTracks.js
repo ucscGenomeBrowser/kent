@@ -1434,6 +1434,11 @@ function showLoadingImage(id)
     return loadingId;
 }
 
+function hideLoadingImage(id)
+{
+    $('#' + id).remove();
+}
+
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
@@ -1898,7 +1903,7 @@ function handleUpdateTrackMap(response, status)
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
           var id = this.id;
           if(this.loadingId) {
-	          $('#' + this.loadingId).remove();
+	          hideLoadingImage(this.loadingId);
           }
           var rec = trackDbJson[id];
           var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";

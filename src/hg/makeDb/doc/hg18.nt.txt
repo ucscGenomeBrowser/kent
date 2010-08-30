@@ -268,7 +268,7 @@ db.grp=ntdb:grp
 # 1. chromosome
 # 2. position
 # 3. Allele string for human data (A=ancestral; D=derived; 0=no data)
-#    The order of the individuals is hg18, San, Yoruban, Papuan, Han, French.
+#    The order of the individuals is hg18, San, Yoruban, Han, Papuan, French.
 # 4. probability that a Neandertal allele would be derived, given the
 # configuration of ancestral/derived alleles in column 3
 # 5. Observed number of neandertal derived alleles at this site
