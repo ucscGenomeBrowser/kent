@@ -1390,6 +1390,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1
 project wgEncode
@@ -1410,6 +1411,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2
 project wgEncode
@@ -1430,6 +1432,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1
 project wgEncode
@@ -1450,6 +1453,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2
 project wgEncode
@@ -1470,6 +1474,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1
 project wgEncode
@@ -1490,6 +1495,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2
 project wgEncode
@@ -1510,6 +1516,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2
 project wgEncode
@@ -1530,6 +1537,7 @@ fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
 grant Myers
 insertLength 400
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2
 project wgEncode
@@ -1550,6 +1558,7 @@ fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2
 project wgEncode
@@ -1570,6 +1579,7 @@ fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1
 project wgEncode
@@ -1590,6 +1600,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1
 project wgEncode
@@ -1610,6 +1621,7 @@ fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
 grant Myers
 insertLength 200
 lab Caltech(Wold)
+localization cell
 mapAlgorithm NA
 parentTable wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1
 project wgEncode
@@ -6536,4 +6548,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: 1823287538
+# MAGIC: 482015142
