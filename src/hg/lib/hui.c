@@ -144,9 +144,9 @@ return NULL;
 //struct dyString *dyTable = dyStringCreate("<table id='mdb_%s'>",tdb->table);
 struct dyString *dyTable = dyStringCreate("<table>");
 if(showLongLabel)
-    dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+    dyStringPrintf(dyTable,"<tr><td colspan=2>%s</td></tr>",tdb->longLabel);
 if(showShortLabel)
-    dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -158,7 +158,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
-        dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
+        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
 
         dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
         dyStringAppend(dyTable,"</td></tr>");
@@ -169,7 +169,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
 
-        dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
+        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
 dyStringAppend(dyTable,"</table>");
@@ -3870,10 +3870,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,membership); // view is known tag
             printf("<TR valign='top' BGCOLOR=\"%s\"",colors[colorIx]);
             if(useDragAndDrop)
-                printf(" class='trDraggable' title='Drag to Reorder'");
+                printf(" class='trDraggable'");
 
             printf(" id=\"tr_%s\" nowrap%s>\n",id,(selectedOnly?" style='display:none'":""));
-            printf("<TD%s>",(enabledCB?"":" title='view is hidden' style='cursor: pointer;'"));
+            printf("<TD%s",(enabledCB?"":" title='view is hidden'"));
+            if (useDragAndDrop)
+                printf(" class='dragHandle' title='Drag to reorder'>");
+            else
+                printf(">");
             dyStringClear(dyHtml);
             dyStringAppend(dyHtml, "subCB");
             for(di=dimX;di<membersForAll->dimMax;di++)
@@ -3884,7 +3888,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             // Save view for last
             if(membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
                 dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
-            cgiMakeCheckBoxFourWay(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' onmouseover=\"this.style.cursor='default';\"");
+            cgiMakeCheckBoxFourWay(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer'");
+            if (useDragAndDrop)
+                printf("&nbsp;");
 
             if(sortOrder != NULL || useDragAndDrop)
                 {
@@ -3952,7 +3958,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #ifdef SUBTRACK_CFG_POPUP
             dyStringFree(&dyLabel);
 #endif///def SUBTRACK_CFG_POPUP
-            printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
+            printf ("<TD nowrap='true' title='select to copy'><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
             compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
