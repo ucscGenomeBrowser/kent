@@ -23,7 +23,7 @@ int debug = 0;
 char *outputExtension = NULL;
 boolean bindingSites = FALSE;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
-float minDelta = -1;
+float minDelta = -1;                   // minDelta == 0 means output all deltas
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 char *markovTable;
 static int maxNearestGene = 10000;
@@ -92,11 +92,13 @@ struct bed7
     unsigned chromStart;	/* Start (0 based) */
     unsigned chromEnd;	/* End (non-inclusive) */
     char *name;	/* Name of item */
-    int score; /* Score - 0-1000 */
+    float score;
     char strand;
     char *key; // user provided stuff
     char *code; // used internally
     };
+
+static DNA parseSnp(char *name, DNA *before, DNA *refCall);
 
 struct genePredStub
 {
@@ -328,6 +330,8 @@ struct lineFile *lf = lineFileOpen(fileName, TRUE);
 int wordCount;
 char *row[40];
 struct bed7 *bed;
+int count = 0;
+int valid = 0;
 
 while ((wordCount = lineFileChop(lf, row)) != 0)
     {
@@ -346,8 +350,19 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
 	bed->chromEnd   -= 1;
 	}
     bed->name = cloneString(row[3]);
+
+    count++;
     if (wordCount >= 5)
-        bed->score = lineFileNeedNum(lf, row, 4);
+        {
+        bed->score = lineFileNeedDouble(lf, row, 4);
+        // fprintf(stderr, "%.2f\n", bed->score);
+        // XXXX Add a way to have a score cutoff?
+//        if(bed->score < 0.95)
+//            continue;
+        }
+    if(parseSnp(bed->name, NULL, NULL))
+        valid++;
+
     if (wordCount >= 6)
         {
         bed->strand = row[5][0];
@@ -360,6 +375,7 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
     slAddHead(list, bed);
     }
 lineFileClose(&lf);
+verbose(2, "%s: valid: %d; count: %d; %.2f\n", fileName, valid, count, ((float) valid) / count);
 }
 
 static void printLine(FILE *stream, char *chrom, int chromStart, int chromEnd, char *name, char *code, char *additional, char *key)
@@ -512,17 +528,38 @@ else if(strlen(name) == 3)
     }
 else if(strlen(name) == 7)
     {
-    // we arbitrarily favor the first listed SNP in unusual case of hetero snp
-    DNA snp = 0;
     if(refCall)
         *refCall = name[0];
-    if(name[5] != name[0])
-        snp = name[5];
-    else if(name[6] != name[0])
-        snp = name[6];
-    if(before != NULL)
-        *before = name[2] == snp ? name[3] : name[2];
-    return snp;
+    if(name[2] == name[3])
+        {
+        // homo -> ...
+        // We arbitrarily favor the first listed SNP in unusual case of hetero snp
+        DNA snp = 0;
+        if(before != NULL)
+            *before = name[2];
+        if(name[5] != name[2])
+            snp = name[5];
+        else if(name[6] != name[2])
+            snp = name[6];
+        return snp;
+        }
+    else if(name[5] == name[6])
+        {
+        // het => hom - this are perhaps (probably?) LOH events
+        // These have a dramatic effect on the heatmaps; in general, they reduce the counts in the null model;
+        // I'm not sure why that is...
+        DNA snp = name[5];
+        if(before != NULL)
+            {
+            if(snp != name[2])
+                *before = name[2];
+            else
+                *before = name[3];
+            }
+        return 0;
+        return snp;
+        }
+    // else het => het - I'm just ignoring those
     }
 else
     {
@@ -825,7 +862,6 @@ while(!done)
                 if(range)
                     {
                     struct dnaSeq *beforeSeq, *afterSeq = NULL;
-                    char beforeDna[256], afterDna[256];
                     float delta, before, after, maxDelta = 0;
                     int count = 0;
 
@@ -843,10 +879,10 @@ while(!done)
                         int pos;
                         struct bed7 *bed = (struct bed7 *) range->val;
 
-                        count++;
                         snp = parseSnp(bed->name, &beforeSnp, NULL);
-                        if(beforeSnp && snp)
+                        if(beforeSnp && snp && beforeSnp != snp)
                             {
+                            count++;
                             if(*site->strand == '-')
                                 {
                                 reverseComplement(&snp, 1);
@@ -860,15 +896,11 @@ while(!done)
                             }
                         }
                     before = dnaMotifBitScore(motif, beforeSeq->dna);
-                    strncpy(beforeDna, beforeSeq->dna, beforeSeq->size);
-                    beforeDna[beforeSeq->size] = 0;
                     after = dnaMotifBitScore(motif, afterSeq->dna);
-                    strncpy(afterDna, afterSeq->dna, afterSeq->size);
-                    afterDna[afterSeq->size] = 0;
                     delta = after - before;
                     freeDnaSeq(&beforeSeq);
                     freeDnaSeq(&afterSeq);
-                    if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
+                    if((!minDelta && count) || (minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
                         {
                         int minDistance = 0;
                         char buf[256];
@@ -877,7 +909,7 @@ while(!done)
                             sprintf(buf, "\t");
                         else
                             safef(buf, sizeof(buf), "%s\t%d", nearestGene->name, minDistance);
-                        fprintf(output, "%s\t%d\t%d\t%s\t%d\t%.2f>%.2f\t%s\n", 
+                        fprintf(output, "%s\t%d\t%d\t%s\t%d\t%.2f\t%.2f\t%s\n", 
                                 site->chrom, site->chromStart, site->chromEnd, site->name, count, before, after, buf);
                         }
                     }
@@ -954,7 +986,7 @@ while(!done)
                             afterDna[seq->size] = 0;
                             delta = after - before;
                             }
-                        if((minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
+                        if(!minDelta || (minDelta > 0 && delta > minDelta && delta > maxDelta) || (minDelta < 0 && delta < minDelta && delta < maxDelta))
                             {
                             int minDistance = 0;
                             maxDelta = delta;
