@@ -1658,7 +1658,7 @@ color 128,0,0
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3
 
-track chainHg19Patch2
+track testChainHg19Patch2
 shortLabel GRCh37.p2 Chain 
 longLabel GRCh37.p2 patch2 Chained Alignments
 group map
