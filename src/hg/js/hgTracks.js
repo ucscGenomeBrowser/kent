@@ -1481,8 +1481,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    // start coordinate seems to be off by one (+1).
-                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd);
+                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd);
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
