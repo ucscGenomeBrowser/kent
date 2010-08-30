@@ -1809,7 +1809,7 @@ rm -f $c.gp $c.maf $c.ss
 
 #############################################################################
 # phastCons 13-way (DONE 2010-08-11 - Chin)
-#   rerun with 2010-08-09 version of phast suite (DONE 2010-08-11 - Chin
+#   rerun with 2010-08-09 version of phast suite (working 2010-08-11 - Chin
     #   was unable to split the full chrom MAF files, now working on the
     #   maf files as they were split up during multiz
     
@@ -1957,11 +1957,11 @@ rm -fr $tmp
     para -ram=8g create jobList
     para try ... check ... push ... etc.
     # Completed: 4749 of 4749 jobs
-    # CPU time in finished jobs:   7469s     124.48m     2.07h    0.09d  0.000 y
-    # IO & Wait Time:             34600s     576.67m     9.61h    0.40d  0.001 y
-    # Average job time:               9s       0.15m     0.00h    0.00d
-    # Longest finished job:          47s       0.78m     0.01h    0.00d
-    # Submission to last job:       403s       6.72m     0.11h    0.00d
+    # CPU time in finished jobs:   7472s     124.53m     2.08h    0.09d  0.000 y
+    # IO & Wait Time:             38319s     638.66m    10.64h    0.44d  0.001 y
+    # Average job time:              10s       0.16m     0.00h    0.00d
+    # Longest finished job:          53s       0.88m     0.01h    0.00d
+    # Submission to last job:       301s       5.02m     0.08h    0.00d
 
     # create Most Conserved track
     ssh hgwdev
@@ -1976,7 +1976,7 @@ rm -fr $tmp
     # load into database
     nice hgLoadBed calJac3 phastConsElements13way mostConserved.bed
     # Reading mostConserved.bed
-    # Loaded 1725324 elements of size 5
+    # Loaded 1725260 elements of size 5
     # Sorted
     # Creating table definition for phastConsElements13way
     # Saving bed.tab
@@ -1984,8 +1984,8 @@ rm -fr $tmp
 
     # Try for 5% overall cov, and 70% CDS cov 
     featureBits calJac3 -enrichment refGene:cds phastConsElements13way
-    # refGene:cds 0.000%, phastConsElements13way 5.136%, 
-    # both 0.000%, cover 72.10%, enrich 14.04x
+    # refGene:cds 0.000%, phastConsElements13way 5.136%,
+    #  both 0.000%, cover 72.10%, enrich 14.04x
 
     # hg19 for comparison
     #   refGene:cds 1.187%, phastConsElements413way 5.065%,
@@ -2031,8 +2031,8 @@ rm -fr $tmp
         -hBinSize=0.001 -hBinCount=1000 -hMinVal=0.0 -verbose=2 \
             phastCons13way >& histogram.data
 
-    #   create plot of histogram:
 
+    #   create plot of histogram:
 
 #orig set terminal png small color x000000 xffffff xc000ff x66ff66 xffff00 x00ffff
     cat << '_EOF_' | gnuplot > histo.png
@@ -2053,6 +2053,7 @@ plot "histogram.data" using 2:5 title " RelFreq" with impulses, \
         "histogram.data" using 2:7 axes x1y2 title " CRF" with lines
 '_EOF_'
     #   << happy emacs
+
 
     display histo.png &
 
@@ -2217,7 +2218,7 @@ nameTranslation "s/^\([0-9XY][0-9]*\)/chr\1/; s/^MT/chrM/; s/^Un/chrUn/"
 
 
 #########################################################################
-# phyloP conservation for 13-way (working 2010-07-22 - Chin - Hiram)
+# phyloP conservation for 13-way (working 2010-08-12 - Chin)
 #
 #
     # split SS files into 1M chunks, this business needs smaller files
@@ -2278,11 +2279,11 @@ doSplit.csh $(path1) {check out exists+ done/$(path1).done}
     para check
     para time
     # Completed: 10770 of 10770 jobs
-    # CPU time in finished jobs:   4401s      73.36m     1.22h    0.05d  0.000 y
-    # IO & Wait Time:             74525s    1242.08m    20.70h    0.86d  0.002 y
-    # Average job time:               7s       0.12m     0.00h    0.00d
-    # Longest finished job:         529s       8.82m     0.15h    0.01d
-    # Submission to last job:       892s      14.87m     0.25h    0.01d
+    # CPU time in finished jobs:   7911s     131.84m     2.20h    0.09d  0.000 y
+    # IO & Wait Time:             29864s     497.74m     8.30h    0.35d  0.001 y
+    # Average job time:               4s       0.06m     0.00h    0.00d
+    # Longest finished job:         865s      14.42m     0.24h    0.01d
+    # Submission to last job:      2474s      41.23m     0.69h    0.03d
 
 
     # run phyloP with --method LRT 
@@ -2351,13 +2352,12 @@ rm -fr $tmp
     para create jobList
     para try ... check ... push ... etc ...
     para time
-    # Completed: 7246 of 7247 jobs
-    # Crashed: 1 jobs <==XXXX need to go back even further
-    # CPU time in finished jobs:  80001s    1333.34m    22.22h    0.93d  0.003 y
-    # IO & Wait Time:             63359s    1055.99m    17.60h    0.73d  0.002 y
-    # Average job time:                  20s       0.33m     0.01h    0.00d
-    # Longest finished job:              62s       1.03m     0.02h    0.00d
-    # Submission to last job:           659s      10.98m     0.18h    0.01d
+    # Completed: 7247 of 7247 jobs
+    # CPU time in finished jobs:  79856s    1330.93m    22.18h    0.92d  0.003 y
+    # IO & Wait Time:            310342s    5172.37m    86.21h    3.59d  0.010 y
+    # Average job time:              54s       0.90m     0.01h    0.00d
+    # Longest finished job:         121s       2.02m     0.03h    0.00d
+    # Submission to last job:       661s      11.02m     0.18h    0.01d
 
 
     ssh hgwdev
@@ -2365,7 +2365,8 @@ rm -fr $tmp
     find ./wigFix -type f \
         | sed -e "s#^./##; s/\./ /g; s/-/ - /g" \
         | sort -k1,1 -k2,2n | sed -e "s/ - /-/g; s/ /./g" > wigFile.list
-XXXX 07-23 4:35PM
+
+XXXX 08-13 4:35PM SAME problem again!!
 error in log:
 Found start=0 at line 1192229886, the first chrom position is 1, not 0
 ==> need to find the "start=1" in each header line of wigFix files
