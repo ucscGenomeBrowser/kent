@@ -15,3 +15,10 @@ $A: ${O}
 
 clean:
 	rm -f $O
+
+build:
+	tmpFile=`mktemp`;\
+	makeTrackIndex $$DBS > $$tmpFile;\
+	rm -f /gbdb/$$DBS/trackDb.ix /gbdb/$$DBS/trackDb.ixx;\
+	ixIxx $$tmpFile /gbdb/$$DBS/trackDb.ix /gbdb/$$DBS/trackDb.ixx;\
+	rm -f $$tmpFile	
