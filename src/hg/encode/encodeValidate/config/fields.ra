@@ -113,9 +113,9 @@ required no
 
 
 # This is the field where you can enter which type of control is being used
-# It seems that this is redundant with the the cv.ra term control
-#Need to retire input and have it be control and have it be controlled by the cv "control"
-field input
+# It used to be called input here, but then was control in the cv and the metaDB
+# Changing this may break some code in the doEncodeValidate
+field control
 file ddf
 type string
 required no

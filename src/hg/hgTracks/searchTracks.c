@@ -181,7 +181,7 @@ char *whiteList[WHITE_LIST_COUNT][2] = {
     {"labExpId",         "Lab specific identifier"},
     {"softwareVersion",  "Lab specific informatics"},
     {"mapAlgorithm",     "Mapping algorithm"},
-    {"grant",            "Priniple Investigator"},
+    {"grant",            "Prinipal Investigator"},
     {"readType",         "Paired/Single reads lengths"},
     {"replicate",        "Replicate number"},
     {"restrictionEnzyme","Restriction Enzyme used"},
