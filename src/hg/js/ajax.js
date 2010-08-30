@@ -166,3 +166,32 @@ function showWarning(str)
     $("#warningText").text(str);
     $("#warning").show();
 }
+
+// Specific calls...
+function lookupMetadata(tableName,showLonglabel,showShortLabel)
+{ // Ajax call to repopulate a metadata vals select when mdb var changes
+    //warn("lookupMetadata for:"+tableName);
+    var thisData = "db=" + getDb() +  "&cmd=tableMetadata&track=" + tableName;
+    if(showLonglabel)
+        thisData += "&showLonglabel=1";
+    if(showShortLabel)
+        thisData += "&showShortLabel=1";
+    $.ajax({
+        type: "GET",
+        url: "../cgi-bin/hgApi",
+        data: thisData,
+        trueSuccess: loadMetadataTable,
+        success: catchErrorOrDispatch,
+        cache: true,
+        cmd: tableName
+    });
+}
+
+function loadMetadataTable(response, status)
+// Handle ajax response (repopulate a metadata val select)
+{
+    var div = $("div#div_"+this.cmd+"_meta");
+    $(div).html(response);
+    $(div).show();
+}
+

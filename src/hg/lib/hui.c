@@ -47,6 +47,12 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 //#define SUBTRACK_CFG_POPUP
+// TODO: For subtrack cfg and integration with right-click and subtrack level vis:
+/*
+1) Composite/view level settings should be ajaxed over upon change
+2) subtrack popup should only register changed vars.  Like findTracks, this could be done by seen inputs with id and hidden inputs with name.
+3) subtrack cfg of vis should only set this var if changed from current possibly inherited state.
+*/
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -61,38 +67,34 @@ if (!sameString(tdb->table, tdb->track))
 return trackDbTopLevelSelfOrParent(tdb);
 }
 
-static boolean makeFileDownloadsLink(char *database, struct trackDb *tdb,char *name,
-	struct hash *trackHash)
-// Make a downloads link (if appropriate and then returns TRUE)
+static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char *name,boolean nameIsFile,
+        struct hash *trackHash)
+// Returns an HTML string for a downloads link
 {
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
+    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
             trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name, name);
-    return TRUE;
+            ENCODE_DCC_DOWNLOADS, dirKeeper->table, (nameIsFile?name:""), name);
+    return dyStringCannibalize(&dyLink);
     }
-return FALSE;
+return NULL;
 }
 
 static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name,
 	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-// Downloads directory if this is ENCODE
-if(trackDbSetting(tdb, "wgEncode") != NULL)
-    {
-    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
-            hDownloadsServer(),
-            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name);
-    return TRUE;
-    }
-return FALSE;
+char *htmlString = htmlStringForDownloadsLink(database,tdb,name,FALSE,trackHash);
+if (htmlString == NULL)
+    return FALSE;
+
+printf(htmlString);
+freeMem(htmlString);
+return TRUE;
 }
 
 boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trackHash)
@@ -132,35 +134,34 @@ if (hTableOrSplitExists(db, tdb->table))
 return FALSE;
 }
 
-boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
-        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash)
-/* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
+char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel, struct hash *trackHash)
+/* If metadata from metaDb exists, return string of html with table definition */
 {
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
-if(safeObj == NULL || safeObj->vars == NULL)
-return FALSE;
+if (safeObj == NULL || safeObj->vars == NULL)
+return NULL;
 
-printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, title);
-printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->table);
+//struct dyString *dyTable = dyStringCreate("<table id='mdb_%s'>",tdb->table);
+struct dyString *dyTable = dyStringCreate("<table>");
 if(showLongLabel)
-    printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
-printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
+if(showShortLabel)
+    dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
 mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
-for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
     if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
+        dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
 
-        makeFileDownloadsLink(db, tdb, mdbVar->val, trackHash);
-        printf("</td></tr>");
+        dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
+        dyStringAppend(dyTable,"</td></tr>");
         }
     else
         {
@@ -168,11 +169,31 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
 
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
+        dyStringPrintf(dyTable,"<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
-printf("</table>--></div>");
+dyStringAppend(dyTable,"</table>");
 //mdbObjsFree(&mdbObj); // spill some memory
+return dyStringCannibalize(&dyTable);
+}
+
+boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
+        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash)
+/* If metadata from metaTbl exists, create a link that will allow toggling it's display */
+{
+const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
+if(safeObj == NULL || safeObj->vars == NULL)
+return FALSE;
+
+printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
+        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, showLongLabel?"true":"false", title);
+if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
+    {
+    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->table,
+        metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
+    }
+else
+    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->table);
 return TRUE;
 }
 
