@@ -1434,6 +1434,11 @@ function showLoadingImage(id)
     return loadingId;
 }
 
+function hideLoadingImage(id)
+{
+    $('#' + id).remove();
+}
+
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
@@ -1476,8 +1481,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    // start coordinate seems to be off by one (+1).
-                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd);
+                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd);
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
@@ -1572,6 +1576,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             else
                 setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
+            initImgTblButtons();
             loadImgAreaSelect(false);
         } else if (false && browser == "safari") {
             // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
@@ -1716,6 +1721,7 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
+            if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
             o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
@@ -1724,9 +1730,10 @@ function loadContextMenu(img)
             }
             menu.push($.contextMenu.separator);
             menu.push(o);
+                menu.push($.contextMenu.separator);
+            }
 
             // Add view image at end
-            menu.push($.contextMenu.separator);
             menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
 
             return menu;
@@ -1769,10 +1776,13 @@ function parseMap(ele, reset)
     return mapItems;
 }
 
-function updateTrackImg(trackName)
+function updateTrackImg(trackName,extraData,loadingId)
 {
     var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
-    var loadingId = showLoadingImage("tr_" + trackName);
+    if(extraData != undefined && extraData != "")
+        data += "&" + extraData;
+    if(loadingId == undefined || loadingId == "")
+        loadingId = showLoadingImage("tr_" + trackName);
     $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
@@ -1822,8 +1832,7 @@ function handleTrackUi(response, status)
                                    // This doesn't work
                                    cache: true
                                },
-                               resizable: true,
-                               bgiframe: true,
+                               resizable: popUpTrackDescriptionOnly,
                                height: 'auto',
                                width: 'auto',
                                minHeight: 200,
@@ -1832,12 +1841,31 @@ function handleTrackUi(response, status)
                                closeOnEscape: true,
                                autoOpen: false,
                                buttons: { "Ok": function() {
-                                    if(popUpTrackDescriptionOnly == false)
-                                        setAllVars($('#pop'));
+                                    var hide = false; // need to handle special case of vis going to hide!
+                                    var vis = $('#pop').find('select[name="'+popUpTrackName+'"]');
+                                    if(vis != undefined)
+                                        hide = ($(vis).val() == 'hide');
+                                    if(popUpTrackDescriptionOnly == false) {
+                                        if($('#imgTbl') != undefined) {
+                                            if(hide) {
+                                                if(trackDbJson[popUpTrackName].parentTrack)
+                                                    setAllVars($('#pop'),popUpTrackName);
+                                                else
+                                                    setAllVars($('#pop'));
+                                                $('#tr_' + popUpTrackName).remove();
+                                                initImgTblButtons();
+                                                loadImgAreaSelect(false);
+                                            }
+                                            else {
+                                                var urlData = getAllVarsAsUrlData($('#pop'));
+                                                updateTrackImg(popUpTrackName,urlData,"");
+                                            }
+                                        } else {
+                                            setAllVars($('#pop'));
+                                            //if(hide) // Need to set checkbox here
+                                        }
+                                    }
                                     $(this).dialog("close");
-                                    if($('#imgTbl') != undefined && popUpTrackDescriptionOnly == false)
-                                        setTimeout('updateTrackImg(popUpTrackName);',50); // Necessary because ajax settings need to be done first
-                                        updateTrackImg(popUpTrackName);
                                }},
                                close: function() {
                                    // clear out html after close to prevent problems caused by duplicate html elements
@@ -1875,7 +1903,7 @@ function handleUpdateTrackMap(response, status)
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
           var id = this.id;
           if(this.loadingId) {
-	          $('#' + this.loadingId).remove();
+	          hideLoadingImage(this.loadingId);
           }
           var rec = trackDbJson[id];
           var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";

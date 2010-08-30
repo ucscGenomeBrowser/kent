@@ -89,7 +89,7 @@ function setCartVar(name, value)
     setCartVars( [ name ], [ value ] );
 }
 
-function setAllVars(obj)
+function setAllVars(obj,subtrackName)
 {
 // Set all enabled inputs and selects found as children obj with names to cart with ajax
 // If obj is undefined then obj is document!
@@ -112,8 +112,20 @@ function setAllVars(obj)
         var name  = $(this).attr('name');
         var val = $(this).val();
         if(name != undefined && val != undefined) {
-            names.push(name);
-            values.push(val);
+            if(subtrackName != undefined && name == subtrackName) {
+                names.push(name+"_sel");  // subtrack is controld by two vars
+                names.push(name);
+                if(val == 'hide') {
+                   values.push("0");    // Can't delete "_sel" because default takes over
+                    values.push("[]");  // can delete vis because subtrack vis should be inherited.
+                } else {
+                    values.push("1");
+                    values.push(val);
+                }
+            } else {
+                names.push(name);
+                values.push(val);
+            }
         }
     });
     if(names.length > 0) {
@@ -154,3 +166,32 @@ function showWarning(str)
     $("#warningText").text(str);
     $("#warning").show();
 }
+
+// Specific calls...
+function lookupMetadata(tableName,showLonglabel,showShortLabel)
+{ // Ajax call to repopulate a metadata vals select when mdb var changes
+    //warn("lookupMetadata for:"+tableName);
+    var thisData = "db=" + getDb() +  "&cmd=tableMetadata&track=" + tableName;
+    if(showLonglabel)
+        thisData += "&showLonglabel=1";
+    if(showShortLabel)
+        thisData += "&showShortLabel=1";
+    $.ajax({
+        type: "GET",
+        url: "../cgi-bin/hgApi",
+        data: thisData,
+        trueSuccess: loadMetadataTable,
+        success: catchErrorOrDispatch,
+        cache: true,
+        cmd: tableName
+    });
+}
+
+function loadMetadataTable(response, status)
+// Handle ajax response (repopulate a metadata val select)
+{
+    var div = $("div#div_"+this.cmd+"_meta");
+    $(div).html(response);
+    $(div).show();
+}
+
