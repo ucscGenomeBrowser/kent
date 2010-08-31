@@ -475,14 +475,18 @@ function warn(msg)
     }
 }
 
-function getAllVarsAsUrlData(obj)
+function cgiBooleanShadowPrefix()
+// Prefix for shadow variable set with boolean variables.
+// Exact copy of code in cheapcgi.c
 {
-// Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
-// If obj is undefined then obj is document!
+    return "boolshad.";
+}
 
-    var urlData = "";
-    var names = [];
-    var values = [];
+function getAllVars(obj)
+{
+// Returns a hash for all inputs and selects in an obj.
+// If obj is undefined then obj is document!
+    var urlData = new Object();
     if($(obj) == undefined)
         obj = $('document');
     var inp = $(obj).find('input');
@@ -491,21 +495,44 @@ function getAllVarsAsUrlData(obj)
     $(inp).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
+        if($(this).attr('type') == 'checkbox') {
+            name = cgiBooleanShadowPrefix() + name;
+            val = $(this).attr('checked') ? 1 : 0;
+        }
         if(name != undefined && name != "Submit" && val != undefined) {
-            urlData += "&"+name+"="+val;
+            urlData[name] = val;
         }
     });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
         if(name != undefined && val != undefined) {
-            urlData += "&"+name+"="+val;
+            urlData[name] = val;
         }
     });
-    if(urlData.length > 0) {
-        return urlData.substring(1); // chop off the first '&'
+    return urlData;
+}
+
+function objectToQueryString(o)
+{
+// return a CGI QUERY_STRING for name/vals in given object
+    var retVal = "";
+    var count = 0;
+    for (var i in o) {
+        if(count++ > 0) {
+            retVal = retVal + "&"
+        }
+        // XXXX encode i and o[i]?
+        retVal = retVal + i + "=" + o[i];
     }
-return "";
+    return retVal;
+}
+
+function getAllVarsAsUrlData(obj)
+{
+// Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
+// If obj is undefined then obj is document!
+    return objectToQueryString(getAllVars(obj));
 }
 
 /*
