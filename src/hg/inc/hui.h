@@ -979,6 +979,9 @@ void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
 
+void pslCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
+/* Put up UI for psl tracks */
+
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
 /* Put up UI for net tracks */
 

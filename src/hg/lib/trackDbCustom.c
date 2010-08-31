@@ -595,6 +595,8 @@ else if(startsWith("chain",type))
     cType = cfgChain;
 else if (startsWith("bam", type))
     cType = cfgBam;
+else if (startsWith("psl", type))
+    cType = cfgPsl;
 // TODO: Only these are configurable so far
 
 if(cType == cfgNone && warnIfNecessary)
