@@ -1494,7 +1494,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
             var id = selectedMenuItem.id;
             var rec = trackDbJson[id];
-            if (rec.parentTrack)
+            if (rec.parentTrack && rec.hasChildren == 0)
                 url += rec.parentTrack
             else
                 url = selectedMenuItem.id;
@@ -1575,6 +1575,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             //var center = $("#img_data_" + id);
             //center.attr('src', "../images/loading.gif")
             //center.attr('style', "text-align: center; display: block;");
+            //warn("hgTracks?"+data); // Uesful to cut and paste the url
             var loadingId = showLoadingImage("tr_" + id);
             $.ajax({
                        type: "GET",
@@ -1704,10 +1705,12 @@ function loadContextMenu(img)
             if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
-            o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
-            if(rec.parentTrack != undefined) {
-                o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-            }
+            if(rec.hasChildren == 0) {
+                o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                if(rec.parentTrack != undefined)
+                    o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+            } else
+                o["configure "+rec.shortLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             menu.push($.contextMenu.separator);
             menu.push(o);
                 menu.push($.contextMenu.separator);
@@ -1846,11 +1849,11 @@ function handleTrackUi(response, status)
                                                     var rec = trackDbJson[popUpTrackName];
                                                     if(rec) {
                                                         rec.localVisibility = newVisibility;
-                                                    }
+                                            }
                                                 }
                                                 var urlData = objectToQueryString(o);
                                                 if(mapIsUpdateable) {
-                                                    updateTrackImg(popUpTrackName,urlData,"");
+                                                updateTrackImg(popUpTrackName,urlData,"");
                                                 } else {
                                                     window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
                                                 }
