@@ -31,10 +31,10 @@ subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 #subGroup2 cellType Cell_Line BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 GM12878=GM12878 HEK293=HEK293 HELA=HeLa-S3 HEPG2=HepG2 HL60=HL-60 HMEC=HMEC HRE=HRE HUVEC=HUVEC K562=K562 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1)  GM12878=GM12878&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) NHEK=NHEK&nbsp;(Tier_2) BJ=BJ Caco2=Caco-2 H7es=H7-HESC  HEK293=HEK293 HL60=HL-60 HMEC=HMEC HRE=HRE GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup3 factor Factor CTCF=CTCF  H3K04me3=H3K4me3  H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
-subGroup4 rep Rep 1=1 2=2
+subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
-dimensionZchecked 1st,2nd
-sortOrder cellType=+ factor=+ rank=+ view=+
+dimensionZchecked 1,2
+sortOrder cellType=+ factor=+ rep=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell factor=antibody
 dragAndDrop subTracks
 priority 0
