@@ -128,7 +128,8 @@ The format of the type fields:
    Unique type for Repeat Masker tracks
 12. type sample [min] [max]
    A continuous value graphing type of track.
-   Becoming obsolete, replaced by the 'type wig' tracks.
+   Completely obsolete, replaced by the 'type wig' tracks.
+   And 'type wig' tracks are more efficient and accurate as 'type bigWig'
    [min] - optional minimum limit of data, default 0.  Used just for label.
    [max] - optional maximum limit of data, default 1000. Used just for label.
 13. type wigMaf <minVal> <maxVal>
@@ -196,6 +197,7 @@ The format of the type fields:
             when using this setting.
 
 14. type wig [lower] [upper]
+   Deprecated type, more efficient and accurate are 'type bigWig' tracks.
    Continuous value graphing track.
    [lower] - overall lower limit of the data, default 0.0
    [upper] - overall upper limit of the data, default 127.0
