@@ -6,7 +6,7 @@ group varRep
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup2 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
 dimensions dimensionX=cellType dimensionY=fragSize
-sortOrder cellType=+ fragSize=+ view=+
+sortOrder cellType=+ fragSize=+ 
 controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
 priority 0

@@ -1382,6 +1382,8 @@ cartVaWebStart(cart, db, format, args);
 va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+cgiMakeHiddenVar("db", db);
 }
 
 void cartWebEnd()

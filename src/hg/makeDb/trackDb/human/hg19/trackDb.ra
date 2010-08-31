@@ -1620,20 +1620,6 @@ noInherit on
     visibility dense
     type bed 12
     
-track altSequence
-shortLabel Alt Sequence
-longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
-visibility hide
-type bed 9 .
-scoreFilterByRange on
-itemRgb on
-group map
-priority 25
-color 0,0,0
-url http:/cgi-bin/hgTracks?db=hg19Patch2&position=$$
-urlLabel Haplotype sequence:
-chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM,chrM_rCRS
-
 searchTable haplotypeLocations
 searchMethod exact
 searchType bed
@@ -1679,3 +1665,69 @@ visibility hide
 color 0,100,0
 altColor 255,240,200
 type psl .
+
+track altSeqComposite
+compositeTrack on
+shortLabel Alt Sequence
+longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
+subGroup1 view Views location=Location psl=Psl
+dragAndDrop subTracks
+# sortOrder view=+
+visibility hide
+type bed 6
+noInherit on
+group map
+priority 25
+url http:/cgi-bin/hgTracks?db=hg19Patch2&position=$$
+urlLabel Haplotype sequence:
+chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
+
+    track altSeqCompositeViewlocation
+    shortLabel Location
+    view location
+    visibility pack
+    parent altSeqComposite
+
+	track altSeqHaplotypes
+        parent altSeqCompositeViewlocation
+        subGroups view=location
+	color 32,32,190
+	shortLabel Haplotypes
+	longLabel GRCh37 alternate sequences, haplotypes to reference sequence
+	priority 1
+
+	track altSeqPatches
+        parent altSeqCompositeViewlocation
+        subGroups view=location
+	color 190,32,32
+	shortLabel GRCh37.p2 updates
+	longLabel GRCh37 alternate sequences, patch2 updates to the reference sequence
+	priority 2
+
+    track altSeqCompositeViewpsl
+    shortLabel Psl
+    view psl
+    visibility pack
+    parent altSeqComposite
+
+	track altSeqLiftOverPsl
+        parent altSeqCompositeViewpsl
+        subGroups view=psl
+	shortLabel Lift Over
+	longLabel GRCh37.p2 Lift over alignments
+	type psl xeno hg19Patch2
+	pslSequence no
+	baseColorDefault itemBases
+	baseColorUseSequence nameIsSequence
+	priority 3
+
+	track altSeqAllPsl
+        parent altSeqCompositeViewpsl
+        subGroups view=psl
+	shortLabel Alignments
+	longLabel Alignments to GRCh37.p2 sequence
+	type psl xeno hg19Patch2
+	pslSequence no
+	baseColorDefault itemBases
+	baseColorUseSequence nameIsSequence
+	priority 4

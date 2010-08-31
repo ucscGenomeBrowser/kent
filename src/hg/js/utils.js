@@ -411,18 +411,17 @@ function validateFloat(obj,min,max)
     }
 }
 
-function metadataShowHide(tableName)
+function metadataShowHide(tableName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_meta");
-    if($(divit).css('display') == 'none')
+    if($(divit).css('display') == 'none') {
         $("#div_"+tableName+"_cfg").hide();  // Hide any configuration when opening metadata
-    var htm = $(divit).html();
-    // Seems to be faster if this undisplayed junk is commented out.
-    if(htm.substring(0,4) == "<!--") {
-        htm = htm.substring(4,htm.length-7);
-        $(divit).html(htm);
+
+        if($(divit).find('table').length == 0) {
+            lookupMetadata(tableName,showLonglabel,showShortLabel);
+        }
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -476,14 +475,18 @@ function warn(msg)
     }
 }
 
-function getAllVarsAsUrlData(obj)
+function cgiBooleanShadowPrefix()
+// Prefix for shadow variable set with boolean variables.
+// Exact copy of code in cheapcgi.c
 {
-// Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
-// If obj is undefined then obj is document!
+    return "boolshad.";
+}
 
-    var urlData = "";
-    var names = [];
-    var values = [];
+function getAllVars(obj)
+{
+// Returns a hash for all inputs and selects in an obj.
+// If obj is undefined then obj is document!
+    var urlData = new Object();
     if($(obj) == undefined)
         obj = $('document');
     var inp = $(obj).find('input');
@@ -492,24 +495,44 @@ function getAllVarsAsUrlData(obj)
     $(inp).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
-        if($(this).attr('type') == 'checkbox' && !$(this).attr('checked')) {
-            val = undefined;
+        if($(this).attr('type') == 'checkbox') {
+            name = cgiBooleanShadowPrefix() + name;
+            val = $(this).attr('checked') ? 1 : 0;
         }
         if(name != undefined && name != "Submit" && val != undefined) {
-            urlData += "&"+name+"="+val;
+            urlData[name] = val;
         }
     });
     $(sel).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
         if(name != undefined && val != undefined) {
-            urlData += "&"+name+"="+val;
+            urlData[name] = val;
         }
     });
-    if(urlData.length > 0) {
-        return urlData.substring(1); // chop off the first '&'
+    return urlData;
+}
+
+function objectToQueryString(o)
+{
+// return a CGI QUERY_STRING for name/vals in given object
+    var retVal = "";
+    var count = 0;
+    for (var i in o) {
+        if(count++ > 0) {
+            retVal = retVal + "&"
+        }
+        // XXXX encode i and o[i]?
+        retVal = retVal + i + "=" + o[i];
     }
-return "";
+    return retVal;
+}
+
+function getAllVarsAsUrlData(obj)
+{
+// Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
+// If obj is undefined then obj is document!
+    return objectToQueryString(getAllVars(obj));
 }
 
 /*
@@ -818,4 +841,31 @@ function waitOnFunction(func)
 
     setTimeout('_launchWaitOnFunction();',50);
 
+}
+
+function showLoadingImage(id)
+{
+// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
+// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
+    var loadingId = id + "LoadingOverlay";
+    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    overlay.appendTo("body");
+    overlay.css("top", $('#'+ id).position().top);
+    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("left",divLeft);
+    var width = $('#'+ id).width() - 5;
+    var height = $('#'+ id).height();
+    overlay.width(width);
+    overlay.height(height);
+    overlay.css("background", "white");
+    overlay.css("opacity", 0.75);
+    var imgLeft = (width / 2) - 110;
+    var imgTop = (height / 2 ) - 10;
+    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    return loadingId;
+}
+
+function hideLoadingImage(id)
+{
+    $('#' + id).remove();
 }

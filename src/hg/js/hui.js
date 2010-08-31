@@ -594,8 +594,7 @@ function popUpCfg(content, status)
     $(popit).html("<div style='font-size:80%'>" + content + "</div>");
     $(popit).dialog({
         ajaxOptions: { cache: true }, // This doesn't work
-        resizable: true,
-        bgiframe: true,
+        resizable: false,
         height: 'auto',
         width: 'auto',
         minHeight: 200,
@@ -1322,19 +1321,20 @@ $(document).ready(function()
     //});
 
     // Allows rows to have their positions updated after a drag event
-    if($(".tableWithDragAndDrop").length > 0) {
-        $(".tableWithDragAndDrop").tableDnD({
+    var tblDnd = $(".tableWithDragAndDrop");
+    if($(tblDnd).length > 0) {
+        $(tblDnd).tableDnD({
             onDragClass: "trDrag",
-            //dragHandle: "dragHandle",
+            dragHandle: "dragHandle",
             onDrop: function(table, row, dragStartIndex) {
                     if(tableSetPositions) {
                         tableSetPositions(table);
                     }
                 }
             });
-        $(".trDraggable").hover(
-            function(){ $(this).addClass('trDrag'); },
-            function(){ $(this).removeClass('trDrag'); }
+        $(".dragHandle").hover(
+            function(){ $(this).parent('tr').addClass('trDrag'); },
+            function(){ $(this).parent('tr').removeClass('trDrag'); }
         );
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!

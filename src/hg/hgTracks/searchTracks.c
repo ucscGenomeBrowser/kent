@@ -17,6 +17,7 @@
 #include "hdb.h"
 #include "trix.h"
 #include "jsHelper.h"
+#include "imageV2.h"
 
 static char const rcsid[] = "$Id: searchTracks.c,v 1.11 2010/06/11 18:21:40 larrym Exp $";
 
@@ -181,12 +182,12 @@ char *whiteList[WHITE_LIST_COUNT][2] = {
     {"labExpId",         "Lab specific identifier"},
     {"softwareVersion",  "Lab specific informatics"},
     {"mapAlgorithm",     "Mapping algorithm"},
-    {"grant",            "Priniple Investigator"},
+    {"grant",            "Prinipal Investigator"},
     {"readType",         "Paired/Single reads lengths"},
     {"replicate",        "Replicate number"},
     {"restrictionEnzyme","Restriction Enzyme used"},
-    {"ripAntibody",      "RIP Antibody"},
-    {"ripTgtProtein",    "RIP Target Protein"},
+    //{"ripAntibody",      "RIP Antibody"},
+    //{"ripTgtProtein",    "RIP Target Protein"},
     {"rnaExtract",       "RNA Extract"},
     {"setType",          "Experiment or Input"},
     {"sex",              "Sex of organism"},
@@ -249,57 +250,6 @@ for (el = varList; el != NULL; el = el->next)
 return count;
 #endif///ndef WHITE_LIST_COUNT
 }
-
-static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
-{
-// add entry for given track to the trackDbJson string
-if(count)
-    dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb))
-    {
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
-    }
-else if(tdbIsCompositeChild(track->tdb))
-    {
-    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", parentTdb->track);
-    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
-    }
-dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
-}
-
-void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
-    int count, char *selected, char *extra)
-/* Make a drop-down list with both text and values. */
-{
-int i;
-char *selString;
-assert(values != NULL && text != NULL);
-if (selected == NULL)
-    selected = values[0];
-printf("<SELECT");
-if (name)
-    printf(" NAME='%s'", name);
-if (extra)
-    printf("%s", extra);
-printf(">\n");
-for (i=0; i<count; ++i)
-    {
-    if (sameWord(values[i], selected))
-        selString = " SELECTED";
-    else
-        selString = "";
-    printf("<OPTION%s value='%s'>%s</OPTION>\n", selString, values[i], text[i]);
-    }
-printf("</SELECT>\n");
-}
-
 
 void doSearchTracks(struct group *groupList)
 {
@@ -697,9 +647,7 @@ else
         }
 
     // Set up json for js functionality
-    struct dyString *trackDbJson = newDyString(1000);
-    int trackDbJsonCount = 1;
-    dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
+    struct dyString *jsonTdbVars = NULL;
 
     hPrintf("<table><tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
@@ -719,7 +667,7 @@ else
             break;
 
         struct track *track = (struct track *) ptr->val;
-        trackJson(trackDbJson, track, trackDbJsonCount++);
+        jsonTdbSettingsBuild(&jsonTdbVars, track);
 
         // trackDbOutput(track->tdb, stderr, ',', '\n');
         hPrintf("<tr bgcolor='%s' valign='top' class='found%s%s'>\n",COLOR_BG_ALTDEFAULT,
@@ -813,8 +761,8 @@ else
     hPrintf("\n</form>\n");
 
     // be done with json
-    dyStringAppend(trackDbJson, "}\n</script>\n");
-    hPrintf(dyStringCannibalize(&trackDbJson));
+    dyStringAppend(jsonTdbVars, "}\n</script>\n");
+    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"
