@@ -3631,6 +3631,8 @@ switch(cType)
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
 #endif
+    case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
     }
@@ -4548,6 +4550,61 @@ if (scoreCtString != NULL)
     }
 cfgEndBox(boxed);
 }
+
+void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+/* Put up UI for psl tracks */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+
+fprintf(stderr, "pslCfgUi: entered for '%s'\n", tdb->table);
+
+char * baseColor = trackDbSettingClosestToHomeOrDefault(tdb, BASE_COLOR_DEFAULT, BASE_COLOR_DRAW_OFF);
+baseColor = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,baseColor);
+enum baseColorDrawOpt baseColorOpt = baseColorDrawOptStringToEnum(baseColor);
+char *baseColorValue = baseColorDrawAllOptionValues[baseColorOpt];
+boolean gotCds = baseColorGotCds(tdb);
+boolean gotSeq = baseColorGotSequence(tdb);
+
+fprintf(stderr, "baseColor: '%s', gotCds: %s, gotSeq: %s\n",
+    baseColor, gotCds ? "TRUE" : "FALSE", gotSeq ? "TRUE" : "FALSE");
+char var[512];
+safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
+if (gotCds && gotSeq)
+    {
+    puts("<P><B>Color track by codons or bases:</B>");
+    cgiMakeDropListFull(var, baseColorDrawAllOptionLabels,
+			baseColorDrawAllOptionValues,
+			ArraySize(baseColorDrawAllOptionLabels),
+			baseColorValue, NULL);
+    printf("<BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+	   CDS_MRNA_HELP_PAGE);
+    }
+else if (gotCds)
+    {
+    puts("<P><B>Color track by codons:</B>");
+    cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
+			baseColorDrawGenomicOptionValues,
+			ArraySize(baseColorDrawGenomicOptionLabels),
+			baseColorValue, NULL);
+    printf("<BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
+	   CDS_HELP_PAGE);
+    }
+else if (gotSeq)
+    {
+    puts("<P><B>Color track by bases:</B>");
+    cgiMakeDropListFull(var, baseColorDrawItemOptionLabels,
+			baseColorDrawItemOptionValues,
+			ArraySize(baseColorDrawItemOptionLabels),
+			baseColorValue, NULL);
+    printf("<BR><A HREF=\"%s\">Help on base coloring</A><BR>",
+	   CDS_BASE_HELP_PAGE);
+    }
+
+indelShowOptions(cart, tdb);
+
+cfgEndBox(boxed);
+}
+
 
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for net tracks */
