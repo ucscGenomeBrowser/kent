@@ -249,8 +249,8 @@ $(window).load(function () {
     // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
     // though if you look in the DOM the changes are there); so we have to do a full form submission when the
     // user changes visibility settings or track configuration.
-    // 
-    // Chrome used to have this problem too, but this  problem seems to have gone away as of 
+    //
+    // Chrome used to have this problem too, but this  problem seems to have gone away as of
     // Chrome 5.0.335.1 (or possibly earlier).
     mapIsUpdateable = browser != "safari";
     loadImgAreaSelect(true);
@@ -1312,6 +1312,20 @@ function makeMapItem(id)
 function findMapItem(e)
 {
 // Find mapItem for given event; returns item object or null if none found.
+
+    // rightClick for non-map items can be resolved to their parent tr and then trackName.
+    if(e.target.tagName.toUpperCase() != "AREA") {
+        var tr = $( e.target ).parents('tr.imgOrd');
+        if( $(tr).length == 1 ) {
+            a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
+            if(a && a[1]) {
+                var id = a[1];
+                return makeMapItem(id);
+            }
+        }
+    }
+
+    // FIXME: do we really need to worry about non-imageV2 ?
     var x,y;
     if(imageV2) {
         // It IS appropriate to use coordinates relative to the img WHEN we have a hit in the right-hand side, but NOT
@@ -1335,25 +1349,6 @@ function findMapItem(e)
     } else {
         x = e.pageX - e.target.offsetLeft;
         y = e.pageY - e.target.offsetTop;
-    }
-
-    if(e.target.tagName.toUpperCase() == "P") {
-        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is true.
-        var a = /p_btn_(.*)/.exec(e.target.id);
-        if(a && a[1]) {
-            var id = a[1];
-            return makeMapItem(id);
-        } else {
-            return null;
-        }
-    } else if(e.target.tagName.toUpperCase() == "IMG") {
-        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is false.
-        var a = /img_btn_(.*)/.exec(e.target.id);
-        if(a && a[1]) {
-            var id = a[1];
-            return makeMapItem(id);
-        }
-        // else fall-through (under msie).
     }
 
     var retval = -1;
@@ -1545,7 +1540,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
             selectUpdated = true;
-                });
+        });
         if(rec) {
             rec.localVisibility = cmd;
         }
@@ -1567,10 +1562,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             if(selectUpdated) {
                 document.TrackForm.submit();
             } else {
-                // add a hidden with new visibility value
-                var form = $(document.TrackHeaderForm);
-                $("<input type='hidden' name='" + id + "'value='" + cmd + "'>").appendTo(form);
-                document.TrackHeaderForm.submit();
+                    // add a hidden with new visibility value
+                    var form = $(document.TrackHeaderForm);
+                    $("<input type='hidden' name='" + id + "'value='" + cmd + "'>").appendTo(form);
+                    document.TrackHeaderForm.submit();
             }
         } else {
             var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis in remote cart
@@ -1844,7 +1839,7 @@ function handleTrackUi(response, status)
                                             else {
                                                 var urlData = getAllVarsAsUrlData($('#pop'));
                                                 if(mapIsUpdateable) {
-                                                    updateTrackImg(popUpTrackName, urlData, "");
+                                                updateTrackImg(popUpTrackName,urlData,"");
                                                 } else {
                                                     window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
                                                 }
