@@ -22,6 +22,7 @@ var originalImgTitle;
 var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
 var selectedMenuItem;       // currently choosen context menu item (via context menu).
 var browser;                // browser ("msie", "safari" etc.)
+var mapIsUpdateable = true;
 
 function initVars(img)
 {
@@ -244,6 +245,14 @@ $(window).load(function () {
         // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
         browser = "chrome";
     }
+
+    // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
+    // though if you look in the DOM the changes are there); so we have to do a full form submission when the
+    // user changes visibility settings or track configuration.
+    // 
+    // Chrome used to have this problem too, but this  problem seems to have gone away as of 
+    // Chrome 5.0.335.1 (or possibly earlier).
+    mapIsUpdateable = browser != "safari";
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
@@ -1559,8 +1568,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // First change the select on our form:
         var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
+        var selectUpdated = false;
         $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
+            selectUpdated = true;
                 });
         if(rec) {
             rec.localVisibility = cmd;
@@ -1578,17 +1589,18 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             $('#tr_' + id).remove();
             initImgTblButtons();
             loadImgAreaSelect(false);
-        } else if (false && browser == "safari") {
-            // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
-            // Chrome 5.0.335.1.); I'm leaving this dead code here for now in case this problem re-appears.
-            //
-            // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
-            // though if you look in the DOM the changes are there); so we have to do a full form submission when the
-            // user changes visibility settings.
+        } else if (!mapIsUpdateable) {
             jQuery('body').css('cursor', 'wait');
-            document.TrackForm.submit();
+            if(selectUpdated) {
+                document.TrackForm.submit();
+            } else {
+                // add a hidden with new visibility value
+                var form = $(document.TrackHeaderForm);
+                $("<input type='hidden' name='" + id + "'value='" + cmd + "'>").appendTo(form);
+                document.TrackHeaderForm.submit();
+            }
         } else {
-            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis
+            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis in remote cart
             if(imageV2) {
 	        data += "&hgt.trackNameFilter=" + id;
             }
@@ -1859,7 +1871,11 @@ function handleTrackUi(response, status)
                                             }
                                             else {
                                                 var urlData = getAllVarsAsUrlData($('#pop'));
-                                                updateTrackImg(popUpTrackName,urlData,"");
+                                                if(mapIsUpdateable) {
+                                                    updateTrackImg(popUpTrackName, urlData, "");
+                                                } else {
+                                                    window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+                                                }
                                             }
                                         } else {
                                             setAllVars($('#pop'));
