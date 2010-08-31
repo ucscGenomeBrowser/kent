@@ -411,18 +411,17 @@ function validateFloat(obj,min,max)
     }
 }
 
-function metadataShowHide(tableName)
+function metadataShowHide(tableName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_meta");
-    if($(divit).css('display') == 'none')
+    if($(divit).css('display') == 'none') {
         $("#div_"+tableName+"_cfg").hide();  // Hide any configuration when opening metadata
-    var htm = $(divit).html();
-    // Seems to be faster if this undisplayed junk is commented out.
-    if(htm.substring(0,4) == "<!--") {
-        htm = htm.substring(4,htm.length-7);
-        $(divit).html(htm);
+
+        if($(divit).find('table').length == 0) {
+            lookupMetadata(tableName,showLonglabel,showShortLabel);
+        }
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -492,9 +491,6 @@ function getAllVarsAsUrlData(obj)
     $(inp).filter('[name]:enabled').each(function (i) {
         var name  = $(this).attr('name');
         var val = $(this).val();
-        if($(this).attr('type') == 'checkbox' && !$(this).attr('checked')) {
-            val = undefined;
-        }
         if(name != undefined && name != "Submit" && val != undefined) {
             urlData += "&"+name+"="+val;
         }

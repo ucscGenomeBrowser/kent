@@ -1481,8 +1481,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    // start coordinate seems to be off by one (+1).
-                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd);
+                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd);
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
@@ -1722,6 +1721,7 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
+            if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
             o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
@@ -1730,9 +1730,10 @@ function loadContextMenu(img)
             }
             menu.push($.contextMenu.separator);
             menu.push(o);
+                menu.push($.contextMenu.separator);
+            }
 
             // Add view image at end
-            menu.push($.contextMenu.separator);
             menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
 
             return menu;
@@ -1831,8 +1832,7 @@ function handleTrackUi(response, status)
                                    // This doesn't work
                                    cache: true
                                },
-                               resizable: true,
-                               bgiframe: true,
+                               resizable: popUpTrackDescriptionOnly,
                                height: 'auto',
                                width: 'auto',
                                minHeight: 200,
