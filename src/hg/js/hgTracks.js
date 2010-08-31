@@ -1421,33 +1421,6 @@ function contextMenuHit(menuItemClicked, menuObject, cmd)
     setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
 }
 
-function showLoadingImage(id)
-{
-// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
-// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
-    var loadingId = id + "LoadingOverlay";
-    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
-    overlay.appendTo("body");
-    overlay.css("top", $('#'+ id).position().top);
-    var divLeft = $('#'+ id).position().left + 2;
-    overlay.css("left",divLeft);
-    var width = $('#'+ id).width() - 5;
-    var height = $('#'+ id).height();
-    overlay.width(width);
-    overlay.height(height);
-    overlay.css("background", "white");
-    overlay.css("opacity", 0.75);
-    var imgLeft = (width / 2) - 110;
-    var imgTop = (height / 2 ) - 10;
-    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
-    return loadingId;
-}
-
-function hideLoadingImage(id)
-{
-    $('#' + id).remove();
-}
-
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
