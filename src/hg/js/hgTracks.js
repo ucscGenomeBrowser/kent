@@ -1835,11 +1835,22 @@ function handleTrackUi(response, status)
                                                 $('#tr_' + popUpTrackName).remove();
                                                 initImgTblButtons();
                                                 loadImgAreaSelect(false);
-                                            }
-                                            else {
-                                                var urlData = getAllVarsAsUrlData($('#pop'));
+                                            } else {
+                                                var o = getAllVars($('#pop'));
+                                                // Keep local state in sync if user changed visibility
+                                                var newVisibility = o[popUpTrackName];
+                                                if(newVisibility != null) {
+                                                    $("select[name=" + popUpTrackName + "]").each(function(t) {
+                                                        $(this).val(newVisibility);
+                                                    });
+                                                    var rec = trackDbJson[popUpTrackName];
+                                                    if(rec) {
+                                                        rec.localVisibility = newVisibility;
+                                                    }
+                                                }
+                                                var urlData = objectToQueryString(o);
                                                 if(mapIsUpdateable) {
-                                                updateTrackImg(popUpTrackName,urlData,"");
+                                                    updateTrackImg(popUpTrackName,urlData,"");
                                                 } else {
                                                     window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
                                                 }
