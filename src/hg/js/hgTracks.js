@@ -1707,17 +1707,17 @@ function loadContextMenu(img)
             }
 
             if(selectedMenuItem) {
-                // Add cfg options at just shy of end...
-                var o = new Object();
-                o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
-                if(rec.parentTrack != undefined) {
-                    o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-                }
-                menu.push($.contextMenu.separator);
-                menu.push(o);
+            // Add cfg options at just shy of end...
+            var o = new Object();
+            o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+            if(rec.parentTrack != undefined) {
+                o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+            }
+            menu.push($.contextMenu.separator);
+            menu.push(o);
                 menu.push($.contextMenu.separator);
             }
-            
+
             // Add view image at end
             menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
 
@@ -1817,8 +1817,7 @@ function handleTrackUi(response, status)
                                    // This doesn't work
                                    cache: true
                                },
-                               resizable: true,
-                               bgiframe: true,
+                               resizable: popUpTrackDescriptionOnly,
                                height: 'auto',
                                width: 'auto',
                                minHeight: 200,
