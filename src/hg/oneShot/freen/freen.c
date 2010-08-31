@@ -6,7 +6,7 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "memgfx.h"
+#include "net.h"
 
 #define TRAVERSE FALSE
 
@@ -16,38 +16,17 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-struct rgbaColor
-    {
-    unsigned char r, g, b, a;
-    };
 
-
-struct rgbaColor rgbaLightRainbowColor(double pos)
-/* Giving a position 0.0 to 1.0 in rainbow, return color. */
-{
-double maxHue = 360.0;
-struct hslColor hsl = {pos*maxHue, 1000, 750};
-struct rgbColor rgb = mgHslToRgb(hsl);
-struct rgbaColor rgba = {rgb.r, rgb.g, rgb.b, 255};
-return rgba;
-}
-
-
-
-
-void freen(char *countString)
+void freen(char *input)
 /* Test some hair-brained thing. */
 {
-int count = atoi(countString);
-if (count < 1)
-   errAbort("count of colors must be positive");
-double stepSize = 1.0/count;
-int i;
-for (i=0; i<count; ++i)
-    {
-    struct rgbaColor col = rgbaLightRainbowColor(stepSize*i);
-    printf("%d,%d,%d\n", col.r, col.g, col.b);
-    }
+struct lineFile *lf = netLineFileOpen(input);
+char *line;
+if (lineFileNext(lf, &line, NULL))
+    printf("%s\n", line);
+else
+    printf("%s is empty\n", input);
+lineFileClose(&lf);
 }
 
 int main(int argc, char *argv[])
