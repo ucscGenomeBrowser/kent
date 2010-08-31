@@ -1670,6 +1670,9 @@ track altSeqComposite
 compositeTrack on
 shortLabel Alt Sequence
 longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
+subGroup1 view Views location=Location psl=Psl
+dragAndDrop subTracks
+# sortOrder view=+
 visibility hide
 type bed 6
 noInherit on
@@ -1679,32 +1682,48 @@ url http:/cgi-bin/hgTracks?db=hg19Patch2&position=$$
 urlLabel Haplotype sequence:
 chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr16,chr17,chr18,chr19,chr20,chr21,chr22,chrM
 
-    track altSeqHaplotypes
-    subTrack altSeqComposite
-    color 32,32,190
-    shortLabel Haplotypes
-    longLabel GRCh37 alternate sequences, haplotypes to reference sequence
-    priority 1
+    track altSeqCompositeViewlocation
+    shortLabel Location
+    view location
+    visibility pack
+    parent altSeqComposite
 
-    track altSeqPatches
-    subTrack altSeqComposite
-    color 190,32,32
-    shortLabel GRCh37.p2 updates
-    longLabel GRCh37 alternate sequences, patch2 updates to the reference sequence
-    priority 2
+	track altSeqHaplotypes
+        parent altSeqCompositeViewlocation
+        subGroups view=location
+	color 32,32,190
+	shortLabel Haplotypes
+	longLabel GRCh37 alternate sequences, haplotypes to reference sequence
+	priority 1
 
-    track altSeqLiftOverPsl
-    subTrack altSeqComposite
-    shortLabel Lift Over
-    longLabel GRCh37.p2 Lift over alignments
-    type psl .
-    showDiffBasesAllScales .
-    priority 3
+	track altSeqPatches
+        parent altSeqCompositeViewlocation
+        subGroups view=location
+	color 190,32,32
+	shortLabel GRCh37.p2 updates
+	longLabel GRCh37 alternate sequences, patch2 updates to the reference sequence
+	priority 2
 
-    track altSeqAllPsl
-    subTrack altSeqComposite
-    shortLabel Alignments
-    longLabel Alignments to GRCh37.p2 sequence
-    type psl .
-    showDiffBasesAllScales .
-    priority 4
+    track altSeqCompositeViewpsl
+    shortLabel Psl
+    view psl
+    visibility pack
+    parent altSeqComposite
+
+	track altSeqLiftOverPsl
+        parent altSeqCompositeViewpsl
+        subGroups view=psl
+	shortLabel Lift Over
+	longLabel GRCh37.p2 Lift over alignments
+	type psl .
+	showDiffBasesAllScales .
+	priority 3
+
+	track altSeqAllPsl
+        parent altSeqCompositeViewpsl
+        subGroups view=psl
+	shortLabel Alignments
+	longLabel Alignments to GRCh37.p2 sequence
+	type psl .
+	showDiffBasesAllScales .
+	priority 4
