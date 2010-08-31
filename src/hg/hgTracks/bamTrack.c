@@ -340,6 +340,10 @@ if (!(core->flag & BAM_FPAIRED) || (core->flag & BAM_FMUNMAP))
     {
     if (lf->start < winEnd && lf->end > winStart)
 	slAddHead(&(tg->items), lfsFromLf(lf));
+    if ((core->flag & BAM_FMUNMAP) && sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
+	sameString(btd->grayMode, BAM_GRAY_MODE_UNPAIRED))
+	// not properly paired: make it a lighter shade.
+	lf->grayIx -= 4;
     }
 else
     {
