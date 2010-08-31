@@ -18,8 +18,7 @@ track altSequence
 shortLabel Alt Sequence
 longLabel GRCh37 alternate sequences, haplotypes and reference sequence patches
 visibility hide
-type bed 9 .
-scoreFilterByRange on
+type bed 9
 itemRgb on
 group map
 priority 25
