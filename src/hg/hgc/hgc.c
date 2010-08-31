@@ -22180,6 +22180,99 @@ if (tdb == NULL)
 return tdb;
 }
 
+void doNumtS(struct trackDb *tdb, char *itemName)
+/* Put up page for NumtS. */
+{
+char *table = tdb->table;
+struct sqlConnection *conn = hAllocConn(database);
+struct bed *bed;
+char query[512];
+struct sqlResult *sr;
+char **row;
+boolean firstTime = TRUE;
+int start = cartInt(cart, "o");
+int num = 6;
+/* message strings */
+char clickMsg[128];
+char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
+char *openMsg2 = "maps\n";
+char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
+
+
+
+
+genericHeader(tdb, itemName);
+//genericClickHandler(tdb, itemName, NULL);
+genericBedClick(conn, tdb, itemName, start, num);
+printTBSchemaLink(tdb);
+printf("<BR>");
+char *date = firstWordInLine(sqlTableUpdate(conn, table));
+if (date != NULL)
+    printf("<B>Data last updated:</B> %s<BR>\n", date);
+
+if (sameString("numtS", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand from numtSMitochondrion  where name =  '%s'", itemName); /* name like  '%s%%'" */
+    strcpy(clickMsg, openMsgM);
+    }
+else if (sameString("numtSAssembled", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand from numtSMitochondrion  where name =  '%s'", itemName);
+    strcpy(clickMsg, openMsgM);
+    }
+else if (sameString("numtSMitochondrion", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand from numtS  where name =  '%s'", itemName);
+    strcpy(clickMsg, openMsg1);
+    }
+else if (sameString("numtSMitochondrionChrPlacement", table))
+    {
+    safef(query, sizeof(query),
+        "select  chrom, chromStart, chromEnd, name, score, strand from numtS  where name =  '%s'", itemName);
+    strcpy(clickMsg, openMsg1);
+    }
+    sr = sqlGetResult(conn, query);
+    firstTime = TRUE;
+    
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        printf("<PRE><TT>");
+        if (firstTime)
+            {
+            firstTime = FALSE;
+        printf("<BR><H3>%s item '%s' %s</H3><BR>", clickMsg, itemName, openMsg2);
+
+            printf("BROWSER | NAME                CHROMOSOME      START        END     SIZE    SCORE  STRAND \n");
+            printf("--------|--------------------------------------------------------------------------------------------\n");
+
+            }
+        bed = bedLoad6(row);
+
+        if (sameString("numtSAssembled", table) || sameString("numtS", table))
+            printf("<A HREF=\"%s&db=%s&position=%s\">browser</A> | ",
+                   hgTracksPathAndSettings(), database, bed->name);
+        else
+            printf("<A HREF=\"%s&db=%s&position=%s%%3A%d-%d\">browser</A> | ",
+                   hgTracksPathAndSettings(), database,
+                    bed->chrom, bed->chromStart+1, bed->chromEnd);
+
+        printf("%-20s %-10s %9d  %9d    %5d    %5d    %1s",
+            bed->name, bed->chrom, bed->chromStart+1, bed->chromEnd,
+            (bed->chromEnd - bed->chromStart),bed->score, bed->strand);
+
+        printf("</TT></PRE>");
+        }
+
+
+ printTrackHtml(tdb); 
+ hFreeConn(&conn);
+}
+
+
+
 void doMiddle()
 /* Generate body of HTML. */
 {
@@ -23332,6 +23425,13 @@ else if (sameString("par", table))
 else if (sameString("t2g", table))
     {
     doT2gDetails(tdb, item);
+    }
+else if (startsWith("numtS", table))
+       //  && (!sameString("numtSAssembled", table)))
+    {
+    //genericHeader(tdb, item);
+    //genericClickHandler(tdb, item, NULL);
+    doNumtS(tdb, item);
     }
 else if (tdb != NULL)
     {

@@ -4369,13 +4369,13 @@ tag YY1
 type Antibody
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
-vendorName Santa Cruz Biotech
-vendorId sc-1703X
-orderUrl http://www.scbt.com/product.php?datasheet=1703
+vendorName Santa Cruz Biotech;Sanata Cruz Biotech
+vendorId sc-1703X;sc-281
+orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
 lab Farnham
 targetId GeneCard:GC14P099774
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
-validation missing
+validation Myers_YY1:Myers_YY1_validation.pdf
 
 term ZBTB33
 tag ZBTB33
@@ -4431,557 +4431,557 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZZZ3
 validation missing
 
 
-### RIP CHIP Antibodies
-### These are all for the RIP CHIP experiments. 
+###  Antibodies
+### These are all for the  experiments. 
 ### They are commentedout until we get the final go ahead to merge the ripAntibodies with the Antibodies
 
 
-#*term CBX5
-#*tag CBX5
-#*type Antibody
-#*targetDescription Chromobox homolog 5 (HP1 alpha homolog, Drosophila) 
-#*antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH,IP,and WB.
-#*vendorName Millipore
-#*vendorId 05-689
-#*orderUrl http://www.millipore.com/catalogue/item/05-689
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
-#*validation RipChip
+term CBX5
+tag CBX5
+type Antibody
+targetDescription Chromobox homolog 5 (HP1 alpha homolog, Drosophila) 
+antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH,IP,and WB.
+vendorName Millipore
+vendorId 05-689
+orderUrl http://www.millipore.com/catalogue/item/05-689
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
+validation RipChip
 
 
-#*term CELF1
-#*tag CELF1
-#*type Antibody
-#*targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); ###Alternative Symbols CUG-BP1; BRUNOL2
-#*antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA.
-#*vendorName Millipore
-#*vendorId 05621
-#*orderUrl
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
-#*validation RipChip
+term CELF1
+tag CELF1
+type Antibody
+targetDescription Embryo deadenylation element-binding protein homolog (Homo sapiens); Alternative Symbols CUG-BP1; BRUNOL2
+antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP,IC, EMSA.
+vendorName Millipore
+vendorId 05621
+orderUrl
+lab Tenenbaum
+lots
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
+validation RipChip
 
-#*term CELF2
-#*tag CELF2
-#*type Antibody
-#*targetDescription CUGBP, Elav-like family member 2
-#*antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CELF2 of human origin by WB.
-#*vendorName Millipore
-#*vendorId 04-047
-#*orderUrl http://www.millipore.com/catalogue/item/04-047
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
-#*validation RipChip
+term CELF2
+tag CELF2
+type Antibody
+targetDescription CUGBP, Elav-like family member 2
+antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CELF2 of human origin by WB.
+vendorName Millipore
+vendorId 04-047
+orderUrl http://www.millipore.com/catalogue/item/04-047
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
+validation RipChip
 
-#*term EEF1A1
-#*tag EEF1A1
-#*type Antibody
-#*targetDescription Eukaryotic translation elongation factor 1 alpha 1
-#*antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
-#*vendorName Millipore
-#*vendorId 05-235
-#*orderUrl http://www.millipore.com/catalogue/item/05-235
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-#*validation RipChip
+term EEF1A1
+tag EEF1A1
+type Antibody
+targetDescription Eukaryotic translation elongation factor 1 alpha 1
+antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EEF1A1 of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
+vendorName Millipore
+vendorId 05-235
+orderUrl http://www.millipore.com/catalogue/item/05-235
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
+validation RipChip
 
-#*term EIF4E
-#*tag EIF4E
-#*type Antibody
-#*targetDescription Eukaryotic initiation factor 4E
-#*antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP.
-#*vendorName Millipore
-#*vendorId 04-1058
-#*orderUrl http://www.millipore.com/catalogue/item/04-1058
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-#*validation RipChip
+term EIF4E
+tag EIF4E
+type Antibody
+targetDescription Eukaryotic initiation factor 4E
+antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209of human eIF4E. Recommended for detection of EIF4E of H, M, and R origin by WB, IH(P), IC, and IP.
+vendorName Millipore
+vendorId 04-1058
+orderUrl http://www.millipore.com/catalogue/item/04-1058
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
+validation RipChip
 
-#*term EIF4EBP1
-#*tag EIF4EBP1
-#*type Antibody
-#*targetDescription Eukaryotic translation initiation factor 4E binding protein 1
-#*antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanEIF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
-#*vendorName Millipore
-#*vendorId 04-1010
-#*orderUrl http://www.millipore.com/catalogue/item/04-1010
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-#*validation RipChip
+term EIF4EBP1
+tag EIF4EBP1
+type Antibody
+targetDescription Eukaryotic translation initiation factor 4E binding protein 1
+antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of humanEIF4EBP1 . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
+vendorName Millipore
+vendorId 04-1010
+orderUrl http://www.millipore.com/catalogue/item/04-1010
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
+validation RipChip
 
-#*term ELAVL1
-#*tag ELAVL1
-#*type Antibody
-#*targetDescription RIP CHIP (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
-#*antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
-#*vendorName 1) Santa Cruz Biotech; 2) Millipore
-#*vendorId SC-5261; Mil ab5831
-#*orderUrl http://www.santacruzbiotech.com
-#*lab Tenenbaum
-#*lots 1) B2508(Nov2008)
-#*targetId
-#*targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-#*validation RipChip
+term ELAVL1
+tag ELAVL1
+type Antibody
+targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huantigen R) (Homo sapiens)
+antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
+vendorName 1) Santa Cruz Biotech; 2) Millipore
+vendorId SC-5261; Mil ab5831
+orderUrl http://www.santacruzbiotech.com
+lab Tenenbaum
+lots 1) B2508(Nov2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
+validation RipChip
 
-#*term FXR1
-#*tag FXR1
-#*type Antibody
-#*targetDescription Fragile X mental retardation, autosomal homolog 1
-#*antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
-#*vendorName Millipore
-#*vendorId 05-1529
-#*orderUrl http://www.millipore.com/catalogue/item/05-1529
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-#*validation RipChip
+term FXR1
+tag FXR1
+type Antibody
+targetDescription Fragile X mental retardation, autosomal homolog 1
+antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+vendorName Millipore
+vendorId 05-1529
+orderUrl http://www.millipore.com/catalogue/item/05-1529
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
+validation RipChip
 
-#*term Hexim1
-#*tag Hexim1
-#*type Antibody
-#*targetDescription Hexamethylene bis-acetamide inducible 1
-#*antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
-#*vendorName Millipore
-#*vendorId 07-955
-#*orderUrl http://www.millipore.com/catalogue/item/07-955
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-#*validation RipChip
+term Hexim1
+tag Hexim1
+type Antibody
+targetDescription Hexamethylene bis-acetamide inducible 1
+antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+vendorName Millipore
+vendorId 07-955
+orderUrl http://www.millipore.com/catalogue/item/07-955
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
+validation RipChip
 
-#*term HNRNPD
-#*tag HNRNPD
-#*type Antibody
-#*targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
-#*antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP
-#*vendorName Millipore
-#*vendorId 07-260
-#*orderUrl http://www.millipore.com/catalogue/item/07-260
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-#*validation RipChip
+term HNRNPD
+tag HNRNPD
+type Antibody
+targetDescription Heterogeneous nuclear ribonucleoprotein D (AU-rich element RNA binding protein 1, 37kDa)
+antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of HNRNPD of m,r, h origin by WB and IP
+vendorName Millipore
+vendorId 07-260
+orderUrl http://www.millipore.com/catalogue/item/07-260
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
+validation RipChip
 
-#*term hnRNPM
-#*tag hnRNPM
-#*type Antibody
-#*targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
-#*vendorName Millipore
-#*vendorId 05-620
-#*orderUrl http://www.millipore.com/catalogue/item/05-620
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-#*validation RipChip
-
-
-#*term IGF2BP1
-#*tag IGF2BP1
-#*type Antibody
-#*targetDescription RIP CHIP Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; #ZBP1; CRDBP;IMP-1; CRD-BP; VICKZ1; IGF2BP1
-#*antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
-#*vendorName Santa Cruz Biotech
-#*vendorId SC-21027
-#*orderUrl
-#*lab Tenenbaum
-#*lots I0607(Nov2008)
-#*targetId
-#*targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-#*validation RipChip
-
-#*term NONO
-#*tag NONO
-#*type Antibody
-#*targetDescription Non-POU domain containing, octamer-binding
-#*antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of NONO of H, R origin by IP, WB, IH.
-#*vendorName Millipore
-#*vendorId 05-950
-#*orderUrl http://www.millipore.com/catalogue/item/05-950
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/4841
-#*validation RipChip
-
-#*term PABP
-#*tag PABP
-#*type Antibody
-#*targetDescription PolyA-binding protein
-#*antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
-#*vendorName Millipore
-#*vendorId 04-1467
-#*orderUrl http://www.millipore.com/catalogue/item/04-1467
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-#*Validation RipChip
-
-#*term PABPC1
-#*tag PABPC1
-#*type Antibody
-#*targetDescription RIP CHIP poly(A) binding protein, cytoplasmic 1 (Homo sapiens) ###Alternative Symbols PAB1; PABP; PABP1; #PABPC2; PABPL1; PABPC
-#*antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
-#*lab Tenenbaum
-#*vendorName Sigma Chemical Co.
-#*vendorId P6246
-#*orderUrl
-#*lab Tenenbaum
-#*lots 044K4810 (Nov 2008)
-#*targetId 26986
-#*targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-#*validation RipChip
-
-#*term QKI
-#*tag QKI
-#*type Antibody
-#*targetDescription Quaking homolog, KH domain RNA binding (mouse)
-#*antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB.
-#*vendorName Millipore
-#*vendorId AB9904
-#*orderUrl http://www.millipore.com/catalogue/item/ab9904
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-#*validation RipChip
+term hnRNPM
+tag hnRNPM
+type Antibody
+targetDescription Heterogeneous nuclear ribonucleoprotein MantibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended fordetection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+vendorName Millipore
+vendorId 05-620
+orderUrl http://www.millipore.com/catalogue/item/05-620
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
+validation RipChip
 
 
-#*term RPS6KA1
-#*tag RPS6KA1
-#*type Antibody
-#*targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
-#*antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA.
-#*vendorName Millipore
-#*vendorId 07-1477
-#*orderUrl http://www.millipore.com/catalogue/item/07-1477
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-#*validation RipChip
+term IGF2BP1
+tag IGF2BP1
+type Antibody
+targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens); Alternative Symbols IMP1; ZBP1; CRDBP;IMP-1; CRD-BP; VICKZ1; IGF2BP1
+antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
+vendorName Santa Cruz Biotech
+vendorId SC-21027
+orderUrl
+lab Tenenbaum
+lots I0607(Nov2008)
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
+validation RipChip
+
+term NONO
+tag NONO
+type Antibody
+targetDescription Non-POU domain containing, octamer-binding
+antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of NONO of H, R origin by IP, WB, IH.
+vendorName Millipore
+vendorId 05-950
+orderUrl http://www.millipore.com/catalogue/item/05-950
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/4841
+validation RipChip
+
+term PABP
+tag PABP
+type Antibody
+targetDescription PolyA-binding protein
+antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein PABP. Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
+vendorName Millipore
+vendorId 04-1467
+orderUrl http://www.millipore.com/catalogue/item/04-1467
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
+Validation RipChip
+
+term PABPC1
+tag PABPC1
+type Antibody
+targetDescription  poly(A) binding protein, cytoplasmic 1 (Homo sapiens). Alternative Symbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC
+antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, hamster, Xenopus origin.
+lab Tenenbaum
+vendorName Sigma Chemical Co.
+vendorId P6246
+orderUrl
+lab Tenenbaum
+lots 044K4810 (Nov 2008)
+targetId 26986
+targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
+validation RipChip
+
+term QKI
+tag QKI
+type Antibody
+targetDescription Quaking homolog, KH domain RNA binding (mouse)
+antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI. Recommended for detection of QKI of H, M, and R origin by IP and WB.
+vendorName Millipore
+vendorId AB9904
+orderUrl http://www.millipore.com/catalogue/item/ab9904
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
+validation RipChip
 
 
-#*term ripInput
-#*tag ripInput
-#*type Antibody
-#*targetDescription RIP CHIP Total input for comparison for RIP experiments
-#*antibodyDescription
-#*vendorName
-#*vendorId
-#*orderUrl
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl
-#*validation RipChip
+term RPS6KA1
+tag RPS6KA1
+type Antibody
+targetDescription Ribosomal protein S6 kinase, 90kDa, polypeptide 1
+antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1(C-LAQRRVRKLPSTTL). Recommended for detection of RPS6KA1 of H, M, and R origin by WB, IP, and ELISA.
+vendorName Millipore
+vendorId 07-1477
+orderUrl http://www.millipore.com/catalogue/item/07-1477
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
+validation RipChip
 
-#*term SLBP
-#*tag SLBP
-#*type Antibody
-#*targetDescription RIP CHIP Stem-loop binding protein (Homo sapiens); Alternative Symbols ###HBP; SLBP
-#*antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
-#*vendorName Millipore; Santa Cruz Biotech; Affinity Bioreagents
-#*vendorId 06-1376; 26522; MA156353 lot 7308-S2
-#*orderUrl
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-#*validation RipChip
 
-#*term T7Tag
-#*tag T7Tag
-#*type Antibody
-#*targetDescription RIP CHIP Negative Control Ab (T7 Tag Mouse Monoclonal).
-#*antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
-#*vendorName Millipore; Novagen
-#*vendorId AB3790; Nov_69522
-#*orderUrl
-#*lab Tenenbaum
-#*lots
-#*targetId
-#*targetUrl ###http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
-#*validation RipChip
+term ripInput
+tag ripInput
+type Antibody
+targetDescription  Total input for comparison for RIP experiments
+antibodyDescription
+vendorName
+vendorId
+orderUrl
+lab Tenenbaum
+lots
+targetId
+targetUrl
+validation RipChip
+
+term SLBP
+tag SLBP
+type Antibody
+targetDescription  Stem-loop binding protein (Homo sapiens); Alternative Symbols HBP; SLBP
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
+vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
+vendorId 06-1376; 26522; MA156353 
+orderUrl
+lab Tenenbaum
+lots 3) 7308-S2
+targetId
+targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
+validation RipChip
+
+term T7Tag
+tag T7Tag
+type Antibody
+targetDescription  Negative Control Ab (T7 Tag Mouse Monoclonal).
+antibodyDescription 1) Mil AB3790 Anti-t7 Epitope tag, T7 (MASMTGGQQMG) 2) Novagen 69522 Negative Control Ab (T7 Tag Mouse Monoclonal)
+vendorName 1)Millipore; 2)Novagen
+vendorId AB3790; Nov_69522
+orderUrl
+lab Tenenbaum
+lots
+targetId
+targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
+validation RipChip
 
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
 ### We will be replacing this.
 
-term ripInput
-tag ripInput
-type ripTgtProtein
-alternativeSymbols None
-description Total input for comparison
-url
+#term ripInput
+#tag ripInput
+#type ripTgtProtein
+#alternativeSymbols None
+#description Total input for comparison
+#url
 
-term T7Tag
-tag T7Tag
-type ripTgtProtein
-alternativeSymbols Novagen T7 Tag Cat# 69522
-description Negative Control Ab (T7 Tag Mouse Monoclonal)
-url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+#term T7Tag
+#tag T7Tag
+#type ripTgtProtein
+#alternativeSymbols Novagen T7 Tag Cat# 69522
+#description Negative Control Ab (T7 Tag Mouse Monoclonal)
+#url http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
 
-term ELAVL1
-tag ELAVL1
-type ripTgtProtein
-alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
-description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/1994
+#term ELAVL1
+#tag ELAVL1
+#type ripTgtProtein
+#alternativeSymbols HUR; Hua; MelG; ELAV1; ELAVL1
+#description ELAV (embryonic lethal, abnormal vision, Drosophila)-like 1 (Hu antigen R) (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/1994
 
-term IGF2BP1
-tag IGF2BP1
-type ripTgtProtein
-alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
-description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/10642
+#term IGF2BP1
+#tag IGF2BP1
+#type ripTgtProtein
+#alternativeSymbols IMP1; ZBP1; CRDBP; IMP-1; CRD-BP; VICKZ1; IGF2BP1
+#description insulin-like growth factor 2 mRNA binding protein 1 (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/10642
 
-term PABPC1
-tag PABPC1
-type ripTgtProtein
-alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
-description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/26986
+#term PABPC1
+#tag PABPC1
+#type ripTgtProtein
+#alternativeSymbols PAB1; PABP; PABP1; PABPC2; PABPL1; PABPC1
+#description poly(A) binding protein, cytoplasmic 1 (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/26986
 
-term SLBP
-tag SLBP
-type ripTgtProtein
-alternativeSymbols HBP; SLBP
-description stem-loop binding protein (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/7884
+#term SLBP
+#tag SLBP
+#type ripTgtProtein
+#alternativeSymbols HBP; SLBP
+#description stem-loop binding protein (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/7884
 
-term CELF1
-tag CELF1
-type ripTgtProtein
-alternativeSymbols CUG-BP1; BRUNOL2
-description Embryo deadenylation element-binding protein homolog (Homo sapiens)
-url http://view.ncbi.nlm.nih.gov/gene/10658
+#term CELF1
+#tag CELF1
+#type ripTgtProtein
+#alternativeSymbols CUG-BP1; BRUNOL2
+#description Embryo deadenylation element-binding protein homolog (Homo sapiens)
+#url http://view.ncbi.nlm.nih.gov/gene/10658
 
 
 #### ripAntibody - Tenenbaum RIP-chip / RIP-seq project
-term AUF1
-tag AUF1
-type ripAntibody
-antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of AUF1 (HNRNPD) of m,r, h origin by WB and IP
-targetDescription HNRNPD
-vendorName Millipore
-vendorId 07-260
-orderUrl http://www.millipore.com/catalogue/item/07-260
+#term AUF1
+#tag AUF1
+#type ripAntibody
+#antibodyDescription Rabbit polyclonal. Raised against purified Human AUF1. Recommended for detection of AUF1 (HNRNPD) of m,r, h origin by WB and IP
+#targetDescription HNRNPD
+#vendorName Millipore
+#vendorId 07-260
+#orderUrl http://www.millipore.com/catalogue/item/07-260
 
-term Mil_AB3790
-tag MILAB3790
-type ripAntibody
-antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG)
-targetDescription T7Tag
-vendorName Millipore
-vendorId AB3790
-orderUrl http://www.millipore.com/catalogue/item/ab3790
+#term Mil_AB3790
+#tag MILAB3790
+#type ripAntibody
+#antibodyDescription Anti-T7 Epitope Tag, T7 (MASMTGGQQMG)
+#targetDescription T7Tag
+#vendorName Millipore
+#vendorId AB3790
+#orderUrl http://www.millipore.com/catalogue/item/ab3790
 
-term Mil_061376
-tag MIL061376
-type ripAntibody
-antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
-targetDescription SLBP
-vendorName Millipore
-vendorId 06-1376
-orderUrl http://www.millipore.com/catalogue/item/06-1376
+#term Mil_061376
+#tag MIL061376
+#type ripAntibody
+#antibodyDescription Rabbit polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
+#targetDescription SLBP
+#vendorName Millipore
+#vendorId 06-1376
+#orderUrl http://www.millipore.com/catalogue/item/06-1376
 
-term Mil_05621
-tag MIL05621
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
-targetDescription CELF1
-vendorName Millipore
-vendorId 05-621
-orderUrl http://www.millipore.com/catalogue/item/05-621
+#term Mil_05621
+#tag MIL05621
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against full-length GST fusion protein corresponding to human CUG-BP1, also known as heterogeneous nuclear ribonucleoprotein (hnRNP) hNab50. Recommended for detection of CUGBP1 (CELF1) of b, h, m, po, r, rb by WB, IP, IC, EMSA.
+#targetDescription CELF1
+#vendorName Millipore
+#vendorId 05-621
+#orderUrl http://www.millipore.com/catalogue/item/05-621
 
-term CUGBP2
-tag CUGBP2
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CUGBP2 (CELF2)of human origin by WB.
-targetDescription CELF2
-vendorName Millipore
-vendorId 04-047
-orderUrl http://www.millipore.com/catalogue/item/04-047
+#term CUGBP2
+#tag CUGBP2
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against a synthetic peptide corresponding to amino acids 209-415 of human CuGBP2. Recommended for detection of CUGBP2 (CELF2)of human origin by WB.
+#targetDescription CELF2
+#vendorName Millipore
+#vendorId 04-047
+#orderUrl http://www.millipore.com/catalogue/item/04-047
 
-term EF1-alpha
-tag EF1alpha
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EF1-alpha (EEF1A1) of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
-targetDescription EEF1A1
-vendorName Millipore
-vendorId 05-235
-orderUrl http://www.millipore.com/catalogue/item/05-235
+#term EF1-alpha
+#tag EF1alpha
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against Crude calmodulin-binding proteins from Trypanosoma brucei isolated using calmodulin-affinity chromatography. Recommended for detection of EF1-alpha (EEF1A1) of bacterial, mammal, yeast (S. cerevisiae) origin by IP and WB.
+#targetDescription EEF1A1
+#vendorName Millipore
+#vendorId 05-235
+#orderUrl http://www.millipore.com/catalogue/item/05-235
 
-term FXR1
-tag FXR1
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
-targetDescription FXR1
-vendorName Millipore
-vendorId 05-1529
-orderUrl http://www.millipore.com/catalogue/item/05-1529
+#term FXR1
+#tag FXR1
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+#targetDescription FXR1
+#vendorName Millipore
+#vendorId 05-1529
+#orderUrl http://www.millipore.com/catalogue/item/05-1529
 
-term Hexim1
-tag Hexim1
-type ripAntibody
-antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
-targetDescription Hexim1
-vendorName Millipore
-vendorId 07-955
-orderUrl http://www.millipore.com/catalogue/item/07-955
+#term Hexim1
+#tag Hexim1
+#type ripAntibody
+#antibodyDescription Rabbit Polyclonal. Raised against recombinant protein corresponding to human FXR1. Recommended for detection of FXR1 of H, M origin by WB, IC, and IP.
+#targetDescription Hexim1
+#vendorName Millipore
+#vendorId 07-955
+#orderUrl http://www.millipore.com/catalogue/item/07-955
 
-term hnRNP_M1-M4
-tag hnRNPM
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended for detection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
-targetDescription hnRNPM
-vendorName Millipore
-vendorId 05-620
-orderUrl http://www.millipore.com/catalogue/item/05-620
+#term hnRNP_M1-M4
+#tag hnRNPM
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against T7 gene 10 fusion protein containing full length human RNP M4. Recommended for detection of hnRNP M1-M4 (RNRNPM) of B, H, M, Po, R, and Rb origin by IP and WB.
+#targetDescription hnRNPM
+#vendorName Millipore
+#vendorId 05-620
+#orderUrl http://www.millipore.com/catalogue/item/05-620
 
-term Hp1-alpha
-tag Hp1alpha
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH, IP, and WB.
-targetDescription CBX5
-vendorName Millipore
-vendorId 05-689
-orderUrl http://www.millipore.com/catalogue/item/05-689
+#term Hp1-alpha
+#tag Hp1alpha
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against GST fusion protein corresponding to residues 2-191 of human HP1 protein. Recommended for detection of Hp1 (CBX5) of human, mouse, and vertebrates origin by Chromatin IP, IC, IH, IP, and WB.
+#targetDescription CBX5
+#vendorName Millipore
+#vendorId 05-689
+#orderUrl http://www.millipore.com/catalogue/item/05-689
 
-term HuR
-tag HuR
-type ripAntibody
-antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide, amino acids 3-19 of HuR. Recommended for detection of HuR (ELAV1) of h,m origin by WB, IC, IH, and IP.
-targetDescription ELAV1
-vendorName Millipore
-vendorId ab5831
-orderUrl http://www.millipore.com/catalogue/item/ab5831
+#term HuR
+#tag HuR
+#type ripAntibody
+#antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide, amino acids 3-19 of HuR. Recommended for detection of HuR (ELAV1) of h,m origin by WB, IC, IH, and IP.
+#targetDescription ELAV1
+#vendorName Millipore
+#vendorId ab5831
+#orderUrl http://www.millipore.com/catalogue/item/ab5831
 
-term Nov_69522
-tag Nov69522
-type ripAntibody
-antibodyDescription Negative Control Ab (T7 Tag Mouse Monoclonal)
-targetDescription T7Tag
-vendorName Novagen
-vendorId 69522
-orderUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
+#term Nov_69522
+#tag Nov69522
+#type ripAntibody
+#antibodyDescription Negative Control Ab (T7 Tag Mouse Monoclonal)
+#targetDescription T7Tag
+#vendorName Novagen
+#vendorId 69522
+#orderUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_BIO-69522/p_uuid
 
-term p54nrb
-tag p54nrb
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of p54nrb (NONO) of H, R origin by IP, WB, IH.
-targetDescription NONO
-vendorName Millipore
-vendorId 05-950
-orderUrl http://www.millipore.com/catalogue/item/05-950
+#term p54nrb
+#tag p54nrb
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against KLH-conjugated, synthetic peptide corresponding to amino acids TVREAGPPAFYRPNS. Recommended for detection of p54nrb (NONO) of H, R origin by IP, WB, IH.
+#targetDescription NONO
+#vendorName Millipore
+#vendorId 05-950
+#orderUrl http://www.millipore.com/catalogue/item/05-950
 
-term PABP
-tag PABP
-type ripAntibody
-antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein (PABP). Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
-targetDescription PABP
-vendorName Millipore
-vendorId 04-1467
-orderUrl http://www.millipore.com/catalogue/item/04-1467
+#term PABP
+#tag PABP
+#type ripAntibody
+#antibodyDescription Mouse monoclonal. Raised against fusion protein corresponding to full-length human poly (A)-binding protein (PABP). Recommended for detection of PABP of H, Rb, and Xenopus origin by IF, IP, and WB.
+#targetDescription PABP
+#vendorName Millipore
+#vendorId 04-1467
+#orderUrl http://www.millipore.com/catalogue/item/04-1467
 
-term phospho-4E-BP1/2/3_Thr45
-tag EIF4EBP1Thr45
-type ripAntibody
-antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of human 4E-BP1/2/3 (EIF4EBP1) . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
-targetDescription EIF4EBP1
-vendorName Millipore
-vendorId 04-1010
-orderUrl http://www.millipore.com/catalogue/item/04-1010
+#term phospho-4E-BP1/2/3_Thr45
+#tag EIF4EBP1Thr45
+#type ripAntibody
+#antibodyDescription Rabbit monoclonal. Raised against Phospho-specific peptide corresponding to residues surrounding Thr45 of human 4E-BP1/2/3 (EIF4EBP1) . Recommended for detection of phospho-4E-BP1/2/3 of H and M origin by IC, IH(P), IP, and WB.
+#targetDescription EIF4EBP1
+#vendorName Millipore
+#vendorId 04-1010
+#orderUrl http://www.millipore.com/catalogue/item/04-1010
 
-term phospho-EIF4E_Ser209
-tag EIF4ESer209
-type ripAntibody
-antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209 of human eIF4E. Recommended for detection of phospho-eIF4E (Ser209) of H, M, and R origin by WB, IH(P), IC, and IP.
-targetDescription EIF4E
-vendorName Millipore
-vendorId 04-1058
-orderUrl http://www.millipore.com/catalogue/item/04-1058
+#term phospho-EIF4E_Ser209
+#tag EIF4ESer209
+#type ripAntibody
+#antibodyDescription Rabbit monoclonal. Raised against Synthetic peptide corresponding to residues surrounding phosphorylated Ser209 of human eIF4E. Recommended for detection of phospho-eIF4E (Ser209) of H, M, and R origin by WB, IH(P), IC, and IP.
+#targetDescription EIF4E
+#vendorName Millipore
+#vendorId 04-1058
+#orderUrl http://www.millipore.com/catalogue/item/04-1058
 
-term QKI-5
-tag QKI5
-type ripAntibody
-antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI-5. Recommended for detection of QKI-5 (QKI) of H, M, and R origin by IP and WB.
-targetDescription QKI
-vendorName Millipore
-vendorId AB9904
-orderUrl http://www.millipore.com/catalogue/item/ab9904
+#term QKI-5
+#tag QKI5
+#type ripAntibody
+#antibodyDescription Rabbit polyclonal. Raised against synthetic peptide from mouse QKI-5. Recommended for detection of QKI-5 (QKI) of H, M, and R origin by IP and WB.
+#targetDescription QKI
+#vendorName Millipore
+#vendorId AB9904
+#orderUrl http://www.millipore.com/catalogue/item/ab9904
 
-term Rsk1
-tag Rsk1
-type ripAntibody
-antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1 (C-LAQRRVRKLPSTTL). Recommended for detection of Rsk1 (RPS6KA1) of H, M, and R origin by WB, IP, and ELISA.
-targetDescription RPS6KA1
-vendorName Millipore
-vendorId 07-1477
-orderUrl http://www.millipore.com/catalogue/item/07-1477
+#term Rsk1
+#tag Rsk1
+#type ripAntibody
+#antibodyDescription Rabbit polyclonal. Raised against Synthetic peptide corresponding to the c-terminal sequence of human p90 RSK1 (C-LAQRRVRKLPSTTL). Recommended for detection of Rsk1 (RPS6KA1) of H, M, and R origin by WB, IP, and ELISA.
+#targetDescription RPS6KA1
+#vendorName Millipore
+#vendorId 07-1477
+#orderUrl http://www.millipore.com/catalogue/item/07-1477
 
 
-term SC_26522
-tag SC26522
-type ripAntibody
-antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
-targetDescription SLPB
-vendorName Santa Cruz Biotech
-vendorId sc-26522
-orderUrl http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html
+#term SC_26522
+#tag SC26522
+#type ripAntibody
+#antibodyDescription Goat polyclonal. Recommended for detection of SLBP of mouse, human and rat origin
+#targetDescription SLPB
+#vendorName Santa Cruz Biotech
+#vendorId sc-26522
+#orderUrl http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html
 
-term SC_5261
-tag SC5261
-type ripAntibody
-antibodyDescription Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
-targetDescription ELAVL1
-vendorName Santa Cruz Biotech
-vendorId sc-5261 lot B2508(Nov2008)
-orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html
+#term SC_5261
+#tag SC5261
+#type ripAntibody
+#antibodyDescription Mouse monoclonal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin
+#targetDescription ELAVL1
+#vendorName Santa Cruz Biotech
+#vendorId sc-5261 lot B2508(Nov2008)
+#orderUrl http://www.scbt.com/datasheet-5261-hur-3a2-antibody.html
 
-term SC_21027
-tag SC21027
-type ripAntibody
-antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protein 1 of mus, rat and hum origin
-targetDescription IGF2BP1
-vendorName Santa Cruz Biotech
-vendorId sc-21027 lot I0607(Nov2008)
-orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
+#term SC_21027
+#tag SC21027
+#type ripAntibody
+#antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protein 1 of mus, rat and hum origin
+#targetDescription IGF2BP1
+#vendorName Santa Cruz Biotech
+#vendorId sc-21027 lot I0607(Nov2008)
+#orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 
-term Sig_P6246
-tag SigP6246
-type ripAntibody
-antibodyDescription Mouse monoclonal vs PABPC1 of hum, mus, bov, can, hamster, Xenopus origin
-targetDescription PABPC1
-vendorName Sigma Chemical Co.
-vendorId P 6246 lot 044K4810(Nov2008)
-orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
+#term Sig_P6246
+#tag SigP6246
+#type ripAntibody
+#antibodyDescription Mouse monoclonal vs PABPC1 of hum, mus, bov, can, hamster, Xenopus origin
+#targetDescription PABPC1
+#vendorName Sigma Chemical Co.
+#vendorId P 6246 lot 044K4810(Nov2008)
+#orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
 
-term ABR_MA156353
-tag ABRMA156353
-type ripAntibody
-antibodyDescription Mouse monoclonal
-targetDescription SLBP
-vendorName ABR-Affinity Bioreagents
-vendorId MA156353 lot 7308-S2(Nov2008)
-orderUrl http://www.bioreagents.com/
+#term ABR_MA156353
+#tag ABRMA156353
+#type ripAntibody
+#antibodyDescription Mouse monoclonal
+#targetDescription SLBP
+#vendorName ABR-Affinity Bioreagents
+#vendorId MA156353 lot 7308-S2(Nov2008)
+#orderUrl http://www.bioreagents.com/
 
 ### mapAlgorithm : Comparing map algorithms
 # term (human-readable map algorithm name)
@@ -5222,13 +5222,34 @@ term longPolyA
 tag pAP
 type rnaExtract
 description Poly(A)+ RNA longer than 200 nt
-label PolyA+
+label longPolyA+
 
 term longNonPolyA
 tag longNonPolyA
 type rnaExtract
 description Poly(A)- RNA longer than 200 nt
+label longPolyA-
+
+## This is what Yale and Caltech are using
+term polyA
+tag polyA 
+type rnaExtract
+description Isolated Poly(A) RNA 
+label PolyA+
+
+term nonPolyARRna
+tag nonPolyARRna
+type rnaExtract
+description Depleted Poly(A) RNA and rRNA
+label PolyARRna-
+
+term nonPolyA
+tag nonPolyA 
+type rnaExtract
+description Depleted Poly(A) RNA 
 label PolyA-
+
+
 
 term proteinRnaExtracts
 tag proteinRnaExtracts
@@ -5879,7 +5900,8 @@ description Applied Biosystems SOLiD System 2.0
 #labPi:        This is the shortened name that we refer to the PI, usually just last name
 #labPiFull:    The full name of the PI
 #grantPI:      Shortened name of the head PI for the grant
-#grantInst:    Term that we use to refer to the project or grant like (SYDH or HAIB)
+#grantInst:    The name of the institution where the grant is administered from.
+#projectName:  
 #organism:     human or mouse
 
 term Broad
@@ -5890,36 +5912,30 @@ labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
 grantInst Broad Institute
+projectName Broad
 organism human
 
-term UNC
-tag UNC
-type lab
-labInst Univeristy of North Carolina
-labPi Lieb
-labPiFull Jason Lieb
-grantPi Crawford
-grantInst UNC
-organism human
 
 term BU
 tag BU 
 type lab
-grantInst Boston University
-labName BU
+labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
+grantInst Boston University
+projectName BU
 organism human
 
 term GIS-Chia
 tag GIS-Chia 
 type lab
 labInst Genome Institute of Singapore (Chia)
-labName GIS-Chia
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
+grantInst Genome Institute of Singapore
+projectName Chia PET??
 organism human
 
 term Genecode
@@ -5930,17 +5946,18 @@ labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
 grantInst Sanger Institute
+projectNmae
 organism human
 
 term SUNY
 tag SUNY
 type lab
 labInst State University of New York at Albany
-labName SunyAlbany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
 grantInst SUNY-Albany
+projectName SUNY
 organism human
 
 term UW
@@ -5948,9 +5965,10 @@ tag UW
 type lab    
 labInst University of Washington
 labPi Stam
-labPiFull George Stamatoyannopoulos??
+labPiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst UW
+grantInst University of Washington
+projectName UW
 organism human
 
 
@@ -5964,17 +5982,30 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-grantInst Duke University
+grantInst Duke
+projectName OpenChrom
 organism human
 
-term Duke-Iyer
-tag Duke-Iyer
+term UT-A
+tag UT-A
 type lab
-labName UT-A
+labInst Duke University
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
 grantInst Duke 
+projectName OpenChrom
+organism human
+
+term UNC
+tag UNC
+type lab
+labInst Univeristy of North Carolina
+labPi Lieb
+labPiFull Jason Lieb
+grantPi Crawford
+grantInst Duke
+projectName OpenChrom
 organism human
 
 ### HAIB Project Labs         
@@ -5987,7 +6018,8 @@ grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-grantInst  HAIB
+grantInst Hudson Alpha Institute of Biotechnology 
+projectName Caltech
 organism human
 
 term HudsonAlpha
@@ -5997,7 +6029,8 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-grantInst HAIB
+grantInst Hudson Alpha Institute for Biotechnology
+projectName HAIB
 organism human
 
 ### NHGRI Labs                 
@@ -6006,21 +6039,23 @@ organism human
 term NHGRI-Elnitski
 tag NHGRI-Elnitski
 type lab
-labInst National Human Genome Research Institute Elnitski
+labInst National Human Genome Research Institute 
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-grantInst National Human Genome Research Institute Elnitski
+grantInst National Human Genome Research Institute 
+projectName NHGRI-Elnitski
 organism human
 
 term NHGRI-Margulies
 tag NHGRI-Marigulies
 type lab
-labInst National Human Genome Research Institute Margulies
+labInst National Human Genome Research Institute 
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-labInst National Human Genome Research Institute Margulies
+labInst National Human Genome Research Institute 
+projectName NHGRI-Margulies
 organism human
 
 
@@ -6035,7 +6070,8 @@ labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term GIS
@@ -6045,7 +6081,8 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term Helicos       
@@ -6055,7 +6092,8 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term Affy
@@ -6065,7 +6103,8 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 term Riken
@@ -6076,7 +6115,8 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-grantInst Transcriptome
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
 organism human
 
 
@@ -6091,6 +6131,7 @@ labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
 grantInst University of Massachusetts Amherst 
+projectName
 organism human
 
 term UMass-Weng
@@ -6101,6 +6142,7 @@ labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
 grantInst University of Massachusetts Amherst  
+projectName
 organism human
 
 
@@ -6114,7 +6156,8 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst SYDH
+grantInst Stanford
+projectName SYDH
 organism human
 
 term Yale
@@ -6124,9 +6167,9 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst  SYDH
+grantInst Stanford
+projectName SYDH
 organism human
-#grantInst  Stanford Yale UCDavis Harvard
 
 term Harvard 
 tag  Harvard 
@@ -6135,7 +6178,8 @@ labInst Harvard
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-grantInst SYDH
+grantInst Stanford
+projectName SYDH
 organism human
 
 term UCD
@@ -6145,7 +6189,8 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-grantInst SYDH
+grantInst Stanford
+projectName SYDH
 organism human
 
 
@@ -6161,6 +6206,7 @@ labPi Ren
 labPiFull Bing Ren
 grantPi Ren
 grantInst LICR
+project LICR
 organism mouse
 
 term Caltech-m
@@ -6171,6 +6217,7 @@ labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
 grantInst PSU
+project
 organism mouse
 
 term UMass-m
@@ -6181,6 +6228,7 @@ labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
 grantInst PSU
+project
 organism mouse
 
 term Duke-m
@@ -6191,26 +6239,29 @@ labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
 grantInst PSU
+project
 organism mouse
 
 term UChicago-m
 tag UChicago 
 type lab
-grantInst University of Chicago 
-labName UChicago
+labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
+grantInst University of Chicago 
+project
 organism mouse
 
 term UNC-m
 tag UNC 
 type lab
 labInst University of North Carolina
-labName UNC-Giddings
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
+grantInst University of North Carolina
+projectName UNC-Giddings
 organism mouse
 
 term UW-m
@@ -6220,7 +6271,8 @@ labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst UW
+grantInst Univeristy of Washington
+projectName UW
 organism mouse
 
 term Stanford-m
@@ -6230,7 +6282,8 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst StanfordYale
+grantInst Stanford
+projectName StanfordYale
 organism human
 
 term Yale-m
@@ -6240,6 +6293,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst StanfordYale
+grantInst Stanford
+projectName StanfordYale
 organism human
 

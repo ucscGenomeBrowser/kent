@@ -482,7 +482,7 @@ for my $key (keys %ra) {
                 !system("/bin/ln $srcFile $target") || die "link failed: $?\n";
             } else {
                 HgAutomate::verbose(2, "copying/zipping $srcFile => $target\n");
-                !system("/bin/gzip -c $srcFile > $target") || die "gzip: $?\n";
+                !system("/usr/bin/pigz -c $srcFile > $target") || die "gzip: $?\n";
             }
         } else {
             if ($type eq "bam") {
@@ -490,21 +490,21 @@ for my $key (keys %ra) {
             }
 
             # make a concatenated copy of multiple files
-            my $unZippedTarget = "$downloadDir/$tablename.$type";
-            unlink($unZippedTarget);
-            HgAutomate::verbose(2, "Zero or multiple files: files=[@files] unlink($unZippedTarget)\n");
+            my $zippedTarget = "$downloadDir/$tablename.$type.gz";
+            unlink($zippedTarget);
+            !system("cat /dev/null > $zippedTarget") || die "gzip failed: $?\n";
+            HgAutomate::verbose(2, "Zero or multiple files: files=[@files] unlink($zippedTarget)\n");
             for my $file (@files) {
                 $file = "$submitPath/$file";
                 my $cmd;
                 if(Encode::isZipped($file)) {
-                    $cmd = "/bin/zcat $file >> $unZippedTarget";
+                    $cmd = "/bin/cat $file >> $zippedTarget";
                 } else {
-                    $cmd = "/bin/cat $file >> $unZippedTarget";
+                    $cmd = "/usr/bin/pigz -c $file >> $zippedTarget";
                 }
-                HgAutomate::verbose(2, "copying $file to $target\n");
+                HgAutomate::verbose(2, "appending gzip of $file to $target\n");
                 !system($cmd) || die "system '$cmd' failed: $?\n";
             }
-            !system("/bin/gzip $unZippedTarget") || die "gzip failed: $?\n";
         }
         push(@{$pushQ->{FILES}}, $target);
         # XXXX add to FILES list and then copy files to unloadFiles.txt
