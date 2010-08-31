@@ -404,7 +404,7 @@ module PipelineBackground
     fullPath = my_join(uploadDir,relativePath)
     Dir.entries(fullPath).each do
       |f| 
-      if (f == ".") or (f == "..")
+      if (f == ".") or (f == "..") or f.starts_with?("._")  # ignore . .. and mac resource forks (._)
         next
       end
       fullName = my_join(fullPath,f)

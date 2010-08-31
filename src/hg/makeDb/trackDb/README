@@ -128,7 +128,8 @@ The format of the type fields:
    Unique type for Repeat Masker tracks
 12. type sample [min] [max]
    A continuous value graphing type of track.
-   Becoming obsolete, replaced by the 'type wig' tracks.
+   Completely obsolete, replaced by the 'type wig' tracks.
+   And 'type wig' tracks are more efficient and accurate as 'type bigWig'
    [min] - optional minimum limit of data, default 0.  Used just for label.
    [max] - optional maximum limit of data, default 1000. Used just for label.
 13. type wigMaf <minVal> <maxVal>
@@ -196,6 +197,7 @@ The format of the type fields:
             when using this setting.
 
 14. type wig [lower] [upper]
+   Deprecated type, more efficient and accurate are 'type bigWig' tracks.
    Continuous value graphing track.
    [lower] - overall lower limit of the data, default 0.0
    [upper] - overall upper limit of the data, default 127.0
@@ -352,6 +354,12 @@ scoreFilterByRange - on                       - Filter using both upper and lowe
 scoreFilterMax     - integer                  - deprecated.  Use scoreFilterLimits.
 noScoreFilter . - to turn off Ui options for bed 5+ tracks, I don't know
 		- what the . is for, but it always appears to be used.
+table           - mySQL table name            - Allows multiple tracks to use the same mySQL table.
+                                              - If omitted the mySQL table name is the same as the
+					      - track name.  Note that there must be at least one
+					      - track associated with the table where the track
+					      - name is the same as the table name, or the table
+					      - browser will have difficulties.
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:
@@ -1049,3 +1057,58 @@ when the track is not in a super track.  (Note that a track can be
 configured to be viewable as a supertrack member or not -- it will
 only be part of a super track if the super track to which it refers
 is configured in the assembly trackDb).
+
+CONTAINER TRACKS
+================
+Container tracks are yet another way of grouping tracks together.  The top 
+level container track includes a tag of the form
+    container <container-type>
+where currently the only container-type is "multiWig" which may only contain
+wig and bigWig tracks.   The advantage of using "container multiWig" instead
+of a composite track is that container multiWig supports the "aggregate" tag
+that allows multiple wiggle graphs to be drawn in the same vertical space.
+
+Here's an example of a container:
+
+    track wgEncodeRegMarkPromoter
+    container multiWig
+    shortLabel Promoter H3K4Me3
+    longLabel ENCODE Promoter Histone Mark (H3K4Me3) on 9 Cell Lines
+    type wig 0 30000
+    viewLimits 0:100
+    configurable on
+    visibility full
+    maxHeightPixels 100:30:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    windowingFunction mean
+    priority 1.4
+
+	track wgEncodeRegMarkPromoterGm12878
+	shortLabel Gm12878
+	longLabel Promoter Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 100593.50
+	color 255,128,128
+
+	track wgEncodeRegMarkPromoterH1hesc
+	shortLabel H1 ES
+	longLabel Promoter Histone Mark (H3K4Me3) on H1 cells from ENCODE
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 12434.00
+	color 255,212,128
+
+	track wgEncodeRegMarkEnhH3k4me3Hepg2
+	shortLabel HepG2
+	longLabel Promoter Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 4927.00
+	color 212,255,128
+
+Note that subtracks of a container use the "parent" tag to indicate the container they belong to,
+just as composite tracks do.  Other tags associated with a container are:
+    o aggregate - Allows the subtracks to be drawn on top of each other in the same vertical
+                  space.  Possible values are: none, transparentOverlay, solidOverlay
+    o showSubtrackColorOnUi on - Puts a small patch of color by the list of subtracks in 
+                  the track UI page.
+

@@ -585,6 +585,68 @@ function subtrackCfgHideAll(table)
     });
 }
 
+var popUpTrackName;
+var popUpTitle = "";
+function popUpCfg(content, status)
+{ // Kicks off a Modal Dialog for the provided content.
+    // Set up the modal dialog
+    var popit = $('#popit');
+    $(popit).html("<div style='font-size:80%'>" + content + "</div>");
+    $(popit).dialog({
+        ajaxOptions: { cache: true }, // This doesn't work
+        resizable: false,
+        height: 'auto',
+        width: 'auto',
+        minHeight: 200,
+        minWidth: 700,
+        modal: true,
+        closeOnEscape: true,
+        autoOpen: false,
+        buttons: { "Ok": function() {
+            setAllVars($('#popit'),popUpTrackName); // Assumes subtrack, will do the right thing with "_sel" on hide // FIXME: sets vis even if same as inherited or unchanged!
+            var vis = $(this).find('select[name="'+popUpTrackName+'"]');
+            var sel = $('input[name="'+popUpTrackName+'_sel"]:checkbox');
+            if(vis != undefined && sel != undefined) {
+                var check = ($(vis).attr('selectedIndex') > 0);
+                $(sel).each( function (i) { matSubCBcheckOne(this,check); });  // Though there is only one, the each works but the direct call does not!
+                setCartVar( $(sel).attr('name'), $(sel).val() );
+                matSubCBsSelected();
+                // FIXME: These settings will be lost, unless the composite/view settings are ajaxed over on change!
+            }
+            $(this).dialog("close");
+        }},
+        close: function() { $('#popit').empty(); }
+    });
+    // Apparently the options above to dialog take only once, so we set title explicitly.
+    if(popUpTitle != undefined && popUpTitle.length > 0)
+        $(popit).dialog('option' , 'title' , popUpTitle );
+    else
+        $(popit).dialog('option' , 'title' , "Please Respond");
+    $(popit).dialog('open');
+}
+
+function _popUpSubrackCfg(trackName,label)
+{ // popup cfg dialog
+    popUpTrackName = trackName;
+    popUpTitle = label;
+
+    // FIXME: Avoid this getting into history and making the back button not work!
+    $.ajax({
+        type: "GET",
+        url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
+        dataType: "html",
+        trueSuccess: popUpCfg,
+        success: catchErrorOrDispatch,
+        cmd: "cfg",
+        cache: false
+    });
+}
+
+function popUpSubtrackCfg(trackName,label)
+{
+    waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
+}
+
 function subtrackCfgShow(tableName)
 {
 // Will show subtrack specific configuration controls
@@ -1259,19 +1321,20 @@ $(document).ready(function()
     //});
 
     // Allows rows to have their positions updated after a drag event
-    if($(".tableWithDragAndDrop").length > 0) {
-        $(".tableWithDragAndDrop").tableDnD({
+    var tblDnd = $(".tableWithDragAndDrop");
+    if($(tblDnd).length > 0) {
+        $(tblDnd).tableDnD({
             onDragClass: "trDrag",
-            //dragHandle: "dragHandle",
+            dragHandle: "dragHandle",
             onDrop: function(table, row, dragStartIndex) {
                     if(tableSetPositions) {
                         tableSetPositions(table);
                     }
                 }
             });
-        $(".trDraggable").hover(
-            function(){ $(this).addClass('trDrag'); },
-            function(){ $(this).removeClass('trDrag'); }
+        $(".dragHandle").hover(
+            function(){ $(this).parent('tr').addClass('trDrag'); },
+            function(){ $(this).parent('tr').removeClass('trDrag'); }
         );
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!

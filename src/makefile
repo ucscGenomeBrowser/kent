@@ -60,7 +60,7 @@ UTILS_APPLIST = bedClip bedGraphToBigWig bedToBigBed \
         bigBedInfo bigBedSummary bigBedToBed \
 	bigWigInfo bigWigSummary bigWigToBedGraph bigWigToWig\
 	faCount faFrag faOneRecord faRandomize faSize faSomeRecords faToNib \
-	faToTwoBit gtfToGenePred htmlCheck nibFrag stringify \
+	faToTwoBit gff3ToGenePred gtfToGenePred htmlCheck nibFrag stringify \
 	textHistogram twoBitInfo twoBitToFa userApps wigCorrelate wigToBigWig
 
 HG_APPLIST = bedSort liftUp liftOver bedItemOverlapCount encode/validateFiles \

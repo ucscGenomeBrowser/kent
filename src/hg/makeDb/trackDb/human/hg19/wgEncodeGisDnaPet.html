@@ -27,11 +27,6 @@ complexity or repetitive sequences.
 you wish to hide.</P>
  
 
-<DL>
-<DT><i>Alignments</i>
-<DD>The Alignments view shows alignment of individual PET sequences.
-</DL>
-
 <H2>Methods</H2>
 <P>
 Sample genomic DNA was isolated, hydrosheared at a given size-range, then
@@ -52,7 +47,7 @@ protocols</A>.
 Reads of DNA-PETs were mapped onto reference genome, GRCh37, hg19, excluding mitochondrion, haplotypes, randoms and chromosome Y. Majority of the PETs mapped on the same chromosome in correct orientations and within expected distance span (e.g., a 10 kb DNA-PET was expected mapping on ~10 kb span distance). A small portion of misaligned PETs, called discordant PETs, mapped either too far from each other, had wrong orientations, or in different chromosomes indicating various genome structure or variations observed between the sample and the reference genome. The variations could be due to deletion, inversion, tandem repeats, trans-location, fusion etc.
 </P>
 <P><B>Mapping parameters:</B>
-Mapping parameters: Mapping was done using Applied Biosystems' SOLiD alignment and pairing pipeline. The ungapped alignment is done in colour space. Seed and extend strategy is adopted where initial seed length of 25 is mapped with maximum of 2 mismatches and then extended to read length, each colour space match is awarded a score of +1 and each mismatch is awarded a penalty of -2.
+Mapping was done using Applied Biosystems' SOLiD alignment and pairing pipeline. The ungapped alignment is done in colour space. Seed and extend strategy is adopted where initial seed length of 25 is mapped with maximum of 2 mismatches and then extended to read length, each colour space match is awarded a score of +1 and each mismatch is awarded a penalty of -2.
 
         Read Score = read length - # of mismatches - 2 * # of mismatches
 

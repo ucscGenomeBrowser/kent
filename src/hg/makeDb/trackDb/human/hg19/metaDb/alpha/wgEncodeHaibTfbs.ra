@@ -6,13 +6,15 @@ composite wgEncodeHaibTfbs
 controlId SL474
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-06
 dateUnrestricted 2011-03-17
 fileIndex wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL474
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549ControlPcr1xDexaAlnRep2
 project wgEncode
 protocol PCR1x
@@ -30,13 +32,15 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-07
 dateUnrestricted 2011-03-17
 fileIndex wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL475
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549ControlPcr1xEtoh02AlnRep1
 project wgEncode
 protocol PCR1x
@@ -61,6 +65,7 @@ fileName wgEncodeHaibTfbsA549ControlPcr2xDexaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL335
+origAssembly hg19
 parentTable wgEncodeHaibTfbsA549ControlPcr2xDexaAlnRep1
 project wgEncode
 protocol PCR2x
@@ -78,13 +83,15 @@ composite wgEncodeHaibTfbs
 controlId SL307
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-15
 dateUnrestricted 2011-03-22
 fileIndex wgEncodeHaibTfbsA549ControlPcr2xEtoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549ControlPcr2xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL307
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549ControlPcr2xEtoh02AlnRep2
 project wgEncode
 protocol PCR2x
@@ -206,13 +213,15 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-12
 dateUnrestricted 2011-03-17
 fileIndex wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1205
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep1
 project wgEncode
 protocol PCR1x
@@ -230,13 +239,15 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-12
 dateUnrestricted 2011-03-17
 fileIndex wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1078
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549CtcfPcr1xEtoh02AlnRep2
 project wgEncode
 protocol PCR1x
@@ -254,12 +265,14 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-12
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1205
+origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -278,12 +291,14 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-12
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549CtcfPcr1xEtoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1078
+origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -432,13 +447,15 @@ composite wgEncodeHaibTfbs
 controlId SL879
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-16
+dateResubmitted 2010-06-16
+dateSubmitted 2009-12-09
 dateUnrestricted 2011-03-16
 fileIndex wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL881
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549GrPcr1xDexcAlnRep2
 project wgEncode
 protocol PCR1x
@@ -482,12 +499,14 @@ composite wgEncodeHaibTfbs
 controlId SL879
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-16
+dateResubmitted 2010-06-16
+dateSubmitted 2009-12-09
 dateUnrestricted 2011-03-16
 fileName wgEncodeHaibTfbsA549GrPcr1xDexcPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL881
+origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -669,6 +688,7 @@ fileName wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL246
+origAssembly hg19
 parentTable wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep1
 project wgEncode
 protocol PCR2x
@@ -693,6 +713,7 @@ fileName wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL304
+origAssembly hg19
 parentTable wgEncodeHaibTfbsA549GrPcr2xDexaAlnRep2
 project wgEncode
 protocol PCR2x
@@ -716,6 +737,7 @@ fileName wgEncodeHaibTfbsA549GrPcr2xDexaPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL246
+origAssembly hg19
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -740,6 +762,7 @@ fileName wgEncodeHaibTfbsA549GrPcr2xDexaPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL304
+origAssembly hg19
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -765,6 +788,7 @@ fileName wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL247
+origAssembly hg19
 parentTable wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep1
 project wgEncode
 protocol PCR2x
@@ -789,6 +813,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL305
 labVersion SL305
+origAssembly hg19
 parentTable wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep2
 project wgEncode
 protocol PCR2x
@@ -813,6 +838,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL305
 labVersion SL305
+origAssembly hg19
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -831,13 +857,15 @@ composite wgEncodeHaibTfbs
 controlId SL335
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-17
 dateUnrestricted 2011-03-22
 fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL244
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep1
 project wgEncode
 protocol PCR2x
@@ -855,13 +883,15 @@ composite wgEncodeHaibTfbs
 controlId Sl335
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-17
 dateUnrestricted 2011-03-22
 fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL306
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549Pol2Pcr2xDexaAlnRep2
 project wgEncode
 protocol PCR2x
@@ -879,12 +909,14 @@ composite wgEncodeHaibTfbs
 controlId SL335
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-17
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL244
+origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -903,12 +935,14 @@ composite wgEncodeHaibTfbs
 controlId Sl335
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-17
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xDexaPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL306
+origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -927,13 +961,15 @@ composite wgEncodeHaibTfbs
 controlId SL307
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-15
 dateUnrestricted 2011-03-22
 fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL245
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep1
 project wgEncode
 protocol PCR2x
@@ -951,13 +987,15 @@ composite wgEncodeHaibTfbs
 controlId SL307
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-15
 dateUnrestricted 2011-03-22
 fileIndex wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL334
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02AlnRep2
 project wgEncode
 protocol PCR2x
@@ -975,12 +1013,14 @@ composite wgEncodeHaibTfbs
 controlId SL307
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-15
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL245
+origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -999,12 +1039,14 @@ composite wgEncodeHaibTfbs
 controlId SL307
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
+dateResubmitted 2010-06-22
+dateSubmitted 2009-12-15
 dateUnrestricted 2011-03-22
 fileName wgEncodeHaibTfbsA549Pol2Pcr2xEtoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL334
+origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1127,13 +1169,15 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-07
 dateUnrestricted 2011-03-17
 fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1207
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep1
 project wgEncode
 protocol PCR1x
@@ -1151,13 +1195,15 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-07
 dateUnrestricted 2011-03-17
 fileIndex wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1080
+origAssembly hg18
 parentTable wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02AlnRep2
 project wgEncode
 protocol PCR1x
@@ -1175,12 +1221,14 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-07
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1207
+origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1199,12 +1247,14 @@ composite wgEncodeHaibTfbs
 controlId SL475
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-18
+dateResubmitted 2010-06-18
+dateSubmitted 2010-01-07
 dateUnrestricted 2011-03-17
 fileName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1080
+origAssembly hg18
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -1230,6 +1280,7 @@ fileName wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1035
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1
 project wgEncode
 protocol v041610.2
@@ -1254,6 +1305,7 @@ fileName wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1087
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2
 project wgEncode
 protocol v041610.2
@@ -1278,6 +1330,7 @@ fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1034
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1
 project wgEncode
 protocol v041610.2
@@ -1302,6 +1355,7 @@ fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1092
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2
 project wgEncode
 protocol v041610.2
@@ -1326,6 +1380,7 @@ fileName wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1
 project wgEncode
 protocol v041610.2
@@ -1350,6 +1405,7 @@ fileName wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2
 project wgEncode
 protocol v041610.2
@@ -1373,6 +1429,7 @@ fileName wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
+origAssembly hg19
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -1397,6 +1454,7 @@ fileName wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
+origAssembly hg19
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -1422,6 +1480,7 @@ fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1
 project wgEncode
 protocol v041610.2
@@ -1446,6 +1505,7 @@ fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
+origAssembly hg19
 parentTable wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2
 project wgEncode
 protocol v041610.2
@@ -1469,6 +1529,7 @@ fileName .broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
+origAssembly hg19
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -1493,6 +1554,7 @@ fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
+origAssembly hg19
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -1823,13 +1885,15 @@ composite wgEncodeHaibTfbs
 controlId SL516
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-05
+dateResubmitted 2010-08-05
+dateSubmitted 2008-12-117
 dateUnrestricted 2011-05-05
 fileName wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL516
 labVersion SL516
+origAssembly hg18
 parentTable wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -1873,13 +1937,15 @@ composite wgEncodeHaibTfbs
 controlId SL217
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateResubmitted 2010-06-21
+dateSubmitted 2009-02-27
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL217
+origAssembly hg18
 parentTable wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep1
 project wgEncode
 protocol PCR2x
@@ -1897,13 +1963,15 @@ composite wgEncodeHaibTfbs
 controlId SL218
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateResubmitted 2010-06-21
+dateSubmitted 2009-02-27
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL218
+origAssembly hg18
 parentTable wgEncodeHaibTfbsGm12878ControlPcr2xAlnRep2
 project wgEncode
 protocol PCR2x
@@ -2361,13 +2429,15 @@ composite wgEncodeHaibTfbs
 controlId SL217
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-06
+dateResubmitted 2010-08-06
+dateSubmitted 2008-11-25
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL202
 labVersion SL202
+origAssembly hg18
 parentTable wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep1
 project wgEncode
 protocol PCR2x
@@ -2411,13 +2481,15 @@ composite wgEncodeHaibTfbs
 controlId SL217
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-06
+dateResubmitted 2010-08-06
+dateSubmitted 2008-11-25
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL202
 labVersion SL202
+origAssembly hg18
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -3301,6 +3373,7 @@ fileName wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1063
+origAssembly hg19
 parentTable wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -3325,6 +3398,7 @@ fileName wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1265
+origAssembly hg19
 parentTable wgEncodeHaibTfbsGm12878RxraPcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -3348,6 +3422,7 @@ fileName wgEncodeHaibTfbsGm12878RxraPcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1063
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -3372,6 +3447,7 @@ fileName wgEncodeHaibTfbsGm12878RxraPcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1265
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4243,13 +4319,15 @@ composite wgEncodeHaibTfbs
 controlId SL1782
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-12
+dateResubmitted 2010-05-12
+dateSubmitted 2010-01-11
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1782
+origAssembly hg18
 parentTable wgEncodeHaibTfbsGm12891ControlV0416101AlnRep1
 project wgEncode
 protocol v041610.1
@@ -4274,6 +4352,7 @@ fileName wgEncodeHaibTfbsGm12891Pax5c20Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1662
+origAssembly hg19
 parentTable wgEncodeHaibTfbsGm12891Pax5c20Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -4297,6 +4376,7 @@ fileName wgEncodeHaibTfbsGm12891Pax5c20Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1662
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -4322,6 +4402,7 @@ fileName wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2131
+origAssembly hg19
 parentTable wgEncodeHaibTfbsGm12891Pax5c20V0416101AlnRep2
 project wgEncode
 protocol v041610.1
@@ -4345,6 +4426,7 @@ fileName wgEncodeHaibTfbsGm12891Pax5c20V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2131
+origAssembly hg19
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -4909,13 +4991,15 @@ composite wgEncodeHaibTfbs
 controlId SL1783
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-05-12
+dateResubmitted 2010-05-12
+dateSubmitted 2010-01-1
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1.bam.bai
 fileName wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1783
+origAssembly hg18
 parentTable wgEncodeHaibTfbsGm12892ControlV0416101AlnRep1
 project wgEncode
 protocol v041610.1
@@ -4940,6 +5024,7 @@ fileName wgEncodeHaibTfbsGm12892Pax5c20Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1664
+origAssembly hg19
 parentTable wgEncodeHaibTfbsGm12892Pax5c20Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -4963,6 +5048,7 @@ fileName wgEncodeHaibTfbsGm12892Pax5c20Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1664
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -4988,6 +5074,7 @@ fileName wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL2133
+origAssembly hg19
 parentTable wgEncodeHaibTfbsGm12892Pax5c20V0416101AlnRep2
 project wgEncode
 protocol v041610.1
@@ -5011,6 +5098,7 @@ fileName wgEncodeHaibTfbsGm12892Pax5c20V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL2133
+origAssembly hg19
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -5348,6 +5436,7 @@ fileName wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1161
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -5372,6 +5461,7 @@ fileName wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1314
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescBcl11aPcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -5395,6 +5485,7 @@ fileName wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1161
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -5419,6 +5510,7 @@ fileName wgEncodeHaibTfbsH1hescBcl11aPcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1314
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -5444,6 +5536,7 @@ fileName wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1164
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -5468,6 +5561,7 @@ fileName wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1312
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescBcl3Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -5491,6 +5585,7 @@ fileName wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1164
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -5515,6 +5610,7 @@ fileName wgEncodeHaibTfbsH1hescBcl3Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1312
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -5566,6 +5662,7 @@ fileName wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1482
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep1
 project wgEncode
 protocol v041610.1
@@ -5590,6 +5687,7 @@ fileName wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1885
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescEgr1V0416101AlnRep2
 project wgEncode
 protocol v041610.1
@@ -5613,6 +5711,7 @@ fileName wgEncodeHaibTfbsH1hescEgr1V0416101PkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1482
+origAssembly hg19
 project wgEncode
 protocol v041610.1
 replicate 1
@@ -5637,6 +5736,7 @@ fileName wgEncodeHaibTfbsH1hescEgr1V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1885
+origAssembly hg19
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -5662,6 +5762,7 @@ fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1518
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -5686,6 +5787,7 @@ fileName wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1660
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescGabpPcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -5709,6 +5811,7 @@ fileName wgEncodeHaibTfbsH1hescGabpPcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1518
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -5733,6 +5836,7 @@ fileName wgEncodeHaibTfbsH1hescGabpPcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1660
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6074,6 +6178,7 @@ fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1157
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -6098,6 +6203,7 @@ fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1313
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSin3ak20Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -6121,6 +6227,7 @@ fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1157
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6145,6 +6252,7 @@ fileName wgEncodeHaibTfbsH1hescSin3ak20Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1313
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6170,6 +6278,7 @@ fileName wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1162
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -6194,6 +6303,7 @@ fileName wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1317
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSix5Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -6217,6 +6327,7 @@ fileName wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1162
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6241,6 +6352,7 @@ fileName wgEncodeHaibTfbsH1hescSix5Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1317
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6266,6 +6378,7 @@ fileName wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1166
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -6290,6 +6403,7 @@ fileName wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1318
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSp1Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -6313,6 +6427,7 @@ fileName wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1166
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6337,6 +6452,7 @@ fileName wgEncodeHaibTfbsH1hescSp1Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1318
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6362,6 +6478,7 @@ fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1483
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -6386,6 +6503,7 @@ fileName wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1659
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescSrfPcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -6409,6 +6527,7 @@ fileName wgEncodeHaibTfbsH1hescSrfPcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1483
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6433,6 +6552,7 @@ fileName wgEncodeHaibTfbsH1hescSrfPcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1659
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6562,6 +6682,7 @@ fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1158
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -6586,6 +6707,7 @@ fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1315
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescTcf12Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -6609,6 +6731,7 @@ fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1158
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6633,6 +6756,7 @@ fileName wgEncodeHaibTfbsH1hescTcf12Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1315
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -6658,6 +6782,7 @@ fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1159
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -6682,6 +6807,7 @@ fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1319
+origAssembly hg19
 parentTable wgEncodeHaibTfbsH1hescUsf1Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -6705,6 +6831,7 @@ fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1159
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -6729,6 +6856,7 @@ fileName wgEncodeHaibTfbsH1hescUsf1Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1319
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -7111,13 +7239,15 @@ composite wgEncodeHaibTfbs
 controlId SL819
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-16
+dateResubmitted 2010-06-16
+dateSubmitted 2010-01-15
 dateUnrestricted 2011-03-16
 fileIndex wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1169
+origAssembly hg18
 parentTable wgEncodeHaibTfbsHepg2Bhlhe40V0416101AlnRep2
 project wgEncode
 protocol v041610.1
@@ -7161,12 +7291,14 @@ composite wgEncodeHaibTfbs
 controlId SL819
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-16
+dateResubmitted 2010-06-16
+dateSubmitted 2010-01-15
 dateUnrestricted 2011-03-16
 fileName wgEncodeHaibTfbsHepg2Bhlhe40V0416101PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1169
+origAssembly hg18
 project wgEncode
 protocol v041610.1
 replicate 2
@@ -7244,6 +7376,7 @@ fileName wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL294
+origAssembly hg19
 parentTable wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep1
 project wgEncode
 protocol PCR2x
@@ -7268,6 +7401,7 @@ fileName wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL295
+origAssembly hg19
 parentTable wgEncodeHaibTfbsHepg2ControlPcr2xAlnRep2
 project wgEncode
 protocol PCR2x
@@ -7292,6 +7426,7 @@ fileName wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1781
+origAssembly hg19
 parentTable wgEncodeHaibTfbsHepg2ControlV0416101AlnRep1
 project wgEncode
 protocol v041610.1
@@ -8320,6 +8455,7 @@ fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1060
+origAssembly hg19
 parentTable wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -8344,6 +8480,7 @@ fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1167
+origAssembly hg19
 parentTable wgEncodeHaibTfbsHepg2Tcf12Pcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -8367,6 +8504,7 @@ fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1060
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8391,6 +8529,7 @@ fileName wgEncodeHaibTfbsHepg2Tcf12Pcr1xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1167
+origAssembly hg19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -8617,13 +8756,15 @@ composite wgEncodeHaibTfbs
 controlId SL108
 dataType ChIP-seq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-06
+dateResubmitted 2010-08-06
+dateSubmitted 2009-07-19
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL108
 labVersion SL108
+origAssembly hg18
 parentTable wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep1
 project wgEncode
 protocol PCR2x
@@ -8641,13 +8782,15 @@ composite wgEncodeHaibTfbs
 controlId SL410
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateResubmitted 2010-06-21
+dateSubmitted 2009-07-19
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL410
+origAssembly hg18
 parentTable wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep2
 project wgEncode
 protocol PCR2x
@@ -8762,13 +8905,15 @@ composite wgEncodeHaibTfbs
 controlId SL518
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateResubmitted 2010-06-21
+dateSubmitted 2008-12-11
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeHaibTfbsK562ControlPcr1xAlnRep1.bam.bai
 fileName wgEncodeHaibTfbsK562ControlPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL518
+origAssembly hg18
 parentTable wgEncodeHaibTfbsK562ControlPcr1xAlnRep1
 project wgEncode
 protocol PCR1x
@@ -8786,13 +8931,15 @@ composite wgEncodeHaibTfbs
 controlId SL519
 dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateResubmitted 2010-06-21
+dateSubmitted 2008-12-11
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeHaibTfbsK562ControlPcr1xAlnRep2.bam.bai
 fileName wgEncodeHaibTfbsK562ControlPcr1xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL519
+origAssembly hg18
 parentTable wgEncodeHaibTfbsK562ControlPcr1xAlnRep2
 project wgEncode
 protocol PCR1x
@@ -9629,6 +9776,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1218
 labVersion Genestein 100nM treatment
+origAssembly hg19
 parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1
 project wgEncode
 protocol v041610.2
@@ -9654,6 +9802,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1492
 labVersion Genestein 100nM treatment
+origAssembly hg19
 parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2
 project wgEncode
 protocol v041610.2
@@ -9678,6 +9827,7 @@ fileName wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1216
+origAssembly hg19
 parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1
 project wgEncode
 protocol v041610.2
@@ -9702,6 +9852,7 @@ fileName wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1490
+origAssembly hg19
 parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2
 project wgEncode
 protocol v041610.2
@@ -9726,6 +9877,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1218
 labVersion Genestein 100nM treatment
+origAssembly hg19
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -9751,6 +9903,7 @@ grant Myers
 lab HudsonAlpha
 labExpId SL1492
 labVersion Genestein 100nM treatment
+origAssembly hg19
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -9906,4 +10059,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -1890010636
+# MAGIC: -1396611773
