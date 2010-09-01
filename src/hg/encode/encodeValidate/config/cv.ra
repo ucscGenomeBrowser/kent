@@ -6123,7 +6123,7 @@ description Applied Biosystems SOLiD System 2.0
 #labPiFull:    The full name of the PI
 #grantPI:      Shortened name of the head PI for the grant
 #type grant
-grantInst:    The name of the institution where the grant is administered from.
+#grantInst:    The name of the institution where the grant is administered from.
 #projectName:  
 #organism:     human or mouse
 
