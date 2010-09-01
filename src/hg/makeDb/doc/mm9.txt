@@ -6289,6 +6289,11 @@ rm -f $tmpExt
 echo "${DB} done"
 done
 
+    ##################################################
+    # redmine GB - Feature #480 -  missing self frames on multiz 
+    #   NwayFrames tables (DONE 2010-07-29) 
+    #   re-run the genePredToMafFrames with mm9 genes/mm9
+  
     ssh kkstore06
     cd /cluster/data/mm9/bed/multiz30way/frames
     # leaving out calJac1, echTel1, otoGar1, sorAra1, eriEur1, cavPor2
