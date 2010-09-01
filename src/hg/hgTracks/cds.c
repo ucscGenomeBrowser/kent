@@ -91,10 +91,12 @@ if (zoomed)
         int thisX,thisX2;
         char c[2];
 	c[1] = '\0';
-	int iMin = min(0, (winStart-chromStart));
-	int iMax = max((chromEnd-chromStart), (winEnd-chromStart));
+	int iMin = max(0, (winStart-chromStart));
+	int iMax = min((chromEnd-chromStart), (winEnd-chromStart));
         for (i=iMin; i<iMax; i++)
             {
+	    if (text[i] == ' ')
+		continue;
             c[0] = text[i];
             thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
             thisX2 = round((double)(chromStart+1+i-winStart)*scale) + xOff;
