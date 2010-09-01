@@ -1782,6 +1782,7 @@ function updateTrackImg(trackName,extraData,loadingId)
 
 var popUpTrackName = "";
 var popUpTrackDescriptionOnly = false;
+var popSaveAllVars = null;
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
@@ -1810,17 +1811,18 @@ function hgTrackUiPopCfgOk(popObj, trackName)
 { // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
     var rec = trackDbJson[trackName];
     var subtrack = rec.isSubtrack ? trackName :"";  // If subtrack then vis rules differ
-
     var allVars = getAllVars($('#pop'), subtrack );
-    var newVis = allVars[subtrack];
-    var hide = (newVis == null || newVis == 'hide' || newVis == '[]');  // subtracks do not have "hide"
+    var changedVars = varHashChanges(allVars,popSaveAllVars);
+    //warn("cfgVars:"+varHashToQueryString(changedVars));
+    var newVis = changedVars[subtrack];
+    var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
     if($('#imgTbl') == undefined) { // On findTracks or config page
-        setAllVars(popObj, subtrack );
-        //if(hide) // Need to set checkbox here
+        setVarsFromHash(changedVars);
+        //if(hide) // TODO: When findTracks or config page has cfg popup, then vis change needs to be handled in page here
     }
     else {  // On image page
         if(hide) {
-            setAllVars(popObj, subtrack );
+            setVarsFromHash(changedVars);
             $('#tr_' + trackName).remove();
             initImgTblButtons();
             loadImgAreaSelect(false);
@@ -1834,7 +1836,7 @@ function hgTrackUiPopCfgOk(popObj, trackName)
                     rec.localVisibility = newVis;
                 }
             }
-            var urlData = objectToQueryString(allVars);
+            var urlData = varHashToQueryString(changedVars);
             if(mapIsUpdateable) {
                 updateTrackImg(trackName,urlData,"");
             } else {
@@ -1866,10 +1868,15 @@ function handleTrackUi(response, status)
                                         hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
                                }},
+                               open: function() {
+                                    var subtrack = trackDbJson[popUpTrackName].isSubtrack ? popUpTrackName :"";  // If subtrack then vis rules differ
+                                    popSaveAllVars = getAllVars( $('#pop'), subtrack );
+                               },
                                close: function() {
                                    $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
                                 popUpTrackName = ""; //set to defaults
                                 popUpTrackDescriptionOnly = false;
+                                popSaveAllVars = null;
                                }
                            });
     if(popUpTrackDescriptionOnly) {

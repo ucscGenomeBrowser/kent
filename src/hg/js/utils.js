@@ -515,24 +515,35 @@ function getAllVars(obj,subtrackName)
                     urlData[name+"_sel"] = 1;
                     urlData[name]        = val;
                 }
-            urlData[name] = val;
-            }
+            } else
+                urlData[name] = val;
         }
     });
     return urlData;
 }
 
-function objectToQueryString(o)
+function varHashChanges(newVars,oldVars)
+{
+// Returns a hash of all vars that are changed between old and new hash.  New vars not found in old are changed.
+    var changedVars = new Object();
+    for (var newVar in newVars) {
+        if(oldVars[newVar] == null || oldVars[newVar] != newVars[newVar])
+            changedVars[newVar] = newVars[newVar];
+    }
+    return changedVars;
+}
+
+function varHashToQueryString(varHash)
 {
 // return a CGI QUERY_STRING for name/vals in given object
     var retVal = "";
     var count = 0;
-    for (var i in o) {
+    for (var aVar in varHash) {
         if(count++ > 0) {
-            retVal = retVal + "&"
+            retVal += "&";
         }
-        // XXXX encode i and o[i]?
-        retVal = retVal + i + "=" + o[i];
+        // XXXX encode var=val ?
+        retVal += aVar + "=" + varHash[aVar];
     }
     return retVal;
 }
@@ -541,7 +552,7 @@ function getAllVarsAsUrlData(obj)
 {
 // Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
 // If obj is undefined then obj is document!
-    return objectToQueryString(getAllVars(obj));
+    return varHashToQueryString(getAllVars(obj));
 }
 
 /*
