@@ -1780,8 +1780,9 @@ function updateTrackImg(trackName,extraData,loadingId)
             });
 }
 
-var popUpTrackName;
+var popUpTrackName = "";
 var popUpTrackDescriptionOnly = false;
+var popSaveAllVars = null;
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
@@ -1806,6 +1807,45 @@ function hgTrackUiPopUp(trackName,descriptionOnly)
     waitOnFunction( _hgTrackUiPopUp, trackName, descriptionOnly );  // Launches the popup but shields the ajax with a waitOnFunction
 }
 
+function hgTrackUiPopCfgOk(popObj, trackName)
+{ // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack ? trackName :"";  // If subtrack then vis rules differ
+    var allVars = getAllVars($('#pop'), subtrack );
+    var changedVars = varHashChanges(allVars,popSaveAllVars);
+    //warn("cfgVars:"+varHashToQueryString(changedVars));
+    var newVis = changedVars[subtrack];
+    var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
+    if($('#imgTbl') == undefined) { // On findTracks or config page
+        setVarsFromHash(changedVars);
+        //if(hide) // TODO: When findTracks or config page has cfg popup, then vis change needs to be handled in page here
+    }
+    else {  // On image page
+        if(hide) {
+            setVarsFromHash(changedVars);
+            $('#tr_' + trackName).remove();
+            initImgTblButtons();
+            loadImgAreaSelect(false);
+        } else {
+            // Keep local state in sync if user changed visibility
+            if(newVis != null) {
+                $("select[name=" + trackName + "]").each(function(t) {
+                    $(this).val(newVis);
+                });
+                if(rec) {
+                    rec.localVisibility = newVis;
+                }
+            }
+            var urlData = varHashToQueryString(changedVars);
+            if(mapIsUpdateable) {
+                updateTrackImg(trackName,urlData,"");
+            } else {
+                window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+            }
+        }
+    }
+}
+
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
@@ -1824,50 +1864,19 @@ function handleTrackUi(response, status)
                                closeOnEscape: true,
                                autoOpen: false,
                                buttons: { "Ok": function() {
-                                    var hide = false; // need to handle special case of vis going to hide!
-                                    var vis = $('#pop').find('select[name="'+popUpTrackName+'"]');
-                                    if(vis != undefined)
-                                        hide = ($(vis).val() == 'hide');
-                                    if(popUpTrackDescriptionOnly == false) {
-                                        if($('#imgTbl') != undefined) {
-                                            if(hide) {
-                                                if(trackDbJson[popUpTrackName].parentTrack)
-                                                    setAllVars($('#pop'),popUpTrackName);
-                                                else
-                                                    setAllVars($('#pop'));
-                                                $('#tr_' + popUpTrackName).remove();
-                                                initImgTblButtons();
-                                                loadImgAreaSelect(false);
-                                            } else {
-                                                var o = getAllVars($('#pop'));
-                                                // Keep local state in sync if user changed visibility
-                                                var newVisibility = o[popUpTrackName];
-                                                if(newVisibility != null) {
-                                                    $("select[name=" + popUpTrackName + "]").each(function(t) {
-                                                        $(this).val(newVisibility);
-                                                    });
-                                                    var rec = trackDbJson[popUpTrackName];
-                                                    if(rec) {
-                                                        rec.localVisibility = newVisibility;
-                                            }
-                                                }
-                                                var urlData = objectToQueryString(o);
-                                                if(mapIsUpdateable) {
-                                                updateTrackImg(popUpTrackName,urlData,"");
-                                                } else {
-                                                    window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
-                                                }
-                                            }
-                                        } else {
-                                            setAllVars($('#pop'));
-                                            //if(hide) // Need to set checkbox here
-                                        }
-                                    }
+                                    if( ! popUpTrackDescriptionOnly )
+                                        hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
                                }},
+                               open: function() {
+                                    var subtrack = trackDbJson[popUpTrackName].isSubtrack ? popUpTrackName :"";  // If subtrack then vis rules differ
+                                    popSaveAllVars = getAllVars( $('#pop'), subtrack );
+                               },
                                close: function() {
-                                   // clear out html after close to prevent problems caused by duplicate html elements
-                                   $('#hgTrackUiDialog').html("");
+                                   $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
+                                popUpTrackName = ""; //set to defaults
+                                popUpTrackDescriptionOnly = false;
+                                popSaveAllVars = null;
                                }
                            });
     if(popUpTrackDescriptionOnly) {
