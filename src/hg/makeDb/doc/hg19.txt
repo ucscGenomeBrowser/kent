@@ -9654,6 +9654,8 @@ EOF
     hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
       hg19 snp131NonClinical -sqlTable=snp131.sql -renameSqlTable snp131NonClinical.bed
 #Loaded 26018146 elements of size 17
+    # 9/1/10: Don't forget to fix the empty-func bug!
+    hgsql hg19 -e 'update snp131Clinical set func = "unknown" where func = "";'
 
 
 ############################################################################
@@ -11793,7 +11795,8 @@ done
     # The file dates are 2005, but all log files begin with 2002 dates.
     # Good, we can proceed with fosends.3 and won't have to reverse-engineer
     # Terry's lost pipeline for translating the files.
-
+    mkdir /hive/data/genomes/hg19/bed/fosEndPairs
+    cd /hive/data/genomes/hg19/bed/fosEndPairs
 
 
 #########################################################################
