@@ -11784,3 +11784,16 @@ done
     #	8782198 bases of 2911519270 (0.302%) in intersection
 
 #########################################################################
+# FOSMID END PAIRS (IN PROGRESS 9/1/10 angie)
+    # First I downloaded raw files from NCBI, to see if they are newer
+    # than what we have in fosends.3:
+    mkdir /hive/data/outside/fosends.4
+    cd /hive/data/outside/fosends.4
+    wget --timestamping ftp://ftp.ncbi.nih.gov/genomes/FOSMIDS/homo_sapiens/\*
+    # The file dates are 2005, but all log files begin with 2002 dates.
+    # Good, we can proceed with fosends.3 and won't have to reverse-engineer
+    # Terry's lost pipeline for translating the files.
+
+
+
+#########################################################################
