@@ -482,7 +482,7 @@ function cgiBooleanShadowPrefix()
     return "boolshad.";
 }
 
-function getAllVars(obj)
+function getAllVars(obj,subtrackName)
 {
 // Returns a hash for all inputs and selects in an obj.
 // If obj is undefined then obj is document!
@@ -507,7 +507,16 @@ function getAllVars(obj)
         var name  = $(this).attr('name');
         var val = $(this).val();
         if(name != undefined && val != undefined) {
+            if(subtrackName != undefined && name == subtrackName) {
+                if(val == 'hide') {
+                   urlData[name+"_sel"] = 0;    // Can't delete "_sel" because default takes over
+                   urlData[name]        = "[]";  // can delete vis because subtrack vis should be inherited.
+                } else {
+                    urlData[name+"_sel"] = 1;
+                    urlData[name]        = val;
+                }
             urlData[name] = val;
+            }
         }
     });
     return urlData;
