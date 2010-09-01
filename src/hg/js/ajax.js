@@ -89,6 +89,21 @@ function setCartVar(name, value)
     setCartVars( [ name ], [ value ] );
 }
 
+function setVarsFromHash(varHash)
+{
+// Set all vars in a var hash
+// If obj is undefined then obj is document!
+    var names = [];
+    var values = [];
+    for (var aVar in varHash) {
+        names.push(aVar);
+        values.push(varHash[aVar]);
+    }
+    if(names.length > 0) {
+        setCartVars(names,values);
+    }
+}
+
 function setAllVars(obj,subtrackName)
 {
 // Set all enabled inputs and selects found as children obj with names to cart with ajax
@@ -98,15 +113,7 @@ function setAllVars(obj,subtrackName)
     if($(obj) == undefined)
         obj = $('document');
 
-    var o = getAllVars(obj);
-    for (var i in o) {
-        names.push(i);
-        values.push(o[i]);
-    }
-    if(names.length > 0) {
-        //warn("variables:"+names+"  values:"+values);
-        setCartVars(names,values);
-    }
+    setVarsFromHash(getAllVars(obj,subtrackName));
 }
 
 function submitMain()
