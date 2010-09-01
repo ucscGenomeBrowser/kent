@@ -1715,15 +1715,27 @@ chromosomes  chr1,chr3,chr4,chr5,chr6,chr7,chr8,chr9,chr10,chr11,chr12,chr15,chr
         subGroups view=psl
 	shortLabel Lift Over
 	longLabel GRCh37.p2 Lift over alignments
-	type psl .
-	showDiffBasesAllScales .
 	priority 3
+	type psl
+	pslSequence no
+	baseColorDefault itemBases
+	baseColorUseSequence extFile seqHg19Patch2 extHg19Patch2
+	indelDoubleInsert on
+	indelQueryInsert on
+	showDiffBasesAllScales .
+	showDiffBasesMaxZoom 10000.0
 
 	track altSeqAllPsl
         parent altSeqCompositeViewpsl
         subGroups view=psl
 	shortLabel Alignments
 	longLabel Alignments to GRCh37.p2 sequence
-	type psl .
-	showDiffBasesAllScales .
 	priority 4
+	type psl
+	pslSequence no
+	baseColorDefault itemBases
+	baseColorUseSequence extFile seqHg19Patch2 extHg19Patch2
+	indelDoubleInsert on
+	indelQueryInsert on
+	showDiffBasesAllScales .
+	showDiffBasesMaxZoom 10000.0

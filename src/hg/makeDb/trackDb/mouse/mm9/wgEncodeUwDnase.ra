@@ -9,7 +9,7 @@ subGroup2 cellType Cell_Line 3134=3134 416B=416B BCellCD19p=B-cell_(CD19+) Cereb
 subGroup3 strain Strain C3H=C3H C57BL6=C57BL/6 S129=129
 subGroup4 sex Sex M=M
 subGroup5 age Age adult8wks=adult-8wks E0=E0 E14half=E14.5
-subGroup6 rep Rank rep1=1st rep2=2nd rep3=3rd rep4=4th rep5=5th rep6=6th
+subGroup6 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 rep6=6
 dimensions dimensionX=cellType dimensionY=age dimensionA=strain dimensionB=rep
 dimensionAchecked C57BL6,S129
 dimensionBchecked rep1
