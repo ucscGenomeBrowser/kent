@@ -7026,6 +7026,274 @@ subId 1362
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1
+objType file
+antibody ZNF274
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HeLa-S3/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1.bam
+grant Snyder
+lab UCDavis
+parentTable wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2112
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2
+objType file
+antibody ZNF274
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HeLa-S3/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2.bam
+grant Snyder
+lab UCDavis
+parentTable wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2112
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Znf274UcdPk
+objType table
+antibody ZNF274
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HeLa-S3/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Znf274UcdPk.narrowPeak.gz
+grant Snyder
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2112
+tableName wgEncodeSydhTfbsHelas3Znf274UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep1
+objType file
+antibody ZNF274
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HeLa-S3/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
+parentTable wgEncodeSydhTfbsHelas3Znf274UcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2112
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep2
+objType file
+antibody ZNF274
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HeLa-S3/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
+parentTable wgEncodeSydhTfbsHelas3Znf274UcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2112
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHelas3Znf274UcdSig
+objType table
+antibody ZNF274
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId HeLa-S3/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Znf274UcdSig.bigWig
+grant Snyder
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2112
+tableName wgEncodeSydhTfbsHelas3Znf274UcdSig
+treatment None
+view Signal
+
+metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1
+objType file
+antibody ZZZ3
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId HeLa-S3/None/Input/IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1.bam
+grant Snyder
+lab Harvard(Weissman)
+parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2093
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2
+objType file
+antibody ZZZ3
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId HeLa-S3/None/Input/IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2.bam
+grant Snyder
+lab Harvard(Weissman)
+parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2093
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsHelas3Zzz3IggyalePk
+objType table
+antibody ZZZ3
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId HeLa-S3/None/Input/IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Zzz3IggyalePk.narrowPeak.gz
+grant Snyder
+lab Harvard(Weissman)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2093
+tableName wgEncodeSydhTfbsHelas3Zzz3IggyalePk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep1
+objType file
+antibody ZZZ3
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId HeLa-S3/None/Input/IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep1.fastq.gz
+grant Snyder
+lab Harvard(Weissman)
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
+parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2093
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep2
+objType file
+antibody ZZZ3
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId HeLa-S3/None/Input/IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep2.fastq.gz
+grant Snyder
+lab Harvard(Weissman)
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
+parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2093
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsHelas3Zzz3IggyaleSig
+objType table
+antibody ZZZ3
+cell HeLa-S3
+composite wgEncodeSydhTfbs
+control IgG-Yale
+controlId HeLa-S3/None/Input/IgG-Yale
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleSig.bigWig
+grant Snyder
+lab Harvard(Weissman)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2093
+tableName wgEncodeSydhTfbsHelas3Zzz3IggyaleSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsHepg2bInputUcdAlnRep1
 objType file
 antibody Input
@@ -11100,6 +11368,138 @@ subId 1386
 treatment IFNa6h
 view Alignments
 
+metaObject wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/IFNg30/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1.bam
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2111
+treatment IFNg30
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/IFNg30/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2.bam
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2111
+treatment IFNg30
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562CmycIfng30StdPk
+objType table
+antibody c-Myc
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/IFNg30/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsK562CmycIfng30StdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2111
+tableName wgEncodeSydhTfbsK562CmycIfng30StdPk
+treatment IFNg30
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep1
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/IFNg30/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsK562CmycIfng30StdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2111
+treatment IFNg30
+view RawData
+
+metaObject wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep2
+objType file
+antibody c-Myc
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/IFNg30/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsK562CmycIfng30StdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2111
+treatment IFNg30
+view RawData
+
+metaObject wgEncodeSydhTfbsK562CmycIfng30StdSig
+objType table
+antibody c-Myc
+cell K562
+composite wgEncodeSydhTfbs
+control std
+controlId K562/IFNg30/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-17
+dateUnrestricted 2011-05-17
+fileName wgEncodeSydhTfbsK562CmycIfng30StdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2111
+tableName wgEncodeSydhTfbsK562CmycIfng30StdSig
+treatment IFNg30
+view Signal
+
 metaObject wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep1
 objType file
 antibody c-Myc
@@ -12128,6 +12528,140 @@ setType exp
 subId 1387
 treatment None
 view Alignments
+
+metaObject wgEncodeSydhTfbsK562Kap1UcdAlnRep1
+objType file
+antibody KAP1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep1.bam
+grant Snyder
+lab UCDavis
+parentTable wgEncodeSydhTfbsK562Kap1UcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2126
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Kap1UcdAlnRep2
+objType file
+antibody KAP1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep2.bam
+grant Snyder
+lab UCDavis
+parentTable wgEncodeSydhTfbsK562Kap1UcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2126
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsK562Kap1UcdPk
+objType table
+antibody KAP1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562Kap1UcdPk.narrowPeak.gz
+grant Snyder
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2126
+tableName wgEncodeSydhTfbsK562Kap1UcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsK562Kap1UcdRawDataRep1
+objType file
+antibody KAP1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
+parentTable wgEncodeSydhTfbsK562Kap1UcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2126
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Kap1UcdRawDataRep2
+objType file
+antibody KAP1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCDavis
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
+parentTable wgEncodeSydhTfbsK562Kap1UcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2126
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsK562Kap1UcdSig
+objType table
+antibody KAP1
+cell K562
+composite wgEncodeSydhTfbs
+control UCDavis
+controlId K562/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-23
+dateUnrestricted 2011-05-23
+fileName wgEncodeSydhTfbsK562Kap1UcdSig.bigWig
+grant Snyder
+lab UCDavis
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2126
+tableName wgEncodeSydhTfbsK562Kap1UcdSig
+treatment None
+view Signal
 
 metaObject wgEncodeSydhTfbsK562MaxStdAlnRep1
 objType file
@@ -13859,6 +14393,138 @@ subId 1364
 treatment None
 view Alignments
 
+metaObject wgEncodeSydhTfbsNb4CmycStdAlnRep1
+objType file
+antibody c-Myc
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4CmycStdAlnRep1.bam
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsNb4CmycStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2129
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsNb4CmycStdAlnRep2
+objType file
+antibody c-Myc
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4CmycStdAlnRep2.bam
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsNb4CmycStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2129
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsNb4CmycStdPk
+objType table
+antibody c-Myc
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4CmycStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2129
+tableName wgEncodeSydhTfbsNb4CmycStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsNb4CmycStdRawDataRep1
+objType file
+antibody c-Myc
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsNb4CmycStdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2129
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsNb4CmycStdRawDataRep2
+objType file
+antibody c-Myc
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsNb4CmycStdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2129
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsNb4CmycStdSig
+objType table
+antibody c-Myc
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4CmycStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2129
+tableName wgEncodeSydhTfbsNb4CmycStdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhTfbsNb4InputStdAlnRep1
 objType file
 antibody Input
@@ -13884,6 +14550,140 @@ setType input
 subId 1366
 treatment None
 view Alignments
+
+metaObject wgEncodeSydhTfbsNb4MaxStdAlnRep1
+objType file
+antibody Max
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4MaxStdAlnRep1.bam
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsNb4MaxStdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2131
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsNb4MaxStdAlnRep2
+objType file
+antibody Max
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4MaxStdAlnRep2.bam
+grant Snyder
+lab Stanford
+parentTable wgEncodeSydhTfbsNb4MaxStdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2131
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhTfbsNb4MaxStdPk
+objType table
+antibody Max
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4MaxStdPk.narrowPeak.gz
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2131
+tableName wgEncodeSydhTfbsNb4MaxStdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhTfbsNb4MaxStdRawDataRep1
+objType file
+antibody Max
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep1.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
+parentTable wgEncodeSydhTfbsNb4MaxStdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2131
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsNb4MaxStdRawDataRep2
+objType file
+antibody Max
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep2.fastq.gz
+grant Snyder
+lab Stanford
+labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
+parentTable wgEncodeSydhTfbsNb4MaxStdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2131
+treatment None
+view RawData
+
+metaObject wgEncodeSydhTfbsNb4MaxStdSig
+objType table
+antibody Max
+cell NB4
+composite wgEncodeSydhTfbs
+control std
+controlId NB4/None/Input/std
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-08-26
+dateUnrestricted 2011-05-26
+fileName wgEncodeSydhTfbsNb4MaxStdSig.bigWig
+grant Snyder
+lab Stanford
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2131
+tableName wgEncodeSydhTfbsNb4MaxStdSig
+treatment None
+view Signal
 
 metaObject wgEncodeSydhTfbsNb4Pol2StdAlnRep1
 objType file
@@ -14493,4 +15293,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 2116509250
+# MAGIC: 1403533638
