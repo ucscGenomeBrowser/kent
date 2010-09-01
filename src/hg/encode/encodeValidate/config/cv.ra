@@ -4367,7 +4367,7 @@ validation missing
 
 #term TAF-II
 #type Antibody
-target TAF-II
+#target TAF-II
 #antibodyDescription Mouse monoclonal (p250)
 #targetDescription General transcription factor; TBP-associated factor p250kDa; other names: TAF250
 #vendorName Santa Cruz Biotech
@@ -4705,7 +4705,7 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
 validation RipChip
 
 ##This does not appear in metaDb
-?term EIF4EBP1
+term EIF4EBP1
 tag EIF4EBP1
 type Antibody
 target EIF4EBP1
