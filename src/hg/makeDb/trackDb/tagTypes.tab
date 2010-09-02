@@ -55,6 +55,7 @@ colorChromDefault psl
 compareGenomeLinks bed
 compositeTrack *
 configurable *
+configureByPopup *
 container *
 controlledVocabulary *
 dataUrl customTracks
