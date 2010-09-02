@@ -130,6 +130,7 @@ else if (tdbIsCompositeChild(track->tdb))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
     }
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
 if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)

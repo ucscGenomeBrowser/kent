@@ -2190,12 +2190,24 @@ gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
+    if(sameString(tdb->type,"genePred")
+    && startsWith("ENCODE Gencode",tdb->longLabel)
+    && startsWith("ENST",name))
+        {
+        char *ensemblIdUrl = trackDbSetting(tdb, "ensemblIdUrl");
+
+        printf("<b>Ensembl Transcript Id:&nbsp</b>");
+        if (ensemblIdUrl != NULL)
+            printf("<a href=\"%s%s\" target=\"_blank\">%s</a><br>", ensemblIdUrl,name,name);
+        else
+            printf("%s<br>",name);
+        }
     if (gp->name2 != NULL && strlen(trimSpaces(gp->name2))> 0)
         {
         /* in Ensembl gene info downloaded from ftp site, sometimes the
            name2 field is populated with "noXref" because there is
            no alternate name. Replace this with "none" */
-        printf("<b>Alternate Name:");
+        printf("<b>Gene Symbol:");
         if (sameString(gp->name2, "noXref"))
            printf("</b> none<br>\n");
         else
@@ -2314,21 +2326,6 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
 
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
-
-if(sameString(tdb->type,"genePred")
-&& startsWith("ENCODE Gencode",tdb->longLabel)
-&& startsWith("ENST",geneName))
-    {
-    char *ensemblIdUrl = trackDbSetting(tdb, "ensemblIdUrl");
-
-    if (ensemblIdUrl != NULL)
-// #define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
-        {
-        puts("<LI>\n");
-        printf("<a href=\"%s%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id", ensemblIdUrl,geneName);
-        puts("</LI>\n");
-        }
-    }
 
 if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
     {
