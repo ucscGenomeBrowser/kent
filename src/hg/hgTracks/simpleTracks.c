@@ -510,7 +510,7 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     char *encodedTableName = cgiEncode(parentName);
     char *view = NULL;
     boolean setView = subgroupFind(toggleGroup->tdb,"view",&view);
-    if(tgParent!=NULL && tvCompare(tgParent->visibility,vis) > 0)
+    if(tgParent!=NULL&& tgParent->visibility != tvHide && tvCompare(tgParent->visibility,vis) > 0)
         {
         setView = FALSE; // Must open parent to see opened child
         vis = tgParent->visibility;
