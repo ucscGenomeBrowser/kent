@@ -132,7 +132,7 @@ jQuery.tableDnD = {
             cells.each(function() {
                 // The cell is bound to "this"
                 jQuery(this).mousedown(function(ev) {
-                    if(ev.button != 0)
+                    if(ev.button > 1)
                         return true;
                     if(jQuery.tableDnD == undefined)
                         return false;

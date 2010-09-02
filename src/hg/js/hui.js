@@ -587,6 +587,24 @@ function subtrackCfgHideAll(table)
 
 var popUpTrackName;
 var popUpTitle = "";
+var popSaveAllVars = null;
+function popUpCfgOk(popObj, trackName)
+{ // Kicks off a Modal Dialog for the provided content.
+    var allVars = getAllVars(popObj, trackName );   // always subtrack cfg
+    var changedVars = varHashChanges(allVars,popSaveAllVars);
+    //warn("cfgVars:"+varHashToQueryString(changedVars));
+    setVarsFromHash(changedVars);  // FIXME: These settings will be lost, unless the composite/view settings are ajaxed over on change!
+    var newVis = changedVars[trackName];
+    if(newVis != null) {
+        var sel = $('input[name="'+trackName+'_sel"]:checkbox');
+        var checked = (newVis != 'hide' && newVis != '[]');  // subtracks do not have "hide", thus '[]'
+        if( $(sel) != undefined ) {
+            $(sel).each( function (i) { matSubCBcheckOne(this,checked); });  // Though there is only one, the each works but the direct call does not!
+            matSubCBsSelected();
+        }
+    }
+}
+
 function popUpCfg(content, status)
 { // Kicks off a Modal Dialog for the provided content.
     // Set up the modal dialog
@@ -594,8 +612,7 @@ function popUpCfg(content, status)
     $(popit).html("<div style='font-size:80%'>" + content + "</div>");
     $(popit).dialog({
         ajaxOptions: { cache: true }, // This doesn't work
-        resizable: true,
-        bgiframe: true,
+        resizable: false,
         height: 'auto',
         width: 'auto',
         minHeight: 200,
@@ -604,18 +621,10 @@ function popUpCfg(content, status)
         closeOnEscape: true,
         autoOpen: false,
         buttons: { "Ok": function() {
-            setAllVars($('#popit'),popUpTrackName); // Assumes subtrack, will do the right thing with "_sel" on hide // FIXME: sets vis even if same as inherited or unchanged!
-            var vis = $(this).find('select[name="'+popUpTrackName+'"]');
-            var sel = $('input[name="'+popUpTrackName+'_sel"]:checkbox');
-            if(vis != undefined && sel != undefined) {
-                var check = ($(vis).attr('selectedIndex') > 0);
-                $(sel).each( function (i) { matSubCBcheckOne(this,check); });  // Though there is only one, the each works but the direct call does not!
-                setCartVar( $(sel).attr('name'), $(sel).val() );
-                matSubCBsSelected();
-                // FIXME: These settings will be lost, unless the composite/view settings are ajaxed over on change!
-            }
+            popUpCfgOk(this,popUpTrackName);
             $(this).dialog("close");
         }},
+        open: function() { popSaveAllVars = getAllVars( this, popUpTrackName ); }, // always subtrack cfg
         close: function() { $('#popit').empty(); }
     });
     // Apparently the options above to dialog take only once, so we set title explicitly.
@@ -1322,19 +1331,20 @@ $(document).ready(function()
     //});
 
     // Allows rows to have their positions updated after a drag event
-    if($(".tableWithDragAndDrop").length > 0) {
-        $(".tableWithDragAndDrop").tableDnD({
+    var tblDnd = $(".tableWithDragAndDrop");
+    if($(tblDnd).length > 0) {
+        $(tblDnd).tableDnD({
             onDragClass: "trDrag",
-            //dragHandle: "dragHandle",
+            dragHandle: "dragHandle",
             onDrop: function(table, row, dragStartIndex) {
                     if(tableSetPositions) {
                         tableSetPositions(table);
                     }
                 }
             });
-        $(".trDraggable").hover(
-            function(){ $(this).addClass('trDrag'); },
-            function(){ $(this).removeClass('trDrag'); }
+        $(".dragHandle").hover(
+            function(){ $(this).parent('tr').addClass('trDrag'); },
+            function(){ $(this).parent('tr').removeClass('trDrag'); }
         );
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!

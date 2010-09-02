@@ -5,6 +5,7 @@
 #include "cheapcgi.h"
 #include "hPrint.h"
 #include "dystring.h"
+#include "hui.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
@@ -120,6 +121,31 @@ else if(!strcmp(cmd, "metaDb"))
     else
         fail("Assembly does not support metaDb");
     }
+else if(!strcmp(cmd, "tableMetadata"))
+    { // returns an html table with metadata for a given track
+    char *trackName = cgiOptionalString("track");
+    boolean showLonglabel = (NULL != cgiOptionalString("showLonglabel"));
+    boolean showShortLabel = (NULL != cgiOptionalString("showShortLabel"));
+    if (trackName != NULL)
+        {
+        struct trackDb *tdb = hTrackDbForTrack(database, trackName);
+        if (tdb != NULL)
+            {
+            char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel,NULL);
+            if (html)
+                {
+                dyStringAppend(output,html);
+                freeMem(html);
+                }
+            else
+                dyStringPrintf(output,"No metadata found for track %s.",trackName);
+            }
+        else
+            dyStringPrintf(output,"Track %s not found",trackName);
+        }
+        else
+            dyStringAppend(output,"No track variable found");
+    }
 else
     fail("Unsupported 'cmd' parameter");
 
@@ -130,7 +156,7 @@ puts("Content-Type:text/javascript\n");
 //puts("\n");
 if(jsonp)
     printf("%s(%s)", jsonp, dyStringContents(output));
-else 
+else
     puts(dyStringContents(output));
 
 return 0;
