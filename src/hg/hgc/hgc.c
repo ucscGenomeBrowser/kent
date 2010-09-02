@@ -7861,17 +7861,17 @@ int start = cartInt(cart, "o");
 int total = 0, i = 0;
 struct psl *pslList = NULL;
 struct sqlConnection *conn = hAllocConn(database);
-char *otherDb = trackDbSetting(tdb, "otherDb");
-int altSize = hChromSize(otherDb, item);
+// char *otherDb = trackDbSetting(tdb, "otherDb");
+// int altSize = hChromSize(otherDb, item);
 
 genericHeader(tdb, item);
 printCustomUrl(tdb, item, TRUE);
 
 puts("<P>");
-//puts("<B>Alignment Summary:</B><BR>\n");
-char strBuf[64];
-sprintLongWithCommas(strBuf, altSize);
-printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
+puts("<B>Alignment Summary:</B><BR>\n");
+// char strBuf[64];
+// sprintLongWithCommas(strBuf, altSize);
+// printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
 pslList = getAlignments(conn, tdb->table, item);
 printAlignments(pslList, start, "htcCdnaAliInWindow", tdb->table, item);
 
