@@ -116,6 +116,11 @@ function setAllVars(obj,subtrackName)
     setVarsFromHash(getAllVars(obj,subtrackName));
 }
 
+function setCartVarFromObjId(obj)
+{
+    setCartVar($(obj).attr('id'),$(obj).val());
+}
+
 function submitMain()
 {
     $('form[name="mainForm"]').submit();
