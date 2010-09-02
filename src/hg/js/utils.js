@@ -522,6 +522,18 @@ function getAllVars(obj,subtrackName)
     return urlData;
 }
 
+function setIdRemoveName(obj)
+{ // This function removes the name of an obj and sets it as the id.  This is very useful
+  // to override forms submitting named inputs and instead setCartVarFromObjId() can be used selectively
+    var id = $(obj).attr('name');
+    if(id != undefined) {
+        $(obj).attr('id',id);
+        $(obj).removeAttr('name');
+    }
+    //warn($(obj).attr('id')+'='+$(obj).val()+" name:"+$(obj).attr('name'));
+}
+
+
 function varHashChanges(newVars,oldVars)
 {
 // Returns a hash of all vars that are changed between old and new hash.  New vars not found in old are changed.

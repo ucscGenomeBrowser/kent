@@ -1469,7 +1469,7 @@ if(width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT  class='inputBox' name=\"%s\" style='width: %dpx' value=%15g",varName,width,initialVal);
+printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%g",varName,width,initialVal);
 printf(" onChange='return validateFloat(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
 if(title)
     printf(" title='%s'",title);

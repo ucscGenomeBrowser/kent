@@ -123,12 +123,14 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
 if (hTableOrSplitExists(db, tdb->table))
     {
-    char *tableName  = tdb->table;
+    char *tbOff = trackDbSetting(tdb, "tableBrowser");
+    if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
+	return FALSE;
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
     struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
-    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track,tableName,hint,label);
+    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track, tdb->table, hint, label);
     return TRUE;
     }
 return FALSE;

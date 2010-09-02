@@ -8366,7 +8366,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 8/2/10 angie)
+# NHGRI GWAS CATALOG (DONE 9/1/10 angie)
+# Updated 8/2/10
 # Updated 6/2/10
 # Updated 5/12/10 (last one to use snp130)
 # Updated 4/1/10
@@ -8389,7 +8390,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4158 elements of size 22
+#Loaded 4233 elements of size 22
 
 
 ######################################################################## 
@@ -9653,6 +9654,8 @@ EOF
     hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
       hg19 snp131NonClinical -sqlTable=snp131.sql -renameSqlTable snp131NonClinical.bed
 #Loaded 26018146 elements of size 17
+    # 9/1/10: Don't forget to fix the empty-func bug!
+    hgsql hg19 -e 'update snp131Clinical set func = "unknown" where func = "";'
 
 
 ############################################################################
@@ -11781,5 +11784,19 @@ done
     # 78097231 bases of 2911519270 (2.682%) in intersection
     featureBits hg19 vegaPseudoGene
     #	8782198 bases of 2911519270 (0.302%) in intersection
+
+#########################################################################
+# FOSMID END PAIRS (IN PROGRESS 9/1/10 angie)
+    # First I downloaded raw files from NCBI, to see if they are newer
+    # than what we have in fosends.3:
+    mkdir /hive/data/outside/fosends.4
+    cd /hive/data/outside/fosends.4
+    wget --timestamping ftp://ftp.ncbi.nih.gov/genomes/FOSMIDS/homo_sapiens/\*
+    # The file dates are 2005, but all log files begin with 2002 dates.
+    # Good, we can proceed with fosends.3 and won't have to reverse-engineer
+    # Terry's lost pipeline for translating the files.
+    mkdir /hive/data/genomes/hg19/bed/fosEndPairs
+    cd /hive/data/genomes/hg19/bed/fosEndPairs
+
 
 #########################################################################

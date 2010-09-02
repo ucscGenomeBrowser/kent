@@ -1786,20 +1786,26 @@ var popSaveAllVars = null;
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
-    var myLink = "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
+    var myLink = "../cgi-bin/hgTrackUi?g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
     popUpTrackDescriptionOnly = descriptionOnly;
     if(popUpTrackDescriptionOnly)
         myLink += "&descriptionOnly=1";
 
-    $.ajax({
-                type: "GET",
-                url: myLink,
-                dataType: "html",
-                trueSuccess: handleTrackUi,
-                success: catchErrorOrDispatch,
-                cmd: selectedMenuItem,
-                cache: false
-            });
+    var rec = trackDbJson[trackName];
+    if(rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
+        window.location = myLink;
+    } else {
+        myLink += "&ajax=1";
+        $.ajax({
+                   type: "GET",
+                   url: myLink,
+                   dataType: "html",
+                   trueSuccess: handleTrackUi,
+                   success: catchErrorOrDispatch,
+                   cmd: selectedMenuItem,
+                   cache: false
+               });
+        }
 }
 
 function hgTrackUiPopUp(trackName,descriptionOnly)
@@ -1810,11 +1816,11 @@ function hgTrackUiPopUp(trackName,descriptionOnly)
 function hgTrackUiPopCfgOk(popObj, trackName)
 { // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
     var rec = trackDbJson[trackName];
-    var subtrack = rec.isSubtrack ? trackName :"";  // If subtrack then vis rules differ
+    var subtrack = rec.isSubtrack ? trackName :undefined;  // If subtrack then vis rules differ
     var allVars = getAllVars($('#pop'), subtrack );
     var changedVars = varHashChanges(allVars,popSaveAllVars);
     //warn("cfgVars:"+varHashToQueryString(changedVars));
-    var newVis = changedVars[subtrack];
+    var newVis = changedVars[trackName];
     var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
     if($('#imgTbl') == undefined) { // On findTracks or config page
         setVarsFromHash(changedVars);

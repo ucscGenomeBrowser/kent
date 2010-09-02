@@ -4728,7 +4728,7 @@ targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huant
 antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
 vendorName 1) Santa Cruz Biotech; 2) Millipore
 vendorId SC-5261; Mil ab5831
-orderUrl http://www.santacruzbiotech.com
+orderUrl http://www.santacruzbiotech.com ; http://www.millipore.com/catalogue/item/ab5831
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId
@@ -4807,7 +4807,7 @@ targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sap
 antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
 vendorName Santa Cruz Biotech
 vendorId SC-21027
-orderUrl
+orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 lab Tenenbaum
 lots I0607(Nov2008)
 targetId
@@ -4855,7 +4855,7 @@ antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, ham
 lab Tenenbaum
 vendorName Sigma Chemical Co.
 vendorId P6246
-orderUrl
+orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
 lab Tenenbaum
 lots 044K4810 (Nov 2008)
 targetId 26986
@@ -4920,7 +4920,7 @@ antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection f
 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353 
-orderUrl
+orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
 lab Tenenbaum
 lots 3) 7308-S2
 targetId 7884
@@ -6122,6 +6122,7 @@ description Applied Biosystems SOLiD System 2.0
 #labPi:        This is the shortened name that we refer to the PI, usually just last name
 #labPiFull:    The full name of the PI
 #grantPI:      Shortened name of the head PI for the grant
+#type grant
 #grantInst:    The name of the institution where the grant is administered from.
 #projectName:  
 #organism:     human or mouse
@@ -6133,8 +6134,6 @@ labInst Broad Institute
 labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
-grantInst Broad Institute
-projectName Broad
 organism human
 
 
@@ -6145,8 +6144,6 @@ labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
-grantInst Boston University
-projectName BU
 organism human
 
 term GIS-Chia
@@ -6156,8 +6153,6 @@ labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
-grantInst Genome Institute of Singapore
-projectName Chia PET??
 organism human
 
 term Genecode
@@ -6167,8 +6162,6 @@ labInst Genecode
 labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
-grantInst Sanger Institute
-projectNmae
 organism human
 
 term SUNY
@@ -6178,8 +6171,6 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
-grantInst SUNY-Albany
-projectName SUNY
 organism human
 
 term UW
@@ -6189,8 +6180,6 @@ labInst University of Washington
 labPi Stam
 labPiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst University of Washington
-projectName UW
 organism human
 
 
@@ -6204,8 +6193,6 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-grantInst Duke
-projectName OpenChrom
 organism human
 
 term UT-A
@@ -6215,8 +6202,6 @@ labInst Duke University
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
-grantInst Duke 
-projectName OpenChrom
 organism human
 
 term UNC
@@ -6226,8 +6211,6 @@ labInst Univeristy of North Carolina
 labPi Lieb
 labPiFull Jason Lieb
 grantPi Crawford
-grantInst Duke
-projectName OpenChrom
 organism human
 
 ### HAIB Project Labs         
@@ -6236,12 +6219,11 @@ organism human
 term Caltech    
 tag Caltech    
 type lab
+type grant
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-grantInst Hudson Alpha Institute of Biotechnology 
-projectName Caltech
 organism human
 
 term HudsonAlpha
@@ -6251,8 +6233,6 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-grantInst Hudson Alpha Institute for Biotechnology
-projectName HAIB
 organism human
 
 ### NHGRI Labs                 
@@ -6265,8 +6245,6 @@ labInst National Human Genome Research Institute
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-grantInst National Human Genome Research Institute 
-projectName NHGRI-Elnitski
 organism human
 
 term NHGRI-Margulies
@@ -6276,8 +6254,6 @@ labInst National Human Genome Research Institute
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-labInst National Human Genome Research Institute 
-projectName NHGRI-Margulies
 organism human
 
 
@@ -6292,8 +6268,6 @@ labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term GIS
@@ -6303,8 +6277,6 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term Helicos       
@@ -6314,8 +6286,6 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term Affy
@@ -6325,8 +6295,6 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term Riken
@@ -6337,8 +6305,6 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 
@@ -6352,8 +6318,6 @@ labInst UMass
 labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
-grantInst University of Massachusetts Amherst 
-projectName
 organism human
 
 term UMass-Weng
@@ -6363,8 +6327,6 @@ labInst UMass
 labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
-grantInst University of Massachusetts Amherst  
-projectName
 organism human
 
 
@@ -6378,8 +6340,6 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 term Yale
@@ -6389,8 +6349,6 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 term Harvard 
@@ -6400,8 +6358,6 @@ labInst Harvard
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 term UCD
@@ -6411,8 +6367,6 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 
@@ -6427,8 +6381,6 @@ labInst Ludwig Institue for Cancer Research
 labPi Ren
 labPiFull Bing Ren
 grantPi Ren
-grantInst LICR
-project LICR
 organism mouse
 
 term Caltech-m
@@ -6438,8 +6390,6 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
-grantInst PSU
-project
 organism mouse
 
 term UMass-m
@@ -6449,8 +6399,6 @@ labInst University of Massachusettes
 labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
-grantInst PSU
-project
 organism mouse
 
 term Duke-m
@@ -6460,8 +6408,6 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
-grantInst PSU
-project
 organism mouse
 
 term UChicago-m
@@ -6471,8 +6417,6 @@ labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
-grantInst University of Chicago 
-project
 organism mouse
 
 term UNC-m
@@ -6482,8 +6426,6 @@ labInst University of North Carolina
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
-grantInst University of North Carolina
-projectName UNC-Giddings
 organism mouse
 
 term UW-m
@@ -6493,8 +6435,6 @@ labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst Univeristy of Washington
-projectName UW
 organism mouse
 
 term Stanford-m
@@ -6504,8 +6444,6 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName StanfordYale
 organism human
 
 term Yale-m
@@ -6515,7 +6453,103 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName StanfordYale
 organism human
 
+
+
+# Grant information
+# term is the last name of the PI
+# grantInst Is the full name of the institution
+# projectName is the name we use to call the project
+
+term Bernstein
+type grant
+grantInst Broad Institute
+projectName Broad
+
+term Tullius
+type grant
+grantInst Boston University
+projectName BU
+
+term Ruan
+type grant
+grantInst Genome Institute of Singapore
+projectName Chia PET??
+
+term Hubbard
+type grant
+grantInst Sanger Institute
+projectName Sanger
+
+term Tenenbaum
+type grant
+grantInst SUNY-Albany
+projectName SUNY
+ 
+term Stam
+type grant
+grantInst University of Washington
+projectName UW
+
+term Crawford
+type grant
+grantInst Duke
+projectName OpenChrom
+
+term Myers
+type grant
+grantInst Hudson Alpha Institute of Biotechnology
+projectName HAIB   
+
+term Elnitski
+type grant
+grantInst National Human Genome Research Institute
+projectName NHGRI-Elnitski
+
+term Margulies
+type grant
+grantInst National Human Genome Research Institute
+projectName NHGRI-Margulies
+
+term Gingeras
+type grant
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
+
+term Dekker
+type grant
+grantInst University of Massachusetts Amherst
+projectName
+
+term Weng
+type grant
+grantInst University of Massachusetts Amherst
+projectName
+
+term Snyder
+type grant
+grantInst Stanford
+projectName SYDH
+# This is broken for mouse which uses StanfYale
+
+
+term Ren
+type grant
+grantInst LICR
+project LICR
+
+term Hardison
+type grant
+grantInst Penn State University
+projectName PSU
+
+term White
+type grant
+grantInst University of Chicago
+projectName
+
+term Giddings
+type grant
+grantInst University of North Carolina
+projectName UNC-Giddings
