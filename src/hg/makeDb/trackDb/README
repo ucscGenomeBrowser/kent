@@ -360,6 +360,9 @@ table           - mySQL table name            - Allows multiple tracks to use th
 					      - track associated with the table where the track
 					      - name is the same as the table name, or the table
 					      - browser will have difficulties.
+configureByPopup - on, off                    - Default: on. If value is off, hgTracks does not use a modal dialog for hgTrackUi, but
+                                                instead always forces user to hgTrackUi page; this is useful for very
+                                                complicated config pages like dbSnp or multiz which do not work well in a modal dialog
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:

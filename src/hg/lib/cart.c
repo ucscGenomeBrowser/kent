@@ -1106,27 +1106,41 @@ safef(buf, sizeof(buf), "%u", cart->sessionInfo->id);
 cgiMakeHiddenVar(sessionVar, buf);
 }
 
-static void cartDumpItem(struct hashEl *hel)
+static void cartDumpItem(struct hashEl *hel,boolean asTable)
 /* Dump one item in cart hash */
 {
-struct dyString *dy = NULL;
-char *val = (char *)(hel->val);
-stripChar(val, '\r');
-dy = dyStringSub(val, "\n", "\\n");
-printf("%s %s\n", hel->name, dy->string);
-dyStringFree(&dy);
+char *var = htmlEncode(hel->name);
+char *val = htmlEncode((char *)(hel->val));
+if (asTable)
+    {
+    printf("<TR><TD>%s</TD><TD>", var);
+    int width=(strlen(val)+1)*8;
+    if(width<100)
+        width = 100;
+    cgiMakeTextVarWithExtraHtml(hel->name, val, width, "onchange='setCartVar(this.name,this.value);'");
+    printf("</TD></TR>\n");
+    }
+else
+    printf("%s %s\n", var, val);
+
+freeMem(var);
+freeMem(val);
 }
 
-void cartDumpList(struct hashEl *elList)
-/* Dump list of cart variables. */
+void cartDumpList(struct hashEl *elList,boolean asTable)
+/* Dump list of cart variables optionally as a table with ajax update support. */
 {
 struct hashEl *el;
 
 if (elList == NULL)
     return;
 slSort(&elList, hashElCmp);
+if (asTable)
+    printf("<table>\n");
 for (el = elList; el != NULL; el = el->next)
-    cartDumpItem(el);
+    cartDumpItem(el,asTable);
+if (asTable)
+    printf("</table>\n");
 hashElFreeList(&elList);
 }
 
@@ -1134,21 +1148,21 @@ void cartDump(struct cart *cart)
 /* Dump contents of cart. */
 {
 struct hashEl *elList = hashElListHash(cart->hash);
-cartDumpList(elList);
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
 }
 
 void cartDumpPrefix(struct cart *cart, char *prefix)
 /* Dump all cart variables with prefix */
 {
 struct hashEl *elList = cartFindPrefix(cart, prefix);
-cartDumpList(elList);
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
 }
 
 void cartDumpLike(struct cart *cart, char *wildcard)
 /* Dump all cart variables matching wildcard */
 {
 struct hashEl *elList = cartFindLike(cart, wildcard);
-cartDumpList(elList);
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
 }
 
 char *cartFindFirstLike(struct cart *cart, char *wildCard)

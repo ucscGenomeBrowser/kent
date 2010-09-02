@@ -2234,6 +2234,15 @@ for (gp = gpList; gp != NULL; gp = gp->next)
            if ((row = sqlNextRow(sr)) != NULL)
               printf("<b>Prediction Class:</b> %s<br>\n", row[0]);
            sqlFreeResult(&sr);
+           if (sqlFieldIndex(conn, classTable, "level") > 0 )
+               {
+               safef(query, sizeof(query),
+                    "select level from %s where name = \"%s\"", classTable, name);
+               sr = sqlGetResult(conn, query);
+               if ((row = sqlNextRow(sr)) != NULL)
+                  printf("<b>Level:&nbsp</b> %s<br>\n", row[0]);
+               sqlFreeResult(&sr);
+               }
            if (sqlFieldIndex(conn, classTable, "geneDesc") > 0 )
                {
                safef(query, sizeof(query),
