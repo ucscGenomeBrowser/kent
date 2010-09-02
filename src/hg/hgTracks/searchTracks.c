@@ -761,7 +761,6 @@ else
     hPrintf("\n</form>\n");
 
     // be done with json
-    dyStringAppend(jsonTdbVars, "}\n</script>\n");
     hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
     }
 

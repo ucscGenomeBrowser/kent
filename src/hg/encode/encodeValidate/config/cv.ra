@@ -4728,7 +4728,7 @@ targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huant
 antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
 vendorName 1) Santa Cruz Biotech; 2) Millipore
 vendorId SC-5261; Mil ab5831
-orderUrl http://www.santacruzbiotech.com
+orderUrl http://www.santacruzbiotech.com ; http://www.millipore.com/catalogue/item/ab5831
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId
@@ -4807,7 +4807,7 @@ targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sap
 antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
 vendorName Santa Cruz Biotech
 vendorId SC-21027
-orderUrl
+orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 lab Tenenbaum
 lots I0607(Nov2008)
 targetId
@@ -4855,7 +4855,7 @@ antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, ham
 lab Tenenbaum
 vendorName Sigma Chemical Co.
 vendorId P6246
-orderUrl
+orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
 lab Tenenbaum
 lots 044K4810 (Nov 2008)
 targetId 26986
@@ -4920,7 +4920,7 @@ antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection f
 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353 
-orderUrl
+orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
 lab Tenenbaum
 lots 3) 7308-S2
 targetId 7884
@@ -6123,7 +6123,7 @@ description Applied Biosystems SOLiD System 2.0
 #labPiFull:    The full name of the PI
 #grantPI:      Shortened name of the head PI for the grant
 #type grant
-grantInst:    The name of the institution where the grant is administered from.
+#grantInst:    The name of the institution where the grant is administered from.
 #projectName:  
 #organism:     human or mouse
 

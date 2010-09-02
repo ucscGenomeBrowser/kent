@@ -30,7 +30,7 @@ leftLabelWidth = 0; /* Left labels are not supported. */
 winBaseCount = winEnd - winStart;
 basesPerPixel = ((float)winBaseCount) / ((float)insideWidth);
 zoomedToCdsColorLevel = (winBaseCount <= insideWidth*3);
-seqBaseCount = hChromSize(chromName);
+seqBaseCount = hChromSize(database, chromName);
 initTl();
 zoomedToBaseLevel = (winBaseCount <= insideWidth / tl.mWidth);
 zoomedToCodonLevel = (ceil(winBaseCount/3) * tl.mWidth) <= insideWidth;

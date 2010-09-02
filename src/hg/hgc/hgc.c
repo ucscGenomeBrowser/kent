@@ -2190,12 +2190,24 @@ gpList = genePredReaderLoadQuery(conn, table, query);
 for (gp = gpList; gp != NULL; gp = gp->next)
     {
     printPos(gp->chrom, gp->txStart, gp->txEnd, gp->strand, FALSE, NULL);
+    if(sameString(tdb->type,"genePred")
+    && startsWith("ENCODE Gencode",tdb->longLabel)
+    && startsWith("ENST",name))
+        {
+        char *ensemblIdUrl = trackDbSetting(tdb, "ensemblIdUrl");
+
+        printf("<b>Ensembl Transcript Id:&nbsp</b>");
+        if (ensemblIdUrl != NULL)
+            printf("<a href=\"%s%s\" target=\"_blank\">%s</a><br>", ensemblIdUrl,name,name);
+        else
+            printf("%s<br>",name);
+        }
     if (gp->name2 != NULL && strlen(trimSpaces(gp->name2))> 0)
         {
         /* in Ensembl gene info downloaded from ftp site, sometimes the
            name2 field is populated with "noXref" because there is
            no alternate name. Replace this with "none" */
-        printf("<b>Alternate Name:");
+        printf("<b>Gene Symbol:");
         if (sameString(gp->name2, "noXref"))
            printf("</b> none<br>\n");
         else
@@ -2314,21 +2326,6 @@ if (startsWith("ENCODE Gencode",tdb->longLabel))
 
 printf("<H3>Links to sequence:</H3>\n");
 printf("<UL>\n");
-
-if(sameString(tdb->type,"genePred")
-&& startsWith("ENCODE Gencode",tdb->longLabel)
-&& startsWith("ENST",geneName))
-    {
-    char *ensemblIdUrl = trackDbSetting(tdb, "ensemblIdUrl");
-
-    if (ensemblIdUrl != NULL)
-// #define ENSEMBL_TRANSCRIPTID_LINK "<a href=\"http://ncbi36.ensembl.org/Homo_sapiens/Transcript/Summary?db=core;t=%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id"
-        {
-        puts("<LI>\n");
-        printf("<a href=\"%s%s\" target=\"_blank\">Ensembl Transcript Report</a> from transcript Id", ensemblIdUrl,geneName);
-        puts("</LI>\n");
-        }
-    }
 
 if ((pepTable != NULL) && hGenBankHaveSeq(database, pepName, pepTable))
     {
@@ -6689,7 +6686,7 @@ else
     wholePsl = pslLoad(row+hasBin);
     sqlFreeResult(&sr);
 
-    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable))
+    if (startsWith("ucscRetroAli", aliTable) || startsWith("retroMrnaAli", aliTable) || sameString("pseudoMrna", aliTable) || sameString("altSeqLiftOverPsl", aliTable))
 	{
         rnaSeq = NULL;
 	char *trackName = hGetTrackForTable(database, aliTable);
@@ -7854,6 +7851,53 @@ htmlHorizontalLine();
 printf("<H3>Protein Alignments</H3>");
 printAlignments(pslList, start, "htcProteinAli", "chr1_viralProt", geneName);
 printTrackHtml(tdb);
+}
+
+void doPslAltSeq(struct trackDb *tdb, char *item)
+/* Fairly generic PSL handler -- print out some more details about the
+ * alignment. */
+{
+int start = cartInt(cart, "o");
+int total = 0, i = 0;
+struct psl *pslList = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+// char *otherDb = trackDbSetting(tdb, "otherDb");
+// int altSize = hChromSize(otherDb, item);
+
+genericHeader(tdb, item);
+printCustomUrl(tdb, item, TRUE);
+
+puts("<P>");
+puts("<B>Alignment Summary:</B><BR>\n");
+// char strBuf[64];
+// sprintLongWithCommas(strBuf, altSize);
+// printf("<B>Alignment Summary: '%s' %s</B><BR>\n", item, strBuf);
+pslList = getAlignments(conn, tdb->table, item);
+printAlignments(pslList, start, "htcCdnaAliInWindow", tdb->table, item);
+
+puts("<P>");
+total = 0;
+for (i=0;  i < pslList -> blockCount;  i++)
+    {
+    total += pslList->blockSizes[i];
+    }
+printf("%d block(s) covering %d bases<BR>\n"
+       "%d matching bases<BR>\n"
+       "%d mismatching bases<BR>\n"
+       "%d N bases<BR>\n"
+       "%d bases inserted in %s<BR>\n"
+       "%d bases inserted in %s<BR>\n"
+       "score: %d<BR>\n",
+       pslList->blockCount, total,
+       pslList->match,
+       pslList->misMatch,
+       pslList->nCount,
+       pslList->tBaseInsert, hOrganism(database),
+       pslList->qBaseInsert, item,
+       pslScore(pslList));
+
+printTrackHtml(tdb);
+hFreeConn(&conn);
 }
 
 void doPslDetailed(struct trackDb *tdb, char *item)
@@ -22719,6 +22763,10 @@ else if ( sameWord(table, "blastHg16KG") ||  sameWord(table, "blatHg16KG" ) ||
         sameWord(table, "blastCe3WB") || sameWord(table, "blastHg18KG") )
     {
     blastProtein(tdb, item);
+    }
+else if (startsWith("altSeqLiftOverPsl", table))
+    {
+    doPslAltSeq(tdb, item);
     }
 else if (sameWord(table, "chimpSimpleDiff"))
     {
