@@ -9,14 +9,19 @@
 #include "jksql.h"
 #endif
 
-#define GENCODEGENECLASS_NUM_COLS 2
+#define GENCODEGENECLASS_NUM_COLS 7
 
 struct gencodeGeneClass
 /* Class for Gencode genes */
     {
     struct gencodeGeneClass *next;  /* Next in singly linked list. */
+    char *geneId;	/* Gene ID for Gencode gene */
     char *name;	/* Transcript ID for Gencode gene */
+    char *transcriptType;	/* Transcript type for Gencode gene */
+    int level;	/* Gencode level */
     char *class;	/* Class of gene.  enum('Antisense', 'Antisense_val', 'Artifact', 'Known', 'Novel_CDS', 'Novel_transcript', 'Novel_transcript_val', 'Putative', 'Putative_val', 'TEC', 'Processed_pseudogene', 'Unprocessed_pseudogene', 'Pseudogene_fragment', 'Undefined') */
+    char *ottGeneId;	/* Otter Gene id for Gencode gene */
+    char *ottTranscriptId;	/* Otter Transcript id for Gencode gene */
     };
 
 void gencodeGeneClassStaticLoad(char **row, struct gencodeGeneClass *ret);
@@ -38,31 +43,6 @@ struct gencodeGeneClass *gencodeGeneClassLoadAllByChar(char *fileName, char chop
 #define gencodeGeneClassLoadAllByTab(a) gencodeGeneClassLoadAllByChar(a, '\t');
 /* Load all gencodeGeneClass from tab separated file.
  * Dispose of this with gencodeGeneClassFreeList(). */
-
-struct gencodeGeneClass *gencodeGeneClassLoadByQuery(struct sqlConnection *conn, char *query);
-/* Load all gencodeGeneClass from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with gencodeGeneClassFreeList(). */
-
-void gencodeGeneClassSaveToDb(struct sqlConnection *conn, struct gencodeGeneClass *el, char *tableName, int updateSize);
-/* Save gencodeGeneClass as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gencodeGeneClassSaveToDbEscaped() */
-
-void gencodeGeneClassSaveToDbEscaped(struct sqlConnection *conn, struct gencodeGeneClass *el, char *tableName, int updateSize);
-/* Save gencodeGeneClass as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gencodeGeneClassSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
 
 struct gencodeGeneClass *gencodeGeneClassCommaIn(char **pS, struct gencodeGeneClass *ret);
 /* Create a gencodeGeneClass out of a comma separated string. 
