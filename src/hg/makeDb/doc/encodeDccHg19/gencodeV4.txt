@@ -126,3 +126,35 @@ echo "submittedDataVersion V4"
 echo "tableName "$table
 echo 
 done
+
+#  reloading the "right" way so that the gene_name in the GTF ends up in name2
+#  of the genePred
+
+# ldHgGene -gtf -genePredExt hg19 wgEncodeGencodeManualV4 gencode_v4fix.annotation.GRCh37.level_1_2.gtf 
+
+gtfToGenePred  -genePredExt -geneNameAsName2 gencode_v4fix.annotation.GRCh37.level_1_2.gtf stdout | sed 's/ENSTR/ENST0/' > gencode_v4fix.annotation.GRCh37.level_1_2.gp 
+hgLoadGenePred -genePredExt hg19 wgEncodeGencodeManualV4 gencode_v4fix.annotation.GRCh37.level_1_2.gp 
+
+# ldHgGene -exon=transcript -noncoding -genePredExt hg19 wgEncodeGencode2wayConsPseudo gencode.v3.2wayconspseudos.GRCh37.gtf
+ tawk '$3=="transcript"{$3="exon"}{print $0}' gencode.v3.2wayconspseudos.GRCh37.gtf |gtfToGenePred -genePredExt stdin gencode.v3.2wayconspseudos.GRCh37.gp
+hgLoadGenePred -genePredExt hg19 wgEncodeGencode2wayConsPseudoV4 gencode.v3.2wayconspseudos.GRCh37.gp
+
+# ldHgGene -gtf -genePredExt hg19 wgEncodeGencodeAutoV4 gencode_v4fix.annotation.GRCh37.level_3.gtf 
+# ldHgGene  -exon=tRNAscan  -genePredExt -oldTable hg19 wgEncodeGencodeAutoV4 gencode.v4.tRNAs.GRCh37.gtf 
+
+gtfToGenePred  -genePredExt -geneNameAsName2 gencode_v4fix.annotation.GRCh37.level_3.gtf stdout | sed 's/ENSTR/ENST0/' > gencode_v4fix.annotation.GRCh37.level_3.gp
+ tawk '$3=="tRNAscan"{$3="exon"}{print $0}' gencode.v4.tRNAs.GRCh37.gtf | gtfToGenePred -genePredExt stdin  gencode.v4.tRNAs.GRCh37.gp
+cat gencode_v4fix.annotation.GRCh37.level_3.gp gencode.v4.tRNAs.GRCh37.gp | hgLoadGenePred -genePredExt hg19 wgEncodeGencodeAutoV4 stdin
+
+
+
+
+# ldHgGene -exon=polyA_signal -genePredExt -noncoding -oldTable hg19 wgEncodeGencodePolyaV4 gencode.v4.polyAs.GRCh37.signal.gtf > load_polyA.out 2>&1
+# ldHgGene -exon=pseudo_polyA -genePredExt -noncoding -oldTable hg19 wgEncodeGencodePolyaV4 gencode.v4.polyAs.GRCh37.pseudo.gtf >> load_polyA.out 2>&1
+# ldHgGene -exon=polyA_site -genePredExt -noncoding -oldTable hg19 wgEncodeGencodePolyaV4 gencode.v4.polyAs.GRCh37.site.gtf >> load_polyA.out 2>&1 
+
+ #tawk '$3=="polyA_signal"{$3="exon"}{print $0}' gencode.v4.polyAs.GRCh37.signal.gtf | gtfToGenePred -genePredExt stdin  gencode.v4.polyAs.GRCh37.signal.gp
+
+
+# didn't reload PolyA since names are garbage and in V3 all name = name2
+
