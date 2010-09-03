@@ -173,7 +173,7 @@ for (in = inList; in != NULL; in = in->next)
         {
 	safef(dtName, sizeof(dtName), "%s.%s",
 		jp->b->database, jp->b->table);
-	if (!hashLookup(uniqHash, dtName))
+	if (!hashLookup(uniqHash, dtName) && !accessControlDenied(jp->b->database, jp->b->table))
 	    {
 	    hashAdd(uniqHash, dtName, NULL);
 	    out = dbTableNew(jp->b->database, jp->b->table);
