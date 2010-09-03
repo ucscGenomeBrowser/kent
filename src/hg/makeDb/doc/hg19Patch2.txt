@@ -368,6 +368,7 @@ hg19Patch2.perChromTables = no
 # lastz alignment to hg19 (DONE - 2010-08-30 - Hiram)
     mkdir /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30
     cd /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30
+    #	construct a 2bit file of just the hg19 reference sequences:
 mkdir -p hg19Bits
 
 export A=-1
@@ -443,7 +444,107 @@ TMPDIR=/scratch/tmp
 	-chainLinearGap=medium -workhorse=hgwdev \
 	-smallClusterHub=encodek -bigClusterHub=swarm > load.log 2>&1
     #	real    0m54.258s
+    cat fb.hg19Patch2.chainHg19Link.txt
+    #	42748025 bases of 44059336 (97.024%) in intersection
 
+    # rework that job list to run these guys only against their bit of
+    #	the reference sequence.
+    cd /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30
+
+    # move all of these out of the way until the next one is done
+    mv psl psl.0
+    mv run.blastz run.blastz.0
+    mv pslParts pslParts.0
+    mv axtNet axtNet.0
+    mv mafNet mafNet.0
+    # start a new lastz run with a specific jobList
+    mkdir -p run.blastz/tParts run.blastz/qParts
+export A=-1
+awk '{print $4}' ../altSequence/altSequence.tab | while read P
+do
+    H=`grep "${P}" ../altSequence/altSequence.tab | awk '{print $1}'`
+    HE=`grep "${P}" ../altSequence/altSequence.tab | awk '{print $3}'`
+    C=`echo ${P} | sed -e "s/:.*//"`
+    CE=`grep "^${C}" /hive/data/genomes/hg19/chrom.sizes | cut -f2 | head -1`
+    SE=`echo ${P} | sed -e "s/.*://"`
+    S=`echo ${SE} | sed -e "s/-.*//" | awk '{printf "%d", $1-1}'`
+    E=`echo ${SE} | sed -e "s/.*-//"`
+    size=`echo $E $S | awk '{printf "%d", $1-$2}'`
+    A=`echo ${A} | awk '{printf "%02d", $1+1}'`
+    echo -e "/hive/data/staging/data/hg19Patch2/hg19Patch2.2bit:$H:0-$HE" \
+        > run.blastz/tParts/$A.lst
+    echo -e "/hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30/hg19Bits.2bit:$C.$A:0-$size" \
+        > run.blastz/qParts/$A.lst
+    echo -e "/cluster/bin/scripts/blastz-run-ucsc -outFormat psl tParts/$A.lst qParts/$A.lst ../DEF {check out exists ../psl/$H.$C.$A.psl }"
+done > run.blastz/jobList
+    ssh swarm
+    cd /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30/run.blastz
+    para create jobList
+    para try
+    para check ... push ... check
+    para time
+# Completed: 80 of 80 jobs
+# CPU time in finished jobs:        161s       2.69m     0.04h    0.00d  0.000 y
+# IO & Wait Time:                   238s       3.96m     0.07h    0.00d  0.000 y
+# Average job time:                   5s       0.08m     0.00h    0.00d
+# Longest finished job:              20s       0.33m     0.01h    0.00d
+# Submission to last job:            37s       0.62m     0.01h    0.00d
+
+    #	put together the individual results:
+    cd /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30
+    cat psl/chr*.psl | gzip -c > pslParts/hg19Patch2.hg19.psl.gz
+
+    #	constructing a chain from those results
+    cd /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30/axtChain/run
+zcat ../../pslParts/hg19Patch2.hg19.psl.gz \
+| axtChain -psl -verbose=0 -scoreScheme=/hive/data/genomes/hg19/bed/lastzHg19Haps.2009-03-09/human_chimp.v2.q  -minScore=2000 -linearGap=medium stdin \
+    /scratch/data/hg19Patch2/hg19Patch2.2bit \
+    /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30/hg19Bits.2bit \
+    stdout \
+| chainAntiRepeat /scratch/data/hg19Patch2/hg19Patch2.2bit \
+    /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30/hg19Bits.2bit \
+    stdin hg19Patch2.hg19.preLift.chain
+liftUp -chainQ hg19Patch2.hg19.lifted.chain \
+    ../../hg19Bits.lift carry hg19Patch2.hg19.preLift.chain
+
+    # constructing the net files:
+cd /hive/data/genomes/hg19Patch2/bed/lastzHg19.2010-08-30/axtChain
+
+chainMergeSort run/hg19Patch2.hg19.lifted.chain | nice gzip -c > hg19Patch2.hg19.all.chain.gz
+chainSplit chain hg19Patch2.hg19.all.chain.gz
+# Make nets ("noClass", i.e. without rmsk/class stats which are added later):
+chainPreNet  hg19Patch2.hg19.all.chain.gz /scratch/data/hg19Patch2/chrom.sizes /scratch/data/hg19/chrom.sizes stdout \
+| chainNet  stdin -minSpace=1 /scratch/data/hg19Patch2/chrom.sizes /scratch/data/hg19/chrom.sizes stdout /dev/null \
+| netSyntenic stdin noClass.net
+
+# Make liftOver chains:
+netChainSubset -verbose=0 noClass.net hg19Patch2.hg19.all.chain.gz stdout \
+| chainStitchId stdin stdout | gzip -c > hg19Patch2.hg19.over.chain.gz
+
+# Make axtNet for download: one .axt per hg19Patch2 seq.
+netSplit noClass.net net
+cd ..
+mkdir -p axtNet
+foreach f (axtChain/net/*.net)
+netToAxt $f axtChain/chain/$f:t:r.chain \
+  /scratch/data/hg19Patch2/hg19Patch2.2bit /scratch/data/hg19/hg19.2bit stdout \
+  | axtSort stdin stdout \
+  | gzip -c > axtNet/$f:t:r.hg19Patch2.hg19.net.axt.gz
+end
+
+# Make mafNet for multiz: one .maf per hg19Patch2 seq.
+mkdir -p mafNet
+foreach f (axtNet/*.hg19Patch2.hg19.net.axt.gz)
+  axtToMaf -tPrefix=hg19Patch2. -qPrefix=hg19. $f \
+        /scratch/data/hg19Patch2/chrom.sizes /scratch/data/hg19/chrom.sizes \
+        stdout \
+  | gzip -c > mafNet/$f:t:r:r:r:r:r.maf.gz
+end
+
+    # no need for these as reference
+    rm -fr psl.0 run.blastz.0 pslParts.0 axtNet.0 mafNet.0
+
+    # swap that business to hg19
     mkdir /hive/data/genomes/hg19/bed/blastz.hg19Patch2.swap
     cd /hive/data/genomes/hg19/bed/blastz.hg19Patch2.swap
     time doBlastzChainNet.pl -verbose=2 \
@@ -452,3 +553,42 @@ TMPDIR=/scratch/tmp
 	-noLoadChainSplit -chainMinScore=2000 \
 	-chainLinearGap=medium -workhorse=hgwdev \
 	-smallClusterHub=encodek -bigClusterHub=swarm > swap.load.log 2>&1
+
+    # and then fixup the chains to include the haplotypes
+    cd /hive/data/genomes/hg19/bed/blastz.hg19Patch2.swap/axtChain
+    # split up each chain by the hg19Patch2 query sequences
+    mkdir -p queryChains
+    chainSplit -q queryChains hg19.hg19Patch2.all.chain.gz
+
+    # then run a 'lift over' chain/net on each single one
+    mkdir -p singleLiftOver
+
+for F in queryChains/*.chain
+do
+    C=`basename ${F}`
+    B=`echo ${C} | sed -e "s/.chain//"`
+    chainPreNet -inclHap ${F} /scratch/data/hg19/chrom.sizes \
+        /scratch/data/hg19Patch2/chrom.sizes stdout \
+    | chainNet -inclHap stdin -minSpace=1 /scratch/data/hg19/chrom.sizes \
+        /scratch/data/hg19Patch2/chrom.sizes singleLiftOver/${B}.raw.net \
+        /dev/null
+    netSyntenic singleLiftOver/${B}.raw.net singleLiftOver/${B}.noClass.net
+    netFilter -chimpSyn singleLiftOver/${B}.noClass.net > singleLiftOver/${B}.chimpSyn.net
+    netChainSubset -verbose=0 singleLiftOver/${B}.noClass.net \
+        ${F} stdout \
+    | chainStitchId stdin stdout > singleLiftOver/${C}
+    echo "${F} -> singleLiftOver/${C}"
+done
+    # put the chains together into one file
+    chainMergeSort singleLiftOver/chr*.chain | gzip -c \
+	> hg19.hg19Patch2.single.over.chain.gz
+
+    # construct psl files from those chains
+    chainToPsl hg19.hg19Patch2.single.over.chain.gz \
+	/hive/data/genomes/hg19/chrom.sizes \
+        /hive/data/genomes/hg19Patch2/chrom.sizes \
+        /hive/data/genomes/hg19/hg19.2bit \
+        /hive/data/genomes/hg19Patch2/hg19Patch2.2bit \
+        hg19.hg19Patch2.over.psl
+    # load this PSL track
+    hgLoadPsl hg19 -table=altSeqLiftOverPsl hg19.hg19Patch2.over.psl
