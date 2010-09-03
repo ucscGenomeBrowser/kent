@@ -98,9 +98,11 @@ visibility hide
 exonArrows on
 nextItemButton off
 noScoreFilter .
+html agilent.notPublic.html
 type bed 6 .
 
     track agilentCgh1x1m
+    release alpha
     parent agilentCgh
     shortLabel Ag CGH 1x1M
     longLabel Agilent SurePrint G3 Rat CGH Microarray 1x1M AMADID 027065
@@ -108,6 +110,7 @@ type bed 6 .
     priority 1
 
     track agilentCgh4x180k
+    release alpha
     parent agilentCgh
     shortLabel Ag CGH 4x180K
     longLabel Agilent SurePrint G3 Rat CGH Microarray 4x180K AMADID 027064
@@ -115,6 +118,7 @@ type bed 6 .
     priority 2
 
     track agilentCgh244a
+    release alpha
     parent agilentCgh
     shortLabel Ag CGH 1x244K
     longLabel Agilent SurePrint HD Rat CGH Microarray 1x244K AMADID 015223
@@ -122,6 +126,7 @@ type bed 6 .
     priority 3
 
     track agilentCgh105a
+    release alpha
     parent agilentCgh
     shortLabel Ag CGH 2x105K
     longLabel Agilent SurePrint HD Rat CGH Microarray 2x105K AMADID 015235
@@ -142,6 +147,7 @@ noScoreFilter .
 type bed 6 .
 
     track agilentCgh244a
+    release beta,public
     parent agilentCgh
     shortLabel Ag CGH 1x244K
     longLabel Agilent SurePrint HD Rat CGH Microarray 1x244K AMADID 015223
@@ -149,6 +155,7 @@ type bed 6 .
     priority 1
 
     track agilentCgh105a
+    release beta,public
     parent agilentCgh
     shortLabel Ag CGH 2x105K
     longLabel Agilent SurePrint HD Rat CGH Microarray 2x105K AMADID 015235
