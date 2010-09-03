@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "jsHelper.h"
 #include "hui.h"
 
 static char const rcsid[] = "$Id: cartDump.c,v 1.14 2008/12/09 00:41:20 angie Exp $";
@@ -18,7 +19,7 @@ void doMiddle(struct cart *cart)
 char *vName = "cartDump.varName";
 char *vVal = "cartDump.newValue";
 char *wildcard;
-boolean *asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
+boolean asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
 
 if (cgiVarExists("submit"))
     {
