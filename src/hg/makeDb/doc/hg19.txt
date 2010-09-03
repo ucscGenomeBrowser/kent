@@ -11799,4 +11799,10 @@ done
     cd /hive/data/genomes/hg19/bed/fosEndPairs
 
 
+##############################################################################
+# hg18 <-> hg19 difference tracks (WORKING - 2010-09-03 - Hiram)
+    # this is documented in hg18.txt, same heading as above
+    mkdir /hive/data/genomes/hg18/bed/liftOverHg19
+    cd /hive/data/genomes/hg18/bed/liftOverHg19
+
 #########################################################################
