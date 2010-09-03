@@ -158,3 +158,12 @@ cat gencode_v4fix.annotation.GRCh37.level_3.gp gencode.v4.tRNAs.GRCh37.gp | hgLo
 
 # didn't reload PolyA since names are garbage and in V3 all name = name2
 
+#build classes table
+# echo "LOAD DATA LOCAL INFILE 'gencode_v4.annotation.GRCh37.level_1_2.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+# echo "LOAD DATA LOCAL INFILE 'gencode_v4.annotation.GRCh37.level_3.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+# echo "LOAD DATA LOCAL INFILE 'gencode.v4.tRNAs.GRCh37.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+# echo "LOAD DATA LOCAL INFILE 'gencode.v4.polyAs.GRCh37.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+# echo "LOAD DATA LOCAL INFILE 'gencode.v3.2wayconspseudos.GRCh37.classes' into table wgEncodeGencodeClassesV4" | hgsql hg19
+
+cat gencode_v4.annotation.GRCh37.level_1_2.classes gencode_v4.annotation.GRCh37.level_3.classes gencode.v4.tRNAs.GRCh37.classes gencode.v4.polyAs.GRCh37.classes gencode.v3.2wayconspseudos.GRCh37.classes | hgLoadSqlTab hg19 wgEncodeGencodeClassesV4 ~/kent/src/hg/lib/gencodeGeneClass.sql stdin
+
