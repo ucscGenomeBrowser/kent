@@ -952,6 +952,8 @@ if (useJoiner)
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
 	struct joinerDtf *dtf = jp->b;
+	if (accessControlDenied(dtf->database, dtf->table))
+	    continue;
 	char buf[256];
 	char *s;
 	if (sameString(dtf->database, database))
