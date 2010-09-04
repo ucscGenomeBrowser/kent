@@ -1140,7 +1140,10 @@ if (asTable)
 for (el = elList; el != NULL; el = el->next)
     cartDumpItem(el,asTable);
 if (asTable)
+    {
+    printf("<tr><td colspan=2>&nbsp;&nbsp;<em>count: %d</em></td></tr>\n",slCount(elList));
     printf("</table>\n");
+    }
 hashElFreeList(&elList);
 }
 

@@ -4,6 +4,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "jsHelper.h"
 #include "hui.h"
 
 static char const rcsid[] = "$Id: cartDump.c,v 1.14 2008/12/09 00:41:20 angie Exp $";
@@ -18,7 +19,7 @@ void doMiddle(struct cart *cart)
 char *vName = "cartDump.varName";
 char *vVal = "cartDump.newValue";
 char *wildcard;
-boolean *asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
+boolean asTable = cartVarExists(cart,CART_DUMP_AS_TABLE);
 
 if (cgiVarExists("submit"))
     {
@@ -54,9 +55,11 @@ if (asTable)
     cgiMakeTextVar(vName, "", 12);
     printf(" <em>value:</em> ");
     cgiMakeTextVar(vVal, "", 24);
-    printf("<BR>");
-    cgiMakeButton("submit", "submit");
-    //printf("<BR><A HREF='../cgi-bin/cartDump'><INPUT TYPE='button' VALUE='Refresh'></a><BR>");
+    printf("&nbsp;");
+    cgiMakeButton("submit", "refresh");// Says refresh but works as a submit.
+    printf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"
+           "<a HREF='../cgi-bin/cartReset?destination=cartDump'><INPUT TYPE='button' VALUE='Reset the cart' style='color:%s;'></a>\n",
+           COLOR_RED);
     printf("</FORM>\n");
     }
 else

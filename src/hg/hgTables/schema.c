@@ -379,6 +379,8 @@ if (jpList != NULL)
     webNewSection("Connected Tables and Joining Fields");
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
+	if (accessControlDenied(jp->b->database, jp->b->table))
+	    continue;
 	struct joinerSet *js = jp->identifier;
 	boolean aViaIndex, bViaIndex;
 	hPrintSpaces(6);

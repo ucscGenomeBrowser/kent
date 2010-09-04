@@ -1633,13 +1633,16 @@ visibility hide
 group genes
 type psl mRNA
 
-track hg18ContigDiff
+track hg19ContigDiff
 shortLabel Hg18 Diff
 longLabel Contigs new to GRCh37/(hg19), not carried forward from NCBI build 36(hg18)
 visibility hide
 group map
-type bed 6
-color 128,0,0
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 26
 
 track wgRna override 
 dataVersion miRBase Release 15.0 (April 2010) and snoRNABase Version 3

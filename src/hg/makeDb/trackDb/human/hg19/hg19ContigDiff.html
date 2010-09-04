@@ -5,13 +5,18 @@ This track indicates differences in this human genome assembly,
 Contigs used in the assembly of GRCh37(hg19) that were not
 present in NCBI Build 36(hg18) are shown.
 </P>
+
 <P>
-Differences can be attributed to:
-<UL>
-<LI>New contigs added to this assembly to fill in missing sequence
-<LI>Updated versions of the same contig to correct errors in the sequence
-<LI>Different portions of the same contig used in this assembly compared to the previous assembly
-</UL>
+The items are categorized by color and score with the following meaning:
+<TABLE BORDER=1>
+<TR><TH WIDTH=20>item<BR>color</TH><TH>item<BR>score</TH><TH>type of change from hg18 to hg19</TH></TR>
+<TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#D81E05">&nbsp;</TD><TD>0</TD><TD>New contigs added to hg19 to update sequence or fill in gaps from hg18</TD></TR>
+<TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#A38205">&nbsp;</TD><TD>500</TD><TD>Different section of the same contig used in hg19 compared to hg18</TD></TR>
+<TR><TD WIDTH=20 HEIGHT=20 BGCOLOR="#1CCE28">&nbsp;</TD><TD>1000</TD><TD>Updated version of the same contig used in hg19 to correct errors in the hg18 sequence</TD></TR>
+</TABLE>
+</P>
+<P>
+You can use the score filter to eliminate or include the different categories in the display.
 </P>
 
 <H2>Methods</H2>

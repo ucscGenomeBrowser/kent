@@ -290,6 +290,10 @@ struct sqlFieldType *sqlListFieldsAndTypes(struct sqlConnection *conn, char *tab
 /* Get list of fields including their names and types.  The type currently is just
  * a MySQL type string. */
 
+boolean accessControlDenied(char *db, char *table);
+/* Return TRUE if table access is restricted to some host(s) other than
+ * the one we're running on. */
+
 /* ------------- Functions related to joining and filtering ------------*/
 void tabOutSelectedFields(
 	char *primaryDb,		/* The primary database. */
