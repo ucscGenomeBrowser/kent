@@ -4109,14 +4109,16 @@ visibility hide
 group genes
 type psl mRNA
 
-track hg19ContigDiff
+track hg18ContigDiff
 shortLabel Hg19 Diff
 longLabel Contigs dropped or changed from NCBI build 36(hg18) to GRCh37(hg19)
 visibility hide
 group map
-type bed 6
-color 128,0,0
-priority 160
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 26
 
 track testChainHg19Overlap500
 shortLabel hg19 liftOver 500

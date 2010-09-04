@@ -114,6 +114,7 @@ def main(argv=None):
         # clean up
         clean_cmd = "rm -rf %s" % para_dir
         command(clean_cmd)
+        return 10
 
     # clean up
     clean_cmd = "rm -rf %s" % para_dir
