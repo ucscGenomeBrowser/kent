@@ -23,6 +23,7 @@ var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
 var selectedMenuItem;       // currently choosen context menu item (via context menu).
 var browser;                // browser ("msie", "safari" etc.)
 var mapIsUpdateable = true;
+var currentMapItem;
 
 function initVars(img)
 {
@@ -1309,11 +1310,28 @@ function makeMapItem(id)
     return {id: id, title: "configure " + title};
 }
 
+function mapItemMouseOver(obj)
+{
+    // Record data for current map area item
+    currentMapItem = makeMapItem(obj.id);
+    currentMapItem.href = obj.href;
+    currentMapItem.title = obj.title;
+}
+
+function mapItemMouseOut(obj)
+{
+    currentMapItem = null;
+}
+
 function findMapItem(e)
 {
 // Find mapItem for given event; returns item object or null if none found.
 
-    // rightClick for non-map items can be resolved to their parent tr and then trackName.
+    if(currentMapItem) {
+        return currentMapItem;
+    }
+    
+    // rightClick for non-map items that can be resolved to their parent tr and then trackName (e.g. items in gray bar)
     if(e.target.tagName.toUpperCase() != "AREA") {
         var tr = $( e.target ).parents('tr.imgOrd');
         if( $(tr).length == 1 ) {
@@ -1324,8 +1342,10 @@ function findMapItem(e)
             }
         }
     }
-
+    
     // FIXME: do we really need to worry about non-imageV2 ?
+    // Yeah, I think the rest of this is (hopefully) dead code
+
     var x,y;
     if(imageV2) {
         // It IS appropriate to use coordinates relative to the img WHEN we have a hit in the right-hand side, but NOT
