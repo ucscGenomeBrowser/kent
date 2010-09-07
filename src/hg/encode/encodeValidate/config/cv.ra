@@ -6083,6 +6083,12 @@ term Illumina_GA2
 tag IlluminaGA2
 geo Illumina Genome Analyzer II
 type seqPlatform
+description Illumina Genome Analyzer II
+
+term Illumina_GA2e
+tag IlluminaGA2e
+geo Illumina Genome Analyzer II
+type seqPlatform
 description Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
