@@ -181,7 +181,7 @@ termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
 sex F
-tier 2
+tier 3
 protocol Keratinocyte_protocol.pdf
 
 term H1-hESC
@@ -199,7 +199,7 @@ termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
 color 0,107,27
 sex M
-tier 2
+tier 1
 protocol H1_ES_protocol.pdf
 
 ###### type 3 cells once they have been submitted.
@@ -2437,9 +2437,7 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally
-isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal
-lethality and defects in hindbrain development in mice homozygous for a
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
 targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
 Genes Dev. 1993 Nov;7(11):2071-84.)
 vendorName Uw lab
@@ -2954,8 +2952,7 @@ term BCL3
 tag BCL3
 type Antibody
 target BCL3
-antibodyDescription Bcl-3(C-14) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminu
-s of Bcl-3 of human origin. Recommended for detection of Bcl-3 of m, r and h origin by WB, IP, IF and ELISA.
+antibodyDescription Bcl-3(C-14) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Bcl-3 of human origin. Recommended for detection of Bcl-3 of m, r and h origin by WB, IP, IF and ELISA.
 targetDescription This gene is a proto-oncogene candidate. It is identified by its translocation into the immunoglobulin alpha-locus in some cases of B-cell leukemia. The protein encoded by this gene contains seven ankyrin repeats, which are most closely related to those found in I kappa B proteins. This protein functions as a transcriptional co-activator that activates through its association with NF-kappa B homodimers. The expression of this gene can be induced by NF-kappa B, which forms a part of the autoregulatory loop that controls the nuclear residence of p50 NF-kappa B. (Provided by RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-185
@@ -3155,7 +3152,8 @@ term E2F1
 tag E2F1
 type Antibody
 target E2F1
-antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.  Recommended for detection of E2F1 of H and Xn origin by WB and IP.targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
+antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.  Recommended for detection of E2F1 of H and Xn origin by WB and IP.
+targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
 orderUrl http://www.millipore.com/catalogue/item/05-379#
 vendorName Millipore
 vendorId 05-379
@@ -3721,7 +3719,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-9144
 lab Snyder
 targetId GeneCard:GC08P145515
-targerUrl http://www.genecards.org//index.php?path=/Search/keyword/HSF1/0/20
+targetUrl http://www.genecards.org//index.php?path=/Search/keyword/HSF1/0/20
 validation missing
 
 term Ini1
@@ -3863,6 +3861,20 @@ vendorId sc-291
 orderUrl http://www.scbt.com/product.php?datasheet=291
 lab Snyder
 lots D1703
+targetId GeneCard:GC12M052972
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
+validation missing
+
+term NF-E2_(H-230) 
+tag NFE2H
+type Antibody
+target NF-E2
+antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin 
+targetDescription Transcription factor NF-E2 45 kDa subunit is a component of the NF-E2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NF-E2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein. 
+vendorName Santa Cruz Biotech
+vendorId sc-22827
+orderUrl http://www.scbt.com/product.php?datasheet=22827
+lab Snyder
 targetId GeneCard:GC12M052972
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
 validation missing
@@ -4133,8 +4145,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-22805
 orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
-targerId
-targerUrl
+targetId
+targetUrl
 validation missing
 
 term Rad21
@@ -4203,7 +4215,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-994
 orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
-targerId
+targetId
 targetUrl
 validation missing
 
@@ -4325,9 +4337,7 @@ term STAT3
 tag STAT3
 type Antibody
 target STAT3
-targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5
-, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression 
-of a variety of genes with roles in processes such as cell growth and apoptosis.
+targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis.
 antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin
 vendorName Santa Cruz Biotech
 vendorId sc-482
@@ -4410,7 +4420,8 @@ term TCF3
 tag TCF3
 type Antibody
 target TCF3
-antibodyDescription E2A.E12(V-18) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG.targetDescription Heterodimers between TCF3 and tissue-specific basic helix-loop-helix (bHLH) proteins play major roles in determining tissue-specific cell fate during embryogenesis, like muscle or early B-cell differentiation. Dimers bind DNA on E-box motifs: 5'-CANNTG-3'. Binds to the kappa-E2 site in the kappa immunoglobulin gene enhancer.
+antibodyDescription E2A.E12(V-18) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG.
+targetDescription Heterodimers between TCF3 and tissue-specific basic helix-loop-helix (bHLH) proteins play major roles in determining tissue-specific cell fate during embryogenesis, like muscle or early B-cell differentiation. Dimers bind DNA on E-box motifs: 5'-CANNTG-3'. Binds to the kappa-E2 site in the kappa immunoglobulin gene enhancer.
 vendorName Santa Cruz Biotech
 vendorId sc-349
 orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
@@ -4916,8 +4927,7 @@ tag SLBP
 type Antibody
 target SLBP
 targetDescription  Stem-loop binding protein (Homo sapiens)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 
-Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353 
 orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
@@ -6071,6 +6081,12 @@ description Illumina Genome Analyzer
 
 term Illumina_GA2
 tag IlluminaGA2
+geo Illumina Genome Analyzer II
+type seqPlatform
+description Illumina Genome Analyzer II
+
+term Illumina_GA2e
+tag IlluminaGA2e
 geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe

@@ -2220,8 +2220,6 @@ for (gp = gpList; gp != NULL; gp = gp->next)
         printf("<b>CDS End: </b>");
         printCdsStatus((gp->strand[0] == '+') ? gp->cdsEndStat : gp->cdsStartStat);
         }
-    if (gp->next != NULL)
-        printf("<br>");
     /* if a gene class table exists, get gene class and print */
     if (classTable != NULL)
         {
@@ -2263,7 +2261,10 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                       printf("<b>Gene Type :</b> %s<br>\n", row[0]);
                }
            }
-        } }
+        } 
+    if (gp->next != NULL)
+        printf("<br>");
+    }
 genePredFreeList(&gpList);
 sqlFreeResult(&sr);
 hFreeConn(&conn);
