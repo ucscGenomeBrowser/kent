@@ -142,6 +142,14 @@ urlLabel GDP Strain ID:
 url http://flypush.imgen.bcm.tmc.edu/pscreen/plqlsearch2.cgi?gene=&mapping=&chromosome=Any&bg=$$&remarks=&orderby=Chromosome&submit=%20%20%20%20Start%20Query%20%20%20%20
 noScoreFilter .
 
+track bdtnpChipper override
+release beta
+html bdtnpChipperOld
+
+track bdtnpChipper override
+release public
+html bdtnpChipperOld
+
 track affyDrosDevSignal
 compositeTrack on
 shortLabel Affy Signal

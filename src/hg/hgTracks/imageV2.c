@@ -130,8 +130,11 @@ else if (tdbIsCompositeChild(track->tdb))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
     }
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+if(sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
 if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
@@ -1468,7 +1471,7 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onclick='return mapClk(this);'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onmouseover='mapItemMouseOver(this)' onmouseout='mapItemMouseOut(this)' onclick='return mapClk(this);'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)

@@ -244,7 +244,7 @@ else
     slAddHead(&(hel->val), sln);
 }
 
-static struct hash *accessControlInit(char *db, struct sqlConnection *conn)
+static struct hash *accessControlInit(struct sqlConnection *conn)
 /* Return a hash associating restricted table/track names in the given db/conn
  * with virtual hosts, or NULL if there is no tableAccessControl table and no
  * forbiddenTrackList (see getFullTrackList). */
@@ -267,7 +267,7 @@ if (forbiddenTrackList != NULL)
     struct trackDb *tdb;
     for (tdb = forbiddenTrackList;  tdb != NULL;  tdb = tdb->next)
 	{
-	char *tbOff = trackDbSetting(tdb, "tableBrowser");
+	char *tbOff = cloneString(trackDbSetting(tdb, "tableBrowser"));
 	if (isEmpty(tbOff))
 	    errAbort("bug: tdb for %s is in forbiddenTrackList without 'tableBrowser off' setting",
 		     tdb->track);
@@ -282,13 +282,26 @@ if (forbiddenTrackList != NULL)
 return acHash;
 }
 
-static boolean accessControlDenied(struct hash *acHash, char *table)
+boolean accessControlDenied(char *db, char *table)
 /* Return TRUE if table access is restricted to some host(s) other than
  * the one we're running on. */
 {
 static char *currentHost = NULL;
 struct slName *enabledHosts = NULL;
 struct slName *sln = NULL;
+static struct hash *dbToAcHash = NULL;
+
+if (dbToAcHash == NULL)
+    dbToAcHash = hashNew(0);
+
+struct hash *acHash = hashFindVal(dbToAcHash, db);
+if (acHash == NULL)
+    {
+    struct sqlConnection *conn = hAllocConn(db);
+    acHash = accessControlInit(conn);
+    hFreeConn(&conn);
+    hashAdd(dbToAcHash, db, acHash);
+    }
 
 if (acHash == NULL)
     return FALSE;
@@ -314,22 +327,6 @@ for (sln = enabledHosts;  sln != NULL;  sln = sln->next)
 return TRUE;
 }
 
-static void freeHelSlNameList(struct hashEl *hel)
-/* Helper function for hashTraverseEls, to free slNameList vals. */
-{
-slNameFreeList(&(hel->val));
-}
-
-static void accessControlFree(struct hash **pAcHash)
-/* Free up access control hash. */
-{
-if (*pAcHash != NULL)
-    {
-    hashTraverseEls(*pAcHash, freeHelSlNameList);
-    freeHash(pAcHash);
-    }
-}
-
 
 struct slName *tablesForDb(char *db)
 /* Find tables associated with database. */
@@ -339,7 +336,6 @@ struct sqlConnection *conn = hAllocConn(db);
 struct slName *raw, *rawList = sqlListTables(conn);
 struct slName *cooked, *cookedList = NULL;
 struct hash *uniqHash = newHash(0);
-struct hash *accessCtlHash = accessControlInit(db, conn);
 
 hFreeConn(&conn);
 for (raw = rawList; raw != NULL; raw = raw->next)
@@ -348,8 +344,7 @@ for (raw = rawList; raw != NULL; raw = raw->next)
 	{
 	/* Deal with tables split across chromosomes. */
 	char *root = unsplitTableName(raw->name);
-	if (accessControlDenied(accessCtlHash, root) ||
-	    accessControlDenied(accessCtlHash, raw->name))
+	if (accessControlDenied(db, root) || accessControlDenied(db, raw->name))
 	    continue;
 	if (!hashLookup(uniqHash, root))
 	    {
@@ -361,7 +356,7 @@ for (raw = rawList; raw != NULL; raw = raw->next)
     else
         {
 	char dbTable[256];
-	if (accessControlDenied(accessCtlHash, raw->name))
+	if (accessControlDenied(db, raw->name))
 	    continue;
 	safef(dbTable, sizeof(dbTable), "%s.%s", db, raw->name);
 	cooked = slNameNew(dbTable);
@@ -369,7 +364,6 @@ for (raw = rawList; raw != NULL; raw = raw->next)
 	}
     }
 hashFree(&uniqHash);
-accessControlFree(&accessCtlHash);
 slFreeList(&rawList);
 slSort(&cookedList, slNameCmp);
 return cookedList;

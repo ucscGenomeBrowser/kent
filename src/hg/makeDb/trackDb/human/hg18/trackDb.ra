@@ -1534,6 +1534,7 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
+configureByPopup off
 
 track snp129 override
 visibility hide
@@ -1542,22 +1543,26 @@ chimpDb panTro2
 orangDb ponAbe2
 macaqueDb rheMac2
 hapmapPhase III
+configureByPopup off
 
 track snp128 override
 visibility hide
 chimpMacaqueOrthoTable snp128OrthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
+configureByPopup off
 
 track snp127 override
 visibility hide
 snpSeq snp127Seq
+configureByPopup off
 
 track snp126 override
 visibility hide
 chimpMacaqueOrthoTable snp126orthoPanTro2RheMac2
 chimpDb panTro2
 macaqueDb rheMac2
+configureByPopup off
 
 track snpArray
 compositeTrack on
@@ -3337,6 +3342,7 @@ visibility full
 type bed 4
 group compGeno
 priority 103.29
+configureByPopup off
 
     track cons44wayViewalign
     shortLabel Multiz Alignments
@@ -3375,6 +3381,7 @@ priority 103.29
     parent cons44way
     viewLimits -0.5:3.0
     viewLimitsMax -15.41:7.13
+    configureByPopup on
 
         # PhyloP conservation
         track phyloP44wayPrimate
@@ -4102,14 +4109,16 @@ visibility hide
 group genes
 type psl mRNA
 
-track hg19ContigDiff
+track hg18ContigDiff
 shortLabel Hg19 Diff
 longLabel Contigs dropped or changed from NCBI build 36(hg18) to GRCh37(hg19)
 visibility hide
 group map
-type bed 6
-color 128,0,0
-priority 160
+type bed 9 .
+scoreFilterByRange on
+itemRgb on
+color 0,0,0
+priority 26
 
 track testChainHg19Overlap500
 shortLabel hg19 liftOver 500

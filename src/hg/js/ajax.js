@@ -89,6 +89,21 @@ function setCartVar(name, value)
     setCartVars( [ name ], [ value ] );
 }
 
+function setVarsFromHash(varHash)
+{
+// Set all vars in a var hash
+// If obj is undefined then obj is document!
+    var names = [];
+    var values = [];
+    for (var aVar in varHash) {
+        names.push(aVar);
+        values.push(varHash[aVar]);
+    }
+    if(names.length > 0) {
+        setCartVars(names,values);
+    }
+}
+
 function setAllVars(obj,subtrackName)
 {
 // Set all enabled inputs and selects found as children obj with names to cart with ajax
@@ -97,41 +112,13 @@ function setAllVars(obj,subtrackName)
     var values = [];
     if($(obj) == undefined)
         obj = $('document');
-    var inp = $(obj).find('input');
-    var sel = $(obj).find('select');
-    //warn("obj:"+$(obj).attr('id') + " inputs:"+$(inp).length+ " selects:"+$(sel).length);
-    $(inp).filter('[name]:enabled').each(function (i) {
-        var name  = $(this).attr('name');
-        var val = $(this).val();
-        if(name != undefined && name != "Submit" && val != undefined) {
-            names.push(name);
-            values.push(val);
-        }
-    });
-    $(sel).filter('[name]:enabled').each(function (i) {
-        var name  = $(this).attr('name');
-        var val = $(this).val();
-        if(name != undefined && val != undefined) {
-            if(subtrackName != undefined && name == subtrackName) {
-                names.push(name+"_sel");  // subtrack is controld by two vars
-                names.push(name);
-                if(val == 'hide') {
-                   values.push("0");    // Can't delete "_sel" because default takes over
-                    values.push("[]");  // can delete vis because subtrack vis should be inherited.
-                } else {
-                    values.push("1");
-                    values.push(val);
-                }
-            } else {
-                names.push(name);
-                values.push(val);
-            }
-        }
-    });
-    if(names.length > 0) {
-        //warn("variables:"+names+"  values:"+values);
-        setCartVars(names,values);
-    }
+
+    setVarsFromHash(getAllVars(obj,subtrackName));
+}
+
+function setCartVarFromObjId(obj)
+{
+    setCartVar($(obj).attr('id'),$(obj).val());
 }
 
 function submitMain()

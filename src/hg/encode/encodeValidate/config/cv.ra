@@ -181,7 +181,7 @@ termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
 sex F
-tier 2
+tier 3
 protocol Keratinocyte_protocol.pdf
 
 term H1-hESC
@@ -199,7 +199,7 @@ termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
 color 0,107,27
 sex M
-tier 2
+tier 1
 protocol H1_ES_protocol.pdf
 
 ###### type 3 cells once they have been submitted.
@@ -2437,9 +2437,7 @@ type Cell Line
 organism Mouse
 tissue
 category Primary Cells
-description ES-cells were originally
-isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal
-lethality and defects in hindbrain development in mice homozygous for a
+description ES-cells were originally isolated  from 129S1/SVImJ mice by Swiatek PJ et al. in 1993 ("Perinatal lethality and defects in hindbrain development in mice homozygous for a
 targeted mutation of the zinc finger gene Krox20". Swiatek PJ, Gridley T.
 Genes Dev. 1993 Nov;7(11):2071-84.)
 vendorName Uw lab
@@ -2954,8 +2952,7 @@ term BCL3
 tag BCL3
 type Antibody
 target BCL3
-antibodyDescription Bcl-3(C-14) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminu
-s of Bcl-3 of human origin. Recommended for detection of Bcl-3 of m, r and h origin by WB, IP, IF and ELISA.
+antibodyDescription Bcl-3(C-14) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of Bcl-3 of human origin. Recommended for detection of Bcl-3 of m, r and h origin by WB, IP, IF and ELISA.
 targetDescription This gene is a proto-oncogene candidate. It is identified by its translocation into the immunoglobulin alpha-locus in some cases of B-cell leukemia. The protein encoded by this gene contains seven ankyrin repeats, which are most closely related to those found in I kappa B proteins. This protein functions as a transcriptional co-activator that activates through its association with NF-kappa B homodimers. The expression of this gene can be induced by NF-kappa B, which forms a part of the autoregulatory loop that controls the nuclear residence of p50 NF-kappa B. (Provided by RefSeq).
 vendorName Santa Cruz Biotech
 vendorId sc-185
@@ -3155,7 +3152,8 @@ term E2F1
 tag E2F1
 type Antibody
 target E2F1
-antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.  Recommended for detection of E2F1 of H and Xn origin by WB and IP.targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
+antibodyDescription E2F1(KH20 and KH95) is a mouse monoclonal antibody.  The epitope for KH20 has been mapped to amino acids 1-89; KH95 to amino acids 342-386.  Recommended for detection of E2F1 of H and Xn origin by WB and IP.
+targetDescription E2F1, the original member of the E2F family of transcription factors, was identified as a cellular protein with DNA binding activity associated with the adenovirus E2 gene promoter. E2F1 is cell cycle regulated with very low levels in early G1, then increasing levels as cells move from G1 to S, and highest levels of protein at the G1/S boundary, which is consistent with its role in S-phase entry.
 orderUrl http://www.millipore.com/catalogue/item/05-379#
 vendorName Millipore
 vendorId 05-379
@@ -3721,7 +3719,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-9144
 lab Snyder
 targetId GeneCard:GC08P145515
-targerUrl http://www.genecards.org//index.php?path=/Search/keyword/HSF1/0/20
+targetUrl http://www.genecards.org//index.php?path=/Search/keyword/HSF1/0/20
 validation missing
 
 term Ini1
@@ -3863,6 +3861,20 @@ vendorId sc-291
 orderUrl http://www.scbt.com/product.php?datasheet=291
 lab Snyder
 lots D1703
+targetId GeneCard:GC12M052972
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
+validation missing
+
+term NF-E2_(H-230) 
+tag NFE2H
+type Antibody
+target NF-E2
+antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin 
+targetDescription Transcription factor NF-E2 45 kDa subunit is a component of the NF-E2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NF-E2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein. 
+vendorName Santa Cruz Biotech
+vendorId sc-22827
+orderUrl http://www.scbt.com/product.php?datasheet=22827
+lab Snyder
 targetId GeneCard:GC12M052972
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
 validation missing
@@ -4133,8 +4145,8 @@ vendorName Santa Cruz Biotech
 vendorId sc-22805
 orderUrl  http://www.scbt.com/product.php?datasheet=22805
 lab Myers
-targerId
-targerUrl
+targetId
+targetUrl
 validation missing
 
 term Rad21
@@ -4203,7 +4215,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-994
 orderUrl http://www.scbt.com/product.php?datasheet=994
 lab Myers
-targerId
+targetId
 targetUrl
 validation missing
 
@@ -4325,9 +4337,7 @@ term STAT3
 tag STAT3
 type Antibody
 target STAT3
-targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5
-, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression 
-of a variety of genes with roles in processes such as cell growth and apoptosis.
+targetDescription Member of STAT family. After phosphorylation in response to cytokines and growth factors (including IFNs, EGF, IL5, IL6, HGF, LIF and BMP2), forms homo- or heterodimers that translocate to nucleus and activate transcription. Activates expression of a variety of genes with roles in processes such as cell growth and apoptosis.
 antibodyDescription Rabbit polyclonal; epitope mapping at the C-terminus of Stat3 of mouse origin
 vendorName Santa Cruz Biotech
 vendorId sc-482
@@ -4367,7 +4377,7 @@ validation missing
 
 #term TAF-II
 #type Antibody
-target TAF-II
+#target TAF-II
 #antibodyDescription Mouse monoclonal (p250)
 #targetDescription General transcription factor; TBP-associated factor p250kDa; other names: TAF250
 #vendorName Santa Cruz Biotech
@@ -4410,7 +4420,8 @@ term TCF3
 tag TCF3
 type Antibody
 target TCF3
-antibodyDescription E2A.E12(V-18) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG.targetDescription Heterodimers between TCF3 and tissue-specific basic helix-loop-helix (bHLH) proteins play major roles in determining tissue-specific cell fate during embryogenesis, like muscle or early B-cell differentiation. Dimers bind DNA on E-box motifs: 5'-CANNTG-3'. Binds to the kappa-E2 site in the kappa immunoglobulin gene enhancer.
+antibodyDescription E2A.E12(V-18) is an affinity purified rabbit polyclonal antibody raised against a peptide mapping at the C-terminus of E2A.E12 of human origin. Recommended for detection of E12 and E47 of m, r and h origin by WB, IP, IF, IHC(P), ELISA and indirect FCM using PE (sc-3739)- or FITC (sc-2012)-conjugated goat anti-rabbit IgG.
+targetDescription Heterodimers between TCF3 and tissue-specific basic helix-loop-helix (bHLH) proteins play major roles in determining tissue-specific cell fate during embryogenesis, like muscle or early B-cell differentiation. Dimers bind DNA on E-box motifs: 5'-CANNTG-3'. Binds to the kappa-E2 site in the kappa immunoglobulin gene enhancer.
 vendorName Santa Cruz Biotech
 vendorId sc-349
 orderUrl http://www.scbt.com/datasheet-349-e2a-e12-v-18-antibody.html
@@ -4705,7 +4716,7 @@ targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
 validation RipChip
 
 ##This does not appear in metaDb
-?term EIF4EBP1
+term EIF4EBP1
 tag EIF4EBP1
 type Antibody
 target EIF4EBP1
@@ -4728,7 +4739,7 @@ targetDescription  (Embryonic lethal, abnormal vision, Drosophila)-like 1 (Huant
 antibodyDescription 1) Mouse monocloanal vs HuR, Hel-N1, HuC and HuD of mus, rat, hum and Xenopus origin; 2) Rabbit polyclonal. Raised against synthetic peptide, amino acids 3-19 of HuR. Recommended for detection against ELAV1 in human and mouse origin.
 vendorName 1) Santa Cruz Biotech; 2) Millipore
 vendorId SC-5261; Mil ab5831
-orderUrl http://www.santacruzbiotech.com
+orderUrl http://www.santacruzbiotech.com ; http://www.millipore.com/catalogue/item/ab5831
 lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId
@@ -4807,7 +4818,7 @@ targetDescription  Insulin-like growth factor 2 mRNA binding protein 1 (Homo sap
 antibodyDescription Goat monoclonal vs IGF-II mRNA-binding protien 1 of mouse, human, and rat origin.
 vendorName Santa Cruz Biotech
 vendorId SC-21027
-orderUrl
+orderUrl http://www.scbt.com/datasheet-21027-imp-1-c-20-antibody.html
 lab Tenenbaum
 lots I0607(Nov2008)
 targetId
@@ -4855,7 +4866,7 @@ antibodyDescription Mouse monoclonal vs PABPC1 of human, mouse, bovine, can, ham
 lab Tenenbaum
 vendorName Sigma Chemical Co.
 vendorId P6246
-orderUrl
+orderUrl http://www.sigmaaldrich.com/catalog/search/ProductDetail/SIGMA/P6246
 lab Tenenbaum
 lots 044K4810 (Nov 2008)
 targetId 26986
@@ -4916,11 +4927,10 @@ tag SLBP
 type Antibody
 target SLBP
 targetDescription  Stem-loop binding protein (Homo sapiens)
-antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 
-Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
+antibodyDescription 1) Mil_061376 Rabbit polyclonal. Recommended for detection fo SLBP of mouse, human, and rat origin. 2) SC-26522 Goat polyclonal. Recommended for detection of SLBP of mouse, human, and rat origin. 3) Mouse monoclonal.
 vendorName 1)Millipore; 2)Santa Cruz Biotech; 3)Affinity Bioreagents
 vendorId 06-1376; 26522; MA156353 
-orderUrl
+orderUrl http://www.millipore.com/catalogue/item/06-1376 ; http://www.scbt.com/datasheet-26522-imp-1-c-20-antibody.html ; http://www.bioreagents.com
 lab Tenenbaum
 lots 3) 7308-S2
 targetId 7884
@@ -6073,6 +6083,12 @@ term Illumina_GA2
 tag IlluminaGA2
 geo Illumina Genome Analyzer II
 type seqPlatform
+description Illumina Genome Analyzer II
+
+term Illumina_GA2e
+tag IlluminaGA2e
+geo Illumina Genome Analyzer II
+type seqPlatform
 description Illumina Genome Analyzer IIe
 # Matches GA2 that Kate initially indicated as the term
 
@@ -6122,6 +6138,7 @@ description Applied Biosystems SOLiD System 2.0
 #labPi:        This is the shortened name that we refer to the PI, usually just last name
 #labPiFull:    The full name of the PI
 #grantPI:      Shortened name of the head PI for the grant
+#type grant
 #grantInst:    The name of the institution where the grant is administered from.
 #projectName:  
 #organism:     human or mouse
@@ -6133,8 +6150,6 @@ labInst Broad Institute
 labPi Bernstein
 labPiFull Bradley Bernstein
 grantPi Bernstein
-grantInst Broad Institute
-projectName Broad
 organism human
 
 
@@ -6145,8 +6160,6 @@ labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
 grantPi Tullius
-grantInst Boston University
-projectName BU
 organism human
 
 term GIS-Chia
@@ -6156,8 +6169,6 @@ labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Ruan
-grantInst Genome Institute of Singapore
-projectName Chia PET??
 organism human
 
 term Genecode
@@ -6167,8 +6178,6 @@ labInst Genecode
 labPi Hubbard
 labPiFull Tim Hubbard
 grantPi Hubbard
-grantInst Sanger Institute
-projectNmae
 organism human
 
 term SUNY
@@ -6178,8 +6187,6 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
-grantInst SUNY-Albany
-projectName SUNY
 organism human
 
 term UW
@@ -6189,8 +6196,6 @@ labInst University of Washington
 labPi Stam
 labPiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst University of Washington
-projectName UW
 organism human
 
 
@@ -6204,8 +6209,6 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Crawford
-grantInst Duke
-projectName OpenChrom
 organism human
 
 term UT-A
@@ -6215,8 +6218,6 @@ labInst Duke University
 labPi Iyer
 labPiFull Tara Iyer
 grantPi Crawford
-grantInst Duke 
-projectName OpenChrom
 organism human
 
 term UNC
@@ -6226,8 +6227,6 @@ labInst Univeristy of North Carolina
 labPi Lieb
 labPiFull Jason Lieb
 grantPi Crawford
-grantInst Duke
-projectName OpenChrom
 organism human
 
 ### HAIB Project Labs         
@@ -6236,12 +6235,11 @@ organism human
 term Caltech    
 tag Caltech    
 type lab
+type grant
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
 grantPi Myers
-grantInst Hudson Alpha Institute of Biotechnology 
-projectName Caltech
 organism human
 
 term HudsonAlpha
@@ -6251,8 +6249,6 @@ labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
 grantPi Myers
-grantInst Hudson Alpha Institute for Biotechnology
-projectName HAIB
 organism human
 
 ### NHGRI Labs                 
@@ -6265,8 +6261,6 @@ labInst National Human Genome Research Institute
 labPi Elnitski
 labPiFull Laura Elnitski
 grantPi Elnitski
-grantInst National Human Genome Research Institute 
-projectName NHGRI-Elnitski
 organism human
 
 term NHGRI-Margulies
@@ -6276,8 +6270,6 @@ labInst National Human Genome Research Institute
 labPi Margulies
 labPiFull Elliott Margulies
 grantPi Margulies
-labInst National Human Genome Research Institute 
-projectName NHGRI-Margulies
 organism human
 
 
@@ -6292,8 +6284,6 @@ labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term GIS
@@ -6303,8 +6293,6 @@ labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term Helicos       
@@ -6314,8 +6302,6 @@ labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term Affy
@@ -6325,8 +6311,6 @@ labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 term Riken
@@ -6337,8 +6321,6 @@ labName Riken
 labPi Carninci
 labPiFull Piero Carninci
 grantPi Gingeras
-grantInst Cold Spring Harbor Laboratory
-projectName Transcriptome
 organism human
 
 
@@ -6352,8 +6334,6 @@ labInst UMass
 labPi Dekker
 labPiFull Job Dekker
 grantPi Dekker
-grantInst University of Massachusetts Amherst 
-projectName
 organism human
 
 term UMass-Weng
@@ -6363,8 +6343,6 @@ labInst UMass
 labPi Weng
 labPiFull Zhiping Weng
 grantPi Weng
-grantInst University of Massachusetts Amherst  
-projectName
 organism human
 
 
@@ -6378,8 +6356,6 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 term Yale
@@ -6389,8 +6365,6 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 term Harvard 
@@ -6400,8 +6374,6 @@ labInst Harvard
 labPi Weissman
 labPiFull Sherman Weissman
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 term UCD
@@ -6411,8 +6383,6 @@ labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
 grantPi Snyder
-grantInst Stanford
-projectName SYDH
 organism human
 
 
@@ -6427,8 +6397,6 @@ labInst Ludwig Institue for Cancer Research
 labPi Ren
 labPiFull Bing Ren
 grantPi Ren
-grantInst LICR
-project LICR
 organism mouse
 
 term Caltech-m
@@ -6438,8 +6406,6 @@ labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
 grantPi Hardison
-grantInst PSU
-project
 organism mouse
 
 term UMass-m
@@ -6449,8 +6415,6 @@ labInst University of Massachusettes
 labPi Dekker
 labPiFull Job Dekker
 grantPi Hardison
-grantInst PSU
-project
 organism mouse
 
 term Duke-m
@@ -6460,8 +6424,6 @@ labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
 grantPi Hardison
-grantInst PSU
-project
 organism mouse
 
 term UChicago-m
@@ -6471,8 +6433,6 @@ labInst University of Chicago
 labPi White
 labPiFull Kevin White
 grantPi White
-grantInst University of Chicago 
-project
 organism mouse
 
 term UNC-m
@@ -6482,8 +6442,6 @@ labInst University of North Carolina
 labPi Giddings
 labPiFull Morgan Giddings
 grantPi Giddings
-grantInst University of North Carolina
-projectName UNC-Giddings
 organism mouse
 
 term UW-m
@@ -6493,8 +6451,6 @@ labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
 grantPi Stam
-grantInst Univeristy of Washington
-projectName UW
 organism mouse
 
 term Stanford-m
@@ -6504,8 +6460,6 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName StanfordYale
 organism human
 
 term Yale-m
@@ -6515,7 +6469,103 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-grantInst Stanford
-projectName StanfordYale
 organism human
 
+
+
+# Grant information
+# term is the last name of the PI
+# grantInst Is the full name of the institution
+# projectName is the name we use to call the project
+
+term Bernstein
+type grant
+grantInst Broad Institute
+projectName Broad
+
+term Tullius
+type grant
+grantInst Boston University
+projectName BU
+
+term Ruan
+type grant
+grantInst Genome Institute of Singapore
+projectName Chia PET??
+
+term Hubbard
+type grant
+grantInst Sanger Institute
+projectName Sanger
+
+term Tenenbaum
+type grant
+grantInst SUNY-Albany
+projectName SUNY
+ 
+term Stam
+type grant
+grantInst University of Washington
+projectName UW
+
+term Crawford
+type grant
+grantInst Duke
+projectName OpenChrom
+
+term Myers
+type grant
+grantInst Hudson Alpha Institute of Biotechnology
+projectName HAIB   
+
+term Elnitski
+type grant
+grantInst National Human Genome Research Institute
+projectName NHGRI-Elnitski
+
+term Margulies
+type grant
+grantInst National Human Genome Research Institute
+projectName NHGRI-Margulies
+
+term Gingeras
+type grant
+grantInst Cold Spring Harbor Laboratory
+projectName Transcriptome
+
+term Dekker
+type grant
+grantInst University of Massachusetts Amherst
+projectName
+
+term Weng
+type grant
+grantInst University of Massachusetts Amherst
+projectName
+
+term Snyder
+type grant
+grantInst Stanford
+projectName SYDH
+# This is broken for mouse which uses StanfYale
+
+
+term Ren
+type grant
+grantInst LICR
+project LICR
+
+term Hardison
+type grant
+grantInst Penn State University
+projectName PSU
+
+term White
+type grant
+grantInst University of Chicago
+projectName
+
+term Giddings
+type grant
+grantInst University of North Carolina
+projectName UNC-Giddings

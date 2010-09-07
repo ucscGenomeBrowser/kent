@@ -482,7 +482,7 @@ function cgiBooleanShadowPrefix()
     return "boolshad.";
 }
 
-function getAllVars(obj)
+function getAllVars(obj,subtrackName)
 {
 // Returns a hash for all inputs and selects in an obj.
 // If obj is undefined then obj is document!
@@ -507,23 +507,55 @@ function getAllVars(obj)
         var name  = $(this).attr('name');
         var val = $(this).val();
         if(name != undefined && val != undefined) {
-            urlData[name] = val;
+            if(subtrackName != undefined && name == subtrackName) {
+                if(val == 'hide') {
+                   urlData[name+"_sel"] = 0;    // Can't delete "_sel" because default takes over
+                   urlData[name]        = "[]";  // can delete vis because subtrack vis should be inherited.
+                } else {
+                    urlData[name+"_sel"] = 1;
+                    urlData[name]        = val;
+                }
+            } else
+                urlData[name] = val;
         }
     });
     return urlData;
 }
 
-function objectToQueryString(o)
+function setIdRemoveName(obj)
+{ // This function removes the name of an obj and sets it as the id.  This is very useful
+  // to override forms submitting named inputs and instead setCartVarFromObjId() can be used selectively
+    var id = $(obj).attr('name');
+    if(id != undefined) {
+        $(obj).attr('id',id);
+        $(obj).removeAttr('name');
+    }
+    //warn($(obj).attr('id')+'='+$(obj).val()+" name:"+$(obj).attr('name'));
+}
+
+
+function varHashChanges(newVars,oldVars)
+{
+// Returns a hash of all vars that are changed between old and new hash.  New vars not found in old are changed.
+    var changedVars = new Object();
+    for (var newVar in newVars) {
+        if(oldVars[newVar] == null || oldVars[newVar] != newVars[newVar])
+            changedVars[newVar] = newVars[newVar];
+    }
+    return changedVars;
+}
+
+function varHashToQueryString(varHash)
 {
 // return a CGI QUERY_STRING for name/vals in given object
     var retVal = "";
     var count = 0;
-    for (var i in o) {
+    for (var aVar in varHash) {
         if(count++ > 0) {
-            retVal = retVal + "&"
+            retVal += "&";
         }
-        // XXXX encode i and o[i]?
-        retVal = retVal + i + "=" + o[i];
+        // XXXX encode var=val ?
+        retVal += aVar + "=" + varHash[aVar];
     }
     return retVal;
 }
@@ -532,7 +564,7 @@ function getAllVarsAsUrlData(obj)
 {
 // Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
 // If obj is undefined then obj is document!
-    return objectToQueryString(getAllVars(obj));
+    return varHashToQueryString(getAllVars(obj));
 }
 
 /*
@@ -767,6 +799,34 @@ function getSizeFromCoordinates(position)
 var gWaitFuncArgs = [];
 var gWaitFunc;
 
+function waitMaskClear()
+{ // Clears the waitMask
+    var  waitMask = $('#waitMask');
+    if( waitMask != undefined )
+        $(waitMask).hide();
+}
+
+function waitMaskSetup(timeOutInMs)
+{ // Sets up the waitMask to block page manipulation until cleared
+
+    // Find or create the waitMask (which masks the whole page)
+    var  waitMask = $('#waitMask');
+    if( waitMask == undefined || waitMask.length != 1) {
+        // create the waitMask
+        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        waitMask = $('#waitMask');
+        // Special for IE
+        if ($.browser.msie)
+            $(waitMask).css('filter','alpha(opacity= 0)');
+    }
+    $(waitMask).css('display','block');
+
+    // Things could fail, so always have a timeout.
+    if(timeOutInMs == undefined || timeOutInMs <=0)
+        timeOutInMs = 5000; // Don't ever leave this as infinite
+    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+}
+
 function _launchWaitOnFunction()
 { // should ONLY be called by waitOnFunction()
   // Launches the saved function
@@ -800,7 +860,7 @@ function _launchWaitOnFunction()
         }
     }
     // Now we can get rid of the wait cursor
-    $('#waitMask').css('display','none');
+    waitMaskClear();
 }
 
 function waitOnFunction(func)
@@ -814,17 +874,7 @@ function waitOnFunction(func)
         return false;
     }
 
-    // Find or create the waitMask (which masks the whole page)
-    var  waitMask = $('#waitMask');
-    if( waitMask == undefined || waitMask.length != 1) {
-        // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
-        waitMask = $('#waitMask');
-        // Special for IE
-        if ($.browser.msie)
-            $(waitMask).css('filter','alpha(opacity= 0)');
-    }
-    $(waitMask).css('display','block');
+    waitMaskSetup(5000);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
     if(arguments.length > 1 && arguments[1].type != undefined) {
