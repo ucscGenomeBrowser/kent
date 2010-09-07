@@ -181,7 +181,7 @@ termId BTO:0000375
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
 color 179,0,134
 sex F
-tier 2
+tier 3
 protocol Keratinocyte_protocol.pdf
 
 term H1-hESC
@@ -199,7 +199,7 @@ termId CL:0000007
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
 color 0,107,27
 sex M
-tier 2
+tier 1
 protocol H1_ES_protocol.pdf
 
 ###### type 3 cells once they have been submitted.

@@ -25,7 +25,7 @@ type bed 3
 origAssembly hg19
 nextItemButton on
 subGroup1 view Views Peaks=Peaks  Signal=Signal 
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2  H1hESC=H1-hESC HUVEC=HUVEC NB4=NB4 Raji=Raji U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> wK562=K562_<i>IFN&gamma;_30min</i> xK562=K562_<i>IFN&gamma;_6hrs</i>
+subGroup2 cellType Cell_Line GM12878=GM12878 H1hESC=H1-hESC K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2   HUVEC=HUVEC NB4=NB4 Raji=Raji U2OS=U2OS uK562=K562_<i>IFN&alpha;_30min</i> wK562=K562_<i>IFN&gamma;_30min</i> xK562=K562_<i>IFN&gamma;_6hrs</i>
 subGroup3 factor Factor  cJUN=c-Jun cMYC=c-Myc CCNT2=CCNT2 ELK4=ELK4 GATA2=GATA2 GTF2B=GTF2B HMGN3=HMGN3 IRF3=IRF3 IRF1=IRF1 JUND=JunD KAP1=KAP1 MAX=Max POL2=Pol2 POL2S2=Pol2(phosphoS2) NRF1=Nrf1 RAD21=Rad21 SETDB1=SETDB1 STAT3=STAT3 SUZ12=SUZ12 TBP=TBP USF2=USF2  WHIP=WHIP ZNF274=ZNF274 ZZZ3=ZZZ3 zInputrab=Input_(<i>IgG-rab</i>)  zInputucd=Input_(<i>UCDavis</i>)
 subGroup4 control Control std=Standard IGGmus=IgG_Mouse IGGrab=IgG_Rabbit IGGYale=IgG_Yale UCD=UC_Davis 
 subGroup5 treatment Treatment aNone=None IFNa30=IFN&alpha;_30min IFNg30=IFN&gamma;_30min IFNg6h=IFN&gamma;_6hrs
