@@ -3865,6 +3865,20 @@ targetId GeneCard:GC12M052972
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
 validation missing
 
+term NF-E2_(H-230) 
+tag NFE2H
+type Antibody
+target NF-E2
+antibodyDescription Rabbit Polyclonal, epitope: 1-230 mapping at the N-terminus of NF-E2 of human origin 
+targetDescription Transcription factor NF-E2 45 kDa subunit is a component of the NF-E2 complex and essential for regulating erythroid and megakaryocytic maturation and differentiation. Binds to the hypersensitive site 2 (HS2) of the beta-globin control region (LCR). This subunit (NFE2)recognizes the TCAT/C sequence of the AP-1-like core palindrome present in a number of erythroid and megakaryocytic gene promoters. Requires MAFK or other small MAF proteins for binding to the NF-E2 motif. May play a role in all aspects of hemoglobin production from globin and heme synthesis to procurement of iron. NFE2 has been shown to interact with CREB binding protein. 
+vendorName Santa Cruz Biotech
+vendorId sc-22827
+orderUrl http://www.scbt.com/product.php?datasheet=22827
+lab Snyder
+targetId GeneCard:GC12M052972
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=NFE2&search=NF-E2
+validation missing
+
 term NFKB
 tag NFKB
 type Antibody
@@ -6067,6 +6081,12 @@ description Illumina Genome Analyzer
 
 term Illumina_GA2
 tag IlluminaGA2
+geo Illumina Genome Analyzer II
+type seqPlatform
+description Illumina Genome Analyzer II
+
+term Illumina_GA2e
+tag IlluminaGA2e
 geo Illumina Genome Analyzer II
 type seqPlatform
 description Illumina Genome Analyzer IIe
