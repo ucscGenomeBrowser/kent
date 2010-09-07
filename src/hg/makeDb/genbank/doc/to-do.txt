@@ -1191,3 +1191,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
   retro copies
 
 - rn4:chr1:78,970,961-79,025,593 - nasty xeno refseq alignments in tandem dup.
+
+- hg19:chr1:145,103,933-145,103,966 CR624978 VitroGen/Genoscope modified to match
+  stop codon in the genome.
