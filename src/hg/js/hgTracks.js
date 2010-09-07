@@ -22,6 +22,8 @@ var originalImgTitle;
 var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
 var selectedMenuItem;       // currently choosen context menu item (via context menu).
 var browser;                // browser ("msie", "safari" etc.)
+var mapIsUpdateable = true;
+var currentMapItem;
 
 function initVars(img)
 {
@@ -244,6 +246,14 @@ $(window).load(function () {
         // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
         browser = "chrome";
     }
+
+    // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
+    // though if you look in the DOM the changes are there); so we have to do a full form submission when the
+    // user changes visibility settings or track configuration.
+    //
+    // Chrome used to have this problem too, but this  problem seems to have gone away as of
+    // Chrome 5.0.335.1 (or possibly earlier).
+    mapIsUpdateable = browser != "safari";
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
@@ -1300,9 +1310,42 @@ function makeMapItem(id)
     return {id: id, title: "configure " + title};
 }
 
+function mapItemMouseOver(obj)
+{
+    // Record data for current map area item
+    currentMapItem = makeMapItem(obj.id);
+    currentMapItem.href = obj.href;
+    currentMapItem.title = obj.title;
+}
+
+function mapItemMouseOut(obj)
+{
+    currentMapItem = null;
+}
+
 function findMapItem(e)
 {
 // Find mapItem for given event; returns item object or null if none found.
+
+    if(currentMapItem) {
+        return currentMapItem;
+    }
+    
+    // rightClick for non-map items that can be resolved to their parent tr and then trackName (e.g. items in gray bar)
+    if(e.target.tagName.toUpperCase() != "AREA") {
+        var tr = $( e.target ).parents('tr.imgOrd');
+        if( $(tr).length == 1 ) {
+            a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
+            if(a && a[1]) {
+                var id = a[1];
+                return makeMapItem(id);
+            }
+        }
+    }
+    
+    // FIXME: do we really need to worry about non-imageV2 ?
+    // Yeah, I think the rest of this is (hopefully) dead code
+
     var x,y;
     if(imageV2) {
         // It IS appropriate to use coordinates relative to the img WHEN we have a hit in the right-hand side, but NOT
@@ -1326,25 +1369,6 @@ function findMapItem(e)
     } else {
         x = e.pageX - e.target.offsetLeft;
         y = e.pageY - e.target.offsetTop;
-    }
-
-    if(e.target.tagName.toUpperCase() == "P") {
-        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is true.
-        var a = /p_btn_(.*)/.exec(e.target.id);
-        if(a && a[1]) {
-            var id = a[1];
-            return makeMapItem(id);
-        } else {
-            return null;
-        }
-    } else if(e.target.tagName.toUpperCase() == "IMG") {
-        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is false.
-        var a = /img_btn_(.*)/.exec(e.target.id);
-        if(a && a[1]) {
-            var id = a[1];
-            return makeMapItem(id);
-        }
-        // else fall-through (under msie).
     }
 
     var retval = -1;
@@ -1410,33 +1434,6 @@ function mapMouseDown(e)
 function contextMenuHit(menuItemClicked, menuObject, cmd)
 {
     setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
-}
-
-function showLoadingImage(id)
-{
-// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
-// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
-    var loadingId = id + "LoadingOverlay";
-    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
-    overlay.appendTo("body");
-    overlay.css("top", $('#'+ id).position().top);
-    var divLeft = $('#'+ id).position().left + 2;
-    overlay.css("left",divLeft);
-    var width = $('#'+ id).width() - 5;
-    var height = $('#'+ id).height();
-    overlay.width(width);
-    overlay.height(height);
-    overlay.css("background", "white");
-    overlay.css("opacity", 0.75);
-    var imgLeft = (width / 2) - 110;
-    var imgTop = (height / 2 ) - 10;
-    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
-    return loadingId;
-}
-
-function hideLoadingImage(id)
-{
-    $('#' + id).remove();
 }
 
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
@@ -1517,7 +1514,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
             var id = selectedMenuItem.id;
             var rec = trackDbJson[id];
-            if (rec.parentTrack)
+            if (rec.parentTrack && rec.hasChildren == 0)
                 url += rec.parentTrack
             else
                 url = selectedMenuItem.id;
@@ -1559,9 +1556,11 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // First change the select on our form:
         var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
+        var selectUpdated = false;
         $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
-                });
+            selectUpdated = true;
+        });
         if(rec) {
             rec.localVisibility = cmd;
         }
@@ -1578,23 +1577,25 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             $('#tr_' + id).remove();
             initImgTblButtons();
             loadImgAreaSelect(false);
-        } else if (false && browser == "safari") {
-            // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
-            // Chrome 5.0.335.1.); I'm leaving this dead code here for now in case this problem re-appears.
-            //
-            // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
-            // though if you look in the DOM the changes are there); so we have to do a full form submission when the
-            // user changes visibility settings.
+        } else if (!mapIsUpdateable) {
             jQuery('body').css('cursor', 'wait');
-            document.TrackForm.submit();
+            if(selectUpdated) {
+                document.TrackForm.submit();
+            } else {
+                    // add a hidden with new visibility value
+                    var form = $(document.TrackHeaderForm);
+                    $("<input type='hidden' name='" + id + "'value='" + cmd + "'>").appendTo(form);
+                    document.TrackHeaderForm.submit();
+            }
         } else {
-            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis
+            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis in remote cart
             if(imageV2) {
 	        data += "&hgt.trackNameFilter=" + id;
             }
             //var center = $("#img_data_" + id);
             //center.attr('src', "../images/loading.gif")
             //center.attr('style', "text-align: center; display: block;");
+            //warn("hgTracks?"+data); // Uesful to cut and paste the url
             var loadingId = showLoadingImage("tr_" + id);
             $.ajax({
                        type: "GET",
@@ -1724,10 +1725,12 @@ function loadContextMenu(img)
             if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
-            o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
-            if(rec.parentTrack != undefined) {
-                o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-            }
+            if(rec.hasChildren == 0) {
+                o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                if(rec.parentTrack != undefined)
+                    o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+            } else
+                o["configure "+rec.shortLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             menu.push($.contextMenu.separator);
             menu.push(o);
                 menu.push($.contextMenu.separator);
@@ -1797,30 +1800,76 @@ function updateTrackImg(trackName,extraData,loadingId)
             });
 }
 
-var popUpTrackName;
+var popUpTrackName = "";
 var popUpTrackDescriptionOnly = false;
+var popSaveAllVars = null;
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
-    var myLink = "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
+    var myLink = "../cgi-bin/hgTrackUi?g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
     popUpTrackDescriptionOnly = descriptionOnly;
     if(popUpTrackDescriptionOnly)
         myLink += "&descriptionOnly=1";
 
-    $.ajax({
-                type: "GET",
-                url: myLink,
-                dataType: "html",
-                trueSuccess: handleTrackUi,
-                success: catchErrorOrDispatch,
-                cmd: selectedMenuItem,
-                cache: false
-            });
+    var rec = trackDbJson[trackName];
+    if(rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
+        window.location = myLink;
+    } else {
+        myLink += "&ajax=1";
+        $.ajax({
+                   type: "GET",
+                   url: myLink,
+                   dataType: "html",
+                   trueSuccess: handleTrackUi,
+                   success: catchErrorOrDispatch,
+                   cmd: selectedMenuItem,
+                   cache: false
+               });
+        }
 }
 
 function hgTrackUiPopUp(trackName,descriptionOnly)
 {
     waitOnFunction( _hgTrackUiPopUp, trackName, descriptionOnly );  // Launches the popup but shields the ajax with a waitOnFunction
+}
+
+function hgTrackUiPopCfgOk(popObj, trackName)
+{ // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack ? trackName :undefined;  // If subtrack then vis rules differ
+    var allVars = getAllVars($('#pop'), subtrack );
+    var changedVars = varHashChanges(allVars,popSaveAllVars);
+    //warn("cfgVars:"+varHashToQueryString(changedVars));
+    var newVis = changedVars[trackName];
+    var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
+    if($('#imgTbl') == undefined) { // On findTracks or config page
+        setVarsFromHash(changedVars);
+        //if(hide) // TODO: When findTracks or config page has cfg popup, then vis change needs to be handled in page here
+    }
+    else {  // On image page
+        if(hide) {
+            setVarsFromHash(changedVars);
+            $('#tr_' + trackName).remove();
+            initImgTblButtons();
+            loadImgAreaSelect(false);
+        } else {
+            // Keep local state in sync if user changed visibility
+            if(newVis != null) {
+                $("select[name=" + trackName + "]").each(function(t) {
+                    $(this).val(newVis);
+                });
+                if(rec) {
+                    rec.localVisibility = newVis;
+                }
+            }
+            var urlData = varHashToQueryString(changedVars);
+            if(mapIsUpdateable) {
+                updateTrackImg(trackName,urlData,"");
+            } else {
+                window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+            }
+        }
+    }
 }
 
 function handleTrackUi(response, status)
@@ -1841,35 +1890,19 @@ function handleTrackUi(response, status)
                                closeOnEscape: true,
                                autoOpen: false,
                                buttons: { "Ok": function() {
-                                    var hide = false; // need to handle special case of vis going to hide!
-                                    var vis = $('#pop').find('select[name="'+popUpTrackName+'"]');
-                                    if(vis != undefined)
-                                        hide = ($(vis).val() == 'hide');
-                                    if(popUpTrackDescriptionOnly == false) {
-                                        if($('#imgTbl') != undefined) {
-                                            if(hide) {
-                                                if(trackDbJson[popUpTrackName].parentTrack)
-                                                    setAllVars($('#pop'),popUpTrackName);
-                                                else
-                                                    setAllVars($('#pop'));
-                                                $('#tr_' + popUpTrackName).remove();
-                                                initImgTblButtons();
-                                                loadImgAreaSelect(false);
-                                            }
-                                            else {
-                                                var urlData = getAllVarsAsUrlData($('#pop'));
-                                                updateTrackImg(popUpTrackName,urlData,"");
-                                            }
-                                        } else {
-                                            setAllVars($('#pop'));
-                                            //if(hide) // Need to set checkbox here
-                                        }
-                                    }
+                                    if( ! popUpTrackDescriptionOnly )
+                                        hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
                                }},
+                               open: function() {
+                                    var subtrack = trackDbJson[popUpTrackName].isSubtrack ? popUpTrackName :"";  // If subtrack then vis rules differ
+                                    popSaveAllVars = getAllVars( $('#pop'), subtrack );
+                               },
                                close: function() {
-                                   // clear out html after close to prevent problems caused by duplicate html elements
-                                   $('#hgTrackUiDialog').html("");
+                                   $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
+                                popUpTrackName = ""; //set to defaults
+                                popUpTrackDescriptionOnly = false;
+                                popSaveAllVars = null;
                                }
                            });
     if(popUpTrackDescriptionOnly) {

@@ -123,12 +123,14 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
 if (hTableOrSplitExists(db, tdb->table))
     {
-    char *tableName  = tdb->table;
+    char *tbOff = trackDbSetting(tdb, "tableBrowser");
+    if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
+	return FALSE;
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
     struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
-    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track,tableName,hint,label);
+    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track, tdb->table, hint, label);
     return TRUE;
     }
 return FALSE;
@@ -954,16 +956,15 @@ if (isNotEmpty(setting))
 return gotIt;
 }
 
-void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
-/* Make appropriately labeled drop down of options if any are applicable.*/
+static void baseColorDropLists(struct cart *cart, struct trackDb *tdb)
+/* draw the baseColor drop list options */
 {
 enum baseColorDrawOpt curOpt = baseColorDrawOptEnabled(cart, tdb);
 char *curValue = baseColorDrawAllOptionValues[curOpt];
 char var[512];
+safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
 boolean gotCds = baseColorGotCds(tdb);
 boolean gotSeq = baseColorGotSequence(tdb);
-
-safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
 if (gotCds && gotSeq)
     {
     puts("<P><B>Color track by codons or bases:</B>");
@@ -996,6 +997,12 @@ else if (gotSeq)
     }
 }
 
+void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
+/* Make appropriately labeled drop down of options if any are applicable.*/
+{
+baseColorDropLists(cart, tdb);
+}
+
 enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
 					      struct trackDb *tdb)
 /* Query cart & trackDb to determine what drawing mode (if any) is enabled. */
@@ -1005,7 +1012,7 @@ assert(cart);
 assert(tdb);
 
 /* trackDb can override default of OFF; cart can override trackDb. */
-stringVal = trackDbSettingOrDefault(tdb, BASE_COLOR_DEFAULT,
+stringVal = trackDbSettingClosestToHomeOrDefault(tdb, BASE_COLOR_DEFAULT,
 				    BASE_COLOR_DRAW_OFF);
 stringVal = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,stringVal);
 
@@ -3631,6 +3638,8 @@ switch(cType)
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
 #endif
+    case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
     }
@@ -4548,6 +4557,16 @@ if (scoreCtString != NULL)
     }
 cfgEndBox(boxed);
 }
+
+void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+/* Put up UI for psl tracks */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+baseColorDropLists(cart, tdb);
+indelShowOptions(cart, tdb);
+cfgEndBox(boxed);
+}
+
 
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for net tracks */

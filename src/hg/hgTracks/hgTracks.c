@@ -2034,7 +2034,6 @@ for (track = trackList; track != NULL; track = track->next)
                     {
                     subtrack->hasUi = track->hasUi;
                     flatTracksAdd(&flatTracks,subtrack,cart);
-                    pixHeight += trackPlusLabelHeight(subtrack, fontHeight);
                     }
                 #endif//def FLAT_TRACK_LIST
                 }
@@ -2057,15 +2056,31 @@ for (track = trackList; track != NULL; track = track->next)
             track->limitedVis = tvHide;
             track->limitedVisSet = TRUE;
             }
+        #ifndef FLAT_TRACK_LIST
         else
-        #ifdef FLAT_TRACK_LIST
-        if (!tdbIsComposite(track->tdb))
-        #endif//def FLAT_TRACK_LIST
             pixHeight += trackPlusLabelHeight(track, fontHeight);
+        #endif//def FLAT_TRACK_LIST
         }
     }
 #ifdef FLAT_TRACK_LIST
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
+for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
+    {
+    track = flatTrack->track;
+    if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
+        {
+        char numBuf[SMALLBUF];
+        sprintLongWithCommas(numBuf, maxSafeHeight);
+        printf("warning: image is over %s pixels high at "
+            "track '%s',<BR>remaining tracks set to hide "
+            "for this view.<BR>\n", numBuf, track->tdb->shortLabel);
+        safeHeight = FALSE;
+        track->limitedVis = tvHide;
+        track->limitedVisSet = TRUE;
+        }
+    else
+        pixHeight += trackPlusLabelHeight(track, fontHeight);
+    }
 #endif//def FLAT_TRACK_LIST
 
 imagePixelHeight = pixHeight;
@@ -5633,9 +5648,12 @@ jsIncludeFile("jquery.contextmenu.js", NULL);
 #endif/// def CONTEXT_MENU
 jsIncludeFile("jquery-ui.js", NULL);
 
+//if (!trackImgOnly)
+    {
 hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 // XXXX stole this and '.hidden' from bioInt.css - needs work
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
+    }
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 if (cartVarExists(cart, "chromInfoPage"))

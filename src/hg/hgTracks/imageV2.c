@@ -106,6 +106,49 @@ if(flatTracks && *flatTracks)
 #endif//def FLAT_TRACK_LIST
 
 /////////////////////////
+// JSON support.  Eventually the whole imgTbl could be written out as JSON
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
+// Creates then successively adds trackDb settings to the jsonTdbSettingsString
+// Initially pass in NULL pointer to a dyString to properly begin building
+{
+if (*jsonTdbSettingsString==NULL)
+    {
+    *jsonTdbSettingsString = newDyString(1024);
+    dyStringPrintf(*jsonTdbSettingsString, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d},\n", rulerMode);
+    }
+else
+    dyStringAppend(*jsonTdbSettingsString, ",\n");
+dyStringPrintf(*jsonTdbSettingsString, "\t%s: {", track->track);
+if (tdbIsSuperTrackChild(track->tdb))
+    {
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
+    }
+else if (tdbIsCompositeChild(track->tdb))
+    {
+    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
+    }
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+if(sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
+if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+}
+
+char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
+// Closes and returns the contents of the jsonTdbSettingsString
+{
+dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n");
+return dyStringCannibalize(jsonTdbSettingsString);
+}
+
+/////////////////////////
 // IMAGEv2
 // The new way to do images: PLEASE REFER TO imageV2.h FOR A DETAILED DESCRIPTION
 /////////////////////////
@@ -1428,7 +1471,7 @@ hPrintf("  <MAP name='map_%s'>", name); // map_ prefix is implicit
 struct mapItem *item = map->items;
 for(;item!=NULL;item=item->next)
     {
-    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onclick='return mapClk(this);'",
+    hPrintf("\n   <AREA SHAPE=RECT COORDS='%d,%d,%d,%d' onmouseover='mapItemMouseOver(this)' onmouseout='mapItemMouseOut(this)' onclick='return mapClk(this);'",
            item->topLeftX, item->topLeftY, item->bottomRightX, item->bottomRightY);
     // TODO: remove static portion of the link and handle in js
     if(map->linkRoot != NULL)
@@ -1580,41 +1623,9 @@ if(slice->parentImg)
     hPrintf("</div>");
 }
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
-{
-// add entry for given track to the trackDbJson string
-if(count)
-    dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb))
-    {
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
-    }
-else if(tdbIsCompositeChild(track->tdb))
-    {
-    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", parentTdb->track);
-    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
-    }
-dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
-}
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 void imageBoxDraw(struct imgBox *imgBox)
 /* writes a entire imgBox including all tracksas HTML */
 {
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-struct dyString *trackDbJson = newDyString(1000);
-int trackDbJsonCount = 1;
-dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 if(imgBox->imgTracks == NULL)  // Not an error to have an empty image
     return;
 imgBoxDropEmpties(imgBox);
@@ -1675,16 +1686,21 @@ hPrintf(" class='tableWithDragAndDrop'");
 #endif//def IMAGEv2_DRAG_REORDER
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+struct dyString *jsonTdbVars = NULL;
+#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-    struct track *track = hashFindVal(trackHash, trackName);
-    if(track)
+    if (!trackImgOnly)
         {
-	trackJson(trackDbJson, track, trackDbJsonCount++);
+        struct track *track = hashFindVal(trackHash, trackName);
+        if(track)
+            jsonTdbSettingsBuild(&jsonTdbVars, track);
         }
 #endif
     //if(verbose && imgTrack->order == 3)
@@ -1745,8 +1761,7 @@ hPrintf("</TABLE>\n");
 hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-dyStringAppend(trackDbJson, "}\n</script>\n");
-if(!trackImgOnly)
-    hPrintf(dyStringContents(trackDbJson));
+if (!trackImgOnly)
+    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }

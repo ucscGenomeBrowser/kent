@@ -128,7 +128,8 @@ The format of the type fields:
    Unique type for Repeat Masker tracks
 12. type sample [min] [max]
    A continuous value graphing type of track.
-   Becoming obsolete, replaced by the 'type wig' tracks.
+   Completely obsolete, replaced by the 'type wig' tracks.
+   And 'type wig' tracks are more efficient and accurate as 'type bigWig'
    [min] - optional minimum limit of data, default 0.  Used just for label.
    [max] - optional maximum limit of data, default 1000. Used just for label.
 13. type wigMaf <minVal> <maxVal>
@@ -196,6 +197,7 @@ The format of the type fields:
             when using this setting.
 
 14. type wig [lower] [upper]
+   Deprecated type, more efficient and accurate are 'type bigWig' tracks.
    Continuous value graphing track.
    [lower] - overall lower limit of the data, default 0.0
    [upper] - overall upper limit of the data, default 127.0
@@ -358,6 +360,9 @@ table           - mySQL table name            - Allows multiple tracks to use th
 					      - track associated with the table where the track
 					      - name is the same as the table name, or the table
 					      - browser will have difficulties.
+configureByPopup - on, off                    - Default: on. If value is off, hgTracks does not use a modal dialog for hgTrackUi, but
+                                                instead always forces user to hgTrackUi page; this is useful for very
+                                                complicated config pages like dbSnp or multiz which do not work well in a modal dialog
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:

@@ -9,5 +9,6 @@ wgEncodeUwDnaseSeq.ra\
 wgEncodeCaltechRnaSeq.ra\
 wgEncodeReg.ra\
 wgEncodeUwAffyExonArray.ra\
+wgEncodeSunyalbanyRnaGeneChip.ra\
 
 include ../../../../makefile.metaDb

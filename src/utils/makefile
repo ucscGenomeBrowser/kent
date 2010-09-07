@@ -100,6 +100,7 @@ DIRS = \
 	gffPeek \
 	git-reports \
 	gitTools \
+	gtfToGenePred \
 	headRest \
 	htmlPics \
 	htmlCheck \
@@ -153,7 +154,6 @@ BAD_DIRS= \
 	ccCpLock \
 	est2genomeToPsl \
 	geneStarts \
-	gtfToGenePred \
 	jimgrep \
 	jkShell \
 	dnsInfo \

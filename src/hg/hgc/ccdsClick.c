@@ -17,7 +17,7 @@ struct ccdsInfo *getCcdsUrlForSrcDb(struct sqlConnection *conn, char *acc)
 /* Get a ccdsInfo object for a RefSeq, ensembl, or vega gene, if it
  * exists, otherwise return NULL */
 {
-if (hTableExists(database, "ccdsInfo"))
+if (sqlTableExists(conn, "ccdsInfo"))
     return ccdsInfoSelectByMrna(conn, acc);
 else
     return NULL;
@@ -347,7 +347,7 @@ printf("<TABLE class=\"hgcCcds\">\n");
 printf("<THEAD>\n");
 printf("<TR><TH>&nbsp;<TH>mRNA<TH>Protein</TR>\n");
 printf("</THEAD><TBODY>\n");
-if (hTableExists(database, "ccdsKgMap"))
+if (sqlTableExists(conn, "ccdsKgMap"))
     ccdsKnownGenesRows(conn, ccdsId);
 ccdsNcbiRows(ccdsId, rsCcds);
 if (vegaCcds != NULL)
@@ -366,8 +366,10 @@ printf("<P><EM>Note: mRNA and protein sequences in other gene collections "
 static void writePublicNotesHtml(struct sqlConnection *conn, char *ccdsId)
 /* write public notes if available */
 {
-struct ccdsNotes *ccdsNotes = sqlQueryObjs(conn, (sqlLoadFunc)ccdsNotesLoad, sqlQueryMulti,
-                                           "select * from ccdsNotes where ccds = \"%s\" order by createDate", ccdsId);
+struct ccdsNotes *ccdsNotes = NULL;
+if (sqlTableExists(conn, "ccdsNotes"))
+    ccdsNotes = sqlQueryObjs(conn, (sqlLoadFunc)ccdsNotesLoad, sqlQueryMulti,
+                             "select * from ccdsNotes where ccds = \"%s\" order by createDate", ccdsId);
 if (ccdsNotes != NULL)
     {
     htmlHorizontalLine();

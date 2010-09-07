@@ -192,7 +192,7 @@ dragAndDrop subTracks
 track bdtnpChipper
 compositeTrack on
 subGroup1 view Views best1=Best_Antibody_(FDR=1%) best25=Best_Antibody_(FDR=25%) other1=Other_Antibodies_(FDR=1%) other25=Other_Antibodies_(FDR=25%)
-subGroup2 factor Factor BCD=bcd CAD=cad GT=gt HB=hb KNI=kni KR=Kr HKB=huckebein TLL=tailless D=Dichaete FTZ=fushi_tarazu H=hairy PRD=paired RUN=runt SLP=sloppy_paired_1 DA=daughterless DL=dorsal MAD=Mothers_against_dpp MED=Medea  SHN=schnurri SNA=snail TWI=twist Z=zeste POLII=PolII TFIIB=Transcription_factor_IIB
+subGroup2 factor Factor BCD=bicoid CAD=caudal GT=giant HB=hunchback KNI=knirps KR=Kruppel HKB=huckebein TLL=tailless D=Dichaete FTZ=fushi_tarazu H=hairy PRD=paired RUN=runt SLP=sloppy_paired_1 DA=daughterless DL=dorsal MAD=Mothers_against_dpp MED=Medea  SHN=schnurri SNA=snail TWI=twist Z=zeste POLII=PolII TFIIB=Transcription_factor_IIB
 subGroup3 class Regulatory_class ape1m=Anterior-posterior_early_maternal ape2g=Anterior-posterior_early_gap ape3t=Anterior-posterior_early_terminal ape4gl=Anterior-posterior_early_gap-like app=Anterior-posterior_pair_rule dvm=Dorsal-ventral_maternal dvz=Dorsal-ventral_zygotic z=Zeste_stage_11 zzgen=General
 subGroup4 stage Stage s04=Stage_4-5 s09=Stage_9 s10=Stage_10 s11=Stage_11 s14=Stage_14
 dimensions dimensionX=class dimensionY=factor dimA=stage

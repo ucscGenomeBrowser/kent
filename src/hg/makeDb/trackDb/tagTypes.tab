@@ -55,6 +55,7 @@ colorChromDefault psl
 compareGenomeLinks bed
 compositeTrack *
 configurable *
+configureByPopup *
 container *
 controlledVocabulary *
 dataUrl customTracks
@@ -97,6 +98,7 @@ filterTopScorers bed5FloatScoreWithFdr bed5FloatScore
 firstItemPos customTracks
 frames wigMaf
 gClass_2way_consensus_pseudogene genePred
+gClass_2way_pseudogene genePred
 gClass_Artifact bed genePred
 gClass_Ensembl_RNA genePred
 gClass_Ensembl_coding genePred
