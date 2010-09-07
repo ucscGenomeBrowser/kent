@@ -799,6 +799,34 @@ function getSizeFromCoordinates(position)
 var gWaitFuncArgs = [];
 var gWaitFunc;
 
+function waitMaskClear()
+{ // Clears the waitMask
+    var  waitMask = $('#waitMask');
+    if( waitMask != undefined )
+        $(waitMask).hide();
+}
+
+function waitMaskSetup(timeOutInMs)
+{ // Sets up the waitMask to block page manipulation until cleared
+
+    // Find or create the waitMask (which masks the whole page)
+    var  waitMask = $('#waitMask');
+    if( waitMask == undefined || waitMask.length != 1) {
+        // create the waitMask
+        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        waitMask = $('#waitMask');
+        // Special for IE
+        if ($.browser.msie)
+            $(waitMask).css('filter','alpha(opacity= 0)');
+    }
+    $(waitMask).css('display','block');
+
+    // Things could fail, so always have a timeout.
+    if(timeOutInMs == undefined || timeOutInMs <=0)
+        timeOutInMs = 5000; // Don't ever leave this as infinite
+    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+}
+
 function _launchWaitOnFunction()
 { // should ONLY be called by waitOnFunction()
   // Launches the saved function
@@ -832,7 +860,7 @@ function _launchWaitOnFunction()
         }
     }
     // Now we can get rid of the wait cursor
-    $('#waitMask').css('display','none');
+    waitMaskClear();
 }
 
 function waitOnFunction(func)
@@ -846,17 +874,7 @@ function waitOnFunction(func)
         return false;
     }
 
-    // Find or create the waitMask (which masks the whole page)
-    var  waitMask = $('#waitMask');
-    if( waitMask == undefined || waitMask.length != 1) {
-        // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
-        waitMask = $('#waitMask');
-        // Special for IE
-        if ($.browser.msie)
-            $(waitMask).css('filter','alpha(opacity= 0)');
-    }
-    $(waitMask).css('display','block');
+    waitMaskSetup(5000);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
     if(arguments.length > 1 && arguments[1].type != undefined) {
