@@ -100,7 +100,6 @@ DIRS = \
 	gffPeek \
 	git-reports \
 	gitTools \
-	gtfToGenePred \
 	headRest \
 	htmlPics \
 	htmlCheck \
