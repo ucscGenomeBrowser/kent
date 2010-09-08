@@ -3146,7 +3146,7 @@ vendorId 612044
 lab Farnham
 targetId GeneCard:GC10M126666
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTBP2&search=ctbp2=GC10M126666
-validation CtBP2(Western_blot,siRna):Farnham_CtBP2_validation.pdf
+validation CtBP2(Western_blot,siRna):human_CtBP2_validation_Farnham.pdf
 
 term E2F1
 tag E2F1
@@ -3174,7 +3174,7 @@ orderUrl http://www.scbt.com/datasheet-866-e2f-4-c-20-antibody.html
 lab Farnham
 targetId GeneCard:GC16P065783
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P065783
-validation E2F4(IP-WB,ChIP):Farnham_E2F4_validation.pdf
+validation E2F4(IP-WB,ChIP):human_E2F4_validation_Farnham.pdf
 
 term E2F6
 tag E2F6
@@ -3188,7 +3188,7 @@ orderUrl http://www.scbt.com/datasheet-22823-e2f-6-h-50-antibody.html
 lab Farnham
 targetId GeneCard:GC02M011536
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC02M011536
-validation E2F6(Western_blot,siRNA-ChIP):Farnham_E2F6_validation.pdf
+validation E2F6(Western_blot,siRNA-ChIP):human_E2F6_validation_Farnham.pdf
 
 term EBF
 tag EBF
@@ -3230,7 +3230,7 @@ orderUrl http://www.scbt.com/datasheet-543-eralpha-hc-20-antibody.html
 lab Ruan
 targetId GeneCard:ESR1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ESR1&search=ESR1
-validation ERalpha_a(immunoblots):Myers_ERalpha_a_validation.pdf
+validation ERalpha_a(immunoblots):human_ERalpha_a_validation_Myers.pdf
 
 ##This does not appear in metaDb
 term ERalpha_b
@@ -3284,7 +3284,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-350
 orderUrl http://www.scbt.com/datasheet-350-ets-1-c-20-antibody.html
 lab Myers
-validation ETS1(immunoblots):Myers_ETS1_validation.pdf
+validation ETS1(immunoblots):human_ETS1_validation_Myers.pdf
 
 term FOSL2
 tag FOSL2
@@ -3356,7 +3356,7 @@ orderUrl
 targetId GeneCard:GC03M129680
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
 lab Farnham
-validation GATA-2(Western_blot,siRNA):Farnham_GATA-2_validation.pdf
+validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 
 term GR
 tag GR
@@ -3480,7 +3480,7 @@ lab Farnham
 lots 1,2
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me3B(Western_blot,competitor_peptides):Farnham_H3K4me3B_validation.pdf
+validation H3K4me3B(Western_blot,competitor_peptides):human_H3K4me3B_validation_Farnham.pdf
 
 term H3K9ac
 tag H3K9ac
@@ -3588,7 +3588,7 @@ lab Farnham
 lots 1
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K27me3B(Western_blot,peptide_ELISA):Farnham_H3K27me3B_validation.pdf
+validation H3K27me3B(Western_blot,peptide_ELISA):human_H3K27me3B_validation_Farnham.pdf
 
 term H3K36me3
 tag H3K36me3
@@ -3619,7 +3619,7 @@ lab Farnham
 lots
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K36me3B(Western_blot,peptide_ELISA):Farnham_H3K36me3B_validation.pdf
+validation H3K36me3B(Western_blot,peptide_ELISA):human_H3K36me3B_validation_Farnham.pdf
 
 term H3K79me2
 tag H3K79me2
@@ -3763,7 +3763,7 @@ orderUrl http://www.scbt.com/datasheet-9082-irf-3-fl-425-antibody.html
 lab Snyder
 targetId GeneCard:IRF1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=IRF3
-validation IRF3(immunoblots):Snyder_IRF3_validation.pdf
+validation IRF3(immunoblots):human_IRF3_validation_Snyder.pdf
 
 term IRF4
 tag IRF4
@@ -3805,7 +3805,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=10483
 lab Farnham
 targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
-validation KAP1(Western,IP-WB):Farnham_KAP1_validation.pdf
+validation KAP1(Western,IP-WB):human_KAP1_validation_Farnham.pdf
 
 term Max
 tag MAX
@@ -3834,7 +3834,7 @@ orderUrl http://www.scbt.com/datasheet-313-mef-2-c-21-antibody.html
 lab Myers
 targetId GeneCard:GC15P100107
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MEF2A&search=mef2a
-validation MEF2A(immunoblots):Myers_MEF2A_validation.pdf
+validation MEF2A(immunoblots):human_MEF2A_validation_Myers.pdf
 
 term NELFe
 tag NELFE
@@ -4061,7 +4061,7 @@ lab Farnham, Iyer, Snyder
 lots 14861301, 14922701
 targetId
 targetUrl
-validation Pol2(immunoblots):Snyder_Pol2_validation.pdf
+validation Pol2(immunoblots):human_Pol2_validation_Synder.pdf
 
 term Pol2(b)
 tag POL2B
@@ -4399,7 +4399,7 @@ orderUrl http://www.abcam.com/TATA-binding-protein-TBP-antibody-mAbcam-62126-Nuc
 lab Snyder
 targetId GeneCard:TBP
 targetUrl hhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
-validation TBP(immunoblots):Snyder_TBP_validation.pdf
+validation TBP(immunoblots):human_TBP_validation_Snyder.pdf
 
 term TCF12
 tag TCF12
@@ -4527,7 +4527,7 @@ orderUrl http://www.abcam.com/USF2-antibody-ab60931.html
 lab Snyder
 targetId GeneCard:USF2
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=USF2
-validation USF2(immunoblots):Snyder_USF2_validation.pdf
+validation USF2(immunoblots):human_USF2_validation_Snyder.pdf
 
 term WHIP
 tag WHIP
@@ -4555,7 +4555,7 @@ vendorId ab145
 lab Snyder
 targetId GeneCard:GC05P082409
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC05P082409
-validation XRCC4(immunoblots):Snyder_XRCC4_validation.pdf
+validation XRCC4(immunoblots):human_XRCC4_validation_Snyder.pdf
 
 term YY1
 tag YY1
@@ -4563,13 +4563,28 @@ type Antibody
 target YY1
 antibodyDescription Rabbit polyclonal
 targetDescription YIN YANG 1 transcription factor belongs to the GLI-Kruppel class of zinc finger proteins.
-vendorName Santa Cruz Biotech;Sanata Cruz Biotech
-vendorId sc-1703X;sc-281
+vendorName Santa Cruz Biotech
+vendorId sc-1703X
 orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
 lab Farnham
 targetId GeneCard:GC14P099774
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
-validation YY1(immunoblots):Myers_YY1_validation.pdf
+validation missing
+
+
+term YY1_(C-20)
+tag YY1C20
+type Antibody
+target YY1
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of YY1 of human origin
+targetDescription YY1 is a ubiquitously distributed transcription factor belonging to the GLI-Kruppel class of zinc finger proteins.  The protein is involved in repressing and activating a diverse number of promoters.  YY1 may direct histone deacetylases and histone acetyltransferases to a promoter in order to activate or repress the promoter, thus implicating histone modification in the function of YY1
+vendorName Santa Cruz Biotech
+vendorId sc-281
+orderUrl http://www.scbt.com/product.php?datasheet=1703; http://www.scbt.com/product.php?datasheet=281
+lab Myers
+targetId GeneCard:GC14P099774
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
+validation YY1(immunoblots):human_YY1_C-20_validation_Myers.pdf
 
 term ZBTB33
 tag ZBTB33
@@ -4613,7 +4628,7 @@ lab Farnham
 lots 060729QCS1
 targetId GeneCard:GC19P063386
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ZNF274&search=znf274
-validation ZN274(WB,IP,siRNA):Farnham_ZNF274_validation.pdf
+validation ZN274(WB,IP,siRNA):human_ZNF274_validation_Farnham.pdf
 
 term ZZZ3
 tag ZZZ3
