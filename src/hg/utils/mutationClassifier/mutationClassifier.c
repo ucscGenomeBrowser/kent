@@ -18,6 +18,7 @@
 #include "dnaMarkov.h"
 #include "dnaMarkovSql.h"
 #include "bed6FloatScore.h"
+#include "nibTwo.h"
 
 int debug = 0;
 char *outputExtension = NULL;
@@ -639,7 +640,11 @@ boolean motifTableExists = sqlTableExists(conn, clusterTable);
 boolean markovTableExists = markovTable != NULL && sqlTableExists(conn, markovTable);
 long time;
 struct genePred *genes = NULL;
+char pathName[2056];
+struct nibTwoCache *ntc;
 
+safef(pathName, sizeof(pathName), "/gbdb/%s/%s.2bit", database, database);
+ntc = nibTwoCacheNew(pathName);
 if(!skipGeneModel || bindingSites)
     {
     time = clock1000();
@@ -866,8 +871,10 @@ while(!done)
                     int count = 0;
 
                     struct dnaMotif *motif = loadMotif(database, site->name, NULL);
-                    beforeSeq = hDnaFromSeq(database, site->chrom, site->chromStart, site->chromEnd, dnaUpper);
-                    afterSeq = hDnaFromSeq(database, site->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                    beforeSeq = nibTwoCacheSeqPartExt(ntc, site->chrom, site->chromStart, site->chromEnd - site->chromStart, TRUE, NULL);
+                    touppers(beforeSeq->dna);
+                    afterSeq = nibTwoCacheSeqPartExt(ntc, site->chrom, site->chromStart, site->chromEnd - site->chromStart, TRUE, NULL);
+                    touppers(afterSeq->dna);
                     if(*site->strand == '-')
                         {
                         reverseComplement(beforeSeq->dna, beforeSeq->size);
@@ -944,9 +951,11 @@ while(!done)
                                 dnaMotifMakeLog2(motif);
                             dnaMarkMakeLog2(mark2);
 
-                            seq = hDnaFromSeq(database, bed->chrom, site->chromStart - 2, site->chromEnd + 2, dnaUpper);
+                            seq = nibTwoCacheSeqPartExt(ntc, bed->chrom, site->chromStart - 2, site->chromEnd - site->chromStart + 4, TRUE, NULL);
+                            touppers(seq->dna);
                             if(refCall && seq->dna[bed->chromStart - site->chromStart + 2] != refCall)
-                                errAbort("Actual reference doesn't match what is reported in input file");
+                                errAbort("Actual reference (%c) doesn't match what is reported in input file (%c): %s:%d-%d", 
+                                         refCall, seq->dna[bed->chromStart - site->chromStart + 2], bed->chrom, site->chromStart - 2, site->chromEnd + 2);
                             if(*site->strand == '-')
                                 {
                                 reverseComplement(seq->dna, seq->size);
@@ -964,9 +973,11 @@ while(!done)
                             }
                         else
                             {
-                            seq = hDnaFromSeq(database, bed->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                            seq = nibTwoCacheSeqPartExt(ntc, bed->chrom, site->chromStart, site->chromEnd - site->chromStart, TRUE, NULL);
+                            touppers(seq->dna);
                             if(refCall && seq->dna[bed->chromStart - site->chromStart] != refCall)
-                                errAbort("Actual reference doesn't match what is reported in input file");
+                                errAbort("Actual reference (%c) doesn't match what is reported in input file (%c): %s:%d-%d", 
+                                         refCall, seq->dna[bed->chromStart - site->chromStart], bed->chrom, site->chromStart, site->chromEnd);
                             if(*site->strand == '-')
                                 {
                                 reverseComplement(seq->dna, seq->size);
@@ -1048,6 +1059,7 @@ while(!done)
 
 sqlDisconnect(&conn);
 sqlDisconnect(&conn2);
+nibTwoCacheFree(&ntc);
 }
 
 int main(int argc, char** argv)
