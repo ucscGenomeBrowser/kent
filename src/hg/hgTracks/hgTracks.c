@@ -2391,6 +2391,7 @@ if (withGuidelines)
         struct tempName gifBg;
         trashDirFile(&gifBg, "hgt", "bg", ".png");  // TODO: We could have a few static files by (pixHeight*pixWidth)  And I doubt pixHeight is needed!
         bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+        bgImg->rc = revCmplDisp;
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
         }
     #endif //defined(IMAGEv2_BG_IMAGE) && defined(USE_PNG)
