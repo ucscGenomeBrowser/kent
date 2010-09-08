@@ -9,7 +9,6 @@ dimensions dimensionX=cellType dimensionY=fragSize
 sortOrder cellType=+ fragSize=+ 
 controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
-priority 0
 type bam
 pairEndsByName on
 showNames off
