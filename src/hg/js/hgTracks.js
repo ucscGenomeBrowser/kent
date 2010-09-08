@@ -1266,6 +1266,7 @@ $(document).ready(function()
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
+        $("#tabs").css('font-family', jQuery('body').css('font-family'));
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
