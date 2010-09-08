@@ -4571,7 +4571,6 @@ targetId GeneCard:GC14P099774
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=YY1&search=yy1
 validation missing
 
-
 term YY1_(C-20)
 tag YY1C20
 type Antibody
