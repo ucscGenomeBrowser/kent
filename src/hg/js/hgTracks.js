@@ -101,7 +101,7 @@ function setPosition(position, size)
 // We assume size has already been commified.
 // Either position or size may be null.
     if(position) {
-        // XXXX There are multiple tags with name == "position":^(
+        // There are multiple tags with name == "position" (one in TrackHeaderForm and another in TrackForm).
 	var tags = document.getElementsByName("position");
 	for (var i = 0; i < tags.length; i++) {
 	    var ele = tags[i];
@@ -1266,6 +1266,7 @@ $(document).ready(function()
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
+        $("#tabs").css('font-family', jQuery('body').css('font-family'));
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
@@ -1485,7 +1486,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                         // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
                         // See comments below on safari problems.
                         jQuery('body').css('cursor', 'wait');
-                        document.TrackForm.submit();
+                        if(document.TrackForm)
+                            document.TrackForm.submit();
+                        else
+                            document.TrackHeaderForm.submit();
                     } else {
                         jQuery('body').css('cursor', '');
                         $.ajax({
@@ -1580,6 +1584,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         } else if (!mapIsUpdateable) {
             jQuery('body').css('cursor', 'wait');
             if(selectUpdated) {
+                // assert(document.TrackForm);
                 document.TrackForm.submit();
             } else {
                     // add a hidden with new visibility value
