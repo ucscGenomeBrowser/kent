@@ -22246,6 +22246,11 @@ char **row;
 boolean firstTime = TRUE;
 int start = cartInt(cart, "o");
 int num = 6;
+char itemNameDash[64]; /* itenName appended with a "_" */
+char itemNameTrimmed[64]; /* itemName trimed at last "_" */
+//char itemNameTrimmedDash[64]; /* itemName trimed with dash added back */
+
+int sDiff = 30; /* acceptable difference of genomics size */
 /* message strings */
 char clickMsg[128];
 char *openMsg1 = "Click 'browser' link below to open Genome Browser at genomic position where";
@@ -22253,39 +22258,72 @@ char *openMsg2 = "maps\n";
 char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochondrial position where";
 
 
-
-
 genericHeader(tdb, itemName);
-//genericClickHandler(tdb, itemName, NULL);
 genericBedClick(conn, tdb, itemName, start, num);
-printTBSchemaLink(tdb);
+/* 
+printTBSchemaLink(tdb); 
 printf("<BR>");
 char *date = firstWordInLine(sqlTableUpdate(conn, table));
 if (date != NULL)
     printf("<B>Data last updated:</B> %s<BR>\n", date);
+*/
+strcpy(itemNameDash, itemName);
+strcat(itemNameDash, "_");
+strcpy(itemNameTrimmed, itemName);
+char *tPt = strrchr(itemNameTrimmed, '_');
+*tPt = '\0';
+
+safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
+      table, itemName);
+sr = sqlGetResult(conn, query);
+int sSize=0;
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+        bed = bedLoad6(row);
+        sSize = bed->chromEnd - bed->chromStart;
+        /* printf("sSize is: %5d <BR>", sSize); */
+    }
+
+
 
 if (sameString("numtS", table))
     {
     safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand from numtSMitochondrion  where name =  '%s'", itemName); /* name like  '%s%%'" */
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtSMitochondrionChrPlacement where ( "
+        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
     strcpy(clickMsg, openMsgM);
     }
 else if (sameString("numtSAssembled", table))
     {
     safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand from numtSMitochondrion  where name =  '%s'", itemName);
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtSMitochondrionChrPlacement where ( "
+        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
     strcpy(clickMsg, openMsgM);
     }
 else if (sameString("numtSMitochondrion", table))
     {
     safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand from numtS  where name =  '%s'", itemName);
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtS where ( "
+        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
     strcpy(clickMsg, openMsg1);
     }
 else if (sameString("numtSMitochondrionChrPlacement", table))
     {
     safef(query, sizeof(query),
-        "select  chrom, chromStart, chromEnd, name, score, strand from numtS  where name =  '%s'", itemName);
+        "select  chrom, chromStart, chromEnd, name, score, strand "
+        "from numtS where ( "
+        "(name = '%s') OR (((name REGEXP '^%s') OR (name='%s')) AND "
+        " (ABS((chromEnd - chromStart)-%d) <= %d ))) ",
+    itemName, itemNameDash, itemNameTrimmed, sSize, sDiff);
     strcpy(clickMsg, openMsg1);
     }
     sr = sqlGetResult(conn, query);
@@ -22320,7 +22358,7 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
         printf("</TT></PRE>");
         }
 
-
+ printf("<BR>");
  printTrackHtml(tdb); 
  hFreeConn(&conn);
 }
