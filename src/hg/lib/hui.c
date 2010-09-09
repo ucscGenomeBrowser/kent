@@ -48,12 +48,6 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 
 //#define SUBTRACK_CFG_POPUP
 //#define BAM_CFG_UI_CHANGES
-// TODO: For subtrack cfg and integration with right-click and subtrack level vis:
-/*
-1) Composite/view level settings should be ajaxed over upon change
-2) subtrack popup should only register changed vars.  Like findTracks, this could be done by seen inputs with id and hidden inputs with name.
-3) subtrack cfg of vis should only set this var if changed from current possibly inherited state.
-*/
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
