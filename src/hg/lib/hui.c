@@ -47,12 +47,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 //#define SUBTRACK_CFG_POPUP
-// TODO: For subtrack cfg and integration with right-click and subtrack level vis:
-/*
-1) Composite/view level settings should be ajaxed over upon change
-2) subtrack popup should only register changed vars.  Like findTracks, this could be done by seen inputs with id and hidden inputs with name.
-3) subtrack cfg of vis should only set this var if changed from current possibly inherited state.
-*/
+//#define BAM_CFG_UI_CHANGES
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -972,7 +967,10 @@ if (gotCds && gotSeq)
 			baseColorDrawAllOptionValues,
 			ArraySize(baseColorDrawAllOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+#ifndef BAM_CFG_UI_CHANGES
+    printf("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+    printf("<A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
 else if (gotCds)
@@ -982,7 +980,10 @@ else if (gotCds)
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
+#ifndef BAM_CFG_UI_CHANGES
+    printf("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+    printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     }
 else if (gotSeq)
@@ -992,7 +993,10 @@ else if (gotSeq)
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on base coloring</A><BR>",
+#ifndef BAM_CFG_UI_CHANGES
+    printf("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+    printf("<A HREF=\"%s\">Help on base coloring</A><BR>",
 	   CDS_BASE_HELP_PAGE);
     }
 }
@@ -1037,6 +1041,30 @@ if (indelAppropriate(tdb))
     boolean showDoubleInsert, showQueryInsert, showPolyA;
     char var[512];
     indelEnabled(cart, tdb, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
+#ifdef BAM_CFG_UI_CHANGES
+    printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
+    printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
+           INDEL_HELP_PAGE);
+    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
+    cgiMakeCheckBox(var, showDoubleInsert);
+    printf("</TD><TD>Draw double horizontal lines when both genome and query have "
+           "an insertion</TD></TR>\n<TR valign='top'><TD>");
+    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->track);
+    cgiMakeCheckBox(var, showQueryInsert);
+    printf("</TD><TD>Draw a vertical purple line for an insertion at the beginning or "
+           "end of the <BR>query, orange for insertion in the middle of the query</TD></TR>\n<TR valign='top'><TD>");
+    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->track);
+    /* We can highlight valid polyA's only if we have query sequence --
+     * so indelPolyA code piggiebacks on baseColor code: */
+    if (baseColorGotSequence(tdb))
+        {
+        cgiMakeCheckBox(var, showPolyA);
+        printf("</TD><TD>Draw a vertical green line where query has a polyA tail "
+               "insertion</TD></TR>\n");
+        }
+
+    printf("</TABLE>\n");
+#else///ifndef BAM_CFG_UI_CHANGES
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
     safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
     cgiMakeCheckBox(var, showDoubleInsert);
@@ -1062,6 +1090,7 @@ if (indelAppropriate(tdb))
     printf("<A HREF=\"%s\">Help on alignment gap/insertion display options</A>"
 	   "<BR>\n",
 	   INDEL_HELP_PAGE);
+#endif///ndef BAM_CFG_UI_CHANGES
     }
 }
 
@@ -3683,11 +3712,15 @@ if (date != NULL)
 return date;
 }
 
-static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
+static void cfgLinkToDependentCfgs(struct cart *cart, struct trackDb *tdb,char *prefix)
 /* Link composite or view level controls to all associateled lower level controls */
 {
-if(tdbIsComposite(tdb)) // FIXME: Only when some subtracks are configurable
+if (!cartVarExists(cart, "ajax") && tdbIsComposite(tdb))
+#ifdef SUBTRACK_CFG_POPUP
+    printf("<script type='text/javascript'>registerViewOnchangeAction('%s')</script>\n",prefix);
+#else///ifndef SUBTRACK_CFG_POPUP
     printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
+#endif///ndef SUBTRACK_CFG_POPUP
 }
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
@@ -3703,7 +3736,9 @@ struct dyString *dyHtml = newDyString(SMALLBUF);
 char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
+#ifndef SUBTRACK_CFG_POPUP
 boolean dependentCfgsNeedBinding = FALSE;
+#endif///ndef SUBTRACK_CFG_POPUP
 
 // Get list of leaf subtracks to work with
 struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
@@ -4009,8 +4044,10 @@ if(slCount(subtrackRefList) > 5)
 puts("<P>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
+#ifndef SUBTRACK_CFG_POPUP
 if(dependentCfgsNeedBinding)
-    cfgLinkToDependentCfgs(parentTdb,parentTdb->track);
+    cfgLinkToDependentCfgs(cart,parentTdb,parentTdb->track);
+#endif//ndef SUBTRACK_CFG_POPUP
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
 dyStringFree(&dyHtml)
 sortOrderFree(&sortOrder);
@@ -4064,7 +4101,7 @@ if (boxed)
     char *view = tdbGetViewName(tdb);
     if(view != NULL)
         printf(" %s",view);
-    printf("' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD align='RIGHT'>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
+    printf("' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
     if (title)
         printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
     }
@@ -5462,6 +5499,33 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
+
+#ifdef BAM_CFG_UI_CHANGES
+printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
+safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
+cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
+printf("</TD><TD>Display read names</TD>");
+if (boxed && fileExists(hHelpFile("hgBamTrackHelp")))
+    printf("<TD style='text-align:right'><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
+           "configuration help</A></TD>");
+printf("</TR>\n");
+boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
+if (canPair)
+    {
+    printf("<TR><TD>");
+    safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, name);
+    cartMakeCheckBox(cart, cartVarName, TRUE);
+    printf("</TD><TD>Attempt to join paired end reads by name\n");
+    //puts("<BR>");
+    }
+printf("<TR><TD colspan=2>Minimum alignment quality:\n");
+safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
+cartMakeIntVar(cart, cartVarName,
+               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
+printf("</TD></TR></TABLE>");
+
+#else///nef BAM_CFG_UI_CHANGES
 puts("<BR>");
 printf("<B>Display read names:</B>\n");
 char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
@@ -5479,8 +5543,10 @@ if (canPair)
 printf("<B>Minimum alignment quality:</B>\n");
 safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
 cartMakeIntVar(cart, cartVarName,
-	       atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
+               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 puts("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+
 if (isCustomTrack(name))
     {
     // Auto-magic baseColor defaults for BAM, same as in hgTracks.c newCustomTrack
@@ -5490,6 +5556,9 @@ if (isCustomTrack(name))
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 baseColorDrawOptDropDown(cart, tdb);
+#ifdef BAM_CFG_UI_CHANGES
+puts("<BR>");
+#endif///def BAM_CFG_UI_CHANGES
 indelShowOptions(cart, tdb);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
@@ -5523,11 +5592,18 @@ if (trackDbSetting(tdb, "noColorTag") == NULL)
     printf("<BR>\n");
     }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
-printf("No additional coloring<BR>\n");
+printf("No additional coloring");
+#ifndef BAM_CFG_UI_CHANGES
+printf("<BR>\n");
+#endif///ndef BAM_CFG_UI_CHANGES
 
 //TODO: include / exclude flags
 
+#ifdef BAM_CFG_UI_CHANGES
+if (!boxed && fileExists(hHelpFile("hgBamTrackHelp")))
+#else///ifndef BAM_CFG_UI_CHANGES
 if (fileExists(hHelpFile("hgBamTrackHelp")))
+#endif///ndef BAM_CFG_UI_CHANGES
     printf("<P><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
 	   "configuration help</A></P>");
 
@@ -5696,7 +5772,7 @@ if(makeCfgRows)
                 {
                 cfgByCfgType(configurable[ix],db,cart,view->subtracks,varName,
                         membersOfView->titles[ix],TRUE);
-                cfgLinkToDependentCfgs(parentTdb,varName);
+                cfgLinkToDependentCfgs(cart,parentTdb,varName);
                 }
             }
         }
@@ -6493,7 +6569,7 @@ boolean displayAll =
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-if(cartOptionalString(cart, "ajax") == NULL)
+if (!cartVarExists(cart, "ajax"))
     {
     if(trackDbSetting(tdb, "dragAndDrop") != NULL)
         jsIncludeFile("jquery.tablednd.js", NULL);
@@ -6507,6 +6583,7 @@ jsIncludeFile("hui.js",NULL);
 #ifdef SUBTRACK_CFG_POPUP
 printf("<div id='popit' style='display: none'></div>");
 cgiMakeHiddenVar("db", db);
+printf("<input type=HIDDEN id='track' value='%s';</input>\n",tdb->track);
 #endif
 puts("<P>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
@@ -6540,6 +6617,11 @@ if(primarySubtrack == NULL)
             hCompositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }
+#ifdef SUBTRACK_CFG_POPUP
+    if(primarySubtrack == NULL)
+        cfgLinkToDependentCfgs(cart,tdb,tdb->track);  // Must be after views are set up to get view vis
+    printf("<script type='text/javascript'>registerFormSubmit('mainForm');</script>\n");
+#endif
     }
 
 cartSaveSession(cart);
