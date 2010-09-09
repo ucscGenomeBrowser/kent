@@ -338,7 +338,7 @@ colorByStrand -   r,g,b r,g,b                 - specifies plus and minus strand 
                                               - this has no effect for elements w/out strand
 priority     -    a decimal number            - used to order this track
                                               - within this track group
-                                              - default 100. Sort is by priority then shortLabel
+					      - if no priority line, hgTrackDb sets priority to 100
 chromosomes  -    comma separated list        - only these chroms have data
                                               - for this track, this track is
                                               - not shown on other chroms

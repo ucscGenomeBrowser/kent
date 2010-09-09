@@ -15,6 +15,11 @@
 	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/c_elegans/
     #	about 11 minutes
 
+    mkdir acedb
+    cd acedb
+    wget --no-parent --timestamping -m -nH --cut-dirs=4 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/acedb/
+
 #########################################################################
 # NORMALIZE SEQUENCE NAMES TO BEGIN WITH chr (DONE - 2010-07-08 - Hiram)
     mkdir /hive/data/genomes/ce9/sanger
@@ -180,3 +185,122 @@ taxId 6239
 	where name="ce9";' hgcentraltest
 
 ############################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-07 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add ce9 just before ce6
+
+# ce9 (C. elegans)
+ce9.serverGenome = /hive/data/genomes/ce9/ce9.2bit
+ce9.clusterGenome = /scratch/data/ce9/ce9.2bit
+ce9.ooc = /scratch/data/ce9/ce9.11.ooc
+ce9.refseq.mrna.native.pslCDnaFilter  = ${finished.refseq.mrna.native.pslCDnaFilter}
+ce9.refseq.mrna.xeno.pslCDnaFilter    = ${finished.refseq.mrna.xeno.pslCDnaFilter}
+ce9.genbank.mrna.native.pslCDnaFilter = ${finished.genbank.mrna.native.pslCDnaFilter}
+ce9.genbank.mrna.xeno.pslCDnaFilter   = ${finished.genbank.mrna.xeno.pslCDnaFilter}
+ce9.genbank.est.native.pslCDnaFilter  = ${finished.genbank.est.native.pslCDnaFilter}
+ce9.maxIntron = 100000
+ce9.lift = no
+ce9.genbank.mrna.xeno.load = yes
+ce9.refseq.mrna.xeno.load = yes
+ce9.downloadDir = ce9
+# ce9.upstreamGeneTbl = refGene
+# ce9.upstreamMaf = multiz6way /hive/data/genomes/ce9/bed/multiz6way/species.lst
+
+    git commit -m "Added ce9 C. elegans WS120" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial ce9 &
+    #	logFile: var/build/logs/2010.09.07-11:34:55.ce9.initalign.log
+XXX - running Tue Sep  7 11:35:08 PDT 2010
+    #	real    137m58.675s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad ce9
+    #	logFile: var/dbload/hgwdev/logs/2008.05.30-20:29:01.dbload.log
+    #	real    23m8.651s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    cvsup
+    # add ce9 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    cvs ci -m "Added ce9 - C. elegans WS190" \
+	etc/align.dbs etc/hgwdev.dbs
+    make etc-update
+
+#########################################################################
+## SANGER GENE TRACK (DONE - 2010-09-07 - Hiram)
+##	There is a tremendous amount of extraneous notations in the gff
+##	files.  Filter them down to a manageable set, change the chrom
+##	names, eliminate duplicates, select only what will work in
+##	ldHgGene
+    mkdir /hive/data/genomes/ce9/bed/sangerGene
+    cd /hive/data/genomes/ce9/bed/sangerGene
+/hive/data/genomes/ce9/ws210] less genome_feature_tables/GFF2/CHROMOSOME_I.gff
+
+for C in I II III IV V X
+do
+    echo -n "${C} "
+    cat ../../ws210/genome_feature_tables/GFF2/CHROMOSOME_${C}.gff | \
+    sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+        s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+        s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+        s/CHROMOSOME_M/chrM/g;" \
+        -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+        -e 's/CDS "//' -e 's/"//' \
+                > chr${C}.gff
+done
+C=M
+echo -n "${C} "
+cat ../../ws210/genome_feature_tables/GFF2/CHROMOSOME_MtDNA.gff | \
+sed -e "s/CHROMOSOME_III/chrIII/g; s/CHROMOSOME_II/chrII/g; \
+    s/CHROMOSOME_IV/chrIV/g; s/CHROMOSOME_I/chrI/g; \
+    s/CHROMOSOME_X/chrX/g; s/CHROMOSOME_V/chrV/g; \
+    s/CHROMOSOME_M/chrM/g; s/chrMtDNA/chrM/g;" \
+    -e 's/Sequence "\(.*\)"$/\1/' -e 's/Transcript "\(.*\)"$/\1/' \
+    -e 's/CDS "//' -e 's/"//' \
+            > chr${C}.gff
+# now filter them to gene definitions
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> filtered.chr${C}.gff"
+    grep -v "^#" chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"curated|Coding_transcript")) {
+	if (match($3,"intron|coding_exon|exon|CDS|three_prime_UTR|five_prime_UTR")) {
+	    gsub("coding_exon","CDS",$3)
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            gsub("three_prime_UTR","3utr",$3)
+            gsub("five_prime_UTR","5utr",$3)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > filtered.chr${C}.gff
+done
+
+# turn them into genePred files
+    nice -n +19 ldHgGene -nobin ce9 sangerGene filtered.*.gff
+    #	Read 55808 transcripts in 1037738 lines in 7 files
+    #	55808 groups 7 seqs 3 sources 5 feature types
+    #	31290 gene predictions
+    nice -n +19 ldHgGene -nobin ce9 sangerGene filtered.*.gff
+    mv genePred.tab filteredGenePred.tab
+
+###############################################################################
