@@ -49,15 +49,16 @@ file ddf
 type int
 required no
 
+# RETIRING IT 9/9/10 
 # This field is used by UW 
 # It is sort of like replicate
 # It would be great if someone in the know could explain this
 # This is a priority of which replicate should be displayed.  It was made because it is difficult to change rep1 to rep2.
 # Retire when Brian has the file nameing issues worked out
-field rank
-file ddf
-type int
-required no
+#field rank
+#file ddf
+#type int
+#required no
 
 # This is a ChIP-seq variable
 # Cricket wonders if it is redundant with medianFragLength 
@@ -97,11 +98,6 @@ type string
 required no
 
 field phase
-file ddf
-type string
-required no
-
-field insLength
 file ddf
 type string
 required no
@@ -215,22 +211,24 @@ file dafHeader
 type string
 required no
 
+# RETIRING IT 9/9/10
 # This is in the DAF and not the DDF
 # It seems to represent the same information as fragLength
 # Is it redundant
 # needs to go
-field medianFragmentLength
-file dafHeader
-type int
-required no
+#field medianFragmentLength
+#file dafHeader
+#type int
+#required no
 
+# RETIRING IT 9/9/10
 # ???????  most likely in Hudson Alpha
 # This comes from creating own signals
 # 
-field fragmentLengthRange
-file dafHeader
-type int
-required no
+#field fragmentLengthRange
+#file dafHeader
+#type int
+#required no
 
 # This is where we list things like Freeze date
 # Cricket also wonders if this should be controlled
@@ -255,12 +253,13 @@ file dafHeader
 type string
 required no
 
+# RETIRING IT 9/9/10
 # Not needed any more as we are not makeing signals
 # I have no idea
-field noAutoCreate
-file dafHeader
-type bool
-required no
+#field noAutoCreate
+#file dafHeader
+#type bool
+#required no
 
 # DAF view fields
 field longLabelPrefix
@@ -290,12 +289,13 @@ file dafList
 type bool
 required yes
 
+#RETIRING IT 9/9/10
 # Tim says this is not used
 # May have been to set a priority in the trackDb, it would be completely worthless to do that now
-field order
-file dafList
-type int
-required no
+#field order
+#file dafList
+#type int
+#required no
 
 # This specifies if the view is download only
 # It is used by ????
@@ -304,12 +304,12 @@ file dafList
 type bool
 required no
 
-
+#RETIRING IT 9/9/10
 # Maybe larrym has some idea about how this works.  May have been validate settings type of thing
-field options
-file dafList
-type string
-required no
+#field options
+#file dafList
+#type string
+#required no
 
 # This is made by Kate and is only used in one DAF
 # Attempt to make a general way to have bedish files
@@ -320,20 +320,3 @@ file dafList
 type string
 required no
 
-
-
-
-
-
-
-
-# cv.ra fields
-#field term
-#file cv
-#type string
-#required yes
-
-#field type
-#file cv
-#type string
-#required yes
