@@ -6,3 +6,15 @@ html gold
 track gap override
 html gap
 
+track sangerGene
+shortLabel WormBase Genes
+longLabel WormBase Gene Annotations
+group genes
+priority 31.1
+visibility pack
+color 0,0,200
+type genePred sangerPep
+url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
+hgGene on
+hgsid on
+directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
