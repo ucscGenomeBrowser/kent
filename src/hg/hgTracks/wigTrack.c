@@ -849,7 +849,7 @@ for (x1 = 0; x1 < width; ++x1)
 
 	if (vis == tvFull || vis == tvPack)
 	    {
-#define scaleHeightToPixels(val) (scaleFactor * (graphUpperLimit - (val)) + yOff)
+#define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
 	    if (lineBar == wiggleGraphBar)
 		{
 		if (whiskers)
