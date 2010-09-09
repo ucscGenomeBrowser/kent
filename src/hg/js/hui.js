@@ -614,7 +614,7 @@ function popUpCfgOk(popObj, trackName)
     var allVars = getAllVars(popObj, trackName );   // always subtrack cfg
     var changedVars = varHashChanges(allVars,popSaveAllVars);
     //warn("cfgVars:"+varHashToQueryString(changedVars));
-    setVarsFromHash(changedVars);  // FIXME: These settings will be lost, unless the composite/view settings are ajaxed over on change!
+    setVarsFromHash(changedVars);
     var newVis = changedVars[trackName];
     if(newVis != null) {
         var sel = $('input[name="'+trackName+'_sel"]:checkbox');
