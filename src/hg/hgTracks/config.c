@@ -22,7 +22,7 @@ static char *sizes[] = {"6", "8", "10", "12", "14", "18", "24", "34"};
 hDropList(textSizeVar, sizes, ArraySize(sizes), tl.textSize);
 }
 
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
 static void printGroupListHtml(char *groupCgiName, struct group *groupList, char *defaultGroup)
 /* Make an HTML select input listing the groups. */
 {
@@ -46,7 +46,7 @@ for (group = groupList; group != NULL; group = group->next)
 cgiMakeDropListFull(groupCgiName, labels, groups, numGroups,
 		    defaultLabel, NULL);
 }
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
 static void trackConfig(struct track *trackList, struct group *groupList,
 	char *groupTarget,  int changeVis)
@@ -56,10 +56,10 @@ static void trackConfig(struct track *trackList, struct group *groupList,
  * unchanged.  If -1 then set visibility to default, otherwise it should
  * be tvHide, tvDense, etc. */
 {
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
 char pname[512];
 char gname[512];
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 struct group *group;
 boolean showedRuler = FALSE;
 
@@ -130,7 +130,7 @@ for (group = groupList; group != NULL; group = group->next)
     char submitName[256];
     safef(submitName, sizeof(submitName), "%sSubmit", group->name);
     cgiMakeButton(submitName, "submit");
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
     if (withPriorityOverride)
         {
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
@@ -138,9 +138,9 @@ for (group = groupList; group != NULL; group = group->next)
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;");
         hPrintf("%s", wrapWhiteFont("Group Order: "));
         }
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
     hPrintf("</TH>\n");
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
     if (withPriorityOverride)
         {
         hPrintf("<TH>\n");
@@ -151,7 +151,7 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("<TH align=CENTER BGCOLOR=#536ED3><B>&nbsp;%s</B></TH> ", wrapWhiteFont("Group"));
         hPrintf("\n");
         }
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
     hPrintf("</TR>\n");
 
     /* First non-CT group gets ruler. */
@@ -172,7 +172,7 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TD>");
 	hPrintf("Chromosome position in bases.  (Clicks here zoom in 3x)");
 	hPrintf("</TD>");
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
         if (withPriorityOverride)
             {
             hPrintf("<TD>");
@@ -180,7 +180,7 @@ for (group = groupList; group != NULL; group = group->next)
             hPrintf("<TD>");
             hPrintf("</TD>");
             }
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
     if (differentString(group->name, "user"))
@@ -190,9 +190,7 @@ for (group = groupList; group != NULL; group = group->next)
      * Sort tracks and supertracks together by priority */
     groupTrackListAddSuper(cart, group);
 
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     if (!withPriorityOverride)
-#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
         {
         /* sort hierarchically by priority, considering supertracks */
         struct trackRef *refList = NULL, *ref;
@@ -278,7 +276,7 @@ for (group = groupList; group != NULL; group = group->next)
 	hPrintf("<TD NOWRAP>");
 	hPrintf("%s", track->longLabel);
 	hPrintf("</TD>");
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
         if (withPriorityOverride)
             {
             hPrintf("<TD>");
@@ -296,7 +294,7 @@ for (group = groupList; group != NULL; group = group->next)
                 }
             hPrintf("</TD>");
             }
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 	hPrintf("</TR>\n");
 	}
     hTableEnd();
@@ -315,9 +313,7 @@ struct track *trackList =  NULL;
 struct track *ideoTrack = NULL;
 struct group *groupList = NULL;
 
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
-#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 
 /* Get track list and group them. */
 ctList = customTracksParseCart(database, cart, &browserLines, &ctFileName);
@@ -422,7 +418,7 @@ hPrintf("</TD><TD>");
 hPrintf("Next/previous exon navigation");
 hPrintf("</TD></TR>\n");
 
-#ifndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#ifdef PRIORITY_CHANGES_IN_CONFIG_UI
 hPrintf("<TR><TD>");
 char *javascript="onClick=\"document.mainForm.hgTracksConfigPage.value='configure';document.mainForm.submit();\"";
 hCheckBoxJS(configPriorityOverride,
@@ -430,7 +426,7 @@ hCheckBoxJS(configPriorityOverride,
 hPrintf("</TD><TD>");
 hPrintf("Enable track re-ordering");
 hPrintf("</TD></TR>\n");
-#endif///ndef IMAGEv2_DRAG_REORDER_NOPRIORITY
+#endif///def PRIORITY_CHANGES_IN_CONFIG_UI
 
 hPrintf("<TR><TD>");
 hCheckBox("enableAdvancedJavascript", advancedJavascriptFeaturesEnabled(cart));
