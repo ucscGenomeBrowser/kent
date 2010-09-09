@@ -225,7 +225,7 @@ visibility hide
 exonArrows on
 nextItemButton off
 noScoreFilter .
-html agilent.notPublic.html
+html agilentCghAlpha
 type bed 6 .
 
     track agilentCgh1x1m
