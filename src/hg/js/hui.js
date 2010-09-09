@@ -575,6 +575,27 @@ function compositeCfgRegisterOnchangeAction(prefix)
     $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
+function registerViewOnchangeAction(viewTrackName)
+{
+// After composite level view settings are written to HTML it is necessary to go back and
+// make sure that each time they change, the change is ajaxed over
+    var list = $("input[name^='"+viewTrackName+"\.']");
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+
+    list = $("select[name^='"+viewTrackName+"\.']"); // includes composite.view.vis
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+
+    list = $("select[name='"+viewTrackName+"']"); // is 'composite' vis
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+}
+
+function registerFormSubmit(formName)
+{
+    $('form[name="'+formName+'"]').each(function(i) { formSubmitWaitOnAjax(this)});
+}
 
 function subtrackCfgHideAll(table)
 {
