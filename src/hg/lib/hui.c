@@ -92,7 +92,7 @@ char *htmlString = htmlStringForDownloadsLink(database,tdb,name,FALSE,trackHash)
 if (htmlString == NULL)
     return FALSE;
 
-printf(htmlString);
+printf("%s", htmlString);
 freeMem(htmlString);
 return TRUE;
 }
