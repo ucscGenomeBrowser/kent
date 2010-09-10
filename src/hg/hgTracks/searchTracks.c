@@ -329,8 +329,8 @@ if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
 hPrintf("<BR>");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'%s>\n", searchTracks,(searchTermsExist && !doSearch?"":" disabled=true"));
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'%s>\n",(searchTermsExist || doSearch?"":" disabled=true"));
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
@@ -469,8 +469,8 @@ if(metaDbExists)
 
 hPrintf("</table>\n");
 
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'%s>\n", searchTracks,(searchTermsExist && !doSearch?"":" disabled=true"));
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'%s>\n",(searchTermsExist || doSearch?"":" disabled=true"));
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
 hPrintf("</div>\n</div>\n");
 
@@ -701,13 +701,7 @@ else
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             track->visibility = limitedVisFromComposite(track);
-            // Must distinguish between subtrack with explicit vis and inherited vis
-            if (track->visibility != tvHide && NULL == cartOptionalString(cart, track->track))
-                {
-                struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-                assert(parentTdb != NULL);
-                track->visibility = tvMin(track->visibility,parentTdb->visibility); // inherited vis must explicitly be filtered by composite.
-                }
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
 
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
@@ -715,7 +709,10 @@ else
             hPrintf(CB_HIDDEN_VAR,track->track,CART_VAR_EMPTY);
             }
         else
+            {
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
             checked = ( track->visibility != tvHide );
+            }
 
         #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));

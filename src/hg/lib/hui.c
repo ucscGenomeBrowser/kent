@@ -6710,6 +6710,28 @@ else
     return b;
 }
 
+enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, enum trackVisibility vis, boolean noSupers)
+// returns visibility limited by ancestry (or subtrack vis override)
+{
+char *cartVis = cartOptionalString(cart, tdb->track);
+if (cartVis != NULL)
+    {
+    if (tdbIsCompositeChild(tdb))
+        return hTvFromString(cartVis); // subtrackVis override
+    vis = tvMin(vis, hTvFromString(cartVis) );
+    }
+else
+    vis = tvMin(vis, tdb->visibility );
+
+if (vis == tvHide || tdb->parent == NULL)
+    return vis;
+
+if (noSupers && tdbIsSuperTrack(tdb->parent))
+    return vis;
+
+return tdbVisLimitedByAncestry(cart,tdb->parent,vis,noSupers);
+}
+
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)
 /* Returns a string with the composite view control name if one exists */
 {
