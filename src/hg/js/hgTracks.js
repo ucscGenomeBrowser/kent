@@ -101,7 +101,7 @@ function setPosition(position, size)
 // We assume size has already been commified.
 // Either position or size may be null.
     if(position) {
-        // XXXX There are multiple tags with name == "position":^(
+        // There are multiple tags with name == "position" (one in TrackHeaderForm and another in TrackForm).
 	var tags = document.getElementsByName("position");
 	for (var i = 0; i < tags.length; i++) {
 	    var ele = tags[i];
@@ -1266,6 +1266,7 @@ $(document).ready(function()
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
+        $("#tabs").css('font-family', jQuery('body').css('font-family'));
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
@@ -1330,7 +1331,7 @@ function findMapItem(e)
     if(currentMapItem) {
         return currentMapItem;
     }
-    
+
     // rightClick for non-map items that can be resolved to their parent tr and then trackName (e.g. items in gray bar)
     if(e.target.tagName.toUpperCase() != "AREA") {
         var tr = $( e.target ).parents('tr.imgOrd');
@@ -1342,7 +1343,7 @@ function findMapItem(e)
             }
         }
     }
-    
+
     // FIXME: do we really need to worry about non-imageV2 ?
     // Yeah, I think the rest of this is (hopefully) dead code
 
@@ -1485,7 +1486,10 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                         // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
                         // See comments below on safari problems.
                         jQuery('body').css('cursor', 'wait');
-                        document.TrackForm.submit();
+                        if(document.TrackForm)
+                            document.TrackForm.submit();
+                        else
+                            document.TrackHeaderForm.submit();
                     } else {
                         jQuery('body').css('cursor', '');
                         $.ajax({
@@ -1580,6 +1584,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         } else if (!mapIsUpdateable) {
             jQuery('body').css('cursor', 'wait');
             if(selectUpdated) {
+                // assert(document.TrackForm);
                 document.TrackForm.submit();
             } else {
                     // add a hidden with new visibility value
@@ -2095,7 +2100,7 @@ function findTracksMdbVarChanged(obj)
                    cmd: "hgt.metadataValue" + num
                });
     }
-    findTracksSearchButtonsEnable(true);
+    //findTracksSearchButtonsEnable(true);
 }
 
 function findTracksHandleNewMdbVals(response, status)
@@ -2143,19 +2148,22 @@ function findTracksClickedOne(selCb,justClicked)
     var seenVis = $('select#' + trackName + "_id");
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
-    var subtrack = $(tr).hasClass('subtrack');
-    var canPack = $(tr).hasClass('canPack');
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    var shouldPack = rec.canPack;
+    if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
+        shouldPack = false;
     var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" canPack:"+canPack);
+    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" shouldPack:"+shouldPack);
 
     // First deal with seenVis control
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(canPack)
+            if(shouldPack)
                 $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
             else
-                $(seenVis).attr('selectedIndex',2);  // full
+                $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
     } else
         $(seenVis).attr('disabled', true );
@@ -2290,7 +2298,7 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.groupSearch').attr('selectedIndex',0);
-    findTracksSearchButtonsEnable(false);
+    //findTracksSearchButtonsEnable(false);
     return false;
 }
 /////////////////////////////////////////////////////

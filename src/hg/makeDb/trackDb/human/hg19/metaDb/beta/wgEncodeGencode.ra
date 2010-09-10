@@ -1,6 +1,7 @@
 metaObject wgEncodeGencode2wayConsPseudoV4
 objType table
 composite wgEncodeGencode
+annotation Automatic
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
@@ -8,9 +9,10 @@ dateUnrestricted 2011-02-01
 fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
+level 3
 project wgEncode
 subId 2094
-submittedDataVersion V3
+submittedDataVersion V4
 tableName wgEncodeGencode2wayConsPseudoV4
 
 metaObject wgEncodeGencodeAutoV4
@@ -64,6 +66,7 @@ tableName wgEncodeGencodeManualV4
 
 metaObject wgEncodeGencodePolyAV4
 objType table
+annotation Manual
 composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
@@ -72,6 +75,7 @@ dateUnrestricted 2011-02-01
 fileName wgEncodeGencodePolyAV4.gtf.gz
 grant Hubbard
 lab Sanger
+level 2
 project wgEncode
 subId 2094
 submittedDataVersion V4

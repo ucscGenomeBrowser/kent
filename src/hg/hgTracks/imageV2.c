@@ -20,7 +20,6 @@ struct imgTrack *curImgTrack = NULL; // Make this global for now to avoid huge r
 //struct mapSet   *curMap      = NULL; // Make this global for now to avoid huge rewrite
 //struct mapItem  *curMapItem  = NULL; // Make this global for now to avoid huge rewrite
 
-#ifdef FLAT_TRACK_LIST
 /////////////////////////
 // FLAT TRACKS
 // A simplistic way of flattening the track list before building the image
@@ -103,7 +102,6 @@ if(flatTracks && *flatTracks)
         freeMem(flatTrack);
     }
 }
-#endif//def FLAT_TRACK_LIST
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
@@ -129,13 +127,18 @@ else if (tdbIsCompositeChild(track->tdb))
     struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
+    if (!track->canPack)
+        {
+        dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
+        track->canPack = parentTdb->canPack;
+        }
     }
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
+if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
@@ -773,11 +776,7 @@ if(order == IMG_FIXEDPOS)
     }
 else
     {
-#ifdef IMAGEv2_DRAG_REORDER
     imgTrack->reorderable = TRUE;
-#else//ifndef IMAGEv2_DRAG_REORDER
-    imgTrack->reorderable = FALSE;
-#endif//ndef IMAGEv2_DRAG_REORDER
     if(order == IMG_ANYORDER)
         {
         if(imgTrack->order <= 0)
@@ -1273,22 +1272,9 @@ return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromSt
 //}
 
 void imgBoxTracksNormalizeOrder(struct imgBox *imgBox)
-/* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
+/* This routine sorts the imgTracks */
 {
-#ifdef IMAGEv2_DRAG_REORDER
 slSort(&(imgBox->imgTracks), imgTrackOrderCmp);
-#ifndef FLAT_TRACK_LIST
-struct imgTrack *imgTrack = NULL;
-int lastOrder = 0;
-for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
-    {
-    if(imgTrack->reorderable)
-        imgTrack->order = ++lastOrder;
-    }
-#endif//ndef FLAT_TRACK_LIST
-#else//ifndef IMAGEv2_DRAG_REORDER
-slReverse(&(imgBox->imgTracks));
-#endif//ndef IMAGEv2_DRAG_REORDER
 }
 
 void imgBoxShow(struct dyString **dy,struct imgBox *imgBox,int indent)
@@ -1639,14 +1625,10 @@ imgBoxTracksNormalizeOrder(imgBox);
 //    imgBoxShow(NULL,imgBox,0);
 
 hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
-#ifdef IMAGEv2_DRAG_REORDER
 jsIncludeFile("jquery.tablednd.js", NULL);
-#endif//def IMAGEv2_DRAG_REORDER
 hPrintf("<style type='text/css'>\n");
 hPrintf("div.dragZoom {cursor: text;}\n");
-//#ifndef FLAT_TRACK_LIST
 hPrintf("img.button {position:relative; border:0;}\n");
-//#endif//ndef FLAT_TRACK_LIST
 hPrintf("img.sliceImg {position:relative; border:0;}\n");
 hPrintf("div.sliceDiv {overflow:hidden;}\n");
 if(imgBox->bgImg)
@@ -1681,9 +1663,7 @@ if(imgBox->showPortal)
 
 hPrintf("<TABLE id='imgTbl' border=0 cellspacing=0 cellpadding=0 BGCOLOR='%s'",COLOR_WHITE);//COLOR_RED); // RED to help find bugs
 hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWidth):imgBox->width);
-#ifdef IMAGEv2_DRAG_REORDER
 hPrintf(" class='tableWithDragAndDrop'");
-#endif//def IMAGEv2_DRAG_REORDER
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)

@@ -624,7 +624,6 @@ if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",hgTracksName(), chrom, start+1, end, ui->string); // NOTE: position may need removing due to portal
-#if defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
     if(!revCmplDisp && x < insideX)  // Do not toggle on side label!
         {
         width -= (insideX+1 - x);
@@ -644,7 +643,6 @@ if(theImgBox && curImgTrack)
             return;
             }
         }
-#endif// defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
     //#ifdef IMAGEv2_SHORT_MAPITEMS
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
@@ -2791,10 +2789,8 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 {
-#ifdef FLAT_TRACK_LIST
-// Don't bother if we are flat, imgV2, dense and a child.
+// Don't bother if we are imageV2 and a dense child.
 if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
-#endif//def FLAT_TRACK_LIST
     {
     char *directUrl = trackDbSetting(tg->tdb, "directUrl");
     boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);

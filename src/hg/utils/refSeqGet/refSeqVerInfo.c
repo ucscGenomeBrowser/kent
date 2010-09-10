@@ -28,14 +28,14 @@ struct hash *refSeqVerInfoFromDb(struct sqlConnection *conn, boolean getNM, bool
 /* load refSeqVerInfo table for all native refseqs in the database */
 {
 struct hash *refSeqVerInfoTbl = hashNew(18);
-char *restrict = "";
+char *accRestrict = "";
 if (getNM && !getNR)
-    restrict = " AND (acc LIKE \"NM%\")";
+    accRestrict = " AND (acc LIKE \"NM%\")";
 else if (!getNM && getNR)
-    restrict = " AND (acc LIKE \"NR%\")";
+    accRestrict = " AND (acc LIKE \"NR%\")";
 char query[128];
 safef(query, sizeof(query),
-      "SELECT acc, version FROM gbStatus WHERE (srcDb = \"RefSeq\") AND (orgCat = \"native\")%s", restrict);
+      "SELECT acc, version FROM gbStatus WHERE (srcDb = \"RefSeq\") AND (orgCat = \"native\")%s", accRestrict);
 struct sqlResult *sr = sqlGetResult(conn, query);
 char **row;
 while ((row = sqlNextRow(sr)) != NULL)

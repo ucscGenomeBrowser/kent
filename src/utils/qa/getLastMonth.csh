@@ -17,7 +17,7 @@ set lastMonth=""
 
 if ( $#argv != 1 ) then
   echo
-  echo "  gets year and month of last month."
+  echo "  gets year and month of last/prev month."
   echo
   echo "    usage: go | YYYY-MM"
   echo
@@ -34,7 +34,11 @@ else
   endif
 endif
 
-if ( $month > 12 ) then
+# for some reason, 08 and 09 make the if statement barf, so drop zero
+set month=`echo $month | sed "s/^0//"`
+#  echo "month = $month"
+
+if ( $month > 12 || $month < 1 ) then
   echo "\n error.  month out of range.\n"
   exit 1
 endif
