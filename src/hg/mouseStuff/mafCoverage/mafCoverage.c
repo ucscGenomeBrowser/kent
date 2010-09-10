@@ -306,7 +306,7 @@ return count;
 }
 
 
-void scanMaf(char *database, char *fileName, struct hash *chromHash, boolean restrict, int spCount)
+void scanMaf(char *database, char *fileName, struct hash *chromHash, boolean covRestrict, int spCount)
 /* Scan through maf file (which must be sorted by
  * chromosome) and fill in coverage histograms on 
  * each chromosome. */
@@ -346,7 +346,7 @@ while ((ali = mafNext(mf)) != NULL)
 	AllocArray(cov, cs->totalSize);
 	AllocArray(align, cs->totalSize);
 	AllocArray(id, cs->totalSize);
-	if (restrict)
+	if (covRestrict)
             {
 	    restrictCov(cov, cs->totalSize, cs->restrictList);
 	    restrictCov(align, cs->totalSize, cs->restrictList);
