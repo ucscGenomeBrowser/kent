@@ -4,12 +4,14 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "cart.h"
+#include "hdb.h"
 #include "jsHelper.h"
 #include "hui.h"
 
 static char const rcsid[] = "$Id: cartDump.c,v 1.14 2008/12/09 00:41:20 angie Exp $";
 
 #define CART_DUMP_REMOVE_VAR "n/a"
+struct hash *oldVars = NULL;
 
 void doMiddle(struct cart *cart)
 /* cartDump - Dump contents of cart. */
@@ -39,6 +41,15 @@ if (cgiVarExists("submit"))
     }
 if (cgiVarExists("noDisplay"))
     {
+    char *trackName = cgiOptionalString("g");
+    if(trackName != NULL && hashNumEntries(oldVars) > 0)
+        {
+        char *db = cartString(cart, "db");
+        struct trackDb *tdb = hTrackDbForTrack(db, trackName);
+        if(tdb != NULL && tdbIsComposite(tdb))
+            cartTdbTreeCleanupOverrides(tdb,cart,oldVars);
+        }
+
     return;
     }
 if (asTable)
@@ -97,6 +108,7 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
-cartHtmlShell("Cart Dump", doMiddle, hUserCookie(), excludeVars, NULL);
+oldVars = hashNew(10);
+cartHtmlShell("Cart Dump", doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

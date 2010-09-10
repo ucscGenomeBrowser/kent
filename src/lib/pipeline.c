@@ -348,7 +348,10 @@ static void waitOnExec(struct plProc *proc)
 {
 // execPipeChild will get EOF when exec happens
 char buf[1];
-(void)read(proc->execPipeParent, buf, sizeof(buf));
+// even with (void) cast, so compilers on some systems complained
+// about the result of read not being used.  Hack to save unused result.
+ssize_t l = read(proc->execPipeParent, buf, sizeof(buf));
+l++;
 safeClose(&proc->execPipeParent);
 }
 
