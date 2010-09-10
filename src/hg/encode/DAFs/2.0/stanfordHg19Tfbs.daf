@@ -28,7 +28,6 @@ grant             Snyder
 lab               Stanford
 dataType          ChIPseq
 compositeSuffix   SydhTfbs
-dataAgreementSuffix Stanf
 group             regulation
 variables         cell, antibody, treatment, control
 assembly          hg19

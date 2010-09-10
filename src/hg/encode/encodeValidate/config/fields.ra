@@ -190,6 +190,7 @@ file dafHeader
 type string
 required yes
 
+# RETIRING IT 9-10-10
 # Use this for composites that include multiple data types
 # (e.g. Open Chromatin) or multiple labs (e.g. Duke)
 # In these cases, there will be multiple data agreements
@@ -197,10 +198,10 @@ required yes
 # is used to generate table and filenames that distinguish
 # Tim said could retire
 # Venkat seems to be using it
-field dataAgreementSuffix
-file dafHeader
-type string
-required no
+#field dataAgreementSuffix
+#file dafHeader
+#type string
+#required no
 
 # optional DAF header fields
 
