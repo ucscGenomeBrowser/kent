@@ -2148,19 +2148,22 @@ function findTracksClickedOne(selCb,justClicked)
     var seenVis = $('select#' + trackName + "_id");
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
-    var subtrack = $(tr).hasClass('subtrack');
-    var canPack = $(tr).hasClass('canPack');
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    var shouldPack = rec.canPack;
+    if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
+        shouldPack = false;
     var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" canPack:"+canPack);
+    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" shouldPack:"+shouldPack);
 
     // First deal with seenVis control
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(canPack)
+            if(shouldPack)
                 $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
             else
-                $(seenVis).attr('selectedIndex',2);  // full
+                $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
     } else
         $(seenVis).attr('disabled', true );

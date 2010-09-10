@@ -669,29 +669,7 @@ else
         struct track *track = (struct track *) ptr->val;
         jsonTdbSettingsBuild(&jsonTdbVars, track);
 
-        // trackDbOutput(track->tdb, stderr, ',', '\n');
-        hPrintf("<tr bgcolor='%s' valign='top' class='found%s%s'>\n",COLOR_BG_ALTDEFAULT,
-                (tdbIsCompositeChild(track->tdb)?" subtrack":""),
-                (track->canPack?" canPack":""));
-
-        // NOTE: We have now changed the paradigm for subtrack vis:
-        // There must be a {trackName}_sel to have subtrack level vis override.
-        // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
-        // AND hgTracks.c now relies upon "_sel" even with subtrack-level vis.
-
-        // NOTE: Difficulties with "sel" and "vis" controls:
-        // 1) subtracks need both "sel" and "vis", but non-subtracks need only "vis"
-        // 2) Submit of form instead of ajax is nice (because it allows cancelling changes), but do not want to set any vars, unless specifically changed on form
-        // 3) When unchecked, need to delete vars instead of set them
-        // Solution to "sel", "vis" difficulties
-        // 1) findTracks remains a submit but:
-        // 2) 'sel' and 'vis' input are not named (won't be submitted)
-        // 3) hidden disabled and named 'sel' and 'vis' vars exist
-        // 4a) check subtrack: enable hidden 'sel' and 'vis' track, set to 'on' and pack/full
-        // 4b) check non-track: enable hidden 'vis', set to pack/full
-        // 5a) uncheck subtrack: enable hidden 'sel' and 'vis' track, set to '[]' and '[]'
-        // 5b) uncheck non-track: enable hidden 'vis', set to '[]'
-        // 6) Change vis: enable hidden 'vis', set to non-hidden vis
+        hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_BG_ALTDEFAULT);
 
         hPrintf("<td align='center' valign='center'>\n");
         char name[256];
@@ -706,7 +684,7 @@ else
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
             #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
-            hPrintf(CB_HIDDEN_VAR,track->track,CART_VAR_EMPTY);
+            hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
             }
         else
             {
