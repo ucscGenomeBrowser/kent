@@ -1331,7 +1331,7 @@ function findMapItem(e)
     if(currentMapItem) {
         return currentMapItem;
     }
-    
+
     // rightClick for non-map items that can be resolved to their parent tr and then trackName (e.g. items in gray bar)
     if(e.target.tagName.toUpperCase() != "AREA") {
         var tr = $( e.target ).parents('tr.imgOrd');
@@ -1343,7 +1343,7 @@ function findMapItem(e)
             }
         }
     }
-    
+
     // FIXME: do we really need to worry about non-imageV2 ?
     // Yeah, I think the rest of this is (hopefully) dead code
 
@@ -2100,7 +2100,7 @@ function findTracksMdbVarChanged(obj)
                    cmd: "hgt.metadataValue" + num
                });
     }
-    findTracksSearchButtonsEnable(true);
+    //findTracksSearchButtonsEnable(true);
 }
 
 function findTracksHandleNewMdbVals(response, status)
@@ -2295,7 +2295,7 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.groupSearch').attr('selectedIndex',0);
-    findTracksSearchButtonsEnable(false);
+    //findTracksSearchButtonsEnable(false);
     return false;
 }
 /////////////////////////////////////////////////////
