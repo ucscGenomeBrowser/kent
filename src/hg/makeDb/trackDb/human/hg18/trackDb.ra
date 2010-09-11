@@ -1089,6 +1089,9 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
+track agilentCgh override
+type bed 6 .
+
 track targetScanS
 shortLabel TS miRNA sites
 longLabel TargetScan miRNA Regulatory Sites

@@ -942,6 +942,9 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
+enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, enum trackVisibility vis, boolean noSupers);
+/* returns visibility limited by ancestry (or subtrack vis override) */
+
 char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 /* Returns a string with the composite view control name if one exists */
 void compositeViewControlNameFree(char **name);

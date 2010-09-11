@@ -51,6 +51,11 @@
 #define MAXPIXELS 14000
 #endif
 
+// imageV2 dragReorder supercedes 'priority' based reordering which used to be allowed
+// on the cfg controls page.  While the priority order is still supported as default,
+// you can re-allow setting those priorities by defining PRIORITY_CHANGES_IN_CONFIG_UI
+//#define PRIORITY_CHANGES_IN_CONFIG_UI
+
 struct track
 /* Structure that displays of tracks. The central data structure
  * of the graphical genome browser. */
@@ -370,11 +375,7 @@ extern struct slName *browserLines; /* Custom track "browser" lines. */
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
-//#define IMAGEv2_DRAG_REORDER_NOPRIORS
-#define IMAGEv2_DRAG_REORDER_NOPRIORITY
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 extern boolean withPriorityOverride;    /* enable track reordering? */
-#endif// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORS)
 extern boolean revCmplDisp;             /* reverse-complement display */
 extern boolean measureTiming;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
