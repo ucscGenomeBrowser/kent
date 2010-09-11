@@ -127,13 +127,18 @@ else if (tdbIsCompositeChild(track->tdb))
     struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
+    if (!track->canPack)
+        {
+        dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
+        track->canPack = parentTdb->canPack;
+        }
     }
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
+if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
+if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
                javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);

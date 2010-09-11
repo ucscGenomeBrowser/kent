@@ -2176,7 +2176,6 @@ void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 {
 char *track = tdb->track;
 
-
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -2335,7 +2334,7 @@ else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track
     dgvUi(tdb);
 #ifdef USE_BAM
 else if (sameString(tdb->type, "bam"))
-    bamCfgUi(cart, tdb, track, NULL, FALSE);
+    bamCfgUi(cart, tdb, track, NULL, FALSE); // tim would like to see this boxed when at composite level: tdbIsComposite(tdb));
 #endif
 else if (tdb->type != NULL)
     {
@@ -2504,10 +2503,18 @@ if (ct && sameString(tdb->type, "maf"))
     else
         {
         /* normal visibility control dropdown */
-        char *vis = hStringFromTv(tdb->visibility);
-        hTvDropDownClassVisOnly(tdb->track,
-            hTvFromString(cartUsualString(cart,tdb->track, vis)),
-            tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
+        enum trackVisibility vis = tdb->visibility;
+        boolean canPack = tdb->canPack;
+        if (ajax)
+            {
+            vis = tdbVisLimitedByAncestry(cart, tdb, vis, TRUE);  // ajax popups should show currently inherited visability
+            if (tdbIsCompositeChild(tdb))
+                canPack = TRUE;
+            }
+        else
+            vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
+        hTvDropDownClassVisOnly(tdb->track,vis,
+            canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
         }
 if (!ajax)
     {

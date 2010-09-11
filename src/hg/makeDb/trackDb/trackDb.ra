@@ -336,6 +336,7 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
+intronGap 12
 
 track knownAlt
 shortLabel Alt Events

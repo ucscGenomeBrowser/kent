@@ -162,7 +162,7 @@ interTableKind encodeFiveC
 #inputTracksSubgroupSelect bed factorSource
 inputTracksSubgroupDisplay bed factorSource
 inputTrackTable bed factorSource
-intronGap psl
+intronGap psl genePred
 irows wigMaf
 itemAttrTbl genePred
 itemBigImagePath bed
