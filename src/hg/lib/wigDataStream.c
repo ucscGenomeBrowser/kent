@@ -978,7 +978,7 @@ if (doAscii)
     summaryOnly = FALSE;
 if (doBed)
     summaryOnly = FALSE;
-if (!wds->isFile && wds->winEnd)
+if (wds->winEnd)
     summaryOnly = FALSE;
 
 /*	nextRow() produces the next SQL row from either DB or file.
