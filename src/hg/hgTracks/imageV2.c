@@ -538,6 +538,20 @@ switch(type)
     }
 }
 
+static char *sliceTypeToClass(enum sliceType type)
+/* Translate enum slice type to the class */
+{
+switch (type)
+    {
+    case stSide:   return "sideLab";
+    case stCenter: return "cntrLab";
+    case stButton: return "button";
+    case stData:   return "dataImg";
+    default:       return "unknown";
+    }
+}
+
+
 struct imgSlice *sliceAddLink(struct imgSlice *slice,char *link,char *title)
 /* Adds a slice wide link.  The link and map are mutually exclusive */
 {
@@ -736,16 +750,17 @@ if(pSlice != NULL && *pSlice != NULL)
 
 /////////////////////// imgTracks
 
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
+struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order)
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
 {
 struct imgTrack *imgTrack;     //  gifTn.forHtml, pixWidth, mapName
 AllocVar(imgTrack);
-return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,showCenterLabel,vis,order);
+imgTrack->centerLabelSeen = clAlways;
+return imgTrackUpdate(imgTrack,tdb,name,db,chrom,chromStart,chromEnd,plusStrand,hasCenterLabel,vis,order);
 }
 
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order)
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order)
 /* Updates an already existing image track */
 {
 if(tdb != NULL && tdb != imgTrack->tdb)
@@ -763,7 +778,7 @@ if(chrom != NULL && chrom != imgTrack->chrom)
 imgTrack->chromStart = chromStart;
 imgTrack->chromEnd   = chromEnd;
 imgTrack->plusStrand = plusStrand;
-imgTrack->showCenterLabel = showCenterLabel;
+imgTrack->hasCenterLabel = hasCenterLabel;
 imgTrack->vis             = vis;
 static int lastOrder = IMG_ORDEREND; // keep track of the order these images get added
 if(order == IMG_FIXEDPOS)
@@ -900,16 +915,31 @@ for(slice = imgTrack->slices;slice != NULL;slice=slice->next)
 return count;
 }
 
+static char *centerLabelSeenToString(enum centerLabelSeen seen)
+/* Translate enum slice type to string */
+{
+switch(seen)
+    {
+    case clAlways: return "always";
+    case clNowSeen:return "now";
+    case clNotSeen:return "notNow";
+    default:       return "unknown";
+    }
+}
+
 static void imgTrackShow(struct dyString **dy,struct imgTrack *imgTrack,int indent)
 /* show the imgTrack */
 {
 if(imgTrack)
     {
     struct dyString *myDy = addIndent(dy,indent);
-    dyStringPrintf(myDy,"imgTrack: name:%s tdb:%s%s%s order:%d vis:%s",
-            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->track?imgTrack->tdb->track:""),
-            (imgTrack->showCenterLabel?" centerLabel":""),(imgTrack->reorderable?" reorderable":""),
-            imgTrack->order,hStringFromTv(imgTrack->vis));
+    dyStringPrintf(myDy,"imgTrack: name:%s tdb:%s",
+            (imgTrack->name?imgTrack->name:""),(imgTrack->tdb && imgTrack->tdb->track?imgTrack->tdb->track:""));
+    if(imgTrack->hasCenterLabel)
+        dyStringPrintf(myDy," centerLabel:%s",centerLabelSeenToString(imgTrack->centerLabelSeen));
+    if(imgTrack->reorderable)
+        dyStringPrintf(myDy," reorderable");
+    dyStringPrintf(myDy," order:%d vis:%s",imgTrack->order,hStringFromTv(imgTrack->vis));
     if(dy == NULL)
         warn("%s",dyStringCannibalize(&myDy));
 
@@ -1224,10 +1254,10 @@ return NULL;
 //return slRemoveEl(&(imgBox->images),img);
 //}
 
-struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order)
 /* Adds an imgTrack to an imgBox.  The imgTrack needs to be extended with imgTrackAddSlice() */
 {
-struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
+struct imgTrack *imgTrack = imgTrackStart(tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,hasCenterLabel,vis,order);
 slAddHead(&(imgBox->imgTracks),imgTrack);
 return imgBox->imgTracks;
 }
@@ -1246,23 +1276,23 @@ for (imgTrack = imgBox->imgTracks; imgTrack != NULL; imgTrack = imgTrack->next )
 return NULL;
 }
 
-struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order)
 /* Find the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
-    imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
+    imgTrack = imgBoxTrackAdd(imgBox,tdb,name,vis,hasCenterLabel,order);
 return imgTrack;
 }
 
-struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order)
+struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order)
 /* Updates the imgTrack, or adds it if not found */
 {
 struct imgTrack *imgTrack = imgBoxTrackFind(imgBox,tdb,name);
 if( imgTrack == NULL)
-    return imgBoxTrackAdd(imgBox,tdb,name,vis,showCenterLabel,order);
+    return imgBoxTrackAdd(imgBox,tdb,name,vis,hasCenterLabel,order);
 
-return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,showCenterLabel,vis,order);
+return imgTrackUpdate(imgTrack,tdb,name,imgBox->db,imgBox->chrom,imgBox->chromStart,imgBox->chromEnd,imgBox->plusStrand,hasCenterLabel,vis,order);
 }
 
 // TODO: Will we need this?
@@ -1500,15 +1530,7 @@ if(slice->parentImg && slice->parentImg->file != NULL)
 
     if(useMap)
         hPrintf(" usemap='#map_%s'",name);
-    hPrintf(" class='sliceImg ");
-    switch (slice->type)
-        {
-        case stSide:   hPrintf("sideLab"); break;
-        case stCenter: hPrintf("cntrLab"); break;
-        case stButton: hPrintf("button");  break;
-        case stData:   hPrintf("dataImg"); break;
-        default: warn("unknown slice = %d !",slice->type); break;
-        }
+    hPrintf(" class='sliceImg %s",sliceTypeToClass(slice->type));
     if(slice->type==stData && imgBox->showPortal)
         hPrintf(" panImg' ondrag='{return false;}'");
     else
@@ -1521,7 +1543,16 @@ if(slice->parentImg && slice->parentImg->file != NULL)
     }
 else
     {
-    hPrintf("  <p id='p_%s' style='height:%dpx;",name,slice->height);
+    int height = slice->height;
+    // Adjustment for centerLabel Conditional
+    if (imgTrack->centerLabelSeen == clNotSeen
+    &&  (slice->type == stSide || slice->type == stButton))
+        {
+        struct imgSlice *centerSlice = imgTrackSliceGetByType(imgTrack,stCenter);
+        if (centerSlice != NULL)
+            height -= centerSlice->height;
+        }
+    hPrintf("  <p id='p_%s' style='height:%dpx;",name,height);
     if(slice->type==stButton)
         {
         char *trackName = imgTrack->name;
@@ -1556,9 +1587,22 @@ if(slice==NULL || slice->height == 0)
 
 boolean useMap=FALSE;
 int offsetX=slice->offsetX;
+int offsetY=slice->offsetY;
+int height = slice->height;
 int width=slice->width;
 if(slice->parentImg)
     {
+    // Adjustment for centerLabel Conditional
+    if (imgTrack->centerLabelSeen == clNotSeen
+    &&  (sliceType == stSide || sliceType == stButton))
+        {
+        struct imgSlice *centerSlice = imgTrackSliceGetByType(imgTrack,stCenter);
+        if (centerSlice != NULL)
+            {
+            height -= centerSlice->height;
+            offsetY += centerSlice->height;
+            }
+        }
     // Adjustment for portal
     if(imgBox->showPortal && imgBox->basesPerPixel > 0
     && (sliceType==stData || sliceType==stCenter))
@@ -1566,7 +1610,11 @@ if(slice->parentImg)
         offsetX += (imgBox->portalStart - imgBox->chromStart) / imgBox->basesPerPixel;
         width=imgBox->portalWidth;
         }
-        hPrintf("  <div style='width:%dpx; height:%dpx;' class='sliceDiv",width,slice->height);
+        hPrintf("  <div style='width:%dpx; height:%dpx;",width,height);
+        if (sliceType == stCenter && imgTrack->centerLabelSeen == clNotSeen)
+            hPrintf(" display:none;");
+        hPrintf("' class='sliceDiv %s",sliceTypeToClass(slice->type));
+
     #ifdef IMAGEv2_DRAG_SCROLL
     if(imgBox->showPortal && sliceType==stData)
         hPrintf(" panDiv%s",(scrollHandle?" scroller":""));
@@ -1601,7 +1649,7 @@ else if(slice->link != NULL)
     hPrintf(">\n" );
     }
 
-imageDraw(imgBox,imgTrack,slice,name,offsetX,slice->offsetY,useMap);
+imageDraw(imgBox,imgTrack,slice,name,offsetX,offsetY,useMap);
 if(slice->link != NULL)
     hPrintf("</A>");
 
@@ -1628,7 +1676,7 @@ hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
 jsIncludeFile("jquery.tablednd.js", NULL);
 hPrintf("<style type='text/css'>\n");
 hPrintf("div.dragZoom {cursor: text;}\n");
-hPrintf("img.button {position:relative; border:0;}\n");
+//hPrintf("img.button {position:relative; border:0;}\n");
 hPrintf("img.sliceImg {position:relative; border:0;}\n");
 hPrintf("div.sliceDiv {overflow:hidden;}\n");
 if(imgBox->bgImg)
@@ -1685,8 +1733,9 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 #endif
     //if(verbose && imgTrack->order == 3)
     //    imgTrackShow(NULL,imgTrack,0);
-    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s'>\n",trackName,imgTrack->order,
-        (imgTrack->reorderable?" trDraggable":" nodrop nodrag"));
+    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s'>\n",trackName,imgTrack->order,
+        (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
+        (imgTrack->centerLabelSeen != clAlways?" clOpt":"") );
 
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
@@ -1708,7 +1757,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     // Main/Data image region
     hPrintf(" <TD id='td_data_%s' width=%d class='tdData'>\n", trackName, imgBox->width);
     // centerLabel
-    if(imgTrack->showCenterLabel)
+    if(imgTrack->hasCenterLabel)
         {
         safef(name, sizeof(name), "center_%s", trackName);
         sliceAndMapDraw(imgBox,imgTrack,stCenter,name,FALSE);
