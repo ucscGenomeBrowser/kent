@@ -159,15 +159,15 @@ static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** me
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
 {
 char query[256];
-#define WHITE_LIST_COUNT 30
+#define WHITE_LIST_COUNT 35
 #ifdef WHITE_LIST_COUNT
 #define WHITE_LIST_VAR 0
 #define WHITE_LIST_LABEL 1
 char *whiteList[WHITE_LIST_COUNT][2] = {
     {"age",              "Age of experimental organism"},
-    {"accession",        "Accession - external"},
     {"antibody",         "Antibody or target protein"},
-    {"cell",             "Cell Line"},
+    {"origAssembly",     "Assembly originally mapped to"},
+    {"cell",             "Cell, tissue or DNA sample"},
     {"localization",     "Cell compartment"},
     {"control",          "Control or Input for ChIPseq"},
     //{"controlId",        "ControlId - explicit relationship"},
@@ -177,21 +177,26 @@ char *whiteList[WHITE_LIST_COUNT][2] = {
     //{"freezeDate",       "Gencode freeze date"},
     //{"level",            "Gencode level"},
     //{"annotation",       "Gencode annotation"},
+    {"accession",        "GEO accession"},
+    {"growthProtocol",   "Growth Protocol"},
     {"lab",              "Lab producing data"},
     {"labVersion",       "Lab specific details"},
     {"labExpId",         "Lab specific identifier"},
     {"softwareVersion",  "Lab specific informatics"},
+    {"protocol",         "Library Protocol"},
     {"mapAlgorithm",     "Mapping algorithm"},
-    {"grant",            "Prinipal Investigator"},
     {"readType",         "Paired/Single reads lengths"},
+    {"grant",            "Prinipal Investigator"},
     {"replicate",        "Replicate number"},
-    {"restrictionEnzyme","Restriction Enzyme used"},
+    //{"restrictionEnzyme","Restriction Enzyme used"},
     //{"ripAntibody",      "RIP Antibody"},
     //{"ripTgtProtein",    "RIP Target Protein"},
     {"rnaExtract",       "RNA Extract"},
+    {"seqPlatform",      "Sequencing Platform"},
     {"setType",          "Experiment or Input"},
     {"sex",              "Sex of organism"},
     {"strain",           "Strain of organism"},
+    {"subId",            "Submission Id"},
     {"treatment",        "Treatment"},
     {"view",             "View - Peaks or Signals"},
 };
@@ -308,7 +313,7 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
@@ -320,9 +325,9 @@ hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
 hPrintf("<div id='tabs' style='display:none;'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced Search</span></a></li>\n"
+        "<li><a href='#advancedTab'><span>Advanced <em>- by %sterms</em></span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab'>\n");
+        "<div id='simpleTab'>\n",metaDbExists?"ENCODE ":"");
 
 hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
 if (simpleSearch && descSearch)
