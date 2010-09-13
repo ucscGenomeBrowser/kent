@@ -729,6 +729,44 @@ function imgTblSetOrder(table)
     }
 }
 
+function imgTblTrackShowCenterLabel(tr, show)
+{   // Will show or hide centerlabel as requested
+    // adjust button, sideLabel height, sideLabelOffset and centerlabel display
+
+    if(!$(tr).hasClass('clOpt'))
+        return;
+    var center = $(tr).find(".sliceDiv.cntrLab");
+    if($(center) == undefined)
+        return;
+    seen = ($(center).css('display') != 'none');
+    if(show == seen)
+        return;
+
+    var centerHeight = $(center).height();
+
+    var btn = $(tr).find("p.btn");
+    var side = $(tr).find(".sliceDiv.sideLab");
+    if($(btn) != undefined && $(side) != undefined) {
+        var sideImg = $(side).find("img");
+        if($(sideImg) != undefined) {
+            var top = parseInt($(sideImg).css('top'));
+            if(show) {
+                $(btn).css('height',$(btn).height() + centerHeight);
+                $(side).css('height',$(side).height() + centerHeight);
+                top += centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).show();
+            } else if(!show) {
+                $(btn).css('height',$(btn).height() - centerHeight);
+                $(side).css('height',$(side).height() - centerHeight);
+                top -= centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).hide();
+            }
+        }
+    }
+}
+
 function imgTblZipButtons(table)
 {
 // Goes through the image and binds composite track buttons when adjacent
@@ -746,6 +784,16 @@ function imgTblZipButtons(table)
             continue;
         var classList = $( btn ).attr("class").split(" ");
         var curMatchesLast=(classList[0] == lastClass);
+
+        // centerLabels may be conditionally seen
+        if($( rows[ix] ).hasClass('clOpt')) {
+            if(curMatchesLast && $( rows[ix - 1] ).hasClass('clOpt'))
+                imgTblTrackShowCenterLabel(rows[ix],false);  // if same composite and previous is also centerLabel optional then hide center label
+            else
+                imgTblTrackShowCenterLabel(rows[ix],true);
+        }
+
+        // On with buttons
         if(lastBtn != undefined) {
             $( lastBtn ).removeClass('btnN btnU btnL btnD');
             if(curMatchesLast && lastMatchLast) {
