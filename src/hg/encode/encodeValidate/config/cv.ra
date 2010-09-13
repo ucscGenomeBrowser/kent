@@ -2372,7 +2372,7 @@ sex M
 protocol
 
 term BoneMarrow
-tag BoneMarrow
+tag BMarrow
 type Cell Line
 organism Mouse
 tissue Bone
