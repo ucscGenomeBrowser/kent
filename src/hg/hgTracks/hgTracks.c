@@ -356,21 +356,21 @@ void smallBreak()
 hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
-int trackPlusLabelHeight(struct track *track, int fontHeight)
+static int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be)
  * and the center label(s) above the items (if any). */
 {
 int y = track->totalHeight(track, limitVisibility(track));
-if (isWithCenterLabels(track))
+if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (tdbIsComposite(track->tdb))
     {
     struct track *subtrack;
     for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-	{
-	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
-	    y += fontHeight;
-	}
+        {
+        if (isSubtrackVisible(subtrack) &&  isCenterLabelIncluded(subtrack))
+            y += fontHeight;
+        }
     }
 return y;
 }
@@ -1134,7 +1134,7 @@ switch (vis)
 	y += tHeight;
         break;
     case tvFull:
-        if (isWithCenterLabels(track))
+        if (isCenterLabelIncluded(track))
             y += fontHeight;
         start = 1;
 
@@ -1217,7 +1217,7 @@ switch (vis)
         break;
     case tvDense:
 
-        if (isWithCenterLabels(track))
+        if (isCenterLabelIncluded(track))
             y += fontHeight;
 
         /*draw y-value limits for 'sample' tracks.
@@ -1296,17 +1296,20 @@ static int doCenterLabels(struct track *track, struct track *parentTrack,
 {
 if (track->limitedVis != tvHide)
     {
-    if(isWithCenterLabels(track))
+    if (isCenterLabelIncluded(track))
         {
         int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
         int trackPastTabWidth = tl.picWidth - trackPastTabX;
         int fontHeight = mgFontLineHeight(font);
         int insideHeight = fontHeight-1;
 	boolean toggleDone = FALSE;
+        char *label = track->longLabel;
+        if (isCenterLabelConditional(track))
+            label = track->parent->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
-                            labelColor, font, track->longLabel);
+                            labelColor, font, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
@@ -1332,7 +1335,7 @@ static int doDrawItems(struct track *track, struct hvGfx *hvg, MgFont *font,
 {
 int fontHeight = mgFontLineHeight(font);
 int pixWidth = tl.picWidth;
-if (isWithCenterLabels(track))
+if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (track->limitedVis == tvPack)
     {
@@ -1366,7 +1369,7 @@ struct slList *item;
 boolean isWig = (sameString("wig", type) || startsWith("wig ", type) ||
         startsWith("bedGraph", type));
 
-if (isWithCenterLabels(track))
+if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (track->mapsSelf)
     {
@@ -1436,7 +1439,7 @@ Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,
 		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
-		      isWithCenterLabels(track), font, labelColor,
+		      isCenterLabelIncluded(track), font, labelColor,
 		      track->limitedVis);
 hvGfxUnclip(hvg);
 y += tHeight;
@@ -1462,7 +1465,7 @@ switch (track->limitedVis)
             {
             if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
                 {
-                if (isWithCenterLabels(track))
+                if (isCenterLabelIncluded(track))
                     y += fontHeight;
                 struct track *subtrack;
                 for (subtrack = track->subtracks;  subtrack != NULL;subtrack = subtrack->next)
@@ -1473,7 +1476,7 @@ switch (track->limitedVis)
                             y = doMapItems(subtrack, hvg, fontHeight, y);
                         else
                             {
-                            if (isWithCenterLabels(subtrack))
+                            if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
                             if(theImgBox && subtrack->limitedVis == tvDense)
                                 mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
@@ -1489,7 +1492,7 @@ switch (track->limitedVis)
             y += trackPlusLabelHeight(track, fontHeight);
         break;
     case tvDense:
-        if (isWithCenterLabels(track))
+        if (isCenterLabelIncluded(track))
             y += fontHeight;
         if (tdbIsComposite(track->tdb))
             mapHeight = track->height;
@@ -2045,7 +2048,8 @@ for (track = trackList; track != NULL; track = track->next)
         }
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
-for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
+struct track *prevTrack = NULL;
+for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
     if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
@@ -2059,8 +2063,12 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
         }
-    else
+    if (track->limitedVis != tvHide)
+        {
+        track->prevTrack = prevTrack; // Important for keeping track of conditional center labels!
         pixHeight += trackPlusLabelHeight(track, fontHeight);
+        prevTrack = track;
+        }
     }
 
 imagePixelHeight = pixHeight;
@@ -2136,7 +2144,7 @@ if(theImgBox)
                 track->ixColor = hvGfxFindRgb(hvg, &track->color);
             #endif//def SUBTRACKS_HAVE_VIS
             int order = flatTrack->order;
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),order);
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isCenterLabelIncluded(track),order);
             }
         }
     }
@@ -2175,40 +2183,40 @@ if (withLeftLabels && psOutput == NULL)
         int h, yStart = y, yEnd;
         if (track->limitedVis != tvHide)
             {
-            y += trackPlusLabelHeight(track, fontHeight);
-            yEnd = y;
-            h = yEnd - yStart - 1;
+        y += trackPlusLabelHeight(track, fontHeight);
+        yEnd = y;
+        h = yEnd - yStart - 1;
 
-            /* alternate button colors for track groups*/
-            if (track->group != lastGroup)
-                grayButtonGroup = !grayButtonGroup;
-            lastGroup = track->group;
-            if (grayButtonGroup)
-                drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
-            else
-                drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
-            if(theImgBox)
-                {
-                // Mini-buttons (side label slice) for tracks
-                sliceHeight      = yEnd - yStart;
-                sliceOffsetY     = yStart - 1;
-                curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
-                }
-            if (track->hasUi)
-                {
-                if(tdbIsCompositeChild(track->tdb))
-		    {
-		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-		    	parent->track, parent->shortLabel, track->track);
-		    }
-                else
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
-                }
+        /* alternate button colors for track groups*/
+        if (track->group != lastGroup)
+            grayButtonGroup = !grayButtonGroup;
+        lastGroup = track->group;
+        if (grayButtonGroup)
+            drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
+                        h, track->hasUi);
+        else
+            drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
+                        h, track->hasUi);
+        if(theImgBox)
+            {
+            // Mini-buttons (side label slice) for tracks
+            sliceHeight      = yEnd - yStart;
+            sliceOffsetY     = yStart - 1;
+            curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
             }
+        if (track->hasUi)
+            {
+            if(tdbIsCompositeChild(track->tdb))
+                {
+                struct trackDb *parent = trackDbCompositeParent(track->tdb);
+                mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
+                    parent->track, parent->shortLabel, track->track);
+                }
+            else
+                mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
+            }
+        }
         }
     butOff = trackTabX + trackTabWidth;
     leftLabelX += butOff;
@@ -2374,13 +2382,14 @@ if (withCenterLabels)
 
         if(theImgBox)
             {
-            //if (isWithCenterLabels(track))  // NOTE: Since track may not have centerlabel but subtrack may (How?), then must always make this slice!
-            // center label slice of tracks
+            // center label slice of tracks Must always make, even if the centerLabel is empty
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            if (isCenterLabelConditional(track))
+                imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track)?clNowSeen:clNotSeen);
             }
         y = doCenterLabels(track, track, hvg, font, y);
         }
@@ -2399,7 +2408,7 @@ if (withCenterLabels)
         if (track->limitedVis == tvHide)
                 continue;
 
-        int centerLabelHeight = (isWithCenterLabels(track) ? fontHeight : 0);
+        int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
         int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
         if(theImgBox)

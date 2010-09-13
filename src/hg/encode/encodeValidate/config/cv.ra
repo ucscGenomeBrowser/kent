@@ -2887,10 +2887,10 @@ targetDescription Activating transcription factor 3. A bZIP transcription factor
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
-lab Struhl, Meyers
+lab Struhl, Myers
 targetId GeneCard:GC-1p212738
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
-validation ATF3(immunoblots):human_ATF3_validation_Myers.pdf 
+validation ATF3(immunoblots)_Myers:human_ATF3_validation_Myers.pdf 
 
 term BAF155
 tag BAF155
@@ -3372,7 +3372,7 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_i
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 
-term GATA-2_(CG2-96)
+term GATA2_(CG2-96)
 tag GATA2CG2
 type Antibody
 target GATA-2
@@ -3384,7 +3384,7 @@ orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
 targetId GeneCard:GC03M128198
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
 lab Myers
-validation GATA-2(immunoblots):human_GATA-2_CG2-96_validation_Myers.pdf
+validation GATA2(immunoblots):human_GATA2_CG2-96_validation_Myers.pdf
 
 term GR
 tag GR
@@ -3835,10 +3835,10 @@ targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
 validation KAP1(Western,IP-WB):human_KAP1_validation_Farnham.pdf
 
-term LEF-1_(C-19)
+term LEF1_(C-19)
 tag LEF1C19
 type Antibody
-target LEF-1
+target LEF1
 antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
 targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq). 
 vendorName Santa Cruz Biotech
@@ -3847,7 +3847,7 @@ orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
 lab Myers
 targetId GeneCard:GC04M108968
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
-validation LEF-1(immunoblots):human_LEF-1_C-19_validation_Myers.pdf
+validation LEF1(immunoblots):human_LEF1_C-19_validation_Myers.pdf
 
 
 term Max

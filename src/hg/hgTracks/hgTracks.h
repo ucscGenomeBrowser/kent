@@ -12,6 +12,8 @@
 #include "hui.h"
 #endif
 
+#include "imageV2.h"
+
 #ifndef CART_H
 #include "cart.h"
 #endif
@@ -205,6 +207,7 @@ struct track
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
     struct track *parent;	/* Parent track if any */
+    struct track *prevTrack;    /* if not NULL, points to track immediately above in the image.  Needed by ConditionalCenterLabel logic */
 
     void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */
@@ -1108,6 +1111,15 @@ boolean isWithCenterLabels(struct track *track);
  * BUT if track->tdb has a centerLabelDense setting, let subtracks go with
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
+
+#define isCenterLabelConditional(track) ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
+// dense subtracks have conditional centerLabels
+
+boolean isCenterLabelConditionallySeen(struct track *track);
+// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+
+#define isCenterLabelIncluded(track) (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
+// Center labels may be conditionally included
 
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */
