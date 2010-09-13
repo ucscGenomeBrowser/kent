@@ -2176,14 +2176,6 @@ function changeSearchVisibilityPopups(cmd)
     return false;
 }
 
-function findTracksChangeVis(seenVis)
-{
-    var trackName = $(seenVis).attr('id');
-    hiddenVis = $("input[name='"+trackName.substring(0,trackName.length - "_id".length)+"']");
-    $(hiddenVis).attr('disabled',false);
-    $(hiddenVis).val($(seenVis).val());
-}
-
 function findTracksClickedOne(selCb,justClicked)
 {
     var selName = $(selCb).attr('id');
@@ -2209,31 +2201,29 @@ function findTracksClickedOne(selCb,justClicked)
             else
                 $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
-    } else
+    } else {
+        $(seenVis).attr('selectedIndex',0);  // hide
         $(seenVis).attr('disabled', true );
+    }
 
-    // Deal with hiddenSel so that submit does the right thing
+    // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
     var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
     if(setHiddenInputs) {
+        if(checked)
+            $(hiddenVis).val($(seenVis).val());
+        else if(subtrack)
+            $(hiddenVis).val("[]");
+        else
+            $(hiddenVis).val("hide");
+        $(hiddenVis).attr('disabled',false);
+
         if(subtrack) {
-            $(hiddenSel).attr('disabled',false);
             if(checked)
                 $(hiddenSel).val('1');
             else
                 $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        }
-
-        // Deal with hiddenVis so that submit does the right thing
-        if(checked) {
-            findTracksChangeVis(seenVis);
-            //$(hiddenVis).val('value',seenVisVal);
-        } else {
-            $(hiddenVis).attr('disabled',false);
-            if(subtrack)
-                $(hiddenVis).val('[]');  // Delete vis for subtrack which is controlled by 2 settings
-            else
-                $(hiddenVis).val('hide');  // Can't set it to [] because default setting is used, but we are explicitly hiding this!
+            $(hiddenSel).attr('disabled',false);
         }
     }
 
