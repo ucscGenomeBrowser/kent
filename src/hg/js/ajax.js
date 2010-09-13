@@ -166,6 +166,9 @@ function setCartVars(names, values)
     loc = loc + "/cartDump";
     var hgsid = getHgsid();
     loc = loc + "?submit=1&noDisplay=1&hgsid=" + hgsid;
+    var track = getTrack();
+    if(track && track.length > 0)
+        loc = loc + "&g=" + track;
 
     // Set up dynamic portion of url
     var ix=0;

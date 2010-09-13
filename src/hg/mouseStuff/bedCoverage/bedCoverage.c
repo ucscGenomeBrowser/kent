@@ -261,7 +261,7 @@ return count;
 }
 
 
-void scanBed(char *database, char *fileName, struct hash *chromHash, boolean restrict)
+void scanBed(char *database, char *fileName, struct hash *chromHash, boolean covRestrict)
 /* Scan through bed file (which must be sorted by
  * chromosome) and fill in coverage histograms on 
  * each chromosome. */
@@ -285,7 +285,7 @@ while (lineFileRow(lf, row))
 	if (lastCs != NULL)
 	    closeChromCov(lf, lastCs, &cov);
 	AllocArray(cov, cs->totalSize);
-	if (restrict)
+	if (covRestrict)
 	    restrictCov(cov, cs->totalSize, cs->restrictList);
 	restrictGaps(database, cov, cs->totalSize, chrom);
 	cs->unrestrictedSize = calcUnrestrictedSize(cov, cs->totalSize);

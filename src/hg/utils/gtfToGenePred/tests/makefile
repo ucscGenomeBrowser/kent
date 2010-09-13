@@ -1,4 +1,4 @@
-include ../../../inc/common.mk
+include ../../../../inc/common.mk
 
 all:
 

@@ -9,7 +9,7 @@ usage() {
     echo "  There should be an example template to start with in the"
     echo "  directory with these scripts."
     echo "This script will fetch the static HTML hierarchy from UCSC"
-    echo "  into your specified DOCHOME from the browserEnvironment.txt file."
+    echo "  into your specified DOCUMENTROOT from the browserEnvironment.txt file."
     echo "It specifically ignores the encode/ js/ and trash directories."
     exit 255
 }
@@ -38,7 +38,7 @@ export FETCHLOG="${LOGDIR}/htdocs/update.${DS}"
 mkdir -p "${LOGDIR}/htdocs"
 
 ${RSYNC} --stats --exclude="encode/" --exclude="js/" --exclude="trash" \
-	${HGDOWNLOAD}/htdocs/ ${DOCHOME}/ > ${FETCHLOG} 2>&1
+	${HGDOWNLOAD}/htdocs/ ${DOCUMENTROOT}/ > ${FETCHLOG} 2>&1
 # remove garbage
-rm -f ${DOCHOME}/html
-rm -f ${DOCHOME}/ENCODE
+rm -f ${DOCUMENTROOT}/html
+rm -f ${DOCUMENTROOT}/ENCODE

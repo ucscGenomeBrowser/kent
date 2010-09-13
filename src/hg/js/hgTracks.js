@@ -729,6 +729,44 @@ function imgTblSetOrder(table)
     }
 }
 
+function imgTblTrackShowCenterLabel(tr, show)
+{   // Will show or hide centerlabel as requested
+    // adjust button, sideLabel height, sideLabelOffset and centerlabel display
+
+    if(!$(tr).hasClass('clOpt'))
+        return;
+    var center = $(tr).find(".sliceDiv.cntrLab");
+    if($(center) == undefined)
+        return;
+    seen = ($(center).css('display') != 'none');
+    if(show == seen)
+        return;
+
+    var centerHeight = $(center).height();
+
+    var btn = $(tr).find("p.btn");
+    var side = $(tr).find(".sliceDiv.sideLab");
+    if($(btn) != undefined && $(side) != undefined) {
+        var sideImg = $(side).find("img");
+        if($(sideImg) != undefined) {
+            var top = parseInt($(sideImg).css('top'));
+            if(show) {
+                $(btn).css('height',$(btn).height() + centerHeight);
+                $(side).css('height',$(side).height() + centerHeight);
+                top += centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).show();
+            } else if(!show) {
+                $(btn).css('height',$(btn).height() - centerHeight);
+                $(side).css('height',$(side).height() - centerHeight);
+                top -= centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).hide();
+            }
+        }
+    }
+}
+
 function imgTblZipButtons(table)
 {
 // Goes through the image and binds composite track buttons when adjacent
@@ -746,6 +784,16 @@ function imgTblZipButtons(table)
             continue;
         var classList = $( btn ).attr("class").split(" ");
         var curMatchesLast=(classList[0] == lastClass);
+
+        // centerLabels may be conditionally seen
+        if($( rows[ix] ).hasClass('clOpt')) {
+            if(curMatchesLast && $( rows[ix - 1] ).hasClass('clOpt'))
+                imgTblTrackShowCenterLabel(rows[ix],false);  // if same composite and previous is also centerLabel optional then hide center label
+            else
+                imgTblTrackShowCenterLabel(rows[ix],true);
+        }
+
+        // On with buttons
         if(lastBtn != undefined) {
             $( lastBtn ).removeClass('btnN btnU btnL btnD');
             if(curMatchesLast && lastMatchLast) {
@@ -1331,7 +1379,7 @@ function findMapItem(e)
     if(currentMapItem) {
         return currentMapItem;
     }
-    
+
     // rightClick for non-map items that can be resolved to their parent tr and then trackName (e.g. items in gray bar)
     if(e.target.tagName.toUpperCase() != "AREA") {
         var tr = $( e.target ).parents('tr.imgOrd');
@@ -1343,7 +1391,7 @@ function findMapItem(e)
             }
         }
     }
-    
+
     // FIXME: do we really need to worry about non-imageV2 ?
     // Yeah, I think the rest of this is (hopefully) dead code
 
@@ -1536,7 +1584,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'viewImg') {
         // Fetch a new copy of track img and show it to the user in another window. This code assume we have updated
         // remote cart with all relevant chages (e.g. drag-reorder).
-        var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid();
+        var data = "hgt.imageV1=1&hgt.trackImgOnly=1&hgsid=" + getHgsid();
         jQuery('body').css('cursor', 'wait');
         $.ajax({
                    type: "GET",
@@ -2022,18 +2070,14 @@ function handleUpdateTrackMap(response, status)
 }
 
 function handleViewImg(response, status)
-{
+{ // handles view image response, which must get new image without imageV2 gimmickery
     jQuery('body').css('cursor', '');
-    for (var id in trackDbJson) {
-        // Use an arbitrary id to pull out a src from the track image table;
-        // e.g.: <IMG id='img_data_knownGene' src='../trash/hgt/hgt_hgwdev_larrym_479c_abde90.png' ...>
-        var str = "<IMG[^>]*id='img_data_" + id + "'[^>]*src='([^']+)'";
-        var reg = new RegExp(str);
-        a = reg.exec(response);
-        if(a && a[1]) {
-            window.open(a[1]);
-            return;
-        }
+    var str = "<IMG[^>]*SRC='([^']+)'";
+    var reg = new RegExp(str);
+    a = reg.exec(response);
+    if(a && a[1]) {
+        window.open(a[1]);
+        return;
     }
     showWarning("Couldn't parse out img src");
 }
@@ -2100,7 +2144,7 @@ function findTracksMdbVarChanged(obj)
                    cmd: "hgt.metadataValue" + num
                });
     }
-    findTracksSearchButtonsEnable(true);
+    //findTracksSearchButtonsEnable(true);
 }
 
 function findTracksHandleNewMdbVals(response, status)
@@ -2148,19 +2192,22 @@ function findTracksClickedOne(selCb,justClicked)
     var seenVis = $('select#' + trackName + "_id");
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
-    var subtrack = $(tr).hasClass('subtrack');
-    var canPack = $(tr).hasClass('canPack');
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    var shouldPack = rec.canPack;
+    if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
+        shouldPack = false;
     var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" canPack:"+canPack);
+    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" shouldPack:"+shouldPack);
 
     // First deal with seenVis control
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(canPack)
+            if(shouldPack)
                 $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
             else
-                $(seenVis).attr('selectedIndex',2);  // full
+                $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
     } else
         $(seenVis).attr('disabled', true );
@@ -2295,7 +2342,7 @@ function findTracksClear()
     //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
     $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
     $('select.groupSearch').attr('selectedIndex',0);
-    findTracksSearchButtonsEnable(false);
+    //findTracksSearchButtonsEnable(false);
     return false;
 }
 /////////////////////////////////////////////////////

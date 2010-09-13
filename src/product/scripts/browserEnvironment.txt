@@ -98,7 +98,7 @@ if [ "X${AUTH_MACHINE}Y" != "X${MACHINE_NAME}Y" ]; then
     exit 255;
 fi
 
-if [ -z "${USER}" ]; then
+if [ -z "${LOGNAME}" ]; then
     echo "ERROR: not found, expected environment variable: LOGNAME"
     exit 255;
 fi

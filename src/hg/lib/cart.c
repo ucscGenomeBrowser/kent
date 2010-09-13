@@ -326,6 +326,7 @@ for (el = list; el != NULL; el = el->next)
                 {
                 char *name = cloneString(el->name);
                 safecpy(name+suffixOffset,strlen(POSITION_SUFFIX),IMGORD_SUFFIX); // We know that POSITION_SUFFIX is longer than IMGORD_SUFFIX
+                //warn("Removing imgOrd for %s",name);
                 cartRemove(cart, name); // Removes if found
                 freeMem(name);
                 }
@@ -2067,82 +2068,93 @@ if (!tdbIsComposite(tdb))
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis
 boolean compositeVisChanged = cartValueHasChanged(newCart,oldVars,tdb->track,TRUE,TRUE);
-//boolean compositeVisHidden  = FALSE;
-//if(compositeVisChanged)
-//    compositeVisHidden = (cartUsualInt(cart,tdb->track,tvFull) == tvHide);
+struct trackDb *tdbView = NULL;
+struct slRef *oneName = NULL;
+char * var = NULL;
+int clensed = 0;
 
-
-// FIXME: Big problem in persistence of changed state.
-boolean debug = FALSE;//sameString(tdb->track,"wgEncodeBroadChipSeq");
-if(debug)
+// Do some debugging
+boolean debug = FALSE;//sameString(tdb->track,"wgEncodeBroadHistone");
+if (debug)
     {
     char *newValue = cartOptionalString(newCart,tdb->track);
     char *oldValue = hashFindVal(oldVars,tdb->track);
-    warn("Cleanup: wgEncodeBroadChipSeq  compositeVisChanged:%s  new:%s  old:%s",
+    warn("Cleanup: %s  compositeVisChanged:%s  new:%s  old:%s",tdb->track,
          (compositeVisChanged?"yes":"no"),(newValue!=NULL?newValue:"(null)"),(oldValue!=NULL?oldValue:"(null)"));
     }
 
-// Build list of current settings for composite
+// Build list of current settings for composite and views
 char setting[512];
 safef(setting,sizeof(setting),"%s.",tdb->track);
+char * view = NULL;
+boolean hasViews = FALSE;
 struct slRef *changedSettings = cartNamesPrefixedBy(newCart, setting);
+for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
+    {
+    if (!tdbIsView(tdbView,&view))
+        break;
+    hasViews = TRUE;
+    safef(setting,sizeof(setting),"%s.",tdbView->track);
+    struct slRef *changeViewSettings = cartNamesPrefixedBy(newCart, setting);
+    changedSettings = slCat(changedSettings, changeViewSettings);
+    }
 if (changedSettings == NULL && !compositeVisChanged)
     return FALSE;
 
 // Prune list to only those which have changed
 if(changedSettings != NULL)
     {
-    if(debug) warn("Cleanup: settings:%d",slCount(changedSettings));
+    if (debug)
+        warn("Cleanup: settings:%d",slCount(changedSettings));
     (void)cartNamesPruneChanged(newCart,oldVars,&changedSettings,TRUE,FALSE);
     if (changedSettings == NULL && !compositeVisChanged)
         return FALSE;
-    if(debug) warn("Cleanup: changed:%d",changedSettings==NULL?0:slCount(changedSettings));
+    if (debug)
+        warn("Cleanup: changed:%d",changedSettings==NULL?0:slCount(changedSettings));
     }
 
-struct slRef *oneName = NULL;
-char * var = NULL;
-boolean clensed = FALSE;
-
 // Walk through views
-boolean hasViews = FALSE;
-struct trackDb *tdbView = tdb->subtracks;
-for (;tdbView != NULL; tdbView = tdbView->next)
+if (hasViews)
     {
-    boolean viewVisChanged = FALSE;
-//    boolean viewVisHidden  = FALSE;
-    char * view = NULL;
-    if (!tdbIsView(tdbView,&view))
-        break;
-
-    hasViews = TRUE;
-    safef(setting,sizeof(setting),"%s.%s.",tdb->track,view);
-    struct slRef *leftOvers = NULL;
-    // Walk through settings that match this view
-    while ((oneName = slPopHead(&changedSettings)) != NULL)
+    for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
         {
-        if(!startsWith(setting,oneName->val))
-            slAddHead(&leftOvers,oneName);
-        else
+        boolean viewVisChanged = FALSE;
+        if (!tdbIsView(tdbView,&view))
+            break;
+
+        safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // unfortunatly setting name could be wgEncodeBroadHistone.Sig.???r
+        char settingAlt[512];
+        safef(settingAlt,sizeof(settingAlt),"%s.",tdbView->track);  // or wgEncodeBroadHistoneViewSig.???
+        struct slRef *leftOvers = NULL;
+        // Walk through settings that match this view
+        while ((oneName = slPopHead(&changedSettings)) != NULL)
             {
-            var = oneName->val + strlen(setting);
+            if(startsWith(setting,oneName->val))
+                var = oneName->val + strlen(setting);
+            else if(startsWith(settingAlt,oneName->val))
+                var = oneName->val + strlen(settingAlt);
+            else
+                {
+                slAddHead(&leftOvers,oneName);
+                continue;
+                }
+
             if (sameString(var,"vis"))
                 {
                 viewVisChanged = TRUE;
-//                viewVisHidden = (cartUsualInt(cart,oneName->val,tvFull) == tvHide);
                 }
-            else {
-                if (cartRemoveFromTdbTree(newCart,tdbView,var,TRUE) > 0)
-                    clensed = TRUE;
-            }
+            else if (cartRemoveFromTdbTree(newCart,tdbView,var,TRUE) > 0)
+                clensed++;
+
             freeMem(oneName);
             }
+        if  (compositeVisChanged || viewVisChanged)
+            { // vis is a special additive case!
+            if (cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE) > 0)
+                clensed++;
+            }
+        changedSettings = leftOvers;
         }
-    if  (compositeVisChanged || viewVisChanged)
-        { // vis is a special additive case!
-        if (cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE) > 0)
-            clensed = TRUE;
-        }
-    changedSettings = leftOvers;
     }
 
 // Now deal with anything remaining at the composite level
@@ -2150,16 +2162,19 @@ while ((oneName = slPopHead(&changedSettings)) != NULL)
     {
     var = oneName->val + strlen(tdb->track) + 1;
     if(cartRemoveFromTdbTree(newCart,tdb,var,TRUE) > 0)
-        clensed = TRUE;
+        clensed++;
     freeMem(oneName);
     }
 if  (compositeVisChanged || !hasViews)
     { // vis is a special additive case!
     if (cartRemoveFromTdbTree(newCart,tdb,NULL,TRUE) > 0)
-        clensed = TRUE;
+        clensed++;
     }
 
-return clensed;
+if (debug)
+    warn("Cleaned up %d composite%s settings",clensed,hasViews?"/view":"");
+
+return (clensed > 0);
 }
 
 

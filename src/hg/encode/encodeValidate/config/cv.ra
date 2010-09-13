@@ -2372,7 +2372,7 @@ sex M
 protocol
 
 term BoneMarrow
-tag BoneMarrow
+tag BMarrow
 type Cell Line
 organism Mouse
 tissue Bone
@@ -2882,15 +2882,15 @@ term ATF3
 tag ATF3
 type Antibody
 target ATF3
-antibodyDescription Activating transcription factor 3
-targetDescription A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of ATF3 of human origin.
+targetDescription Activating transcription factor 3. A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
-lab Struhl
-targetId GeneCard:GC01P210805
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P210805
-validation missing
+lab Struhl, Myers
+targetId GeneCard:GC-1p212738
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
+validation ATF3(immunoblots)_Myers:human_ATF3_validation_Myers.pdf 
 
 term BAF155
 tag BAF155
@@ -2961,6 +2961,20 @@ lab Myers
 targetId GeneCard:GC19P049943
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
 validation missing
+
+term BCLAF1_(M33-P5B11)
+tag BCLAF1M33
+type Antibody
+target BCLAF1
+antibodyDescription Mouse monoclonal IgG, raised against a synthetic peptide corresponding to a.a. 900-909 of BCLAF1 of human origin. 
+targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-1-101388
+orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
+lab Myers
+targetId GeneCard:GC06M136621
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
+validation BCLAF1(immunoblots):human_BCLAF1_M33-P5B11_validation_Myers.pdf 
 
 term BDP1
 tag BDP1
@@ -3357,6 +3371,20 @@ targetId GeneCard:GC03M129680
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
+
+term GATA2_(CG2-96)
+tag GATA2CG2
+type Antibody
+target GATA-2
+targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
+antibodyDescription Mouse monoclonal IgG. 
+vendorName Santa Cruz Biotech
+vendorId  sc-267
+orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
+targetId GeneCard:GC03M128198
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+lab Myers
+validation GATA2(immunoblots):human_GATA2_CG2-96_validation_Myers.pdf
 
 term GR
 tag GR
@@ -3806,6 +3834,21 @@ lab Farnham
 targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
 validation KAP1(Western,IP-WB):human_KAP1_validation_Farnham.pdf
+
+term LEF1_(C-19)
+tag LEF1C19
+type Antibody
+target LEF1
+antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
+targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-8592
+orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
+lab Myers
+targetId GeneCard:GC04M108968
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
+validation LEF1(immunoblots):human_LEF1_C-19_validation_Myers.pdf
+
 
 term Max
 tag MAX
