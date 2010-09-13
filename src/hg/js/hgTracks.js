@@ -1584,7 +1584,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'viewImg') {
         // Fetch a new copy of track img and show it to the user in another window. This code assume we have updated
         // remote cart with all relevant chages (e.g. drag-reorder).
-        var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid();
+        var data = "hgt.imageV1=1&hgt.trackImgOnly=1&hgsid=" + getHgsid();
         jQuery('body').css('cursor', 'wait');
         $.ajax({
                    type: "GET",
@@ -2070,18 +2070,14 @@ function handleUpdateTrackMap(response, status)
 }
 
 function handleViewImg(response, status)
-{
+{ // handles view image response, which must get new image without imageV2 gimmickery
     jQuery('body').css('cursor', '');
-    for (var id in trackDbJson) {
-        // Use an arbitrary id to pull out a src from the track image table;
-        // e.g.: <IMG id='img_data_knownGene' src='../trash/hgt/hgt_hgwdev_larrym_479c_abde90.png' ...>
-        var str = "<IMG[^>]*id='img_data_" + id + "'[^>]*src='([^']+)'";
-        var reg = new RegExp(str);
-        a = reg.exec(response);
-        if(a && a[1]) {
-            window.open(a[1]);
-            return;
-        }
+    var str = "<IMG[^>]*SRC='([^']+)'";
+    var reg = new RegExp(str);
+    a = reg.exec(response);
+    if(a && a[1]) {
+        window.open(a[1]);
+        return;
     }
     showWarning("Couldn't parse out img src");
 }
