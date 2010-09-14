@@ -1306,6 +1306,8 @@ $(document).ready(function()
     }
 
     if($("#tabs").length > 0) {
+        // Search page specific code
+
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
                             show: function(event, ui) {
@@ -2162,9 +2164,11 @@ function findTracksHandleNewMdbVals(response, status)
 function searchKeydown(event)
 {
     if (event.which == 13) {
-        $('#searchSubmit').click();
-        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
-        // $('#searchTracks').submit();
+        // hgt.forceSearch is required to fix problem on IE and Safari where value of hgt_searchTracks is "-" (i.e. not "Search").
+        $("input[name=hgt.forceSearch]").val(1);
+        $('#searchTracks').submit();
+        // This doesn't work with IE or Safari.
+        // $('#searchSubmit').click();
     }
 }
 
