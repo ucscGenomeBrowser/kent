@@ -9065,6 +9065,7 @@ bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+#ifndef SUBTRACKS_HAVE_VIS
 /* Remove redundant cart settings to avoid cart bloat. */
 if (enabled == enabledInTdb)
     {
@@ -9072,6 +9073,7 @@ if (enabled == enabledInTdb)
     if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
         cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
     }
+#endif///def SUBTRACKS_HAVE_VIS
 #ifdef SUBTRACKS_HAVE_VIS
 if(overrideComposite)
     enabled = TRUE;
