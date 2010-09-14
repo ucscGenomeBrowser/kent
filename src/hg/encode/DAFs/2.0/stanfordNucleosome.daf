@@ -10,7 +10,6 @@ grant             Snyder
 lab               Stanford
 dataType          Nucleosome
 compositeSuffix   Nsome
-dataAgreementSuffix Stanf
 group             regulation
 variables         cell
 assembly          hg19
