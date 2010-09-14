@@ -5492,21 +5492,6 @@ tag shortDeplRrna
 type rnaExtract
 description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
 
-term short19-40
-tag short19to40
-type rnaExtract
-description RNA sized 19-40 nt
-
-term short40-60
-tag short40to60
-type rnaExtract
-description RNA sized 40-60 nt
-
-term short60-200
-tag short60to200
-type rnaExtract
-description RNA sized 60-200 nt
-
 term longPolyA
 tag pAP
 type rnaExtract
