@@ -1089,6 +1089,9 @@ spectrum on
 urlLabel Transfac matrix link:
 url http://www.gene-regulation.com/cgi-bin/pub/databases/transfac/getTF.cgi?AC=$$
 
+track agilentCgh override
+type bed 6 .
+
 track targetScanS
 shortLabel TS miRNA sites
 longLabel TargetScan miRNA Regulatory Sites
@@ -4153,6 +4156,7 @@ noInherit on
 type bed 3 .
 html numtSeq
 
+
     track numtSAssembled
     parent NumtSeq
     shortLabel NumtS assembled
@@ -4161,6 +4165,7 @@ html numtSeq
     priority 1
     useScore 1
     type bed 12 .
+    html numtSeq
     
 
     track numtS
@@ -4172,6 +4177,7 @@ html numtSeq
     useScore 1
     priority 2
     type bed 6 .
+    html numtSeq
 
     track numtSMitochondrion
     parent NumtSeq
@@ -4181,6 +4187,7 @@ html numtSeq
     color 0,60,120
     priority 3
     type bed 6 .
+    html numtSeq
 
     track numtSMitochondrionChrPlacement
     parent NumtSeq
@@ -4189,8 +4196,9 @@ html numtSeq
     priority 4
     itemRgb on    
     type bed 9 .
+    html numtSeq
 
-searchTable numtSMitochondrion
+searchTable numtSMitochondrionChrPlacement
 searchMethod exact
 searchType bed
 shortCircuit 1

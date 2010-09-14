@@ -1,51 +1,58 @@
 #
 #	browserEnvironment.txt
 #
-#	$Id: browserEnvironment.txt,v 1.4 2010/03/22 19:10:06 hiram Exp $
-#
 #	example UCSC genome mirror site definition file
-#	copy this file to a local named file to start the definitions for your
-#	local site.  This file is used as an argument to the scripts for
-#	building the source tree and fetching /gbdb/ and goldenPath/ files from
-#	UCSC and loading database tables.
+#
+#	copy this entire product/scripts/ directory to some directory outside
+#	of the kent source tree.  Edit this browserEnvironment.txt file
+#	for your local site.  This file is used as an argument to the scripts 
+#	for building the source tree and fetching /gbdb/ and goldenPath/ files
+#	from UCSC and loading database tables.
 #
 
-#       rsync command used to fetch from hgdownload.cse.ucsc.edu
-#	Note the explicit arguments for mirroring in an attempt to work-around
-#	the UCSC permissions on directories and files which are not
-#	consistent for 'group' rwx permissions.
-export RSYNC="rsync -rltgoDz"
-#	rsync location at UCSC to fetch files
-export HGDOWNLOAD="rsync://hgdownload.cse.ucsc.edu"
-#	kentSrc - location where you want your master kent source tree to live
-export kentSrc="/scratch/tmp/kent"
-#	LOGDIR - location to keep log files of script activities:
-export LOGDIR="/scratch/tmp/browserLogs"
-#	TRASHDIR - the full path to your "trash" directory
-#	*BEWARE* this TRASHDIR specification is used by the trashCleaner.sh
-#	script to remove files in this directory.  It needs to be correct.
-#	It must be an absolute path starting with / and it must end in /trash
-export TRASHDIR="/scratch/tmp/trash"
-#	GOLD - where to download goldenPath/database/ directories
-export GOLD="/scratch/tmp/goldenPath"
-# GBDB - You will need a symlink /gbdb -> to this directory with gbdb downloads
-export GBDB="/scratch/tmp/gbdb"
-# DOCHOME - location of top level htdocs for downloading UCSC static html
-#	file hierarchy
-export DOCHOME="/scratch/tmp/htdocs"
+# MACHTYPE needs to be a simple string such as: i386 or ppc or x86_64
+# see what your uname -m produces, make sure it has no - characters
 export MACHTYPE=`uname -m`
-# BAM and PNG optional behavior for the genome browser, see also:
-#	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
-# export USE_BAM=1
-# export USE_PNG=1
+#	KENTHOME - directory where you want the kent source tree and built
+#	binaries to exist.  This is typically your $HOME/ directory
+export KENTHOME="/scratch/tmp"
 # Set KENTBIN to a directory where you want the results of the kent
 #	source tree build.  *NOTE* This will also require a symlink
 #	in your HOME directory: $HOME/bin/$MACHTYPE -> $KENTBIN/$MACHTYPE
 #	as the source tree often places resulting binaries in
-#	$HOME/bin/$MACHTYPE
-export KENTBIN="/scratch/tmp/bin"
+#	$HOME/bin/$MACHTYPE despite this directive (this deficiency
+#		to be corrected in later versions of the source tree)
+export KENTBIN="${KENTHOME}/bin"
+export BINDIR="${KENTBIN}/$MACHTYPE"
+# This SCRIPTS is a directory where scripts from the kent source tree build
+#	will be placed
+export SCRIPTS="${KENTBIN}/scripts"
+#	kentSrc - location where you want your master kent source tree to live
+export kentSrc="${KENTHOME}/kent"
+#	LOGDIR - location to keep log files of script activities:
+export LOGDIR="${KENTHOME}/browserLogs"
+# GBDB - You will need a symlink /gbdb -> to this directory with gbdb downloads
+export GBDB="/scratch/tmp/gbdb"
+# BROWSERHOME - directory where cgi-bin/ trash/ and htdocs/ should exist
+#   This is typically something like /var/www or /usr/local/apache
+export BROWSERHOME="/scratch/tmp"
+# DOCUMENTROOT - location of top level htdocs for downloading UCSC static html
+#	file hierarchy
+export DOCUMENTROOT="${BROWSERHOME}/htdocs"
+#	GOLD - where to download goldenPath/database/ directories
+export GOLD="${DOCUMENTROOT}/goldenPath"
+#	TRASHDIR - the full path to your "trash" directory
+#	*BEWARE* this TRASHDIR specification is used by the trashCleaner.sh
+#	script to remove files in this directory.  It needs to be correct.
+#	It must be an absolute path starting with / and it must end in /trash
+export TRASHDIR="${BROWSERHOME}/trash"
+# cgi-bin/ must be in the same directory as htdocs/ and trash/
+export CGI_BIN="${BROWSERHOME}/cgi-bin"
+# USE_PNG is not really an option, it is mandatory as of mid-year 2010
+#	The libpng development and run-time packages must be installed
+export USE_PNG=1
 # Adding these to your path will enable finding all the kent commands
-export PATH=$KENTBIN/$MACHTYPE:$KENTBIN/:$PATH
+export PATH="$KENTBIN/$MACHTYPE:$KENTBIN/:$PATH"
 # where to find the hgsql command for database operations
 export HGSQL="$KENTBIN/$MACHTYPE/hgsql"
 # You will need to find out where your MySQL libs are.
@@ -55,20 +62,34 @@ export MYSQLINC="/usr/include/mysql"
 # If your mysql is SSL enabled, use the -lssl:
 # export MYSQLLIBS="/usr/lib64/mysql/libmysqlclient.a -lssl -lz"
 
+# BAM optional behavior for the genome browser, see also:
+#	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
+# export USE_BAM=1
 # if you want to set USE_BAM, you will need the samtools.  See also:
 #	http://genomewiki.ucsc.edu/index.php/Build_Environment_Variables
-# export SAMDIR=/scratch/tmp/samtools-0.1.7a
+# export SAMDIR=${BROWSERHOME}/samtools-0.1.7a
 # export SAMINC=$SAMDIR
-# export SAMLIB=/scratch/tmp/samtools/lib/libbam.a
-export SCRIPTS=/scratch/tmp/bin
-export CGI_BIN=/scratch/tmp/cgi-bin
-export DOCUMENTROOT=/scratch/tmp/htdocs
-export BINDIR=${KENTBIN}/$MACHTYPE
-export ENCODE_PIPELINE_BIN=${BINDIR}
+# export SAMLIB=${BROWSERHOME}/samtools/lib/libbam.a
+export ENCODE_PIPELINE_BIN="${BINDIR}"
 # protect these scripts by specifying the single machine on which they
 #	should run and the single user name which should be running them.
-export AUTH_MACHINE="hgwdev"
-export AUTH_USER="hiram"
+# for the AUTH_MACHINE you may need to see what uname -n says
+export AUTH_MACHINE="yourMachineName"
+export AUTH_USER="yourUserName"
+
+########################################################################
+# probably no changes needed with these variables, they are just convenient
+# global variables for all the scripts
+#       rsync command used to fetch from hgdownload.cse.ucsc.edu
+#	Note the explicit arguments for mirroring in an attempt to work-around
+#	the UCSC permissions on directories and files which are not
+#	consistent for 'group' rwx permissions.
+export RSYNC="rsync -rltgoDz"
+#	rsync location at UCSC to fetch files
+export HGDOWNLOAD="rsync://hgdownload.cse.ucsc.edu"
+#
+#   END OF CONFIGURATION VARIABLES
+########################################################################
 
 #	verify this machine and user are correct
 export MACHINE_NAME=`uname -n | sed -e 's/\..*//'`
@@ -77,7 +98,7 @@ if [ "X${AUTH_MACHINE}Y" != "X${MACHINE_NAME}Y" ]; then
     exit 255;
 fi
 
-if [ -z "${USER}" ]; then
+if [ -z "${LOGNAME}" ]; then
     echo "ERROR: not found, expected environment variable: LOGNAME"
     exit 255;
 fi

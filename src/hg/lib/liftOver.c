@@ -1677,13 +1677,13 @@ char *liftOverErrHelp()
 {
     return
     "Deleted in new:\n"
-    "    None of sequence intersects with any alignment chain for the region\n"
+    "    Sequence intersects no chains\n"
     "Partially deleted in new:\n"
-    "    Sequence intersects with part of a single alignment chain in the region\n"
+    "    Sequence insufficiently intersects one chain\n"
     "Split in new:\n"
-    "    Sequence partially intersects multiple chains in the region\n"
+    "    Sequence insufficiently intersects multiple chains\n"
     "Duplicated in new:\n"
-    "    Sequence completely intersects multiple chains in the region\n"
+    "    Sequence sufficiently intersects multiple chains\n"
     "Boundary problem:\n"
     "    Missing start or end base in an exon\n";
 }

@@ -72,9 +72,7 @@ boolean hasCustomTracks = FALSE;  /* whether any custom tracks are for this db*/
 struct slName *browserLines = NULL; /* Custom track "browser" lines. */
 
 boolean withNextItemArrows = FALSE; /* Display next feature (gene) navigation buttons near center labels? */
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 boolean withPriorityOverride = FALSE;   /* Display priority for each track to allow reordering */
-#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 
 int gfxBorder = hgDefaultGfxBorder; /* Width of graphics border. */
 int guidelineSpacing = 12;  /* Pixels between guidelines. */
@@ -224,27 +222,23 @@ for (group = groupList; group != NULL; group = group->next)
                     {
                     assert(tdb->parent != NULL && tdb->parent->track);
                     cartRemove(cart, tdb->parent->track);
-                    #if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                     if (withPriorityOverride)
                         {
                         safef(pname, sizeof(pname), "%s.priority",tdb->parent->track);
                         cartRemove(cart, pname);
                         }
-                    #endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                     }
 
                 track->visibility = tdb->visibility;
                 cartRemove(cart, track->track);
 
                 /* set the track priority back to the default value */
-                #if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                 if (withPriorityOverride)
                     {
                     safef(pname, sizeof(pname), "%s.priority",track->track);
                     cartRemove(cart, pname);
                     track->priority = track->defaultPriority;
                     }
-                #endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
                 }
             else
                 {
@@ -362,21 +356,21 @@ void smallBreak()
 hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
-int trackPlusLabelHeight(struct track *track, int fontHeight)
+static int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be)
  * and the center label(s) above the items (if any). */
 {
 int y = track->totalHeight(track, limitVisibility(track));
-if (isWithCenterLabels(track))
+if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (tdbIsComposite(track->tdb))
     {
     struct track *subtrack;
     for (subtrack = track->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-	{
-	if (isSubtrackVisible(subtrack) && isWithCenterLabels(subtrack))
-	    y += fontHeight;
-	}
+        {
+        if (isSubtrackVisible(subtrack) &&  isCenterLabelIncluded(subtrack))
+            y += fontHeight;
+        }
     }
 return y;
 }
@@ -1140,7 +1134,7 @@ switch (vis)
 	y += tHeight;
         break;
     case tvFull:
-        if (isWithCenterLabels(track))
+        if (isCenterLabelIncluded(track))
             y += fontHeight;
         start = 1;
 
@@ -1223,7 +1217,7 @@ switch (vis)
         break;
     case tvDense:
 
-        if (isWithCenterLabels(track))
+        if (isCenterLabelIncluded(track))
             y += fontHeight;
 
         /*draw y-value limits for 'sample' tracks.
@@ -1302,19 +1296,20 @@ static int doCenterLabels(struct track *track, struct track *parentTrack,
 {
 if (track->limitedVis != tvHide)
     {
-#ifdef FLAT_TRACK_LIST
-    if(isWithCenterLabels(track))
-#endif//def FLAT_TRACK_LIST
+    if (isCenterLabelIncluded(track))
         {
         int trackPastTabX = (withLeftLabels ? trackTabWidth : 0);
         int trackPastTabWidth = tl.picWidth - trackPastTabX;
         int fontHeight = mgFontLineHeight(font);
         int insideHeight = fontHeight-1;
 	boolean toggleDone = FALSE;
+        char *label = track->longLabel;
+        if (isCenterLabelConditional(track))
+            label = track->parent->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
-                            labelColor, font, track->longLabel);
+                            labelColor, font, label);
         if (track->nextItemButtonable && track->nextPrevItem && !tdbIsComposite(track->tdb))
             {
             if (withNextItemArrows || trackDbSettingOn(track->tdb, "nextItemButton"))
@@ -1340,7 +1335,7 @@ static int doDrawItems(struct track *track, struct hvGfx *hvg, MgFont *font,
 {
 int fontHeight = mgFontLineHeight(font);
 int pixWidth = tl.picWidth;
-if (isWithCenterLabels(track))
+if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (track->limitedVis == tvPack)
     {
@@ -1374,7 +1369,7 @@ struct slList *item;
 boolean isWig = (sameString("wig", type) || startsWith("wig ", type) ||
         startsWith("bedGraph", type));
 
-if (isWithCenterLabels(track))
+if (isCenterLabelIncluded(track))
     y += fontHeight;
 if (track->mapsSelf)
     {
@@ -1444,7 +1439,7 @@ Color labelColor = (track->labelColor ? track->labelColor : track->ixColor);
 hvGfxSetClip(hvg, leftLabelX, y, leftLabelWidth, tHeight);
 track->drawLeftLabels(track, winStart, winEnd,
 		      hvg, leftLabelX, y, leftLabelWidth, tHeight,
-		      isWithCenterLabels(track), font, labelColor,
+		      isCenterLabelIncluded(track), font, labelColor,
 		      track->limitedVis);
 hvGfxUnclip(hvg);
 y += tHeight;
@@ -1470,7 +1465,7 @@ switch (track->limitedVis)
             {
             if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
                 {
-                if (isWithCenterLabels(track))
+                if (isCenterLabelIncluded(track))
                     y += fontHeight;
                 struct track *subtrack;
                 for (subtrack = track->subtracks;  subtrack != NULL;subtrack = subtrack->next)
@@ -1481,7 +1476,7 @@ switch (track->limitedVis)
                             y = doMapItems(subtrack, hvg, fontHeight, y);
                         else
                             {
-                            if (isWithCenterLabels(subtrack))
+                            if (isCenterLabelIncluded(subtrack))
                                 y += fontHeight;
                             if(theImgBox && subtrack->limitedVis == tvDense)
                                 mapBoxToggleVis(hvg, trackPastTabX, y, trackPastTabWidth, track->lineHeight, subtrack);
@@ -1497,7 +1492,7 @@ switch (track->limitedVis)
             y += trackPlusLabelHeight(track, fontHeight);
         break;
     case tvDense:
-        if (isWithCenterLabels(track))
+        if (isCenterLabelIncluded(track))
             y += fontHeight;
         if (tdbIsComposite(track->tdb))
             mapHeight = track->height;
@@ -1930,10 +1925,8 @@ if(theImgBox)
     sliceOffsetX[stData] = (revCmplDisp?0:sliceWidth[stSide] + sliceWidth[stButton]);
     sliceWidth[stData]   = tl.picWidth - (sliceWidth[stSide] + sliceWidth[stButton]);
     }
-#ifdef FLAT_TRACK_LIST
 struct flatTracks *flatTracks = NULL;
 struct flatTracks *flatTrack = NULL;
-#endif//def FLAT_TRACK_LIST
 
 if (rulerMode != tvFull)
     {
@@ -2027,7 +2020,6 @@ for (track = trackList; track != NULL; track = track->next)
                     subtrack->limitedVisSet = track->limitedVisSet;
                     }
 
-                #ifdef FLAT_TRACK_LIST
                 #ifdef SUBTRACKS_HAVE_VIS
                 if (subtrack->limitedVis != tvHide)
                 #endif///def SUBTRACKS_HAVE_VIS
@@ -2035,16 +2027,13 @@ for (track = trackList; track != NULL; track = track->next)
                     subtrack->hasUi = track->hasUi;
                     flatTracksAdd(&flatTracks,subtrack,cart);
                     }
-                #endif//def FLAT_TRACK_LIST
                 }
             }
-        #ifdef FLAT_TRACK_LIST
         else
             #ifdef SUBTRACKS_HAVE_VIS
             if (track->limitedVis != tvHide)
             #endif///def SUBTRACKS_HAVE_VIS
                 flatTracksAdd(&flatTracks,track,cart);
-        #endif//def FLAT_TRACK_LIST
         if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
             {
             char numBuf[SMALLBUF];
@@ -2056,15 +2045,11 @@ for (track = trackList; track != NULL; track = track->next)
             track->limitedVis = tvHide;
             track->limitedVisSet = TRUE;
             }
-        #ifndef FLAT_TRACK_LIST
-        else
-            pixHeight += trackPlusLabelHeight(track, fontHeight);
-        #endif//def FLAT_TRACK_LIST
         }
     }
-#ifdef FLAT_TRACK_LIST
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
-for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
+struct track *prevTrack = NULL;
+for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
     if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
@@ -2078,10 +2063,13 @@ for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
         }
-    else
+    if (track->limitedVis != tvHide)
+        {
+        track->prevTrack = prevTrack; // Important for keeping track of conditional center labels!
         pixHeight += trackPlusLabelHeight(track, fontHeight);
+        prevTrack = track;
+        }
     }
-#endif//def FLAT_TRACK_LIST
 
 imagePixelHeight = pixHeight;
 if (psOutput)
@@ -2092,10 +2080,8 @@ if (psOutput)
 else
     {
     boolean transparentImage = FALSE;
-    #ifdef IMAGEv2_BG_IMAGE
     if (theImgBox!=NULL)
-        transparentImage = TRUE;   // transparent when BG is defined
-    #endif///def IMAGEv2_BG_IMAGE
+        transparentImage = TRUE;   // transparent because BG (blue ruler lines) is separate image
 
 #ifdef USE_PNG
     trashDirFile(&gifTn, "hgt", "hgt", ".png");
@@ -2147,28 +2133,18 @@ if(theImgBox)
         {
         curImgTrack = imgBoxTrackFindOrAdd(theImgBox,NULL,RULER_TRACK_NAME,rulerMode,FALSE,IMG_FIXEDPOS); // No tdb, no centerlabel, not reorderable
         }
-#ifdef FLAT_TRACK_LIST
+
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-    for (track = trackList; track != NULL; track = track->next)
-        {
-#endif//ndef FLAT_TRACK_LIST
         if (track->limitedVis != tvHide)
             {
             #ifdef SUBTRACKS_HAVE_VIS
             if(track->labelColor == track->ixColor && track->ixColor == 0)
                 track->ixColor = hvGfxFindRgb(hvg, &track->color);
             #endif//def SUBTRACKS_HAVE_VIS
-            #ifdef FLAT_TRACK_LIST
             int order = flatTrack->order;
-            #else//ifndef FLAT_TRACK_LIST
-            char var[256];
-            safef(var,sizeof(var),"%s_%s",track->tdb->track,IMG_ORDER_VAR);
-            int order = cartUsualInt(cart, var,IMG_ANYORDER);
-            #endif//ndef FLAT_TRACK_LIST
-            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isWithCenterLabels(track),order);
+            curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isCenterLabelIncluded(track),order);
             }
         }
     }
@@ -2193,66 +2169,54 @@ if (withLeftLabels && psOutput == NULL)
             sliceHeight      = height + 1;
             sliceOffsetY     = 0;
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
-            #ifdef FLAT_TRACK_LIST
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
-            #else//ifndef FLAT_TRACK_LIST
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,theSideImg,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY);
-            #endif//ndef FLAT_TRACK_LIST
             }
         drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxTrackUi(hvgSide, trackTabX, y, trackTabWidth, height,
               RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
         y += height + 1;
         }
-#ifdef FLAT_TRACK_LIST
+
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-    for (track = trackList; track != NULL; track = track->next)
-        {
-#endif//ndef FLAT_TRACK_LIST
         int h, yStart = y, yEnd;
         if (track->limitedVis != tvHide)
             {
-            y += trackPlusLabelHeight(track, fontHeight);
-            yEnd = y;
-            h = yEnd - yStart - 1;
+        y += trackPlusLabelHeight(track, fontHeight);
+        yEnd = y;
+        h = yEnd - yStart - 1;
 
-            /* alternate button colors for track groups*/
-            if (track->group != lastGroup)
-                grayButtonGroup = !grayButtonGroup;
-            lastGroup = track->group;
-            if (grayButtonGroup)
-                drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
-            else
-                drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
-            if(theImgBox)
-                {
-                // Mini-buttons (side label slice) for tracks
-                sliceHeight      = yEnd - yStart;
-                sliceOffsetY     = yStart - 1;
-                curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-                #ifdef FLAT_TRACK_LIST
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
-                #else//ifndef FLAT_TRACK_LIST
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,theSideImg,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY);
-                #endif//ndef FLAT_TRACK_LIST
-                }
-            if (track->hasUi)
-                {
-                if(tdbIsCompositeChild(track->tdb))
-		    {
-		    struct trackDb *parent = trackDbCompositeParent(track->tdb);
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-		    	parent->track, parent->shortLabel, track->track);
-		    }
-                else
-                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
-                }
+        /* alternate button colors for track groups*/
+        if (track->group != lastGroup)
+            grayButtonGroup = !grayButtonGroup;
+        lastGroup = track->group;
+        if (grayButtonGroup)
+            drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
+                        h, track->hasUi);
+        else
+            drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
+                        h, track->hasUi);
+        if(theImgBox)
+            {
+            // Mini-buttons (side label slice) for tracks
+            sliceHeight      = yEnd - yStart;
+            sliceOffsetY     = yStart - 1;
+            curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
             }
+        if (track->hasUi)
+            {
+            if(tdbIsCompositeChild(track->tdb))
+                {
+                struct trackDb *parent = trackDbCompositeParent(track->tdb);
+                mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
+                    parent->track, parent->shortLabel, track->track);
+                }
+            else
+                mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
+            }
+        }
         }
     butOff = trackTabX + trackTabWidth;
     leftLabelX += butOff;
@@ -2330,14 +2294,9 @@ if (withLeftLabels)
             if (rulerCds)
                 y += rulerTranslationHeight;
         }
-#ifdef FLAT_TRACK_LIST
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-    for (track = trackList; track != NULL; track = track->next)
-        {
-#endif//ndef FLAT_TRACK_LIST
         if (track->limitedVis == tvHide)
             continue;
          if(theImgBox)
@@ -2349,24 +2308,7 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
-#ifndef FLAT_TRACK_LIST
-        if (trackIsCompositeWithSubtracks(track))
-            {
-            struct track *subtrack;
-            if (isWithCenterLabels(track))
-                y += fontHeight;
-            for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
-                {
-                if (isSubtrackVisible(subtrack))
-                    y = doLeftLabels(subtrack, hvgSide, font, y);
-                //if (track->limitedVis == tvDense)
-                //track->nextItemButtonable = FALSE;
-                }
-            track->nextItemButtonable = FALSE; // Composites are not NextItemButtonable (but subtracks may be)
-            }
-        else
-#endif//ndef FLAT_TRACK_LIST
-            y = doLeftLabels(track, hvgSide, font, y);
+        y = doLeftLabels(track, hvgSide, font, y);
         }
     }
 else
@@ -2385,15 +2327,19 @@ if (withGuidelines)
         //    (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
         //    pixWidth, pixHeight,FALSE);
     struct hvGfx *bgImg = hvg; // Default to the one image
-    #if defined(IMAGEv2_BG_IMAGE) && defined(USE_PNG)
     if(theImgBox)
         {
         struct tempName gifBg;
+        #ifdef USE_PNG
         trashDirFile(&gifBg, "hgt", "bg", ".png");  // TODO: We could have a few static files by (pixHeight*pixWidth)  And I doubt pixHeight is needed!
         bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+        #else //ifndef
+        trashDirFile(&gifBg, "hgt", "bg", ".gif");
+        bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+        #endif //ndef USE_PNG
+        bgImg->rc = revCmplDisp;
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
         }
-    #endif //defined(IMAGEv2_BG_IMAGE) && defined(USE_PNG)
     int height = pixHeight - 2*gfxBorder;
     int x;
     Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
@@ -2428,55 +2374,24 @@ if (withCenterLabels)
     {
     hvGfxSetClip(hvg, insideX, gfxBorder, insideWidth, pixHeight - 2*gfxBorder);
     y = yAfterRuler;
-#ifdef FLAT_TRACK_LIST
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-    for (track = trackList; track != NULL; track = track->next)
-        {
-#endif//ndef FLAT_TRACK_LIST
         if (track->limitedVis == tvHide)
             continue;
 
         if(theImgBox)
             {
-            //if (isWithCenterLabels(track))  // NOTE: Since track may not have centerlabel but subtrack may (How?), then must always make this slice!
-            // center label slice of tracks
+            // center label slice of tracks Must always make, even if the centerLabel is empty
             sliceHeight      = fontHeight;
             sliceOffsetY     = y;
             curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stCenter,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
+            if (isCenterLabelConditional(track))
+                imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track)?clNowSeen:clNotSeen);
             }
-#ifndef FLAT_TRACK_LIST
-        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-            {
-            if (isWithCenterLabels(track))
-                y = doCenterLabels(track, track, hvg, font, y) - track->height; /* subtrack heights tallied below: */
-            if(theImgBox)
-                {
-                // Special case: data slice of tracks
-                sliceHeight      = trackPlusLabelHeight(track, fontHeight) - fontHeight;
-                sliceOffsetY     = y;
-                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stData,theOneImg,NULL,sliceWidth[stData],sliceHeight,sliceOffsetX[stData],sliceOffsetY);
-                curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
-                }
-            struct track *subtrack;
-            for (subtrack = track->subtracks; subtrack != NULL; subtrack = subtrack->next)
-                {
-                if (isSubtrackVisible(subtrack))
-                    {
-                    if (isWithCenterLabels(subtrack))
-                        y = doCenterLabels(subtrack, track, hvg, font, y);
-                    else
-                        y += subtrack->totalHeight(subtrack,subtrack->limitedVis);
-                    }
-                }
-            }
-        else
-#endif//ndef FLAT_TRACK_LIST
-            y = doCenterLabels(track, track, hvg, font, y);
+        y = doCenterLabels(track, track, hvg, font, y);
         }
     hvGfxUnclip(hvg);
     }
@@ -2487,18 +2402,13 @@ if (withCenterLabels)
     y = yAfterRuler;
     if (measureTiming)
         lastTime = clock1000();
-#ifdef FLAT_TRACK_LIST
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-    for (track = trackList; track != NULL; track = track->next)
-        {
-#endif//ndef FLAT_TRACK_LIST
         if (track->limitedVis == tvHide)
                 continue;
 
-        int centerLabelHeight = (isWithCenterLabels(track) ? fontHeight : 0);
+        int centerLabelHeight = (isCenterLabelIncluded(track) ? fontHeight : 0);
         int yStart = y + centerLabelHeight;
         int yEnd   = y + trackPlusLabelHeight(track, fontHeight);
         if(theImgBox)
@@ -2513,26 +2423,10 @@ if (withCenterLabels)
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
-#ifndef FLAT_TRACK_LIST
-        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-            {
-            struct track *subtrack;
-            if (isWithCenterLabels(track))
-                y += fontHeight;
-            for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
-                {
-                if (isSubtrackVisible(subtrack))
-                    y = doDrawItems(subtrack, hvg, font, y, &lastTime);
-                }
-            }
-        else
-#endif//ndef FLAT_TRACK_LIST
-            y = doDrawItems(track, hvg, font, y, &lastTime);
+        y = doDrawItems(track, hvg, font, y, &lastTime);
 
-#if defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
-#endif// defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
 
         if(yEnd!=y)
             warn("Slice height does not add up.  Expecting %d != %d actual",yEnd - yStart - 1,y-yStart);
@@ -2545,14 +2439,9 @@ if (withCenterLabels)
 if (withLeftLabels)
     {
     y = yAfterRuler;
-#ifdef FLAT_TRACK_LIST
     for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
         {
         track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-    for (track = trackList; track != NULL; track = track->next)
-        {
-#endif//ndef FLAT_TRACK_LIST
         if (track->limitedVis == tvHide)
                 continue;
         if(theImgBox)
@@ -2564,45 +2453,20 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
-#ifndef FLAT_TRACK_LIST
-        if (trackIsCompositeWithSubtracks(track))  //TODO: Change when tracks->subtracks are always set for composite
-            {
-            struct track *subtrack;
-            if (isWithCenterLabels(track))
-                y += fontHeight;
-            for (subtrack = track->subtracks; subtrack != NULL;subtrack = subtrack->next)
-                {
-                if (isSubtrackVisible(subtrack))
-                    {
-                    if (subtrack->drawLeftLabels != NULL)
-                        y = doOwnLeftLabels(subtrack, hvgSide, font, y);
-                    else
-                        y += trackPlusLabelHeight(subtrack, fontHeight);
-                    }
-                }
-            }
+
+        if (track->drawLeftLabels != NULL)
+            y = doOwnLeftLabels(track, hvgSide, font, y);
         else
-#endif//ndef FLAT_TRACK_LIST
-            {
-            if (track->drawLeftLabels != NULL)
-                y = doOwnLeftLabels(track, hvgSide, font, y);
-            else
-                y += trackPlusLabelHeight(track, fontHeight);
-            }
+            y += trackPlusLabelHeight(track, fontHeight);
         }
     }
 
 
 /* Make map background. */
 y = yAfterRuler;
-#ifdef FLAT_TRACK_LIST
 for (flatTrack = flatTracks; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
-#else//ifndef FLAT_TRACK_LIST
-for (track = trackList; track != NULL; track = track->next)
-    {
-#endif//ndef FLAT_TRACK_LIST
     if (track->limitedVis != tvHide)
         {
         if(theImgBox)
@@ -2650,13 +2514,11 @@ if(theImgBox)
 else
     {
     char *titleAttr = dragZooming ? "title='click or drag mouse in base position track to zoom in'" : "";
-    hPrintf("<IMG SRC = \"%s\" BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
+    hPrintf("<IMG SRC='%s' BORDER=1 WIDTH=%d HEIGHT=%d USEMAP=#%s %s id='trackMap'",
         gifTn.forHtml, pixWidth, pixHeight, mapName, titleAttr);
     hPrintf("><BR>\n");
     }
-#ifdef FLAT_TRACK_LIST
 flatTracksFree(&flatTracks);
-#endif//def FLAT_TRACK_LIST
 }
 
 static void printEnsemblAnchor(char *database, char* archive,
@@ -3521,7 +3383,7 @@ char *orgEnc = cgiEncode(organism);
 boolean psOutput = cgiVarExists("hgt.psOutput");
 
 hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#000000\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"1\"><TR><TD>\n");
-hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"2\"><TR>\n");
+hPrintf("<TABLE WIDTH=\"100%%\" BGCOLOR=\"#2636D1\" BORDER=\"0\" CELLSPACING=\"0\" CELLPADDING=\"0\"><TR>\n");
 hPrintf("<TD><TABLE BORDER=\"0\"><TR>\n");
 hPrintf("<TD ALIGN=CENTER><A HREF=\"../index.html?org=%s&db=%s&%s=%u\" class=\"topbar\">Home</A>&nbsp;&nbsp;</TD>",
     orgEnc, database, cartSessionVarName(), cartSessionId(cart));
@@ -3874,7 +3736,6 @@ for (grp = grps; grp != NULL; grp = grp->next)
     {
     /* deal with group reordering */
     float priority = grp->priority;
-    #if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     if (withPriorityOverride)
         {
         char cartVar[512];
@@ -3884,7 +3745,6 @@ for (grp = grps; grp != NULL; grp = grp->next)
         if (priority == grp->priority)
             cartRemove(cart, cartVar);
         }
-    #endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     /* create group object; add to list and hash */
     AllocVar(group);
     group->name = cloneString(grp->name);
@@ -3901,7 +3761,6 @@ grpFreeList(&grps);
  * If necessary make up an unknown group. */
 for (track = *pTrackList; track != NULL; track = track->next)
     {
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
     /* handle track reordering feature -- change group assigned to track */
     if (withPriorityOverride)
         {
@@ -3952,7 +3811,6 @@ for (track = *pTrackList; track != NULL; track = track->next)
 */
         track->priority = priority;
         }
-#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 
     /* assign group object to track */
     if (track->groupName == NULL)
@@ -4436,7 +4294,6 @@ if (measureTiming)
     uglyTime("getTrackList");
 #endif /* SOON */
 
-#ifdef IMAGEv2_DRAG_REORDER
 // honor defaultImgOrder
 if(cgiVarExists("hgt.defaultImgOrder"))
     {
@@ -4444,7 +4301,6 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
     }
-#endif///def IMAGEv2_DRAG_REORDER
 #ifdef SUBTRACKS_HAVE_VIS
 subtrackCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
@@ -4462,7 +4318,7 @@ if (cgiVarExists("hgt.nextItem"))
 else if (cgiVarExists("hgt.prevItem"))
     doNextPrevItem(FALSE, cgiUsualString("hgt.prevItem", NULL));
 
-if(advancedJavascriptFeaturesEnabled(cart) && !psOutput)
+if(advancedJavascriptFeaturesEnabled(cart) && !psOutput && !cgiVarExists("hgt.imageV1"))
     {
     // Start an imagebox (global for now to avoid huge rewrite of hgTracks)
     // Set up imgBox dimensions
@@ -4739,12 +4595,8 @@ if (!hideControls)
     hPrintf("<TD COLSPAN=15 style=\"white-space:normal\">"); // allow this text to wrap
     hWrites("Click on a feature for details. ");
     hWrites(dragZooming ? "Click or drag in the base position track to zoom in. " : "Click on base position to zoom in around cursor. ");
-#ifdef IMAGEv2_DRAG_REORDER
     hWrites("Click side bars for track options. ");
     hWrites("Drag side bars or labels up or down to reorder tracks. ");
-#else//ifndef IMAGEv2_DRAG_REORDER
-    hWrites("Click gray/blue bars on left for track options and descriptions. ");
-#endif//ndef IMAGEv2_DRAG_REORDER
 #ifdef IMAGEv2_DRAG_SCROLL
     hWrites("Drag tracks left or right to new position. ");
 #endif//def IMAGEv2_DRAG_SCROLL
@@ -4772,10 +4624,8 @@ if (!hideControls)
         }
 #endif
     hButton("hgt.reset", "default tracks");
-#ifdef IMAGEv2_DRAG_REORDER
 	hPrintf("&nbsp;");
     hButton("hgt.defaultImgOrder", "default order");
-#endif//def IMAGEv2_DRAG_REORDER
     // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
 	{
 	hPrintf("&nbsp;");
@@ -5222,9 +5072,7 @@ if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
     }
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 withPriorityOverride = cartUsualBoolean(cart, configPriorityOverride, FALSE);
-#endif/// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 insideX = trackOffsetX();
 insideWidth = tl.picWidth-gfxBorder-insideX;
 

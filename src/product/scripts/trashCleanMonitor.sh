@@ -35,6 +35,12 @@ if [ "$1" != "searchAndDestroy" ]; then
     exit 255
 fi
 
+if [ ! -d "${logDir}" ]; then
+    mkdir -p "${logDir}"
+    chmod 755 "${userLog}"
+    chmod 755 "${userLog}/${YYYY}"
+    chmod 755 "${logDir}"
+fi
 $trashCleaner searchAndDestroy > "${cleanerLog}" 2>&1
 returnCode=$?
 if [ "${returnCode}" -eq "0" ]; then

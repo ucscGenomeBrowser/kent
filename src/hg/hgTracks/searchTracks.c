@@ -159,15 +159,15 @@ static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** me
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
 {
 char query[256];
-#define WHITE_LIST_COUNT 30
+#define WHITE_LIST_COUNT 35
 #ifdef WHITE_LIST_COUNT
 #define WHITE_LIST_VAR 0
 #define WHITE_LIST_LABEL 1
 char *whiteList[WHITE_LIST_COUNT][2] = {
     {"age",              "Age of experimental organism"},
-    {"accession",        "Accession - external"},
     {"antibody",         "Antibody or target protein"},
-    {"cell",             "Cell Line"},
+    {"origAssembly",     "Assembly originally mapped to"},
+    {"cell",             "Cell, tissue or DNA sample"},
     {"localization",     "Cell compartment"},
     {"control",          "Control or Input for ChIPseq"},
     //{"controlId",        "ControlId - explicit relationship"},
@@ -177,21 +177,26 @@ char *whiteList[WHITE_LIST_COUNT][2] = {
     //{"freezeDate",       "Gencode freeze date"},
     //{"level",            "Gencode level"},
     //{"annotation",       "Gencode annotation"},
+    {"accession",        "GEO accession"},
+    {"growthProtocol",   "Growth Protocol"},
     {"lab",              "Lab producing data"},
     {"labVersion",       "Lab specific details"},
     {"labExpId",         "Lab specific identifier"},
     {"softwareVersion",  "Lab specific informatics"},
+    {"protocol",         "Library Protocol"},
     {"mapAlgorithm",     "Mapping algorithm"},
-    {"grant",            "Prinipal Investigator"},
     {"readType",         "Paired/Single reads lengths"},
+    {"grant",            "Prinipal Investigator"},
     {"replicate",        "Replicate number"},
-    {"restrictionEnzyme","Restriction Enzyme used"},
+    //{"restrictionEnzyme","Restriction Enzyme used"},
     //{"ripAntibody",      "RIP Antibody"},
     //{"ripTgtProtein",    "RIP Target Protein"},
     {"rnaExtract",       "RNA Extract"},
+    {"seqPlatform",      "Sequencing Platform"},
     {"setType",          "Experiment or Input"},
     {"sex",              "Sex of organism"},
     {"strain",           "Strain of organism"},
+    {"subId",            "Submission Id"},
     {"treatment",        "Treatment"},
     {"view",             "View - Peaks or Signals"},
 };
@@ -308,7 +313,7 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
@@ -320,17 +325,17 @@ hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
 hPrintf("<div id='tabs' style='display:none;'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced Search</span></a></li>\n"
+        "<li><a href='#advancedTab'><span>Advanced <em>- by %sterms</em></span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab'>\n");
+        "<div id='simpleTab'>\n",metaDbExists?"ENCODE ":"");
 
 hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
 hPrintf("<BR>");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'%s>\n", searchTracks,(searchTermsExist && !doSearch?"":" disabled=true"));
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'%s>\n",(searchTermsExist || doSearch?"":" disabled=true"));
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
@@ -469,8 +474,8 @@ if(metaDbExists)
 
 hPrintf("</table>\n");
 
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'%s>\n", searchTracks,(searchTermsExist && !doSearch?"":" disabled=true"));
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'%s>\n",(searchTermsExist || doSearch?"":" disabled=true"));
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
 hPrintf("</div>\n</div>\n");
 
@@ -669,29 +674,7 @@ else
         struct track *track = (struct track *) ptr->val;
         jsonTdbSettingsBuild(&jsonTdbVars, track);
 
-        // trackDbOutput(track->tdb, stderr, ',', '\n');
-        hPrintf("<tr bgcolor='%s' valign='top' class='found%s%s'>\n",COLOR_BG_ALTDEFAULT,
-                (tdbIsCompositeChild(track->tdb)?" subtrack":""),
-                (track->canPack?" canPack":""));
-
-        // NOTE: We have now changed the paradigm for subtrack vis:
-        // There must be a {trackName}_sel to have subtrack level vis override.
-        // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
-        // AND hgTracks.c now relies upon "_sel" even with subtrack-level vis.
-
-        // NOTE: Difficulties with "sel" and "vis" controls:
-        // 1) subtracks need both "sel" and "vis", but non-subtracks need only "vis"
-        // 2) Submit of form instead of ajax is nice (because it allows cancelling changes), but do not want to set any vars, unless specifically changed on form
-        // 3) When unchecked, need to delete vars instead of set them
-        // Solution to "sel", "vis" difficulties
-        // 1) findTracks remains a submit but:
-        // 2) 'sel' and 'vis' input are not named (won't be submitted)
-        // 3) hidden disabled and named 'sel' and 'vis' vars exist
-        // 4a) check subtrack: enable hidden 'sel' and 'vis' track, set to 'on' and pack/full
-        // 4b) check non-track: enable hidden 'vis', set to pack/full
-        // 5a) uncheck subtrack: enable hidden 'sel' and 'vis' track, set to '[]' and '[]'
-        // 5b) uncheck non-track: enable hidden 'vis', set to '[]'
-        // 6) Change vis: enable hidden 'vis', set to non-hidden vis
+        hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_BG_ALTDEFAULT);
 
         hPrintf("<td align='center' valign='center'>\n");
         char name[256];
@@ -701,21 +684,18 @@ else
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             track->visibility = limitedVisFromComposite(track);
-            // Must distinguish between subtrack with explicit vis and inherited vis
-            if (track->visibility != tvHide && NULL == cartOptionalString(cart, track->track))
-                {
-                struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-                assert(parentTdb != NULL);
-                track->visibility = tvMin(track->visibility,parentTdb->visibility); // inherited vis must explicitly be filtered by composite.
-                }
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
 
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
             #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
-            hPrintf(CB_HIDDEN_VAR,track->track,CART_VAR_EMPTY);
+            hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
             }
         else
+            {
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
             checked = ( track->visibility != tvHide );
+            }
 
         #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
