@@ -850,7 +850,7 @@ outPrefix = argv[8];
 
 userHash = hashNew(5);
 
-chdir(repoDir);
+setCurrentDir(repoDir);
 
 gitReports();
 

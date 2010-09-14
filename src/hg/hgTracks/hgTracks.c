@@ -5471,7 +5471,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 
-hPrintf(commonCssStyles());
+hWrites(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 if(dragZooming)
