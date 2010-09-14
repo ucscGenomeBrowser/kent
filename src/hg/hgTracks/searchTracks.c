@@ -259,7 +259,7 @@ char *currentTab = cartUsualString(cart, "hgt.currentSearchTab", "simpleTab");
 char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
 char *descSearch;
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
-boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
+boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search") || cartUsualInt(cart, "hgt.forceSearch", 0) == 1;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 struct slRef *tracks = NULL;
@@ -312,6 +312,7 @@ hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
 hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
+hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
 
 hPrintf("<div id='tabs' style='display:none;'>\n"
         "<ul>\n"

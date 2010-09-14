@@ -4,7 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated .ddf should look like this:
-# files   view    cell    localization    rnaExtract
+# files   view    cell    localization    rnaExtract 	labVersion
 
 
 dafVersion        2.0
@@ -24,13 +24,13 @@ validationSettings      validateFiles.bam:mismatches=8
 # Track/view definition
 view             PlusClusters
 longLabelPrefix  RIKEN CAGE Plus Strand Predicted Start Sites
-type             bedGraph 4
+type             bigWig    
 required         yes
 hasReplicates    no
 
 view             MinusClusters
 longLabelPrefix  RIKEN CAGE Minus Strand Predicted Start Sites
-type             bedGraph 4
+type             bigWig    
 required         yes
 hasReplicates    no
 
@@ -47,7 +47,7 @@ required         no
 hasReplicates    no
 
 view             Alignments
-longLabelPrefix  RIKEN CAGE Tags
+longLabelPrefix  RIKEN CAGE Tags      
 type             bam
 required         no
 hasReplicates    no
