@@ -75,7 +75,7 @@ endif
 ifeq (${SAMDIR},)
   SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
   ifneq ($(wildcard ${SAMDIR}),)
-     KNETFILE_HOOK=1
+     KNETFILE_HOOKS=1
   endif
 endif
 ifeq (${USE_BAM},)
