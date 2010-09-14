@@ -564,7 +564,7 @@ return dy;
 boolean isWithCenterLabels(struct track *track)
 /* Cases: only TRUE when global withCenterLabels is TRUE
  * If track->tdb has a centerLabelDense setting, go with it.
- * If composite child then no center labels in dense mode. */
+// * If composite child then no center labels in dense mode. */
 {
 if(!withCenterLabels)
     return FALSE;
@@ -575,10 +575,19 @@ if (track != NULL)
         {
         return sameWord(centerLabelsDense, "on");
         }
-    if ((limitVisibility(track) == tvDense) && tdbIsCompositeChild(track->tdb))
-	   return FALSE;
     }
 return withCenterLabels;
+}
+
+boolean isCenterLabelConditionallySeen(struct track *track)
+// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+{
+if (isCenterLabelConditional(track))
+    {
+    if (track->prevTrack && track->parent == track->prevTrack->parent && isCenterLabelConditional(track->prevTrack))
+        return FALSE;
+    }
+return isWithCenterLabels(track);
 }
 
 void mapStatusMessage(char *format, ...)
@@ -9056,6 +9065,7 @@ bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+#ifndef SUBTRACKS_HAVE_VIS
 /* Remove redundant cart settings to avoid cart bloat. */
 if (enabled == enabledInTdb)
     {
@@ -9063,6 +9073,7 @@ if (enabled == enabledInTdb)
     if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
         cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
     }
+#endif///def SUBTRACKS_HAVE_VIS
 #ifdef SUBTRACKS_HAVE_VIS
 if(overrideComposite)
     enabled = TRUE;

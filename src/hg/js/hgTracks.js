@@ -729,6 +729,44 @@ function imgTblSetOrder(table)
     }
 }
 
+function imgTblTrackShowCenterLabel(tr, show)
+{   // Will show or hide centerlabel as requested
+    // adjust button, sideLabel height, sideLabelOffset and centerlabel display
+
+    if(!$(tr).hasClass('clOpt'))
+        return;
+    var center = $(tr).find(".sliceDiv.cntrLab");
+    if($(center) == undefined)
+        return;
+    seen = ($(center).css('display') != 'none');
+    if(show == seen)
+        return;
+
+    var centerHeight = $(center).height();
+
+    var btn = $(tr).find("p.btn");
+    var side = $(tr).find(".sliceDiv.sideLab");
+    if($(btn) != undefined && $(side) != undefined) {
+        var sideImg = $(side).find("img");
+        if($(sideImg) != undefined) {
+            var top = parseInt($(sideImg).css('top'));
+            if(show) {
+                $(btn).css('height',$(btn).height() + centerHeight);
+                $(side).css('height',$(side).height() + centerHeight);
+                top += centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).show();
+            } else if(!show) {
+                $(btn).css('height',$(btn).height() - centerHeight);
+                $(side).css('height',$(side).height() - centerHeight);
+                top -= centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).hide();
+            }
+        }
+    }
+}
+
 function imgTblZipButtons(table)
 {
 // Goes through the image and binds composite track buttons when adjacent
@@ -746,6 +784,16 @@ function imgTblZipButtons(table)
             continue;
         var classList = $( btn ).attr("class").split(" ");
         var curMatchesLast=(classList[0] == lastClass);
+
+        // centerLabels may be conditionally seen
+        if($( rows[ix] ).hasClass('clOpt')) {
+            if(curMatchesLast && $( rows[ix - 1] ).hasClass('clOpt'))
+                imgTblTrackShowCenterLabel(rows[ix],false);  // if same composite and previous is also centerLabel optional then hide center label
+            else
+                imgTblTrackShowCenterLabel(rows[ix],true);
+        }
+
+        // On with buttons
         if(lastBtn != undefined) {
             $( lastBtn ).removeClass('btnN btnU btnL btnD');
             if(curMatchesLast && lastMatchLast) {
@@ -1258,6 +1306,8 @@ $(document).ready(function()
     }
 
     if($("#tabs").length > 0) {
+        // Search page specific code
+
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
                             show: function(event, ui) {
@@ -1536,7 +1586,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'viewImg') {
         // Fetch a new copy of track img and show it to the user in another window. This code assume we have updated
         // remote cart with all relevant chages (e.g. drag-reorder).
-        var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid();
+        var data = "hgt.imageV1=1&hgt.trackImgOnly=1&hgsid=" + getHgsid();
         jQuery('body').css('cursor', 'wait');
         $.ajax({
                    type: "GET",
@@ -2022,18 +2072,14 @@ function handleUpdateTrackMap(response, status)
 }
 
 function handleViewImg(response, status)
-{
+{ // handles view image response, which must get new image without imageV2 gimmickery
     jQuery('body').css('cursor', '');
-    for (var id in trackDbJson) {
-        // Use an arbitrary id to pull out a src from the track image table;
-        // e.g.: <IMG id='img_data_knownGene' src='../trash/hgt/hgt_hgwdev_larrym_479c_abde90.png' ...>
-        var str = "<IMG[^>]*id='img_data_" + id + "'[^>]*src='([^']+)'";
-        var reg = new RegExp(str);
-        a = reg.exec(response);
-        if(a && a[1]) {
-            window.open(a[1]);
-            return;
-        }
+    var str = "<IMG[^>]*SRC='([^']+)'";
+    var reg = new RegExp(str);
+    a = reg.exec(response);
+    if(a && a[1]) {
+        window.open(a[1]);
+        return;
     }
     showWarning("Couldn't parse out img src");
 }
@@ -2118,9 +2164,11 @@ function findTracksHandleNewMdbVals(response, status)
 function searchKeydown(event)
 {
     if (event.which == 13) {
-        $('#searchSubmit').click();
-        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
-        // $('#searchTracks').submit();
+        // hgt.forceSearch is required to fix problem on IE and Safari where value of hgt_searchTracks is "-" (i.e. not "Search").
+        $("input[name=hgt.forceSearch]").val(1);
+        $('#searchTracks').submit();
+        // This doesn't work with IE or Safari.
+        // $('#searchSubmit').click();
     }
 }
 
@@ -2130,14 +2178,6 @@ function changeSearchVisibilityPopups(cmd)
         $(this).val(cmd);
     });
     return false;
-}
-
-function findTracksChangeVis(seenVis)
-{
-    var trackName = $(seenVis).attr('id');
-    hiddenVis = $("input[name='"+trackName.substring(0,trackName.length - "_id".length)+"']");
-    $(hiddenVis).attr('disabled',false);
-    $(hiddenVis).val($(seenVis).val());
 }
 
 function findTracksClickedOne(selCb,justClicked)
@@ -2165,31 +2205,29 @@ function findTracksClickedOne(selCb,justClicked)
             else
                 $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
-    } else
+    } else {
+        $(seenVis).attr('selectedIndex',0);  // hide
         $(seenVis).attr('disabled', true );
+    }
 
-    // Deal with hiddenSel so that submit does the right thing
+    // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
     var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
     if(setHiddenInputs) {
+        if(checked)
+            $(hiddenVis).val($(seenVis).val());
+        else if(subtrack)
+            $(hiddenVis).val("[]");
+        else
+            $(hiddenVis).val("hide");
+        $(hiddenVis).attr('disabled',false);
+
         if(subtrack) {
-            $(hiddenSel).attr('disabled',false);
             if(checked)
                 $(hiddenSel).val('1');
             else
                 $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        }
-
-        // Deal with hiddenVis so that submit does the right thing
-        if(checked) {
-            findTracksChangeVis(seenVis);
-            //$(hiddenVis).val('value',seenVisVal);
-        } else {
-            $(hiddenVis).attr('disabled',false);
-            if(subtrack)
-                $(hiddenVis).val('[]');  // Delete vis for subtrack which is controlled by 2 settings
-            else
-                $(hiddenVis).val('hide');  // Can't set it to [] because default setting is used, but we are explicitly hiding this!
+            $(hiddenSel).attr('disabled',false);
         }
     }
 

@@ -131,43 +131,34 @@ static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char 
 // Search the assembly's metaDb table for var; If name == NULL, we search every metadata field.
 // Search is via mysql, so it's case-insensitive.
 {
-struct slName *retVal = NULL;
 char query[256];
-struct sqlResult *sr = NULL;
-char **row = NULL;
-
+char *prefix = "select distinct obj from metaDb";
 if(sameString(op, "contains"))
     if(name == NULL)
-        safef(query, sizeof(query), "select obj from metaDb where val like  '%%%s%%'", val);
+        safef(query, sizeof(query), "%s where val like  '%%%s%%'", prefix, val);
     else
-        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val like  '%%%s%%'", name, val);
+        safef(query, sizeof(query), "%s where var = '%s' and val like  '%%%s%%'", prefix, name, val);
 else
     if(name == NULL)
-        safef(query, sizeof(query), "select distinct obj from metaDb where val = '%s'", val);
+        safef(query, sizeof(query), "%s where val = '%s'", prefix, val);
     else
-        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val = '%s'", name, val);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slNameAddHead(&retVal, row[0]);
-    }
-sqlFreeResult(&sr);
-return retVal;
+        safef(query, sizeof(query), "%s where var = '%s' and val = '%s'", prefix, name, val);
+return sqlQuickList(conn, query);
 }
 
 static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** metaLabels)
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
 {
 char query[256];
-#define WHITE_LIST_COUNT 30
+#define WHITE_LIST_COUNT 35
 #ifdef WHITE_LIST_COUNT
 #define WHITE_LIST_VAR 0
 #define WHITE_LIST_LABEL 1
 char *whiteList[WHITE_LIST_COUNT][2] = {
     {"age",              "Age of experimental organism"},
-    {"accession",        "Accession - external"},
     {"antibody",         "Antibody or target protein"},
-    {"cell",             "Cell Line"},
+    {"origAssembly",     "Assembly originally mapped to"},
+    {"cell",             "Cell, tissue or DNA sample"},
     {"localization",     "Cell compartment"},
     {"control",          "Control or Input for ChIPseq"},
     //{"controlId",        "ControlId - explicit relationship"},
@@ -177,21 +168,26 @@ char *whiteList[WHITE_LIST_COUNT][2] = {
     //{"freezeDate",       "Gencode freeze date"},
     //{"level",            "Gencode level"},
     //{"annotation",       "Gencode annotation"},
+    {"accession",        "GEO accession"},
+    {"growthProtocol",   "Growth Protocol"},
     {"lab",              "Lab producing data"},
     {"labVersion",       "Lab specific details"},
     {"labExpId",         "Lab specific identifier"},
     {"softwareVersion",  "Lab specific informatics"},
+    {"protocol",         "Library Protocol"},
     {"mapAlgorithm",     "Mapping algorithm"},
-    {"grant",            "Prinipal Investigator"},
     {"readType",         "Paired/Single reads lengths"},
+    {"grant",            "Prinipal Investigator"},
     {"replicate",        "Replicate number"},
-    {"restrictionEnzyme","Restriction Enzyme used"},
+    //{"restrictionEnzyme","Restriction Enzyme used"},
     //{"ripAntibody",      "RIP Antibody"},
     //{"ripTgtProtein",    "RIP Target Protein"},
     {"rnaExtract",       "RNA Extract"},
+    {"seqPlatform",      "Sequencing Platform"},
     {"setType",          "Experiment or Input"},
     {"sex",              "Sex of organism"},
     {"strain",           "Strain of organism"},
+    {"subId",            "Submission Id"},
     {"treatment",        "Treatment"},
     {"view",             "View - Peaks or Signals"},
 };
@@ -263,7 +259,7 @@ char *currentTab = cartUsualString(cart, "hgt.currentSearchTab", "simpleTab");
 char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
 char *descSearch;
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
-boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
+boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search") || cartUsualInt(cart, "hgt.forceSearch", 0) == 1;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 struct slRef *tracks = NULL;
@@ -308,7 +304,7 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
@@ -316,22 +312,25 @@ hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
 hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
+hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
 
 hPrintf("<div id='tabs' style='display:none;'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced Search</span></a></li>\n"
+        "<li><a href='#advancedTab'><span>Advanced <em>- by %sterms</em></span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab'>\n");
+        "<div id='simpleTab'>\n",metaDbExists?"ENCODE ":"");
 
+hPrintf("<table><tr><td colspan='2'>");
 hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("</td></tr><tr><td>");
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
-hPrintf("<BR>");
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
 hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
+hPrintf("</td><td align='right'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
         "<table>\n");
@@ -467,13 +466,13 @@ if(metaDbExists)
         }
     }
 
-hPrintf("</table>\n");
-
+hPrintf("<tr><td colspan='5'>\n");
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
 hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
+hPrintf("</td><td align='left'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr>\n");
+hPrintf("</table>\n");
 hPrintf("</div>\n</div>\n");
-
 hPrintf("</form>\n");
 
 if(descSearch != NULL && !strlen(descSearch))
@@ -487,17 +486,15 @@ if(!isEmpty(descSearch))
     char *val = nextWord(&tmp);
     struct slName *el, *descList = NULL;
     int i;
-
     while (val != NULL)
         {
         slNameAddTail(&descList, val);
+        descWordCount++;
         val = nextWord(&tmp);
         }
-    descWordCount = slCount(descList);
     descWords = needMem(sizeof(char *) * descWordCount);
     for(i = 0, el = descList; el != NULL; i++, el = el->next)
         descWords[i] = strLower(el->name);
-
     }
 
 if(doSearch)
