@@ -4,9 +4,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the related .ddf should look like this:
-# files   view    cell    localization    rnaExtract	sampleID  replicate
-
-
+# files   view    cell    localization    rnaExtract	labProtocolId      replicate
 
 
 dafVersion        2.0
@@ -16,12 +14,10 @@ grant             Gingeras
 lab               CSHL
 dataType          LongRnaSeq
 compositeSuffix   CshlLongRnaSeq
-superTrack        
 group             expression
-variables         cell, localization, rnaExtract
+variables         cell, localization, rnaExtract, labProtocolID
 assembly          hg19
-noAutoCreate     yes
-validationSettings validateFiles.bam:mismatches=7,nMatch
+validationSettings validateFiles.bam:mismatches=7,nMatch,allowOther
 
 # Track/view definition
 view             PlusRawSig
@@ -48,17 +44,17 @@ type             bam
 hasReplicates    yes
 required         yes
 
+
 # Solexa paired sequence
 view             FastqRd1
 type             fastq
 hasReplicates    yes
-required         no
-downloadOnly    yes
+required         yes
+downloadOnly     yes
 
 view             FastqRd2
 type             fastq
 hasReplicates    yes
-required         no
-downloadOnly    yes
-
+required         yes
+downloadOnly     yes
 
