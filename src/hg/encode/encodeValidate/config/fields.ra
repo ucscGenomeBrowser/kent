@@ -138,6 +138,14 @@ file ddf
 type string
 required no
 
+# This field is for the lab to enter thier own internal tracking numbers
+# These experiment ID's can be used by the labs to specify which input files to use
+field labProtocolId
+file ddf
+type string
+required no
+
+
 # This field is to track data that was originally submitted
 # on another assembly, but has been lifted over or remapped.
 # The values should be restricted to hg18, hg19, mm8, mm9
