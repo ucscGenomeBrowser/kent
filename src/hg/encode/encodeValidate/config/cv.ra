@@ -3128,7 +3128,7 @@ lab Bernstein, Iyer
 lots 1350637, DAM1472197
 targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
-validation missing
+validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
 ##This does not appear in metaDb
 term CtBP1
@@ -3355,6 +3355,20 @@ targetId GeneCard:GC0XP048529
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=GC0XP048529
 lab Farnham
 validation missing
+
+term GATA1_(SC-265)
+tag GATA1SC265
+type Antibody
+target GATA1
+targetDescription GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
+antibodyDescription rat monoclonal antibody raised against mouse recombinant GATA1; recommended for detection of GATA1 of mouse, rat and human origin
+vendorName Santa Cruz Biotech
+vendorId  sc-265
+orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
+targetId GeneCard:Gata1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
+lab Hardison
+validation GATA1(Western_blot):mouse_Gata1_validation_Hardison.pdf
 
 term GATA-2
 tag GATA2
@@ -4415,6 +4429,20 @@ geneId 6872
 lab Myers / Wold
 lots K0905 F2706
 validation missing
+
+term TAL1_(SC-12984)
+tag TAL1SC12984
+type Antibody
+antibodyDescription goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin
+vendorName Santa Cruz Biotech
+vendorId sc-12984
+orderUrl http://www.scbt.com/datasheet-12984-tal1-c-21-antibody.html
+target TAL1
+targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basic helix-loop-helix transcription factor known to regulate embryonic hematopoiesis.
+targetId GeneCard:Tal1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
+lab Hardison
+validation TAL1(Western_blot):mouse_Tal1_validation_Hardison.pdf
 
 #term TAF-II
 #type Antibody
