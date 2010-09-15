@@ -336,6 +336,7 @@ directUrl /cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_t
 baseColorUseCds given
 baseColorDefault genomicCodons
 defaultLinkedTables kgXref
+intronGap 12
 
 track knownAlt
 shortLabel Alt Events
@@ -1577,7 +1578,7 @@ track snp131
 shortLabel SNPs (131)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 131)
 group varRep
-priority 100.093
+priority 99.093
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1589,7 +1590,7 @@ track snp130
 shortLabel SNPs (130)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 130)
 group varRep
-priority 100.094
+priority 99.094
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1601,7 +1602,7 @@ track snp129
 shortLabel SNPs (129)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 129)
 group varRep
-priority 100.095
+priority 99.095
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1613,7 +1614,7 @@ track snp128
 shortLabel SNPs (128)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 128) 
 group varRep
-priority 100.096
+priority 99.096
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1624,7 +1625,7 @@ track snp127
 shortLabel SNPs (127)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 127) 
 group varRep
-priority 100.097
+priority 99.097
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1635,7 +1636,7 @@ track snp126
 shortLabel SNPs (126)
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 126) 
 group varRep
-priority 100.098
+priority 99.098
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 
@@ -1646,7 +1647,7 @@ track snp125
 shortLabel SNPs 
 longLabel Simple Nucleotide Polymorphisms (dbSNP build 125) 
 group varRep
-priority 100.099
+priority 99.099
 visibility dense 
 url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
 urlLabel dbSNP: 

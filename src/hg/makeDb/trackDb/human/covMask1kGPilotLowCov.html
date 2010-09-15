@@ -1,0 +1,71 @@
+<H1>Description</H1>
+<P>
+This track displays regions of the reference genome that have anomalies 
+in the 
+<A HREF="http://1000genomes.org/" TARGET=_BLANK>1000 Genomes Project</A>'s 
+mapping of high-throughput sequencing reads from the pilot study of ~180 
+genomes, each sequenced at low coverage (~2X), from the 
+CEU (CEPH - Northern European from Utah), 
+CHB/JPT (Chinese from Beijing and Japanese from Tokyo) and
+YRI (Yoruba from Ibadan, Nigeria) populations 
+(see <A HREF="https://ccr.coriell.org/%28X%281%29%29/Sections/Collections/NHGRI/1000genome.aspx?PgId=664" 
+TARGET=_BLANK>Coriell Institute's description
+of 1000 Genomes samples</A>).  
+These regions were excluded from the 1000 Genomes Project's 
+SNP-calling process.
+</P>
+<P>
+Regions with abnormal read depth (total depth is greater than twice the 
+average depth at HapMap3 sites) are displayed in dark red.  
+Regions with low mapping quality (more than 20% of reads from Illumina 
+platform have mapping quality 0) are displayed in light red.  
+Regions with no coverage (no reads mapped) are shown in light gray.
+There is a separate subtrack per population and type of anomaly.
+</P>
+
+<H1>Methods</H1>
+<P>
+Pseudo-fasta files included in the July 2010 release of 1000 Genomes pilot data, 
+containing a mapping code letter for each base in the reference genome,
+were downloaded from 
+<A HREF="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_07/low_coverage/other_data/" 
+TARGET=_BLANK>ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_07/low_coverage/other_data/</A> and processed by UCSC to extract genomic coordinates of 
+annotated regions.  
+</P>
+<P>Excerpted from 
+<A HREF="ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_07/low_coverage/other_data/README.2010_03.low_coverage_masks" 
+TARGET=_BLANK>ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_07/low_coverage/other_data/README.2010_03.low_coverage_masks</A>:
+<PRE>
+This directory contains information about the coverage of each base in
+the genome in the pilot 1 populations, and whether that base would
+have passed the filters used for SNP calling in the consensus released
+SNP sets.
+
+The <pop>.mask.fa files are pseudo-fasta files for the whole genome,
+with instead of a sequence of bases a sequence of the following symbols:
+  N  N in reference
+  -  no coverage
+  M  failed MAPQ0 filter: more than 20% of Illumina reads have mapping quality 0
+  D  failed DEPTH filter: total depth is greater than twice the average depth at 
+     HapMap3 sites, i.e. >625 for CEU, >445 for YRI, >330 for CHBJPT
+  B  failed both M and D filters
+  0  passes filters
+
+Note that the filters are relatively conservative, designed to achieve
+a false discovery rate below 5%
+</PRE>
+Bases with D or B are included in the Abnormal Depth subtracks; 
+bases with M or B are included in the Mapping Quality Failure subtracks;
+and bases with - are included in the No Coverage subtracks.
+</P>
+
+<H1>Credits</H1>
+Thanks to Richard Durbin, Sendu Bala and the rest of the 1000 Genomes 
+Project Consortium for these data.
+
+<H1>References</H1>
+<P>
+1000 Genomes Project, 
+<A HREF="http://1000genomes.org/" TARGET=_BLANK>http://1000genomes.org/</A>,
+accessed Sep. 2010.
+</P>

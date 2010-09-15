@@ -1,9 +1,9 @@
-include ../../inc/common.mk
+include ../../../inc/common.mk
 
 L += -lm ${MYSQLLIBS}
-MYLIBDIR = ../../lib/${MACHTYPE}
+MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS = ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-HG_INC=-I../../inc -I../../hg/inc
+HG_INC=-I../../../inc -I../../../hg/inc
 
 A = gtfToGenePred
 O = gtfToGenePred.o

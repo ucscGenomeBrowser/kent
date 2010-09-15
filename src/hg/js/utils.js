@@ -724,8 +724,20 @@ function getDb()
 {
     var db = document.getElementsByName("db");
     if(db == undefined || db.length == 0)
-        return ""; // default?
+        {
+        db = $("#db");
+        if(db == undefined || db.length == 0)
+            return ""; // default?
+        }
     return db[0].value;
+}
+
+function getTrack()
+{
+    var track = $("#track");
+    if(track == undefined || track.length == 0)
+        return ""; // default?
+    return track[0].value;
 }
 
 function Rectangle()
@@ -740,12 +752,17 @@ function Rectangle()
         this.endX = arguments[1];
         this.startY = arguments[2];
         this.endY = arguments[3];
-    } else {
+    } else if(arguments.length > 0)  { 
         var coords = arguments[0].split(",");
         this.startX = coords[0];
         this.endX = coords[2];
         this.startY = coords[1];
         this.endY = coords[3];
+    } else { // what else to do?
+        this.startX = 0;
+        this.endX = 100;
+        this.startY = 0;
+        this.endY = 100;
     }
 }
 
@@ -799,6 +816,34 @@ function getSizeFromCoordinates(position)
 var gWaitFuncArgs = [];
 var gWaitFunc;
 
+function waitMaskClear()
+{ // Clears the waitMask
+    var  waitMask = $('#waitMask');
+    if( waitMask != undefined )
+        $(waitMask).hide();
+}
+
+function waitMaskSetup(timeOutInMs)
+{ // Sets up the waitMask to block page manipulation until cleared
+
+    // Find or create the waitMask (which masks the whole page)
+    var  waitMask = $('#waitMask');
+    if( waitMask == undefined || waitMask.length != 1) {
+        // create the waitMask
+        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        waitMask = $('#waitMask');
+        // Special for IE
+        if ($.browser.msie)
+            $(waitMask).css('filter','alpha(opacity= 0)');
+    }
+    $(waitMask).css('display','block');
+
+    // Things could fail, so always have a timeout.
+    if(timeOutInMs == undefined || timeOutInMs <=0)
+        timeOutInMs = 5000; // Don't ever leave this as infinite
+    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+}
+
 function _launchWaitOnFunction()
 { // should ONLY be called by waitOnFunction()
   // Launches the saved function
@@ -832,7 +877,7 @@ function _launchWaitOnFunction()
         }
     }
     // Now we can get rid of the wait cursor
-    $('#waitMask').css('display','none');
+    waitMaskClear();
 }
 
 function waitOnFunction(func)
@@ -846,17 +891,7 @@ function waitOnFunction(func)
         return false;
     }
 
-    // Find or create the waitMask (which masks the whole page)
-    var  waitMask = $('#waitMask');
-    if( waitMask == undefined || waitMask.length != 1) {
-        // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
-        waitMask = $('#waitMask');
-        // Special for IE
-        if ($.browser.msie)
-            $(waitMask).css('filter','alpha(opacity= 0)');
-    }
-    $(waitMask).css('display','block');
+    waitMaskSetup(5000);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
     if(arguments.length > 1 && arguments[1].type != undefined) {
