@@ -162,6 +162,7 @@ our %validators = (
     origAssembly => \&validateNoValidation,
     controlId => \&validateNoValidation,
     labExpId => \&validateNoValidation,
+    labProtocolId => \&validateNoValidation,
     softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
     replicate => \&validateNoValidation,

@@ -301,10 +301,11 @@ required yes
 #RETIRING IT 9/9/10
 # Tim says this is not used
 # May have been to set a priority in the trackDb, it would be completely worthless to do that now
-#field order
-#file dafList
-#type int
-#required no
+# UNRETIRING 9/14/10  doEncodeValidate fails if this is not present.  Even if it is not in the DAF
+field order
+file dafList
+type int
+required no
 
 # This specifies if the view is download only
 # It is used by ????
