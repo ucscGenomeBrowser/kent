@@ -2241,6 +2241,15 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                   printf("<b>Level:&nbsp</b> %s<br>\n", row[0]);
                sqlFreeResult(&sr);
                }
+           if (sqlFieldIndex(conn, classTable, "transcriptType") > 0 )
+               {
+               safef(query, sizeof(query),
+                    "select transcriptType from %s where name = \"%s\"", classTable, name);
+               sr = sqlGetResult(conn, query);
+               if ((row = sqlNextRow(sr)) != NULL)
+                  printf("<b>Transcript type:&nbsp</b> %s<br>\n", row[0]);
+               sqlFreeResult(&sr);
+               }
            if (sqlFieldIndex(conn, classTable, "geneDesc") > 0 )
                {
                safef(query, sizeof(query),

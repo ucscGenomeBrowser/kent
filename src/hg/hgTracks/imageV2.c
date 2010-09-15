@@ -1790,7 +1790,7 @@ hPrintf("</TABLE>\n");
 hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-if (!trackImgOnly)
+if (!trackImgOnly && jsonTdbVars != NULL)
     hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }
