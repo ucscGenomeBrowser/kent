@@ -629,6 +629,7 @@ else
     {
     struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
+    cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
     #define MAX_FOUND_TRACKS 100
     if(tracksFound > MAX_FOUND_TRACKS)
         {
