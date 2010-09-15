@@ -1306,6 +1306,8 @@ $(document).ready(function()
     }
 
     if($("#tabs").length > 0) {
+        // Search page specific code
+
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
                             show: function(event, ui) {
@@ -2162,9 +2164,11 @@ function findTracksHandleNewMdbVals(response, status)
 function searchKeydown(event)
 {
     if (event.which == 13) {
-        $('#searchSubmit').click();
-        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
-        // $('#searchTracks').submit();
+        // hgt.forceSearch is required to fix problem on IE and Safari where value of hgt_searchTracks is "-" (i.e. not "Search").
+        $("input[name=hgt.forceSearch]").val(1);
+        $('#searchTracks').submit();
+        // This doesn't work with IE or Safari.
+        // $('#searchSubmit').click();
     }
 }
 
@@ -2176,8 +2180,33 @@ function changeSearchVisibilityPopups(cmd)
     return false;
 }
 
+function findTracksChangeVis(seenVis)
+{ // called by onchange of vis
+    var visName = $(seenVis).attr('id');
+    var trackName = visName.substring(0,visName.length - "_id".length)
+    var hiddenVis = $("input[name='"+trackName+"']");
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    if($(seenVis).val() != "hide")
+        $(hiddenVis).val($(seenVis).val());
+    else {
+        var selCb = $("input#"+trackName+"_sel_id");
+        $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        var hiddenSel = $("input[name='"+trackName+"_sel']");
+        $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        $(hiddenSel).attr('disabled',false);
+        if(subtrack)
+            $(hiddenVis).val("[]");
+        else
+            $(hiddenVis).val("hide");
+    }
+    $(hiddenVis).attr('disabled',false);
+    //warn("Changed "+trackName+" to "+$(hiddenVis).val())
+}
+
 function findTracksClickedOne(selCb,justClicked)
-{
+{ // called by on click of CB and findTracksCheckAll()
     var selName = $(selCb).attr('id');
     var trackName = selName.substring(0,selName.length - "_sel_id".length)
     var hiddenSel = $("input[name='"+trackName+"_sel']");

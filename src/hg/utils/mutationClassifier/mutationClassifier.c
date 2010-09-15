@@ -18,17 +18,20 @@
 #include "dnaMarkov.h"
 #include "dnaMarkovSql.h"
 #include "bed6FloatScore.h"
+#include "nibTwo.h"
+#include "binRange.h"
 
 int debug = 0;
 char *outputExtension = NULL;
 boolean bindingSites = FALSE;
+char *geneModel;
 boolean lazyLoading = FALSE;           // avoid loading DNA for all known genes (performance hack if you are classifying only a few items).
 float minDelta = -1;                   // minDelta == 0 means output all deltas
 char *clusterTable = "wgEncodeRegTfbsClusteredMotifs";
 char *markovTable;
 static int maxNearestGene = 10000;
-boolean skipGeneModel = FALSE;
 boolean oneBased = FALSE;
+boolean skipGeneModel = FALSE;
 
 #ifdef TCGA_CODES
 
@@ -74,6 +77,7 @@ boolean oneBased = FALSE;
 static struct optionSpec optionSpecs[] = {
     {"bindingSites", OPTION_BOOLEAN},
     {"clusterTable", OPTION_STRING},
+    {"geneModel", OPTION_STRING},
     {"lazyLoading", OPTION_BOOLEAN},
     {"minDelta", OPTION_FLOAT},
     {"markovTable", OPTION_STRING},
@@ -192,17 +196,6 @@ static int myBedCmp(const void *va, const void *vb)
      return diff;
 }
 
-static int myGenePredCmp(const void *va, const void *vb)
-/* slSort callback to sort based on chrom,chromStart. */
-{
-     const struct genePred *a = *((struct genePred **)va);
-     const struct genePred *b = *((struct genePred **)vb);
-     int diff = strcmp(a->chrom, b->chrom);
-     if (!diff)
-	  diff = a->cdsStart - b->cdsStart;
-     return diff;
-}
-
 static int bedItemsOverlap(struct bed *a, struct genePred *b)
 {
      return (!strcmp(a->chrom, b->chrom) &&
@@ -216,109 +209,50 @@ static int intersectBeds (struct bed7 *a, struct genePred *b,
 {
 // NOTE that because of the definition of this function, aCommon and bCommon can have 
 // duplicate copies from a and b respectively.
-//
-// if bCommon is NULL we don't return intersected regions in b, AND we only include one copy
-// from a (even if it overlaps multiple copies from b).
-//
-// Running time is O(nlgn) (where n = max(slCount(a), slCount(b)))
-// (though b/c of the multiple matching "feature" there's a degenerate case that's O(n^2) 
-// if all the items in a overlap all the items in b).
 
 int count = 0;
-slSort(&a, myBedCmp);
-slSort(&b, myGenePredCmp);
-// allocA and allocB point to the last allocated bed struct's
+struct hash *hash = newHash(0);
+struct hashEl *hel;
+struct binKeeper *bk;
 struct bed7 *curA;
-struct bed7 *lastAddedA = NULL;
-struct genePred *curB = b;
-struct genePred *savedB = NULL;
-struct genePredStub *lastAddedB = NULL;
-boolean curAUsed = FALSE;
+struct genePred *curB;
 
-for (curA = a; curA != NULL && curB != NULL;)
+for (curB = b; curB != NULL; curB = curB->next)
     {
-    if (debug)
+    hel = hashLookup(hash, curB->chrom);
+    if (hel == NULL)
         {
-        fprintf(stderr, "A: %s:%d-%d\n", curA->chrom, curA->chromStart, curA->chromEnd);
-        fprintf(stderr, "B: %s:%d-%d\n", curB->chrom, curB->cdsStart, curB->cdsEnd);
-        }
-    if (bedItemsOverlap((struct bed *) curA, curB))
-        {
-        curAUsed = TRUE;
-        if (debug)
-            fprintf(stderr, "%s:%d-%d", curA->chrom, curA->chromStart, curA->chromEnd);
-        if (aCommon != NULL)
-            {
-            struct bed7 *tmpA = shallowBedCopy(curA);
-            if (*aCommon == NULL)
-                {
-                *aCommon = tmpA;
-                }
-            else
-                {
-                lastAddedA->next = tmpA;
-                }
-            // We put newly allocated bed items at the end of the returned list so they match order in original list
-            lastAddedA = tmpA;
-            }
-        if (bCommon != NULL)
-            {
-            struct genePredStub *tmpB = genePredStubCopy(curB);
-            if (*bCommon == NULL)
-                {
-                *bCommon = tmpB;
-                }
-            else
-                {
-                lastAddedB->next = tmpB;
-                }
-            lastAddedB = tmpB;
-            }
-        if (bCommon == NULL)
-            {
-            // see note at beginning of function
-            curA = curA->next;
-            curAUsed = FALSE;
-            }
-        else
-            {
-            if (savedB == NULL)
-                savedB = curB;
-            curB = curB->next;
-            }
-        count++;
+        bk = binKeeperNew(0, 511*1024*1024);
+        hel = hashAdd(hash, curB->chrom, bk);
         }
     else
+        bk = hel->val;
+    binKeeperAdd(bk, curB->txStart, curB->txEnd, curB);
+    }
+
+for (curA = a; curA != NULL; curA = curA->next)
+    {
+    boolean added = FALSE;
+    bk = hashFindVal(hash, curA->chrom);
+    if (bk == NULL)
+        // this is unlikely to happen when using large bed files
+        verbose(2, "Couldn't find chrom %s\n", curA->chrom);
+    else
         {
-        if (savedB)
+	struct binElement *hit, *hitList = binKeeperFind(bk, curA->chromStart, curA->chromEnd == curA->chromStart ? curA->chromStart + 1 : curA->chromEnd);
+        for (hit = hitList; hit != NULL; hit = hit->next)
             {
-            // curA has matched at least one entry in b; now rewind curB to look for potentially multiple matches 
-            // within b in the next entry from a (see notes in hw1_analyze.h)
-            if(!curAUsed && aUnmatched != NULL)
-                slAddHead(aUnmatched, shallowBedCopy(curA));
-            curA = curA->next;
-            curB = savedB;
-            savedB = NULL;
-            curAUsed = FALSE;
+            added = TRUE;
+            struct bed7 *tmpA = shallowBedCopy(curA);
+            slAddHead(aCommon, tmpA);
+            struct genePredStub *tmpB = genePredStubCopy((struct genePred *) hit->val);
+            slAddHead(bCommon, tmpB);
+            count++;
             }
-        else
-            {
-            int diff = strcmp(curA->chrom, curB->chrom);
-            if (!diff)
-                diff = curA->chromStart - curB->cdsStart;
-            if (diff < 0)
-                {
-                if(!curAUsed && aUnmatched != NULL)
-                    slAddHead(aUnmatched, shallowBedCopy(curA));
-                curA = curA->next;
-                curAUsed = FALSE;
-                }
-            else
-                {
-                curB = curB->next;
-                }
-            }
+	slFreeList(&hitList);
         }
+    if(!added)
+        slAddHead(aUnmatched, shallowBedCopy(curA));
     }
 return count;
 }
@@ -360,7 +294,8 @@ while ((wordCount = lineFileChop(lf, row)) != 0)
 //        if(bed->score < 0.95)
 //            continue;
         }
-    if(parseSnp(bed->name, NULL, NULL))
+
+    if(bed->chromStart == bed->chromEnd && parseSnp(bed->name, NULL, NULL))
         valid++;
 
     if (wordCount >= 6)
@@ -475,29 +410,59 @@ struct sqlResult *sr;
 char **row;
 struct hash *geneHash = newHash(16);
 
-// get geneSymbols for output purposes
-safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    hashAdd(geneHash, row[0], (void *) cloneString(row[1]));
-sqlFreeResult(&sr);
+// XXXX support just "knownGene" too?
 
-safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
+if(sameString(geneModel, "knownCanonical"))
     {
-    struct hashEl *el;
-    struct genePred *gp = genePredLoad(row);
-    if ((el = hashLookup(geneHash, gp->name)))
-        {
-        freeMem(gp->name);
-        gp->name = cloneString((char *) el->val);
-        }
-    gp->name2 = NULL;
-    slAddHead(&retVal, gp);
-    }
-sqlFreeResult(&sr);
+    // get geneSymbols for output purposes
+    safef(query, sizeof(query), "select x.kgID, x.geneSymbol from knownCanonical k, kgXref x where k.transcript = x.kgID");
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        hashAdd(geneHash, row[0], (void *) cloneString(row[1]));
+    sqlFreeResult(&sr);
 
+    safef(query, sizeof(query), "select k.* from knownGene k, knownCanonical c where k.cdsStart != k.cdsEnd and k.name = c.transcript");
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct hashEl *el;
+        struct genePred *gp = genePredLoad(row);
+        if ((el = hashLookup(geneHash, gp->name)))
+            {
+            freeMem(gp->name);
+            gp->name = cloneString((char *) el->val);
+            }
+        gp->name2 = NULL;
+        slAddHead(&retVal, gp);
+        }
+    sqlFreeResult(&sr);
+    }
+else if(sameString(geneModel, "refGene"))
+    {
+    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from refGene where cdsStart != cdsEnd");
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct genePred *gp = genePredLoad(row);
+        gp->name2 = NULL;
+        slAddHead(&retVal, gp);
+        }
+    sqlFreeResult(&sr);
+    }
+else if(sameString(geneModel, "ensGene"))
+    {
+    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from ensGene where cdsStart != cdsEnd");
+    sr = sqlGetResult(conn, query);
+    while ((row = sqlNextRow(sr)) != NULL)
+        {
+        struct genePred *gp = genePredLoad(row);
+        gp->name2 = NULL;
+        slAddHead(&retVal, gp);
+        }
+    sqlFreeResult(&sr);
+    }
+else
+    errAbort("Unsupported gene model '%s'", geneModel);
 slSort(&retVal, genePredCmp);
 if(!lazyLoading)
     {
@@ -639,7 +604,11 @@ boolean motifTableExists = sqlTableExists(conn, clusterTable);
 boolean markovTableExists = markovTable != NULL && sqlTableExists(conn, markovTable);
 long time;
 struct genePred *genes = NULL;
+char pathName[2056];
+struct nibTwoCache *ntc;
 
+safef(pathName, sizeof(pathName), "/gbdb/%s/%s.2bit", database, database);
+ntc = nibTwoCacheNew(pathName);
 if(!skipGeneModel || bindingSites)
     {
     time = clock1000();
@@ -866,8 +835,10 @@ while(!done)
                     int count = 0;
 
                     struct dnaMotif *motif = loadMotif(database, site->name, NULL);
-                    beforeSeq = hDnaFromSeq(database, site->chrom, site->chromStart, site->chromEnd, dnaUpper);
-                    afterSeq = hDnaFromSeq(database, site->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                    beforeSeq = nibTwoCacheSeqPartExt(ntc, site->chrom, site->chromStart, site->chromEnd - site->chromStart, TRUE, NULL);
+                    touppers(beforeSeq->dna);
+                    afterSeq = nibTwoCacheSeqPartExt(ntc, site->chrom, site->chromStart, site->chromEnd - site->chromStart, TRUE, NULL);
+                    touppers(afterSeq->dna);
                     if(*site->strand == '-')
                         {
                         reverseComplement(beforeSeq->dna, beforeSeq->size);
@@ -944,9 +915,11 @@ while(!done)
                                 dnaMotifMakeLog2(motif);
                             dnaMarkMakeLog2(mark2);
 
-                            seq = hDnaFromSeq(database, bed->chrom, site->chromStart - 2, site->chromEnd + 2, dnaUpper);
+                            seq = nibTwoCacheSeqPartExt(ntc, bed->chrom, site->chromStart - 2, site->chromEnd - site->chromStart + 4, TRUE, NULL);
+                            touppers(seq->dna);
                             if(refCall && seq->dna[bed->chromStart - site->chromStart + 2] != refCall)
-                                errAbort("Actual reference doesn't match what is reported in input file");
+                                errAbort("Actual reference (%c) doesn't match what is reported in input file (%c): %s:%d-%d", 
+                                         refCall, seq->dna[bed->chromStart - site->chromStart + 2], bed->chrom, site->chromStart - 2, site->chromEnd + 2);
                             if(*site->strand == '-')
                                 {
                                 reverseComplement(seq->dna, seq->size);
@@ -964,9 +937,11 @@ while(!done)
                             }
                         else
                             {
-                            seq = hDnaFromSeq(database, bed->chrom, site->chromStart, site->chromEnd, dnaUpper);
+                            seq = nibTwoCacheSeqPartExt(ntc, bed->chrom, site->chromStart, site->chromEnd - site->chromStart, TRUE, NULL);
+                            touppers(seq->dna);
                             if(refCall && seq->dna[bed->chromStart - site->chromStart] != refCall)
-                                errAbort("Actual reference doesn't match what is reported in input file");
+                                errAbort("Actual reference (%c) doesn't match what is reported in input file (%c): %s:%d-%d", 
+                                         refCall, seq->dna[bed->chromStart - site->chromStart], bed->chrom, site->chromStart, site->chromEnd);
                             if(*site->strand == '-')
                                 {
                                 reverseComplement(seq->dna, seq->size);
@@ -1048,6 +1023,7 @@ while(!done)
 
 sqlDisconnect(&conn);
 sqlDisconnect(&conn2);
+nibTwoCacheFree(&ntc);
 }
 
 int main(int argc, char** argv)
@@ -1055,6 +1031,7 @@ int main(int argc, char** argv)
 optionInit(&argc, argv, optionSpecs);
 bindingSites = optionExists("bindingSites");
 clusterTable = optionVal("clusterTable", clusterTable);
+geneModel = optionVal("geneModel", "knownCanonical");
 lazyLoading = optionExists("lazyLoading");
 markovTable = optionVal("markovTable", NULL);
 maxNearestGene = optionInt("maxNearestGene", maxNearestGene);

@@ -248,6 +248,65 @@ ce9.downloadDir = ce9
     git push
     make etc-update
 
+###############################################################################
+## RNA sangerGenes (DONE - 2010-09-14 - Hiram)
+    mkdir /hive/data/genomes/ce9/bed/sangerNonCoding
+    cd /hive/data/genomes/ce9/bed/sangerNonCoding
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> rna.chr${C}.gff"
+    grep -v "^#" ../sangerGene/chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"^miRNA|^ncRNA|^rRNA|^scRNA|^snRNA|^snlRNA|^snoRNA|^tRNA|^tRNAscan-SE-1.23")) {
+        if (match($3,"exon")) {
+            gsub("Transcript ","",$9)
+            gsub(" .*","",$9)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > rna.chr${C}.gff
+done
+
+for C in I II III IV V X M
+do
+    echo "chr${C}.gff -> pseudoGene.chr${C}.gff"
+    grep -v "^#" ../sangerGene/chr${C}.gff | awk -F'\t' '
+BEGIN { IGNORECASE=1 }
+{
+    if (match($2,"^Pseudogene")) {
+        if (match($3,"Pseudogene")) {
+            gsub("Pseudogene ","",$9)
+            gsub("Pseudogene","CDS",$3)
+            gsub(" .*","",$9)
+            gsub("\".*","",$9)
+            for (i = 1; i < 9; ++i) {
+                printf "%s\t", $i
+            }
+            printf "%s\n", $9
+        }
+    }
+}
+' | sort -u | sort -k4n > pseudoGene.chr${C}.gff
+done
+
+    cd /hive/data/genomes/ce9/bed/sangerNonCoding
+    ldHgGene -out=sangerRnaGene.gp ce9 sangerRnaGene rna.*.gff
+    #	Read 16551 transcripts in 16622 lines in 7 files
+    #	16551 groups 7 seqs 9 sources 1 feature types
+    #	16551 gene predictions
+    ldHgGene ce9 sangerRnaGene rna.*.gff
+
+    ldHgGene -out=sangerPseudoGene.gp ce9 sangerPseudoGene pseudoGene.*.gff
+    #	Read 1565 transcripts in 1565 lines in 7 files
+    #	1565 groups 6 seqs 1 sources 1 feature types
+    #	1565 gene predictions
+    ldHgGene ce9 sangerPseudoGene pseudoGene.*.gff
+
 #########################################################################
 ## SANGER GENE TRACK (DONE - 2010-09-09 - Hiram)
 ##	There is a tremendous amount of extraneous notations in the gff
@@ -525,6 +584,22 @@ close (FH);
 
     hgLoadSqlTab ce9 orfToGene ~/kent/src/hg/lib/orfToGene.sql \
 	fixedOrfToGene.tab
+
+    cat ../../ws210/tarFile/chr*.gff | awk '{print $NF}' \
+	| sort -u > tar.gene.list
+    cat filtered.chr*.gff | awk '{print $NF}' \
+	| sort -u > ucsc.filtered.gene.list
+
+    #	obtained tar file with lists from Paul Davis
+    #	our genes are a subset since we separate non-coding
+    #	using what we already have:
+    cut -f1 paragraph.tab | sort > local.paragraph.nameList
+    ln -s /hive/data/genomes/ce9/ws210/tarFile/paragraph.txt ./paragraph.txt
+    sort paragraph.txt > sort.paragraph.txt
+    #	selecting out what they have for our business
+    join sort.paragraph.txt local.paragraph.nameList \
+	| sed -e "s/ /\t/" > join.local.paragraph.txt
+
 
     cat << '_EOF_' > mkSangerLinks.pl
 #!/usr/bin/env perl

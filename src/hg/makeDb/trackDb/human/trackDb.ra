@@ -1183,6 +1183,97 @@ urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v9
 
+track covMask1kGPilotLowCov
+compositeTrack on
+shortLabel 1000Genomes Cov
+longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase
+group varRep
+priority 101.5
+visibility hide
+subGroup1 view Views Depth=Abnormal_Depth MapQ=Mapping_Quality_Failure Uncov=No_Coverage
+subGroup2 pop Population Ceu=CEU ChbJpt=CHB/JPT Yri=YRI
+dimensions dimX=view dimY=pop
+sortOrder view=+ pop=+
+dragAndDrop subTracks
+type bed 3
+
+    track covMask1kGPilotLowCovDepth
+    view Depth
+    shortLabel Abnormal Depth
+    visibility dense
+    parent covMask1kGPilotLowCov
+    color 180,0,0
+
+	track covMask1kGPilotLowCovCeuDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, CEU
+	subGroups view=Depth pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, CHB/JPT
+	subGroups view=Depth pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, YRI
+	subGroups view=Depth pop=Yri
+
+    track covMask1kGPilotLowCovMapQ
+    view MapQ
+    shortLabel Map Qual Failure
+    visibility dense
+    parent covMask1kGPilotLowCov
+    color 224,108,108
+
+	track covMask1kGPilotLowCovCeuMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, CEU
+	subGroups view=MapQ pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, CHB/JPT
+	subGroups view=MapQ pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, YRI
+	subGroups view=MapQ pop=Yri
+
+    track covMask1kGPilotLowCovUncov
+    view Uncov
+    shortLabel No Coverage
+    visibility dense
+    parent covMask1kGPilotLowCov
+    color 150,150,150
+
+	track covMask1kGPilotLowCovCeuUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, CEU
+	subGroups view=Uncov pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, CHB/JPT
+	subGroups view=Uncov pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, YRI
+	subGroups view=Uncov pop=Yri
+
+
+
 track kiddEichlerDisc
 compositeTrack on
 shortLabel HGSV Discordant

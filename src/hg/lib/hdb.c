@@ -850,7 +850,7 @@ void hParseTableName(char *db, char *table, char trackName[HDB_MAX_TABLE_STRING]
  * something like this:
  *
  * Code somewhere wants to check for a split table existing.  If the table is not split,
- * but contains an underscore, such as 
+ * but contains an underscore, such as
  *     encodeUcsdChipHeLaH3H4dmH3K4_p0
  * results it in calling this function with the default chromosome name pre-pended:
  *     chr9_encodeUcsdChipHeLaH3H4dmH3K4_p0
@@ -1380,7 +1380,7 @@ if (hTableExists(sqlGetDatabase(conn), seqTbl))
           extFileFld, seqTbl, acc);
     struct sqlResult *sr = sqlMustGetResult(conn, query);
     char **row = sqlNextRow(sr);
-    if (row != NULL) 
+    if (row != NULL)
         {
         if (retId != NULL)
             *retId = sqlUnsigned(row[0]);
@@ -3416,11 +3416,11 @@ static void inheritFromSuper(struct trackDb *subtrackTdb,
  * effect to the inheritance of subtracks in effect if not in method.  Rather
  * than relying on trackDbSetting to chase missing settings from parents, this
  * on copies in the settings from parent to child settingsHash.  I suspect that
- * this is no longer needed, but am leaving it in until such time as the 
+ * this is no longer needed, but am leaving it in until such time as the
  * supertrack system as a whole is factored out -jk. */
 {
 assert(subtrackTdb->parent == compositeTdb);
-subtrackTdb->parentName = compositeTdb->track; 
+subtrackTdb->parentName = compositeTdb->track;
 if (!trackDbSettingClosestToHome(subtrackTdb, "noInherit"))
     {
     if (isEmpty(subtrackTdb->type))
@@ -3467,8 +3467,12 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         {
 	if (trackDbSetting(parent, "compositeTrack"))
 	    {
-	    tdbMarkAsComposite(parent);
-	    tdbMarkAsCompositeChild(tdb);
+            if (trackDbLocalSetting(parent, "compositeTrack"))
+	       tdbMarkAsComposite(parent);
+            if (tdb->subtracks == NULL)
+	       tdbMarkAsCompositeChild(tdb);
+            else
+               tdbMarkAsCompositeView(tdb);
 	    }
 	}
     trackDbCompositeMarkup(tdb, tdb->subtracks);
@@ -3493,7 +3497,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         {
 	slAddHead(&newList, tdb);
 	}
-    else 
+    else
         {
         addTrackIfDataAccessible(db, tdb, chrom, privateHost, &newList);
 	}
@@ -3601,7 +3605,7 @@ for (subTdb = tdb->subtracks; subTdb != NULL; subTdb = subTdb->next)
     }
 hFreeConn(&conn);
 }
-  
+
 struct trackDb *hTrackDbForTrack(char *db, char *track)
 /* Load trackDb object for a track. If track is composite, its subtracks
  * will also be loaded and inheritance will be handled; if track is a
@@ -3615,7 +3619,7 @@ return rFindTrack(0, tdbList, track);
 }
 
 struct trackDb *hTrackDbForTrackAndAncestors(char *db, char *track)
-/* Load trackDb object for a track. If need be grab its ancestors too. 
+/* Load trackDb object for a track. If need be grab its ancestors too.
  * This does not load children. hTrackDbForTrack will handle children, and
  * is actually faster if being called on lots of tracks.  This function
  * though is faster on one or two tracks. */
@@ -3631,7 +3635,7 @@ for (;;)
     char *parentTrack = NULL;
     char *parent = trackDbLocalSetting(ancestor, "parent");
     if (parent != NULL)
-	parentTrack = cloneFirstWord(parent);  
+	parentTrack = cloneFirstWord(parent);
     if (parentTrack == NULL)
         {
 	char *super = trackDbLocalSetting(ancestor, "superTrack");
@@ -3854,7 +3858,7 @@ return hoh;
 }
 
 static struct hash *makeDbTableToTrackHash(char *db)
-/* Create a hash based on trackDb tables in given database that 
+/* Create a hash based on trackDb tables in given database that
  * will give you a track name given a table name as a key. */
 {
 struct hash *hoh = hTdbGetTrackSettingsHash(db);
@@ -4768,10 +4772,10 @@ return sqlQuickString(conn, query);
 }
 
 struct trackDb *findTdbForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table))
-/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables) 
- * References an externally defined function ctLookupName() which looks up a 
+/* Find or creates the tdb for this table.  Might return NULL! (e.g. all tables)
+ * References an externally defined function ctLookupName() which looks up a
  * custom track by name
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
@@ -4798,8 +4802,8 @@ return tdb;
 
 char *findTypeForTable(char *db,struct trackDb *parent,char *table, struct customTrack *(*ctLookupName)(char *table))
 /* Finds the TrackType for this Table
- * if table has no parent trackDb pass NULL for parent 
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
@@ -4811,9 +4815,9 @@ return (parent?parent->type:NULL);
 
 boolean trackIsType(char *database, char *table, struct trackDb *parent, char *type, struct customTrack *(*ctLookupName)(char *table))
 /* Return TRUE track is a specific type.  Type should be something like "bed" or
- * "bigBed" or "bigWig" 
- * if table has no parent trackDb pass NULL for parent 
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+ * "bigBed" or "bigWig"
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
@@ -4822,9 +4826,9 @@ return (tdbType && startsWithWord(type, tdbType));
 }
 
 boolean hIsBigBed(char *database, char *table, struct trackDb *parent, struct customTrack *(*ctLookupName)(char *table))
-/* Return TRUE if table corresponds to a bigBed file. 
- * if table has no parent trackDb pass NULL for parent 
- * If this is a custom track, pass in function ctLookupName(table) which looks up a 
+/* Return TRUE if table corresponds to a bigBed file.
+ * if table has no parent trackDb pass NULL for parent
+ * If this is a custom track, pass in function ctLookupName(table) which looks up a
  * custom track by name, otherwise pass NULL
  */
 {
