@@ -30719,3 +30719,107 @@ close (DR);
     hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
 
 ##############################################################################
+# 1000 GENOMES COVERAGE MASK (DONE 9/14/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/1000GenomesMask
+    cd /hive/data/genomes/hg18/bed/1000GenomesMask
+    wget --timestamping \
+      ftp://ftp-trace.ncbi.nih.gov/1000genomes/ftp/pilot_data/release/2010_07/low_coverage/other_data/\*
+    cat > pseudoFastaToBed.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+
+my ($base, $inFile) = @ARGV;
+
+die "usage: $0 outputBase input.gz\n" if (! $base || ! $inFile);
+my ($IN, $OUTD, $OUTM, $OUTU);
+open($IN, "zcat $inFile |") || die;
+my $outD = $base . "Depth.bed.gz";
+my $outM = $base . "MapQ.bed.gz";
+my $outU = $base . "Uncov.bed.gz";
+open($OUTD, "| gzip -c > $outD") || die;
+open($OUTM, "| gzip -c > $outM") || die;
+open($OUTU, "| gzip -c > $outU") || die;
+
+sub printItem {
+  my ($chr, $start, $end, $mask) = @_;
+  return unless $end > $start;
+  if ($mask eq 'D') {
+    print $OUTD join("\t", $chr, $start, $end) . "\n";
+  } elsif ($mask eq 'M') {
+    print $OUTM join("\t", $chr, $start, $end) . "\n";
+  } elsif ($mask eq 'B') {
+    print $OUTD join("\t", $chr, $start, $end) . "\n";
+    print $OUTM join("\t", $chr, $start, $end) . "\n";
+  } elsif ($mask eq "-") {
+    print $OUTU join("\t", $chr, $start, $end) . "\n";
+  }
+}
+
+sub maskToBed3Subtracks {
+  my ($chr, $seqRef) = @_;
+  $chr =~ s/MT$/M/; $chr =~ s/^([0-9XMY])/chr$1/;
+  my ($start, $end) = (0, 0);
+  my $len = length($$seqRef);
+  my $prevM;
+  while ($end < $len) {
+    my $m = substr $$seqRef, $end, 1;
+    if (defined $prevM && $m ne $prevM) {
+      &printItem($chr, $start, $end, $prevM);
+      $start = $end;
+    }
+    $end++;
+    $prevM = $m;
+  }
+  &printItem($chr, $start, $end, $prevM);
+}
+
+my ($prevChrom, $seq);
+while (<$IN>) {
+  if (/^>(\S+)/) {
+    my $chrom = $1;
+    if (defined $prevChrom) {
+      &maskToBed3Subtracks($prevChrom, \$seq);
+    }
+    $prevChrom = $chrom;
+    $seq = "";
+  } elsif (/^([NMDB0-]+)$/) {
+    $seq .= $1;
+  } else {
+    die "Unexpected line format:\n$_\t";
+  }
+}
+&maskToBed3Subtracks($prevChrom, \$seq);
+close($OUTD); close($OUTM); close($OUTU);
+'_EOF_'
+    # << emacs
+    chmod a+x pseudoFastaToBed.pl
+    foreach f ({CEU,CHBJPT,YRI}.low_coverage.mask.fa.gz)
+      set pop = `echo $f:r:r:r:r | perl -wpe '$_ = ucfirst lc; s/Chbjpt/ChbJpt/;'`
+      set tBase = "covMask1kGPilotLowCov$pop"
+      echo $tBase
+      ./pseudoFastaToBed.pl $tBase $f
+    end
+    foreach f (covMask*.bed.gz)
+      hgLoadBed hg18 $f:r:r $f
+    end
+#Reading covMask1kGPilotLowCovCeuDepth.bed.gz
+#Loaded 136902 elements of size 3
+#Reading covMask1kGPilotLowCovCeuMapQ.bed.gz
+#Loaded 4176529 elements of size 3
+#Reading covMask1kGPilotLowCovCeuUncov.bed.gz
+#Loaded 311 elements of size 3
+#Reading covMask1kGPilotLowCovChbJptDepth.bed.gz
+#Loaded 261381 elements of size 3
+#Reading covMask1kGPilotLowCovChbJptMapQ.bed.gz
+#Loaded 4492217 elements of size 3
+#Reading covMask1kGPilotLowCovChbJptUncov.bed.gz
+#Loaded 2108 elements of size 3
+#Reading covMask1kGPilotLowCovYriDepth.bed.gz
+#Loaded 256837 elements of size 3
+#Reading covMask1kGPilotLowCovYriMapQ.bed.gz
+#Loaded 4623392 elements of size 3
+#Reading covMask1kGPilotLowCovYriUncov.bed.gz
+#Loaded 1255 elements of size 3
+
+#########################################################################
