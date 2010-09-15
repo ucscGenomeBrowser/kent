@@ -70,7 +70,7 @@ my @allClusters = (keys %cluster);
 
 %clusterFilesystem =
     ( 'scratch' =>
-        { root => '/scratch/hg', clusterLocality => 1.0,
+        { root => '/scratch/data', clusterLocality => 1.0,
 	  distrHost => [], distrCommand => '',
 	  inputFor => \@allClusters, outputFor => [], },
       'hive' =>

@@ -326,6 +326,7 @@ for (el = list; el != NULL; el = el->next)
                 {
                 char *name = cloneString(el->name);
                 safecpy(name+suffixOffset,strlen(POSITION_SUFFIX),IMGORD_SUFFIX); // We know that POSITION_SUFFIX is longer than IMGORD_SUFFIX
+                //warn("Removing imgOrd for %s",name);
                 cartRemove(cart, name); // Removes if found
                 freeMem(name);
                 }
@@ -1106,27 +1107,44 @@ safef(buf, sizeof(buf), "%u", cart->sessionInfo->id);
 cgiMakeHiddenVar(sessionVar, buf);
 }
 
-static void cartDumpItem(struct hashEl *hel)
+static void cartDumpItem(struct hashEl *hel,boolean asTable)
 /* Dump one item in cart hash */
 {
-struct dyString *dy = NULL;
-char *val = (char *)(hel->val);
-stripChar(val, '\r');
-dy = dyStringSub(val, "\n", "\\n");
-printf("%s %s\n", hel->name, dy->string);
-dyStringFree(&dy);
+char *var = htmlEncode(hel->name);
+char *val = htmlEncode((char *)(hel->val));
+if (asTable)
+    {
+    printf("<TR><TD>%s</TD><TD>", var);
+    int width=(strlen(val)+1)*8;
+    if(width<100)
+        width = 100;
+    cgiMakeTextVarWithExtraHtml(hel->name, val, width, "onchange='setCartVar(this.name,this.value);'");
+    printf("</TD></TR>\n");
+    }
+else
+    printf("%s %s\n", var, val);
+
+freeMem(var);
+freeMem(val);
 }
 
-void cartDumpList(struct hashEl *elList)
-/* Dump list of cart variables. */
+void cartDumpList(struct hashEl *elList,boolean asTable)
+/* Dump list of cart variables optionally as a table with ajax update support. */
 {
 struct hashEl *el;
 
 if (elList == NULL)
     return;
 slSort(&elList, hashElCmp);
+if (asTable)
+    printf("<table>\n");
 for (el = elList; el != NULL; el = el->next)
-    cartDumpItem(el);
+    cartDumpItem(el,asTable);
+if (asTable)
+    {
+    printf("<tr><td colspan=2>&nbsp;&nbsp;<em>count: %d</em></td></tr>\n",slCount(elList));
+    printf("</table>\n");
+    }
 hashElFreeList(&elList);
 }
 
@@ -1134,21 +1152,21 @@ void cartDump(struct cart *cart)
 /* Dump contents of cart. */
 {
 struct hashEl *elList = hashElListHash(cart->hash);
-cartDumpList(elList);
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
 }
 
 void cartDumpPrefix(struct cart *cart, char *prefix)
 /* Dump all cart variables with prefix */
 {
 struct hashEl *elList = cartFindPrefix(cart, prefix);
-cartDumpList(elList);
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
 }
 
 void cartDumpLike(struct cart *cart, char *wildcard)
 /* Dump all cart variables matching wildcard */
 {
 struct hashEl *elList = cartFindLike(cart, wildcard);
-cartDumpList(elList);
+cartDumpList(elList,cartVarExists(cart,CART_DUMP_AS_TABLE));
 }
 
 char *cartFindFirstLike(struct cart *cart, char *wildCard)
@@ -1382,6 +1400,8 @@ cartVaWebStart(cart, db, format, args);
 va_end(args);
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
+jsIncludeFile("ajax.js", NULL);
+cgiMakeHiddenVar("db", db);
 }
 
 void cartWebEnd()
@@ -2048,82 +2068,93 @@ if (!tdbIsComposite(tdb))
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis
 boolean compositeVisChanged = cartValueHasChanged(newCart,oldVars,tdb->track,TRUE,TRUE);
-//boolean compositeVisHidden  = FALSE;
-//if(compositeVisChanged)
-//    compositeVisHidden = (cartUsualInt(cart,tdb->track,tvFull) == tvHide);
+struct trackDb *tdbView = NULL;
+struct slRef *oneName = NULL;
+char * var = NULL;
+int clensed = 0;
 
-
-// FIXME: Big problem in persistence of changed state.
-boolean debug = FALSE;//sameString(tdb->track,"wgEncodeBroadChipSeq");
-if(debug)
+// Do some debugging
+boolean debug = FALSE;//sameString(tdb->track,"wgEncodeBroadHistone");
+if (debug)
     {
     char *newValue = cartOptionalString(newCart,tdb->track);
     char *oldValue = hashFindVal(oldVars,tdb->track);
-    warn("Cleanup: wgEncodeBroadChipSeq  compositeVisChanged:%s  new:%s  old:%s",
+    warn("Cleanup: %s  compositeVisChanged:%s  new:%s  old:%s",tdb->track,
          (compositeVisChanged?"yes":"no"),(newValue!=NULL?newValue:"(null)"),(oldValue!=NULL?oldValue:"(null)"));
     }
 
-// Build list of current settings for composite
+// Build list of current settings for composite and views
 char setting[512];
 safef(setting,sizeof(setting),"%s.",tdb->track);
+char * view = NULL;
+boolean hasViews = FALSE;
 struct slRef *changedSettings = cartNamesPrefixedBy(newCart, setting);
+for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
+    {
+    if (!tdbIsView(tdbView,&view))
+        break;
+    hasViews = TRUE;
+    safef(setting,sizeof(setting),"%s.",tdbView->track);
+    struct slRef *changeViewSettings = cartNamesPrefixedBy(newCart, setting);
+    changedSettings = slCat(changedSettings, changeViewSettings);
+    }
 if (changedSettings == NULL && !compositeVisChanged)
     return FALSE;
 
 // Prune list to only those which have changed
 if(changedSettings != NULL)
     {
-    if(debug) warn("Cleanup: settings:%d",slCount(changedSettings));
+    if (debug)
+        warn("Cleanup: settings:%d",slCount(changedSettings));
     (void)cartNamesPruneChanged(newCart,oldVars,&changedSettings,TRUE,FALSE);
     if (changedSettings == NULL && !compositeVisChanged)
         return FALSE;
-    if(debug) warn("Cleanup: changed:%d",changedSettings==NULL?0:slCount(changedSettings));
+    if (debug)
+        warn("Cleanup: changed:%d",changedSettings==NULL?0:slCount(changedSettings));
     }
 
-struct slRef *oneName = NULL;
-char * var = NULL;
-boolean clensed = FALSE;
-
 // Walk through views
-boolean hasViews = FALSE;
-struct trackDb *tdbView = tdb->subtracks;
-for (;tdbView != NULL; tdbView = tdbView->next)
+if (hasViews)
     {
-    boolean viewVisChanged = FALSE;
-//    boolean viewVisHidden  = FALSE;
-    char * view = NULL;
-    if (!tdbIsView(tdbView,&view))
-        break;
-
-    hasViews = TRUE;
-    safef(setting,sizeof(setting),"%s.%s.",tdb->track,view);
-    struct slRef *leftOvers = NULL;
-    // Walk through settings that match this view
-    while ((oneName = slPopHead(&changedSettings)) != NULL)
+    for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
         {
-        if(!startsWith(setting,oneName->val))
-            slAddHead(&leftOvers,oneName);
-        else
+        boolean viewVisChanged = FALSE;
+        if (!tdbIsView(tdbView,&view))
+            break;
+
+        safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // unfortunatly setting name could be wgEncodeBroadHistone.Sig.???r
+        char settingAlt[512];
+        safef(settingAlt,sizeof(settingAlt),"%s.",tdbView->track);  // or wgEncodeBroadHistoneViewSig.???
+        struct slRef *leftOvers = NULL;
+        // Walk through settings that match this view
+        while ((oneName = slPopHead(&changedSettings)) != NULL)
             {
-            var = oneName->val + strlen(setting);
+            if(startsWith(setting,oneName->val))
+                var = oneName->val + strlen(setting);
+            else if(startsWith(settingAlt,oneName->val))
+                var = oneName->val + strlen(settingAlt);
+            else
+                {
+                slAddHead(&leftOvers,oneName);
+                continue;
+                }
+
             if (sameString(var,"vis"))
                 {
                 viewVisChanged = TRUE;
-//                viewVisHidden = (cartUsualInt(cart,oneName->val,tvFull) == tvHide);
                 }
-            else {
-                if (cartRemoveFromTdbTree(newCart,tdbView,var,TRUE) > 0)
-                    clensed = TRUE;
-            }
+            else if (cartRemoveFromTdbTree(newCart,tdbView,var,TRUE) > 0)
+                clensed++;
+
             freeMem(oneName);
             }
+        if  (compositeVisChanged || viewVisChanged)
+            { // vis is a special additive case!
+            if (cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE) > 0)
+                clensed++;
+            }
+        changedSettings = leftOvers;
         }
-    if  (compositeVisChanged || viewVisChanged)
-        { // vis is a special additive case!
-        if (cartRemoveFromTdbTree(newCart,tdbView,NULL,TRUE) > 0)
-            clensed = TRUE;
-        }
-    changedSettings = leftOvers;
     }
 
 // Now deal with anything remaining at the composite level
@@ -2131,16 +2162,19 @@ while ((oneName = slPopHead(&changedSettings)) != NULL)
     {
     var = oneName->val + strlen(tdb->track) + 1;
     if(cartRemoveFromTdbTree(newCart,tdb,var,TRUE) > 0)
-        clensed = TRUE;
+        clensed++;
     freeMem(oneName);
     }
 if  (compositeVisChanged || !hasViews)
     { // vis is a special additive case!
     if (cartRemoveFromTdbTree(newCart,tdb,NULL,TRUE) > 0)
-        clensed = TRUE;
+        clensed++;
     }
 
-return clensed;
+if (debug)
+    warn("Cleaned up %d composite%s settings",clensed,hasViews?"/view":"");
+
+return (clensed > 0);
 }
 
 

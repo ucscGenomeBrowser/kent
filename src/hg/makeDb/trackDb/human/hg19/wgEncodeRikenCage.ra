@@ -38,7 +38,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel NHEK cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
         subGroups view=1-PlusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1811 dateSubmitted=2010-06-21
 
@@ -48,7 +48,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel GM12878 cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cytosol)
         subGroups view=1-PlusClusters cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
 
@@ -58,7 +58,7 @@ superTrack wgEncodeRnaSeqSuper
 #        shortLabel GM12878 nucleus total
 #        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleus)
 #        subGroups view=1-PlusClusters cellType=GM12878 localization=30-nucleus rnaExtract=total
-#        type bedGraph 4
+        #type bigWig 0.040000 4464.319824
 #        color 153,38,0
 #       retracted due to nameing confusion on part of the lab
         # subId=1798 dateSubmitted=2010-06-21
@@ -69,7 +69,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel H1-hESC cell total
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in H1-hESC cell)
         subGroups view=1-PlusClusters cellType=H1hESC localization=0-cell rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 0,107,27
         # subId=1799 dateSubmitted=2010-06-21
 
@@ -79,7 +79,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel HUVEC cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in HUVEC cytosol)
         subGroups view=1-PlusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21
 
@@ -89,7 +89,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel HepG2 cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in HepG2 cytosol)
         subGroups view=1-PlusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
 
@@ -99,7 +99,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel HepG2 nucleus longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in HepG2 nucleus)
         subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
 
@@ -109,7 +109,7 @@ superTrack wgEncodeRnaSeqSuper
 #        shortLabel HepG2 nucleus total
 #        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in HepG2 nucleus)
 #        subGroups view=1-PlusClusters cellType=HepG2 localization=30-nucleus rnaExtract=total
-#        type bedGraph 4
+        type bigWig 0.040000 4464.319824
 #        color 189,0,157
 #       retracted due to nameing confusion on part of the lab
         # subId=1803 dateSubmitted=2010-06-21
@@ -120,7 +120,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 chromatin total
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 chromatin)
         subGroups view=1-PlusClusters cellType=K562 localization=50-chromatin rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
 
@@ -130,7 +130,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 cytosol total
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 cytosol)
         subGroups view=1-PlusClusters cellType=K562 localization=20-cytosol rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1805 dateSubmitted=2010-06-21
 
@@ -140,7 +140,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 cytosol longPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longPolyA in K562 cytosol)
         subGroups view=1-PlusClusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
 
@@ -150,7 +150,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 nucleolus total
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleolus)
         subGroups view=1-PlusClusters cellType=K562 localization=60-nucleolus rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
@@ -160,7 +160,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 nucleoplasm total
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleoplasm)
         subGroups view=1-PlusClusters cellType=K562 localization=40-nucleoplasm rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
 
@@ -170,7 +170,7 @@ superTrack wgEncodeRnaSeqSuper
 #        shortLabel K562 nucleus total
 #        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleus)
 #        subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=total
-#        type bedGraph 4
+        type bigWig 0.040000 4464.319824
 #        color 46,0,184
 #        retracted due to naming confusion on the part of the lab
         # subId=1809 dateSubmitted=2010-06-21
@@ -181,7 +181,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 polysome longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in K562 polysome)
         subGroups view=1-PlusClusters cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
-        type bedGraph 4
+    type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
 
@@ -191,7 +191,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel NHEK nucleus longNonPolyA
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in NHEK nucleus)
         subGroups view=1-PlusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1812 dateSubmitted=2010-06-21
 
@@ -201,8 +201,38 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel prostate cell total
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in prostate cell)
         subGroups view=1-PlusClusters cellType=prostate localization=0-cell rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         # subId=1813 dateSubmitted=2010-06-21
+
+        track wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
+        release alpha
+        parent wgEncodeRikenCageView1-PlusClusters off
+        shortLabel K562 nucleus longNonPolyA
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in K562 nucleus)
+        subGroups view=1-PlusClusters cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
+        type bigWig 0.040000 4464.319824
+        color 46,0,184
+        # subId=2127 dateSubmitted=2010-08-26
+
+        track wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
+        release alpha
+        parent wgEncodeRikenCageView1-PlusClusters off
+        shortLabel HepG2 nucleolus total
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in HepG2 nucleolus)
+        subGroups view=1-PlusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
+        type bigWig 0.040000 4464.319824
+        color 189,0,157
+        # subId=2124 dateSubmitted=2010-08-23
+
+        track wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
+        release alpha
+        parent wgEncodeRikenCageView1-PlusClusters off
+        shortLabel GM12878 nucleolus total
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleolus)
+        subGroups view=1-PlusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
+        type bigWig 0.040000 4464.319824
+        color 153,38,0
+        # subId=2125 dateSubmitted=2010-08-23
 
 
     track wgEncodeRikenCageView3-MinusClusters
@@ -224,7 +254,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel NHEK cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
         subGroups view=3-MinusClusters cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1811 dateSubmitted=2010-06-21
 
@@ -234,7 +264,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel GM12878 cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in GM12878 cytosol)
         subGroups view=3-MinusClusters cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 153,38,0
         # subId=1797 dateSubmitted=2010-06-21
 
@@ -244,7 +274,7 @@ superTrack wgEncodeRnaSeqSuper
 #        shortLabel GM12878 nucleus total
 #        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleus)
 #        subGroups view=3-MinusClusters cellType=GM12878 localization=30-nucleus rnaExtract=total
-#        type bedGraph 4
+#type bigWig 0.040000 4464.319824
 #        color 153,38,0
 #       retracted due to nameing confusion on part of the lab
         # subId=1798 dateSubmitted=2010-06-21
@@ -255,7 +285,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel H1-hESC cell total
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in H1-hESC cell)
         subGroups view=3-MinusClusters cellType=H1hESC localization=0-cell rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 0,107,27
         # subId=1799 dateSubmitted=2010-06-21
 
@@ -265,7 +295,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel HUVEC cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in HUVEC cytosol)
         subGroups view=3-MinusClusters cellType=HUVEC localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 224,75,0
         # subId=1800 dateSubmitted=2010-06-21
 
@@ -275,7 +305,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel HepG2 cytosol longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in HepG2 cytosol)
         subGroups view=3-MinusClusters cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1801 dateSubmitted=2010-06-21
 
@@ -285,7 +315,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel HepG2 nucleus longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in HepG2 nucleus)
         subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 189,0,157
         # subId=1802 dateSubmitted=2010-06-21
 
@@ -295,7 +325,7 @@ superTrack wgEncodeRnaSeqSuper
 #        shortLabel HepG2 nucleus total
 #        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in HepG2 nucleus)
 #        subGroups view=3-MinusClusters cellType=HepG2 localization=30-nucleus rnaExtract=total
-#        type bedGraph 4
+#type bigWig 0.040000 4464.319824
 #        color 189,0,157
 #       retracted due to nameing confusion on part of the lab
         # subId=1803 dateSubmitted=2010-06-21
@@ -306,7 +336,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 chromatin total
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 chromatin)
         subGroups view=3-MinusClusters cellType=K562 localization=50-chromatin rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1804 dateSubmitted=2010-06-21
 
@@ -316,7 +346,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 cytosol total
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 cytosol)
         subGroups view=3-MinusClusters cellType=K562 localization=20-cytosol rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1805 dateSubmitted=2010-06-21
 
@@ -326,7 +356,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 cytosol longPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longPolyA in K562 cytosol)
         subGroups view=3-MinusClusters cellType=K562 localization=20-cytosol rnaExtract=longPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1806 dateSubmitted=2010-06-21
 
@@ -336,7 +366,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 nucleolus total
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleolus)
         subGroups view=3-MinusClusters cellType=K562 localization=60-nucleolus rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1807 dateSubmitted=2010-06-21
 
@@ -346,7 +376,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 nucleoplasm total
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleoplasm)
         subGroups view=3-MinusClusters cellType=K562 localization=40-nucleoplasm rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1808 dateSubmitted=2010-06-21
 
@@ -356,7 +386,7 @@ superTrack wgEncodeRnaSeqSuper
 #        shortLabel K562 nucleus total
 #        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleus)
 #        subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=total
-#        type bedGraph 4
+#type bigWig 0.040000 4464.319824
 #        color 46,0,184
 #	retracted due to nameing confusion on part of the lab
         # subId=1809 dateSubmitted=2010-06-21
@@ -367,7 +397,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 polysome longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in K562 polysome)
         subGroups view=3-MinusClusters cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 46,0,184
         # subId=1810 dateSubmitted=2010-06-21
 
@@ -377,7 +407,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel NHEK nucleus longNonPolyA
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in NHEK nucleus)
         subGroups view=3-MinusClusters cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         color 179,0,134
         # subId=1812 dateSubmitted=2010-06-21
 
@@ -387,8 +417,38 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel prostate cell total
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in prostate cell)
         subGroups view=3-MinusClusters cellType=prostate localization=0-cell rnaExtract=total
-        type bedGraph 4
+        type bigWig 0.040000 4464.319824
         # subId=1813 dateSubmitted=2010-06-21
+
+        track wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters
+        release alpha
+        parent wgEncodeRikenCageView3-MinusClusters off
+        shortLabel K562 nucleus longNonPolyA
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in K562 nucleus)
+        subGroups view=3-MinusClusters cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
+        type bigWig 0.040000 4464.319824
+        color 46,0,184
+        # subId=2127 dateSubmitted=2010-08-26
+
+        track wgEncodeRikenCageHepg2NucleolusTotalMinusClusters
+        release alpha
+        parent wgEncodeRikenCageView3-MinusClusters off
+        shortLabel HepG2 nucleolus total
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in HepG2 nucleolus)
+        subGroups view=3-MinusClusters cellType=HepG2 localization=60-nucleolus rnaExtract=total
+        type bigWig 0.040000 4464.319824
+        color 189,0,157
+        # subId=2124 dateSubmitted=2010-08-23
+
+        track wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
+        release alpha
+        parent wgEncodeRikenCageView3-MinusClusters off
+        shortLabel GM12878 nucleolus total
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleolus)
+        subGroups view=3-MinusClusters cellType=GM12878 localization=60-nucleolus rnaExtract=total
+        type bigWig 0.040000 4464.319824
+        color 153,38,0
+        # subId=2125 dateSubmitted=2010-08-23
 
 
     track wgEncodeRikenCageView5-Alignments
@@ -586,6 +646,36 @@ superTrack wgEncodeRnaSeqSuper
         subGroups view=5-Alignments cellType=prostate localization=0-cell rnaExtract=total
         type bam
         # subId=1813 dateSubmitted=2010-06-21
+
+        track wgEncodeRikenCageK562NucleusLongnonpolyaAln
+        release alpha
+        parent wgEncodeRikenCageView5-Alignments off
+        shortLabel K562 nucleus longNonPolyA Aln
+        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in K562 nucleus)
+        subGroups view=5-Alignments cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
+        type bam
+        color 46,0,184
+        # subId=2127 dateSubmitted=2010-08-26
+
+        track wgEncodeRikenCageHepg2NucleolusTotalAln
+        release alpha
+        parent wgEncodeRikenCageView5-Alignments off
+        shortLabel HepG2 nucleolus total Aln
+        longLabel ENCODE RIKEN CAGE Tags (total in HepG2 nucleolus)
+        subGroups view=5-Alignments cellType=HepG2 localization=60-nucleolus rnaExtract=total
+        type bam
+        color 189,0,157
+        # subId=2124 dateSubmitted=2010-08-23
+
+        track wgEncodeRikenCageGm12878NucleolusTotalAln
+        release alpha
+        parent wgEncodeRikenCageView5-Alignments off
+        shortLabel GM12878 nucleolus total Aln
+        longLabel ENCODE RIKEN CAGE Tags (total in GM12878 nucleolus)
+        subGroups view=5-Alignments cellType=GM12878 localization=60-nucleolus rnaExtract=total
+        type bam
+        color 153,38,0
+        # subId=2125 dateSubmitted=2010-08-23
 
 
 

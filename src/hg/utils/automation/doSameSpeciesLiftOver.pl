@@ -78,12 +78,12 @@ $HgAutomate::clusterData/\$fromDb/$HgAutomate::trackBuild/blat.\$toDb.\$date unl
   # Detailed help (-help):
   print STDERR "
 Assumptions:
-1. $HgAutomate::clusterData/\$db/\$db.2bit contains RepeatMasked sequence for
+1. /scratch/data/\$db/\$db.2bit contains RepeatMasked sequence for
    database/assembly \$db.
 2. $HgAutomate::clusterData/\$db/chrom.sizes contains all sequence names and sizes from
    \$db.2bit.
 3. The \$db.2bit files have already been distributed to cluster-scratch
-   (/scratch/hg or /iscratch, /san etc).
+   (/scratch/data/<db>/).
 " if ($detailed);
   print "\n";
   exit $status;
@@ -122,20 +122,29 @@ sub getClusterSeqs {
   my @okFilesystems =
     &HgAutomate::chooseFilesystemsForCluster($paraHub, 'in');
   my ($tSeqScratch, $qSeqScratch);
-  foreach my $fs (@okFilesystems) {
-    if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
-      $tSeqScratch = "$fs/$tDb/$tDb.2bit";
-      last;
+  if ( -e "/scratch/data/$tDb/$tDb.2bit" ) {
+      $tSeqScratch = "/scratch/data/$tDb/$tDb.2bit";
+  } else {
+    foreach my $fs (@okFilesystems) {
+&HgAutomate::verbose(1, "checking $fs/$tDb/$tDb.2bit\n");
+      if (&HgAutomate::machineHasFile($paraHub, "$fs/$tDb/$tDb.2bit")) {
+        $tSeqScratch = "$fs/$tDb/$tDb.2bit";
+        last;
+      }
     }
   }
   if (! defined $tSeqScratch) {
     die "align: can't find $tDb/$tDb.2bit in " .
       join("/, ", @okFilesystems) . "/ -- please distribute.\n";
   }
-  foreach my $fs (@okFilesystems) {
-    if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
-      $qSeqScratch = "$fs/$qDb/$qDb.2bit";
-      last;
+  if ( -e "/scratch/data/$qDb/$qDb.2bit" ) {
+      $qSeqScratch = "/scratch/data/$qDb/$qDb.2bit";
+  } else {
+    foreach my $fs (@okFilesystems) {
+      if (&HgAutomate::machineHasFile($paraHub, "$fs/$qDb/$qDb.2bit")) {
+        $qSeqScratch = "$fs/$qDb/$qDb.2bit";
+        last;
+      }
     }
   }
   if (! defined $qSeqScratch) {
@@ -213,16 +222,16 @@ foreach spec (\$specList)
   set seqSize = `awk '\$1 == "'\$seq'" {print \$2;}' q.sizes`
   set chunkEnd = '0'
   while (\$chunkEnd < \$end)
-    set chunkEnd = `expr \$start + $size`
+    set chunkEnd = `echo \$start $size | awk '{print \$1+\$2}'`
     if (\$chunkEnd > \$end) set chunkEnd = \$end
-    set chunkSize = `expr \$chunkEnd - \$start`
+    set chunkSize = `echo \$chunkEnd \$start | awk '{print \$1-\$2}'`
     echo \$file\\:\$seq\\:\$start-\$chunkEnd >> reSplitQuery.lst
     if ((\$start == 0) && (\$chunkEnd == \$seqSize)) then
       echo "\$start	\$seq	\$seqSize	\$seq	\$seqSize" >> query.lft
     else
       echo "\$start	\$seq"":\$start-\$chunkEnd	\$chunkSize	\$seq	\$seqSize" >> query.lft
     endif
-    set start = `expr \$chunkEnd - $splitOverlap`
+    set start = `echo \$chunkEnd $splitOverlap | awk '{print \$1-\$2}'`
   end
 end
 
@@ -517,9 +526,9 @@ _EOF_
 
 sub getSeqAndSizes {
   # Test assumptions about 2bit and chrom.sizes files.
-  $tSeq = "$HgAutomate::clusterData/$tDb/$tDb.2bit";
+  $tSeq = "/scratch/data/$tDb/$tDb.2bit";
   $tSizes = "$HgAutomate::clusterData/$tDb/chrom.sizes";
-  $qSeq = "$HgAutomate::clusterData/$qDb/$qDb.2bit";
+  $qSeq = "/scratch/data/$qDb/$qDb.2bit";
   $qSizes = "$HgAutomate::clusterData/$qDb/chrom.sizes";
   my $problem = 0;
   foreach my $file ($tSeq, $tSizes, $qSeq, $qSizes) {

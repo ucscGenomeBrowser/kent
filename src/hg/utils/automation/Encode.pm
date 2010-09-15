@@ -382,6 +382,7 @@ sub parseDaf
         foreach my $key (keys %track) {
             HgAutomate::verbose(4, "    Setting: $key   Value: $track{$key}\n");
         }
+ 	#my @keys = grep(!/^order$/, keys %track); I would like to skip order
         my @keys = keys %track;
         push(@errors, validateFieldList(\@keys, $fields, 'dafList'));
     }

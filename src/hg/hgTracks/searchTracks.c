@@ -17,6 +17,7 @@
 #include "hdb.h"
 #include "trix.h"
 #include "jsHelper.h"
+#include "imageV2.h"
 
 static char const rcsid[] = "$Id: searchTracks.c,v 1.11 2010/06/11 18:21:40 larrym Exp $";
 
@@ -130,80 +131,121 @@ static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char 
 // Search the assembly's metaDb table for var; If name == NULL, we search every metadata field.
 // Search is via mysql, so it's case-insensitive.
 {
-struct slName *retVal = NULL;
 char query[256];
-struct sqlResult *sr = NULL;
-char **row = NULL;
-
+char *prefix = "select distinct obj from metaDb";
 if(sameString(op, "contains"))
     if(name == NULL)
-        safef(query, sizeof(query), "select obj from metaDb where val like  '%%%s%%'", val);
+        safef(query, sizeof(query), "%s where val like  '%%%s%%'", prefix, val);
     else
-        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val like  '%%%s%%'", name, val);
+        safef(query, sizeof(query), "%s where var = '%s' and val like  '%%%s%%'", prefix, name, val);
 else
     if(name == NULL)
-        safef(query, sizeof(query), "select distinct obj from metaDb where val = '%s'", val);
+        safef(query, sizeof(query), "%s where val = '%s'", prefix, val);
     else
-        safef(query, sizeof(query), "select obj from metaDb where var = '%s' and val = '%s'", name, val);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slNameAddHead(&retVal, row[0]);
-    }
-sqlFreeResult(&sr);
-return retVal;
+        safef(query, sizeof(query), "%s where var = '%s' and val = '%s'", prefix, name, val);
+return sqlQuickList(conn, query);
 }
 
-static int metaDbVars(struct sqlConnection *conn, char *** metaValues)
+static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** metaLabels)
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
 {
 char query[256];
+#define WHITE_LIST_COUNT 35
+#ifdef WHITE_LIST_COUNT
+#define WHITE_LIST_VAR 0
+#define WHITE_LIST_LABEL 1
+char *whiteList[WHITE_LIST_COUNT][2] = {
+    {"age",              "Age of experimental organism"},
+    {"antibody",         "Antibody or target protein"},
+    {"origAssembly",     "Assembly originally mapped to"},
+    {"cell",             "Cell, tissue or DNA sample"},
+    {"localization",     "Cell compartment"},
+    {"control",          "Control or Input for ChIPseq"},
+    //{"controlId",        "ControlId - explicit relationship"},
+    {"dataType",         "Experiment type"},
+    {"dataVersion",      "ENCODE release"},
+    //{"fragLength",       "Fragment Length for ChIPseq"},
+    //{"freezeDate",       "Gencode freeze date"},
+    //{"level",            "Gencode level"},
+    //{"annotation",       "Gencode annotation"},
+    {"accession",        "GEO accession"},
+    {"growthProtocol",   "Growth Protocol"},
+    {"lab",              "Lab producing data"},
+    {"labVersion",       "Lab specific details"},
+    {"labExpId",         "Lab specific identifier"},
+    {"softwareVersion",  "Lab specific informatics"},
+    {"protocol",         "Library Protocol"},
+    {"mapAlgorithm",     "Mapping algorithm"},
+    {"readType",         "Paired/Single reads lengths"},
+    {"grant",            "Prinipal Investigator"},
+    {"replicate",        "Replicate number"},
+    //{"restrictionEnzyme","Restriction Enzyme used"},
+    //{"ripAntibody",      "RIP Antibody"},
+    //{"ripTgtProtein",    "RIP Target Protein"},
+    {"rnaExtract",       "RNA Extract"},
+    {"seqPlatform",      "Sequencing Platform"},
+    {"setType",          "Experiment or Input"},
+    {"sex",              "Sex of organism"},
+    {"strain",           "Strain of organism"},
+    {"subId",            "Submission Id"},
+    {"treatment",        "Treatment"},
+    {"view",             "View - Peaks or Signals"},
+};
+// FIXME: The whitelist should be a table or ra
+// FIXME: The whitelist should be in list order
+// FIXME: Should read in list, then verify that an mdb val exists.
+
+char **retVar = needMem(sizeof(char *) * WHITE_LIST_COUNT);
+char **retLab = needMem(sizeof(char *) * WHITE_LIST_COUNT);
+int ix,count;
+for(ix=0,count=0;ix<WHITE_LIST_COUNT;ix++)
+    {
+    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",whiteList[ix][WHITE_LIST_VAR]);
+    if(sqlQuickNum(conn,query) > 0)
+        {
+        retVar[count] = whiteList[ix][WHITE_LIST_VAR];
+        retLab[count] = whiteList[ix][WHITE_LIST_LABEL];
+        count++;
+        }
+    }
+if(count == 0)
+    {
+    freez(&retVar);
+    freez(&retLab);
+    }
+*metaVars = retVar;
+*metaLabels = retLab;
+return count;
+
+#else///ifndef WHITE_LIST_COUNT
+
+char **retVar;
+char **retLab;
+struct slName *el, *varList = NULL;
 struct sqlResult *sr = NULL;
 char **row = NULL;
-int i;
-struct slName *el, *varList = NULL;
-char **retVal;
 
-safef(query, sizeof(query), "select distinct var from metaDb");
+safef(query, sizeof(query), "select distinct var from metaDb order by var");
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     slNameAddHead(&varList, row[0]);
 sqlFreeResult(&sr);
-retVal = needMem(sizeof(char *) * slCount(varList));
-slNameSort(&varList);
-for (el = varList, i = 0; el != NULL; el = el->next, i++)
-    retVal[i] = el->name;
-*metaValues = retVal;
-return i;
-}
-
-// FIXME: This code is duplicated in imageV2!!!
-// FIXME: This code is duplicated in imageV2!!!
-static void trackJson(struct dyString *trackDbJson, struct track *track, int count)
-{
-// add entry for given track to the trackDbJson string
-if(count)
-    dyStringAppend(trackDbJson, "\n,");
-dyStringPrintf(trackDbJson, "\t%s: {", track->track);
-if(tdbIsSuperTrackChild(track->tdb))
+retVar = needMem(sizeof(char *) * slCount(varList));
+retLab = needMem(sizeof(char *) * slCount(varList));
+slReverse(&varList);
+//slNameSort(&varList);
+int count = 0;
+for (el = varList; el != NULL; el = el->next)
     {
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
+    retVar[count] = el->name;
+    retLab[count] = el->name;
+    count++;
     }
-else if(tdbIsCompositeChild(track->tdb))
-    {
-    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-    dyStringPrintf(trackDbJson, "\n\t\tparentTrack: '%s',", parentTdb->track);
-    dyStringPrintf(trackDbJson, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
-    }
-dyStringPrintf(trackDbJson, "\n\t\ttype: '%s',", track->tdb->type);
-if(sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(trackDbJson, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
-dyStringPrintf(trackDbJson, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+*metaVars = retVar;
+*whiteLabels = retLab;
+return count;
+#endif///ndef WHITE_LIST_COUNT
 }
-// FIXME: This code is duplicated in imageV2!!!
-// FIXME: This code is duplicated in imageV2!!!
 
 void doSearchTracks(struct group *groupList)
 {
@@ -217,20 +259,21 @@ char *currentTab = cartUsualString(cart, "hgt.currentSearchTab", "simpleTab");
 char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
 char *descSearch;
 char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
-boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search");
+boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search") || cartUsualInt(cart, "hgt.forceSearch", 0) == 1;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 struct slRef *tracks = NULL;
 int numMetadataSelects, tracksFound = 0;
 int numMetadataNonEmpty = 0;
-char **metadataName;
-char **metadataValue;
+char **mdbVar;
+char **mdbVal;
 struct hash *parents = newHash(4);
 boolean simpleSearch;
 struct trix *trix;
 char trixFile[HDB_MAX_PATH_STRING];
 char **descWords = NULL;
 int descWordCount = 0;
+boolean searchTermsExist = FALSE;
 
 if(sameString(currentTab, "simpleTab"))
     {
@@ -261,7 +304,7 @@ for (group = groupList; group != NULL; group = group->next)
         }
     }
 
-webStartWrapperDetailedNoArgs(cart, database, "", "Track Search", FALSE, FALSE, FALSE, FALSE);
+webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 
@@ -269,18 +312,25 @@ hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
 hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
+hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
 
 hPrintf("<div id='tabs' style='display:none;'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced Search</span></a></li>\n"
+        "<li><a href='#advancedTab'><span>Advanced <em>- by %sterms</em></span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab'>\n");
+        "<div id='simpleTab'>\n",metaDbExists?"ENCODE ":"");
 
-hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80'>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("<table><tr><td colspan='2'>");
+hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("</td></tr><tr><td>");
+if (simpleSearch && descSearch)
+    searchTermsExist = TRUE;
 
-hPrintf("<br><input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
-hPrintf("<input type='submit' name='submit' value='Cancel' style='font-size:14px;'>\n");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
+hPrintf("</td><td align='right'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
         "<table>\n");
@@ -290,15 +340,21 @@ hPrintf("<tr><td></td><td></td><td></td><td><b>Track Name:</b></td><td align='ri
 //char *op_labels[] = {"is", "contains"};
 //char *nameOp = cartOptionalString(cart, "hgt.nameOp");
 //cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
-hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
+hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
+if (!simpleSearch && nameSearch)
+    searchTermsExist = TRUE;
 
 hPrintf("<tr><td></td><td></td><td>and</td><td><b>Description:</b></td><td align='right'>contains</td>\n");
-hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80'></td></tr>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'></td></tr>\n", descSearch == NULL ? "" : descSearch);
+if (!simpleSearch && descSearch)
+    searchTermsExist = TRUE;
 
 hPrintf("<tr><td></td><td></td><td>and</td>\n");
 hPrintf("<td><b>Group</b></td><td align='right'>is</td>\n<td>\n");
-cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, NULL);
+cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, "class='groupSearch'");
 hPrintf("</td></tr>\n");
+if (!simpleSearch && groupSearch)
+    searchTermsExist = TRUE;
 
 // figure out how many metadata selects are visible.
 
@@ -323,8 +379,8 @@ if(addSearchSelect)
 
 if(numMetadataSelects)
     {
-    metadataName = needMem(sizeof(char *) * numMetadataSelects);
-    metadataValue = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
     int i;
     for(i = 0; i < numMetadataSelects; i++)
         {
@@ -337,14 +393,14 @@ if(numMetadataSelects)
         else
             offset = 1;
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
-        metadataName[i] = cartOptionalString(cart, buf);
+        mdbVar[i] = cartOptionalString(cart, buf);
         if(!simpleSearch)
             {
             safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            metadataValue[i] = cartOptionalString(cart, buf);
-            if(sameString(metadataValue[i], ANYLABEL))
-                metadataValue[i] = NULL;
-            if(!isEmpty(metadataValue[i]))
+            mdbVal[i] = cartOptionalString(cart, buf);
+            if(sameString(mdbVal[i], ANYLABEL))
+                mdbVal[i] = NULL;
+            if(!isEmpty(mdbVal[i]))
                 numMetadataNonEmpty++;
             }
         }
@@ -361,19 +417,20 @@ else
     {
     // create defaults
     numMetadataSelects = 2;
-    metadataName = needMem(sizeof(char *) * numMetadataSelects);
-    metadataValue = needMem(sizeof(char *) * numMetadataSelects);
-    metadataName[0] = "cell";
-    metadataName[1] = "antibody";
-    metadataValue[0] = ANYLABEL;
-    metadataValue[1] = ANYLABEL;
+    mdbVar = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVal = needMem(sizeof(char *) * numMetadataSelects);
+    mdbVar[0] = "cell";
+    mdbVar[1] = "antibody";
+    mdbVal[0] = ANYLABEL;
+    mdbVal[1] = ANYLABEL;
     }
 
 if(metaDbExists)
     {
     int i;
-    char **metaValues = NULL;
-    int count = metaDbVars(conn, &metaValues);
+    char **mdbVars = NULL;
+    char **mdbVarLabels = NULL;
+    int count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
 
     for(i = 0; i < numMetadataSelects; i++)
         {
@@ -396,22 +453,26 @@ if(metaDbExists)
         hPrintf("</td><td>and</td>\n");
         hPrintf("</td><td colspan=2 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiMakeDropListClassWithStyleAndJavascript(buf, metaValues, count, metadataName[i],
-                                                   NULL, NULL, "onchange=metadataSelectChanged(this)");
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
+        //cgiMakeDropListClassWithStyleAndJavascript(buf, mdbVars, count, mdbVar[i],
+        //                                           "mdbVar", NULL, "onchange=findTracksMdbVarChanged(this)");
         hPrintf("is</td>\n<td>\n");
-        len = getTermArray(conn, &terms, metadataName[i]);
+        len = getTermArray(conn, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, terms, terms, len, metadataValue[i], NULL);
+        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' onchange='findTracksSearchButtonsEnable(true)'");
+        if (!simpleSearch && mdbVal[i])
+            searchTermsExist = TRUE;
         hPrintf("</td></tr>\n");
         }
     }
 
-hPrintf("</table>\n");
-
+hPrintf("<tr><td colspan='5'>\n");
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
-hPrintf("<input type='submit' name='submit' value='Cancel' style='font-size:14px;'>\n");
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
+hPrintf("</td><td align='left'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr>\n");
+hPrintf("</table>\n");
 hPrintf("</div>\n</div>\n");
-
 hPrintf("</form>\n");
 
 if(descSearch != NULL && !strlen(descSearch))
@@ -425,17 +486,15 @@ if(!isEmpty(descSearch))
     char *val = nextWord(&tmp);
     struct slName *el, *descList = NULL;
     int i;
-
     while (val != NULL)
         {
         slNameAddTail(&descList, val);
+        descWordCount++;
         val = nextWord(&tmp);
         }
-    descWordCount = slCount(descList);
     descWords = needMem(sizeof(char *) * descWordCount);
     for(i = 0, el = descList; el != NULL; i++, el = el->next)
         descWords[i] = strLower(el->name);
-
     }
 
 if(doSearch)
@@ -461,8 +520,13 @@ if(doSearch)
         for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
-            refAdd(&tracks, track);
-            tracksFound++;
+            if (track != NULL)
+                {
+                refAdd(&tracks, track);
+                tracksFound++;
+                }
+            //else // FIXME: Should get to the bottom of why some of these are null
+            //    warn("found trix track is NULL.");
             }
         slReverse(&tracks);
         }
@@ -476,9 +540,9 @@ if(doSearch)
 
         for(i = 0; i < numMetadataSelects; i++)
             {
-            if(!isEmpty(metadataValue[i]))
+            if(!isEmpty(mdbVal[i]))
                 {
-                struct slName *tmp = metaDbSearch(conn, metadataName[i], metadataValue[i], "is");
+                struct slName *tmp = metaDbSearch(conn, mdbVar[i], mdbVal[i], "is");
                 if(metaTracks == NULL)
                     metaTracks = tmp;
                 else
@@ -518,8 +582,13 @@ if(doSearch)
                            (isEmpty(descSearch) || isDescriptionMatch(track, descWords, descWordCount)) &&
                            (!numMetadataNonEmpty || hashLookup(matchingTracks, track->track) != NULL))
                             {
-                            tracksFound++;
-                            refAdd(&tracks, track);
+                            if (track != NULL)
+                                {
+                                tracksFound++;
+                                refAdd(&tracks, track);
+                                }
+                            else
+                                warn("found group track is NULL.");
                             }
                         if (track->subtracks != NULL)
                             {
@@ -532,8 +601,13 @@ if(doSearch)
                                     {
                                     // XXXX to parent hash. - use tdb->parent instead.
                                     hashAdd(parents, subTrack->track, track);
-                                    tracksFound++;
-                                    refAdd(&tracks, subTrack);
+                                    if (track != NULL)
+                                        {
+                                        tracksFound++;
+                                        refAdd(&tracks, subTrack);
+                                        }
+                                    else
+                                        warn("found subtrack is NULL.");
                                     }
                                 }
                             }
@@ -545,6 +619,7 @@ if(doSearch)
         }
     }
 
+hPrintf("<div id='foundTracks' style='display:none;'>\n"); // This div allows the clear button to empty it
 if(tracksFound < 1)
     {
     if(doSearch)
@@ -554,6 +629,7 @@ else
     {
     struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
+    cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
     #define MAX_FOUND_TRACKS 100
     if(tracksFound > MAX_FOUND_TRACKS)
         {
@@ -569,9 +645,7 @@ else
         }
 
     // Set up json for js functionality
-    struct dyString *trackDbJson = newDyString(1000);
-    int trackDbJsonCount = 1;
-    dyStringPrintf(trackDbJson, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d}", rulerMode);
+    struct dyString *jsonTdbVars = NULL;
 
     hPrintf("<table><tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
@@ -583,6 +657,7 @@ else
     // FIXME: I believe that only data tracks should appear in found tracks.  If composite is found, show its children instead
 
     int trackCount=0;
+    boolean containerTrackCount = 0;
     struct slRef *ptr;
     while((ptr = slPopHead(&tracks)))
         {
@@ -590,31 +665,9 @@ else
             break;
 
         struct track *track = (struct track *) ptr->val;
-        trackJson(trackDbJson, track, trackDbJsonCount++);
+        jsonTdbSettingsBuild(&jsonTdbVars, track);
 
-        // trackDbOutput(track->tdb, stderr, ',', '\n');
-        hPrintf("<tr bgcolor='%s' valign='top' class='found%s%s'>\n",COLOR_BG_ALTDEFAULT,
-                (tdbIsCompositeChild(track->tdb)?" subtrack":""),
-                (track->canPack?" canPack":""));
-
-        // NOTE: We have now changed the paradigm for subtrack vis:
-        // There must be a {trackName}_sel to have subtrack level vis override.
-        // This means rightClick must make a {trackName}_sel, which is needed for hgTrackUi conformity anyway
-        // AND hgTracks.c now relies upon "_sel" even with subtrack-level vis.
-
-        // NOTE: Difficulties with "sel" and "vis" controls:
-        // 1) subtracks need both "sel" and "vis", but non-subtracks need only "vis"
-        // 2) Submit of form instead of ajax is nice (because it allows cancelling changes), but do not want to set any vars, unless specifically changed on form
-        // 3) When unchecked, need to delete vars instead of set them
-        // Solution to "sel", "vis" difficulties
-        // 1) findTracks remains a submit but:
-        // 2) 'sel' and 'vis' input are not named (won't be submitted)
-        // 3) hidden disabled and named 'sel' and 'vis' vars exist
-        // 4a) check subtrack: enable hidden 'sel' and 'vis' track, set to 'on' and pack/full
-        // 4b) check non-track: enable hidden 'vis', set to pack/full
-        // 5a) uncheck subtrack: enable hidden 'sel' and 'vis' track, set to '[]' and '[]'
-        // 5b) uncheck non-track: enable hidden 'vis', set to '[]'
-        // 6) Change vis: enable hidden 'vis', set to non-hidden vis
+        hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_BG_ALTDEFAULT);
 
         hPrintf("<td align='center' valign='center'>\n");
         char name[256];
@@ -624,17 +677,18 @@ else
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             track->visibility = limitedVisFromComposite(track);
-            struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-            if(parentTdb != NULL)
-                track->visibility = tvMin(track->visibility,parentTdb->visibility);
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
 
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
             #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
-            hPrintf(CB_HIDDEN_VAR,track->track,CART_VAR_EMPTY);
+            hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
             }
         else
+            {
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
             checked = ( track->visibility != tvHide );
+            }
 
         #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
@@ -656,6 +710,13 @@ else
             safef(extra,sizeof(extra),"id='%s_id' onchange='findTracksChangeVis(this)'",track->track);
             hTvDropDownClassWithJavascript(NULL, track->visibility,track->canPack,"normalText seenVis",extra);
             }
+
+        // If this is a container track, allow configuring...
+        if (tdbIsComposite(track->tdb) || tdbIsSuper(track->tdb))
+            {
+            containerTrackCount++;
+            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
+            }
         hPrintf("</td>\n");
         //if(tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
         //    hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
@@ -666,40 +727,38 @@ else
         hPrintf("</td></tr>\n");
         }
     hPrintf("</table>\n");
+    if(containerTrackCount > 0)
+        hPrintf("* Tracks so marked are containers which group related data tracks.  These may not be visible unless further configuration is done.  Click on the * to configure these.<BR>\n");
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
-    hPrintf("<script type='text/javascript'>findTracksNormalizeFound();</script>\n");
     hPrintf("\n</form>\n");
 
     // be done with json
-    dyStringAppend(trackDbJson, "}\n</script>\n");
-    hPrintf(dyStringCannibalize(&trackDbJson));
+    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"
-        "<li>Deleting/Adding selection criteria with [-][+] buttons in 'Advanced Search'.</li>"
-        "<li>Found track list shows only the first 100 tracks with warning to narrow search.\"</li>\n"
-        "<li>Clicks in menu bar up top now work correctly.</li>\n"
-        "<li>Found tracks are selected by checkboxes.</li>"
-        "<li>Checkbox state should be persistent.  Subtracks selected will be checked in their composite.</li>"
+        "<li>Metadata variables have been 'white-listed' to only include vetted items.  Short text descriptions and vetted list should be reviewed.</li>"
+        "<li>'Clear' button added and search and clear buttons should be meaningfully enabled/disabled.</li>"
+        "<li>Clicking on shortLabel for found track will popup the description text.  Subtracks should show their composite description.</li>"
+        "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
+        "<li>Simple search had been bombing on NULL tracks.  This should be solved.</li>"
+        "<li>Short and long label searched on advanced 'Track Name' search.</li>"
+        "<li>Deleting/Adding selection criteria with [-][+] buttons in 'Advanced Search' should work.</li>"
+        "<li>Found track list shows only the first 100 tracks with warning to narrow search.  Larry suggests this could be done by pages of results in v2.0.</li>\n"
         "<li>Full descriptions of metadata items are indexed in simple search index (e.g. cell descriptions).</li>"
         "</ul></p>"
         "<p><b>Known Problems</b><ul>"
-        "<li>Search results should be cleared when switching between simple and advanced tabs (do we agree on that?)</li>"
-        "<li>Subtracks often come up with the wrong visibility (but saving visibility for subtracks does work)."
-        "<BR>QUESTION: Upon selecting with checkbox, what is correct default vis for any track?  Perhaps 'full' for wigs, 'pack' for others?</li>"
-        "<li>Too large of found track list results in slow scripts.</li>"
         "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found."
         "<BR>QUESTION: Is that a bug? REM that description search is NOT inherited. (* Suggestions below.)</li>"
         "</ul></p>"
         "<p><b>Suggested improvments:</b><ul>\n"
-        "<li>Only data tracks should be seen in found track list.  Found superTracks/composites should be converted into their children.</li>"
-        "<li>Configuring found tracks should be by pop-up dialog box.</li>"
-        "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.</li>"
-        "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites.</li>"
-        "<li>* 'Descrtiption' and 'Track Name' should be merged into a single search term.</li>"
+        "<li>The metadata values will not be white-listed, but it would be nice to have more descriptive text for them.  A short label added to cv.ra?</li>"
+        "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.  Jim suggests look and feel of hgTracks 'Configure Tracks...' list instead.</li>"
+        "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
         "<li>* 'Descrtiption' should be inherited by subtracks?</li>"
         "</ul></p>\n");
 
+hPrintf("</div"); // This div allows the clear button to empty it
 webEndSectionTables();
 }

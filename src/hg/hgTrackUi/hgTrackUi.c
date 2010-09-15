@@ -2176,7 +2176,6 @@ void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 {
 char *track = tdb->track;
 
-
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -2335,7 +2334,7 @@ else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track
     dgvUi(tdb);
 #ifdef USE_BAM
 else if (sameString(tdb->type, "bam"))
-    bamCfgUi(cart, tdb, track, NULL, FALSE);
+    bamCfgUi(cart, tdb, track, NULL, FALSE); // tim would like to see this boxed when at composite level: tdbIsComposite(tdb));
 #endif
 else if (tdb->type != NULL)
     {
@@ -2448,23 +2447,25 @@ if(tdbIsComposite(tdb))
     if(1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     }
-if(ajax && cartOptionalString(cart, "descriptionOnly"))
+if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
-    //printf("<table><tr valign='top'><td>");
-    char * html = tdb->html;
-    struct trackDb *thisTdb = tdb;
-    // FIXME: children need to get their parents filled in before this works!
-    while(html == NULL && html[0] != 0 && thisTdb->parent != NULL)
-        {
-        thisTdb = thisTdb->parent;
-        html = thisTdb->html;
-        }
-    if (html != NULL && html[0] != 0)
-        puts(html);
+    //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
+    if (tdb->html != NULL && tdb->html[0] != 0)
+        puts(tdb->html);
     else
-        puts("<h2>No description found.</h2>");
-    //printf("</td></table>");
-    cartRemove(cart,"descriptionOnly");
+        {
+        struct trackDb *tdbParent = tdb->parent;
+        for (;tdbParent && (tdbParent->html == NULL || tdbParent->html[0] == 0); tdbParent = tdbParent->parent )
+            ; // Get the first parent that has html
+        if (tdbParent != NULL && tdbParent->html != NULL && tdbParent->html[0])
+            {
+            printf("<h2 style='color:%s'>Retrieved from %s Track...</h2>\n",COLOR_DARKGREEN,tdbParent->shortLabel);
+            puts(tdbParent->html);
+            }
+        else
+            printf("<h2>No description found for: %s.</h2>",tdbParent?tdbParent->track:tdb->track);
+        }
+    cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
 
@@ -2502,10 +2503,18 @@ if (ct && sameString(tdb->type, "maf"))
     else
         {
         /* normal visibility control dropdown */
-        char *vis = hStringFromTv(tdb->visibility);
-        hTvDropDownClassVisOnly(tdb->track,
-            hTvFromString(cartUsualString(cart,tdb->track, vis)),
-            tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
+        enum trackVisibility vis = tdb->visibility;
+        boolean canPack = tdb->canPack;
+        if (ajax)
+            {
+            vis = tdbVisLimitedByAncestry(cart, tdb, vis, TRUE);  // ajax popups should show currently inherited visability
+            if (tdbIsCompositeChild(tdb))
+                canPack = TRUE;
+            }
+        else
+            vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
+        hTvDropDownClassVisOnly(tdb->track,vis,
+            canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
         }
 if (!ajax)
     {

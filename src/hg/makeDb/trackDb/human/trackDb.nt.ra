@@ -86,7 +86,8 @@ indelQueryInsert on
 showDiffBasesAllScales .
 showDiffBasesMaxZoom 100
 maxWindowToDraw 1000000
-subGroup1 sample Sample Han=Han Papuan=Papuan Yoruba=Yoruba San=San French=French
+# Using alphabetical prefixes, establish the same order as ntSssSnps codes:
+subGroup1 sample Sample a1San=San b2Yoruba=Yoruba c3Han=Han d4Papuan=Papuan e5French=French
 sortOrder sample=+
 dragAndDrop subTracks
 allButtonPair on
@@ -96,31 +97,31 @@ dimensions dimensionX=sample
     parent ntModernHumans
     shortLabel Han Seq
     longLabel Han (HGDP00778) Sequence Reads
-    subGroups sample=Han
+    subGroups sample=c3Han
 
     track bamMMS5
     parent ntModernHumans
     shortLabel Papuan Seq
     longLabel Papuan (HGDP00542) Sequence Reads
-    subGroups sample=Papuan
+    subGroups sample=d4Papuan
 
     track bamMMS6
     parent ntModernHumans
     shortLabel Yoruba Seq
     longLabel Yoruba (HGDP00927) Sequence Reads
-    subGroups sample=Yoruba
+    subGroups sample=b2Yoruba
 
     track bamMMS7
     parent ntModernHumans
     shortLabel San Seq
     longLabel San (HGDP01029) Sequence Reads
-    subGroups sample=San
+    subGroups sample=a1San
 
     track bamMMS8
     parent ntModernHumans
     shortLabel French Seq
     longLabel French (HGDP00521) Sequence Reads
-    subGroups sample=French
+    subGroups sample=e5French
 
 
 track ntMito

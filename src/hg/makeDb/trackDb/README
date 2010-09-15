@@ -128,7 +128,8 @@ The format of the type fields:
    Unique type for Repeat Masker tracks
 12. type sample [min] [max]
    A continuous value graphing type of track.
-   Becoming obsolete, replaced by the 'type wig' tracks.
+   Completely obsolete, replaced by the 'type wig' tracks.
+   And 'type wig' tracks are more efficient and accurate as 'type bigWig'
    [min] - optional minimum limit of data, default 0.  Used just for label.
    [max] - optional maximum limit of data, default 1000. Used just for label.
 13. type wigMaf <minVal> <maxVal>
@@ -196,6 +197,7 @@ The format of the type fields:
             when using this setting.
 
 14. type wig [lower] [upper]
+   Deprecated type, more efficient and accurate are 'type bigWig' tracks.
    Continuous value graphing track.
    [lower] - overall lower limit of the data, default 0.0
    [upper] - overall upper limit of the data, default 127.0
@@ -255,22 +257,22 @@ The format of the type fields:
 
     bigBed-specific optional field:
         denseCoverage maxVal
-    In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal 
+    In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal
     corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
     will be calculated from the data itself.
 
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other
     than substituting "bigWig" for "wig" in the type line, the same as the
-    "type wig" explained above.  The database loading procedure is 
+    "type wig" explained above.  The database loading procedure is
         hgBbiDbLink hg19 myLocalBigWig /gbdb/hg18/bbi/myLocalBigWig.bw
     which is equivalent to:
     hgsql hg19 -e 'drop table if exists myLocalBigWig; \
             create table myLocalBigWig (fileName varchar(255) not null); \
             insert into myLocalBigWig values
-        ("/gbdb/hg19/bbi/myLocalBigWig.bw");' 
+        ("/gbdb/hg19/bbi/myLocalBigWig.bw");'
     I believe this works even if the entry is a URL to a remote
-    bigWig file.   
+    bigWig file.
 
 19. type bam
     This uses a binary indexed file (which can be a URL) named in a database table.
@@ -279,12 +281,12 @@ The format of the type fields:
     same path plus the ".bai" suffix.
     BAM-specific settings:
     pairEndsByName <placeholder e.g. .>         # presence indicates paired-end alignments
-    pairSearchRange <N>                         # max distance between paired alignments, 
+    pairSearchRange <N>                         # max distance between paired alignments,
                                                 #   default 20,000 bases
     bamColorMode    strand|gray|tag|off         # coloring method, default is strand
     bamGrayMode     aliQual|baseQual|unpaired   # grayscale metric, default is aliQual
     bamColorTag     <XX>                        # optional tag for RGB color, default is "YC"
-    minAliQual      <N>                         # display only items with alignment quality 
+    minAliQual      <N>                         # display only items with alignment quality
                                                 #   at least N, default 0
     Additional general settings that may be useful to speed up display for extremely
     dense data e.g. next-gen sequencing reads: maxWindowToDraw, chromosomes (see below)
@@ -293,13 +295,13 @@ The format of the type fields:
     This type is used for transcription factors on multiple cell lines.  It displays
     the transcription factor on the left label, and the cell lines the factor is
     present in as one letter per cell line on the right.  The main table format is
-    bed 15, the same as used for microarray expression.  There is a second table 
+    bed 15, the same as used for microarray expression.  There is a second table
     required that describes the cell lines.  This is specified with the tag:
 	sourceTable <tableName>
     Use the program hgBedsToBedExp to create the tables from a collection of
     (simpler) bed's one for each txn factor/cell combination.
-    
-    
+
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -336,6 +338,7 @@ colorByStrand -   r,g,b r,g,b                 - specifies plus and minus strand 
                                               - this has no effect for elements w/out strand
 priority     -    a decimal number            - used to order this track
                                               - within this track group
+					      - if no priority line, hgTrackDb sets priority to 100
 chromosomes  -    comma separated list        - only these chroms have data
                                               - for this track, this track is
                                               - not shown on other chroms
@@ -352,6 +355,15 @@ scoreFilterByRange - on                       - Filter using both upper and lowe
 scoreFilterMax     - integer                  - deprecated.  Use scoreFilterLimits.
 noScoreFilter . - to turn off Ui options for bed 5+ tracks, I don't know
 		- what the . is for, but it always appears to be used.
+table           - mySQL table name            - Allows multiple tracks to use the same mySQL table.
+                                              - If omitted the mySQL table name is the same as the
+					      - track name.  Note that there must be at least one
+					      - track associated with the table where the track
+					      - name is the same as the table name, or the table
+					      - browser will have difficulties.
+configureByPopup - on, off                    - Default: on. If value is off, hgTracks does not use a modal dialog for hgTrackUi, but
+                                                instead always forces user to hgTrackUi page; this is useful for very
+                                                complicated config pages like dbSnp or multiz which do not work well in a modal dialog
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:
@@ -441,7 +453,7 @@ Some settings used by various tracks:
         (used chiefly by ENCODE)
     o origAssembly - prints out a message on the details page, indicating
         that the data was lifted from this assembly (used chiefly by ENCODE)
-    o release tag[,tag]*  where tag is public, beta, or alpha 
+    o release tag[,tag]*  where tag is public, beta, or alpha
         - restricts inclusion of a trackDb entry in the  table.  When a make
         is done in the trackDb directory, the hgTrackDb and tdbQuery tools
         parse the release tag status in response to the "-release=" option in
@@ -450,7 +462,7 @@ Some settings used by various tracks:
         is used. The alpha setting is used to avoid inadvertently changing the
         configuration of an existing public track when it is undergoing further
         development.  It provides a temporary, development-only version of the
-        trackDb entry. 
+        trackDb entry.
         TrackDb.ra entries marked 'release beta' are included in the trackDb
         table with 'make beta'.  This setting is for tracks that are staged for
         release by Q/A.
@@ -550,13 +562,13 @@ Some settings used by various tracks:
       by clustering or aggregating data found in other tracks.  This names a table
       that is in three column format - first the input track name, then the source
       name (cell line etc) if any, then the factor name if any.
-    o inputTracksSubgroupDisplay - used with inputTrackTable.  This contains a list 
+    o inputTracksSubgroupDisplay - used with inputTrackTable.  This contains a list
       of group types (just the left size of the var=val pairs in the subGroupN line of the parent)
       to display as columns in the details display table.
     o showSubtrackColorOnUi - used with tracks that include other tracks.  When UI shows
       a table of tracks and this is set, a small patch of color indicating the track color
       is part of the table.
-    o tableBrowser off [otherTable1 otherTable2] -- prevents this track from 
+    o tableBrowser off [otherTable1 otherTable2] -- prevents this track from
       appearing in hgTables.  If other tables are named after "off", they will be
       excluded in "All Tables" mode along with the track table.
 
@@ -702,7 +714,7 @@ With a composite track with or without multi-view, there are many settings that
 could be at the subtrack, view or composite level. The usual way of querying settings,
 trackDbSetting(), will look for the setting in the subtrack first, then in the view,
 and finally in the composite level.  In cases where one only wants the settings at a
-particular level, use trackDbLocalSetting() instead.   
+particular level, use trackDbLocalSetting() instead.
 
 Composite Track ADDITIONAL OPTIONS
 ----------------------------------
@@ -743,7 +755,7 @@ and signal 'wig'.  These views need different controls, though all signal
 subtracks may share the same controls (based upon subgroups).  This organization
 is achieved by inserting a "view" level of tracks in between the composite level and the
 subtracks.  Settings that are common to all tracks in a composite can be put at the
-composite level, settings that are common to all tracks in a view can be put in the view 
+composite level, settings that are common to all tracks in a view can be put in the view
 level, and individual track settings can be put at the lowest level.  In addition
 the composite parent track needs to have a specialized subGroup1 setting 'view' and
 view must be contained in the subGroup setting at the lowest level.   Example:
@@ -766,7 +778,7 @@ view must be contained in the subGroup setting at the lowest level.   Example:
 	   shortLabe Signals in Liver
 	   parent sigViewTrack
 	   subGroup view=Sig
-     
+
        track alnViewTrack
        view Aln
        shortLabel Alignments
@@ -781,8 +793,8 @@ view must be contained in the subGroup setting at the lowest level.   Example:
 	   shortLabe Signals in Liver
 	   parent alnViewTrack
 	   subGroup view=Aln
-     
-Note that the view level track needs to have a view tag.  There is some redundancy between 
+
+Note that the view level track needs to have a view tag.  There is some redundancy between
 information in the view track and the subGroup tag of the composite parent.  Apologies.  This
 is largely so that the same sorting machinery for non-view subGroups can be reused here.  In
 particular the value of the view tag needs to be the same as the right hand in the var=value pair
@@ -790,12 +802,12 @@ of the subGroup, and the same as the left hand side of the var=val pair in the s
 
 Each view (Sig, Aln) will be controlled by a separate drop down
 (hide,dense,...) and auxilary controls.  All subtracks for a given view must
-be of the same track type.  Each subtrack of a multi-view should have all the proper settings 
+be of the same track type.  Each subtrack of a multi-view should have all the proper settings
 for the subtrack type.
 
     MULTI-VIEW VISIBILITY DEFAULTS
     ------------------------------
-    The setting 
+    The setting
         viewUi on
     inside of a view if present will make the view's configuration settings displayed by default.
 
@@ -1049,3 +1061,58 @@ when the track is not in a super track.  (Note that a track can be
 configured to be viewable as a supertrack member or not -- it will
 only be part of a super track if the super track to which it refers
 is configured in the assembly trackDb).
+
+CONTAINER TRACKS
+================
+Container tracks are yet another way of grouping tracks together.  The top
+level container track includes a tag of the form
+    container <container-type>
+where currently the only container-type is "multiWig" which may only contain
+wig and bigWig tracks.   The advantage of using "container multiWig" instead
+of a composite track is that container multiWig supports the "aggregate" tag
+that allows multiple wiggle graphs to be drawn in the same vertical space.
+
+Here's an example of a container:
+
+    track wgEncodeRegMarkPromoter
+    container multiWig
+    shortLabel Promoter H3K4Me3
+    longLabel ENCODE Promoter Histone Mark (H3K4Me3) on 9 Cell Lines
+    type wig 0 30000
+    viewLimits 0:100
+    configurable on
+    visibility full
+    maxHeightPixels 100:30:11
+    aggregate transparentOverlay
+    showSubtrackColorOnUi on
+    windowingFunction mean
+    priority 1.4
+
+	track wgEncodeRegMarkPromoterGm12878
+	shortLabel Gm12878
+	longLabel Promoter Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 100593.50
+	color 255,128,128
+
+	track wgEncodeRegMarkPromoterH1hesc
+	shortLabel H1 ES
+	longLabel Promoter Histone Mark (H3K4Me3) on H1 cells from ENCODE
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 12434.00
+	color 255,212,128
+
+	track wgEncodeRegMarkEnhH3k4me3Hepg2
+	shortLabel HepG2
+	longLabel Promoter Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
+	parent wgEncodeRegMarkPromoter
+        type wig 0.00 4927.00
+	color 212,255,128
+
+Note that subtracks of a container use the "parent" tag to indicate the container they belong to,
+just as composite tracks do.  Other tags associated with a container are:
+    o aggregate - Allows the subtracks to be drawn on top of each other in the same vertical
+                  space.  Possible values are: none, transparentOverlay, solidOverlay
+    o showSubtrackColorOnUi on - Puts a small patch of color by the list of subtracks in
+                  the track UI page.
+

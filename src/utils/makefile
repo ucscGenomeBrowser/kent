@@ -153,7 +153,6 @@ BAD_DIRS= \
 	ccCpLock \
 	est2genomeToPsl \
 	geneStarts \
-	gtfToGenePred \
 	jimgrep \
 	jkShell \
 	dnsInfo \

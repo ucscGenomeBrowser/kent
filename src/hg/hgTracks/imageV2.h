@@ -4,15 +4,10 @@
 #define IMAGEV2_H
 
 // UNCOMMENT
-//   IMAGEv2_DRAG_REORDER to allow dragReorder
-//   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 //   CONTEXT_MENU to allow right-click funtionality
 //   IMAGEv2_DRAG_SCROLL and IMAGEv2_DRAG_SCROLL_SZ to allow dragScroll
-//   FLAT_TRACK_LIST (depends on IMAGEv2_DRAG_REORDER) to allow reordering of subtracks
-//   SUBTRACKS_HAVE_VIS (depends on FLAT_TRACK_LIST) to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
-
-#define IMAGEv2_DRAG_REORDER
-//#define USE_NAVIGATION_LINKS
+//   SUBTRACKS_HAVE_VIS (needed by CONTEXT_MENU or TRACK_SEARCH) to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
+//   USE_NAVIGATION_LINKS to use navigation links by image, rather than buttons at top
 
 // UNCOMMENT CONTEXT_MENU to allow right-click funtionality
 //#define CONTEXT_MENU
@@ -27,23 +22,15 @@
     #define IMAGEv2_SHORT_MAPITEMS
 #endif// defined(IMAGEv2_DRAG_SCROLL_SZ) && (IMAGEv2_DRAG_SCROLL_SZ > 1)
 
-// UNCOMMENT FLAT_TRACK_LIST to allow reordering of subtracks
-#ifdef IMAGEv2_DRAG_REORDER
-    #define FLAT_TRACK_LIST
-#endif//def IMAGEv2_DRAG_REORDER
-
 // UNCOMMENT SUBTRACKS_HAVE_VIS to allow vis setting in cart for subtrack to override composite->view->subtrack vis rules.
-#ifdef FLAT_TRACK_LIST
-    #include "searchTracks.h"
-    #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-        #define SUBTRACKS_HAVE_VIS
-    #endif
-#endif//def FLAT_TRACK_LIST
+#include "searchTracks.h"
+#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
+    #define SUBTRACKS_HAVE_VIS
+#endif
 
-// Support for guidelines as separate bg image (allowing dragScroll to move guidelines through centerLabels)
-#if defined(IMAGEv2_DRAG_REORDER) || defined(IMAGEv2_DRAG_SCROLL)
-    #define IMAGEv2_BG_IMAGE
-#endif// defined(IMAGEv2_DRAG_REORDER) || defined(IMAGEv2_DRAG_SCROLL)
+// UNCOMMENT  USE_NAVIGATION_LINKS for so far experimental UI changes to replace buttons at top with more streamlined links
+//#define USE_NAVIGATION_LINKS
+
 
 // CURRENT PROBLEMS:
 // o FIXED: some map items span both sideLabel and data!!
@@ -60,7 +47,6 @@ extern struct imgTrack *curImgTrack; // Make this global for now to avoid huge r
 //extern struct mapSet   *curMap;      // Make this global for now to avoid huge rewrite
 //extern struct mapItem  *curMapItem;  // Make this global for now to avoid huge rewrite
 
-#ifdef FLAT_TRACK_LIST
 /////////////////////////
 // FLAT TRACKS
 // A simplistic way of flattening the track list before building the image
@@ -76,18 +62,24 @@ struct flatTracks // List of tracks in image, flattened to promote subtracks
 
 void flatTracksAdd(struct flatTracks **flatTracks,struct track *track,struct cart *cart);
 /* Adds one track into the flatTracks list */
+
 int flatTracksCmp(const void *va, const void *vb);
 /* Compare to sort on flatTrack->order */
+
 void flatTracksSort(struct flatTracks **flatTracks);
 /* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
+
 void flatTracksFree(struct flatTracks **flatTracks);
 /* Frees all memory used to support flatTracks (underlying tracks are untouched) */
-#else//ifndef FLAT_TRACK_LIST
-#define flatTracksAdd(a,b,c)
-#define flatTracksSort(a)
-#define flatTracksSort(a)
-#endif//def FLAT_TRACK_LIST
 
+/////////////////////////
+// JSON support.  Eventually the whole imgTbl could be written out as JSON
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track);
+// Creates then successively adds trackDb settings to the jsonTdbSettingsString
+// Initially pass in NULL pointer to a dyString to properly begin building
+
+char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString);
+// Closes and returns the contents of the jsonTdbSettingsString
 
 /////////////////////////
 // IMAGEv2
@@ -123,8 +115,6 @@ void flatTracksFree(struct flatTracks **flatTracks);
 // image contains all information about an image file and associated map box
 /////////////////////////
 
-
-
 /////////////////////// Maps
 struct mapItem // IMAGEv2: single map item in an image map.
     {
@@ -137,6 +127,7 @@ struct mapItem // IMAGEv2: single map item in an image map.
     int bottomRightY;         // in pixels relative to image
     char *id;                 // id; used by js right-click code to figure out what to do with a map item (usually mapName)
     };
+
 struct mapSet // IMAGEv2: full map for image OR partial map for slice
     {
     char *name;               // to point an image to a map in HTML
@@ -144,27 +135,38 @@ struct mapSet // IMAGEv2: full map for image OR partial map for slice
     char *linkRoot;           // the common or static portion of the link for the entire image
     struct mapItem *items;    // list of items
     };
+
 struct mapSet *mapSetStart(char *name,struct image *img,char *linkRoot);
 /* Starts a map (aka mapSet) which is the seet of links and image locations used in HTML.
    Complete a map by adding items with mapItemAdd() */
+
 struct mapSet *mapSetUpdate(struct mapSet *map,char *name,struct image *img,char *linkRoot);
 /* Updates an existing map (aka mapSet) */
+
 struct mapItem *mapSetItemFind(struct mapSet *map,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY);
 /* Find a single mapItem based upon coordinates (within a pixel) */
+
 struct mapItem *mapSetItemUpdate(struct mapSet *map,struct mapItem *item,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Update an already existing mapItem */
+
 struct mapItem *mapSetItemAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Add a single mapItem to a growing mapSet */
+
 struct mapItem *mapSetItemUpdateOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Update or add a single mapItem */
+
 struct mapItem *mapSetItemFindOrAdd(struct mapSet *map,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Finds or adds the map item */
+
 void mapItemFree(struct mapItem **pItem);
 /* frees all memory assocated with a single mapItem */
+
 boolean mapItemConsistentWithImage(struct mapItem *item,struct image *img,boolean verbose);
 /* Test whether a map item is consistent with the image it is supposed to be for */
+
 boolean mapSetIsComplete(struct mapSet *map,boolean verbose);
 /* Tests the completeness and consistency of this map (mapSet) */
+
 void mapSetFree(struct mapSet **pMap);
 /* frees all memory (including items) assocated with a single mapSet */
 
@@ -180,20 +182,24 @@ struct image // IMAGEv2: single image which may have multiple imgSlices focused 
     int  height;              // in pixels
     struct mapSet *map;       // map assocated with this image (may be NULL)
     };
+
 struct image *imgCreate(char *gif,char *title,int width,int height);
 /* Creates a single image container.
    A map map be added with imgMapStart(),mapSetItemAdd() */
+
 struct mapSet *imgMapStart(struct image *img,char *name,char *linkRoot);
 /* Starts a map associated with an image. Map items can then be added to the returned pointer with mapSetItemAdd() */
+
 struct mapSet *imgGetMap(struct image *img);
 /* Gets the map associated with this image. Map items can then be added to the map with mapSetItemAdd() */
+
 void imgFree(struct image **pImg);
 /* frees all memory assocated with an image (including a map) */
 
 
 
 /////////////////////// Slices
-enum sliceType // IMAGEv2: currently 4
+enum sliceType
     {
     stUnknown=0,              // Invalid
     stData=1,                 // Data or track slice of an image
@@ -203,6 +209,7 @@ enum sliceType // IMAGEv2: currently 4
     stInvalid=5               // Invalid
     };
 #define stMaxSliceTypes stInvalid
+
 struct imgSlice // IMAGEv2: the portion of an image that is displayable for one track
     {
     struct imgSlice *next;    // slList
@@ -216,32 +223,50 @@ struct imgSlice // IMAGEv2: the portion of an image that is displayable for one 
     int  offsetX;             // offset from left (when img->width > slice->width)
     int  offsetY;             // offset from top (when img->height > slice->height)
     };
+
 struct imgSlice *sliceCreate(enum sliceType type,struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Creates of a slice which is a portion of an image.
    A slice specific map map be added with sliceMapStart(),mapSetItemAdd() */
+
 struct imgSlice *sliceUpdate(struct imgSlice *slice,enum sliceType type,struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* updates an already created slice */
+
 char *sliceTypeToString(enum sliceType type);
 /* Translate enum slice type to string */
+
 struct imgSlice *sliceAddLink(struct imgSlice *slice,char *link,char *title);
 /* Adds a slice wide link.  The link and map are mutually exclusive */
+
 struct mapSet *sliceMapStart(struct imgSlice *slice,char *name,char *linkRoot);
 /* Adds a slice specific map to a slice of an image. Map items can then be added to the returned pointer with mapSetItemAdd()*/
+
 struct mapSet *sliceGetMap(struct imgSlice *slice,boolean sliceSpecific);
 /* Gets the map associate with a slice which may be sliceSpecific or it may belong to the slices' image.
    Map items can then be added to the map returned with mapSetItemAdd() */
+
 struct mapSet *sliceMapFindOrStart(struct imgSlice *slice,char *name,char *linkRoot);
 /* Finds the slice specific map or starts it */
+
 struct mapSet *sliceMapUpdateOrStart(struct imgSlice *slice,char *name,char *linkRoot);
 /* Updates the slice specific map or starts it */
+
 boolean sliceIsConsistent(struct imgSlice *slice,boolean verbose);
 /* Test whether the slice and it's associated image and map are consistent with each other */
+
 void sliceFree(struct imgSlice **pSlice);
 /* frees all memory assocated with a slice (not including the image or a map belonging to the image) */
 
 
 
 /////////////////////// imgTracks
+enum centerLabelSeen
+    {
+    clUnknown=0,              // Invalid
+    clAlways=1,               // Default is always seen
+    clNowSeen=2,              // Conditionally and currently seen
+    clNotSeen=3               // Conditionally and currently unseen
+    };
+
 struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     {
     struct imgTrack *next;    // slList
@@ -252,40 +277,56 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     int  chromStart;          // Image start (absolute, not portal position)
     int  chromEnd;            // Image end (absolute, not portal position)
     boolean plusStrand;       // Image covers plus strand, not minus strand
-    boolean showCenterLabel;  // Initially display center label? TODO: Isn't this redundent with vis?
+    boolean hasCenterLabel;   // A track may have a center label but not show it
+    enum centerLabelSeen centerLabelSeen;  // Conditionally displayed center labels are always there but sometimes hidden
     boolean reorderable;      // Is this track reorderable (by drag and drop) ?
     int order;                // Image order: This keeps track of dragReorder
     enum trackVisibility vis; // Current visibility of track image
     struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
     };
+
 #define IMG_ANYORDER  -2
 #define IMG_FIXEDPOS  -1
 #define IMG_ORDEREND  1000
 #define IMG_ORDER_VAR "imgOrd"
-struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
+
+struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order);
 /* Starts an image track which will contain all image slices needed to render one track
    Must completed by adding slices with imgTrackAddSlice() */
-struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean showCenterLabel,enum trackVisibility vis,int order);
+
+struct imgTrack *imgTrackUpdate(struct imgTrack *imgTrack,struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order);
 /* Updates an already existing image track */
+
+#define imgTrackUpdateCenterLabelSeen(slice,seen) { (slice)->centerLabelSeen = (seen); }
+/* Center slices are occasionally unseen */
+
 int imgTrackOrderCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
+
 struct imgSlice *imgTrackSliceAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Adds slices to an image track.  Expected are types: stData, stButton, stSide and stCenter */
+
 struct imgSlice *imgTrackSliceGetByType(struct imgTrack *imgTrack,enum sliceType type);
 /* Gets a specific slice already added to an image track.  Expected are types: stData, stButton, stSide and stCenter */
+
 struct imgSlice *imgTrackSliceFindOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Find the slice or adds it */
+
 struct imgSlice *imgTrackSliceUpdateOrAdd(struct imgTrack *imgTrack,enum sliceType type, struct image *img,char *title,int width,int height,int offsetX,int offsetY);
 /* Updates the slice or adds it */
+
 struct mapSet *imgTrackGetMapByType(struct imgTrack *imgTrack,enum sliceType type);
 /* Gets the map assocated with a specific slice belonging to the imgTrack */
+
 int imgTrackAddMapItem(struct imgTrack *imgTrack,char *link,char *title,int topLeftX,int topLeftY,int bottomRightX,int bottomRightY, char *id);
 /* Will add a map item it an imgTrack's appropriate slice's map
    Since a map item may span slices, the imgTrack is in the best position to determine where to put the map item
    returns count of map items added, which could be 0, 1 or more than one if item spans slices
    NOTE: Precedence is given to first map item when adding items with same coordinates! */
+
 boolean imgTrackIsComplete(struct imgTrack *imgTrack,boolean verbose);
 /* Tests the completeness and consistency of this imgTrack (including slices) */
+
 void imgTrackFree(struct imgTrack **pImgTrack);
 /* frees all memory assocated with an imgTrack (including slices) */
 
@@ -315,34 +356,47 @@ struct imgBox // IMAGEv2: imageBox conatins all the definitions to draw an image
 struct imgBox *imgBoxStart(char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,int sideLabelWidth,int width);
 /* Starts an imgBox which should contain all info needed to draw the hgTracks image with multiple tracks
    The image box must be completed using imgBoxImageAdd() and imgBoxTrackAdd() */
+
 boolean imgBoxPortalDefine(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth,double imageMultiple);
 /* Defines the portal of the imgBox.  The portal is the initial viewable region when dragScroll is being used.
    the new chromStart,chromEnd and imgWidth are returned as OUTs, while the portal becomes the initial defined size
    returns TRUE if successfully defined as having a portal */
+
 boolean imgBoxPortalRemove(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth);
 /* Will redefine the imgBox as the portal dimensions and return the dimensions as OUTs.
    Returns TRUE if a portal was defined in the first place */
+
 boolean imgBoxPortalDimensions(struct imgBox *imgBox,int *chromStart,int *chromEnd,int *imgWidth,int *sideLabelWidth,int *portalStart,int *portalEnd,int *portalWidth,double *basesPerPixel);
 /* returns the imgBox portal dimensions in the OUTs  returns TRUE if portal defined */
+
 struct image *imgBoxImageAdd(struct imgBox *imgBox,char *gif,char *title,int width,int height,boolean backGround);
 /* Adds an image to an imgBox.  The image may be extended with imgMapStart(),mapSetItemAdd() */
+
 struct image *imgBoxImageFind(struct imgBox *imgBox,char *gif);
 /* Finds a specific image already added to this imgBox */
-struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
+
+struct imgTrack *imgBoxTrackAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order);
 /* Adds an imgTrack to an imgBox.  The imgTrack needs to be extended with imgTrackAddSlice() */
+
 struct imgTrack *imgBoxTrackFind(struct imgBox *imgBox,struct trackDb *tdb,char *name);
 /* Finds a specific imgTrack already added to this imgBox */
-struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
+
+struct imgTrack *imgBoxTrackFindOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order);
 /* Find the imgTrack, or adds it if not found */
-struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean showCenterLabel,int order);
+
+struct imgTrack *imgBoxTrackUpdateOrAdd(struct imgBox *imgBox,struct trackDb *tdb,char *name,enum trackVisibility vis,boolean hasCenterLabel,int order);
 /* Updates the imgTrack, or adds it if not found */
+
 void imgBoxTracksNormalizeOrder(struct imgBox *imgBox);
-/* This routine sorts the imgTracks then forces tight ordering, so new tracks wil go to the end */
+/* This routine sorts the imgTracks */
+
 int imgBoxDropEmpties(struct imgBox *imgBox);
 /* Empty imageTracks (without slices) is not an error but they should be dropped.
    returns remaining current track count */
+
 boolean imgBoxIsComplete(struct imgBox *imgBox,boolean verbose);
 /* Tests the completeness and consistency of an imgBox. */
+
 void imgBoxFree(struct imgBox **pImgBox);
 /* frees all memory assocated with an imgBox (including images and imgTracks) */
 

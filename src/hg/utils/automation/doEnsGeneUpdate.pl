@@ -727,16 +727,14 @@ if ($opt_vegaGene) {
     $vegaSpecies = "human" if ($db =~ m/^hg/);
     $vegaSpecies = "danio" if ($db =~ m/^danRer/);
     $vegaPep = "Mus_musculus.VEGA$ensVersion" if ($db =~ m/^mm/);
-    $vegaPep = "Homo_sapiens.VEGA" if ($db =~ m/^hg/);
+    $vegaPep = "Homo_sapiens.VEGA$ensVersion" if ($db =~ m/^hg/);
     $vegaPep = "Danio_rerio.VEGA$ensVersion" if ($db =~ m/^danRer/);
-}
-
-if ($opt_vegaGene) {
-  $ensGtfUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/gtf_file.gz";
-  $ensPepUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/pep/$vegaPep.$ensVersion.pep.all.fa.gz";
-  $ensMySqlUrl = "";
-  $ensVersionDateReference = `date "+%Y-%m-%d"`;
-  chomp $ensVersionDateReference;
+    $ensGtfUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/gtf_file.gz";
+    $ensGtfUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/gtf_human_rel$ensVersion.gz" if ($db =~ m/^hg/);;
+    $ensPepUrl = "ftp://ftp.sanger.ac.uk/pub/vega/$vegaSpecies/pep/$vegaPep.$ensVersion.pep.all.fa.gz";
+    $ensMySqlUrl = "";
+    $ensVersionDateReference = `date "+%Y-%m-%d"`;
+    chomp $ensVersionDateReference;
 } else {
   ($ensGtfUrl, $ensPepUrl, $ensMySqlUrl, $ensVersionDateReference) =
     &EnsGeneAutomate::ensGeneVersioning($db, $ensVersion );

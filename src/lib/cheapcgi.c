@@ -1469,7 +1469,7 @@ if(width==0)
 if (width < 65)
     width = 65;
 
-printf("<INPUT TYPE=TEXT  class='inputBox' name=\"%s\" style='width: %dpx' value=%15g",varName,width,initialVal);
+printf("<INPUT TYPE=TEXT class='inputBox' name=\"%s\" style='width: %dpx' value=%g",varName,width,initialVal);
 printf(" onChange='return validateFloat(this,%s,%s);'",(min?min:"\"null\""),(max?max:"\"null\""));
 if(title)
     printf(" title='%s'",title);
@@ -1679,6 +1679,33 @@ for (i=0; i<menuSize; ++i)
     }
 printf("</SELECT>\n");
 }
+
+void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
+    int count, char *selected, char *extra)
+/* Make a drop-down list with both text and values. */
+{
+int i;
+char *selString;
+assert(values != NULL && text != NULL);
+if (selected == NULL)
+    selected = values[0];
+printf("<SELECT");
+if (name)
+    printf(" NAME='%s'", name);
+if (extra)
+    printf("%s", extra);
+printf(">\n");
+for (i=0; i<count; ++i)
+    {
+    if (sameWord(values[i], selected))
+        selString = " SELECTED";
+    else
+        selString = "";
+    printf("<OPTION%s value='%s'>%s</OPTION>\n", selString, values[i], text[i]);
+    }
+printf("</SELECT>\n");
+}
+
 
 void cgiMakeHiddenVarWithExtra(char *varName, char *string,char *extra)
 /* Store string in hidden input for next time around. */

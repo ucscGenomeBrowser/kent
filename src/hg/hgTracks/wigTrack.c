@@ -849,7 +849,7 @@ for (x1 = 0; x1 < width; ++x1)
 
 	if (vis == tvFull || vis == tvPack)
 	    {
-#define scaleHeightToPixels(val) (scaleFactor * (graphUpperLimit - (val)) + yOff)
+#define scaleHeightToPixels(val) (min(BIGNUM,(scaleFactor * (graphUpperLimit - (val)) + yOff)))
 	    if (lineBar == wiggleGraphBar)
 		{
 		if (whiskers)
@@ -876,9 +876,9 @@ for (x1 = 0; x1 < width; ++x1)
 		        if (((zeroPos-yOff)+darkHeight) == 0)
 			    darkHeight += 1;	  // top pixel special case
 			hvGfxBox(hvg, x,zeroPos,1, darkHeight, drawColor);
-			hvGfxBox(hvg, x, zeroPos+darkHeight, 1, mediumHeight-darkHeight, 
+			hvGfxBox(hvg, x, zeroPos+darkHeight, 1, mediumHeight-darkHeight,
 				mediumColor);
-			hvGfxBox(hvg, x, zeroPos+mediumHeight,1, lightHeight-mediumHeight, 
+			hvGfxBox(hvg, x, zeroPos+mediumHeight,1, lightHeight-mediumHeight,
 				lightColor);
 			}
 		    else
@@ -887,7 +887,7 @@ for (x1 = 0; x1 < width; ++x1)
 			 * of the history.  Originally it drew from the baseline
 			 * up to the max first in the lightest color, then from the
 			 * baseline to the mean+std in medium color, and finally
-			 * from baseline to mean in dark color.  This ended up 
+			 * from baseline to mean in dark color.  This ended up
 			 * drawing the same pixels up to three times which messed
 			 * things up in transparent overlay mode.   The code was
 			 * refactored to accomplish this without having to worry
@@ -920,7 +920,7 @@ for (x1 = 0; x1 < width; ++x1)
 			boxHeight = max(1,zeroPos-scaledMax);
 			int lightTop = scaledMax, lightHeight = boxHeight;
 
-			/* Draw, making sure not to overwrite pixels since 
+			/* Draw, making sure not to overwrite pixels since
 			 * would mess up transparent drawing. */
 			hvGfxBox(hvg,x,darkTop,1, darkHeight, drawColor);
 			hvGfxBox(hvg, x, mediumTop, 1, mediumHeight-darkHeight, mediumColor);
@@ -1080,10 +1080,8 @@ if (tg->mapsSelf)
 #endif /* GBROWSE */
 	itemName = cloneString(tg->track);
 
-#ifdef FLAT_TRACK_LIST
-    // Don't bother if we are flat, imgV2, dense and a child.
+    // Don't bother if we are imageV2 and a dense child.
     if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
-#endif//def FLAT_TRACK_LIST
     mapBoxHc(hvg, seqStart, seqEnd, xOff, yOff, width, tg->height, tg->track,
             itemName, NULL);
     freeMem(itemName);
@@ -1123,7 +1121,7 @@ return usingDataSpan;
 
 void wigDrawPredraw(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width,
-	MgFont *font, Color color, enum trackVisibility vis, 
+	MgFont *font, Color color, enum trackVisibility vis,
 	struct preDrawContainer *preDrawList,
 	int preDrawZero, int preDrawSize, double *retGraphUpperLimit, double *retGraphLowerLimit)
 /* Draw once we've figured out predraw... */
@@ -1321,14 +1319,22 @@ for (wi = tg->items; wi != NULL; wi = wi->next)
 	/*	let's check end point screen coordinates.  If they are
  	 *	the same, then this entire data block lands on one pixel,
  	 *	no need to walk through it, just use the block's specified
- 	 *	max/min.  It is OK if these end up + or -, we do want to
+ 	 *	max/min.  It is OK if these end up + or - values, we do want to
  	 *	keep track of pixels before and after the screen for
- 	 *	later smoothing operations
+ 	 *	later smoothing operations.
 	 */
-	x1 = (wi->start - seqStart) * pixelsPerBase;
-	x2 = ((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
+double x1d = (double)(wi->start - seqStart) * pixelsPerBase;
+	x1 = round(x1d);
+double x2d = (double)((wi->start+(wi->count * usingDataSpan))-seqStart) * pixelsPerBase;
+	x2 = round(x2d);
 
-	if (x2 > x1)
+        /* this used to be if (x2 > x1) which often caused reading of blocks
+	 * when they were merely x2 = x1 + 1 due to rounding errors as
+	 * they became integers.  This double comparison for something over
+	 * 0.5 will account for rounding errors that are really small, but
+	 * still handle a slipping window size as it walks across the screen
+	 */
+	if ((x2d - x1d) > 0.5)
 	    {
 	    unsigned char *readData;	/* the bytes read in from the file */
 	    lseek(wibFH, wi->offset, SEEK_SET);
@@ -1410,7 +1416,7 @@ freeMem(preDraw);
 void wigLeftAxisLabels(struct track *tg, int seqStart, int seqEnd,
 	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
 	boolean withCenterLabels, MgFont *font, Color color,
-	enum trackVisibility vis, char *shortLabel, 
+	enum trackVisibility vis, char *shortLabel,
 	double graphUpperLimit, double graphLowerLimit, boolean showNumbers)
 /* Draw labels on left for a wiggle-type track. */
 {
@@ -1550,9 +1556,9 @@ void wigLeftLabels(struct track *tg, int seqStart, int seqEnd,
 	enum trackVisibility vis)
 /*	drawing left labels	*/
 {
-wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels, 
+wigLeftAxisLabels(tg, seqStart, seqEnd, hvg, xOff, yOff, width, height, withCenterLabels,
 	font, color, vis, tg->shortLabel, tg->graphUpperLimit, tg->graphLowerLimit, TRUE);
-}	
+}
 
 
 struct wigCartOptions *wigCartOptionsNew(struct cart *cart, struct trackDb *tdb, int wordCount, char *words[])

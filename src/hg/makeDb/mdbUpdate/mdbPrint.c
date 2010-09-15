@@ -137,7 +137,7 @@ errAbort(
   );
 }
 
-void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *varsToSelect,char *varsToUpdate)
+static void mdbObjPrintUpdateLines(struct mdbObj **mdbObjs,char *dbToUpdate,char *tableToUpdate, char *varsToSelect,char *varsToUpdate)
 // prints mdbUpdate lines to allow taking vars from one db to another (sorts mdbObjs so pass pointer)
 // Specialty print for importing vars from one db or table to another
 {
@@ -182,7 +182,7 @@ if (updExpId)
 // For each passed in obj, write an mdbUpdate statement
 struct mdbObj *mdbObj = NULL;
 struct dyString *thisSelection = newDyString(256);
-char *lastSelection = NULL;
+struct dyString *lastSelection = newDyString(256);
 for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
     {
     if (mdbObj->obj == NULL || mdbObj->deleteThis)
@@ -212,9 +212,10 @@ for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
         }
 
     // Don't bother making another mdpUpdate line if selection is the same.
-    if (lastSelection != NULL && sameString(lastSelection,dyStringContents(thisSelection)))
+    if (dyStringLen(lastSelection) > 0 && sameString(dyStringContents(lastSelection),dyStringContents(thisSelection)))
         continue;
-    lastSelection = cloneString(dyStringContents(thisSelection));
+    dyStringClear(lastSelection);
+    dyStringAppend(lastSelection,dyStringContents(thisSelection));
 
     printf("mdbUpdate %s table=%s %s",dbToUpdate,tableToUpdate,dyStringContents(thisSelection));
 
@@ -240,11 +241,10 @@ for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
     printf("\" -test\n"); // Always test first
     }
 dyStringFree(&thisSelection);
-if(lastSelection != NULL)
-    freeMem(lastSelection);
+dyStringFree(&lastSelection);
 }
 
-void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars)
+static void mdbObjPrintInsertToExperimentsTable(struct mdbObj **mdbObjs,char *expTableName, char *expDefiningVars)
 // prints insert statements for the experiments table to backfill experiments submitted before the experiments table existed
 // Specialty prints for limited puropse
 {
@@ -271,8 +271,8 @@ int ix=0;
 // For each passed in obj, write an insert into expTable statement
 struct mdbObj *mdbObj = NULL;
 struct dyString *varNames = newDyString(256);
-struct dyString *varVals = newDyString(256);
-char *lastVals = NULL;
+struct dyString *varVals  = newDyString(256);
+struct dyString *lastVals = newDyString(256);
 for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
     {
     if (mdbObj->obj == NULL || mdbObj->deleteThis)
@@ -305,17 +305,17 @@ for (mdbObj=*mdbObjs; mdbObj!=NULL; mdbObj=mdbObj->next)
         }
 
     // Don't bother making another insert statment if selection is the same.
-    if (lastVals != NULL && sameString(lastVals,dyStringContents(varVals)))
+    if (dyStringLen(lastVals) > 0 && sameString(dyStringContents(lastVals),dyStringContents(varVals)))
         continue;
-    lastVals = cloneString(dyStringContents(varVals));
+    dyStringClear(lastVals);
+    dyStringAppend(lastVals,dyStringContents(varVals));
 
     printf("INSERT INTO %s (%s) VALUES (%s);\n",expTableName,dyStringContents(varNames),dyStringContents(varVals));
 
     }
 dyStringFree(&varNames);
 dyStringFree(&varVals);
-if(lastVals != NULL)
-    freeMem(lastVals);
+dyStringFree(&lastVals);
 }
 
 int main(int argc, char *argv[])

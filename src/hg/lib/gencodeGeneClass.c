@@ -8,15 +8,20 @@
 #include "jksql.h"
 #include "gencodeGeneClass.h"
 
-static char const rcsid[] = "$Id: gencodeGeneClass.c,v 1.2 2005/09/20 22:17:33 baertsch Exp $";
+static char const rcsid[] = "$Id:$";
 
 void gencodeGeneClassStaticLoad(char **row, struct gencodeGeneClass *ret)
 /* Load a row from gencodeGeneClass table into ret.  The contents of ret will
  * be replaced at the next call to this function. */
 {
 
-ret->name = row[0];
-ret->class = row[1];
+ret->geneId = row[0];
+ret->name = row[1];
+ret->transcriptType = row[2];
+ret->level = sqlSigned(row[3]);
+ret->class = row[4];
+ret->ottGeneId = row[5];
+ret->ottTranscriptId = row[6];
 }
 
 struct gencodeGeneClass *gencodeGeneClassLoad(char **row)
@@ -26,8 +31,13 @@ struct gencodeGeneClass *gencodeGeneClassLoad(char **row)
 struct gencodeGeneClass *ret;
 
 AllocVar(ret);
-ret->name = cloneString(row[0]);
-ret->class = cloneString(row[1]);
+ret->geneId = cloneString(row[0]);
+ret->name = cloneString(row[1]);
+ret->transcriptType = cloneString(row[2]);
+ret->level = sqlSigned(row[3]);
+ret->class = cloneString(row[4]);
+ret->ottGeneId = cloneString(row[5]);
+ret->ottTranscriptId = cloneString(row[6]);
 return ret;
 }
 
@@ -37,7 +47,7 @@ struct gencodeGeneClass *gencodeGeneClassLoadAll(char *fileName)
 {
 struct gencodeGeneClass *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[7];
 
 while (lineFileRow(lf, row))
     {
@@ -55,7 +65,7 @@ struct gencodeGeneClass *gencodeGeneClassLoadAllByChar(char *fileName, char chop
 {
 struct gencodeGeneClass *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[2];
+char *row[7];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -67,66 +77,6 @@ slReverse(&list);
 return list;
 }
 
-struct gencodeGeneClass *gencodeGeneClassLoadByQuery(struct sqlConnection *conn, char *query)
-/* Load all gencodeGeneClass from table that satisfy the query given.  
- * Where query is of the form 'select * from example where something=something'
- * or 'select example.* from example, anotherTable where example.something = 
- * anotherTable.something'.
- * Dispose of this with gencodeGeneClassFreeList(). */
-{
-struct gencodeGeneClass *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = gencodeGeneClassLoad(row);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-return list;
-}
-
-void gencodeGeneClassSaveToDb(struct sqlConnection *conn, struct gencodeGeneClass *el, char *tableName, int updateSize)
-/* Save gencodeGeneClass as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size
- * of a string that would contain the entire query. Arrays of native types are
- * converted to comma separated strings and loaded as such, User defined types are
- * inserted as NULL. Note that strings must be escaped to allow insertion into the database.
- * For example "autosql's features include" --> "autosql\'s features include" 
- * If worried about this use gencodeGeneClassSaveToDbEscaped() */
-{
-struct dyString *update = newDyString(updateSize);
-dyStringPrintf(update, "insert into %s values ( '%s','%s')", 
-	tableName,  el->name,  el->class);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-}
-
-void gencodeGeneClassSaveToDbEscaped(struct sqlConnection *conn, struct gencodeGeneClass *el, char *tableName, int updateSize)
-/* Save gencodeGeneClass as a row to the table specified by tableName. 
- * As blob fields may be arbitrary size updateSize specifies the approx size.
- * of a string that would contain the entire query. Automatically 
- * escapes all simple strings (not arrays of string) but may be slower than gencodeGeneClassSaveToDb().
- * For example automatically copies and converts: 
- * "autosql's features include" --> "autosql\'s features include" 
- * before inserting into database. */ 
-{
-struct dyString *update = newDyString(updateSize);
-char  *name, *class;
-name = sqlEscapeString(el->name);
-class = sqlEscapeString(el->class);
-
-dyStringPrintf(update, "insert into %s values ( '%s','%s')", 
-	tableName,  name,  class);
-sqlUpdate(conn, update->string);
-freeDyString(&update);
-freez(&name);
-freez(&class);
-}
-
 struct gencodeGeneClass *gencodeGeneClassCommaIn(char **pS, struct gencodeGeneClass *ret)
 /* Create a gencodeGeneClass out of a comma separated string. 
  * This will fill in ret if non-null, otherwise will
@@ -136,8 +86,13 @@ char *s = *pS;
 
 if (ret == NULL)
     AllocVar(ret);
+ret->geneId = sqlStringComma(&s);
 ret->name = sqlStringComma(&s);
+ret->transcriptType = sqlStringComma(&s);
+ret->level = sqlSignedComma(&s);
 ret->class = sqlStringComma(&s);
+ret->ottGeneId = sqlStringComma(&s);
+ret->ottTranscriptId = sqlStringComma(&s);
 *pS = s;
 return ret;
 }
@@ -149,8 +104,12 @@ void gencodeGeneClassFree(struct gencodeGeneClass **pEl)
 struct gencodeGeneClass *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->geneId);
 freeMem(el->name);
+freeMem(el->transcriptType);
 freeMem(el->class);
+freeMem(el->ottGeneId);
+freeMem(el->ottTranscriptId);
 freez(pEl);
 }
 
@@ -171,11 +130,29 @@ void gencodeGeneClassOutput(struct gencodeGeneClass *el, FILE *f, char sep, char
 /* Print out gencodeGeneClass.  Separate fields with sep. Follow last field with lastSep. */
 {
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->geneId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->name);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->transcriptType);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+fprintf(f, "%d", el->level);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->class);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->ottGeneId);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->ottTranscriptId);
 if (sep == ',') fputc('"',f);
 fputc(lastSep,f);
 }

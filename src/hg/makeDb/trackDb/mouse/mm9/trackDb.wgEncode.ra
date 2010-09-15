@@ -1,6 +1,6 @@
 # $Header: /projects/compbio/cvsroot/kent/src/hg/makeDb/trackDb/mouse/mm9/trackDb.wgEncode.ra,v 1.5 2010/05/25 18:28:25 vsmalladi Exp $
 
 #Tracks to be included
-include trackDb.wgEncodeSydhHist.ra
-include trackDb.wgEncodeSydhTfbs.ra
-include trackDb.wgEncodeUwDnase.ra
+include wgEncodeSydhHistone.ra
+include wgEncodeSydhTfbs.ra
+include wgEncodeUwDnase.ra

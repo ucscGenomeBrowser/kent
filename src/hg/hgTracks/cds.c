@@ -74,9 +74,6 @@ if (zoomed)
     int x1, x2, w;
     x1 = round((double)(chromStart-winStart)*scale) + xOff;
     x2 = round((double)(chromEnd-winStart)*scale) + xOff;
-    w = x2-x1;
-    if (w < 1)
-        w = 1;
     if (x2 >= maxPixels)
         x2 = maxPixels - 1;
     w = x2-x1;
@@ -93,9 +90,14 @@ if (zoomed)
         {
         int thisX,thisX2;
         char c[2];
-        for (i=0; i<strlen(text); i++)
+	c[1] = '\0';
+	int iMin = max(0, (winStart-chromStart));
+	int iMax = min((chromEnd-chromStart), (winEnd-chromStart));
+        for (i=iMin; i<iMax; i++)
             {
-            sprintf(c,"%c",text[i]);
+	    if (text[i] == ' ')
+		continue;
+            c[0] = text[i];
             thisX = round((double)(chromStart+i-winStart)*scale) + xOff;
             thisX2 = round((double)(chromStart+1+i-winStart)*scale) + xOff;
             hvGfxTextCentered(hvg, thisX, y, thisX2-thisX, height,

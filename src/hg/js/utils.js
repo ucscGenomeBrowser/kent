@@ -411,18 +411,17 @@ function validateFloat(obj,min,max)
     }
 }
 
-function metadataShowHide(tableName)
+function metadataShowHide(tableName,showLonglabel,showShortLabel)
 {
 // Will show subtrack specific configuration controls
 // Config controls not matching name will be hidden
     var divit = $("#div_"+tableName+"_meta");
-    if($(divit).css('display') == 'none')
+    if($(divit).css('display') == 'none') {
         $("#div_"+tableName+"_cfg").hide();  // Hide any configuration when opening metadata
-    var htm = $(divit).html();
-    // Seems to be faster if this undisplayed junk is commented out.
-    if(htm.substring(0,4) == "<!--") {
-        htm = htm.substring(4,htm.length-7);
-        $(divit).html(htm);
+
+        if($(divit).find('table').length == 0) {
+            lookupMetadata(tableName,showLonglabel,showShortLabel);
+        }
     }
     $(divit).toggle();  // jQuery hide/show
     return false;
@@ -469,10 +468,106 @@ function warn(msg)
         alert(msg);
     else {
         $( warnList ).append('<li>'+msg+'</li>');
-        showWarnBox();
+        if(showWarnBox != undefined)
+            showWarnBox();
+        else
+            alert(msg);
     }
 }
 
+function cgiBooleanShadowPrefix()
+// Prefix for shadow variable set with boolean variables.
+// Exact copy of code in cheapcgi.c
+{
+    return "boolshad.";
+}
+
+function getAllVars(obj,subtrackName)
+{
+// Returns a hash for all inputs and selects in an obj.
+// If obj is undefined then obj is document!
+    var urlData = new Object();
+    if($(obj) == undefined)
+        obj = $('document');
+    var inp = $(obj).find('input');
+    var sel = $(obj).find('select');
+    //warn("obj:"+$(obj).attr('id') + " inputs:"+$(inp).length+ " selects:"+$(sel).length);
+    $(inp).filter('[name]:enabled').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if($(this).attr('type') == 'checkbox') {
+            name = cgiBooleanShadowPrefix() + name;
+            val = $(this).attr('checked') ? 1 : 0;
+        }
+        if(name != undefined && name != "Submit" && val != undefined) {
+            urlData[name] = val;
+        }
+    });
+    $(sel).filter('[name]:enabled').each(function (i) {
+        var name  = $(this).attr('name');
+        var val = $(this).val();
+        if(name != undefined && val != undefined) {
+            if(subtrackName != undefined && name == subtrackName) {
+                if(val == 'hide') {
+                   urlData[name+"_sel"] = 0;    // Can't delete "_sel" because default takes over
+                   urlData[name]        = "[]";  // can delete vis because subtrack vis should be inherited.
+                } else {
+                    urlData[name+"_sel"] = 1;
+                    urlData[name]        = val;
+                }
+            } else
+                urlData[name] = val;
+        }
+    });
+    return urlData;
+}
+
+function setIdRemoveName(obj)
+{ // This function removes the name of an obj and sets it as the id.  This is very useful
+  // to override forms submitting named inputs and instead setCartVarFromObjId() can be used selectively
+    var id = $(obj).attr('name');
+    if(id != undefined) {
+        $(obj).attr('id',id);
+        $(obj).removeAttr('name');
+    }
+    //warn($(obj).attr('id')+'='+$(obj).val()+" name:"+$(obj).attr('name'));
+}
+
+
+function varHashChanges(newVars,oldVars)
+{
+// Returns a hash of all vars that are changed between old and new hash.  New vars not found in old are changed.
+    var changedVars = new Object();
+    for (var newVar in newVars) {
+        if(oldVars[newVar] == null || oldVars[newVar] != newVars[newVar])
+            changedVars[newVar] = newVars[newVar];
+    }
+    return changedVars;
+}
+
+function varHashToQueryString(varHash)
+{
+// return a CGI QUERY_STRING for name/vals in given object
+    var retVal = "";
+    var count = 0;
+    for (var aVar in varHash) {
+        if(count++ > 0) {
+            retVal += "&";
+        }
+        // XXXX encode var=val ?
+        retVal += aVar + "=" + varHash[aVar];
+    }
+    return retVal;
+}
+
+function getAllVarsAsUrlData(obj)
+{
+// Returns a string in the form of var1=val1&var2=val2... for all inputs and selects in an obj
+// If obj is undefined then obj is document!
+    return varHashToQueryString(getAllVars(obj));
+}
+
+/*
 function popupBox(popit, content, popTitle)
 {
 // Kicks off a Modal Dialog for the provided content.
@@ -520,6 +615,7 @@ function popupBox(popit, content, popTitle)
     jQuery('body').css('cursor', '');
     $(popit).dialog('open');
 }
+*/
 
 function embedBoxOpen(boxit, content, reenterable) // 4 extra STRING Params: boxWidth, boxTitle, applyFunc, applyName
 {
@@ -624,6 +720,26 @@ function getHgsid()
     return hgsid;
 }
 
+function getDb()
+{
+    var db = document.getElementsByName("db");
+    if(db == undefined || db.length == 0)
+        {
+        db = $("#db");
+        if(db == undefined || db.length == 0)
+            return ""; // default?
+        }
+    return db[0].value;
+}
+
+function getTrack()
+{
+    var track = $("#track");
+    if(track == undefined || track.length == 0)
+        return ""; // default?
+    return track[0].value;
+}
+
 function Rectangle()
 {
 // Rectangle object constructor:
@@ -636,12 +752,17 @@ function Rectangle()
         this.endX = arguments[1];
         this.startY = arguments[2];
         this.endY = arguments[3];
-    } else {
+    } else if(arguments.length > 0)  { 
         var coords = arguments[0].split(",");
         this.startX = coords[0];
         this.endX = coords[2];
         this.startY = coords[1];
         this.endY = coords[3];
+    } else { // what else to do?
+        this.startX = 0;
+        this.endX = 100;
+        this.startY = 0;
+        this.endY = 100;
     }
 }
 
@@ -695,6 +816,34 @@ function getSizeFromCoordinates(position)
 var gWaitFuncArgs = [];
 var gWaitFunc;
 
+function waitMaskClear()
+{ // Clears the waitMask
+    var  waitMask = $('#waitMask');
+    if( waitMask != undefined )
+        $(waitMask).hide();
+}
+
+function waitMaskSetup(timeOutInMs)
+{ // Sets up the waitMask to block page manipulation until cleared
+
+    // Find or create the waitMask (which masks the whole page)
+    var  waitMask = $('#waitMask');
+    if( waitMask == undefined || waitMask.length != 1) {
+        // create the waitMask
+        $("body").append("<div id='waitMask' class='waitMask');'></div>");
+        waitMask = $('#waitMask');
+        // Special for IE
+        if ($.browser.msie)
+            $(waitMask).css('filter','alpha(opacity= 0)');
+    }
+    $(waitMask).css('display','block');
+
+    // Things could fail, so always have a timeout.
+    if(timeOutInMs == undefined || timeOutInMs <=0)
+        timeOutInMs = 5000; // Don't ever leave this as infinite
+    setTimeout('waitMaskClear();',timeOutInMs); // Just in case
+}
+
 function _launchWaitOnFunction()
 { // should ONLY be called by waitOnFunction()
   // Launches the saved function
@@ -728,7 +877,7 @@ function _launchWaitOnFunction()
         }
     }
     // Now we can get rid of the wait cursor
-    $('#waitMask').css('display','none');
+    waitMaskClear();
 }
 
 function waitOnFunction(func)
@@ -742,17 +891,7 @@ function waitOnFunction(func)
         return false;
     }
 
-    // Find or create the waitMask (which masks the whole page)
-    var  waitMask = $('#waitMask');
-    if( waitMask == undefined || waitMask.length != 1) {
-        // create the waitMask
-        $("body").append("<div id='waitMask' class='waitMask');'></div>");
-        waitMask = $('#waitMask');
-        // Special for IE
-        if ($.browser.msie)
-            $(waitMask).css('filter','alpha(opacity= 0)');
-    }
-    $(waitMask).css('display','block');
+    waitMaskSetup(5000);  // Find or create the waitMask (which masks the whole page) but gives up after 5sec
 
     // Special if the first var is a button that can visually be inset
     if(arguments.length > 1 && arguments[1].type != undefined) {
@@ -769,4 +908,31 @@ function waitOnFunction(func)
 
     setTimeout('_launchWaitOnFunction();',50);
 
+}
+
+function showLoadingImage(id)
+{
+// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
+// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
+    var loadingId = id + "LoadingOverlay";
+    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
+    overlay.appendTo("body");
+    overlay.css("top", $('#'+ id).position().top);
+    var divLeft = $('#'+ id).position().left + 2;
+    overlay.css("left",divLeft);
+    var width = $('#'+ id).width() - 5;
+    var height = $('#'+ id).height();
+    overlay.width(width);
+    overlay.height(height);
+    overlay.css("background", "white");
+    overlay.css("opacity", 0.75);
+    var imgLeft = (width / 2) - 110;
+    var imgTop = (height / 2 ) - 10;
+    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
+    return loadingId;
+}
+
+function hideLoadingImage(id)
+{
+    $('#' + id).remove();
 }

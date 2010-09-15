@@ -617,6 +617,15 @@ identifier wgEncodeGencodeClassesV4
     hg19.wgEncodeGencodeAutoV4.name unique
     hg19.wgEncodeGencodeManualV4.name unique
     hg19.wgEncodeGencodePolyaV4.name unique
+    hg19.wgEncodeGencode2wayConsPseudoV4.name unique
+
+identifier wgEncodeGencodeYalePseudoV4
+"Link together Gencode gene model and possible pseudogenes for May 2010 Data Version"
+    hg19.wgEncodeGencodeYalePseudoV4.name
+    hg19.wgEncodeGencodeAutoV4.name unique
+    hg19.wgEncodeGencodeManualV4.name unique
+    hg19.wgEncodeGencodePolyaV4.name unique
+    panTro2.wgEncodeNhgriBip.name unique
 
 identifier wgEncodeGencodeClassesV3Hg19
 "Link together Gencode gene model (Known) and class for July 2009 Data Version"
@@ -3342,6 +3351,7 @@ tablesIgnored $hg
     cnpSharpSampleCount
     cnpSharpSamples
     cnpTuzun
+    darned
     delConrad
     delConrad2
     delHinds

@@ -315,6 +315,10 @@ void cgiMakeDropListWithVals(char *name, char *menu[], char *values[],
 void cgiMakeDropListFull(char *name, char *menu[], char *values[], int menuSize, char *checked, char *extraAttribs);
 /* Make a drop-down list with names and values. */
 
+void cgiDropDownWithTextValsAndExtra(char *name, char *text[], char *values[],
+    int count, char *selected, char *extra);
+/* Make a drop-down list with both text and values. */
+
 void cgiMakeMultList(char *name, char *menu[], int menuSize, struct slName *checked, int length);
 /* Make a list of names which can have multiple selections.
  * Same as drop-down list except "multiple" is added to select tag */

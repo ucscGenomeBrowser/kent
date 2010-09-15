@@ -22,6 +22,8 @@ var originalImgTitle;
 var autoHideSetting = true; // Current state of imgAreaSelect autoHide setting
 var selectedMenuItem;       // currently choosen context menu item (via context menu).
 var browser;                // browser ("msie", "safari" etc.)
+var mapIsUpdateable = true;
+var currentMapItem;
 
 function initVars(img)
 {
@@ -99,7 +101,7 @@ function setPosition(position, size)
 // We assume size has already been commified.
 // Either position or size may be null.
     if(position) {
-        // XXXX There are multiple tags with name == "position":^(
+        // There are multiple tags with name == "position" (one in TrackHeaderForm and another in TrackForm).
 	var tags = document.getElementsByName("position");
 	for (var i = 0; i < tags.length; i++) {
 	    var ele = tags[i];
@@ -109,14 +111,6 @@ function setPosition(position, size)
     if(size) {
         $('#size').text(size);
     }
-}
-
-function getDb()
-{
-    var db = document.getElementsByName("db");
-    if(db == undefined || db.length == 0)
-        return undefined;
-    return db[0].value;
 }
 
 function checkPosition(img, selection)
@@ -252,6 +246,14 @@ $(window).load(function () {
         // Handle the fact that (as of 1.3.1), jQuery.browser reports "safari" when the browser is in fact Chrome.
         browser = "chrome";
     }
+
+    // Safari has the following bug: if we update the hgTracks map dynamically, the browser ignores the changes (even
+    // though if you look in the DOM the changes are there); so we have to do a full form submission when the
+    // user changes visibility settings or track configuration.
+    //
+    // Chrome used to have this problem too, but this  problem seems to have gone away as of
+    // Chrome 5.0.335.1 (or possibly earlier).
+    mapIsUpdateable = browser != "safari";
     loadImgAreaSelect(true);
     if($('#hgTrackUiDialog'))
         $('#hgTrackUiDialog').hide();
@@ -727,6 +729,44 @@ function imgTblSetOrder(table)
     }
 }
 
+function imgTblTrackShowCenterLabel(tr, show)
+{   // Will show or hide centerlabel as requested
+    // adjust button, sideLabel height, sideLabelOffset and centerlabel display
+
+    if(!$(tr).hasClass('clOpt'))
+        return;
+    var center = $(tr).find(".sliceDiv.cntrLab");
+    if($(center) == undefined)
+        return;
+    seen = ($(center).css('display') != 'none');
+    if(show == seen)
+        return;
+
+    var centerHeight = $(center).height();
+
+    var btn = $(tr).find("p.btn");
+    var side = $(tr).find(".sliceDiv.sideLab");
+    if($(btn) != undefined && $(side) != undefined) {
+        var sideImg = $(side).find("img");
+        if($(sideImg) != undefined) {
+            var top = parseInt($(sideImg).css('top'));
+            if(show) {
+                $(btn).css('height',$(btn).height() + centerHeight);
+                $(side).css('height',$(side).height() + centerHeight);
+                top += centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).show();
+            } else if(!show) {
+                $(btn).css('height',$(btn).height() - centerHeight);
+                $(side).css('height',$(side).height() - centerHeight);
+                top -= centerHeight; // top is a negative number
+                $(sideImg).css( {'top': top.toString() + "px" });
+                $( center ).hide();
+            }
+        }
+    }
+}
+
 function imgTblZipButtons(table)
 {
 // Goes through the image and binds composite track buttons when adjacent
@@ -744,6 +784,16 @@ function imgTblZipButtons(table)
             continue;
         var classList = $( btn ).attr("class").split(" ");
         var curMatchesLast=(classList[0] == lastClass);
+
+        // centerLabels may be conditionally seen
+        if($( rows[ix] ).hasClass('clOpt')) {
+            if(curMatchesLast && $( rows[ix - 1] ).hasClass('clOpt'))
+                imgTblTrackShowCenterLabel(rows[ix],false);  // if same composite and previous is also centerLabel optional then hide center label
+            else
+                imgTblTrackShowCenterLabel(rows[ix],true);
+        }
+
+        // On with buttons
         if(lastBtn != undefined) {
             $( lastBtn ).removeClass('btnN btnU btnL btnD');
             if(curMatchesLast && lastMatchLast) {
@@ -1256,6 +1306,8 @@ $(document).ready(function()
     }
 
     if($("#tabs").length > 0) {
+        // Search page specific code
+
         var val = $('#currentSearchTab').val();
         $("#tabs").tabs({
                             show: function(event, ui) {
@@ -1264,9 +1316,11 @@ $(document).ready(function()
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
+        $("#tabs").css('font-family', jQuery('body').css('font-family'));
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
+        findTracksNormalize();
     }
 
     if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
@@ -1307,9 +1361,42 @@ function makeMapItem(id)
     return {id: id, title: "configure " + title};
 }
 
+function mapItemMouseOver(obj)
+{
+    // Record data for current map area item
+    currentMapItem = makeMapItem(obj.id);
+    currentMapItem.href = obj.href;
+    currentMapItem.title = obj.title;
+}
+
+function mapItemMouseOut(obj)
+{
+    currentMapItem = null;
+}
+
 function findMapItem(e)
 {
 // Find mapItem for given event; returns item object or null if none found.
+
+    if(currentMapItem) {
+        return currentMapItem;
+    }
+
+    // rightClick for non-map items that can be resolved to their parent tr and then trackName (e.g. items in gray bar)
+    if(e.target.tagName.toUpperCase() != "AREA") {
+        var tr = $( e.target ).parents('tr.imgOrd');
+        if( $(tr).length == 1 ) {
+            a = /tr_(.*)/.exec($(tr).attr('id'));  // voodoo
+            if(a && a[1]) {
+                var id = a[1];
+                return makeMapItem(id);
+            }
+        }
+    }
+
+    // FIXME: do we really need to worry about non-imageV2 ?
+    // Yeah, I think the rest of this is (hopefully) dead code
+
     var x,y;
     if(imageV2) {
         // It IS appropriate to use coordinates relative to the img WHEN we have a hit in the right-hand side, but NOT
@@ -1333,25 +1420,6 @@ function findMapItem(e)
     } else {
         x = e.pageX - e.target.offsetLeft;
         y = e.pageY - e.target.offsetTop;
-    }
-
-    if(e.target.tagName.toUpperCase() == "P") {
-        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is true.
-        var a = /p_btn_(.*)/.exec(e.target.id);
-        if(a && a[1]) {
-            var id = a[1];
-            return makeMapItem(id);
-        } else {
-            return null;
-        }
-    } else if(e.target.tagName.toUpperCase() == "IMG") {
-        // This occurs in the left buttons when IMAGEv2_DRAG_REORDER is false.
-        var a = /img_btn_(.*)/.exec(e.target.id);
-        if(a && a[1]) {
-            var id = a[1];
-            return makeMapItem(id);
-        }
-        // else fall-through (under msie).
     }
 
     var retval = -1;
@@ -1419,28 +1487,6 @@ function contextMenuHit(menuItemClicked, menuObject, cmd)
     setTimeout(function() { contextMenuHitFinish(menuItemClicked, menuObject, cmd); }, 1);
 }
 
-function showLoadingImage(id)
-{
-// Show a loading image above the given id; return's id of div added (so it can be removed when loading is finished).
-// This code was mostly directly copied from hgHeatmap.js, except I also added the "overlay.appendTo("body");"
-    var loadingId = id + "LoadingOverlay";
-    var overlay = $("<div></div>").attr("id", loadingId).css("position", "absolute");
-    overlay.appendTo("body");
-    overlay.css("top", $('#'+ id).position().top);
-    var divLeft = $('#'+ id).position().left + 2;
-    overlay.css("left",divLeft);
-    var width = $('#'+ id).width() - 5;
-    var height = $('#'+ id).height();
-    overlay.width(width);
-    overlay.height(height);
-    overlay.css("background", "white");
-    overlay.css("opacity", 0.75);
-    var imgLeft = (width / 2) - 110;
-    var imgTop = (height / 2 ) - 10;
-    $("<img src='../images/loading.gif'/>").css("position", "relative").css('left', imgLeft).css('top', imgTop).appendTo(overlay);
-    return loadingId;
-}
-
 function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 {
 // dispatcher for context menu hits
@@ -1483,15 +1529,17 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    // start coordinate seems to be off by one (+1).
-                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + chromStart + "&r=" + chromEnd);
+                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd);
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
                         // We need to parse out more stuff to support resetting the position under imageV2 via ajax, but it's probably possible.
                         // See comments below on safari problems.
                         jQuery('body').css('cursor', 'wait');
-                        document.TrackForm.submit();
+                        if(document.TrackForm)
+                            document.TrackForm.submit();
+                        else
+                            document.TrackHeaderForm.submit();
                     } else {
                         jQuery('body').css('cursor', '');
                         $.ajax({
@@ -1513,18 +1561,18 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
 
     } else if (cmd == 'hgTrackUi_follow') {
 
-        var link = $('td#td_btn_'+ selectedMenuItem.id).children('a').attr('href'); // The button already has the ref
+        var link = $( 'td#td_btn_'+ selectedMenuItem.id ).children('a'); // The button already has the ref
         if( $(link) != undefined) {
             location.assign($(link).attr('href'));
         } else {
-            var url = "../cgi-bin/hgTrackUi?hgsid=" + getHgsid() + "&g=";
+            var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
             var id = selectedMenuItem.id;
             var rec = trackDbJson[id];
-            if (rec.parentTrack)
+            if (rec.parentTrack && rec.hasChildren == 0)
                 url += rec.parentTrack
             else
                 url = selectedMenuItem.id;
-            location.assign($(link).attr('href'));
+            location.assign(url);
         }
 
     } else if (cmd == 'dragZoomMode') {
@@ -1538,7 +1586,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'viewImg') {
         // Fetch a new copy of track img and show it to the user in another window. This code assume we have updated
         // remote cart with all relevant chages (e.g. drag-reorder).
-        var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid();
+        var data = "hgt.imageV1=1&hgt.trackImgOnly=1&hgsid=" + getHgsid();
         jQuery('body').css('cursor', 'wait');
         $.ajax({
                    type: "GET",
@@ -1556,15 +1604,17 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'followLink') {
         // XXXX This is blocked by Safari's popup blocker (without any warning message).
         location.assign(selectedMenuItem.href);
-    } else {
+    } else {   // if( cmd in 'hide','dense','squish','pack','full','show' )
         // Change visibility settings:
         //
         // First change the select on our form:
         var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
+        var selectUpdated = false;
         $("select[name=" + id + "]").each(function(t) {
             $(this).val(cmd);
-                });
+            selectUpdated = true;
+        });
         if(rec) {
             rec.localVisibility = cmd;
         }
@@ -1573,26 +1623,34 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         if(imageV2 && cmd == 'hide')
         {
             // Hide local display of this track and update server side cart.
-            setCartVar(id, cmd);
+            // Subtracks controlled by 2 settings so del vis and set sel=0.  Others, just set vis hide.
+            if(rec.parentTrack != undefined)
+                setCartVars( [ id, id+"_sel" ], [ "[]", 0 ] ); // Don't set '_sel" to [] because default gets used, but we are explicitly hiding this!
+            else
+                setCartVar(id, 'hide' );
             $('#tr_' + id).remove();
+            initImgTblButtons();
             loadImgAreaSelect(false);
-        } else if (false && browser == "safari") {
-            // This problem seems to have gone away (I don't see it in Safari AppleWebKit 531.9.1 or
-            // Chrome 5.0.335.1.); I'm leaving this dead code here for now in case this problem re-appears.
-            //
-            // Safari has the following bug: if we update the local map dynamically, the browser ignores the changes (even
-            // though if you look in the DOM the changes are there); so we have to do a full form submission when the
-            // user changes visibility settings.
+        } else if (!mapIsUpdateable) {
             jQuery('body').css('cursor', 'wait');
-            document.TrackForm.submit();
+            if(selectUpdated) {
+                // assert(document.TrackForm);
+                document.TrackForm.submit();
+            } else {
+                    // add a hidden with new visibility value
+                    var form = $(document.TrackHeaderForm);
+                    $("<input type='hidden' name='" + id + "'value='" + cmd + "'>").appendTo(form);
+                    document.TrackHeaderForm.submit();
+            }
         } else {
-            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();
+            var data = "hgt.trackImgOnly=1&" + id + "=" + cmd + "&hgsid=" + getHgsid();  // this will update vis in remote cart
             if(imageV2) {
 	        data += "&hgt.trackNameFilter=" + id;
             }
             //var center = $("#img_data_" + id);
             //center.attr('src', "../images/loading.gif")
             //center.attr('style', "text-align: center; display: block;");
+            //warn("hgTracks?"+data); // Uesful to cut and paste the url
             var loadingId = showLoadingImage("tr_" + id);
             $.ajax({
                        type: "GET",
@@ -1719,17 +1777,21 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
+            if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
-            o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
-            if(rec.parentTrack != undefined) {
-                o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-            }
+            if(rec.hasChildren == 0) {
+                o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                if(rec.parentTrack != undefined)
+                    o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+            } else
+                o["configure "+rec.shortLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             menu.push($.contextMenu.separator);
             menu.push(o);
+                menu.push($.contextMenu.separator);
+            }
 
             // Add view image at end
-            menu.push($.contextMenu.separator);
             menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
 
             return menu;
@@ -1772,9 +1834,13 @@ function parseMap(ele, reset)
     return mapItems;
 }
 
-function updateTrackImg(trackName)
+function updateTrackImg(trackName,extraData,loadingId)
 {
-    var data = "hgt.trackImgOnly=1&&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
+    var data = "hgt.trackImgOnly=1&hgsid=" + getHgsid() + "&hgt.trackNameFilter=" + trackName;
+    if(extraData != undefined && extraData != "")
+        data += "&" + extraData;
+    if(loadingId == undefined || loadingId == "")
+        loadingId = showLoadingImage("tr_" + trackName);
     $.ajax({
                 type: "GET",
                 url: "../cgi-bin/hgTracks",
@@ -1783,29 +1849,38 @@ function updateTrackImg(trackName)
                 trueSuccess: handleUpdateTrackMap,
                 success: catchErrorOrDispatch,
                 cmd: 'refresh',
+                loadingId: loadingId,
+                id: trackName,
                 cache: false
             });
 }
 
-var popUpTrackName;
+var popUpTrackName = "";
 var popUpTrackDescriptionOnly = false;
+var popSaveAllVars = null;
 function _hgTrackUiPopUp(trackName,descriptionOnly)
 { // popup cfg dialog
     popUpTrackName = trackName;
-    var myLink = "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
+    var myLink = "../cgi-bin/hgTrackUi?g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb();
     popUpTrackDescriptionOnly = descriptionOnly;
     if(popUpTrackDescriptionOnly)
         myLink += "&descriptionOnly=1";
 
-    $.ajax({
-                type: "GET",
-                url: myLink,
-                dataType: "html",
-                trueSuccess: handleTrackUi,
-                success: catchErrorOrDispatch,
-                cmd: selectedMenuItem,
-                cache: false
-            });
+    var rec = trackDbJson[trackName];
+    if(rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
+        window.location = myLink;
+    } else {
+        myLink += "&ajax=1";
+        $.ajax({
+                   type: "GET",
+                   url: myLink,
+                   dataType: "html",
+                   trueSuccess: handleTrackUi,
+                   success: catchErrorOrDispatch,
+                   cmd: selectedMenuItem,
+                   cache: false
+               });
+        }
 }
 
 function hgTrackUiPopUp(trackName,descriptionOnly)
@@ -1813,17 +1888,55 @@ function hgTrackUiPopUp(trackName,descriptionOnly)
     waitOnFunction( _hgTrackUiPopUp, trackName, descriptionOnly );  // Launches the popup but shields the ajax with a waitOnFunction
 }
 
+function hgTrackUiPopCfgOk(popObj, trackName)
+{ // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack ? trackName :undefined;  // If subtrack then vis rules differ
+    var allVars = getAllVars($('#pop'), subtrack );
+    var changedVars = varHashChanges(allVars,popSaveAllVars);
+    //warn("cfgVars:"+varHashToQueryString(changedVars));
+    var newVis = changedVars[trackName];
+    var hide = (newVis != null && (newVis == 'hide' || newVis == '[]'));  // subtracks do not have "hide", thus '[]'
+    if($('#imgTbl') == undefined) { // On findTracks or config page
+        setVarsFromHash(changedVars);
+        //if(hide) // TODO: When findTracks or config page has cfg popup, then vis change needs to be handled in page here
+    }
+    else {  // On image page
+        if(hide) {
+            setVarsFromHash(changedVars);
+            $('#tr_' + trackName).remove();
+            initImgTblButtons();
+            loadImgAreaSelect(false);
+        } else {
+            // Keep local state in sync if user changed visibility
+            if(newVis != null) {
+                $("select[name=" + trackName + "]").each(function(t) {
+                    $(this).val(newVis);
+                });
+                if(rec) {
+                    rec.localVisibility = newVis;
+                }
+            }
+            var urlData = varHashToQueryString(changedVars);
+            if(mapIsUpdateable) {
+                updateTrackImg(trackName,urlData,"");
+            } else {
+                window.location = "../cgi-bin/hgTracks?" + urlData + "&hgsid=" + getHgsid();
+            }
+        }
+    }
+}
+
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
-    $('#hgTrackUiDialog').html("<div style='font-size:60% background: #FFFEE8' id='pop'>" + response + "</div>");
+    $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
                                    // This doesn't work
                                    cache: true
                                },
-                               resizable: true,
-                               bgiframe: true,
+                               resizable: popUpTrackDescriptionOnly,
                                height: 'auto',
                                width: 'auto',
                                minHeight: 200,
@@ -1832,15 +1945,19 @@ function handleTrackUi(response, status)
                                closeOnEscape: true,
                                autoOpen: false,
                                buttons: { "Ok": function() {
-                                    if(popUpTrackDescriptionOnly == false)
-                                        setAllVars($('#pop'));
+                                    if( ! popUpTrackDescriptionOnly )
+                                        hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
-                                    if($('#imgTbl') != undefined && popUpTrackDescriptionOnly == false)
-                                        updateTrackImg(popUpTrackName);
                                }},
+                               open: function() {
+                                    var subtrack = trackDbJson[popUpTrackName].isSubtrack ? popUpTrackName :"";  // If subtrack then vis rules differ
+                                    popSaveAllVars = getAllVars( $('#pop'), subtrack );
+                               },
                                close: function() {
-                                   // clear out html after close to prevent problems caused by duplicate html elements
-                                   $('#hgTrackUiDialog').html("");
+                                   $('#hgTrackUiDialog').html("");  // clear out html after close to prevent problems caused by duplicate html elements
+                                popUpTrackName = ""; //set to defaults
+                                popUpTrackDescriptionOnly = false;
+                                popSaveAllVars = null;
                                }
                            });
     if(popUpTrackDescriptionOnly) {
@@ -1851,7 +1968,6 @@ function handleTrackUi(response, status)
     } else {
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
     }
-    jQuery('body').css('cursor', '');
     $('#hgTrackUiDialog').dialog('open');
 }
 
@@ -1875,7 +1991,7 @@ function handleUpdateTrackMap(response, status)
           // this updates src in img_left_ID, img_center_ID and img_data_ID and map in map_data_ID
           var id = this.id;
           if(this.loadingId) {
-	          $('#' + this.loadingId).remove();
+	          hideLoadingImage(this.loadingId);
           }
           var rec = trackDbJson[id];
           var str = "<TR id='tr_" + id + "'[^>]*>([\\s\\S]+?)</TR>";
@@ -1896,6 +2012,7 @@ function handleUpdateTrackMap(response, status)
                    trackImgTbl.tableDnDUpdate();
           } else {
                showWarning("Couldn't parse out new image for id: " + id);
+               //showWarning(response);
           }
     } else {
         if(imageV2) {
@@ -1955,18 +2072,14 @@ function handleUpdateTrackMap(response, status)
 }
 
 function handleViewImg(response, status)
-{
+{ // handles view image response, which must get new image without imageV2 gimmickery
     jQuery('body').css('cursor', '');
-    for (var id in trackDbJson) {
-        // Use an arbitrary id to pull out a src from the track image table;
-        // e.g.: <IMG id='img_data_knownGene' src='../trash/hgt/hgt_hgwdev_larrym_479c_abde90.png' ...>
-        var str = "<IMG[^>]*id='img_data_" + id + "'[^>]*src='([^']+)'";
-        var reg = new RegExp(str);
-        a = reg.exec(response);
-        if(a && a[1]) {
-            window.open(a[1]);
-            return;
-        }
+    var str = "<IMG[^>]*SRC='([^']+)'";
+    var reg = new RegExp(str);
+    a = reg.exec(response);
+    if(a && a[1]) {
+        window.open(a[1]);
+        return;
     }
     showWarning("Couldn't parse out img src");
 }
@@ -1988,45 +2101,6 @@ function jumpButtonOnClick()
         }
     }
     return true;
-}
-
-function metadataSelectChanged(obj)
-{
-    var newVar = $(obj).val();
-    var a = /metadataName(\d+)/.exec(obj.name)
-    if(newVar != undefined && a && a[1]) {
-        var num = a[1];
-        $.ajax({
-                   type: "GET",
-                   url: "../cgi-bin/hgApi",
-                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
-                   trueSuccess: handleNewMetadataVar,
-                   success: catchErrorOrDispatch,
-                   cache: true,
-                   cmd: "hgt.metadataValue" + num
-               });
-    }
-}
-
-function handleNewMetadataVar(response, status)
-// Handle ajax response (repopulate a metadata select)
-{
-    var list = eval(response);
-    var ele = $('select[name=' + this.cmd + ']');
-    ele.empty();
-    ele.append("<option>Any</option>");
-    for (var i = 0; i < list.length; i++) {
-        ele.append("<option>" + list[i] + "</option>");
-    }
-}
-
-function searchKeydown(event)
-{
-    if (event.which == 13) {
-        $('#searchSubmit').click();
-        // XXXX submitting the button works, but the following doesn't work in IE/FF (I don't know why).
-        // $('#searchTracks').submit();
-    }
 }
 
 function remoteTrackCallback(rec)
@@ -2053,67 +2127,132 @@ function remoteTrackCallback(rec)
     }
 }
 
-function changeSearchVisibilityPopups(cmd)
-{
-    $("#searchResultsForm select").each(function(i) {
-                                                                 $(this).val(cmd);
-                                                             });
-    return false;
-}
-
 /////////////////////////////////////////////////////
 // findTracks functions
 
-function findTracksChangeVis(seenVis)
+function findTracksMdbVarChanged(obj)
+{ // Ajax call to repopulate a metadata vals select when mdb var changes
+    var newVar = $(obj).val();
+    var a = /metadataName(\d+)/.exec(obj.name)
+    if(newVar != undefined && a && a[1]) {
+        var num = a[1];
+        $.ajax({
+                   type: "GET",
+                   url: "../cgi-bin/hgApi",
+                   data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
+                   trueSuccess: findTracksHandleNewMdbVals,
+                   success: catchErrorOrDispatch,
+                   cache: true,
+                   cmd: "hgt.metadataValue" + num
+               });
+    }
+    //findTracksSearchButtonsEnable(true);
+}
+
+function findTracksHandleNewMdbVals(response, status)
+// Handle ajax response (repopulate a metadata val select)
 {
-    var trackName = $(seenVis).attr('id');
-    hiddenVis = $("input[name='"+trackName.substring(0,trackName.length - "_id".length)+"']");
+    var list = eval(response);
+    var ele = $('select[name=' + this.cmd + ']');
+    ele.empty();
+    ele.append("<option>Any</option>");
+    for (var i = 0; i < list.length; i++) {
+        ele.append("<option>" + list[i] + "</option>");
+    }
+}
+
+function searchKeydown(event)
+{
+    if (event.which == 13) {
+        // hgt.forceSearch is required to fix problem on IE and Safari where value of hgt_searchTracks is "-" (i.e. not "Search").
+        $("input[name=hgt.forceSearch]").val(1);
+        $('#searchTracks').submit();
+        // This doesn't work with IE or Safari.
+        // $('#searchSubmit').click();
+    }
+}
+
+function changeSearchVisibilityPopups(cmd)
+{  // ??? Larry?
+    $("#searchResultsForm select").each(function(i) {
+        $(this).val(cmd);
+    });
+    return false;
+}
+
+function findTracksChangeVis(seenVis)
+{ // called by onchange of vis
+    var visName = $(seenVis).attr('id');
+    var trackName = visName.substring(0,visName.length - "_id".length)
+    var hiddenVis = $("input[name='"+trackName+"']");
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    if($(seenVis).val() != "hide")
+        $(hiddenVis).val($(seenVis).val());
+    else {
+        var selCb = $("input#"+trackName+"_sel_id");
+        $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        var hiddenSel = $("input[name='"+trackName+"_sel']");
+        $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        $(hiddenSel).attr('disabled',false);
+        if(subtrack)
+            $(hiddenVis).val("[]");
+        else
+            $(hiddenVis).val("hide");
+    }
     $(hiddenVis).attr('disabled',false);
-    $(hiddenVis).val($(seenVis).val());
+    //warn("Changed "+trackName+" to "+$(hiddenVis).val())
 }
 
 function findTracksClickedOne(selCb,justClicked)
-{
+{ // called by on click of CB and findTracksCheckAll()
     var selName = $(selCb).attr('id');
     var trackName = selName.substring(0,selName.length - "_sel_id".length)
     var hiddenSel = $("input[name='"+trackName+"_sel']");
     var seenVis = $('select#' + trackName + "_id");
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
-    var subtrack = $(tr).hasClass('subtrack');
-    var canPack = $(tr).hasClass('canPack');
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    var shouldPack = rec.canPack;
+    if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
+        shouldPack = false;
     var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" canPack:"+canPack);
+    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" shouldPack:"+shouldPack);
 
     // First deal with seenVis control
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(canPack)
+            if(shouldPack)
                 $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
             else
-                $(seenVis).attr('selectedIndex',2);  // full
+                $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
         }
-    } else
+    } else {
+        $(seenVis).attr('selectedIndex',0);  // hide
         $(seenVis).attr('disabled', true );
+    }
 
-    if(justClicked) {
-        // Deal with hiddenSel so that submit does the right thing
+    // Deal with hiddenSel and hiddenVis so that submit does the right thing
+    // Setting these requires justClicked OR seen vs. hidden to be different
+    var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
+    if(setHiddenInputs) {
+        if(checked)
+            $(hiddenVis).val($(seenVis).val());
+        else if(subtrack)
+            $(hiddenVis).val("[]");
+        else
+            $(hiddenVis).val("hide");
+        $(hiddenVis).attr('disabled',false);
+
         if(subtrack) {
-            $(hiddenSel).attr('disabled',false);
             if(checked)
                 $(hiddenSel).val('1');
             else
-                $(hiddenSel).val('[]');
-        }
-
-        // Deal with hiddenVis so that submit does the right thing
-        if(checked) {
-            findTracksChangeVis(seenVis);
-            //$(hiddenVis).val('value',seenVisVal);
-        } else {
-            $(hiddenVis).attr('disabled',false);
-            $(hiddenVis).val('[]');
+                $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+            $(hiddenSel).attr('disabled',false);
         }
     }
 
@@ -2129,8 +2268,9 @@ function findTracksClickedOne(selCb,justClicked)
 }
 
 
-function findTracksNormalizeFound()
+function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
+    $('#foundTracks').show()
     var selCbs = $('input.selCb');
 
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
@@ -2145,6 +2285,11 @@ function findTracksNormalizeFound()
         $('input.viewBtn').val('Return to Browser');
 
     findTracksCounts();
+}
+
+function findTracksNormalizeWaitOn()
+{ // Put up wait mask then Normalize the page based upon current state of all found tracks
+    waitOnFunction( findTracksNormalize );
 }
 
 function findTracksCheckAll(check)
@@ -2192,6 +2337,34 @@ function findTracksCounts()
         $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
     }
 }
+
+function findTracksSearchButtonsEnable(enable)
+{
+// Displays visible and checked track count
+    var searchButton = $('input[name="hgt_searchTracks"]');
+    var clearButton  = $('input.clear');
+    if(enable) {
+        $(searchButton).attr('disabled',false);
+        $(clearButton).attr('disabled',false);
+    } else {
+        $(searchButton).attr('disabled',true);
+        $(clearButton).attr('disabled',true);
+    }
+}
+
+function findTracksClear()
+{// Clear found tracks and all input controls
+    var foundTracks = $('#foundTracks');
+    if(foundTracks != undefined)
+        $(foundTracks).remove();
+    $('input[type="text"]').val(''); // This will always be found
+    //$('select.mdbVar').attr('selectedIndex',0); // Do we want to set the first two to cell/antibody?
+    $('select.mdbVal').attr('selectedIndex',0); // Should be 'Any'
+    $('select.groupSearch').attr('selectedIndex',0);
+    //findTracksSearchButtonsEnable(false);
+    return false;
+}
+/////////////////////////////////////////////////////
 
 function delSearchSelect(obj, rowNum)
 {

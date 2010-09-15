@@ -49,17 +49,21 @@ file ddf
 type int
 required no
 
+# RETIRING IT 9/9/10 
 # This field is used by UW 
 # It is sort of like replicate
 # It would be great if someone in the know could explain this
-field rank
-file ddf
-type int
-required no
+# This is a priority of which replicate should be displayed.  It was made because it is difficult to change rep1 to rep2.
+# Retire when Brian has the file nameing issues worked out
+#field rank
+#file ddf
+#type int
+#required no
 
 # This is a ChIP-seq variable
 # Cricket wonders if it is redundant with medianFragLength 
 # Cricket wonders how it relates to fragSize
+# This means meadianFragLength and is prefered over the other
 field fragLength
 file ddf
 type int
@@ -98,11 +102,6 @@ file ddf
 type string
 required no
 
-field insLength
-file ddf
-type string
-required no
-
 field seqPlatform
 file ddf
 type string
@@ -110,14 +109,16 @@ required no
 
 
 # This is the field where you can enter which type of control is being used
-# It seems that this is redundant with the the cv.ra term control
-field input
+# It used to be called input here, but then was control in the cv and the metaDB
+# Changing this may break some code in the doEncodeValidate
+field control
 file ddf
 type string
 required no
 
 # This field is to indicate whether the file represents an experiment or input.
 # The values should be exp or input 
+# Rename to something more clear like expOrInput or what Flo suggested
 field setType
 file ddf
 type string
@@ -136,6 +137,14 @@ field labExpId
 file ddf
 type string
 required no
+
+# This field is for the lab to enter thier own internal tracking numbers
+# These experiment ID's can be used by the labs to specify which input files to use
+field labProtocolId
+file ddf
+type string
+required no
+
 
 # This field is to track data that was originally submitted
 # on another assembly, but has been lifted over or remapped.
@@ -173,6 +182,8 @@ file dafHeader
 type string
 required yes
 
+# Description of how to use in the DataWrangler HowTo 
+# http://encodewiki.ucsc.edu/EncodeDCC/index.php/Data_Wrangler_HOWTO#validateSettings
 field validationSettings
 file dafHeader
 type string
@@ -187,15 +198,18 @@ file dafHeader
 type string
 required yes
 
+# RETIRING IT 9-10-10
 # Use this for composites that include multiple data types
 # (e.g. Open Chromatin) or multiple labs (e.g. Duke)
 # In these cases, there will be multiple data agreements
 # folded into a shared composite.  The dataAgreementSuffix
 # is used to generate table and filenames that distinguish
-field dataAgreementSuffix
-file dafHeader
-type string
-required no
+# Tim said could retire
+# Venkat seems to be using it
+#field dataAgreementSuffix
+#file dafHeader
+#type string
+#required no
 
 # optional DAF header fields
 
@@ -206,29 +220,36 @@ file dafHeader
 type string
 required no
 
+# RETIRING IT 9/9/10
 # This is in the DAF and not the DDF
 # It seems to represent the same information as fragLength
 # Is it redundant
-field medianFragmentLength
-file dafHeader
-type int
-required no
+# needs to go
+#field medianFragmentLength
+#file dafHeader
+#type int
+#required no
 
-# ???????
-field fragmentLengthRange
-file dafHeader
-type int
-required no
+# RETIRING IT 9/9/10
+# ???????  most likely in Hudson Alpha
+# This comes from creating own signals
+# 
+#field fragmentLengthRange
+#file dafHeader
+#type int
+#required no
 
 # This is where we list things like Freeze date
 # Cricket also wonders if this should be controlled
+#This is really submittedDataVersion and is already in the the code to convert.
 field dataVersion
 file dafHeader
 type int
 required no
 
 # This doesn't seem to be used in any DAF nor is it
-# in the metaData.  Can we get rid of it?
+# in the metaData.  Can we get rid of it?A
+# This is submittedDataVersionComment and is the reason that the data needed to be changed
 field dataVersionComment
 file dafHeader
 type string
@@ -241,12 +262,13 @@ file dafHeader
 type string
 required no
 
-# ??????
+# RETIRING IT 9/9/10
+# Not needed any more as we are not makeing signals
 # I have no idea
-field noAutoCreate
-file dafHeader
-type bool
-required no
+#field noAutoCreate
+#file dafHeader
+#type bool
+#required no
 
 # DAF view fields
 field longLabelPrefix
@@ -270,12 +292,16 @@ type string
 required yes
 
 # This specifes if the view is required to successfully submit
-# It is used by ????
+# It is used by the validator, will fail if there is no data for that view
 field required
 file dafList
 type bool
 required yes
 
+#RETIRING IT 9/9/10
+# Tim says this is not used
+# May have been to set a priority in the trackDb, it would be completely worthless to do that now
+# UNRETIRING 9/14/10  doEncodeValidate fails if this is not present.  Even if it is not in the DAF
 field order
 file dafList
 type int
@@ -288,32 +314,19 @@ file dafList
 type bool
 required no
 
-field options
-file dafList
-type string
-required no
+#RETIRING IT 9/9/10
+# Maybe larrym has some idea about how this works.  May have been validate settings type of thing
+#field options
+#file dafList
+#type string
+#required no
 
 # This is made by Kate and is only used in one DAF
-# 
+# Attempt to make a general way to have bedish files
+# To provide an alternate table layouts for spcialized views,
+# An alternative schema for dataTypes that are slightly different from our existing dataTypes 
 field sql
 file dafList
 type string
 required no
 
-
-
-
-
-
-
-
-# cv.ra fields
-#field term
-#file cv
-#type string
-#required yes
-
-#field type
-#file cv
-#type string
-#required yes
