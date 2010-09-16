@@ -338,7 +338,18 @@ done
 ##	There is a tremendous amount of extraneous notations in the gff
 ##	files.  Filter them down to a manageable set, change the chrom
 ##	names, eliminate duplicates, select only what will work in
-##	ldHgGene
+##	ldHgGene.   Plus there is a lot of confusion in the names, ever since
+##	the ce4 build.  These notes from Angie are still accurate:
+##
+# ADJUST KIMEXPDISTANCE NAMES TO MATCH SANGERCANONICAL (DONE 7/12/07 angie)
+# kimExpDistance has all [A-Z]+[0-9]+\.[0-9]+ names, but now sangerCanonical
+# has some of the new    [A-Z]+[0-9]+\.[0-9]+\.[0-9]+ names, so when hgNear 
+# looks for a canonical name in kimExpDistance, it often can't find it.
+# Canonical also has     [A-Z]+[0-9]+\.[0-9]+[a-z]
+# and                    [A-Z]+[0-9]+\.[0-9]+[a-z]\.[0-9]+
+# kimExpDistance has 4   [A-Z]+[0-9]+\.[0-9]+[A-Z]
+# Update the names in kimExpDistance to match sangerCanonical.
+
     mkdir /hive/data/genomes/ce9/bed/sangerGene
     cd /hive/data/genomes/ce9/bed/sangerGene
 /hive/data/genomes/ce9/ws210] less genome_feature_tables/GFF2/CHROMOSOME_I.gff
@@ -723,6 +734,7 @@ close (FH);
 
 ###############################################################################
 ######## MAKING GENE SORTER TABLES #### (DONE - 2010-09-09 - Hiram)
+## Before starting this, the sangerPep and names need to be fixed
 # These are instructions for building the
 # Gene Sorter browser.  Don't start these until
 # there is a sangerGene table with a proteinID column containing Swiss-Prot
@@ -764,8 +776,8 @@ scratchDir /hive/data/genomes/ce9/bed/blastTab/ce9/tmp
 	-clusterHub=pk ce9.config.ra > do.log 2>&1 &
 
     time ./ce9/run.ce9.ce9/loadPairwise.csh 
-    #	Scanning through 969 files
-    #	Loading database with 970795 rows
+    #	Scanning through 968 files
+    #	Loading database with 1228800 rows
 
     #	real    0m37.193s
 
@@ -774,6 +786,9 @@ scratchDir /hive/data/genomes/ce9/bed/blastTab/ce9/tmp
     # KIM LAB EXPRESSION DATA - this creates ce9.kimExpDistance
     time hgExpDistance ce9 hgFixed.kimWormLifeMedianRatio \
 	  hgFixed.kimWormLifeMedianExps kimExpDistance
+    time hgExpDistance -lookup=sangerToRefSeq ce9 \
+	hgFixed.kimWormLifeMedianRatio \
+	hgFixed.kimWormLifeMedianExps kimExpDistance
     #	Have 19134 elements in hgFixed.kimWormLifeMedianRatio
     #	Got 19134 unique elements in hgFixed.kimWormLifeMedianRatio
     #	real    1m50.164s
@@ -782,8 +797,8 @@ scratchDir /hive/data/genomes/ce9/bed/blastTab/ce9/tmp
     # sangerToRefSeq
     hgMapToGene ce9 refGene sangerGene sangerToRefSeq
 
-    # SET dbDb TABLE ENTRY FOR GENE SORTER (DONE, 2004-05-25, hartera)
-    # set hgNearOk to 1 on hgcentraltest to make Ce6 Gene Sorter viewable
+    # SET dbDb TABLE ENTRY FOR GENE SORTER
+    # set hgNearOk to 1 on hgcentraltest to make Ce9 Gene Sorter viewable
 
     hgsql -e 'update dbDb set hgNearOk = 1 where name = "ce9";' \
          hgcentraltest
@@ -791,15 +806,18 @@ scratchDir /hive/data/genomes/ce9/bed/blastTab/ce9/tmp
     #	Running joinerCheck to see what is sane:
     cd ~/kent/src/hg/makeDb/schema
     joinerCheck -identifier=wormBaseId -database=ce9 -times -keys ./all.joiner
-# ce9.orfToGene.name - hits 30296 of 30296 ok
-# ce9.sangerBlastTab.query - hits 1255312 of 1255312 ok
-# ce9.sangerBlastTab.target - hits 1255312 of 1255312 ok
-# ce9.sangerCanonical.transcript - hits 20051 of 20051 ok
-# ce9.sangerIsoforms.transcript - hits 30296 of 30296 ok
-# ce9.sangerLinks.orfName - hits 30115 of 30115 ok
-# ce9.sangerPep.name - hits 23771 of 23771 ok
-# ce9.sangerToRefSeq.name - hits 29995 of 29995 ok
+# ce9.kimExpDistance.query - hits 11528085 of 11528085 ok
+# ce9.kimExpDistance.target - hits 11528085 of 11528085 ok
+# ce9.orfToGene.name - hits 28125 of 28125 ok
+# ce9.sangerBlastTab.query - hits 1228800 of 1228800 ok
+# ce9.sangerBlastTab.target - hits 1228800 of 1228800 ok
+# ce9.sangerCanonical.transcript - hits 19952 of 19952 ok
+# ce9.sangerIsoforms.transcript - hits 28152 of 28152 ok
+# ce9.sangerLinks.orfName - hits 28152 of 28152 ok
+# ce9.sangerPep.name - hits 28152 of 28152 ok
+# ce9.sangerToRefSeq.name - hits 27945 of 27945 ok
 
+XXX - ready for the next business Thu Sep 16 16:29:26 PDT 2010
     ## create a gene name to WBGene ID reference table
     ## to be used to construct URL
     mkdir /hive/data/genomes/ce9/bed/WBGeneID
@@ -873,28 +891,70 @@ foreach my $key (keys %neededNames) {
 	fixed.sangerGeneToWBGeneID.tab
     cd ~/kent/src/hg/makeDb/schema
     joinerCheck -identifier=wormBaseId -database=ce9 -times -keys ./all.joiner
-# Checking keys on database ce9
-#  ce9.kimExpDistance.query - hits 11554000 of 19134000
-# Error: 7580000 of 19134000 elements of ce9.kimExpDistance.query are not in key sangerGene.name line 1751 of ./all.joiner
-# Example miss: F46G10.5
-#  ce9.kimExpDistance.target - hits 11437253 of 19134000
-# Error: 7696747 of 19134000 elements of ce9.kimExpDistance.target are not in key sangerGene.name line 1752 of ./all.joiner
-# Example miss: C27A2.3
-#  ce9.orfToGene.name - hits 28125 of 28125 ok
-#  ce9.sangerBlastTab.query - hits 877737 of 970795
-# Error: 93058 of 970795 elements of ce9.sangerBlastTab.query are not in key sangerGene.name line 1754 of ./all.joiner
-# Example miss: AC3.5
-#  ce9.sangerBlastTab.target - hits 876846 of 970795
-# Error: 93949 of 970795 elements of ce9.sangerBlastTab.target are not in key sangerGene.name line 1755 of ./all.joiner
-# Example miss: C26C6.1B
-#  ce9.sangerCanonical.transcript - hits 19952 of 19952 ok
-#  ce9.sangerIsoforms.transcript - hits 28152 of 28152 ok
-#  ce9.sangerLinks.orfName - hits 28152 of 28152 ok
-#  ce9.sangerPep.name - hits 21247 of 24273
-# Error: 3026 of 24273 elements of ce9.sangerPep.name are not in key sangerGene.name line 1759 of ./all.joiner
-# Example miss: AC3.5
-#  ce9.sangerToRefSeq.name - hits 27945 of 27945 ok
-# 
+# After all the table names were fixed:
+# ce9.kimExpDistance.query - hits 11528085 of 11528085 ok
+# ce9.kimExpDistance.target - hits 11528085 of 11528085 ok
+# ce9.orfToGene.name - hits 28125 of 28125 ok
+# ce9.sangerBlastTab.query - hits 1228800 of 1228800 ok
+# ce9.sangerBlastTab.target - hits 1228800 of 1228800 ok
+# ce9.sangerCanonical.transcript - hits 19952 of 19952 ok
+# ce9.sangerIsoforms.transcript - hits 28152 of 28152 ok
+# ce9.sangerLinks.orfName - hits 28152 of 28152 ok
+# ce9.sangerPep.name - hits 28152 of 28152 ok
+# ce9.sangerToRefSeq.name - hits 27945 of 27945 ok
+
+    # fixup the Pep names
+    cd /hive/data/genomes/ce9/bed/geneSorter
+    hgsql -N -e "select name from sangerPep;" ce9 | sort -u \
+	> name.sangerPep.ce9
+    hgsql -N -e "select name from sangerGene;" ce9 | sort -u \
+	> name.sangerGene.ce9
+    comm -13 name.sangerGene.ce9 name.sangerPep.ce9 > toRemove.sangerPep.ce9
+    wc -l toRemove.sangerPep.ce9 
+    #	3026 toRemove.sangerPep.ce9
+
+    # it appears each name with two extensions: name.1.2
+    # is the cause of this trouble
+    awk -F'.' 'NF == 3' name.sangerGene.ce9 \
+	| awk -F'.' '{printf "%s.%s\n", $1, $2}' | sort -u | wc -l
+    #	3026
+    # try duplicating those names in the sangerPep table
+    awk -F'.' 'NF == 3' name.sangerGene.ce9 \
+	| awk -F'.' '{printf "%s.%s\t%s.%s.%s\n", $1, $2, $1, $2, $3}' \
+	> name.translation
+
+    cat << '_EOF_' > replicate.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "<name.translation") or die "can not read name.translation";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($smallName, $bigName) = split('\t', $line);
+    printf "rm -f $bigName.faa $smallName.faa\n";
+    printf "hgsql -N -e 'select * from sangerPep where name=\"$smallName\";' ce9 > $smallName.faa\n";
+    printf "sed -e 's/^$smallName/$bigName/' $smallName.faa > $bigName.faa\n";
+    printf "hgsql -N -e 'load data local infile \"$bigName.faa\" into table sangerPep;' ce9\n";
+    printf "rm -f $bigName.faa $smallName.faa\n";
+}
+close (FH);
+
+open (FH, "<name.translation") or die "can not read name.translation";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($smallName, $bigName) = split('\t', $line);
+    printf "hgsql -N -e 'delete from sangerPep where name=\"$smallName\";' ce9\n";
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x replicate.pl
+    ./replicate.pl > replicate.sh
+    sh replicate.sh
+
+
 # ce9.orfToGene.name - hits 30296 of 30296 ok
 # ce9.sangerBlastTab.query - hits 1255312 of 1255312 ok
 # ce9.sangerBlastTab.target - hits 1255312 of 1255312 ok
@@ -906,3 +966,93 @@ foreach my $key (keys %neededNames) {
 # ce9.sangerGeneToWBGeneID.sangerGene - hits 30115 of 30115 ok
 
 ###############################################################################
+# ADJUST KIMEXPDISTANCE NAMES TO MATCH SANGERCANONICAL
+#	(DONE - 2010-09-16 - Hiram)
+#	This business taken from Angie's fixups in ce4.txt
+# kimExpDistance has all [A-Z]+[0-9]+\.[0-9]+ names, but now sangerCanonical
+# has some of the new    [A-Z]+[0-9]+\.[0-9]+\.[0-9]+ names, so when hgNear 
+# looks for a canonical name in kimExpDistance, it often can't find it.
+# Canonical also has     [A-Z]+[0-9]+\.[0-9]+[a-z]
+# and                    [A-Z]+[0-9]+\.[0-9]+[a-z]\.[0-9]+
+# kimExpDistance has 4   [A-Z]+[0-9]+\.[0-9]+[A-Z]
+# Update the names in kimExpDistance to match sangerCanonical.
+    mkdir /hive/data/genomes/ce9/bed/fixupKim
+    cd /hive/data/genomes/ce9/bed/fixupKim
+    # Look at just the names and how they differ between the two sources:
+    hgsql ce9 -N -e 'select transcript from sangerCanonical' \
+      | sort > canonicalName.list
+    hgsql ce9 -N -e 'select * from kimExpDistance' > ce9.kimExpDistance
+    awk -F"\t" '{print $1}' ce9.kimExpDistance | sort -u > ce9.kimExpNames
+    sdiff /tmp/canonicalName.list ce9.kimExpNames | less
+    comm -23 canonicalName.list ce9.kimExpNames | wc -l
+#8539
+    comm -13 canonicalName.list ce9.kimExpNames | wc -l
+#7721
+    comm -12 canonicalName.list ce9.kimExpNames | wc -l
+#11413
+    # Pretty significant non-overlap, but I think much of it can be 
+    # resolved by slight tweaks to kimExpDistance names so that they 
+    # match the latest, more-specifically-versioned canonical transcripts.
+    # Also, kimExpDistance has many names with no match in canonical,
+    # which means many thousands of unnecessary rows bloating the table.
+    cat > fixExpDistance.pl <<'_EOF_'
+#!/bin/env perl
+
+use warnings;
+use strict;
+
+my @kimExpNames;
+my @kimSpecial;
+open(FH, "<ce9.kimExpNames") || die;
+while (<FH>) {
+  chomp;
+  push @kimExpNames, $_;
+  push @kimSpecial, $_ if ($_ =~ /\dA$/);
+}
+close(FH);
+
+my %kim2canon;
+open(FH, "canonicalName.list") || die;
+while (<FH>) {
+  chomp;
+  my $kim = $_;
+  my @special = grep m/^$kim$/i, @kimSpecial;
+  if (scalar(@special)) {
+    $kim2canon{$special[0]} = $kim;
+  } else {
+    my $simple = $kim;
+    $simple =~ s/^(\w+\.\d+).*$/$1/;
+    $kim2canon{$simple} = $kim;
+  }
+}
+close(FH);
+
+while (<>) {
+  chomp;
+  my ($query, $target, $distance) = split('\t');
+  my $canonicalQ = $kim2canon{$query};
+  my $canonicalT = $kim2canon{$target};
+  if (defined $canonicalQ && defined $canonicalT) {
+    print "$canonicalQ\t$canonicalT\t$distance\n";
+  }
+}
+'_EOF_'
+    # << emacs
+    chmod a+x fixExpDistance.pl
+    ./fixExpDistance.pl ce9.kimExpDistance > kimExpDistanceFixedNames.tab
+    # Look the file over, grep for some IDs in /tmp/canonicalName.list.
+    # Load into the db as kimExprDistanceTest.  It will take a while
+    # because it's still 12M rows (down from 19M).
+    time nice hgLoadSqlTab ce9 kimExpDistanceTest \
+      ~/kent/src/hg/lib/distance.sql kimExpDistanceFixedNames.tab
+    #	real    0m37.241s
+
+    # Test hgNear with kimExpDistanceTest instead of kimExpDistance.
+    # Don't delete the original table just yet, but do clean it up soon
+    # because it's quite large.
+    hgsql ce9 -e 'rename table kimExpDistance to kimExpDistanceOrig;'
+    hgsql ce9 -e 'rename table kimExpDistanceTest to kimExpDistance;'
+    runJoiner.csh ce9 kimExpDistance
+    # Test hgNear again with kimExpDistance.
+
+############################################################################
