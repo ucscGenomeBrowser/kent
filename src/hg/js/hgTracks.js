@@ -1351,22 +1351,28 @@ function rulerModeToggle (ele)
 function makeMapItem(id)
 {
     // Create a dummy mapItem on the fly (for objects that don't have corresponding entry in the map).
-    var title;
-    var rec = trackDbJson[id];
-    if(rec) {
-        title = rec.shortLabel;
+    if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
+        var title;
+        var rec = trackDbJson[id];
+        if(rec) {
+            title = rec.shortLabel;
+        } else {
+            title = id;
+        }
+        return {id: id, title: "configure " + title};
     } else {
-        title = id;
+        return null;
     }
-    return {id: id, title: "configure " + title};
 }
 
 function mapItemMouseOver(obj)
 {
     // Record data for current map area item
     currentMapItem = makeMapItem(obj.id);
-    currentMapItem.href = obj.href;
-    currentMapItem.title = obj.title;
+    if(currentMapItem != null) {
+        currentMapItem.href = obj.href;
+        currentMapItem.title = obj.title;
+    }
 }
 
 function mapItemMouseOut(obj)
