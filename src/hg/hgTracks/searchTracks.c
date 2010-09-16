@@ -307,6 +307,7 @@ for (group = groupList; group != NULL; group = group->next)
 webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
+cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
@@ -676,8 +677,8 @@ else
         if(tdbIsCompositeChild(track->tdb))
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
-            track->visibility = limitedVisFromComposite(track);
-            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
+            //track->visibility = limitedVisFromComposite(track);
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
 
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
@@ -686,7 +687,7 @@ else
             }
         else
             {
-            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, track->visibility, FALSE);
+            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
             checked = ( track->visibility != tvHide );
             }
 
@@ -738,15 +739,13 @@ else
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"
+        "<li>Composite/view visibilites in hgTrackUi get reshaped to reflect found/selected subtracks.  (In demo1: only default state composites; demo2: all composites.)</li>"
         "<li>Metadata variables have been 'white-listed' to only include vetted items.  Short text descriptions and vetted list should be reviewed.</li>"
-        "<li>'Clear' button added and search and clear buttons should be meaningfully enabled/disabled.</li>"
         "<li>Clicking on shortLabel for found track will popup the description text.  Subtracks should show their composite description.</li>"
         "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
-        "<li>Simple search had been bombing on NULL tracks.  This should be solved.</li>"
+        "<li>Simple search should now query metaDb properly (and included descriptions for cv terms like 'cell').  This had been failing earlier.</li>"
         "<li>Short and long label searched on advanced 'Track Name' search.</li>"
-        "<li>Deleting/Adding selection criteria with [-][+] buttons in 'Advanced Search' should work.</li>"
         "<li>Found track list shows only the first 100 tracks with warning to narrow search.  Larry suggests this could be done by pages of results in v2.0.</li>\n"
-        "<li>Full descriptions of metadata items are indexed in simple search index (e.g. cell descriptions).</li>"
         "</ul></p>"
         "<p><b>Known Problems</b><ul>"
         "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found."

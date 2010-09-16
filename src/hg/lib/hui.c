@@ -412,6 +412,7 @@ static char *hTvStrings[] =
     "pack",
     "squish"
     };
+#define hTvStringShowSameAsFull "show"
 
 enum trackVisibility hTvFromStringNoAbort(char *s)
 /* Given a string representation of track visibility, return as
@@ -419,7 +420,11 @@ enum trackVisibility hTvFromStringNoAbort(char *s)
 {
 int vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
 if (vis < 0)
+    {
+    if (sameString(hTvStringShowSameAsFull,s))
+        return tvShow;  // Show is the same as full!
     vis = 0;  // don't generate bogus value on invalid input
+    }
 return vis;
 }
 
@@ -2186,6 +2191,22 @@ fourState = cartUsualInt(cart, objName, fourState);
 tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
 return fourState;
 }
+
+void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled)
+/* Sets the fourState Checked in the cart and updates cached state */
+{
+int fourState = ( checked ? FOUR_STATE_CHECKED : FOUR_STATE_UNCHECKED );
+if (!enabled)
+    FOUR_STATE_DISABLE(fourState);
+
+char objName[SMALLBUF];
+char objVal[5];
+safef(objName, sizeof(objName), "%s_sel", subtrack->track);
+safef(objVal, sizeof(objVal), "%d", fourState);
+cartSetString(cart, objName, objVal);
+tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
+}
+
 
 typedef struct _dimensions {
     int count;
@@ -6710,26 +6731,26 @@ else
     return b;
 }
 
-enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, enum trackVisibility vis, boolean noSupers)
+enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers)
 // returns visibility limited by ancestry (or subtrack vis override)
 {
-char *cartVis = cartOptionalString(cart, tdb->track);
-if (cartVis != NULL)
+enum trackVisibility vis = tdb->visibility;
+if (cart)
     {
-    if (tdbIsCompositeChild(tdb))
-        return hTvFromString(cartVis); // subtrackVis override
-    vis = tvMin(vis, hTvFromString(cartVis) );
+    char *cartVis = cartOptionalString(cart, tdb->track);
+    if (cartVis != NULL)
+        {
+        vis = hTvFromString(cartVis);
+        if (tdbIsCompositeChild(tdb))
+            return vis; // subtrackVis override
+        }
     }
-else
-    vis = tvMin(vis, tdb->visibility );
-
 if (vis == tvHide || tdb->parent == NULL)
     return vis;
 
 if (noSupers && tdbIsSuperTrack(tdb->parent))
     return vis;
-
-return tdbVisLimitedByAncestry(cart,tdb->parent,vis,noSupers);
+return tvMin(vis,tdbVisLimitedByAncestry(cart,tdb->parent,noSupers));
 }
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)
