@@ -694,8 +694,39 @@ if(tdb == NULL && db != NULL)
 return tdb;
 }
 
+#ifdef OMIT
+// NOTE: This may not be needed.
+struct trackDb *tdbFillInAncestry(char *db,struct trackDb *tdbChild)
+/* Finds parents and fills them in.  Does not find siblings, however! */
+{
+assert(tdbChild != NULL);
+struct trackDb *tdb = tdbChild;
+struct sqlConnection *conn = NULL;
+for (;tdb->parent != NULL;tdb = tdb->parent)
+    ; // advance to highest parent already known
+
+// If track with no tdbParent has a parent setting then fill it in.
+for (;tdb->parent == NULL; tdb = tdb->parent)
+    {
+    char *parentTrack = trackDbLocalSetting(tdb,"parent");
+    if (parentTrack == NULL)
+        break;
+
+    if (conn == NULL)
+        conn = hAllocConn(db);
+    tdb->parent = hMaybeTrackInfo(conn, parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    printf("tdbFillInAncestry(%s): has %d children.",parentTrack,slCount(tdb->parent->subtracks));
+    //tdb->parent = tdbFindOrCreate(db,tdb,parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    }
+if (conn != NULL)
+    hFreeConn(&conn);
+
+return tdb;
+}
+#endif///def OMIT
+
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
 {
 if(tdb->extras == NULL)
     {
@@ -706,6 +737,13 @@ else
     {
     hashReplace(tdb->extras, name, value);
     }
+}
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name)
+/* Removes a value from the extras hash. */
+{
+if(tdb->extras != NULL)
+    hashMayRemove(tdb->extras, name);
 }
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal)
