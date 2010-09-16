@@ -317,7 +317,10 @@ struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name);
+/* Removes a value from the extras hash. */
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
 /* Returns a value if it is found in the extras hash. */
