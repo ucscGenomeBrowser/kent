@@ -774,11 +774,11 @@ scratchDir /hive/data/genomes/ce9/bed/blastTab/ce9/tmp
     mkdir ce9
     time nice -n +19 doHgNearBlastp.pl -targetOnly -noLoad -workhorse=hgwdev \
 	-clusterHub=pk ce9.config.ra > do.log 2>&1 &
+    #	real    5m56.823s
 
     time ./ce9/run.ce9.ce9/loadPairwise.csh 
     #	Scanning through 968 files
     #	Loading database with 1228800 rows
-
     #	real    0m37.193s
 
     cd /hive/data/genomes/ce9/bed/geneSorter
