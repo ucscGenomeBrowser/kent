@@ -66,7 +66,7 @@ do
     if [ -s "${T_NAME}.txt.gz" ]; then
 	${HGSQL} -e "drop table ${T_NAME};" ${DB} > /dev/null 2> /dev/null
 	grep -v "^----------------------" "${SQL}" | ${HGSQL} "${DB}"
-	gunzip -c "${T_NAME}.txt.gz" | ${HGSQL} --local-infile=1-e \
+	gunzip -c "${T_NAME}.txt.gz" | ${HGSQL} --local-infile=1 -e \
             "load data local infile \"/dev/stdin\" into table ${T_NAME};" ${DB}
     else
 	echo "ERROR: can not find: ${T_NAME}.txt.gz"
