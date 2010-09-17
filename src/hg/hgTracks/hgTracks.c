@@ -203,7 +203,7 @@ for (group = groupList; group != NULL; group = group->next)
         {
         struct track *track = tr->track;
 	struct trackDb *tdb = track->tdb;
-        if (changeVis == -1)
+        if (changeVis == -1) // to default
                 {
                 if(tdbIsComposite(tdb))
                     {
@@ -240,7 +240,7 @@ for (group = groupList; group != NULL; group = group->next)
                     track->priority = track->defaultPriority;
                     }
                 }
-            else
+            else // to changeVis value (Usually tvHide)
                 {
                 /* change to specified visibility */
                 if (tdbIsSuperTrackChild(tdb))
@@ -258,17 +258,31 @@ for (group = groupList; group != NULL; group = group->next)
                         cartSetString(cart, parentTdb->track,
                                     changeVis == tvHide ? "hide" : "show");
                     }
-                else
+                else // Not super  child
                     {
-                    /* regular track */
                     if (changeVis == tdb->visibility)
                         /* remove if setting to default vis */
                         cartRemove(cart, track->track);
                     else
-                        cartSetString(cart, track->track,
-                                                hStringFromTv(changeVis));
+                        cartSetString(cart, track->track, hStringFromTv(changeVis));
                     track->visibility = changeVis;
                     }
+
+                #ifdef SUBTRACKS_HAVE_VIS
+                // Whether super child or not, if its a composite, then handle the children
+                if (tdbIsComposite(tdb))
+                    {
+                    struct track *subtrack;
+                    for(subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
+                        {
+                        if (changeVis == tvHide)
+                            cartRemove(cart, subtrack->track); // Since subtrack level vis is an override, simply remove it to hide it
+                        else
+                            cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
+                        subtrack->visibility = changeVis;
+                        }
+                    }
+                #endif///def SUBTRACKS_HAVE_VIS
                 }
             }
         }
@@ -4232,12 +4246,31 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
-void subtrackCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
-/* When composite/view settings changes, remove subtrack specific vis */
+static void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view settings changes, remove subtrack specific vis
+   When superTrackChild is found and selected, shape superTrack to match. */
 {
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
-    cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+    {
+    if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
+        { // Need to update track visibility
+        if (tdbIsSuperTrackChild(track->tdb))
+            {
+            // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
+            // So now we need to find the supertrack and take changed cart values of its children
+            struct slRef *childRef;
+            for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
+                {
+                struct trackDb * childTdb = childRef->val;
+                struct track *child = hashFindVal(trackHash, childTdb->track);
+                char *cartVis = cartOptionalString(cart,child->track);
+                if (cartVis)
+                    child->visibility = hTvFromString(cartVis);
+                }
+            }
+        }
+    }
 }
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
@@ -4302,7 +4335,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     cartRemoveLike(cart, wildCard);
     }
 #ifdef SUBTRACKS_HAVE_VIS
-subtrackCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
