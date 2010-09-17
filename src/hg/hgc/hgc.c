@@ -266,6 +266,14 @@ int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
 
+struct palInfo
+{
+    char *chrom;
+    int left;
+    int right;
+    char *rnaName;
+};
+
 /* See this NCBI web doc for more info about entrezFormat:
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
 char *entrezFormat = "http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=%s&term=%s&doptcmdl=%s&tool=genome.ucsc.edu";
@@ -2307,9 +2315,31 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
+void linkToPal(char *track,  char *chrom, int start, int end, char *geneName)
+/* Make anchor tag to open pal window */
+{
+printf("<A TITLE=\"%s\" HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d\">",
+       geneName, hgPalName(), track, geneName, chrom, start, end);
+    printf("CDS FASTA alignment</A> from multiple alignment. ");
+}
+
+void addPalLink(struct sqlConnection *conn, char *track,
+    char *chrom, int start, int end, char *geneName)
+{
+struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");
+
+if (list != NULL)
+    {
+    puts("<LI>\n");
+    linkToPal( track, chrom, start, end, geneName);
+    puts("</LI>\n");
+    }
+}
+
+void geneShowPosAndLinksPal(char *geneName, char *pepName, struct trackDb *tdb,
 			 char *pepTable, char *pepClick,
-			 char *mrnaClick, char *genomicClick, char *mrnaDescription)
+			 char *mrnaClick, char *genomicClick, char *mrnaDescription,
+                         struct palInfo *palInfo)
 /* Show parts of gene common to everything. If pepTable is not null,
  * it's the old table name, but will check gbSeq first. */
 {
@@ -2398,7 +2428,25 @@ puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
+
+if (palInfo)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left, 
+        palInfo->right, palInfo->rnaName);
+    hFreeConn(&conn);
+    }
+
 printf("</UL>\n");
+}
+
+void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
+			 char *pepTable, char *pepClick,
+			 char *mrnaClick, char *genomicClick, char *mrnaDescription)
+{
+geneShowPosAndLinksPal(geneName, pepName, tdb,
+			 pepTable, pepClick,
+			 mrnaClick, genomicClick, mrnaDescription, NULL);
 }
 
 void geneShowPosAndLinksDNARefseq(char *geneName, char *pepName, struct trackDb *tdb,
@@ -2720,14 +2768,6 @@ void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, cha
 {
 printf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
        title, hgTracksName(), otherDb, chrom, start+1, end);
-}
-
-void linkToPal(char *track,  char *chrom, int start, int end, char *geneName)
-/* Make anchor tag to open pal window */
-{
-printf("<A TITLE=\"%s\" HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d\">",
-       geneName, hgPalName(), track, geneName, chrom, start, end);
-    printf("%s</A>  ",geneName);
 }
 
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
@@ -9568,18 +9608,6 @@ for (i = 0; imgExt[i] != NULL; i++)
 return NULL;
 }
 
-void addPalLink(struct sqlConnection *conn, char *track,
-    char *chrom, int start, int end, char *geneName)
-{
-struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");
-
-if (list != NULL)
-    {
-    printf("<B>CDS FASTA alignment from multiple alignment: </B>\n");
-    linkToPal( track, chrom, start, end, geneName);
-    }
-}
-
 void addGeneExtra(char *geneName)
 /* create html table columns with geneExtra data, see hgdocs/geneExtra/README
  * for details */
@@ -9835,9 +9863,6 @@ printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
-if (genbankIsRefSeqCodingMRnaAcc(rnaName))
-    addPalLink(conn, tdb->track,  chrom, left, right, rnaName);
-
 printf("</tr>\n</table>\n");
 
 /* optional summary text */
@@ -9861,8 +9886,19 @@ printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
 
 htmlHorizontalLine();
 
-geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
-		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+struct palInfo *palInfo = NULL;
+
+if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+    {
+    AllocVar(palInfo);
+    palInfo->chrom = chrom;
+    palInfo->left = left;
+    palInfo->right = right;
+    palInfo->rnaName = rnaName;
+    }
+
+geneShowPosAndLinksPal(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
+		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
