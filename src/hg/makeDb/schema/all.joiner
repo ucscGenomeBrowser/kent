@@ -16,7 +16,7 @@ set calJac calJac1,calJac3
 set canFam canFam1,canFam2
 set cavPor cavPor3
 set cb cb1,cb3
-set ce ce2,ce4,ce6
+set ce ce2,ce4,ce6,ce9
 set ci ci1,ci2
 set cioSav cioSav1
 set danRer danRer3,danRer4,danRer5,danRer6
@@ -3479,5 +3479,7 @@ tablesIgnored oryLat2
 tablesIgnored susScr2
     bosTau4ChainPileUp
 
+tablesIgnored ce9
+    gc5BaseBw
 
 
