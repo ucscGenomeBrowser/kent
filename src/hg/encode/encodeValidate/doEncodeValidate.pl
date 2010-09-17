@@ -1585,7 +1585,7 @@ if(!@errors) {
         # Also note that any project (like transcriptome) that doesnt have replicates should also use
         # this for their auto-create signals.
         HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
-        if( ( $daf->{noAutoCreate} eq "no") #We are no longer AutoCreateing, we only create under duress, 9-17-10
+        if($daf->{noAutoCreate} && ( $daf->{noAutoCreate} eq "no") #We are no longer AutoCreateing, we only create under duress, 9-17-10
         && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
         ##&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})   ## No longer create RawSignals
         && !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})
