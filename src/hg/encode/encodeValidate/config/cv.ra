@@ -2372,7 +2372,7 @@ sex M
 protocol
 
 term BoneMarrow
-tag BoneMarrow
+tag BMarrow
 type Cell Line
 organism Mouse
 tissue Bone
@@ -2508,10 +2508,9 @@ termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol PSU(Hardison):G1E_Hardison_protocol.pdf
+protocol PSU(Hardison):G1E_Hardison_protocol.pdf
 
-term G1E_E4+E2
+term G1E-E4+E2
 tag G1E_E4_E2
 type Cell Line
 organism Mouse
@@ -2526,8 +2525,7 @@ termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-# Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
+protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
 
 term Heart
 tag Heart
@@ -2882,15 +2880,15 @@ term ATF3
 tag ATF3
 type Antibody
 target ATF3
-antibodyDescription Activating transcription factor 3
-targetDescription A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the C-terminus of ATF3 of human origin.
+targetDescription Activating transcription factor 3. A bZIP transcription factor and member of the Ca2+/cAMP response element-binding (CREB) protein family. ATF3 is found to act both as an activator and repressor of transcription.
 orderUrl http://www.scbt.com/datasheet-188-atf-3-c-19-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-188
-lab Struhl
-targetId GeneCard:GC01P210805
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P210805
-validation missing
+lab Struhl, Myers
+targetId GeneCard:GC-1p212738
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=ATF3
+validation ATF3(immunoblots)_Myers:human_ATF3_validation_Myers.pdf 
 
 term BAF155
 tag BAF155
@@ -2961,6 +2959,20 @@ lab Myers
 targetId GeneCard:GC19P049943
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL3
 validation missing
+
+term BCLAF1_(M33-P5B11)
+tag BCLAF1M33
+type Antibody
+target BCLAF1
+antibodyDescription Mouse monoclonal IgG, raised against a synthetic peptide corresponding to a.a. 900-909 of BCLAF1 of human origin. 
+targetDescription This gene encodes a transcriptional repressor that interacts with several members of the BCL2 family of proteins. Overexpression of this protein induces apoptosis, which can be suppressed by co-expression of BCL2 proteins (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-1-101388
+orderUrl http://www.scbt.com/datasheet-101388-bclaf1-m33-p5b11-antibody.html
+lab Myers
+targetId GeneCard:GC06M136621
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCLAF1
+validation BCLAF1(immunoblots):human_BCLAF1_M33-P5B11_validation_Myers.pdf 
 
 term BDP1
 tag BDP1
@@ -3116,7 +3128,7 @@ lab Bernstein, Iyer
 lots 1350637, DAM1472197
 targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
-validation missing
+validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
 ##This does not appear in metaDb
 term CtBP1
@@ -3344,6 +3356,20 @@ targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA1&search=gata1=G
 lab Farnham
 validation missing
 
+term GATA1_(SC-265)
+tag GATA1SC265
+type Antibody
+target GATA1
+targetDescription GATA1 is erythroid-specific and is responsible for the regulated transcription of erythroid genes.
+antibodyDescription rat monoclonal antibody raised against mouse recombinant GATA1; recommended for detection of GATA1 of mouse, rat and human origin
+vendorName Santa Cruz Biotech
+vendorId  sc-265
+orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
+targetId GeneCard:Gata1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
+lab Hardison
+validation GATA1(Western_blot):mouse_Gata1_validation_Hardison.pdf
+
 term GATA-2
 tag GATA2
 type Antibody
@@ -3357,6 +3383,20 @@ targetId GeneCard:GC03M129680
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2&search=GATA2_id=GC03M129680
 lab Farnham
 validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
+
+term GATA2_(CG2-96)
+tag GATA2CG2
+type Antibody
+target GATA-2
+targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
+antibodyDescription Mouse monoclonal IgG. 
+vendorName Santa Cruz Biotech
+vendorId  sc-267
+orderUrl http://www.scbt.com/datasheet-267-gata-2-cg2-96-antibody.html
+targetId GeneCard:GC03M128198
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=GATA2
+lab Myers
+validation GATA2(immunoblots):human_GATA2_CG2-96_validation_Myers.pdf
 
 term GR
 tag GR
@@ -3806,6 +3846,20 @@ lab Farnham
 targetId GeneCard:GC19P063747
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TRIM28&search=trim28&search=GC19P063747
 validation KAP1(Western,IP-WB):human_KAP1_validation_Farnham.pdf
+
+term LEF1_(C-19)
+tag LEF1C19
+type Antibody
+target LEF1
+antibodyDescription 	 Goat polyclonal IgG, epitope mapping near the C-terminus of LEF1 of human origin
+targetDescription This gene encodes a transcription factor belonging to a family of proteins that share homology with the high mobility group protein-1. The proteins encoded by this gene can bind to a functionally important site in the T-cell receptor-alpha enhancer, thereby conferring maximal enhancer activity (RefSeq). 
+vendorName Santa Cruz Biotech
+vendorId sc-8592
+orderUrl http://www.scbt.com/datasheet-8592-lef-1-c-19-antibody.html
+lab Myers
+targetId GeneCard:GC04M108968
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
+validation LEF1(immunoblots):human_LEF1_C-19_validation_Myers.pdf
 
 term Max
 tag MAX
@@ -4374,6 +4428,20 @@ geneId 6872
 lab Myers / Wold
 lots K0905 F2706
 validation missing
+
+term TAL1_(SC-12984)
+tag TAL1SC12984
+type Antibody
+antibodyDescription goat polyclonal antibody; epitope mapping at the C-terminus of TAL1 of human origin, recommended for detection of TAL1 of mouse, rat and human origin
+vendorName Santa Cruz Biotech
+vendorId sc-12984
+orderUrl http://www.scbt.com/datasheet-12984-tal1-c-21-antibody.html
+target TAL1
+targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basic helix-loop-helix transcription factor known to regulate embryonic hematopoiesis.
+targetId GeneCard:Tal1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
+lab Hardison
+validation TAL1(Western_blot):mouse_Tal1_validation_Hardison.pdf
 
 #term TAF-II
 #type Antibody
@@ -5449,21 +5517,6 @@ tag shortDeplRrna
 type rnaExtract
 description RNA (<200 nt) with depleted 5S and 5.8S rRNAs
 
-term short19-40
-tag short19to40
-type rnaExtract
-description RNA sized 19-40 nt
-
-term short40-60
-tag short40to60
-type rnaExtract
-description RNA sized 40-60 nt
-
-term short60-200
-tag short60to200
-type rnaExtract
-description RNA sized 60-200 nt
-
 term longPolyA
 tag pAP
 type rnaExtract
@@ -5873,7 +5926,7 @@ label ChIP-seq
 term Exon-array
 tag AffyExonArray
 type dataType
-label Affy_Exon_Array
+label Exon-array
 
 term BIP
 tag bip
@@ -5955,7 +6008,8 @@ label RNA-seq
 term shRNA-seq
 tag shortrnaseq
 type dataType
-label RNA-seq
+# NOTE: add label later
+#label RNA-seq
 
 term TFBS-valid
 tag tfbsvalid

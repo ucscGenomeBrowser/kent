@@ -216,17 +216,15 @@ urlLabel MGI Phenotypic Allele:
 
 track agilentCgh
 release alpha
+compositeTrack on
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
-compositeTrack on
 group regulation
-priority 79.5
 visibility hide
-exonArrows on
-nextItemButton off
-noScoreFilter .
-html agilent.notPublic.html
-type bed 6 .
+noInherit on
+priority 79.5
+html agilentCghAlpha
+type bed 3
 
     track agilentCgh1x1m
     release alpha
@@ -234,6 +232,10 @@ type bed 6 .
     shortLabel Ag CGH 1x1M
     longLabel Agilent SurePrint G3 Mouse CGH Microarray 1x1M AMADID 027414
     color 0,128,0
+    nextItemButton off
+    noScoreFilter .
+    html agilentCghAlpha
+    type bed 4 .
     priority 1
 
     track agilentCgh4x180k
@@ -242,6 +244,10 @@ type bed 6 .
     shortLabel Ag CGH 4x180K
     longLabel Agilent SurePrint G3 Mouse CGH Microarray 4x180K AMADID 027411
     color 255,128,0
+    nextItemButton off
+    noScoreFilter .
+    html agilentCghAlpha
+    type bed 4 .
     priority 2
 
     track agilentCgh244a
@@ -250,6 +256,11 @@ type bed 6 .
     shortLabel Ag CGH 1x244K
     longLabel Agilent SurePrint HD Mouse CGH Microarray 1x244K AMADID 014695
     color 0,128,0
+    exonArrows on
+    nextItemButton off
+    noScoreFilter .
+    html agilentCghAlpha
+    type bed 6 .
     priority 3
 
     track agilentCgh105a
@@ -258,10 +269,15 @@ type bed 6 .
     shortLabel Ag CGH 2x105K
     longLabel Agilent SurePrint HD Mouse CGH Microarray 2x105K AMADID 014699
     color 255,128,0
+    exonArrows on
+    nextItemButton off
+    noScoreFilter .
+    html agilentCghAlpha
+    type bed 6 .
     priority 4
 
 track agilentCgh
-release beta,public
+release beta, public
 shortLabel Agilent CGH
 longLabel Agilent CGH Microarray probesets
 compositeTrack on
@@ -271,10 +287,11 @@ visibility hide
 exonArrows on
 nextItemButton off
 noScoreFilter .
+html agilentCghBeta
 type bed 6 .
 
     track agilentCgh244a
-    release beta,public
+    release beta, public
     parent agilentCgh
     shortLabel Ag CGH 1x244K
     longLabel Agilent SurePrint HD Mouse CGH Microarray 1x244K AMADID 014695
@@ -282,7 +299,7 @@ type bed 6 .
     priority 1
 
     track agilentCgh105a
-    release beta,public
+    release beta, public
     parent agilentCgh
     shortLabel Ag CGH 2x105K
     longLabel Agilent SurePrint HD Mouse CGH Microarray 2x105K AMADID 014699

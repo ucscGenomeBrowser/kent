@@ -51,7 +51,7 @@ echo "now committing new version# into source code versionInfo.h [${0}: `date`]"
 set temp = "#define CGI_VERSION "'"'"$BRANCHNN"'"'
 echo $temp > versionInfo.h
 cat versionInfo.h
-set temp = '"'"New version number v$BRANCHNN"'"'
+set temp = "New version number v$BRANCHNN"
 git add versionInfo.h
 git commit -m "$temp" versionInfo.h
 if ( $status ) then

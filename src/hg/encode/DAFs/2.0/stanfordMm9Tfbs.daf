@@ -35,7 +35,6 @@ lab               Stanford
 #Alternative labs: lab Yale
 dataType          ChIP-seq
 compositeSuffix   SydhTfbs
-dataAgreementSuffix Stanf
 group             regulation
 variables         cell,strain, antibody, treatment, control
 assembly          mm9

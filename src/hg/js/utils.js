@@ -724,8 +724,20 @@ function getDb()
 {
     var db = document.getElementsByName("db");
     if(db == undefined || db.length == 0)
-        return ""; // default?
+        {
+        db = $("#db");
+        if(db == undefined || db.length == 0)
+            return ""; // default?
+        }
     return db[0].value;
+}
+
+function getTrack()
+{
+    var track = $("#track");
+    if(track == undefined || track.length == 0)
+        return ""; // default?
+    return track[0].value;
 }
 
 function Rectangle()
@@ -740,12 +752,17 @@ function Rectangle()
         this.endX = arguments[1];
         this.startY = arguments[2];
         this.endY = arguments[3];
-    } else {
+    } else if(arguments.length > 0)  { 
         var coords = arguments[0].split(",");
         this.startX = coords[0];
         this.endX = coords[2];
         this.startY = coords[1];
         this.endY = coords[3];
+    } else { // what else to do?
+        this.startX = 0;
+        this.endX = 100;
+        this.startY = 0;
+        this.endY = 100;
     }
 }
 

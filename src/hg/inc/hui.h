@@ -166,6 +166,7 @@ enum trackVisibility
     tvPack=3,           /* Zig zag it up and down. */
     tvSquish=4,         /* Pack with thin boxes and no labels. */
     };
+#define tvShow tvFull
 
 enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as
@@ -942,6 +943,9 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
 
+enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers);
+/* returns visibility limited by ancestry (or subtrack vis override) */
+
 char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 /* Returns a string with the composite view control name if one exists */
 void compositeViewControlNameFree(char **name);
@@ -1148,5 +1152,8 @@ void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char
 
 int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
 /* Returns the four state checked state of the subtrack */
+
+void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
+/* Sets the fourState Checked in the cart and updates cached state */
 
 #endif /* HUI_H */

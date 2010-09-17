@@ -575,6 +575,27 @@ function compositeCfgRegisterOnchangeAction(prefix)
     $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
+function registerViewOnchangeAction(viewTrackName)
+{
+// After composite level view settings are written to HTML it is necessary to go back and
+// make sure that each time they change, the change is ajaxed over
+    var list = $("input[name^='"+viewTrackName+"\.']");
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+
+    list = $("select[name^='"+viewTrackName+"\.']"); // includes composite.view.vis
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+
+    list = $("select[name='"+viewTrackName+"']"); // is 'composite' vis
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+}
+
+function registerFormSubmit(formName)
+{
+    $('form[name="'+formName+'"]').each(function(i) { formSubmitWaitOnAjax(this)});
+}
 
 function subtrackCfgHideAll(table)
 {
@@ -593,7 +614,7 @@ function popUpCfgOk(popObj, trackName)
     var allVars = getAllVars(popObj, trackName );   // always subtrack cfg
     var changedVars = varHashChanges(allVars,popSaveAllVars);
     //warn("cfgVars:"+varHashToQueryString(changedVars));
-    setVarsFromHash(changedVars);  // FIXME: These settings will be lost, unless the composite/view settings are ajaxed over on change!
+    setVarsFromHash(changedVars);
     var newVis = changedVars[trackName];
     if(newVis != null) {
         var sel = $('input[name="'+trackName+'_sel"]:checkbox');
@@ -640,7 +661,6 @@ function _popUpSubrackCfg(trackName,label)
     popUpTrackName = trackName;
     popUpTitle = label;
 
-    // FIXME: Avoid this getting into history and making the back button not work!
     $.ajax({
         type: "GET",
         url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
@@ -655,6 +675,7 @@ function _popUpSubrackCfg(trackName,label)
 function popUpSubtrackCfg(trackName,label)
 {
     waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
+    return false;
 }
 
 function subtrackCfgShow(tableName)
