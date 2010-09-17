@@ -2241,6 +2241,15 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                   printf("<b>Level:&nbsp</b> %s<br>\n", row[0]);
                sqlFreeResult(&sr);
                }
+           if (sqlFieldIndex(conn, classTable, "transcriptType") > 0 )
+               {
+               safef(query, sizeof(query),
+                    "select transcriptType from %s where name = \"%s\"", classTable, name);
+               sr = sqlGetResult(conn, query);
+               if ((row = sqlNextRow(sr)) != NULL)
+                  printf("<b>Transcript type:&nbsp</b> %s<br>\n", row[0]);
+               sqlFreeResult(&sr);
+               }
            if (sqlFieldIndex(conn, classTable, "geneDesc") > 0 )
                {
                safef(query, sizeof(query),
@@ -22248,8 +22257,6 @@ int start = cartInt(cart, "o");
 int num = 6;
 char itemNameDash[64]; /* itenName appended with a "_" */
 char itemNameTrimmed[64]; /* itemName trimed at last "_" */
-//char itemNameTrimmedDash[64]; /* itemName trimed with dash added back */
-
 int sDiff = 30; /* acceptable difference of genomics size */
 /* message strings */
 char clickMsg[128];
@@ -22260,18 +22267,11 @@ char *openMsgM = "Click 'browser' link below to open Genome Browser at mitochond
 
 genericHeader(tdb, itemName);
 genericBedClick(conn, tdb, itemName, start, num);
-/* 
-printTBSchemaLink(tdb); 
-printf("<BR>");
-char *date = firstWordInLine(sqlTableUpdate(conn, table));
-if (date != NULL)
-    printf("<B>Data last updated:</B> %s<BR>\n", date);
-*/
-strcpy(itemNameDash, itemName);
-strcat(itemNameDash, "_");
-strcpy(itemNameTrimmed, itemName);
-char *tPt = strrchr(itemNameTrimmed, '_');
-*tPt = '\0';
+
+safecpy(itemNameDash, sizeof(itemNameDash),itemName);
+safecat(itemNameDash,64,"_");
+safecpy(itemNameTrimmed, sizeof(itemNameTrimmed),itemName);
+chopSuffixAt(itemNameTrimmed, '_');
 
 safef(query, sizeof(query), "select chrom, chromStart, chromEnd, name, score, strand from %s where name='%s'",
       table, itemName);

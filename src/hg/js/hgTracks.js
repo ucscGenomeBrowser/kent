@@ -1351,22 +1351,28 @@ function rulerModeToggle (ele)
 function makeMapItem(id)
 {
     // Create a dummy mapItem on the fly (for objects that don't have corresponding entry in the map).
-    var title;
-    var rec = trackDbJson[id];
-    if(rec) {
-        title = rec.shortLabel;
+    if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
+        var title;
+        var rec = trackDbJson[id];
+        if(rec) {
+            title = rec.shortLabel;
+        } else {
+            title = id;
+        }
+        return {id: id, title: "configure " + title};
     } else {
-        title = id;
+        return null;
     }
-    return {id: id, title: "configure " + title};
 }
 
 function mapItemMouseOver(obj)
 {
     // Record data for current map area item
     currentMapItem = makeMapItem(obj.id);
-    currentMapItem.href = obj.href;
-    currentMapItem.title = obj.title;
+    if(currentMapItem != null) {
+        currentMapItem.href = obj.href;
+        currentMapItem.title = obj.title;
+    }
 }
 
 function mapItemMouseOut(obj)
@@ -2180,8 +2186,33 @@ function changeSearchVisibilityPopups(cmd)
     return false;
 }
 
+function findTracksChangeVis(seenVis)
+{ // called by onchange of vis
+    var visName = $(seenVis).attr('id');
+    var trackName = visName.substring(0,visName.length - "_id".length)
+    var hiddenVis = $("input[name='"+trackName+"']");
+    var rec = trackDbJson[trackName];
+    var subtrack = rec.isSubtrack;
+    if($(seenVis).val() != "hide")
+        $(hiddenVis).val($(seenVis).val());
+    else {
+        var selCb = $("input#"+trackName+"_sel_id");
+        $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        var hiddenSel = $("input[name='"+trackName+"_sel']");
+        $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+        $(hiddenSel).attr('disabled',false);
+        if(subtrack)
+            $(hiddenVis).val("[]");
+        else
+            $(hiddenVis).val("hide");
+    }
+    $(hiddenVis).attr('disabled',false);
+    //warn("Changed "+trackName+" to "+$(hiddenVis).val())
+}
+
 function findTracksClickedOne(selCb,justClicked)
-{
+{ // called by on click of CB and findTracksCheckAll()
     var selName = $(selCb).attr('id');
     var trackName = selName.substring(0,selName.length - "_sel_id".length)
     var hiddenSel = $("input[name='"+trackName+"_sel']");

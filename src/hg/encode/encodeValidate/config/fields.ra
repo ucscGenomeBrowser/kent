@@ -138,6 +138,14 @@ file ddf
 type string
 required no
 
+# This field is for the lab to enter thier own internal tracking numbers
+# These experiment ID's can be used by the labs to specify which input files to use
+field labProtocolId
+file ddf
+type string
+required no
+
+
 # This field is to track data that was originally submitted
 # on another assembly, but has been lifted over or remapped.
 # The values should be restricted to hg18, hg19, mm8, mm9
@@ -212,24 +220,26 @@ file dafHeader
 type string
 required no
 
-# RETIRING IT 9/9/10
+#UNRETIRING THIS 9/15/2010 
 # This is in the DAF and not the DDF
 # It seems to represent the same information as fragLength
 # Is it redundant
 # needs to go
-#field medianFragmentLength
-#file dafHeader
-#type int
-#required no
+# The doEncodeValidate relies on this information
+field medianFragmentLength
+file dafHeader
+type int
+required no
 
-# RETIRING IT 9/9/10
+# UNRETIRING THIS 9/15/2010
 # ???????  most likely in Hudson Alpha
 # This comes from creating own signals
-# 
-#field fragmentLengthRange
-#file dafHeader
-#type int
-#required no
+# Necessary for DAF to pass validation
+# Need to look more into its function
+field fragmentLengthRange
+file dafHeader
+type int
+required no
 
 # This is where we list things like Freeze date
 # Cricket also wonders if this should be controlled
@@ -293,10 +303,11 @@ required yes
 #RETIRING IT 9/9/10
 # Tim says this is not used
 # May have been to set a priority in the trackDb, it would be completely worthless to do that now
-#field order
-#file dafList
-#type int
-#required no
+# UNRETIRING 9/14/10  doEncodeValidate fails if this is not present.  Even if it is not in the DAF
+field order
+file dafList
+type int
+required no
 
 # This specifies if the view is download only
 # It is used by ????
