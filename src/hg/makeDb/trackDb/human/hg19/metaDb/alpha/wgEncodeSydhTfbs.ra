@@ -1265,7 +1265,7 @@ dateUnrestricted 2010-10-07
 fileIndex wgEncodeSydhTfbsGm12878Tr4StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
 parentTable wgEncodeSydhTfbsGm12878Tr4StdAlnRep1
@@ -1291,7 +1291,7 @@ dateUnrestricted 2010-10-07
 fileIndex wgEncodeSydhTfbsGm12878Tr4StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
 parentTable wgEncodeSydhTfbsGm12878Tr4StdAlnRep2
@@ -1451,7 +1451,7 @@ dateUnrestricted 2010-09-19
 fileIndex wgEncodeSydhTfbsGm12878Yy1StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsGm12878Yy1StdAlnRep1
@@ -1477,7 +1477,7 @@ dateUnrestricted 2010-09-19
 fileIndex wgEncodeSydhTfbsGm12878Yy1StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsGm12878Yy1StdAlnRep2
@@ -1502,7 +1502,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
 project wgEncode
 replicate 1
@@ -1525,7 +1525,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
 project wgEncode
 replicate 2
@@ -1547,7 +1547,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
@@ -1569,7 +1569,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep1
 project wgEncode
@@ -1592,7 +1592,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep2
 project wgEncode
@@ -1615,7 +1615,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4046,7 +4046,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsH1hescInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsH1hescInputUcdAln.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsH1hescInputUcdAln
 project wgEncode
 setType input
@@ -4067,7 +4067,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsH1hescInputUcdRawSignal
 project wgEncode
 setType input
@@ -4088,7 +4088,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescInputUcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -4245,7 +4245,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1
 project wgEncode
 replicate 1
@@ -4268,7 +4268,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2
 project wgEncode
 replicate 2
@@ -4290,7 +4290,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4312,7 +4312,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
 parentTable wgEncodeSydhTfbsH1hescSuz12UcdRawSignalRep1
 project wgEncode
@@ -4335,7 +4335,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
 parentTable wgEncodeSydhTfbsH1hescSuz12UcdRawSignalRep2
 project wgEncode
@@ -4358,7 +4358,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4382,7 +4382,7 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHct116InputUcdAlnRep1
@@ -4408,7 +4408,7 @@ dateUnrestricted 2010-02-15
 fileIndex wgEncodeSydhTfbsHct116Pol2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHct116Pol2UcdAlnRep1
@@ -4434,7 +4434,7 @@ dateUnrestricted 2010-02-15
 fileIndex wgEncodeSydhTfbsHct116Pol2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHct116Pol2UcdAlnRep2
@@ -4460,7 +4460,7 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1
@@ -4486,7 +4486,7 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2
@@ -4616,7 +4616,7 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1
@@ -4642,7 +4642,7 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2
@@ -4668,7 +4668,7 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1
@@ -4694,7 +4694,7 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2
@@ -5266,7 +5266,7 @@ dateUnrestricted 2010-10-08
 fileIndex wgEncodeSydhTfbsHelas3E2f1StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3E2f1StdAlnRep1
@@ -5292,7 +5292,7 @@ dateUnrestricted 2010-10-08
 fileIndex wgEncodeSydhTfbsHelas3E2f1StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3E2f1StdAlnRep2
@@ -5318,7 +5318,7 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeSydhTfbsHelas3E2f4StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3E2f4StdAlnRep1
@@ -5344,7 +5344,7 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeSydhTfbsHelas3E2f4StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3E2f4StdAlnRep2
@@ -5370,7 +5370,7 @@ dateUnrestricted 2010-07-20
 fileIndex wgEncodeSydhTfbsHelas3E2f6StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3E2f6StdAlnRep1
@@ -5396,7 +5396,7 @@ dateUnrestricted 2010-07-20
 fileIndex wgEncodeSydhTfbsHelas3E2f6StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3E2f6StdAlnRep2
@@ -5421,7 +5421,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1
 project wgEncode
 replicate 1
@@ -5444,7 +5444,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2
 project wgEncode
 replicate 2
@@ -5466,7 +5466,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5488,7 +5488,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3Elk4UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -5510,7 +5510,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3Elk4UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -5532,7 +5532,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5556,7 +5556,7 @@ dateUnrestricted 2011-03-14
 fileIndex wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1
@@ -5582,7 +5582,7 @@ dateUnrestricted 2011-03-14
 fileIndex wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2
@@ -5997,7 +5997,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsHelas3InputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsHelas3InputUcdAln.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3InputUcdAln
 project wgEncode
 setType input
@@ -6018,7 +6018,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3InputUcdRawData.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3InputUcdRawSignal
 project wgEncode
 setType input
@@ -6039,7 +6039,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3InputUcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -6989,7 +6989,7 @@ dateUnrestricted 2010-06-24
 fileIndex wgEncodeSydhTfbsHelas3Tr4StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Tr4StdAlnRep1
@@ -7015,7 +7015,7 @@ dateUnrestricted 2010-06-24
 fileIndex wgEncodeSydhTfbsHelas3Tr4StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHelas3Tr4StdAlnRep2
@@ -7039,7 +7039,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1
 project wgEncode
 replicate 1
@@ -7061,7 +7061,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2
 project wgEncode
 replicate 2
@@ -7083,7 +7083,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -7105,7 +7105,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
 parentTable wgEncodeSydhTfbsHelas3Znf274UcdRawSignalRep1
 project wgEncode
@@ -7128,7 +7128,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
 parentTable wgEncodeSydhTfbsHelas3Znf274UcdRawSignalRep2
 project wgEncode
@@ -7151,7 +7151,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdSig.bigWig
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -7309,7 +7309,7 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHepg2bInputUcdAlnRep1
@@ -7335,7 +7335,7 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1
@@ -7361,7 +7361,7 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2
@@ -9381,7 +9381,7 @@ dateUnrestricted 2011-02-10
 fileIndex wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
 project wgEncode
 replicate 1
@@ -9404,7 +9404,7 @@ dateUnrestricted 2011-02-10
 fileIndex wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
 project wgEncode
 replicate 2
@@ -9426,7 +9426,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
@@ -9448,7 +9448,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep1
 project wgEncode
@@ -9471,7 +9471,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep2
 project wgEncode
@@ -9494,7 +9494,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -9569,7 +9569,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHuvecGata2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -9592,7 +9592,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHuvecGata2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -9614,7 +9614,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -9636,7 +9636,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep1
 project wgEncode
@@ -9659,7 +9659,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
 parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep2
 project wgEncode
@@ -9682,7 +9682,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -9757,7 +9757,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsHuvecInputUcdAln.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHuvecInputUcdAln
 project wgEncode
 setType input
@@ -9779,7 +9779,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecInputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHuvecInputUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHuvecInputUcdAlnRep1
 project wgEncode
 setType input
@@ -9800,7 +9800,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsHuvecInputUcdRawSignal
 project wgEncode
 setType input
@@ -9821,7 +9821,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecInputUcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -10105,7 +10105,7 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bE2f4UcdAlnRep1
@@ -10131,7 +10131,7 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bE2f4UcdAlnRep2
@@ -10157,7 +10157,7 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bE2f6UcdAlnRep1
@@ -10183,7 +10183,7 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bE2f6UcdAlnRep2
@@ -10209,7 +10209,7 @@ dateUnrestricted 2009-11-27
 fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bGata1UcdAlnRep1
@@ -10235,7 +10235,7 @@ dateUnrestricted 2009-11-27
 fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bGata1UcdAlnRep2
@@ -10261,7 +10261,7 @@ dateUnrestricted 2010-06-02
 fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bGata2UcdAlnRep1
@@ -10287,7 +10287,7 @@ dateUnrestricted 2010-06-02
 fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bGata2UcdAlnRep2
@@ -10313,7 +10313,7 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bInputUcdAlnRep1
@@ -10547,7 +10547,7 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1
@@ -10573,7 +10573,7 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2
@@ -10599,7 +10599,7 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1
@@ -10625,7 +10625,7 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2
@@ -10651,7 +10651,7 @@ dateUnrestricted 2010-03-22
 fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bTr4UcdAlnRep1
@@ -10677,7 +10677,7 @@ dateUnrestricted 2010-03-22
 fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bTr4UcdAlnRep2
@@ -10703,7 +10703,7 @@ dateUnrestricted 2010-06-03
 fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bYy1UcdAlnRep1
@@ -10729,7 +10729,7 @@ dateUnrestricted 2010-06-03
 fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bYy1UcdAlnRep2
@@ -10755,7 +10755,7 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bZnf263UcdAlnRep1
@@ -10781,7 +10781,7 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bZnf263UcdAlnRep2
@@ -10807,7 +10807,7 @@ dateUnrestricted 2010-10-04
 fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bZnf274UcdAlnRep1
@@ -10833,7 +10833,7 @@ dateUnrestricted 2010-10-04
 fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsK562bZnf274UcdAlnRep2
@@ -12542,7 +12542,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep1.bam
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsK562Kap1UcdAlnRep1
 project wgEncode
 replicate 1
@@ -12564,7 +12564,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep2.bam
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsK562Kap1UcdAlnRep2
 project wgEncode
 replicate 2
@@ -12586,7 +12586,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12608,7 +12608,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
 parentTable wgEncodeSydhTfbsK562Kap1UcdRawSignalRep1
 project wgEncode
@@ -12631,7 +12631,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
 parentTable wgEncodeSydhTfbsK562Kap1UcdRawSignalRep2
 project wgEncode
@@ -12654,7 +12654,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdSig.bigWig
 grant Snyder
-lab UCDavis
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -14304,7 +14304,7 @@ dateUnrestricted 2010-07-28
 fileIndex wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1
@@ -14330,7 +14330,7 @@ dateUnrestricted 2010-07-28
 fileIndex wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2
@@ -14356,7 +14356,7 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsMcf7InputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsMcf7InputUcdAlnRep1
@@ -14382,7 +14382,7 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsMcf7InputUcdAlnRep2
@@ -14778,7 +14778,7 @@ dateUnrestricted 2010-03-08
 fileIndex wgEncodeSydhTfbsNt2d1InputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsNt2d1InputUcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18
 origAssembly hg18
 parentTable wgEncodeSydhTfbsNt2d1InputUcdAlnRep1
@@ -14804,7 +14804,7 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1
@@ -14830,7 +14830,7 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2
@@ -14856,7 +14856,7 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1
@@ -14882,7 +14882,7 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
 parentTable wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2
@@ -14907,7 +14907,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsRajiInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsRajiInputUcdAln.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsRajiInputUcdAln
 project wgEncode
 setType input
@@ -14928,7 +14928,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsRajiInputUcdRawSignal
 project wgEncode
 setType input
@@ -14949,7 +14949,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiInputUcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -14972,7 +14972,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsRajiPol2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsRajiPol2UcdAlnRep1
 project wgEncode
 replicate 1
@@ -14995,7 +14995,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsRajiPol2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsRajiPol2UcdAlnRep2
 project wgEncode
 replicate 2
@@ -15017,7 +15017,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15039,7 +15039,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsRajiPol2UcdRawSignalRep1
 project wgEncode
 replicate 1
@@ -15061,7 +15061,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsRajiPol2UcdRawSignalRep2
 project wgEncode
 replicate 2
@@ -15083,7 +15083,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15106,7 +15106,7 @@ dateUnrestricted 2011-03-11
 fileIndex wgEncodeSydhTfbsU2osInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsU2osInputUcdAln.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsU2osInputUcdAln
 project wgEncode
 setType input
@@ -15127,7 +15127,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsU2osInputUcdRawSignal
 project wgEncode
 setType input
@@ -15148,7 +15148,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osInputUcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -15171,7 +15171,7 @@ dateUnrestricted 2011-03-11
 fileIndex wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1
 project wgEncode
 replicate 1
@@ -15194,7 +15194,7 @@ dateUnrestricted 2011-03-11
 fileIndex wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2.bam
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 parentTable wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2
 project wgEncode
 replicate 2
@@ -15216,7 +15216,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15238,7 +15238,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A.
 parentTable wgEncodeSydhTfbsU2osSetdb1UcdRawSignalRep1
 project wgEncode
@@ -15261,7 +15261,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A.
 parentTable wgEncodeSydhTfbsU2osSetdb1UcdRawSignalRep2
 project wgEncode
@@ -15284,7 +15284,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdSig.bigWig
 grant Snyder
-lab UCD
+lab UCD(Farnham)
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15293,4 +15293,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1447350426
+# MAGIC: -2124260372
