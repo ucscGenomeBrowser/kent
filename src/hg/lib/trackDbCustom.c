@@ -475,12 +475,15 @@ void trackDbSuperMemberSettings(struct trackDb *tdb)
  * supertrack. */
 {
 struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+if(stInfo == NULL || stInfo->isSuper)
+    return;
 tdb->parentName = cloneString(stInfo->parentName);
 tdb->visibility = stInfo->defaultVis;
 tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
+    refAddUnique(&(tdb->parent->children),tdb);
     }
 freeMem(stInfo);
 }
@@ -504,6 +507,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
             hashAdd(superHash, tdb->track, tdb);
+        tdb->children = NULL; // assertable?
         }
     freeMem(stInfo);
     }
@@ -812,31 +816,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 /* Do superTrack inheritance.  This involves setting up the parent pointers to superTracks,
  * but removing the superTracks themselves from the list. */
 struct trackDb *superlessList = NULL;
+trackDbSuperMarkup(tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    char *superTrack = trackDbSetting(tdb, "superTrack");
-    if (superTrack != NULL)
-        {
-	if (startsWithWord("on", superTrack))
-	    {
-	    tdb->next = NULL;
-	    }
-	else
-	    {
-	    char *parentName = tdb->parentName = cloneFirstWord(superTrack);
-	    struct trackDb *parent = hashFindVal(trackHash, parentName);
-	    if (parent == NULL)
-		errAbort("Parent track %s of supertrack %s doesn't exist",
-			parentName, tdb->track);
-	    tdb->parent = parent;
-	    slAddHead(&superlessList, tdb);
-	    }
-	}
+    if (tdbIsSuperTrack(tdb))
+        tdb->next = NULL;
     else
-        {
-	slAddHead(&superlessList, tdb);
-	}
+        slAddHead(&superlessList, tdb);
     }
 
 /* Do subtrack hierarchy - filling in parent and subtracks fields. */
