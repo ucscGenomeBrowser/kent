@@ -2440,13 +2440,6 @@ if (trackDbLocalSetting(tdb, "container"))
     /* For the moment, be a composite... */
     tdbMarkAsComposite(tdb);
     }
-if(tdbIsComposite(tdb))
-    {
-    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
-    // NOTE: if you want track vis to not be reset, move to after vis dropdown
-    if(1 == cartUsualInt(cart, setting, 0))
-        cartRemoveAllForTdbAndChildren(cart,tdb);
-    }
 if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
     //struct trackDb *tdbParent = tdbFillInAncestry(cartString(cart, "db"),tdb);
@@ -2467,6 +2460,15 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
         }
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
+    }
+if(tdbIsComposite(tdb))
+    {
+    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
+    // NOTE: if you want track vis to not be reset, move to after vis dropdown
+    if (1 == cartUsualInt(cart, setting, 0))
+        cartRemoveAllForTdbAndChildren(cart,tdb);
+    else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
+        cartTdbTreeMatchSubtrackVis(cart,tdb);
     }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
@@ -2507,7 +2509,7 @@ if (ct && sameString(tdb->type, "maf"))
         boolean canPack = tdb->canPack;
         if (ajax)
             {
-            vis = tdbVisLimitedByAncestry(cart, tdb, vis, TRUE);  // ajax popups should show currently inherited visability
+            vis = tdbVisLimitedByAncestry(cart, tdb, TRUE);  // ajax popups should show currently inherited visability
             if (tdbIsCompositeChild(tdb))
                 canPack = TRUE;
             }

@@ -266,11 +266,11 @@ required no
 
 # RETIRING IT 9/9/10
 # Not needed any more as we are not makeing signals
-# I have no idea
-#field noAutoCreate
-#file dafHeader
-#type bool
-#required no
+# Unretireing on 9/17/10 hard coded in doEncodeVAlidate
+field noAutoCreate
+file dafHeader
+type bool
+required no
 
 # DAF view fields
 field longLabelPrefix
