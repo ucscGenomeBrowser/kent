@@ -674,6 +674,7 @@ else
         char name[256];
         safef(name,sizeof(name),"%s_sel",track->track);
         boolean checked = FALSE;
+        #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
         if(tdbIsCompositeChild(track->tdb))
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
@@ -682,13 +683,14 @@ else
 
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             // Only subtracks get "_sel" var
-            #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
             hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
             }
         else
             {
             track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
             checked = ( track->visibility != tvHide );
+            if (tdbIsSuperTrackChild(track->tdb))
+                hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
             }
 
         #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
@@ -735,7 +737,7 @@ else
     hPrintf("\n</form>\n");
 
     // be done with json
-    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
+    hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"

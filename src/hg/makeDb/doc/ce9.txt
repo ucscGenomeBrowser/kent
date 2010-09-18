@@ -1056,3 +1056,121 @@ while (<>) {
     # Test hgNear again with kimExpDistance.
 
 ############################################################################
+## create a sangerGene name to WBGene ID reference table
+    ## to be used to construct URL
+    mkdir /hive/data/genomes/ce9/bed/WBGeneID
+    cd /hive/data/genomes/ce9/bed/WBGeneID
+
+    hgsql -N -e "select name from sangerGene;" ce9 | sort -u \
+	> ce9.sangerGene.name
+
+    cut -f1,3 ../../ws210/sequences/protein/wormpep.table210 \
+	| sed -e "s/^>//" | awk '{printf "%s\t%s\n", $1, $2}' \
+	| sort > geneToWBId.tab
+
+    sed -e "s#http://wormbase.org/db/gene/gene?name=##; s#;class=Gene##"\
+	../../ws210/tarFile/url.txt | sort > sangerGeneToWBGeneID.tab
+    sort -u geneToWBId.tab sangerGeneToWBGeneID.tab > two.lists.geneToWBid.tab
+
+    cat << '_EOF_' > addNames.pl
+#!/bin/env perl
+
+use strict;
+use warnings;
+
+my %sangerGenes;
+my %shortNames;
+open (FH, "<ce9.sangerGene.name") or die "can not read ce9.sangerGene.name";
+while (my $fullName = <FH>) {
+    chomp $fullName;
+    $sangerGenes{$fullName} = 1;
+    my @a = split('\.', $fullName);
+    my $shortName = $fullName;
+    if (scalar(@a) == 3) {
+        $shortName = "$a[0].$a[1]";
+    } elsif (scalar(@a) == 2) {
+        $shortName = "$a[0]";
+    }
+    if (exists($shortNames{$shortName})) {
+        $shortNames{$shortName} .= ",$fullName";
+    } else {
+        $shortNames{$shortName} = "$fullName";
+    }
+}
+close (FH);
+
+open (FH, "<two.lists.geneToWBId.tab") or die "can not read two.lists.geneToWBId.tab";
+while (my $line = <FH>) {
+    chomp $line;
+    my ($name, $wbId) = split('\t', $line);
+    if (exists($sangerGenes{$name})) {
+        printf "%s\t%s\n", $name, $wbId;
+    } elsif (exists($shortNames{$name})) {
+        my @a = split(',', $shortNames{$name});
+        for (my $i = 0; $i < scalar(@a); ++$i) {
+            printf "%s\t%s\n", $a[$i], $wbId;
+        }
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x addNames.pl
+    ./addNames.pl | sort -u > fixedGeneToWBGeneID.tab
+
+
+    hgLoadSqlTab ce9 sangerGeneToWBGeneID \
+	~/kent/src/hg/lib/sangerGeneToWBGeneID.sql \
+	fixedGeneToWBGeneID.tab
+    cd ~/kent/src/hg/makeDb/schema
+    joinerCheck -identifier=wormBaseId -database=ce9 -times -keys ./all.joiner
+# ce9.kimExpDistance.query - hits 11528085 of 11528085 ok
+# ce9.kimExpDistance.target - hits 11528085 of 11528085 ok
+# ce9.orfToGene.name - hits 28125 of 28125 ok
+# ce9.sangerBlastTab.query - hits 1228800 of 1228800 ok
+# ce9.sangerBlastTab.target - hits 1228800 of 1228800 ok
+# ce9.sangerCanonical.transcript - hits 19952 of 19952 ok
+# ce9.sangerIsoforms.transcript - hits 28152 of 28152 ok
+# ce9.sangerLinks.orfName - hits 28152 of 28152 ok
+# ce9.sangerPep.name - hits 28152 of 28152 ok
+# ce9.sangerToRefSeq.name - hits 27945 of 27945 ok
+# ce9.sangerGeneToWBGeneID.sangerGene - hits 28152 of 28152 ok
+
+############################################################################
+## Blastz SELF (DONE - 2010-09-17 - Hiram)
+    #	screen
+    mkdir /hive/data/genomes/ce9/bed/lastzCe9.2010-09-17
+    cd /hive/data/genomes/ce9/bed/lastzCe9.2010-09-17
+
+    cat << '_EOF_' > DEF
+# ce9 vs ce9 - Self alignment
+BLASTZ_H=2000
+BLASTZ_M=200
+
+# TARGET: elegans Ce9
+SEQ1_DIR=/scratch/data/ce9/ce9.2bit
+SEQ1_LEN=/scratch/data/ce9/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: elegans Ce9
+SEQ2_DIR=/scratch/data/ce9/ce9.2bit
+SEQ2_LEN=/scratch/data/ce9/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce9/bed/lastzCe9.2010-09-17
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-chainMinScore=10000 -chainLinearGap=medium -bigClusterHub=pk \
+	-smallClusterHub=memk > do.log 2>&1 &
+    #	real    30m2.833s
+
+    nice -n +19 featureBits ce9 chainSelfLink > fb.ce9.chainSelfLink.txt 2>&1
+    #	30911955 bases of 100286004 (30.824%) in intersection
+
+##########################################################################
