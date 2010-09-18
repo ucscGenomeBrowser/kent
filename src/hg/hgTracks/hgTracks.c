@@ -4246,6 +4246,7 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
+#ifdef SUBTRACKS_HAVE_VIS
 static void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -4272,6 +4273,7 @@ for (;track != NULL; track = track->next)
         }
     }
 }
+#endif///def SUBTRACKS_HAVE_VIS
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
