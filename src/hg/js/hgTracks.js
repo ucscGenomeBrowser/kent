@@ -1750,8 +1750,10 @@ function loadContextMenu(img)
                     }
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
                     && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
-                        o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
-                        any = true;
+                        if(selectedMenuItem.title.indexOf("Click to alter") != 0 || selectedMenuItem.title.indexOf("and similar subtracks") != -1) {
+                            o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                            any = true;
+                        }
                     }
                     if(any) {
                         menu.push($.contextMenu.separator);
@@ -2176,14 +2178,6 @@ function searchKeydown(event)
         // This doesn't work with IE or Safari.
         // $('#searchSubmit').click();
     }
-}
-
-function changeSearchVisibilityPopups(cmd)
-{  // ??? Larry?
-    $("#searchResultsForm select").each(function(i) {
-        $(this).val(cmd);
-    });
-    return false;
 }
 
 function findTracksChangeVis(seenVis)

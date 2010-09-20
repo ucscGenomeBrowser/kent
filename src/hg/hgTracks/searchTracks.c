@@ -394,11 +394,11 @@ if(numMetadataSelects)
         else
             offset = 1;
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
-        mdbVar[i] = cartOptionalString(cart, buf);
+        mdbVar[i] = cloneString(cartOptionalString(cart, buf));
         if(!simpleSearch)
             {
             safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            mdbVal[i] = cartOptionalString(cart, buf);
+            mdbVal[i] = cloneString(cartOptionalString(cart, buf));
             if(sameString(mdbVal[i], ANYLABEL))
                 mdbVal[i] = NULL;
             if(!isEmpty(mdbVal[i]))
