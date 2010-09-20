@@ -96,6 +96,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	priPac1 \
 	caePb1 caePb2 \
 	bruMal1 \
+	melHap1 \
 	falciparum \
 	choHof1 \
 	sacCer1 sacCer2 \
