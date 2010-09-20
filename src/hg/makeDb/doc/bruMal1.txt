@@ -1,0 +1,49 @@
+# for emacs: -*- mode: sh; -*-
+
+# Brugia malayi
+# TIGR and the Sanger Institute
+# "Draft genome of the filarial nematode parasite Brugia malayi.",
+# Science, 2007 Sep 21; 317(5845):1756-60
+# http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2613796/
+
+##############################################################################
+## Fetch sequence (DONE - 2010-09-20 - Hiram)
+
+    mkdir -p /hive/data/genomes/bruMal1/ws210
+    cd /hive/data/genomes/bruMal1/ws210
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/b_malayi/
+
+    hgFakeAgp -minScaffoldGap=100000 -minContigGap=1 \
+	sequences/dna/b_malayi.WS210.dna.fa.gz ucsc.fake.bruMal1.agp
+
+##############################################################################
+## Initial browser build (DONE - 2010-09-20 - Hiram)
+    cd /hive/data/genomes/bruMal1
+
+    cat << '_EOF_' > bruMal1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db bruMal1
+clade worm
+genomeCladePriority 80
+scientificName Brugia malayi
+commonName B. malayi
+assemblyDate Sep. 2007
+assemblyLabel TIGR and the Sanger Institute
+assemblyShortLabel TIGR 1.0
+orderKey 890
+mitoAcc NC_004298.1
+fastaFiles /hive/data/genomes/bruMal1/ws210/sequences/dna/b_malayi.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/bruMal1/ws210/ucsc.fake.bruMal1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6279
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-stop=agp bruMal1.config.ra > agp.log 2>&1
+    time makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-continue=db bruMal1.config.ra > db.log 2>&1
+    #	real    0m48.923s
