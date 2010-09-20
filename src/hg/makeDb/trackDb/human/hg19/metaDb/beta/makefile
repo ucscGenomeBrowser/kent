@@ -1,8 +1,9 @@
 
 LIST=\
 wgEncodeMapability.ra \
-wgEncodeGisDnaPet.ra \
 wgEncodeGencode.ra \
+wgEncodeGisDnaPet.ra \
+wgEncodeGisRnaSeq.ra \
 
 include ../../../../makefile.metaDb
 
