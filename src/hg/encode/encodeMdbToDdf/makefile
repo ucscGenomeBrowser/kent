@@ -6,7 +6,7 @@ SCRIPT_FILES = \
 	encodeMdbToDdf
 
 install: 
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} scripts
+	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} scripts
 
 scripts:
 	@for F in ${SCRIPT_FILES}; do \

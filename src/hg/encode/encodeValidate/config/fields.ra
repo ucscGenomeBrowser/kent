@@ -42,6 +42,23 @@ file ddf
 type string
 required no
 
+# This is used to store experiment defining variables for a composite
+field expVars
+file ddf
+type string
+required no
+
+# GEO accession numbers for series and sample
+field geoSeries
+file ddf
+type string
+required no
+
+field geoSample
+file ddf
+type string
+required no
+
 # This is replicate number as you would expect
 # It would be nice to verify that you have a rep 1 if you have a rep 2. etc
 field replicate

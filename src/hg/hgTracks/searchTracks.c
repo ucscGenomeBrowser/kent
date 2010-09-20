@@ -737,7 +737,7 @@ else
     hPrintf("\n</form>\n");
 
     // be done with json
-    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
+    hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
 hPrintf("<p><b>Recently Done</b><ul>\n"

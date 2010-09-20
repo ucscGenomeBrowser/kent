@@ -9,6 +9,7 @@
 #include "web.h"
 #include "encode/encodePeak.h"
 
+#ifdef UNUSED
 static boolean pairInList(struct slPair *pair, struct slPair *list)
 /* Return TRUE if pair is in list. */
 {
@@ -44,6 +45,7 @@ struct trackDb *sub;
 for (sub = tdb->subtracks; sub != NULL; sub = sub->next)
     rAddMatching(sub, selGroupList, pList);
 }
+#endif//def UNUSED
 
 void doEncodePeak(struct trackDb *tdb, struct customTrack *ct)
 /*  details for encodePeak type tracks. */
