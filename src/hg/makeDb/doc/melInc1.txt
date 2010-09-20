@@ -1,0 +1,49 @@
+# for emacs: -*- mode: sh; -*-
+
+# Meloidogyne incognita
+# Sanger and Genoscope
+# http://www.nematode.net/Species.Summaries/Meloidogyne.incognita/index.php
+#	Genbank: CABB00000000
+
+##############################################################################
+## Fetch sequence (DONE - 2010-09-20 - Hiram)
+
+    mkdir -p /hive/data/genomes/melInc1/ws210
+    cd /hive/data/genomes/melInc1/ws210
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/m_incognita/
+
+    hgFakeAgp -minContigGap=1 \
+	sequences/dna/b_malayi.WS210.dna.fa.gz ucsc.fake.melInc1.agp
+
+##############################################################################
+## Initial browser build (DONE - 2010-09-20 - Hiram)
+    cd /hive/data/genomes/melInc1
+
+    cat << '_EOF_' > melInc1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db melInc1
+clade worm
+genomeCladePriority 84
+scientificName Meloidogyne incognita
+commonName M. incognita
+assemblyDate Feb. 2008
+assemblyLabel Sanger and Genoscope Genbank: CABB00000000
+assemblyShortLabel M. incognita WS210
+orderKey 897
+mitoAcc none
+fastaFiles /hive/data/genomes/melInc1/ws210/sequences/dna/m_incognita.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/melInc1/ws210/ucsc.fake.melInc1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6306
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-stop=agp melInc1.config.ra > agp.log 2>&1
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-continue=db melInc1.config.ra > db.log 2>&1
+
+##############################################################################
