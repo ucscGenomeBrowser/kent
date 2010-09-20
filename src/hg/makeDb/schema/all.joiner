@@ -1699,13 +1699,13 @@ identifier kompName
 
 identifier ikmcName
 "IKMC (knockoutmouse.org) gene name"
-    $hg.ikmc.name dupeOk
-    $hg.ikmcExtra.name
+    $mm.ikmc.name dupeOk
+    $mm.ikmcExtra.name
 
 identifier hgIkmcName
 "IKMC (knockoutmouse.org) mapped gene name"
-    $mm.hgIkmc.name dupeOk
-    $mm.hgIkmcExtra.name
+    $hg.hgIkmc.name dupeOk
+    $hg.hgIkmcExtra.name
 
 # "Biological" Gene Names
 
