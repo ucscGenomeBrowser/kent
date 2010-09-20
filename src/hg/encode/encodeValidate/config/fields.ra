@@ -42,6 +42,12 @@ file ddf
 type string
 required no
 
+# This is used to store experiment defining variables for a composite
+field expVars
+file ddf
+type string
+required no
+
 # GEO accession numbers for series and sample
 field geoSeries
 file ddf
