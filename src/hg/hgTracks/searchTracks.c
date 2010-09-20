@@ -398,7 +398,7 @@ if(numMetadataSelects)
         if(!simpleSearch)
             {
             safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            mdbVal[i] = cartOptionalString(cart, buf);
+            mdbVal[i] = cloneString(cartOptionalString(cart, buf));
             if(sameString(mdbVal[i], ANYLABEL))
                 mdbVal[i] = NULL;
             if(!isEmpty(mdbVal[i]))
