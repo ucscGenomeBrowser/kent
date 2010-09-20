@@ -1,6 +1,7 @@
 metaObject wgEncodeCaltechRnaSeq
 objType composite
 composite wgEncodeCaltechRnaSeq
+expVars cell,localization,readType,insertLength,replicate
 geoSeries GSE23316
 
 metaObject wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
