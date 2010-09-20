@@ -1,3 +1,8 @@
+metaObject wgEncodeCaltechRnaSeq
+objType composite
+composite wgEncodeCaltechRnaSeq
+geoSeries GSE23316
+
 metaObject wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32
 objType table
 cell GM12878
@@ -7,6 +12,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591674
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -30,6 +37,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqAlignsRep1Gm12878CellPapBb2R1x75d.bed12.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -53,6 +62,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep1H1hescCellPapBb2R1x75d.bed12.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -76,6 +87,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep1Helas3CellPapBb2R1x75d.bed12.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -99,6 +112,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep1Hepg2CellPapBb2R1x75d.bed12.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -122,6 +137,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep1HuvecCellPapBb2R1x75d.bed12.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -145,6 +162,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591675
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -168,6 +187,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqAlignsRep1K562CellPapBb2R1x75d.bed12.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -191,6 +212,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep1NhekCellPapBb2R1x75d.bed12.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -214,6 +237,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591657
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -237,6 +262,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqAlignsRep2Gm12878CellPapBb2R1x75d.bed12.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -260,6 +287,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep2H1hescCellPapBb2R1x75d.bed12.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -283,6 +312,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep2Helas3CellPapBb2R1x75d.bed12.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -306,6 +337,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep2Hepg2CellPapBb2R1x75d.bed12.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -329,6 +362,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqAlignsRep2HuvecCellPapBb2R1x75d.bed12.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -352,6 +387,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591667
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -375,6 +412,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqAlignsRep2K562CellPapBb2R1x75d.bed12.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -398,6 +437,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -421,6 +462,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1H1hescCellPapNaR2x75Il400.fastq.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -444,6 +487,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1Helas3CellPapNaR2x75.fastq.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -467,6 +512,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1Hepg2CellPapNaR2x75.fastq.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -490,6 +537,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1HuvecCellPapNaR2x75.fastq.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -513,6 +562,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep1NhekCellPapNaR2x75.fastq.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -536,6 +587,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Gm12878CellPapNaR2x75Il400.fastq.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -559,6 +612,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -582,6 +637,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Helas3CellPapNaR2x75.fastq.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -605,6 +662,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2Hepg2CellPapNaR2x75.fastq.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -628,6 +687,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep2HuvecCellPapNaR2x75.fastq.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -651,6 +712,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep3H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -674,6 +737,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd1Rep4H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -720,6 +785,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -743,6 +810,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1H1hescCellPapNaR2x75Il400.fastq.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -766,6 +835,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1Helas3CellPapNaR2x75.fastq.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -789,6 +860,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1Hepg2CellPapNaR2x75.fastq.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -812,6 +885,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1HuvecCellPapNaR2x75.fastq.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -835,6 +910,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep1NhekCellPapNaR2x75.fastq.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -858,6 +935,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Gm12878CellPapNaR2x75Il400.fastq.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -881,6 +960,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -904,6 +985,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Helas3CellPapNaR2x75.fastq.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -927,6 +1010,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2Hepg2CellPapNaR2x75.fastq.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -950,6 +1035,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep2HuvecCellPapNaR2x75.fastq.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -973,6 +1060,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep3H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -996,6 +1085,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRd2Rep4H1hescCellPapNaR2x75.fastq.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -1042,6 +1133,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqFastqRep1Gm12878CellPapNaR1x75d.fastq.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1065,6 +1158,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep1H1hescCellPapNaR1x75d.fastq.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1088,6 +1183,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep1Helas3CellPapNaR1x75d.fastq.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1111,6 +1208,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x32.fastq.gz
+geoSample GSM591654
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1134,6 +1233,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep1Hepg2CellPapNaR1x75d.fastq.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1157,6 +1258,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep1HuvecCellPapNaR1x75d.fastq.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1180,6 +1283,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqFastqRep1K562CellPapNaR1x75d.fastq.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1203,6 +1308,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep1NhekCellPapNaR1x75d.fastq.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1226,6 +1333,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqFastqRep2Gm12878CellPapNaR1x75d.fastq.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1249,6 +1358,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep2H1hescCellPapNaR1x75d.fastq.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1272,6 +1383,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep2Helas3CellPapNaR1x75d.fastq.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1295,6 +1408,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x32.fastq.gz
+geoSample GSM591662
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1318,6 +1433,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep2Hepg2CellPapNaR1x75d.fastq.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1341,6 +1458,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqFastqRep2HuvecCellPapNaR1x75d.fastq.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1364,6 +1483,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqFastqRep2K562CellPapNaR1x75d.fastq.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1639,6 +1760,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Gm12878CellPapBb2R1x75d.wig.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1662,6 +1785,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1H1hescCellPapBb2R1x75d.wig.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1685,6 +1810,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Helas3CellPapBb2R1x75d.wig.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1708,6 +1835,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1Hepg2CellPapBb2R1x75d.wig.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1731,6 +1860,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1HuvecCellPapBb2R1x75d.wig.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1754,6 +1885,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1K562CellPapBb2R1x75d.wig.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1777,6 +1910,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep1NhekCellPapBb2R1x75d.wig.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1800,6 +1935,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Gm12878CellPapBb2R1x75d.wig.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1823,6 +1960,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2H1hescCellPapBb2R1x75d.wig.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1846,6 +1985,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Helas3CellPapBb2R1x75d.wig.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1869,6 +2010,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2Hepg2CellPapBb2R1x75d.wig.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1892,6 +2035,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2HuvecCellPapBb2R1x75d.wig.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1915,6 +2060,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqMinusRawSignalRep2K562CellPapBb2R1x75d.wig.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -1938,6 +2085,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqPairedRep1Gm12878CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -1961,6 +2110,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75.bed12.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -1984,6 +2135,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPairedRep1H1hescCellPapErng32aR2x75Il400.bed12.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -2007,6 +2160,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqPairedRep1Helas3CellPapErng32aR2x75.bed12.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2030,6 +2185,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR1x32.bed12.gz
+geoSample GSM591654
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2053,6 +2210,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqPairedRep1Hepg2CellPapErng32aR2x75.bed12.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2076,6 +2235,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqPairedRep1HuvecCellPapErng32aR2x75.bed12.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2099,6 +2260,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqPairedRep1K562CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2122,6 +2285,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqPairedRep1NhekCellPapErng32aR2x75.bed12.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2145,6 +2310,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqPairedRep2Gm12878CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2168,6 +2335,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPairedRep2Gm12878CellPapErng32aR2x75Il400.bed12.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -2191,6 +2360,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqPairedRep2H1hescCellPapErng32aR2x75.bed12.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2214,6 +2385,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqPairedRep2Helas3CellPapErng32aR2x75.bed12.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2237,6 +2410,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR1x32.bed12.gz
+geoSample GSM591662
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2260,6 +2435,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqPairedRep2Hepg2CellPapErng32aR2x75.bed12.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2283,6 +2460,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqPairedRep2HuvecCellPapErng32aR2x75.bed12.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2306,6 +2485,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqPairedRep2K562CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2329,6 +2510,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqPairedRep3H1hescCellPapErng32aR2x75.bed12.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2352,6 +2535,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPairedRep4H1hescCellPapErng32aR2x75.bed12.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2398,6 +2583,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Gm12878CellPapBb2R1x75d.wig.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2421,6 +2608,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1H1hescCellPapBb2R1x75d.wig.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2444,6 +2633,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Helas3CellPapBb2R1x75d.wig.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2467,6 +2658,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1Hepg2CellPapBb2R1x75d.wig.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2490,6 +2683,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1HuvecCellPapBb2R1x75d.wig.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2513,6 +2708,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1K562CellPapBb2R1x75d.wig.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2536,6 +2733,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep1NhekCellPapBb2R1x75d.wig.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2559,6 +2758,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Gm12878CellPapBb2R1x75d.wig.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2582,6 +2783,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2H1hescCellPapBb2R1x75d.wig.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2605,6 +2808,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Helas3CellPapBb2R1x75d.wig.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2628,6 +2833,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2Hepg2CellPapBb2R1x75d.wig.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2651,6 +2858,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2HuvecCellPapBb2R1x75d.wig.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2674,6 +2883,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqPlusRawSignalRep2K562CellPapBb2R1x75d.wig.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -2697,6 +2908,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData2Rep1Gm12878CellLongpolyaBow0982x75.bowtie.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2720,6 +2933,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData2Rep1K562CellLongpolyaBow0982x75.bowtie.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2743,6 +2958,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData2Rep2Gm12878CellLongpolyaBow0982x75.bowtie.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2766,6 +2983,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData2Rep2K562CellLongpolyaBow0982x75.bowtie.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2789,6 +3008,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData3Rep1Gm12878CellLongpolyaBow0982x75.fasta.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2812,6 +3033,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData3Rep1K562CellLongpolyaBow0982x75.fasta.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2835,6 +3058,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData3Rep2Gm12878CellLongpolyaBow0982x75.fasta.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2858,6 +3083,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData3Rep2K562CellLongpolyaBow0982x75.fasta.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2881,6 +3108,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData4Rep1Gm12878CellLongpolyaBb12x75.psl.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2904,6 +3133,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData4Rep1K562CellLongpolyaBb12x75.psl.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2927,6 +3158,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData4Rep2Gm12878CellLongpolyaBb12x75.psl.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2950,6 +3183,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData4Rep2K562CellLongpolyaBb12x75.psl.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2973,6 +3208,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -2996,6 +3233,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellLongpolyaErng3b1x32.rpkm.gz
+geoSample GSM591674
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3019,6 +3258,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3042,6 +3283,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3065,6 +3308,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3088,6 +3333,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep1H1hescCellPapErng32aR2x75Il400.rpkm.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -3111,6 +3358,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3134,6 +3383,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Helas3CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3157,6 +3408,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
+geoSample GSM591654
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3180,6 +3433,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3203,6 +3458,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqRawData5Rep1Hepg2CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3226,6 +3483,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3249,6 +3508,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData5Rep1HuvecCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3272,6 +3533,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3295,6 +3558,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellLongpolyaErng3b1x32.rpkm.gz
+geoSample GSM591675
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3318,6 +3583,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep1K562CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3341,6 +3608,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3364,6 +3633,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData5Rep1NhekCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3387,6 +3658,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3410,6 +3683,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellLongpolyaErng3b1x32.rpkm.gz
+geoSample GSM591657
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3433,6 +3708,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3456,6 +3733,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Gm12878CellPapErng32aR2x75Il400.rpkm.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -3479,6 +3758,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3502,6 +3783,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawData5Rep2H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3525,6 +3808,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3548,6 +3833,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Helas3CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3571,6 +3858,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
+geoSample GSM591662
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3594,6 +3883,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3617,6 +3908,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawData5Rep2Hepg2CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3640,6 +3933,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3663,6 +3958,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData5Rep2HuvecCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3686,6 +3983,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3709,6 +4008,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellLongpolyaErng3b1x32.rpkm.gz
+geoSample GSM591667
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3732,6 +4033,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqRawData5Rep2K562CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3755,6 +4058,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawData5Rep3H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3778,6 +4083,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData5Rep4H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3824,6 +4131,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3847,6 +4156,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Gm12878CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3870,6 +4181,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3893,6 +4206,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3916,6 +4231,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep1H1hescCellPapErng32aR2x75Il400.rpkm.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -3939,6 +4256,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -3962,6 +4281,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Helas3CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -3985,6 +4306,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x32.rpkm.gz
+geoSample GSM591654
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4008,6 +4331,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4031,6 +4356,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqRawData6Rep1Hepg2CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4054,6 +4381,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4077,6 +4406,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData6Rep1HuvecCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4100,6 +4431,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4123,6 +4456,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqRawData6Rep1K562CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4146,6 +4481,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4169,6 +4506,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData6Rep1NhekCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4192,6 +4531,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4215,6 +4556,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4238,6 +4581,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Gm12878CellPapErng32aR2x75Il400.rpkm.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -4261,6 +4606,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4284,6 +4631,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawData6Rep2H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4307,6 +4656,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4330,6 +4681,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Helas3CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4353,6 +4706,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x32.rpkm.gz
+geoSample GSM591662
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4376,6 +4731,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4399,6 +4756,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawData6Rep2Hepg2CellPapErng32aR2x75.rpkm.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4422,6 +4781,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4445,6 +4806,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawData6Rep2HuvecCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4468,6 +4831,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4491,6 +4856,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqRawData6Rep2K562CellPapErng32aR1x75d.rpkm.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4514,6 +4881,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawData6Rep3H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4537,6 +4906,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawData6Rep4H1hescCellPapErng32aR2x75.rpkm.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4583,6 +4954,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData7Rep1Gm12878CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4606,6 +4979,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData7Rep1K562CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4629,6 +5004,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData7Rep2Gm12878CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4652,6 +5029,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawData7Rep2K562CellLongpolyaErng32x75.rpkm.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4675,6 +5054,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawDataRep1Gm12878CellLongpolyaNa2x75.fasta.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4697,6 +5078,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawDataRep1K562CellLongpolyaNa2x75.fasta.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4719,6 +5102,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawDataRep2Gm12878CellLongpolyaNa2x75.fasta.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4741,6 +5126,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawDataRep2K562CellLongpolyaNa2x75.fasta.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4763,6 +5150,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaBb12x75.wig.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4786,6 +5175,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Gm12878CellLongpolyaErng3b1x32.wig.gz
+geoSample GSM591674
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4809,6 +5200,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75.wig.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4832,6 +5225,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawSignalRep1H1hescCellPapBb2R2x75Il400.wig.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -4855,6 +5250,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Helas3CellPapBb2R2x75.wig.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4878,6 +5275,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R1x32.wig.gz
+geoSample GSM591654
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4901,6 +5300,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqRawSignalRep1Hepg2CellPapBb2R2x75.wig.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4924,6 +5325,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawSignalRep1HuvecCellPapBb2R2x75.wig.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4947,6 +5350,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaBb12x75.wig.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -4970,6 +5375,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep1K562CellLongpolyaErng3b1x32.wig.gz
+geoSample GSM591675
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -4993,6 +5400,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawSignalRep1NhekCellPapBb2R2x75.wig.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5016,6 +5425,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaBb12x75.wig.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5039,6 +5450,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellLongpolyaErng3b1x32.wig.gz
+geoSample GSM591657
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5062,6 +5475,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Gm12878CellPapBb2R2x75Il400.wig.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -5085,6 +5500,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawSignalRep2H1hescCellPapBb2R2x75.wig.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5108,6 +5525,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Helas3CellPapBb2R2x75.wig.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5131,6 +5550,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R1x32.wig.gz
+geoSample GSM591662
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5154,6 +5575,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqRawSignalRep2Hepg2CellPapBb2R2x75.wig.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5177,6 +5600,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqRawSignalRep2HuvecCellPapBb2R2x75.wig.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5200,6 +5625,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaBb12x75.wig.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5223,6 +5650,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqRawSignalRep2K562CellLongpolyaErng3b1x32.wig.gz
+geoSample GSM591667
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5246,6 +5675,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqRawSignalRep3H1hescCellPapBb2R2x75.wig.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5269,6 +5700,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqRawSignalRep4H1hescCellPapBb2R2x75.wig.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5315,6 +5748,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5338,6 +5773,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBlat342x75.bed12.gz
+geoSample GSM591661
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5361,6 +5798,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591674
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5384,6 +5823,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBb2R1x75d.bed12.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5407,6 +5848,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-04
 dateUnrestricted 2010-10-04
 fileName wgEncodeCaltechRnaSeqSplicesRep1Gm12878CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591664
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5430,6 +5873,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R1x75d.bed12.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5453,6 +5898,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R2x75.bed12.gz
+geoSample GSM591658
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5476,6 +5923,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBb2R2x75Il400.bed12.gz
+geoSample GSM572172
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -5499,6 +5948,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1H1hescCellPapBlat34R1x75d.bed12.gz
+geoSample GSM572173
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5522,6 +5973,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R1x75d.bed12.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5545,6 +5998,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBb2R2x75.bed12.gz
+geoSample GSM591682
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5568,6 +6023,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1Helas3CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591670
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5591,6 +6048,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x32.bed12.gz
+geoSample GSM591654
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5614,6 +6073,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R1x75d.bed12.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5637,6 +6098,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBb2R2x75.bed12.gz
+geoSample GSM591672
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5660,6 +6123,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1Hepg2CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591665
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5683,6 +6148,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R1x75d.bed12.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5706,6 +6173,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBb2R2x75.bed12.gz
+geoSample GSM591663
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5729,6 +6198,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1HuvecCellPapBlat34R1x75d.bed12.gz
+geoSample GSM591655
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5752,6 +6223,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5775,6 +6248,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBlat342x75.bed12.gz
+geoSample GSM591666
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5798,6 +6273,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591675
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5821,6 +6298,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBb2R1x75d.bed12.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5844,6 +6323,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqSplicesRep1K562CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591679
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5867,6 +6348,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R1x75d.bed12.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5890,6 +6373,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBb2R2x75.bed12.gz
+geoSample GSM591656
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5913,6 +6398,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep1NhekCellPapBlat34R1x75d.bed12.gz
+geoSample GSM591681
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -5936,6 +6423,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5959,6 +6448,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBlat342x75.bed12.gz
+geoSample GSM591673
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -5982,6 +6473,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591657
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6005,6 +6498,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R1x75d.bed12.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6028,6 +6523,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBb2R2x75Il400.bed12.gz
+geoSample GSM591684
+geoSeries GSE23316
 grant Myers
 insertLength 400
 lab Caltech
@@ -6051,6 +6548,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2Gm12878CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591669
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6074,6 +6573,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R1x75d.bed12.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6097,6 +6598,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBb2R2x75.bed12.gz
+geoSample GSM591652
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6120,6 +6623,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2H1hescCellPapBlat34R1x75d.bed12.gz
+geoSample GSM591680
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6143,6 +6648,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R1x75d.bed12.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6166,6 +6673,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBb2R2x75.bed12.gz
+geoSample GSM591659
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6189,6 +6698,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2Helas3CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591671
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6212,6 +6723,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x32.bed12.gz
+geoSample GSM591662
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6235,6 +6748,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R1x75d.bed12.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6258,6 +6773,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBb2R2x75.bed12.gz
+geoSample GSM591653
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6281,6 +6798,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2Hepg2CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591677
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6304,6 +6823,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R1x75d.bed12.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6327,6 +6848,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBb2R2x75.bed12.gz
+geoSample GSM591678
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6350,6 +6873,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep2HuvecCellPapBlat34R1x75d.bed12.gz
+geoSample GSM591683
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6373,6 +6898,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBb12x75.bed12.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6396,6 +6923,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBlat342x75.bed12.gz
+geoSample GSM591668
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6419,6 +6948,8 @@ dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-06
 dateUnrestricted 2009-12-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellLongpolyaBow0981x32.bed12.gz
+geoSample GSM591667
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6442,6 +6973,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBb2R1x75d.bed12.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6465,6 +6998,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqSplicesRep2K562CellPapBlat34R1x75d.bed12.gz
+geoSample GSM591660
+geoSeries GSE23316
 grant Myers
 insertLength ilNA
 lab Caltech
@@ -6488,6 +7023,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqSplicesRep3H1hescCellPapBb2R2x75.bed12.gz
+geoSample GSM591676
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6511,6 +7048,8 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqSplicesRep4H1hescCellPapBb2R2x75.bed12.gz
+geoSample GSM591685
+geoSeries GSE23316
 grant Myers
 insertLength 200
 lab Caltech
@@ -6548,4 +7087,4 @@ subId 1065
 tableName wgEncodeCaltechRnaSeqSplicesRep5H1hescCellPapBb2R2x75
 view Splices
 
-# MAGIC: 482015142
+# MAGIC: -1406347684
