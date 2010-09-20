@@ -2,7 +2,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -23,7 +23,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -44,7 +44,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -67,7 +67,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -90,7 +90,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaJunctionsRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -111,7 +111,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaJunctionsRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -132,7 +132,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -154,7 +154,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -176,7 +176,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -198,7 +198,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -220,7 +220,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -243,7 +243,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -266,7 +266,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -286,7 +286,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -306,7 +306,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -326,7 +326,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -346,7 +346,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -367,7 +367,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -388,7 +388,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -408,7 +408,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -428,7 +428,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -448,7 +448,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -468,7 +468,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -488,7 +488,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -508,7 +508,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -528,7 +528,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -548,7 +548,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -568,7 +568,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -588,7 +588,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -610,7 +610,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -632,7 +632,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -653,7 +653,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -674,7 +674,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -696,7 +696,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -718,7 +718,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -738,7 +738,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -758,7 +758,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
@@ -778,7 +778,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
@@ -798,7 +798,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneDeNovoRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -819,7 +819,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneFPKMRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -840,7 +840,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneModelRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -861,7 +861,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400InsLengthRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -882,7 +882,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400JunctionsRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -903,7 +903,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -926,7 +926,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -948,7 +948,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2
 objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -971,7 +971,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TranscriptDeNovoRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -992,7 +992,7 @@ metaObject wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TranscriptFPKMRep2
 objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1013,7 +1013,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1034,7 +1034,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1055,7 +1055,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1078,7 +1078,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1101,7 +1101,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaJunctionsRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1122,7 +1122,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaJunctionsRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1143,7 +1143,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1165,7 +1165,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1187,7 +1187,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1209,7 +1209,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1231,7 +1231,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1254,7 +1254,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -1277,7 +1277,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1298,7 +1298,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1319,7 +1319,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1340,7 +1340,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1361,7 +1361,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1382,7 +1382,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1403,7 +1403,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1424,7 +1424,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1445,7 +1445,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1466,7 +1466,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1487,7 +1487,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1508,7 +1508,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1529,7 +1529,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1550,7 +1550,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1571,7 +1571,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1592,7 +1592,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1613,7 +1613,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1634,7 +1634,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1655,7 +1655,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1676,7 +1676,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1697,7 +1697,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1718,7 +1718,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1739,7 +1739,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1760,7 +1760,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1781,7 +1781,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1802,7 +1802,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1823,7 +1823,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1844,7 +1844,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1865,7 +1865,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1886,7 +1886,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1907,7 +1907,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -1930,7 +1930,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1953,7 +1953,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -1976,7 +1976,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -1999,7 +1999,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2021,7 +2021,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2043,7 +2043,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2065,7 +2065,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -2087,7 +2087,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2110,7 +2110,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2133,7 +2133,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2156,7 +2156,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -2179,7 +2179,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2200,7 +2200,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2221,7 +2221,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2242,7 +2242,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -2263,7 +2263,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2284,7 +2284,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2305,7 +2305,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep3
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
@@ -2326,7 +2326,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep4
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
@@ -2347,7 +2347,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneDeNovoRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2368,7 +2368,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneFPKMRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2389,7 +2389,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneModelRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2410,7 +2410,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400InsLengthRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2431,7 +2431,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400JunctionsRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2452,7 +2452,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2475,7 +2475,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2497,7 +2497,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1
 objType table
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2520,7 +2520,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptDeNovoRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2541,7 +2541,7 @@ metaObject wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptFPKMRep1
 objType file
 cell H1-hESC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2562,7 +2562,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2583,7 +2583,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2604,7 +2604,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2627,7 +2627,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2650,7 +2650,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaJunctionsRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2671,7 +2671,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaJunctionsRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2692,7 +2692,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2714,7 +2714,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2736,7 +2736,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2758,7 +2758,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2780,7 +2780,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2803,7 +2803,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -2826,7 +2826,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2847,7 +2847,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -2868,7 +2868,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2889,7 +2889,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -2910,7 +2910,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2931,7 +2931,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -2952,7 +2952,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneFPKMRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -2973,7 +2973,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneFPKMRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -2994,7 +2994,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3015,7 +3015,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3036,7 +3036,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200InsLengthRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3057,7 +3057,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200InsLengthRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3078,7 +3078,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200JunctionsRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3099,7 +3099,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200JunctionsRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3120,7 +3120,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3143,7 +3143,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3166,7 +3166,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3188,7 +3188,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3210,7 +3210,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3233,7 +3233,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2
 objType table
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3256,7 +3256,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3277,7 +3277,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3298,7 +3298,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
@@ -3319,7 +3319,7 @@ metaObject wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell HeLa-S3
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -3340,7 +3340,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3361,7 +3361,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3382,7 +3382,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3405,7 +3405,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3428,7 +3428,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaJunctionsRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3449,7 +3449,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaJunctionsRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3470,7 +3470,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3492,7 +3492,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3514,7 +3514,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3536,7 +3536,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3558,7 +3558,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3581,7 +3581,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -3604,7 +3604,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3625,7 +3625,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3646,7 +3646,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3667,7 +3667,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3688,7 +3688,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3709,7 +3709,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3730,7 +3730,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneFPKMRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3751,7 +3751,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneFPKMRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3772,7 +3772,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3793,7 +3793,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3814,7 +3814,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200InsLengthRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3835,7 +3835,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200InsLengthRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3856,7 +3856,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200JunctionsRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3877,7 +3877,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200JunctionsRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3898,7 +3898,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3921,7 +3921,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3944,7 +3944,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -3966,7 +3966,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -3988,7 +3988,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -4011,7 +4011,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2
 objType table
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -4034,7 +4034,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -4055,7 +4055,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -4076,7 +4076,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
@@ -4097,7 +4097,7 @@ metaObject wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell HepG2
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
@@ -4118,7 +4118,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4138,7 +4138,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4158,7 +4158,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4178,7 +4178,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4198,7 +4198,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4218,7 +4218,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4238,7 +4238,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4258,7 +4258,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4278,7 +4278,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4298,7 +4298,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4318,7 +4318,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4338,7 +4338,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4358,7 +4358,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1
 objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4380,7 +4380,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2
 objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4402,7 +4402,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
 objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4423,7 +4423,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
 objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4444,7 +4444,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1
 objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4466,7 +4466,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2
 objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4488,7 +4488,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4508,7 +4508,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4528,7 +4528,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4548,7 +4548,7 @@ metaObject wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -4568,7 +4568,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4589,7 +4589,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4610,7 +4610,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4633,7 +4633,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4656,7 +4656,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaJunctionsRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4677,7 +4677,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaJunctionsRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4698,7 +4698,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4720,7 +4720,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4742,7 +4742,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4764,7 +4764,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4786,7 +4786,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4809,7 +4809,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
@@ -4832,7 +4832,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4853,7 +4853,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4874,7 +4874,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4895,7 +4895,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4916,7 +4916,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4937,7 +4937,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4958,7 +4958,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneFPKMRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -4979,7 +4979,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneFPKMRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5000,7 +5000,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5021,7 +5021,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5042,7 +5042,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200InsLengthRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5063,7 +5063,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200InsLengthRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5084,7 +5084,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200JunctionsRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5105,7 +5105,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200JunctionsRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5126,7 +5126,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5149,7 +5149,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5172,7 +5172,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5194,7 +5194,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5216,7 +5216,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5239,7 +5239,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2
 objType table
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5262,7 +5262,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5283,7 +5283,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5304,7 +5304,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5325,7 +5325,7 @@ metaObject wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell HUVEC
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
@@ -5346,7 +5346,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5367,7 +5367,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5388,7 +5388,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5411,7 +5411,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5434,7 +5434,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaJunctionsRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5455,7 +5455,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaJunctionsRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5476,7 +5476,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5498,7 +5498,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5520,7 +5520,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5542,7 +5542,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5564,7 +5564,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5587,7 +5587,7 @@ metaObject wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
@@ -5610,7 +5610,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5630,7 +5630,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5650,7 +5650,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5670,7 +5670,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5690,7 +5690,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5710,7 +5710,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5730,7 +5730,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneFPKMRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5750,7 +5750,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneFPKMRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5770,7 +5770,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5790,7 +5790,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5810,7 +5810,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200InsLengthRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5830,7 +5830,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200InsLengthRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5850,7 +5850,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200JunctionsRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5870,7 +5870,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200JunctionsRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5890,7 +5890,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5912,7 +5912,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5934,7 +5934,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5955,7 +5955,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5976,7 +5976,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -5998,7 +5998,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2
 objType table
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -6020,7 +6020,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -6040,7 +6040,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -6060,7 +6060,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -6080,7 +6080,7 @@ metaObject wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell K562
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
@@ -6100,7 +6100,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6120,7 +6120,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6140,7 +6140,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6160,7 +6160,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneFPKMRep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6180,7 +6180,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6200,7 +6200,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6220,7 +6220,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2
 objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6242,7 +6242,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
 objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6263,7 +6263,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2
 objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6285,7 +6285,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6305,7 +6305,7 @@ metaObject wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6325,7 +6325,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
@@ -6346,7 +6346,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
@@ -6369,7 +6369,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaJunctionsRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
@@ -6390,7 +6390,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
@@ -6412,7 +6412,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
@@ -6434,7 +6434,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
@@ -6457,7 +6457,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6478,7 +6478,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6498,7 +6498,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6519,7 +6519,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6539,7 +6539,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6560,7 +6560,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6580,7 +6580,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6601,7 +6601,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6621,7 +6621,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6642,7 +6642,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6662,7 +6662,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200InsLengthRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6683,7 +6683,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6704,7 +6704,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6724,7 +6724,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6747,7 +6747,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6769,7 +6769,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6791,7 +6791,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6812,7 +6812,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6835,7 +6835,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2
 objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6857,7 +6857,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6878,7 +6878,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6898,7 +6898,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep1
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
@@ -6919,7 +6919,7 @@ metaObject wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6939,7 +6939,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6959,7 +6959,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6979,7 +6979,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -6999,7 +6999,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7019,7 +7019,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7039,7 +7039,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7059,7 +7059,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneFPKMRep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7079,7 +7079,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7099,7 +7099,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7119,7 +7119,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7139,7 +7139,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7159,7 +7159,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1
 objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7181,7 +7181,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2
 objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7203,7 +7203,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
 objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7224,7 +7224,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7245,7 +7245,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1
 objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7267,7 +7267,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2
 objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7289,7 +7289,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7309,7 +7309,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
@@ -7329,7 +7329,7 @@ metaObject wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptFPKMRep2
 objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
-dataType RNA-seq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
