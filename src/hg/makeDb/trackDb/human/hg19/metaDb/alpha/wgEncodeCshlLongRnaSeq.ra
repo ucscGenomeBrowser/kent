@@ -2,7 +2,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -23,7 +23,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAllRawSigRep2
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -44,13 +44,13 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
 fileIndex wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam.bai
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep1.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -66,13 +66,13 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
 fileIndex wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam.bai
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -88,7 +88,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -109,7 +109,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep2
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -130,7 +130,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -151,7 +151,7 @@ metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalPlusRawSigRep2
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -172,7 +172,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -193,7 +193,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -214,13 +214,13 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
 fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.bai
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -236,13 +236,13 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-2010
-fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
 fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.bai
+fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
 grant Gingeras
 lab CSHL
 localization cell
@@ -258,7 +258,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -279,7 +279,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -300,7 +300,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -321,7 +321,7 @@ metaObject wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
@@ -338,4 +338,4 @@ subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: -1927838696
+# MAGIC: -1000315426
