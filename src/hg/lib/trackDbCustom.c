@@ -109,6 +109,18 @@ if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
 }
 
+//not needed?
+int bedDetailSizeFromType(char *type)
+/* parse bedSize from type line for bedDetail, assume 4 if none */
+{
+int ret = 4;  /* minimal expected */
+char *words[3];
+int wordCount = chopLine(cloneString(type), words);
+if (wordCount > 1)
+    ret = atoi(words[1]) - 2; /* trackDb has field count, we want bedSize */
+return ret;
+}
+
 void trackDbFieldsFromSettings(struct trackDb *bt)
 /* Update trackDb fields from settings hash */
 {
@@ -192,7 +204,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
-		   sameString("bam", s));
+		   sameString("bam", s) || sameString("bedDetail", s));
 freeMem(t);
 return canPack;
 }
