@@ -5690,6 +5690,11 @@ description 12hrs, 1nM Methyltrienolone (R1881) (Crawford)
 type treatment
 label Methyltrienolone
 
+term Alpha-amanitin_50ug_9hr
+tag AMA50ug9h
+type tratement
+description 9h with 50ug/ml alpha-amanitin
+
 term Betamethasone_100nM
 tag BMETH
 description 1h,100nM Betamethasone (Myers)
