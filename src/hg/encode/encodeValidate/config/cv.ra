@@ -5949,9 +5949,10 @@ type dataType
 label CNV
 
 #term not standard to match hg18???
-term DGF
-tag dgf
+term DnaseDgf
+tag DGF
 type dataType
+label DNase-DGF
 
 term DnaPet 
 tag dnaPet

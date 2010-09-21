@@ -2,7 +2,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShortAln
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -23,7 +23,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -43,7 +43,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -63,7 +63,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -83,7 +83,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -104,7 +104,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -124,7 +124,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -144,7 +144,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -164,7 +164,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -185,7 +185,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -205,7 +205,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -225,7 +225,7 @@ metaObject wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -245,7 +245,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -266,7 +266,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -286,7 +286,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -306,7 +306,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CellShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
@@ -326,7 +326,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -347,7 +347,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -367,7 +367,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -387,7 +387,7 @@ metaObject wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -407,7 +407,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -428,7 +428,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -448,7 +448,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -468,7 +468,7 @@ metaObject wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -488,7 +488,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -509,7 +509,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -529,7 +529,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -549,7 +549,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -569,7 +569,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -590,7 +590,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -610,7 +610,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -630,7 +630,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -650,7 +650,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -671,7 +671,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -691,7 +691,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -711,7 +711,7 @@ metaObject wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -731,7 +731,7 @@ metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortAln
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -752,7 +752,7 @@ metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -772,7 +772,7 @@ metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2009-09-23
@@ -792,7 +792,7 @@ metaObject wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -812,7 +812,7 @@ metaObject wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
@@ -832,7 +832,7 @@ metaObject wgEncodeCshlShortRnaSeqProstateCellTotalAln
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
@@ -853,7 +853,7 @@ metaObject wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
@@ -873,7 +873,7 @@ metaObject wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
