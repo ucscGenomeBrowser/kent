@@ -1800,7 +1800,7 @@ identifier flyBaseGeneId external=FlyBase
     dm1.flyBaseSwissProt.flyBaseId minCheck=0.95
     $dm,!dm1.flyBase2004Xref.fbgn minCheck=0.90
     $dm,!dm1.pscreen.geneIds comma minCheck=0.95
-    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,|ce9,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
+    $gbd,!hg17,!hg18,!danRer3,!mm7,!mm8,!mm9,!rn3,!rn4,!ce2,!ce6,!ce9,!sacCer1,!sacCer2.dmBlastTab.target minCheck=0.90
 
 identifier bdgpIsoformCluster
 "Overlapping (after splicing) BDGP Drosophila transcripts"
@@ -2555,15 +2555,23 @@ identifier jaxRepTranscriptName external=MGI
 
 identifier jaxAlleleName external=MGI
 "Jackson Labs/MGI Allele name: concatenated representative transcript ID and allele ID"
-    $mm.jaxAllele.name dupeOk
-    $mm.jaxAlleleInfo.name
-    $mm.jaxAllelePheno.allele
+    # Using dupeOk here because there are some case-sensitive allele name diffs (ugh)
+    $mm.jaxAllelePheno.allele dupeOk
+    $mm.jaxAlleleInfo.name minCheck=0.9
+    $mm.jaxAllele.name minCheck=0.9
+    $mm.jaxGeneTrapInfo.name minCheck=0.000001
+    $mm.jaxGeneTrap.name minCheck=0.000001
 
 identifier jaxPhenotypeName external=MGI
 "Jackson Labs/MGI Phenotype name: representative transcript ID"
     $mm.jaxPhenotype.name dupeOk
     $mm.jaxPhenotypeAlias.name
-    mm8.jaxAllelePheno.transcript minCheck=0.9
+    mm8,mm9.jaxAllelePheno.transcript minCheck=0.9
+
+identifier jaxGeneTrapName external=MGI
+"Jackson Labs/MGI GeneTrap name: concatenated representative transcript ID and allele ID"
+    $mm.jaxGeneTrap.name dupeOk
+    $mm.jaxGeneTrapInfo.name
 
 #links between the UniProt variants tables
 identifier protVarId

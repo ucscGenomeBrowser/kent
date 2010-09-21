@@ -213,6 +213,19 @@ type bed 12 +
 noScoreFilter .
 url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
 urlLabel MGI Phenotypic Allele: 
+html jaxAlleleOld
+
+track jaxGeneTrap
+shortLabel MGI Gene Trap
+longLabel Jackson Laboratory / Mouse Genome Informatics DNA and RNA Gene Traps
+group phenoAllele
+visibility hide
+priority 72.01
+type bed 12 +
+itemRgb on
+noScoreFilter .
+url http://www.informatics.jax.org/javawi2/servlet/WIFetch?page=alleleDetail&id=$$
+urlLabel MGI Phenotypic Allele: 
 
 track agilentCgh
 release alpha
