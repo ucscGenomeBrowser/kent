@@ -1492,7 +1492,7 @@ objType file
 antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
-controlId HepG2/None/Input/PCR1x
+controlId HepG2/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -1504,7 +1504,7 @@ lab HudsonAlpha
 labVersion SL593
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 878
@@ -3733,7 +3733,7 @@ objType file
 antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
-controlId HepG2/None/Input/PCR1x
+controlId HepG2/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -3745,7 +3745,7 @@ lab HudsonAlpha
 labVersion SL819
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 878
@@ -9647,7 +9647,7 @@ objType file
 antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
-controlId HepG2/None/Input/PCR1x
+controlId HepG2/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -9658,7 +9658,7 @@ lab HudsonAlpha
 labVersion SL593
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 878
@@ -11301,7 +11301,7 @@ objType file
 antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
-controlId HepG2/None/Input/PCR1x
+controlId HepG2/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -11312,7 +11312,7 @@ lab HudsonAlpha
 labVersion SL819
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 878
@@ -13384,7 +13384,7 @@ objType table
 antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
-controlId HepG2/None/Input/PCR1x
+controlId HepG2/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -13395,7 +13395,7 @@ grant Myers
 lab HudsonAlpha
 labVersion SL593
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 878
@@ -15627,7 +15627,7 @@ objType table
 antibody Input
 cell HepG2
 composite wgEncodeHudsonalphaChipSeq
-controlId HepG2/None/Input/PCR1x
+controlId HepG2/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-25
@@ -15638,7 +15638,7 @@ grant Myers
 lab HudsonAlpha
 labVersion SL819
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 878
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 1803797744
+# MAGIC: 1803797804
