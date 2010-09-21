@@ -475,12 +475,15 @@ void trackDbSuperMemberSettings(struct trackDb *tdb)
  * supertrack. */
 {
 struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+if(stInfo == NULL || stInfo->isSuper)
+    return;
 tdb->parentName = cloneString(stInfo->parentName);
 tdb->visibility = stInfo->defaultVis;
 tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
+    refAddUnique(&(tdb->parent->children),tdb);
     }
 freeMem(stInfo);
 }
@@ -504,6 +507,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
             hashAdd(superHash, tdb->track, tdb);
+        tdb->children = NULL; // assertable?
         }
     freeMem(stInfo);
     }
@@ -694,8 +698,39 @@ if(tdb == NULL && db != NULL)
 return tdb;
 }
 
+#ifdef OMIT
+// NOTE: This may not be needed.
+struct trackDb *tdbFillInAncestry(char *db,struct trackDb *tdbChild)
+/* Finds parents and fills them in.  Does not find siblings, however! */
+{
+assert(tdbChild != NULL);
+struct trackDb *tdb = tdbChild;
+struct sqlConnection *conn = NULL;
+for (;tdb->parent != NULL;tdb = tdb->parent)
+    ; // advance to highest parent already known
+
+// If track with no tdbParent has a parent setting then fill it in.
+for (;tdb->parent == NULL; tdb = tdb->parent)
+    {
+    char *parentTrack = trackDbLocalSetting(tdb,"parent");
+    if (parentTrack == NULL)
+        break;
+
+    if (conn == NULL)
+        conn = hAllocConn(db);
+    tdb->parent = hMaybeTrackInfo(conn, parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    printf("tdbFillInAncestry(%s): has %d children.",parentTrack,slCount(tdb->parent->subtracks));
+    //tdb->parent = tdbFindOrCreate(db,tdb,parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    }
+if (conn != NULL)
+    hFreeConn(&conn);
+
+return tdb;
+}
+#endif///def OMIT
+
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
 {
 if(tdb->extras == NULL)
     {
@@ -706,6 +741,13 @@ else
     {
     hashReplace(tdb->extras, name, value);
     }
+}
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name)
+/* Removes a value from the extras hash. */
+{
+if(tdb->extras != NULL)
+    hashMayRemove(tdb->extras, name);
 }
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal)
@@ -774,31 +816,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 /* Do superTrack inheritance.  This involves setting up the parent pointers to superTracks,
  * but removing the superTracks themselves from the list. */
 struct trackDb *superlessList = NULL;
+trackDbSuperMarkup(tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    char *superTrack = trackDbSetting(tdb, "superTrack");
-    if (superTrack != NULL)
-        {
-	if (startsWithWord("on", superTrack))
-	    {
-	    tdb->next = NULL;
-	    }
-	else
-	    {
-	    char *parentName = tdb->parentName = cloneFirstWord(superTrack);
-	    struct trackDb *parent = hashFindVal(trackHash, parentName);
-	    if (parent == NULL)
-		errAbort("Parent track %s of supertrack %s doesn't exist",
-			parentName, tdb->track);
-	    tdb->parent = parent;
-	    slAddHead(&superlessList, tdb);
-	    }
-	}
+    if (tdbIsSuperTrack(tdb))
+        tdb->next = NULL;
     else
-        {
-	slAddHead(&superlessList, tdb);
-	}
+        slAddHead(&superlessList, tdb);
     }
 
 /* Do subtrack hierarchy - filling in parent and subtracks fields. */

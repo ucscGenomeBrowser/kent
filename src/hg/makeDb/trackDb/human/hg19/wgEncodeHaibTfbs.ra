@@ -270,7 +270,7 @@ nextItemButton on
         color 0,107,27
     # subId=1215 dateSubmitted=2010-05-27
 
-        track wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep2
+        track wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2
         release alpha
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 ERal_a Pk 2
@@ -279,7 +279,7 @@ nextItemButton on
         type broadPeak
     # subId=1216 dateSubmitted=2010-05-27
 
-        track wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep1
+        track wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1
         release alpha
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 ERal_a Pk 1
@@ -1134,7 +1134,7 @@ nextItemButton on
         origAssembly hg18
     # subId=1258 dateSubmitted=2010-06-08
 
-        track wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep2
+        track wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2
         release alpha
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 GR     Pk 2
@@ -1143,7 +1143,7 @@ nextItemButton on
         type broadPeak
     # subId=1254 dateSubmitted=2010-06-07
 
-        track wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep1
+        track wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1
         release alpha
         subTrack wgEncodeHaibTfbsViewPeaks off
         shortLabel ECC-1 GR     Pk 1
@@ -1681,7 +1681,7 @@ nextItemButton on
             type broadPeak
         # subId=1681 dateSubmitted=2010-06-22
 
-            track wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep2
+            track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
             release alpha
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel T-47D ERal_a Pk 2
@@ -1690,7 +1690,7 @@ nextItemButton on
             type broadPeak
         # subId=1826 dateSubmitted=2010-06-22
 
-            track wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep1
+            track wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1
             release alpha
             subTrack wgEncodeHaibTfbsViewPeaks off
             shortLabel T-47D ERal_a Pk 1

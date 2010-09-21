@@ -1351,22 +1351,28 @@ function rulerModeToggle (ele)
 function makeMapItem(id)
 {
     // Create a dummy mapItem on the fly (for objects that don't have corresponding entry in the map).
-    var title;
-    var rec = trackDbJson[id];
-    if(rec) {
-        title = rec.shortLabel;
+    if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
+        var title;
+        var rec = trackDbJson[id];
+        if(rec) {
+            title = rec.shortLabel;
+        } else {
+            title = id;
+        }
+        return {id: id, title: "configure " + title};
     } else {
-        title = id;
+        return null;
     }
-    return {id: id, title: "configure " + title};
 }
 
 function mapItemMouseOver(obj)
 {
     // Record data for current map area item
     currentMapItem = makeMapItem(obj.id);
-    currentMapItem.href = obj.href;
-    currentMapItem.title = obj.title;
+    if(currentMapItem != null) {
+        currentMapItem.href = obj.href;
+        currentMapItem.title = obj.title;
+    }
 }
 
 function mapItemMouseOut(obj)
@@ -1744,8 +1750,10 @@ function loadContextMenu(img)
                     }
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
                     && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
+                        if(selectedMenuItem.title.indexOf("Click to alter") != 0 || selectedMenuItem.title.indexOf("and similar subtracks") != -1) {
                         o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
                         any = true;
+                    }
                     }
                     if(any) {
                         menu.push($.contextMenu.separator);
@@ -2172,31 +2180,25 @@ function searchKeydown(event)
     }
 }
 
-function changeSearchVisibilityPopups(cmd)
-{  // ??? Larry?
-    $("#searchResultsForm select").each(function(i) {
-        $(this).val(cmd);
-    });
-    return false;
-}
-
 function findTracksChangeVis(seenVis)
 { // called by onchange of vis
     var visName = $(seenVis).attr('id');
     var trackName = visName.substring(0,visName.length - "_id".length)
     var hiddenVis = $("input[name='"+trackName+"']");
     var rec = trackDbJson[trackName];
-    var subtrack = rec.isSubtrack;
     if($(seenVis).val() != "hide")
         $(hiddenVis).val($(seenVis).val());
     else {
         var selCb = $("input#"+trackName+"_sel_id");
         $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
         $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        var hiddenSel = $("input[name='"+trackName+"_sel']");
-        $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        $(hiddenSel).attr('disabled',false);
-        if(subtrack)
+        var needSel = (rec.parentTrack != undefined);
+        if (needSel) {
+            var hiddenSel = $("input[name='"+trackName+"_sel']");
+            $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
+            $(hiddenSel).attr('disabled',false);
+        }
+        if(rec.isSubtrack)
             $(hiddenVis).val("[]");
         else
             $(hiddenVis).val("hide");
@@ -2214,12 +2216,12 @@ function findTracksClickedOne(selCb,justClicked)
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
     var rec = trackDbJson[trackName];
-    var subtrack = rec.isSubtrack;
+    var needSel = (rec.parentTrack != undefined);
     var shouldPack = rec.canPack;
     if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
         shouldPack = false;
     var checked = $(selCb).attr('checked');
-    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" subtrack:"+subtrack +" shouldPack:"+shouldPack);
+    //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
 
     // First deal with seenVis control
     if(checked) {
@@ -2237,17 +2239,17 @@ function findTracksClickedOne(selCb,justClicked)
 
     // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
+    var setHiddenInputs = (justClicked || ($(seenVis).val() != $(hiddenVis).val()));
     if(setHiddenInputs) {
         if(checked)
             $(hiddenVis).val($(seenVis).val());
-        else if(subtrack)
+        else if(rec.isSubtrack)
             $(hiddenVis).val("[]");
         else
             $(hiddenVis).val("hide");
         $(hiddenVis).attr('disabled',false);
 
-        if(subtrack) {
+        if(needSel) {
             if(checked)
                 $(hiddenSel).val('1');
             else
@@ -2293,21 +2295,7 @@ function findTracksNormalizeWaitOn()
 }
 
 function findTracksCheckAll(check)
-{
-    // NOTE: Difficulties with "_sel" and "vis" controls:
-    // 1) subtracks need both "sel" and "vis", but non-subtracks need only "vis"
-    // 2) Submit of form instead of ajax is nice (because it allows cancelling changes), but do not want to set any vars, unless specifically changed on form
-    // 3) When unchecked, need to delete vars instead of set them
-    // Solution to "sel", "vis" difficulties
-    // 1) findTracks remains a submit but:
-    // 2) 'sel' and 'vis' input are not named (won't be submitted)
-    // 3) hidden disabled and named 'sel' and 'vis' vars exist
-    // 4a) check subtrack: enable hidden 'sel' and 'vis' track, set to 'on' and pack/full
-    // 4b) check non-track: enable hidden 'vis', set to pack/full
-    // 5a) uncheck subtrack: enable hidden 'sel' and 'vis' track, set to '[]' and '[]'
-    // 5b) uncheck non-track: enable hidden 'vis', set to '[]'
-    // 6) Change vis: enable hidden 'vis', set to non-hidden vis
-
+{ // Checks/unchecks all found tracks.
     var selCbs = $('input.selCb');
     $(selCbs).attr('checked',check);
 
@@ -2325,7 +2313,7 @@ function findTracksCheckAll(check)
 
 function findTracksCheckAllWithWait(check)
 {
-    waitOnFunction( findTracksCheckAll, check);  // FIXME: wait cursor not working for some reason
+    waitOnFunction( findTracksCheckAll, check);
 }
 
 function findTracksCounts()

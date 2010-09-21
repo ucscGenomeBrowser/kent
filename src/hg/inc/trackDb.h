@@ -47,7 +47,8 @@ struct trackDb
     /* additional info, determined from settings */
     char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
     struct trackDb *parent;     /* parent of composite or superTracks */
-    struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */ // NOTE: can only be on one sl at a time!
+    struct trackDb *subtracks;  /* children of composite not supertracks */ // NOTE: can only be on one sl at a time!
+    struct slRef *children;     /* children of superTracks only.  Needed since these children are on the main trackList and can't be in 2 sl's at once */
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
     struct hash *overrides;     /* If not NULL, this is an override
@@ -317,7 +318,10 @@ struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name);
+/* Removes a value from the extras hash. */
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
 /* Returns a value if it is found in the extras hash. */

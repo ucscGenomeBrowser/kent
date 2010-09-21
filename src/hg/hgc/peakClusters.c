@@ -173,9 +173,7 @@ struct trackDb *clusterTdb = tdbForTableArg();
 struct slName *matchTrackList = findMatchingSubtracks(clusterTdb);
 struct slName *matchTrack;
 
-char title[256];
-safef(title, sizeof(title), "List of items assayed in %s", clusterTdb->shortLabel);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "List of items assayed in %s", clusterTdb->shortLabel);
 
 char *inputTracksSubgroupDisplay = trackDbRequiredSetting(clusterTdb, "inputTracksSubgroupDisplay");
 struct slName *displayGroupList = stringToSlNames(inputTracksSubgroupDisplay);
@@ -203,9 +201,7 @@ char **row;
 struct bed *cluster = NULL;
 struct sqlConnection *conn = hAllocConn(database);
 
-char title[256];
-safef(title, sizeof(title), "%s item details", tdb->shortLabel);
-cartWebStart(cart, database, title);
+cartWebStart(cart, database, "%s item details", tdb->shortLabel);
 safef(query, sizeof(query),
 	"select * from %s where  name = '%s' and chrom = '%s' and chromStart = %d",
 	table, item, seqName, start);

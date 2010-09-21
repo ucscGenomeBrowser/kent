@@ -11805,4 +11805,56 @@ done
     mkdir /hive/data/genomes/hg18/bed/liftOverHg19
     cd /hive/data/genomes/hg18/bed/liftOverHg19
 
-#########################################################################
+#############################################################################
+# HGDP GEOGRAPHIC SNP MAPS (DONE 9/15/10 angie)
+    # Project data downloaded and parsed in /hive/data/outside/hgdpGeo,
+    # see makeDb/doc/hgdpGeo.txt.
+    mkdir /hive/data/genomes/hg19/bed/hgdpGeo
+    cd /hive/data/genomes/hg19/bed/hgdpGeo
+    # Make an rsId-sorted snp coords file for joining with the hgdpGeo data.
+    grep -Fwf /hive/data/outside/hgdpGeo/rsIDs.lst \
+      ../snp131/snp131.bed \
+    | awk 'BEGIN{OFS="\t";} {print $4, $1, $2, $3, $8;}' \
+    | sort > snp131CoordsAndRef.txt
+    # How many distinct SNPs in there?  (compare to 657000 from HGDP):
+    cut -f 1 snp131CoordsAndRef.txt | uniq | wc -l
+#656332
+    # Join files to make a track table -- well, first we'll need to 
+    # normalize alleles to the + strand:
+    join -e ERROR -t'	' -o 1.2,1.3,1.4,1.1,2.2,2.3,2.4,1.5 \
+      snp131CoordsAndRef.txt /hive/data/outside/hgdpGeo/hgdpGeoCoordless.txt \
+    | sed -re 's/([AGTC])\*/\1/' \
+    | sort -k1,1 -k2n,2n \
+      > hgdpGeo.fixme
+    wc -l hgdpGeo.fixme
+#667392 hgdpGeo.fixme
+    # Use the snp131 reference allele to detect when we need to rev-comp
+    # the alleles to match the + strand.  Also, throw out SNPs for which 
+    # the ref allele is multi-base -- it's questionable whether we're giving
+    # the right coords (some funny things happen with dbSNP's clustering...):
+    cat > fixAlleles.pl <<'_EOF_'
+#!/usr/bin/env perl
+use warnings;
+use strict;
+my %rc = ('A' => 'T', 'C' => 'G', 'G' => 'C', 'T' => 'A');
+while (<>) {
+  chomp;  my ($c, $s, $e, $rs, $ancAl, $derAl, $freqs, $ref) = split;
+  next unless ($ref =~ /^[ACGT]$/);
+  if ($ancAl ne $ref && $derAl ne $ref) {
+    $ancAl = $rc{$ancAl};
+    $derAl = $rc{$derAl};
+  }
+  print join("\t", $c, $s, $e, $rs, $ancAl, $derAl, $freqs) . "\n";
+}
+'_EOF_'
+    # << emacs
+    chmod a+x fixAlleles.pl
+    ./fixAlleles.pl hgdpGeo.fixme > hgdpGeo.tab
+    wc -l hgdpGeo.tab
+#667349 hgdpGeo.tab
+    hgLoadBed hg19 hgdpGeo hgdpGeo.tab \
+      -sqlTable=$HOME/kent/src/hg/lib/hgdpGeo.sql
+#Loaded 667349 elements of size 7
+
+
+#############################################################################

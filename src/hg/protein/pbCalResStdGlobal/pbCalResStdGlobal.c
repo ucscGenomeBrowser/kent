@@ -230,21 +230,21 @@ o1 = mustOpen("pbAnomLimit.tab", "w");
 for (j=0; j<20; j++)
     {
     safef(temp_str, sizeof(temp_str), "cat %c.txt|sort|uniq > %c.srt", aaAlphabet[j], aaAlphabet[j]);
-    system(temp_str);
+    mustSystem(temp_str);
 
     /* figure out how many unique entries */
     safef(temp_str, sizeof(temp_str), "wc %c.srt > %c.tmp",  aaAlphabet[j], aaAlphabet[j]);
-    system(temp_str);
+    mustSystem(temp_str);
     safef(temp_str, sizeof(temp_str), "%c.tmp",  aaAlphabet[j]);
     o3 = mustOpen(temp_str, "r");
-    fgets(temp_str, 1000, o3);
+    mustGetLine(o3, temp_str, 1000);
     chp = temp_str;
     while (*chp == ' ') chp++;
     while (*chp != ' ') chp++;
     *chp = '\0';
     sscanf(temp_str, "%d", &sortedCnt);
     safef(temp_str, sizeof(temp_str), "rm %c.tmp", aaAlphabet[j]);
-    system(temp_str);
+    mustSystem(temp_str);
 
     /* cal hi and low cutoff threshold */
     ilow = (int)((float)sortedCnt * 0.025);
@@ -255,21 +255,21 @@ for (j=0; j<20; j++)
     i=0;
     for (i=0; i<ilow; i++)
 	{
-	fgets(temp_str, 1000, o2);
+	mustGetLine(o2, temp_str, 1000);
 	}
     sscanf(temp_str, "%f", &fvalue1);
 
-    fgets(temp_str, 1000, o2);
+    mustGetLine(o2, temp_str, 1000);
     sscanf(temp_str, "%f", &fvalue2);
     p1 = (fvalue1 + fvalue2)/2.0;
 
     for (i=ilow+1; i<ihi; i++)
 	{
-	fgets(temp_str, 1000, o2);
+	mustGetLine(o2, temp_str, 1000);
 	}
     sscanf(temp_str, "%f", &fvalue1);
 
-    fgets(temp_str, 1000, o2);
+    mustGetLine(o2, temp_str, 1000);
     sscanf(temp_str, "%f", &fvalue2);
     p2 = (fvalue1 + fvalue2)/2.0;
     carefulClose(&o2);

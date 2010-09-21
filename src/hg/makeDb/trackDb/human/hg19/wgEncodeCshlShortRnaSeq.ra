@@ -1,16 +1,15 @@
-
 track wgEncodeCshlShortRnaSeq
 compositeTrack off
 shortLabel CSHL Sm RNA-seq
-longLabel ENCODE CSHL Gingeras Small RNA-seq
+longLabel ENCODE CSHL Small RNA-seq
 group expression
 subGroup1 view Views 1-Transfrags=TransFrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments 
-subGroup2 cellType Cell_Line GM12878=GM12878_<i>Tier_1</i> K562=K562_<i>Tier_1</i> prostate=prostate 
+subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=prostate 
 subGroup3 localization Localization cell=cell chromatin=chromatin cytosol=cytosol nucleus=nucleus nucleolus=nucleolus nucleoplasm=nucleoplasm polysome=polysome
 subGroup4 rnaExtract RnaExtract short=ShortRNA
 dimensions dimensionX=localization dimensionY=cellType 
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+sortOrder cellType=+ localization=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults  MinusRawSignal=hide PlusRawSignal=hide Alignments=hide
 priority 0
@@ -144,15 +143,15 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1411 dateSubmitted=2010-06-14
 
-    track wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
-    release alpha
-    parent wgEncodeCshlShortRnaSeqView4Alignments off
-    shortLabel GM12878 nucl sh Al
-    longLabel ENCODE CSHL Small RNA-seq Alignments in GM12878 nucleus
-    subGroups view=4-Alignments cellType=GM12878 localization=nucleus rnaExtract=short
-    type bam
-    color 153,38,0
-    # subId=1402 dateSubmitted=2010-06-14
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView4Alignments off
+        shortLabel GM12878 nucl sh Al
+        longLabel ENCODE CSHL Small RNA-seq Alignments in GM12878 nucleus
+        subGroups view=4-Alignments cellType=GM12878 localization=nucleus rnaExtract=short
+        type bam
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
 
     track wgEncodeCshlShortRnaSeqView3MinusRawSignal
     shortLabel Minus Raw Signal
@@ -266,15 +265,15 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1411 dateSubmitted=2010-06-14
 
-    track wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
-    release alpha
-    parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-    shortLabel GM12878 nucl sh R-
-    longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in GM12878 nucleus
-    subGroups view=3-MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=short
-    type bigWig 1.000000 4933762.000000
-    color 153,38,0
-    # subId=1402 dateSubmitted=2010-06-14
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
+        release alpha
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 nucl sh R-
+        longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in GM12878 nucleus
+        subGroups view=3-MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=short
+        type bigWig 1.000000 4933762.000000
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
 
     track wgEncodeCshlShortRnaSeqView2PlusRawSignal
     shortLabel Plus Raw Signal

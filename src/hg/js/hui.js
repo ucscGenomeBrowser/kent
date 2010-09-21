@@ -661,7 +661,6 @@ function _popUpSubrackCfg(trackName,label)
     popUpTrackName = trackName;
     popUpTitle = label;
 
-    // FIXME: Avoid this getting into history and making the back button not work!
     $.ajax({
         type: "GET",
         url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
@@ -676,6 +675,7 @@ function _popUpSubrackCfg(trackName,label)
 function popUpSubtrackCfg(trackName,label)
 {
     waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
+    return false;
 }
 
 function subtrackCfgShow(tableName)
