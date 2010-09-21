@@ -1232,5 +1232,11 @@ char *bbiNameFromTable(struct sqlConnection *conn, char *table);
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */
 
+void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
+/* Load bedDetail track from custom tracks as bed or linked features */
+
+void pgSnpCtMethods (struct track *tg);
+/* Load pgSnp track from custom tracks */
+
 #endif /* HGTRACKS_H */
 
