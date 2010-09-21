@@ -113,7 +113,7 @@ greatRequest = dyStringCreate(
     dyStringContents(requestURL), database, dyStringContents(requestName));
 
 hPrintf("<b>GREAT</b> is processing BED data from \"%s\"...please wait.\n", dyStringContents(requestName));
-hPrintf(dyStringContents(greatRequest));
+hWrites(dyStringContents(greatRequest));
 freeDyString(&greatRequest);
 freeDyString(&requestName);
 freeDyString(&requestURL);

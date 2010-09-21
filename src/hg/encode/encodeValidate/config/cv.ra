@@ -5918,108 +5918,130 @@ type restrictionEnzyme
 ### tag:   This is the camel case convention that we use in our file names
 ### label: This will be used for human display and should also match NHGRI with any further information
 
-term ChIP-seq
-tag ChipSeq
-type dataType
-label ChIP-seq
 
-term Exon-array
+term AffyExonArray
 tag AffyExonArray
 type dataType
-label Exon-array
+label Affy Exon-array
 
-term BIP
+
+#not currently in metaDb
+term Bip
 tag bip
 type dataType
+label BIP
 
-term CAGE
+term Cage
 tag cage
 type dataType
 label CAGE
 
-term CNV
-tag cnv
+term ChipSeq
+tag chipSeq
 type dataType
+label ChIP-seq
 
-term DGF
-tag dgf
+#tag not standard to match hg18
+term Cnv
+tag CNV
 type dataType
+label CNV
 
-term DNA-PET
-tag DnaPet
+#term not standard to match hg18???
+term DnaseDgf
+tag DGF
+type dataType
+label DNase-DGF
+
+term DnaPet 
+tag dnaPet
 type dataType
 label DNA-PET
 
-term DNase-seq
-tag DnaseSeq
+term DnaseSeq
+tag dnaseSeq
 type dataType
 label DNase-seq
 
-term FAIRE-seq
-tag FaireSeq
+#The tag is not standard Camel case to be consistent with hg18
+term FaireSeq
+tag FAIREseq
 type dataType
+label FAIRE-seq
 
-term Genes
+term Gencode
 tag gencode
 type dataType
+label Gencode
 
 # TODO: retire this ?
-term loRNA-seq
-tag longrnaseq
+term LongRnaSeq
+tag longRnaSeq
 type dataType
 label RNA-seq
 
 # TODO: retire this ?
-term RNA-seq-pA
-tag rnaseqpolya
+term RnaSeqPolyA
+tag rnaSeqPolya
 type dataType
 label RNA-seq
 
 term Mapability
 tag mapability
 type dataType
+label Mapability
 
 term Methyl27
 tag methyl27
 type dataType
+label Methyl 27
 
 term Methyl-seq
 tag methylseq
 type dataType
 
+term MethylRrbs
+tag methylRrbs
+type dataType
+label Methyl RRBS
+
+# Not currently in the metaDB
 term NRE
 tag nre
 type dataType
 
-term PET
-tag RnaPet
+# tag not standard to match hg18
+term RnaPet
+tag PET   
 type dataType
 label RNA-PET
 
-term RNA-chip
-tag rnachip
+term RnaChip
+tag rnaChip
 type dataType
+label RNA-chip
 
-term RNA-seq
-tag RnaSeq
+term RnaSeq 
+tag rnaSeq
 type dataType
 label RNA-seq
 
-term shRNA-seq
-tag shortrnaseq
-type dataType
-# NOTE: add label later
-#label RNA-seq
-
-term TFBS-valid
-tag tfbsvalid
-type dataType
-label TfbsValid
-
-term RIP-chip
-tag  RipChip
+term RipChip
+tag  ripChip
 type dataType
 label RIP-chip
+
+#This should be retired
+term ShortRnaSeq
+tag shortRnaSeq
+type dataType
+label RNA-seq
+
+#This is not in the metaDB currently
+term TfbsValid 
+tag tfbsValid
+type dataType
+label TFBS-Valid
 
 ### version
 

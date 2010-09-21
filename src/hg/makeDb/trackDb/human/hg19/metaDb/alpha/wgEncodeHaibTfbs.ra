@@ -1265,57 +1265,7 @@ tableName wgEncodeHaibTfbsA549Usf1Pcr1xEtoh02PkRep2
 treatment EtOH_0.02pct
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1
-objType file
-antibody GR
-cell ECC-1
-composite wgEncodeHaibTfbs
-controlId SL1035
-dataType ChIP-seq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
-fileIndex wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL1035
-origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep1
-project wgEncode
-protocol v041610.2
-replicate 1
-setType input
-subId 1254
-treatment EtOH_0.02pct
-view Alignments
-
-metaObject wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2
-objType file
-antibody GR
-cell ECC-1
-composite wgEncodeHaibTfbs
-controlId SL1087
-dataType ChIP-seq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-07
-dateUnrestricted 2011-03-07
-fileIndex wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2.bam
-grant Myers
-lab HudsonAlpha
-labExpId SL1087
-origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1ControlPcr2xEtoh02AlnRep2
-project wgEncode
-protocol v041610.2
-replicate 2
-setType input
-subId 1254
-treatment EtOH_0.02pct
-view Alignments
-
-metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep1
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -1325,13 +1275,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
-fileIndex wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1034
 origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep1
+parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -1340,7 +1290,7 @@ subId 1216
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -1350,13 +1300,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
-fileIndex wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1092
 origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1ControlV0416102Dmso2AlnRep2
+parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102Dmso2AlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -1365,7 +1315,7 @@ subId 1216
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -1375,13 +1325,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
 origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep1
+parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -1390,7 +1340,7 @@ subId 1216
 treatment Estradiol_10nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2
 objType file
 antibody ERalpha_a
 cell ECC-1
@@ -1400,13 +1350,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
-fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
 origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102AlnRep2
+parentTable wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hAlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -1415,7 +1365,7 @@ subId 1216
 treatment Estradiol_10nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep1
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -1425,7 +1375,7 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep1.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1011
@@ -1436,11 +1386,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 1216
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep1
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep1
 treatment Estradiol_10nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep2
+metaObject wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2
 objType table
 antibody ERalpha_a
 cell ECC-1
@@ -1450,7 +1400,7 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-27
 dateUnrestricted 2011-02-27
-fileName wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1093
@@ -1461,11 +1411,11 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 1216
-tableName wgEncodeHaibTfbsEcc1EralphaaV0416102PkRep2
+tableName wgEncodeHaibTfbsEcc1EralphaaV0416102Estradia1hPkRep2
 treatment Estradiol_10nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1
+metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1
 objType file
 antibody GR
 cell ECC-1
@@ -1475,13 +1425,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
-fileIndex wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1.bam
+fileIndex wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
 origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep1
+parentTable wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -1490,7 +1440,7 @@ subId 1254
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2
+metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2
 objType file
 antibody GR
 cell ECC-1
@@ -1500,13 +1450,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
-fileIndex wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2.bam
+fileIndex wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
 origAssembly hg19
-parentTable wgEncodeHaibTfbsEcc1GrPcr2xDexaAlnRep2
+parentTable wgEncodeHaibTfbsEcc1GrV0416102DexaAlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -1515,7 +1465,7 @@ subId 1254
 treatment DEX_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep1
+metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1
 objType table
 antibody GR
 cell ECC-1
@@ -1525,7 +1475,7 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
-fileName .broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1012
@@ -1536,11 +1486,11 @@ replicate 1
 setType exp
 softwareVersion MACS
 subId 1254
-tableName wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep1
+tableName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep1
 treatment DEX_100nM
 view Peaks
 
-metaObject wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep2
+metaObject wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2
 objType table
 antibody GR
 cell ECC-1
@@ -1550,7 +1500,7 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-07
 dateUnrestricted 2011-03-07
-fileName wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep2.broadPeak.gz
+fileName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL1088
@@ -1561,9 +1511,59 @@ replicate 2
 setType exp
 softwareVersion MACS
 subId 1254
-tableName wgEncodeHaibTfbsEcc1GrPcr2xDexaPkRep2
+tableName wgEncodeHaibTfbsEcc1GrV0416102DexaPkRep2
 treatment DEX_100nM
 view Peaks
+
+metaObject wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep1
+objType file
+antibody GR
+cell ECC-1
+composite wgEncodeHaibTfbs
+controlId SL1035
+dataType ChIP-seq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-07
+dateUnrestricted 2011-03-07
+fileIndex wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep1.bam.bai
+fileName wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1035
+origAssembly hg19
+parentTable wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep1
+project wgEncode
+protocol v041610.2
+replicate 1
+setType input
+subId 1254
+treatment EtOH_0.02pct
+view Alignments
+
+metaObject wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep2
+objType file
+antibody GR
+cell ECC-1
+composite wgEncodeHaibTfbs
+controlId SL1087
+dataType ChIP-seq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-07
+dateUnrestricted 2011-03-07
+fileIndex wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep2.bam.bai
+fileName wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1087
+origAssembly hg19
+parentTable wgEncodeHaibTfbsEcc1GRV0416102Etoh02AlnRep2
+project wgEncode
+protocol v041610.2
+replicate 2
+setType input
+subId 1254
+treatment EtOH_0.02pct
+view Alignments
 
 metaObject wgEncodeHaibTfbsGm12878BatfPcr1xAlnRep1
 objType file
@@ -9760,7 +9760,7 @@ subId 1189
 treatment None
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep1
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -9770,14 +9770,14 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
-fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1.bam.bai
-fileName wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep1.bam.bai
+fileName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1218
 labVersion Genestein 100nM treatment
 origAssembly hg19
-parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep1
+parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -9786,7 +9786,7 @@ subId 1826
 treatment Genistein_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep2
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -9796,14 +9796,14 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
-fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2.bam.bai
-fileName wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep2.bam.bai
+fileName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1492
 labVersion Genestein 100nM treatment
 origAssembly hg19
-parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xAlnRep2
+parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hAlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -9812,7 +9812,59 @@ subId 1826
 treatment Genistein_100nM
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1
+metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1
+objType table
+antibody ERalpha_a
+cell T-47D
+composite wgEncodeHaibTfbs
+controlId SL1216
+dataType ChIP-seq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-22
+dateUnrestricted 2011-03-22
+fileName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1218
+labVersion Genestein 100nM treatment
+origAssembly hg19
+project wgEncode
+protocol v041610.2
+replicate 1
+setType exp
+softwareVersion MACS
+subId 1826
+tableName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep1
+treatment Genistein_100nM
+view Peaks
+
+metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
+objType table
+antibody ERalpha_a
+cell T-47D
+composite wgEncodeHaibTfbs
+controlId SL1490
+dataType ChIP-seq
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-06-22
+dateUnrestricted 2011-03-22
+fileName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1492
+labVersion Genestein 100nM treatment
+origAssembly hg19
+project wgEncode
+protocol v041610.2
+replicate 2
+setType exp
+softwareVersion MACS
+subId 1826
+tableName wgEncodeHaibTfbsT47dEralphaaPcr2xGen1hPkRep2
+treatment Genistein_100nM
+view Peaks
+
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -9822,13 +9874,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
-fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1.bam.bai
-fileName wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1.bam.bai
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1216
 origAssembly hg19
-parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep1
+parentTable wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep1
 project wgEncode
 protocol v041610.2
 replicate 1
@@ -9837,7 +9889,7 @@ subId 1826
 treatment DMSO_0.02pct
 view Alignments
 
-metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2
+metaObject wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2
 objType file
 antibody ERalpha_a
 cell T-47D
@@ -9847,13 +9899,13 @@ dataType ChIP-seq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-22
-fileIndex wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2.bam.bai
-fileName wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2.bam
+fileIndex wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2.bam.bai
+fileName wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL1490
 origAssembly hg19
-parentTable wgEncodeHaibTfbsT47dEralphaaPcr2xDmso2AlnRep2
+parentTable wgEncodeHaibTfbsT47dEralphaaV0416102Dmso2AlnRep2
 project wgEncode
 protocol v041610.2
 replicate 2
@@ -9861,58 +9913,6 @@ setType input
 subId 1826
 treatment DMSO_0.02pct
 view Alignments
-
-metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep1
-objType table
-antibody ERalpha_a
-cell T-47D
-composite wgEncodeHaibTfbs
-controlId SL1216
-dataType ChIP-seq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-22
-fileName wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep1.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL1218
-labVersion Genestein 100nM treatment
-origAssembly hg19
-project wgEncode
-protocol v041610.2
-replicate 1
-setType exp
-softwareVersion MACS
-subId 1826
-tableName wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep1
-treatment Genistein_100nM
-view Peaks
-
-metaObject wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep2
-objType table
-antibody ERalpha_a
-cell T-47D
-composite wgEncodeHaibTfbs
-controlId SL1490
-dataType ChIP-seq
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-22
-dateUnrestricted 2011-03-22
-fileName wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep2.broadPeak.gz
-grant Myers
-lab HudsonAlpha
-labExpId SL1492
-labVersion Genestein 100nM treatment
-origAssembly hg19
-project wgEncode
-protocol v041610.2
-replicate 2
-setType exp
-softwareVersion MACS
-subId 1826
-tableName wgEncodeHaibTfbsT47dEralphaaPcr2xPkRep2
-treatment Genistein_100nM
-view Peaks
 
 metaObject wgEncodeHaibTfbsU87ControlPcr2xAlnRep1
 objType file
@@ -10059,4 +10059,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -1396611773
+# MAGIC: -17749017
