@@ -2347,7 +2347,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in BE2_C cells)
-        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10057.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
@@ -2355,7 +2355,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel BE2_C Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in BE2_C cells)
-        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=BE2C rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11125.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Nrsf
@@ -2379,7 +2379,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in PANC-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 25110.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
@@ -2387,7 +2387,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PANC-1 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PANC-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PANC1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11542.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
@@ -2431,7 +2431,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 21708.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
@@ -2439,7 +2439,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel PFSK-1 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in PFSK-1 cells)
-        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=PFSK1 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 11343.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
@@ -2491,7 +2491,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HTB-11 Ctl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HTB-11 cells)
-        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 10286.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
@@ -2499,7 +2499,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HTB-11 Ctl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HTB-11 cells)
-        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=HTB11 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 2739.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
@@ -2523,7 +2523,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in U87 cells)
-        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep1 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep1 prot=PCR2x treat=aNONE
         type wig 1.00 26957.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
@@ -2531,7 +2531,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel U87 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in U87 cells)
-        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2 prot=PCR1x treat=aNONE
+        subGroups view=zRaw factor=zCTRL cellType=U87 rep=rep2 prot=PCR2x treat=aNONE
         type wig 1.00 7552.00
 
         track wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp
@@ -2798,7 +2798,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Ctrl R2
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep2 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR1x treat=aNONE rep=rep2
+        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR2x treat=aNONE rep=rep2
         type wig 1.00 11467.00
         color 189,0,157
 
@@ -2807,7 +2807,7 @@ dataVersion through the ENCODE Jan 2010 Freeze
         parent wgEncodeHudsonalphaChipSeqViewzRaw off
         shortLabel HepG2 Ctrl R1
         longLabel ENCODE TFBS, HudsonAlpha ChIP-seq RawSignal Rep1 (Control in HepG2 cells)
-        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR1x treat=aNONE rep=rep1
+        subGroups view=zRaw factor=zCTRL cellType=2HEP prot=PCR2x treat=aNONE rep=rep1
         type wig 1.00 8979.00
         color 189,0,157
 

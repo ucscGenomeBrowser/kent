@@ -467,6 +467,72 @@ superTrack wgEncodeRnaSeqSuper
         origAssembly hg19
         # subId=2365 dateSubmitted=2010-09-21
 
+        track wgEncodeRikenCageGm12878CellPapPlusClustersRep2
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cell longPolyA 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cell)
+        subGroups view=PlusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep2
+        type bigWig 0.040000 10789.110352
+        origAssembly hg19
+        color 153,38,0
+        # subId=2394 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cytosol longPolyA 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cytosol)
+        subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep1
+        type bigWig 0.050000 8459.320312
+        origAssembly hg19
+        color 153,38,0
+        # subId=2393 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 nucleus longPolyA 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 nucleus)
+        subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep2
+        type bigWig 0.050000 21429.859375
+        origAssembly hg19
+        color 153,38,0
+        # subId=2392 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cytosol longPolyA 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cytosol)
+        subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep2
+        type bigWig 0.050000 12842.799805
+        origAssembly hg19
+        color 153,38,0
+        # subId=2391 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 nucleus longPolyA 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 nucleus)
+        subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep1
+        type bigWig 0.050000 19231.990234
+        origAssembly hg19
+        color 153,38,0
+        # subId=2390 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CellPapPlusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewPlusClusters off
+        shortLabel GM12878 cell longPolyA 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cell)
+        subGroups view=PlusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep1
+        type bigWig 0.050000 10785.929688
+        origAssembly hg19
+        color 153,38,0
+        # subId=2389 dateSubmitted=2010-09-21
+
 #        track wgEncodeRikenCageHepg2NucleusTotalPlusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewPlusClusters off
@@ -1176,15 +1242,81 @@ superTrack wgEncodeRnaSeqSuper
         origAssembly hg19
         # subId=2365 dateSubmitted=2010-09-21
 
+        track wgEncodeRikenCageGm12878CellPapMinusClustersRep2
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cell longPolyA 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cell)
+        subGroups view=MinusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep2
+        type bigWig 0.040000 13936.719727
+        origAssembly hg19
+        color 153,38,0
+        # subId=2394 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cytosol longPolyA 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cytosol)
+        subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep1
+        type bigWig 0.050000 22328.720703
+        origAssembly hg19
+        color 153,38,0
+        # subId=2393 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 nucleus longPolyA 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 nucleus)
+        subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep2
+        type bigWig 0.050000 5120.069824
+        origAssembly hg19
+        color 153,38,0
+        # subId=2392 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cytosol longPolyA 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cytosol)
+        subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep2
+        type bigWig 0.050000 21908.230469
+        origAssembly hg19
+        color 153,38,0
+        # subId=2391 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 nucleus longPolyA 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 nucleus)
+        subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep1
+        type bigWig 0.050000 6014.189941
+        origAssembly hg19
+        color 153,38,0
+        # subId=2390 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CellPapMinusClustersRep1
+        release alpha
+        parent wgEncodeRikenCageViewMinusClusters off
+        shortLabel GM12878 cell longPolyA 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cell)
+        subGroups view=MinusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep1
+        type bigWig 0.050000 14935.410156
+        origAssembly hg19
+        color 153,38,0
+        # subId=2389 dateSubmitted=2010-09-21
+
 
     track wgEncodeRikenCageViewAlignments
-        release alpha
+    release alpha
     shortLabel Alignments
     view Alignments
     visibility hide
     parent wgEncodeRikenCage
 
-        track wgEncodeRikenCageNhekCytosolLongnonpolyaAl
+        track wgEncodeRikenCageNhekCytosolLongnonpolyaAln
         release alpha
         subTrack wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cyto pA- Al
@@ -1194,7 +1326,7 @@ superTrack wgEncodeRnaSeqSuper
         color 179,0,134
         # subId=1811 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageGm12878CytosolLongnonpolyaAl
+        track wgEncodeRikenCageGm12878CytosolLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12878 cyto pA- Al
@@ -1217,7 +1349,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1798 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageH1hescCellTotalAl
+        track wgEncodeRikenCageH1hescCellTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC cell total Al
@@ -1228,7 +1360,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1799 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageHuvecCytosolLongnonpolyaAl
+        track wgEncodeRikenCageHuvecCytosolLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC cyto pA- Al
@@ -1236,10 +1368,10 @@ superTrack wgEncodeRnaSeqSuper
         subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bam
         color 224,75,0
-        # subId=1800 dateSubmitted=2010-06-21
+        # subId=1800 dateSubmitted=2010-06-21 THIS ONE SHOWS
 
 
-        track wgEncodeRikenCageHepg2CytosolLongnonpolyaAl
+        track wgEncodeRikenCageHepg2CytosolLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 cyto pA- Al
@@ -1250,7 +1382,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1801 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageHepg2NucleusLongnonpolyaAl
+        track wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 nucl pA- Al
@@ -1273,7 +1405,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1803 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562ChromatinTotalAl
+        track wgEncodeRikenCageK562ChromatinTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 chromatin total Al
@@ -1284,7 +1416,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1804 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562CytosolTotalAl
+        track wgEncodeRikenCageK562CytosolTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto total Al
@@ -1295,7 +1427,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1805 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562CytosolPapAl
+        track wgEncodeRikenCageK562CytosolPapAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ Al
@@ -1306,7 +1438,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1806 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562NucleolusTotalAl
+        track wgEncodeRikenCageK562NucleolusTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucleolus total Al
@@ -1317,7 +1449,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1807 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562NucleoplasmTotalAl
+        track wgEncodeRikenCageK562NucleoplasmTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucleoplasm total Al
@@ -1340,7 +1472,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1809 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageK562PolysomeLongnonpolyaAl
+        track wgEncodeRikenCageK562PolysomeLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 polysome pA- Al
@@ -1353,7 +1485,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
 
-        track wgEncodeRikenCageNhekNucleusLongnonpolyaAl
+        track wgEncodeRikenCageNhekNucleusLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK nucl pA- Al
@@ -1364,7 +1496,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1812 dateSubmitted=2010-06-21
 
 
-        track wgEncodeRikenCageProstateCellTotalAl
+        track wgEncodeRikenCageProstateCellTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel prostate cell total Al
@@ -1373,7 +1505,7 @@ superTrack wgEncodeRnaSeqSuper
         type bam
         # subId=1813 dateSubmitted=2010-06-21
 
-        track wgEncodeRikenCageK562NucleusLongnonpolyaAl
+        track wgEncodeRikenCageK562NucleusLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA- Al
@@ -1383,7 +1515,7 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=2127 dateSubmitted=2010-08-26
 
-        track wgEncodeRikenCageHepg2NucleolusTotalAl
+        track wgEncodeRikenCageHepg2NucleolusTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 nucleolus total Al
@@ -1393,7 +1525,7 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=2124 dateSubmitted=2010-08-23
 
-        track wgEncodeRikenCageGm12878NucleolusTotalAl
+        track wgEncodeRikenCageGm12878NucleolusTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel GM12878 nucleolus total Al
@@ -1403,7 +1535,7 @@ superTrack wgEncodeRnaSeqSuper
         color 153,38,0
         # subId=2125 dateSubmitted=2010-08-23
 
-        track wgEncodeRikenCageHuvecCellPapAlRep2
+        track wgEncodeRikenCageHuvecCellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC cell pA+ Al 2
@@ -1414,7 +1546,7 @@ superTrack wgEncodeRnaSeqSuper
         color 224,75,0
         # subId=2388 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHelas3NucleusPapAlRep1
+        track wgEncodeRikenCageHelas3NucleusPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 nucl pA+ Al 1
@@ -1425,7 +1557,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,119,158
         # subId=2386 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHelas3NucleusPapAlRep2
+        track wgEncodeRikenCageHelas3NucleusPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 nucl pA+ Al 2
@@ -1436,7 +1568,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,119,158
         # subId=2384 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageNhekNucleusPapAlRep3
+        track wgEncodeRikenCageNhekNucleusPapAlnRep3
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK nucl pA+ Al 3
@@ -1447,7 +1579,7 @@ superTrack wgEncodeRnaSeqSuper
         color 179,0,134
         # subId=2382 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHepg2CellPapAlRep1
+        track wgEncodeRikenCageHepg2CellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 cell pA+ Al 1
@@ -1458,7 +1590,7 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=2381 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageH1hescCellPapAlRep1
+        track wgEncodeRikenCageH1hescCellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC cell pA+ Al 1
@@ -1469,7 +1601,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,107,27
         # subId=2380 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageH1hescCytosolPapAlRep2
+        track wgEncodeRikenCageH1hescCytosolPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC cyto pA+ Al 2
@@ -1480,7 +1612,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,107,27
         # subId=2379 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHepg2CellPapAlRep2
+        track wgEncodeRikenCageHepg2CellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 cell pA+ Al 2
@@ -1491,7 +1623,7 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=2378 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHuvecNucleusPapAlRep3
+        track wgEncodeRikenCageHuvecNucleusPapAlnRep3
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC nucl pA+ Al 3
@@ -1502,7 +1634,7 @@ superTrack wgEncodeRnaSeqSuper
         color 224,75,0
         # subId=2377 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHuvecCellPapAlRep1
+        track wgEncodeRikenCageHuvecCellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC cell pA+ Al 1
@@ -1513,7 +1645,7 @@ superTrack wgEncodeRnaSeqSuper
         color 224,75,0
         # subId=2376 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHepg2NucleusPapAlRep1
+        track wgEncodeRikenCageHepg2NucleusPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 nucl pA+ Al 1
@@ -1524,7 +1656,7 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=2375 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHelas3CellPapAlRep2
+        track wgEncodeRikenCageHelas3CellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 cell pA+ Al 2
@@ -1535,7 +1667,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,119,158
         # subId=2374 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageNhekCytosolPapAlRep3
+        track wgEncodeRikenCageNhekCytosolPapAlnRep3
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cyto pA+ Al 3
@@ -1546,7 +1678,7 @@ superTrack wgEncodeRnaSeqSuper
         color 179,0,134
         # subId=2373 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageNhekCellPapAlRep1
+        track wgEncodeRikenCageNhekCellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cell pA+ Al 1
@@ -1557,7 +1689,7 @@ superTrack wgEncodeRnaSeqSuper
         color 179,0,134
         # subId=2372 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageK562CytosolPapAlRep1
+        track wgEncodeRikenCageK562CytosolPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cyto pA+ Al 1
@@ -1568,7 +1700,7 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=2371 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageH1hescCellPapAlRep2
+        track wgEncodeRikenCageH1hescCellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC cell pA+ Al 2
@@ -1579,7 +1711,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,107,27
         # subId=2370 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHepg2CytosolPapAlRep2
+        track wgEncodeRikenCageHepg2CytosolPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 cyto pA+ Al 2
@@ -1590,7 +1722,7 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=2369 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHuvecCytosolPapAlRep3
+        track wgEncodeRikenCageHuvecCytosolPapAlnRep3
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC cyto pA+ Al 3
@@ -1601,7 +1733,7 @@ superTrack wgEncodeRnaSeqSuper
         color 224,75,0
         # subId=2368 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageK562NucleusPapAlRep1
+        track wgEncodeRikenCageK562NucleusPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 nucl pA+ Al 1
@@ -1612,7 +1744,7 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=2367 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHepg2NucleusPapAlRep2
+        track wgEncodeRikenCageHepg2NucleusPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 nucl pA+ Al 2
@@ -1623,7 +1755,7 @@ superTrack wgEncodeRnaSeqSuper
         color 189,0,157
         # subId=2366 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHelas3CytosolPapAlRep1
+        track wgEncodeRikenCageHelas3CytosolPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 cyto pA+ Al 1
@@ -1634,7 +1766,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,119,158
         # subId=2364 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageHelas3CellPapAlRep1
+        track wgEncodeRikenCageHelas3CellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 cell pA+ Al 1
@@ -1645,7 +1777,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,119,158
         # subId=2363 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageK562CellPapAlRep2
+        track wgEncodeRikenCageK562CellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ Al 2
@@ -1656,7 +1788,7 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=2362 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageNhekCellPapAlRep2
+        track wgEncodeRikenCageNhekCellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cell pA+ Al 2
@@ -1667,7 +1799,7 @@ superTrack wgEncodeRnaSeqSuper
         color 179,0,134
         # subId=2361 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageH1hescNucleusPapAlRep2
+        track wgEncodeRikenCageH1hescNucleusPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC nucl pA+ Al 2
@@ -1678,7 +1810,7 @@ superTrack wgEncodeRnaSeqSuper
         color 0,107,27
         # subId=2360 dateSubmitted=2010-09-21
 
-        track wgEncodeRikenCageK562CellPapAlRep1
+        track wgEncodeRikenCageK562CellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ Al 1
@@ -1753,7 +1885,7 @@ superTrack wgEncodeRnaSeqSuper
         type bam
         origAssembly hg19
         color 153,38,0
-        # subId=2350 dateSubmitted=2010-09-21
+        # subId=2350 dateSubmitted=2010-09-21  THIS ONE SHOWS
 
         track wgEncodeRikenCageMcf7CellPapAlnRep1
         release alpha
@@ -1764,6 +1896,72 @@ superTrack wgEncodeRnaSeqSuper
         type bam
         origAssembly hg19
         # subId=2365 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CellPapAlnRep2
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cell longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (longPolyA in GM12878 cell)
+        subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=2394 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CytosolPapAlnRep1
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cytosol longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longPolyA in GM12878 cytosol)
+        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=2393 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878NucleusPapAlnRep2
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 nucleus longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (longPolyA in GM12878 nucleus)
+        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=2392 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CytosolPapAlnRep2
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cytosol longPolyA Aln 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (longPolyA in GM12878 cytosol)
+        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep2
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=2391 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878NucleusPapAlnRep1
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 nucleus longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longPolyA in GM12878 nucleus)
+        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=2390 dateSubmitted=2010-09-21
+
+        track wgEncodeRikenCageGm12878CellPapAlnRep1
+        release alpha
+        parent wgEncodeRikenCageViewAlignments off
+        shortLabel GM12878 cell longPolyA Aln 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longPolyA in GM12878 cell)
+        subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=2389 dateSubmitted=2010-09-21
 
 
 
