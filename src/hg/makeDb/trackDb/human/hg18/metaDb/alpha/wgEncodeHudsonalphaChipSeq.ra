@@ -364,7 +364,7 @@ objType file
 antibody Input
 cell BE2_C
 composite wgEncodeHudsonalphaChipSeq
-controlId BE2_C/None/Input/PCR1x
+controlId BE2_C/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -375,7 +375,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cControl
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 437
@@ -1821,7 +1821,7 @@ objType file
 antibody Input
 cell HTB-11
 composite wgEncodeHudsonalphaChipSeq
-controlId HTB-11/None/Input/PCR1x
+controlId HTB-11/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -1832,7 +1832,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 438
@@ -2253,7 +2253,7 @@ objType file
 antibody Input
 cell PANC-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PANC-1/None/Input/PCR1x
+controlId PANC-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -2264,7 +2264,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 435
@@ -2299,7 +2299,7 @@ objType file
 antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PFSK-1/None/Input/PCR1x
+controlId PFSK-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -2310,7 +2310,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 436
@@ -2391,7 +2391,7 @@ objType file
 antibody Input
 cell U87
 composite wgEncodeHudsonalphaChipSeq
-controlId U87/None/Input/PCR1x
+controlId U87/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -2402,7 +2402,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 434
@@ -2677,7 +2677,7 @@ objType file
 antibody Input
 cell BE2_C
 composite wgEncodeHudsonalphaChipSeq
-controlId BE2_C/None/Input/PCR1x
+controlId BE2_C/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -2688,7 +2688,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 437
@@ -4039,7 +4039,7 @@ objType file
 antibody Input
 cell HTB-11
 composite wgEncodeHudsonalphaChipSeq
-controlId HTB-11/None/Input/PCR1x
+controlId HTB-11/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -4050,7 +4050,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 438
@@ -4471,7 +4471,7 @@ objType file
 antibody Input
 cell PANC-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PANC-1/None/Input/PCR1x
+controlId PANC-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -4482,7 +4482,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 435
@@ -4517,7 +4517,7 @@ objType file
 antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PFSK-1/None/Input/PCR1x
+controlId PFSK-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -4528,7 +4528,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 436
@@ -4609,7 +4609,7 @@ objType file
 antibody Input
 cell U87
 composite wgEncodeHudsonalphaChipSeq
-controlId U87/None/Input/PCR1x
+controlId U87/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -4620,7 +4620,7 @@ grant Myers
 lab HudsonAlpha
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 434
@@ -10151,7 +10151,7 @@ objType file
 antibody Input
 cell PANC-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PANC-1/None/Input/PCR1x
+controlId PANC-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -10162,7 +10162,7 @@ lab HudsonAlpha
 labVersion SL117
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 880
@@ -11805,7 +11805,7 @@ objType file
 antibody Input
 cell PANC-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PANC-1/None/Input/PCR1x
+controlId PANC-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-15
@@ -11816,7 +11816,7 @@ lab HudsonAlpha
 labVersion SL523
 parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 880
@@ -12256,7 +12256,7 @@ objType table
 antibody Input
 cell BE2_C
 composite wgEncodeHudsonalphaChipSeq
-controlId BE2_C/None/Input/PCR1x
+controlId BE2_C/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -12266,7 +12266,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 437
@@ -13713,7 +13713,7 @@ objType table
 antibody Input
 cell HTB-11
 composite wgEncodeHudsonalphaChipSeq
-controlId HTB-11/None/Input/PCR1x
+controlId HTB-11/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -13723,7 +13723,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 438
@@ -14146,7 +14146,7 @@ objType table
 antibody Input
 cell PANC-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PANC-1/None/Input/PCR1x
+controlId PANC-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -14156,7 +14156,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 435
@@ -14192,7 +14192,7 @@ objType table
 antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PFSK-1/None/Input/PCR1x
+controlId PFSK-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -14202,7 +14202,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 436
@@ -14284,7 +14284,7 @@ objType table
 antibody Input
 cell U87
 composite wgEncodeHudsonalphaChipSeq
-controlId U87/None/Input/PCR1x
+controlId U87/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -14294,7 +14294,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 1
 setType input
 subId 434
@@ -14570,7 +14570,7 @@ objType table
 antibody Input
 cell BE2_C
 composite wgEncodeHudsonalphaChipSeq
-controlId BE2_C/None/Input/PCR1x
+controlId BE2_C/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -14580,7 +14580,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 437
@@ -15933,7 +15933,7 @@ objType table
 antibody Input
 cell HTB-11
 composite wgEncodeHudsonalphaChipSeq
-controlId HTB-11/None/Input/PCR1x
+controlId HTB-11/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -15943,7 +15943,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 438
@@ -16366,7 +16366,7 @@ objType table
 antibody Input
 cell PANC-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PANC-1/None/Input/PCR1x
+controlId PANC-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-19
@@ -16376,7 +16376,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 435
@@ -16412,7 +16412,7 @@ objType table
 antibody Input
 cell PFSK-1
 composite wgEncodeHudsonalphaChipSeq
-controlId PFSK-1/None/Input/PCR1x
+controlId PFSK-1/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -16422,7 +16422,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 436
@@ -16504,7 +16504,7 @@ objType table
 antibody Input
 cell U87
 composite wgEncodeHudsonalphaChipSeq
-controlId U87/None/Input/PCR1x
+controlId U87/None/Input/PCR2x
 dataType ChipSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-17
@@ -16514,7 +16514,7 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol PCR1x
+protocol PCR2x
 replicate 2
 setType input
 subId 434
@@ -16568,4 +16568,4 @@ tableName wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 treatment None
 view RawSignal
 
-# MAGIC: 1803797524
+# MAGIC: 1803797744
