@@ -204,6 +204,7 @@
 #include "pgPhenoAssoc.h"
 #include "pgSiftPred.h"
 #include "pgPolyphenPred.h"
+#include "bedDetail.h"
 #include "ec.h"
 #include "transMapClick.h"
 #include "retroClick.h"
@@ -3700,6 +3701,11 @@ else if (wordCount > 0)
         {
 	doAltGraphXDetails(tdb,item);
 	}
+    //add bedDetail here
+    else if (startsWith("bedDetail", type))
+        {
+        doBedDetail(tdb, NULL, item);
+        }
 #ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
@@ -4387,31 +4393,38 @@ hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
 hti->type = cloneString(ct->tdb->type);
-if (ct->fieldCount >= 3)
+int fieldCount = 3;
+if (sameWord(ct->dbTrackType, "bedDetail"))
+    fieldCount = ct->fieldCount - 2;
+else if (sameWord(ct->dbTrackType, "pgSnp"))
+    fieldCount = 4;
+else
+    fieldCount = ct->fieldCount;
+if (fieldCount >= 3)
     {
     strncpy(hti->chromField, "chrom", 32);
     strncpy(hti->startField, "chromStart", 32);
     strncpy(hti->endField, "chromEnd", 32);
     }
-if (ct->fieldCount >= 4)
+if (fieldCount >= 4)
     {
     strncpy(hti->nameField, "name", 32);
     }
-if (ct->fieldCount >= 5)
+if (fieldCount >= 5)
     {
     strncpy(hti->scoreField, "score", 32);
     }
-if (ct->fieldCount >= 6)
+if (fieldCount >= 6)
     {
     strncpy(hti->strandField, "strand", 32);
     }
-if (ct->fieldCount >= 8)
+if (fieldCount >= 8)
     {
     strncpy(hti->cdsStartField, "thickStart", 32);
     strncpy(hti->cdsEndField, "thickEnd", 32);
     hti->hasCDS = TRUE;
     }
-if (ct->fieldCount >= 12)
+if (fieldCount >= 12)
     {
     strncpy(hti->countField, "blockCount", 32);
     strncpy(hti->startsField, "chromStarts", 32);
@@ -18614,6 +18627,14 @@ else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     hFreeConn(&conn2);
     hFreeConn(&conn);
     }
+else if (ct->dbTrack && sameWord(type, "bedDetail")) 
+    {
+    doBedDetail(ct->tdb, ct, itemName);
+    }
+else if (ct->dbTrack && sameWord(type, "pgSnp"))
+    {
+    doPgSnp(ct->tdb, itemName, ct);
+    }
 else
     {
     if (ct->dbTrack)
@@ -21519,15 +21540,26 @@ freeMem(gvPrevType);
 hFreeConn(&conn);
 }
 
-void doPgSnp(struct trackDb *tdb, char *itemName)
+void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct)
 /* print detail page for personal genome track (pgSnp) */
 {
-char *table = tdb->table;
+char *table;
+struct sqlConnection *conn;
 char *escName = sqlEscapeString(itemName);
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
+if (ct == NULL) 
+    {
+    table = tdb->table;
+    conn = hAllocConn(database);
+    }
+else 
+    {
+    table = ct->dbTableName;
+    conn = hAllocConn(CUSTOM_TRASH);
+    //ct->tdb
+    }
 
 genericHeader(tdb, itemName);
 
@@ -21578,6 +21610,31 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
 hFreeConn(&conn);
+}
+
+void doPgPhenoAssoc(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->table;
+struct pgPhenoAssoc *pheno = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+struct dyString *query = dyStringNew(512);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+               table, seqName);
+dyStringPrintf(query, "name = '%s' and chromStart = %d", itemName, start);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    pheno = pgPhenoAssocLoad(row);
+    bedPrintPos((struct bed *)pheno, 4, tdb);
+    printf("Personal Genome phenotype: <a href=\"%s\">link to phenotype source</a><BR>\n", pheno->srcUrl);
+    }
+printTrackHtml(tdb);
 }
 
 void doAllenBrain(struct trackDb *tdb, char *itemName)
@@ -22268,6 +22325,65 @@ sqlFreeResult(&sr);
 printTrackHtml(tdb);
 }
 
+void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName)
+/* generate the detail page for a custom track of bedDetail type */
+{
+char *table; 
+struct bedDetail *r = NULL;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *chrom = cartString(cart,"c");  /* don't assume name is unique */
+int start = cgiInt("o");
+int end = cgiInt("t");
+int bedPart = 4;
+char *escName = NULL;
+if (ct == NULL)
+    {
+    char *words[3];
+    int cnt = chopLine(cloneString(tdb->type), words);
+    if (cnt > 1)
+        bedPart = atoi(words[1]) - 2;
+    table = tdb->table;
+    conn = hAllocConn(database);
+    genericHeader(tdb, itemName);
+    }
+else
+    {
+    table = ct->dbTableName;
+    conn = hAllocConn(CUSTOM_TRASH);
+    bedPart = ct->fieldCount - 2;
+    /* header handled by custom track handler */
+    }
+
+/* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromStart = %d and chromEnd = %d and name = '%s'", table, chrom, start, end, escName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    r = bedDetailLoadWithGaps(row, bedPart+2);
+    bedPrintPos((struct bed*)r, bedPart, tdb);
+    //print bedPart using bed routines?
+    //printf("<B>Name:</B> %s <BR>\n", r->name);
+    //print ID as link if have url
+    if (r->id != NULL) 
+        {
+        printf("<B>ID:</B> %s <BR>\n", r->id);
+        printCustomUrl(tdb, r->id, TRUE);
+        }
+    //printf("<B>Position:</B> %s:%u-%u<BR><BR>", r->chrom, *(r->chromStart)+1, *(r->chromEnd));
+    if (r->description != NULL) 
+        printf("%s <BR>\n", r->description);
+    }
+sqlFreeResult(&sr);
+
+bedDetailFree(&r);
+freeMem(escName);
+hFreeConn(&conn);
+}
 
 struct trackDb *tdbForTableArg()
 /* get trackDb for track passed in table arg */
@@ -23474,7 +23590,12 @@ else if (sameString("pgVenter", table) ||
          sameString("pgSaqqaqHc", table) ||
          sameString("pgTest", table) )
     {
-    doPgSnp(tdb, item);
+    doPgSnp(tdb, item, NULL);
+    }
+else if (startsWith("pg", table) && 
+         (endsWith(table, "PhenCode") || endsWith(table, "Snpedia") || endsWith(table, "Hgmd")) )
+    {
+    doPgPhenoAssoc(tdb, item);
     }
 else if (sameString("gvPos", table))
     {
@@ -23557,6 +23678,10 @@ else if (sameString("par", table))
 else if (sameString("t2g", table))
     {
     doT2gDetails(tdb, item);
+    }
+else if (tdb != NULL && startsWith("bedDetail", tdb->type))
+    {
+    doBedDetail(tdb, NULL, item);
     }
 else if (startsWith("numtS", table))
        //  && (!sameString("numtSAssembled", table)))

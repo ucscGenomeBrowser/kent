@@ -1750,8 +1750,10 @@ function loadContextMenu(img)
                     }
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
                     && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
+                        if(selectedMenuItem.title.indexOf("Click to alter") != 0 || selectedMenuItem.title.indexOf("and similar subtracks") != -1) {
                         o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
                         any = true;
+                    }
                     }
                     if(any) {
                         menu.push($.contextMenu.separator);
@@ -2178,14 +2180,6 @@ function searchKeydown(event)
     }
 }
 
-function changeSearchVisibilityPopups(cmd)
-{  // ??? Larry?
-    $("#searchResultsForm select").each(function(i) {
-        $(this).val(cmd);
-    });
-    return false;
-}
-
 function findTracksChangeVis(seenVis)
 { // called by onchange of vis
     var visName = $(seenVis).attr('id');
@@ -2245,7 +2239,7 @@ function findTracksClickedOne(selCb,justClicked)
 
     // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
+    var setHiddenInputs = (justClicked || ($(seenVis).val() != $(hiddenVis).val()));
     if(setHiddenInputs) {
         if(checked)
             $(hiddenVis).val($(seenVis).val());

@@ -1704,8 +1704,8 @@ identifier ikmcName
 
 identifier hgIkmcName
 "IKMC (knockoutmouse.org) mapped gene name"
-    $mm.hgIkmc.name dupeOk
-    $mm.hgIkmcExtra.name
+    $hg.hgIkmc.name dupeOk
+    $hg.hgIkmcExtra.name
 
 # "Biological" Gene Names
 

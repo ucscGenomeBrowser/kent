@@ -370,6 +370,12 @@ void doBamDetails(struct trackDb *tdb, char *item);
 void doMakeItemsDetails(struct customTrack *ct, char *itemIdString);
 /* Show details of a makeItems item. */
 
+void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName);
+/* generate the detail page for a custom track of bedDetail type */
+
+void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct);
+/* print detail page for personal genome track (pgSnp) */
+
 #define NUCCORE_SEARCH "http://www.ncbi.nlm.nih.gov/sites/entrez?db=nuccore&cmd=search&term="
 
 #endif
