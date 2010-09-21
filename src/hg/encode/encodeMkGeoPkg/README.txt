@@ -1,13 +1,50 @@
 Instructions for running GEO packager for ENCODE data
 
+-----------
+TODO:  Add tests with dummy input data:
+
+1) dummy metaDb's, imported from files checked in to input/ dir.
+2) dummy expVar.ra
+3) dummy files in fake compositeDir;
+* only needs to test -soft option and diff with expected/
+------------
+
 1) Add an entry for the composite to config/expVars.ra
-2) Create .soft file, e.g.:
+2) Create .soft file to test it, e.g.:
 
 encodeMkGeoPkg hg18 wgEncodeCaltechRnaSeq -soft dummy_seq_platform
 
 Creates file:  ucsc_encode_dcc_wgEncodeCaltechRnaSeq.soft
 
-Example output:
+3) To complete submission, run w/o -soft option:
+
+encodeMkGeoPkg hg18 wgEncodeCaltechRnaSeq <dummy_seq_platform>
+
+This creates a directory: ucsc_encode_dcc_wgEncodeCaltechRnaSeq
+containing all files in downloads directory that are referenced
+by metaDb for that composite.
+
+4) Hand-craft .soft file:
+
+a) Title (use long label for example)
+b) Summary text
+c) Overall design
+d) Contributors (pulled from Credits section of track description)
+
+4) bzip <submission dir> (lengthy)
+
+5) Use aspera to send bzipped dir and .soft to GEO:
+
+KRISH ADDS HERE
+
+6) Mail GEO (pierre) to notify that files have been uploaded (say which ones)
+
+7) Verify GSE and GSM entries are correct, and that the GSE appears on the GEO ENCODE
+page:  http://www.ncbi.nlm.nih.gov/geo/info/ENCODE.html
+
+8) Load accession numbers into metaDb table
+
+Example output of encodeMkGeoPkg:
 --------------------------------------
 
 Number of objects in composite track: 286
