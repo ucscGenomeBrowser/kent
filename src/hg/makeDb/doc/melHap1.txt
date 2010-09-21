@@ -1,0 +1,52 @@
+# for emacs: -*- mode: sh; -*-
+
+# Meloidogyne hapla
+# The Center for the Biology of Nematode Parasitism, N.C. State
+# "Sequence and genetic map of Meloidogyne hapla:
+#	A compact nematode genome for plant parasitism"
+#	http://www.pnas.org/content/105/39/14802.full
+#	PNAS  September 30, 2008   vol. 105  no. 39  14802-14807 
+
+##############################################################################
+## Fetch sequence (DONE - 2010-09-20 - Hiram)
+
+    mkdir -p /hive/data/genomes/melHap1/ws210
+    cd /hive/data/genomes/melHap1/ws210
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/m_hapla/
+
+    hgFakeAgp -minContigGap=1 \
+	sequences/dna/b_malayi.WS210.dna.fa.gz ucsc.fake.melHap1.agp
+
+##############################################################################
+## Initial browser build (DONE - 2010-09-20 - Hiram)
+    cd /hive/data/genomes/melHap1
+
+    cat << '_EOF_' > melHap1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db melHap1
+clade worm
+genomeCladePriority 80
+scientificName Meloidogyne hapla
+commonName Root Knot
+assemblyDate Sep. 2008
+assemblyLabel The Center for the Biology of Nematode Parasitism, N.C. State
+assemblyShortLabel M. hapla VW9 WS210
+orderKey 895
+mitoAcc none
+fastaFiles /hive/data/genomes/melHap1/ws210/sequences/dna/m_hapla.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/melHap1/ws210/ucsc.fake.melHap1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6305
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-stop=agp melHap1.config.ra > agp.log 2>&1
+    time makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-continue=db melHap1.config.ra > db.log 2>&1
+    #	real    0m27.328s
+
+##############################################################################

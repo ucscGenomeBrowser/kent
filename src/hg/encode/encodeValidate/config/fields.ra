@@ -42,6 +42,23 @@ file ddf
 type string
 required no
 
+# This is used to store experiment defining variables for a composite
+field expVars
+file ddf
+type string
+required no
+
+# GEO accession numbers for series and sample
+field geoSeries
+file ddf
+type string
+required no
+
+field geoSample
+file ddf
+type string
+required no
+
 # This is replicate number as you would expect
 # It would be nice to verify that you have a rep 1 if you have a rep 2. etc
 field replicate
@@ -49,15 +66,16 @@ file ddf
 type int
 required no
 
+# RETIRING IT 9/9/10 
 # This field is used by UW 
 # It is sort of like replicate
 # It would be great if someone in the know could explain this
 # This is a priority of which replicate should be displayed.  It was made because it is difficult to change rep1 to rep2.
 # Retire when Brian has the file nameing issues worked out
-field rank
-file ddf
-type int
-required no
+#field rank
+#file ddf
+#type int
+#required no
 
 # This is a ChIP-seq variable
 # Cricket wonders if it is redundant with medianFragLength 
@@ -101,11 +119,6 @@ file ddf
 type string
 required no
 
-field insLength
-file ddf
-type string
-required no
-
 field seqPlatform
 file ddf
 type string
@@ -141,6 +154,14 @@ field labExpId
 file ddf
 type string
 required no
+
+# This field is for the lab to enter thier own internal tracking numbers
+# These experiment ID's can be used by the labs to specify which input files to use
+field labProtocolId
+file ddf
+type string
+required no
+
 
 # This field is to track data that was originally submitted
 # on another assembly, but has been lifted over or remapped.
@@ -194,6 +215,7 @@ file dafHeader
 type string
 required yes
 
+# RETIRING IT 9-10-10
 # Use this for composites that include multiple data types
 # (e.g. Open Chromatin) or multiple labs (e.g. Duke)
 # In these cases, there will be multiple data agreements
@@ -201,10 +223,10 @@ required yes
 # is used to generate table and filenames that distinguish
 # Tim said could retire
 # Venkat seems to be using it
-field dataAgreementSuffix
-file dafHeader
-type string
-required no
+#field dataAgreementSuffix
+#file dafHeader
+#type string
+#required no
 
 # optional DAF header fields
 
@@ -215,18 +237,22 @@ file dafHeader
 type string
 required no
 
+#UNRETIRING THIS 9/15/2010 
 # This is in the DAF and not the DDF
 # It seems to represent the same information as fragLength
 # Is it redundant
 # needs to go
+# The doEncodeValidate relies on this information
 field medianFragmentLength
 file dafHeader
 type int
 required no
 
+# UNRETIRING THIS 9/15/2010
 # ???????  most likely in Hudson Alpha
 # This comes from creating own signals
-# 
+# Necessary for DAF to pass validation
+# Need to look more into its function
 field fragmentLengthRange
 file dafHeader
 type int
@@ -255,8 +281,9 @@ file dafHeader
 type string
 required no
 
+# RETIRING IT 9/9/10
 # Not needed any more as we are not makeing signals
-# I have no idea
+# Unretireing on 9/17/10 hard coded in doEncodeVAlidate
 field noAutoCreate
 file dafHeader
 type bool
@@ -290,8 +317,10 @@ file dafList
 type bool
 required yes
 
+#RETIRING IT 9/9/10
 # Tim says this is not used
 # May have been to set a priority in the trackDb, it would be completely worthless to do that now
+# UNRETIRING 9/14/10  doEncodeValidate fails if this is not present.  Even if it is not in the DAF
 field order
 file dafList
 type int
@@ -304,12 +333,12 @@ file dafList
 type bool
 required no
 
-
+#RETIRING IT 9/9/10
 # Maybe larrym has some idea about how this works.  May have been validate settings type of thing
-field options
-file dafList
-type string
-required no
+#field options
+#file dafList
+#type string
+#required no
 
 # This is made by Kate and is only used in one DAF
 # Attempt to make a general way to have bedish files
@@ -320,20 +349,3 @@ file dafList
 type string
 required no
 
-
-
-
-
-
-
-
-# cv.ra fields
-#field term
-#file cv
-#type string
-#required yes
-
-#field type
-#file cv
-#type string
-#required yes

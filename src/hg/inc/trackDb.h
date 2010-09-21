@@ -47,7 +47,8 @@ struct trackDb
     /* additional info, determined from settings */
     char treeNodeType;          /* bit map containing defining supertrack, composite and children of same (may be parent & child) */
     struct trackDb *parent;     /* parent of composite or superTracks */
-    struct trackDb *subtracks;  /* children of composite (TODO: or supertrack) */ // NOTE: can only be on one sl at a time!
+    struct trackDb *subtracks;  /* children of composite not supertracks */ // NOTE: can only be on one sl at a time!
+    struct slRef *children;     /* children of superTracks only.  Needed since these children are on the main trackList and can't be in 2 sl's at once */
     char *parentName;           /* set if this is a supertrack member */
     boolean isShow;             /* for supertracks tracks: true if this is a supertrack with pseudo-vis 'show' */
     struct hash *overrides;     /* If not NULL, this is an override
@@ -60,6 +61,7 @@ struct trackDb
 
 #define SUPERTRACK_MASK                 0x10
 #define COMPOSITE_MASK                  0x20
+#define COMPOSITE_VIEW_MASK             0x40
 #define SUPERTRACK_CHILD_MASK           0x01
 #define COMPOSITE_CHILD_MASK            0x02
 #define PARENT_MASK                     0xF0
@@ -69,6 +71,7 @@ struct trackDb
 #define CHILD_NODE(nodeType)            ((nodeType) & CHILD_MASK)
 #define SUPERTRACK_NODE(nodeType)       (((nodeType) & SUPERTRACK_MASK) == SUPERTRACK_MASK)
 #define COMPOSITE_NODE(nodeType)        (((nodeType) & COMPOSITE_MASK ) == COMPOSITE_MASK )
+#define COMPOSITE_VIEW_NODE(nodeType)   (((nodeType) & COMPOSITE_VIEW_MASK ) == COMPOSITE_VIEW_MASK )
 #define SUPERTRACK_CHILD_NODE(nodeType) (((nodeType) & SUPERTRACK_CHILD_MASK) == SUPERTRACK_CHILD_MASK)
 #define COMPOSITE_CHILD_NODE(nodeType)  (((nodeType) & COMPOSITE_CHILD_MASK ) == COMPOSITE_CHILD_MASK )
 #define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
@@ -109,6 +112,12 @@ INLINE boolean tdbIsCompositeChild(struct trackDb *tdb)
 return tdb && tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType);
 }
 
+INLINE boolean tdbIsCompositeView(struct trackDb *tdb)
+/* Is this trackDb struct marked as a child of a composite track ?  */
+{
+return tdb && tdb->subtracks && COMPOSITE_VIEW_NODE( tdb->treeNodeType);
+}
+
 INLINE void tdbMarkAsSuperTrack(struct trackDb *tdb)
 /* Marks a trackDb struct as a supertrack */
 {
@@ -131,6 +140,12 @@ INLINE void tdbMarkAsCompositeChild( struct trackDb *tdb)
 /* Marks a trackDb struct as a child of a composite track  */
 {
 tdb->treeNodeType |= COMPOSITE_CHILD_MASK;
+}
+
+INLINE void tdbMarkAsCompositeView( struct trackDb *tdb)
+/* Marks a trackDb struct as a view of a composite track  */
+{
+tdb->treeNodeType |= COMPOSITE_VIEW_MASK;
 }
 
 struct trackDb *trackDbLoad(char **row);
@@ -303,7 +318,10 @@ struct trackDb *tdbFindOrCreate(char *db,struct trackDb *parent,char *table);
 /* Find or creates the tdb for this table. May return NULL. */
 
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value);
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name);
+/* Removes a value from the extras hash. */
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal);
 /* Returns a value if it is found in the extras hash. */
