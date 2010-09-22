@@ -2239,7 +2239,15 @@ function findTracksClickedOne(selCb,justClicked)
 
     // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = (justClicked || ($(seenVis).val() != $(hiddenVis).val()));
+    var setHiddenInputs = justClicked;
+    if(!justClicked) {
+        if(needSel)
+            setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
+        else if (checked)
+            setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
+        else
+            setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
+    }
     if(setHiddenInputs) {
         if(checked)
             $(hiddenVis).val($(seenVis).val());
@@ -2272,19 +2280,13 @@ function findTracksClickedOne(selCb,justClicked)
 
 function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
-    $('#foundTracks').show()
+    $('div#found').show()
     var selCbs = $('input.selCb');
 
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    // The "view in browser" button should be enabled/disabled
-    var disabled = ($(selCbs).length == 0 || $(selCbs).filter(':checked').length == 0);
-    //$('input.viewBtn').attr('disabled',disabled);
-    if(disabled == false)
-        $('input.viewBtn').val('View in Browser');
-    else
-        $('input.viewBtn').val('Return to Browser');
+    findTracksViewButtoneText();
 
     findTracksCounts();
 }
@@ -2302,11 +2304,7 @@ function findTracksCheckAll(check)
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    if(check)
-        $('input.viewBtn').val('View in Browser');
-    else
-        $('input.viewBtn').val('Return to Browser');
-
+    findTracksViewButtoneText();
     findTracksCounts();
     return false;  // Pressing button does nothing more
 }
@@ -2340,9 +2338,18 @@ function findTracksSearchButtonsEnable(enable)
     }
 }
 
+function findTracksViewButtoneText()
+{
+    var inputs = $('table#foundTracks').find('input:hidden');
+    if( $(inputs).length == $(inputs).filter(':disabled').length)
+        $('input.viewBtn').val('Return to Browser');
+    else
+        $('input.viewBtn').val('View in Browser');
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
-    var foundTracks = $('#foundTracks');
+    var foundTracks = $('div#found');
     if(foundTracks != undefined)
         $(foundTracks).remove();
     $('input[type="text"]').val(''); // This will always be found

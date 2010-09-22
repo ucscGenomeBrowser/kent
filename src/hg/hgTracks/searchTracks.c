@@ -673,7 +673,7 @@ if(doSearch)
         }
     }
 
-hPrintf("<div id='foundTracks' style='display:none;'>\n"); // This div allows the clear button to empty it
+hPrintf("<div id='found' style='display:none;'>\n"); // This div allows the clear button to empty it
 if(tracksFound < 1)
     {
     if(doSearch)
@@ -695,13 +695,13 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
         }
 
     // Set up json for js functionality
     struct dyString *jsonTdbVars = NULL;
 
-    hPrintf("<table><tr><td colspan='2'>\n");
+    hPrintf("<table id='foundTracks'><tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
     #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracksCheckAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
