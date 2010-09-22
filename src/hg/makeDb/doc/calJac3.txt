@@ -2499,5 +2499,30 @@ qacAddGapIdx calJac3.agp calJac3.qual.qac calJac3.qac calJac3.qdx
 
 /hive/data/genomes/calJac3/bed/multiz13way/quals] time mafAddQRows 10way.list ../run/calJac3.13way.maf calJac3.quals.13way.maf
 
+############################################################################
+## Fix gold/gap tables (DONE - 2010-09-22 - Hiram)
+    # the hgGoldGapGl program has been fixed for chrom names > 16 characters
+    mkdir /hive/data/genomes/calJac3/bed/goldGap
+    cd /hive/data/genomes/calJac3/bed/goldGap
+    # record table status before loading anything:
+    hgsql -e "show table status;" calJac3 > before.status
+    # verify SQL create statements with -noLoad option:
+    hgGoldGapGl -noLoad -verbose=2 -noGl \
+        calJac3 /hive/data/genomes/calJac3/calJac3.agp
+    # if that looks OK, load the two tables:
+    hgGoldGapGl -verbose=2 -noGl \
+        calJac3 /hive/data/genomes/calJac3/calJac3.agp
+    # verify only gold and gap tables have changed
+    hgsql -e "show table status;" calJac3 > after.status
+    # it appears only the gold table actually changed
+    diff before.status after.status
+< gap   MyISAM  10      Dynamic 187214  44      8366704
+> gap   MyISAM  10      Dynamic 187214  44      8366704
+< gold  MyISAM  10      Dynamic 194974  46      9129232
+> gold  MyISAM  10      Dynamic 201523  47      9496340
+
+    # gold and gap tables together now cover the entire genome:
+    featureBits -countGaps -or calJac3 gold gap
+    #	2914958544 bases of 2914958544 (100.000%) in intersection
 
 ############################################################################
