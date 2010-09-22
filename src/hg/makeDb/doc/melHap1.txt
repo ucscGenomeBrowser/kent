@@ -27,9 +27,9 @@
 # Config parameters for makeGenomeDb.pl:
 db melHap1
 clade worm
-genomeCladePriority 80
+genomeCladePriority 82
 scientificName Meloidogyne hapla
-commonName Root Knot
+commonName M. hapla
 assemblyDate Sep. 2008
 assemblyLabel The Center for the Biology of Nematode Parasitism, N.C. State
 assemblyShortLabel M. hapla VW9 WS210
@@ -43,10 +43,89 @@ taxId 6305
 '_EOF_'
     # << happy emacs
 
-    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
-	-stop=agp melHap1.config.ra > agp.log 2>&1
     time makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
-	-continue=db melHap1.config.ra > db.log 2>&1
-    #	real    0m27.328s
+	melHap1.config.ra > makeGenomeDb.log 2>&1
+    #	real    0m42.028s
 
 ##############################################################################
+# REPEATMASKER (DONE - 2010-09-21 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/melHap1/bed/repeatMasker
+    cd /hive/data/genomes/melHap1/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=pk \
+	-buildDir=`pwd` melHap1 > do.log 2>&1 &
+    #	real    23m56.249s
+
+    #	from the do.log:
+    #	RepeatMasker version development-$Id:
+    #	RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp
+    #	CC   RELEASE 20090604;                                            *
+
+    cat faSize.rmsk.txt
+    #	53017507 bases (0 N's 53017507 real 43261440 upper 9756067 lower)
+    #	in 3452 sequences in 1 files
+    #	%18.40 masked total, %18.40 masked real
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2010-09-21 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/melHap1/bed/simpleRepeat
+    cd /hive/data/genomes/melHap1/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -workhorse=hgwdev \
+	-smallClusterHub=memk -buildDir=`pwd` melHap1 > do.log 2>&1 &
+    #	real    11m40.808s
+
+    cat fb.simpleRepeat 
+    #	2456208 bases of 53017507 (4.633%) in intersection
+
+#########################################################################
+# run window masker (DONE - 2010-09-21 - Hiram)
+    mkdir /hive/data/genomes/melHap1/bed/windowMasker
+    cd /hive/data/genomes/melHap1/bed/windowMasker
+    time doWindowMasker.pl -verbose=2 -workhorse=kolossus \
+	-buildDir=`pwd` melHap1 > do.log 2>&1 &
+    #	real    1m59.029s
+
+    twoBitToFa melHap1.wmsk.sdust.2bit stdout | faSize stdin
+    #	53017507 bases (0 N's 53017507 real 24940979 upper 28076528 lower)
+    #	in 3452 sequences in 1 files
+    #	%52.96 masked total, %52.96 masked real
+
+    hgLoadBed melHap1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 477268 elements of size 3
+    featureBits melHap1 windowmaskerSdust
+    #	28076528 bases of 53017507 (52.957%) in intersection
+
+    #	this is the mask for the genome
+    cd /hive/data/genomes/melHap1
+    zcat bed/windowMasker/windowmasker.sdust.bed.gz \
+	| twoBitMask melHap1.unmasked.2bit stdin \
+	    -type=.bed melHap1.2bit
+    twoBitToFa melHap1.2bit stdout | faSize stdin
+    #	53017507 bases (0 N's 53017507 real 24940979 upper 28076528 lower)
+    #	in 3452 sequences in 1 files
+    #	%52.96 masked total, %52.96 masked real
+
+    ln -s `pwd`/melHap1.2bit /gbdb/melHap1/melHap1.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2010-09-21 - Hiram)
+    # numerator is melHap1 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases as reported by featureBits,
+    #	featureBits hg19 gap
+    # 1024 is threshold used for human -repMatch:
+    calc \( 53017507 / 2897310462 \) \* 1024
+    #	( 53017507 / 2897310462 ) * 1024 = 18.738043
+    # 18 is way too small, use 100 to keep the number of overused
+    #	11-mers to a smaller number
+
+    cd /hive/data/genomes/melHap1
+    blat melHap1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=melHap1.11.ooc -repMatch=50
+    #	Wrote 6149 overused 11-mers to melHap1.11.ooc
+
+    mkdir /hive/data/staging/data/melHap1
+    cp -p melHap1.2bit chrom.sizes melHap1.11.ooc \
+	/hive/data/staging/data/melHap1
+
+#########################################################################

@@ -1319,7 +1319,7 @@ if (track->limitedVis != tvHide)
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
         if (isCenterLabelConditional(track))
-            label = track->parent->longLabel;
+            label = track->tdb->parent->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
@@ -3158,6 +3158,19 @@ else if (sameString(type, "makeItems"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
+else if (sameString(type, "bedDetail"))
+    {
+    tg = trackFromTrackDb(tdb);
+    bedDetailCtMethods(tg, ct);
+    tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
+    }
+else if (sameString(type, "pgSnp"))
+    {
+    tg = trackFromTrackDb(tdb);
+    pgSnpCtMethods(tg);
+    //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
@@ -4444,6 +4457,13 @@ if(theImgBox)
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
 
+if(trackImgOnly)
+    {
+    makeActiveImage(trackList, psOutput);
+    fflush(stdout);
+    return;  // bail out b/c we are done
+    }
+
 
 if (!hideControls)
     {
@@ -5538,7 +5558,6 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");

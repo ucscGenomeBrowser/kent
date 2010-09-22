@@ -623,3 +623,35 @@ for(i=0;i<tot;i++)
     }
 }
 
+char *pgSnpAutoSqlString =
+"table pgSnp"
+"\"personal genome SNP\""
+"   ("
+"   ushort  bin;            \"A field to speed indexing\""
+"   string  chrom;          \"Chromosome\""
+"   uint    chromStart;     \"Start position in chrom\""
+"   uint    chromEnd;       \"End position in chrom\""
+"   string  name;           \"alleles ACTG[/ACTG]\""
+"   int     alleleCount;    \"number of alleles\""
+"   string  alleleFreq;     \"comma separated list of frequency of each allele\""
+"   string  alleleScores;   \"comma separated list of quality scores\""
+"   )"
+;
+
+struct pgSnp *pgSnpLoadNoBin(char **row)
+/* load pgSnp struct from row without bin */
+{
+struct pgSnp *ret;
+
+AllocVar(ret);
+ret->bin = 0;
+ret->chrom = cloneString(row[0]);
+ret->chromStart = sqlUnsigned(row[1]);
+ret->chromEnd = sqlUnsigned(row[2]);
+ret->name = cloneString(row[3]);
+ret->alleleCount = sqlSigned(row[4]);
+ret->alleleFreq = cloneString(row[5]);
+ret->alleleScores = cloneString(row[6]);
+return ret;
+}
+
