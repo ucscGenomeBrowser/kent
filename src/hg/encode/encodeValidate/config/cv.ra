@@ -2383,7 +2383,7 @@ termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 153,38,0
 sex U
-#protocol LICR:BoneMarrow_Ren_protocol.pdf
+protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
 tag Cerebellum
@@ -2397,7 +2397,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-#protocol LICR:Cerebellum_Ren_protocol.pdf
+protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -2429,7 +2429,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-#protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term ES-CJ7
 tag ESCJ7
@@ -2462,7 +2462,7 @@ termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
 sex U
-#protocol LICR:Colon_Ren_protocol.pdf
+protocol LICR(Ren):Colon_Ren_protocol.pdf
 
 term Cortex
 tag Cortex
@@ -2476,7 +2476,7 @@ termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
 sex U
-#protocol LICR:Cortex_Ren_protocol.pdf
+protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
 term Fibroblast
 tag Fibroblast
@@ -2525,7 +2525,7 @@ termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
+protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
 term Heart
 tag Heart
@@ -2539,7 +2539,7 @@ termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-#protocol LICR:Heart_Ren_protocol.pdf
+protocol LICR(Ren):Heart_Ren_protocol.pdf
 
 term Kidney
 tag Kidney
@@ -2568,7 +2568,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Limb_Ren_protocol.pdf
+#protocol LICR(Ren):Limb_Ren_protocol.pdf
 
 term Liver
 tag Liver
@@ -2582,7 +2582,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-#protocol LICR:Liver_Ren_protocol.pdf
+protocol LICR(Ren):Liver_Ren_protocol.pdf
 
 term Lung
 tag Lung
@@ -2596,7 +2596,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-#protocol LICR:Lung_Ren_protocol.pdf
+protocol LICR(Ren):Lung_Ren_protocol.pdf
 
 
 term MEF
@@ -2611,7 +2611,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-#protocol LICR:MEF_Ren_protocol.pdf
+protocol LICR(Ren):MEF_Ren_protocol.pdf
 
 #Shortened Tem
 term Megakaryo
@@ -2642,7 +2642,7 @@ description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
-protocol missing
+protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
 
 #Missing VendorName and termId
 term Myocyte
@@ -2688,7 +2688,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-#protocol LICR:OlfactoryBulb_Ren_protocol.pdf
+protocol LICR(Ren):OlfactoryBulb_Ren_protocol.pdf
 
 term Pancreas
 tag Pancreas
@@ -2702,7 +2702,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-#protocol LICR:Pancreas_Ren_protocol.pdf
+protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
 term Placenta
 tag Placenta
@@ -2732,7 +2732,7 @@ termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
 sex U
-#protocol LICR:SmallIntestine_Ren_protocol.pdf
+protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
 term Spleen
 tag Spleen
@@ -2746,7 +2746,7 @@ termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
 sex U
-#protocol LICR:Spleen_Ren_protocol.pdf
+protocol LICR(Ren):Spleen_Ren_protocol.pdf
 
 term Testis
 tag Testis
@@ -2760,7 +2760,7 @@ termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
 sex U
-#protocol LICR:Testis_Ren_protocol.pdf
+protocol LICR(Ren):Testis_Ren_protocol.pdf
 
 term Thymus
 tag Thymus
@@ -2774,7 +2774,7 @@ termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
-#protocol LICR:Thymus_Ren_protocol.pdf
+protocol LICR(Ren):Thymus_Ren_protocol.pdf
 
 term T-Naive
 tag TNaive
@@ -4732,7 +4732,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
-validation RipChip
+validation 
 
 
 term CELF1
@@ -4748,7 +4748,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term CELF2
@@ -4764,7 +4764,7 @@ lab Tenenbaum
 lots
 targetId 
 targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term EEF1A1
@@ -4780,7 +4780,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term EIF4E
@@ -4796,7 +4796,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term EIF4EBP1
@@ -4812,7 +4812,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-validation RipChip
+validation 
 
 term ELAVL1
 tag ELAVL1
@@ -4827,7 +4827,7 @@ lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term FXR1
@@ -4843,7 +4843,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term Hexim1
@@ -4859,7 +4859,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term HNRNPD
@@ -4875,7 +4875,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term hnRNPM
@@ -4890,7 +4890,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-validation RipChip
+validation 
 
 
 term IGF2BP1
@@ -4906,7 +4906,7 @@ lab Tenenbaum
 lots I0607(Nov2008)
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term NONO
@@ -4922,7 +4922,7 @@ lab Tenenbaum
 lots
 targetId GeneCard:GC0XP070503
 targetUrl http://www.ncbi.nlm.nih.gov/gene/4841
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term PABP
@@ -4938,7 +4938,7 @@ lab Tenenbaum
 lots
 targetId 37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-Validation RipChip
+Validation 
 
 term PABPC1
 tag PABPC1
@@ -4954,7 +4954,7 @@ lab Tenenbaum
 lots 044K4810 (Nov 2008)
 targetId 26986
 targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term QKI
@@ -4970,7 +4970,7 @@ lab Tenenbaum
 lots
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-validation RipChip
+validation 
 
 
 ##This does not appear in metaDb
@@ -4987,7 +4987,7 @@ lab Tenenbaum
 lots
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-validation RipChip
+validation 
 
 
 term ripInput
@@ -5003,7 +5003,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl
-validation RipChip
+validation 
 
 term SLBP
 tag SLBP
@@ -5018,7 +5018,7 @@ lab Tenenbaum
 lots 3) 7308-S2
 targetId 7884
 targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-validation RipChip
+validation 
 
 term T7Tag
 tag T7Tag
@@ -5033,7 +5033,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
-validation RipChip
+validation
 
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
