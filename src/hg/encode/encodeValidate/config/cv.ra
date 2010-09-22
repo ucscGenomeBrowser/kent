@@ -2525,7 +2525,7 @@ termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
+protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
 term Heart
 tag Heart
