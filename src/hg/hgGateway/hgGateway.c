@@ -176,6 +176,15 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
+if(isSearchTracksSupported(db))
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    cgiMakeButton(searchTracks, "find tracks");
+    puts("</FORM></TD>");
+    }
+
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
 puts("<TD VALIGN=\"TOP\">");
@@ -198,15 +207,6 @@ puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 puts("</FORM></TD>");
-
-if(isSearchTracksSupported(db))
-    {
-    puts("<TD VALIGN=\"TOP\">");
-    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    cgiMakeButton(searchTracks, "find tracks");
-    puts("</FORM></TD>");
-    }
 
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
