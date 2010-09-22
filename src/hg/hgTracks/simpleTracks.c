@@ -9604,6 +9604,93 @@ tg->itemColor = blastColor;
 tg->itemNameColor = blastNameColor;
 }
 
+
+char *cactusName(struct track *tg, void *item)
+/* Get name to use for refGene item. */
+{
+return "";
+}
+
+
+void cactusDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+struct slList *item;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, hvg);
+    char *name = tg->itemName(tg, item);
+    name = strchr(name, '.');
+
+    if (name != NULL)
+        name++;
+    int y = atoi(name) * tg->lineHeight + yOff;
+
+    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    }
+//linkedFeaturesDraw(tg, seqStart, seqEnd,
+        //hvg, xOff, yOff, width,
+        //font, color, vis);
+}
+
+void cactusDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+linkedFeaturesDrawAt(tg, item,
+	hvg, xOff, y, scale,
+	font, color, vis);
+}
+
+int cactusHeight(struct track *tg, enum trackVisibility vis)
+{
+tg->height = 3 * tg->lineHeight;
+return tg->height;
+}
+
+int cactusItemHeight(struct track *tg, void *item)
+{
+return tg->lineHeight;
+}
+
+Color cactusNameColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+return MG_WHITE;
+}
+
+void cactusLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+{
+}
+
+void cactusBedMethods(struct track *tg)
+/* cactus bed track methods */
+{
+tg->freeItems = linkedFeaturesFreeItems;
+tg->drawItems = cactusDraw;
+tg->drawItemAt = cactusDrawAt;
+tg->mapItemName = linkedFeaturesName;
+tg->totalHeight = cactusHeight;
+tg->itemHeight = cactusItemHeight;
+tg->itemStart = linkedFeaturesItemStart;
+tg->itemEnd = linkedFeaturesItemEnd;
+tg->itemNameColor = linkedFeaturesNameColor;
+tg->nextPrevExon = linkedFeaturesNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->loadItems = loadGappedBed;
+//tg->itemName = cactusName;
+tg->itemName = linkedFeaturesName;
+//tg->mapItemName = refGeneMapName;
+//tg->itemColor = blastColor;
+tg->itemNameColor = cactusNameColor;
+tg->drawLeftLabels = cactusLeftLabels;
+}
+
 void blastMethods(struct track *tg)
 /* blast protein track methods */
 {
@@ -11629,6 +11716,7 @@ registerTrackHandler("transfacHit", triangleMethods );
 registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 registerTrackHandler("igtc", igtcMethods );
+registerTrackHandler("cactusBed", cactusBedMethods );
 /* Lowe lab related */
 #ifdef LOWELAB
 registerTrackHandler("refSeq", archaeaGeneMethods);
