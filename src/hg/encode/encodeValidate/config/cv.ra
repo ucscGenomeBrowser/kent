@@ -2630,7 +2630,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
+#protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
 
 #Needs protocol, VendorName and Term Id
 term MEL
