@@ -2352,6 +2352,17 @@ function findTracksClear()
     //findTracksSearchButtonsEnable(false);
     return false;
 }
+
+function findTracksSortNow(obj)
+{// Called by radio button to sort tracks
+    if( $('#sortIt').length == 0 )
+        $('form#searchTracks').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
+    else
+        $('#sortIt').val($(obj).val());
+    $('#searchSubmit').click();
+    return true;
+}
+
 /////////////////////////////////////////////////////
 
 function delSearchSelect(obj, rowNum)
