@@ -1737,5 +1737,30 @@ rm -f $c.gp $c.maf $c.ss
     cd /usr/local/apache/htdocs-hgdownload/goldenPath/felCat4/liftOver/
     md5sum felCat4ToFelCat3.over.chain.gz  >> md5sum.txt
 
+############################################################################
+## Fix gold/gap tables (DONE - 2010-09-22 -Chin)
+    # the hgGoldGapGl program has been fixed for chrom names > 16 characters
+    mkdir /hive/data/genomes/felCat4/bed/goldGap
+    cd /hive/data/genomes/felCat4/bed/goldGap
+    # record table status before loading anything:
+    hgsql -e "show table status;" felCat4 > before.status
+    # verify SQL create statements with -noLoad option:
+    hgGoldGapGl -noLoad -verbose=2 -noGl \
+        felCat4 /hive/data/genomes/felCat4/felCat4.agp
+    # if that looks OK, load the two tables:
+    hgGoldGapGl -verbose=2 -noGl \
+        felCat4 /hive/data/genomes/felCat4/felCat4.agp
+    # verify only gold and gap tables have changed
+    hgsql -e "show table status;" felCat4 > after.status
+    # it appears only the gold table actually changed
+    diff before.status after.status
+< gap   MyISAM  10      Dynamic 501801  44      2210626
+> gap   MyISAM  10      Dynamic 500507  44      22052384
+< gold  MyISAM  10      Dynamic 506133  47      24249424
+> gold  MyISAM  10      Dynamic 604561  49      29761392
+
+    # gold and gap tables together now cover the entire genome:
+    featureBits -countGaps -or felCat4 gold gap
+    #  3160303948 bases of 3160303948 (100.000%) in intersection
 
 #############################################################################
