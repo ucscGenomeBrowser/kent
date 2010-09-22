@@ -1,8 +1,30 @@
-metaObject wgEncodeRikenCageGm12878CellPapAlnRep2
+metaObject wgEncodeRikenCageGm12878CellPapAlnRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
 dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+tableName wgEncodeRikenCageGm12878CellPapAlnRep1
+view Alignments
+
+metaObject wgEncodeRikenCageGm12878CellPapAlnRep2
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -20,11 +42,33 @@ subId 2394
 tableName wgEncodeRikenCageGm12878CellPapAlnRep2
 view Alignments
 
-metaObject wgEncodeRikenCageGm12878CellPapMinusClustersRep2
+metaObject wgEncodeRikenCageGm12878CellPapMinusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
 dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapMinusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+tableName wgEncodeRikenCageGm12878CellPapMinusClustersRep1
+view MinusClusters
+
+metaObject wgEncodeRikenCageGm12878CellPapMinusClustersRep2
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -42,11 +86,33 @@ subId 2394
 tableName wgEncodeRikenCageGm12878CellPapMinusClustersRep2
 view MinusClusters
 
-metaObject wgEncodeRikenCageGm12878CellPapPlusClustersRep2
+metaObject wgEncodeRikenCageGm12878CellPapPlusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
 dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapPlusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+tableName wgEncodeRikenCageGm12878CellPapPlusClustersRep1
+view PlusClusters
+
+metaObject wgEncodeRikenCageGm12878CellPapPlusClustersRep2
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -64,11 +130,33 @@ subId 2394
 tableName wgEncodeRikenCageGm12878CellPapPlusClustersRep2
 view PlusClusters
 
-metaObject wgEncodeRikenCageGm12878CellPapRawDataRep2
+metaObject wgEncodeRikenCageGm12878CellPapRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeRikenCage
 dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+parentTable wgEncodeRikenCageGm12878CellPapRawSignalRep1
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+view RawData
+
+metaObject wgEncodeRikenCageGm12878CellPapRawDataRep2
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -148,7 +236,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapAlnRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -170,7 +258,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapAlnRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -192,7 +280,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -214,7 +302,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -236,7 +324,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -258,7 +346,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -280,7 +368,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -302,7 +390,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -462,7 +550,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapAlnRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -484,7 +572,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapAlnRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -506,7 +594,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -528,7 +616,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -550,7 +638,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -572,7 +660,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -594,7 +682,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -616,7 +704,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3230,7 +3318,7 @@ metaObject wgEncodeRikenCageK562CytosolPapAlnRep2
 objType table
 cell K562
 composite wgEncodeRikenCage
-dataType Cage
+dataType CAGE
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3271,7 +3359,7 @@ metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep2
 objType table
 cell K562
 composite wgEncodeRikenCage
-dataType Cage
+dataType CAGE
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3312,7 +3400,7 @@ metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep2
 objType table
 cell K562
 composite wgEncodeRikenCage
-dataType Cage
+dataType CAGE
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3334,7 +3422,7 @@ metaObject wgEncodeRikenCageK562CytosolPapRawDataRep2
 objType file
 cell K562
 composite wgEncodeRikenCage
-dataType Cage
+dataType CAGE
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -4398,4 +4486,4 @@ subId 1813
 tableName wgEncodeRikenCageProstateCellTotalPlusClusters
 view PlusClusters
 
-# MAGIC: 1363823312
+# MAGIC: 1220034363

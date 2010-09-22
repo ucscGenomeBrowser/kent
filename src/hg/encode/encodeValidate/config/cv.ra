@@ -5692,7 +5692,7 @@ label Methyltrienolone
 
 term Alpha-amanitin_50ug_9hr
 tag AMA50ug9h
-type tratement
+type treatement
 description 9h with 50ug/ml alpha-amanitin
 
 term Betamethasone_100nM
