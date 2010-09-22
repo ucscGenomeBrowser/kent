@@ -34,6 +34,8 @@
 #include "bamFile.h"
 #endif//def USE_BAM
 #include "makeItemsItem.h"
+#include "bedDetail.h"
+#include "pgSnp.h"
 
 static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
@@ -677,6 +679,318 @@ static struct customFactory encodePeakFactory =
     "encodePeak",
     encodePeakRecognizer,
     encodePeakLoader,
+    };
+
+/*** bedDetail Factory - close to bed but added fields for detail page ***/
+
+static boolean bedDetailRecognizer(struct customFactory *fac,
+        struct customPp *cpp, char *type,
+        struct customTrack *track)
+/* Return TRUE if looks like we're handling an bedDetail track */
+{
+if (type != NULL && !sameType(type, fac->name) &&
+    !sameString(type, "bedDetail") )
+    return FALSE;
+char *line = customFactoryNextRealTilTrack(cpp);
+if (line == NULL)
+    return FALSE;
+char *dupe = cloneString(line);
+char *row[14+3];
+int wordCount = chopTabs(dupe, row);
+if (wordCount > 14 || wordCount < 5) 
+    return FALSE;
+track->fieldCount = wordCount;
+/* bed 4 + so is first part bed? */
+char *ctDb = ctGenomeOrCurrent(track);
+int bedCount = wordCount -2;
+boolean isBed = rowIsBed(row, bedCount, ctDb);
+freeMem(dupe);
+customPpReuse(cpp, line);
+return (isBed);
+}
+
+static struct pipeline *bedDetailLoaderPipe(struct customTrack *track)
+/* Set up pipeline that will load the bedDetail into database. */
+/* Must be tab separated file, so that can have spaces in description */
+{
+/* running the single command:
+ *	hgLoadBed -customTrackLoader -sqlTable=loader/bedDetail.sql -renameSqlTable 
+ *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
+ */
+struct dyString *tmpDy = newDyString(0);
+//bed size can vary
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", "-tab", "-noBin",
+	"-sqlTable=loader/bedDetail.sql", "-renameSqlTable", "-trimSqlTable", "-bedDetail", NULL, NULL, NULL, NULL, NULL, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+int index = 8;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+cmd1[index++] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
+ */
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
+	"/dev/null", track->dbStderrFile);
+}
+
+/* customTrackBedDetail load item */
+static struct bedDetail *customTrackBedDetail(char *db, char **row, 
+        struct hash *chromHash, struct lineFile *lf, int size)
+/* Convert a row of strings to a bed 4 + for bedDetail. */
+{
+struct bedDetail *item = bedDetailLoadWithGaps(row, size);
+hashStoreName(chromHash, item->chrom);
+customFactoryCheckChromNameDb(db, item->chrom, lf);
+return item;
+}
+
+/*   remember to set all the custom track settings necessary */
+static struct customTrack *bedDetailFinish(struct customTrack *track, struct bedDetail *itemList)
+/* Finish up bedDetail tracks (and others that create track->bedList). */
+{
+struct bedDetail *item;
+char buf[50];
+track->tdb->type = cloneString("bedDetail");
+track->dbTrackType = cloneString("bedDetail");
+safef(buf, sizeof(buf), "%d", track->fieldCount);
+ctAddToSettings(track, "fieldCount", cloneString(buf)); /* set by recognizer? */
+safef(buf, sizeof(buf), "%d", slCount(itemList));
+ctAddToSettings(track, "itemCount", cloneString(buf));
+safef(buf, sizeof(buf), "%s:%u-%u", itemList->chrom,
+                itemList->chromStart, itemList->chromEnd);
+ctAddToSettings(track, "firstItemPos", cloneString(buf));
+
+/* If necessary add track offsets. */
+int offset = track->offset;
+if (offset != 0)
+    {
+    /* Add track offsets if any */
+    for (item = itemList; item != NULL; item = item->next)
+	{
+	item->chromStart += offset;
+	item->chromEnd += offset;
+	}
+    track->offset = 0;	/*	so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
+    }
+
+/* If necessary load database */
+customFactorySetupDbTrack(track);
+struct pipeline *dataPipe = bedDetailLoaderPipe(track);
+FILE *out = pipelineFile(dataPipe);
+for (item = itemList; item != NULL; item = item->next)
+    bedDetailOutput(item, out, '\t', '\n', track->fieldCount);
+fflush(out);		/* help see error from loader failure */
+if(ferror(out) || pipelineWait(dataPipe))
+    pipelineFailExit(track);	/* prints error and exits */
+unlink(track->dbStderrFile);	/* no errors, not used */
+pipelineFree(&dataPipe);
+return track;
+}
+
+static struct customTrack *bedDetailLoader(struct customFactory *fac,
+        struct hash *chromHash,
+        struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up bedDetail data until get next track line. */
+{
+char *line;
+char *db = ctGenomeOrCurrent(track);
+struct bedDetail *itemList = NULL;
+if (!dbRequested)
+    errAbort("bedDetail custom track type unavailable without custom trash database. Please set that up in your hg.conf");
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[15];
+    int wordCount = chopTabs(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
+    struct bedDetail *item = customTrackBedDetail(db, row, chromHash, lf, wordCount);
+    slAddHead(&itemList, item);
+    }
+slReverse(&itemList);
+return bedDetailFinish(track, itemList);
+}
+
+static struct customFactory bedDetailFactory =
+/* Factory for bedDetail tracks */
+    {
+    NULL,
+    "bedDetail",
+    bedDetailRecognizer,
+    bedDetailLoader,
+    };
+
+/*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
+
+static boolean pgSnpRecognizer(struct customFactory *fac,
+        struct customPp *cpp, char *type,
+        struct customTrack *track)
+/* Return TRUE if looks like we're handling an pgSnp track */
+{
+if (type != NULL && !sameType(type, fac->name) &&
+    !sameString(type, "pgSnp") )
+    return FALSE;
+char *line = customFactoryNextRealTilTrack(cpp);
+if (line == NULL)
+    return FALSE;
+char *dupe = cloneString(line);
+char *row[7+3];
+int wordCount = chopLine(dupe, row); //has bin at this point?
+if (wordCount > 7 || wordCount < 5)
+    return FALSE;
+track->fieldCount = wordCount;
+/* bed 4 + so is first 4 bed? */
+char *ctDb = ctGenomeOrCurrent(track);
+boolean isBed = rowIsBed(row, 4, ctDb);
+/* check col5 as int? or 4 as ACTG[/ACTG]? */
+freeMem(dupe);
+customPpReuse(cpp, line);
+return (isBed);
+}
+
+static struct pipeline *pgSnpLoaderPipe(struct customTrack *track)
+/* Set up pipeline that will load the pgSnp into database. */
+{
+/* running the single command:
+ *	hgLoadBed -customTrackLoader -sqlTable=loader/pgSnp.sql -renameSqlTable 
+ *                -trimSqlTable -notItemRgb -tmpDir=/data/tmp
+ *		-maxChromNameLength=${nameLength} customTrash tableName stdin
+ */
+struct dyString *tmpDy = newDyString(0);
+char *cmd1[] = {"loader/hgLoadBed", "-customTrackLoader", 
+	"-sqlTable=loader/pgSnp.sql", "-renameSqlTable", "-trimSqlTable", "-notItemRgb", NULL, NULL, NULL, NULL, NULL, NULL};
+char *tmpDir = cfgOptionDefault("customTracks.tmpdir", "/data/tmp");
+struct stat statBuf;
+int index = 6;
+
+if (stat(tmpDir,&statBuf))
+    errAbort("can not find custom track tmp load directory: '%s'<BR>\n"
+	"create directory or specify in hg.conf customTracks.tmpdir", tmpDir);
+dyStringPrintf(tmpDy, "-tmpDir=%s", tmpDir);
+cmd1[index++] = dyStringCannibalize(&tmpDy); tmpDy = newDyString(0);
+dyStringPrintf(tmpDy, "-maxChromNameLength=%d", track->maxChromName);
+cmd1[index++] = dyStringCannibalize(&tmpDy);
+cmd1[index++] = CUSTOM_TRASH;
+cmd1[index++] = track->dbTableName;
+cmd1[index++] = "stdin";
+assert(index <= ArraySize(cmd1));
+
+/* the "/dev/null" file isn't actually used for anything, but it is used
+ * in the pipeLineOpen to properly get a pipe started that isn't simply
+ * to STDOUT which is what a NULL would do here instead of this name.
+ *	This function exits if it can't get the pipe created
+ *	The dbStderrFile will get stderr messages from hgLoadBed into the
+ *	our private error log so we can send it back to the user
+ */
+return pipelineOpen1(cmd1, pipelineWrite | pipelineNoAbort,
+	"/dev/null", track->dbStderrFile);
+}
+
+/* customTrackPgSnp load item */
+static struct pgSnp *customTrackPgSnp(char *db, char **row,
+        struct hash *chromHash, struct lineFile *lf)
+/* Convert a row of strings to pgSnp. */
+{
+struct pgSnp *item;
+if (startsWith("chr", row[0]))
+   item = pgSnpLoadNoBin(row);
+else 
+   item = pgSnpLoad(row);
+hashStoreName(chromHash, item->chrom);
+customFactoryCheckChromNameDb(db, item->chrom, lf);
+return item;
+}
+
+/*   remember to set all the custom track settings necessary */
+static struct customTrack *pgSnpFinish(struct customTrack *track, struct pgSnp *itemList)
+/* Finish up pgSnp tracks. */
+{
+struct pgSnp *item;
+char buf[50];
+track->tdb->type = cloneString("pgSnp");
+track->dbTrackType = cloneString("pgSnp");
+safef(buf, sizeof(buf), "%d", track->fieldCount);
+ctAddToSettings(track, "fieldCount", cloneString(buf));
+safef(buf, sizeof(buf), "%d", slCount(itemList));
+ctAddToSettings(track, "itemCount", cloneString(buf));
+safef(buf, sizeof(buf), "%s:%u-%u", itemList->chrom,
+                itemList->chromStart, itemList->chromEnd);
+ctAddToSettings(track, "firstItemPos", cloneString(buf));
+
+/* If necessary add track offsets. */
+int offset = track->offset;
+if (offset != 0)
+    {
+    /* Add track offsets if any */
+    for (item = itemList; item != NULL; item = item->next)
+	{
+	item->chromStart += offset;
+	item->chromEnd += offset;
+	}
+    track->offset = 0;	/*	so DB load later won't do this again */
+    hashMayRemove(track->tdb->settingsHash, "offset"); /* nor the file reader*/
+    }
+
+/* If necessary load database */
+customFactorySetupDbTrack(track);
+struct pipeline *dataPipe = pgSnpLoaderPipe(track);
+FILE *out = pipelineFile(dataPipe);
+for (item = itemList; item != NULL; item = item->next)
+    pgSnpOutput(item, out, '\t', '\n');
+fflush(out);		/* help see error from loader failure */
+if(ferror(out) || pipelineWait(dataPipe))
+    pipelineFailExit(track);	/* prints error and exits */
+unlink(track->dbStderrFile);	/* no errors, not used */
+pipelineFree(&dataPipe);
+return track;
+}
+
+static struct customTrack *pgSnpLoader(struct customFactory *fac,
+        struct hash *chromHash,
+        struct customPp *cpp, struct customTrack *track, boolean dbRequested)
+/* Load up pgSnp data until get next track line. */
+{
+char *line;
+char *db = ctGenomeOrCurrent(track);
+struct pgSnp *itemList = NULL;
+if (!dbRequested)
+    errAbort("pgSnp custom track type unavailable without custom trash database. Please set that up in your hg.conf");
+while ((line = customFactoryNextRealTilTrack(cpp)) != NULL)
+    {
+    char *row[7];
+    int wordCount = chopLine(line, row);
+    struct lineFile *lf = cpp->fileStack;
+    lineFileExpectAtLeast(lf, track->fieldCount, wordCount);
+    struct pgSnp *item = customTrackPgSnp(db, row, chromHash, lf);
+    slAddHead(&itemList, item);
+    }
+slReverse(&itemList);
+return pgSnpFinish(track, itemList);
+}
+
+static struct customFactory pgSnpFactory =
+/* Factory for pgSnp tracks */
+    {
+    NULL,
+    "pgSnp",
+    pgSnpRecognizer,
+    pgSnpLoader,
     };
 
 /*** GFF/GTF Factory - converts to BED ***/
@@ -1779,6 +2093,8 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &microarrayFactory);
     slAddTail(&factoryList, &coloredExonFactory);
     slAddTail(&factoryList, &encodePeakFactory);
+    slAddTail(&factoryList, &bedDetailFactory);
+    slAddTail(&factoryList, &pgSnpFactory);
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM
