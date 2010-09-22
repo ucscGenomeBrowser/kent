@@ -33,6 +33,35 @@ const struct group *b = *((struct group **)vb);
 return strcmp(a->label, b->label);
 }
 
+// Would like to do a radio button choice ofsorts
+#define SORT_BY_HIERARCHY
+#ifdef SORT_BY_HIERARCHY
+#define SORT_BY_VAR           "findTracksSortBy"
+#define SORT_BY_ABC           "abc"
+#define SORT_BY_HIER          "hier"
+static int gCmpTrackHierarchy(const void *va, const void *vb)
+/* Compare tracks based on longLabel. */
+{
+const struct slRef *aa = *((struct slRef **)va);
+const struct slRef *bb = *((struct slRef **)vb);
+const struct track *a = ((struct track *) aa->val);
+const struct track *b = ((struct track *) bb->val);
+     if ( tdbIsSuperTrack(a->tdb) && !tdbIsSuperTrack(b->tdb))
+        return -1;
+else if (!tdbIsSuperTrack(a->tdb) &&  tdbIsSuperTrack(b->tdb))
+        return 1;
+     if ( tdbIsComposite(a->tdb) && !tdbIsComposite(b->tdb))
+        return -1;
+else if (!tdbIsComposite(a->tdb) &&  tdbIsComposite(b->tdb))
+        return 1;
+     if (!tdbIsCompositeChild(a->tdb) &&  tdbIsCompositeChild(b->tdb))
+        return -1;
+else if ( tdbIsCompositeChild(a->tdb) && !tdbIsCompositeChild(b->tdb))
+        return 1;
+return strcasecmp(a->longLabel, b->longLabel);
+}
+#endif///def SORT_BY_HIERARCHY
+
 static int gCmpTrack(const void *va, const void *vb)
 /* Compare tracks based on longLabel. */
 {
@@ -40,7 +69,7 @@ const struct slRef *aa = *((struct slRef **)va);
 const struct slRef *bb = *((struct slRef **)vb);
 const struct track *a = ((struct track *) aa->val);
 const struct track *b = ((struct track *) bb->val);
-return strcmp(a->longLabel, b->longLabel);
+return strcasecmp(a->longLabel, b->longLabel);
 }
 
 // XXXX make a matchString function to support "contains", "is" etc. and wildcards in contains
@@ -306,6 +335,7 @@ for (group = groupList; group != NULL; group = group->next)
 
 webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
+hPrintf("<div style='max-width:1000px'>");
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
@@ -315,15 +345,15 @@ hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
 
-hPrintf("<div id='tabs' style='display:none;'>\n"
+hPrintf("<div id='tabs' style='display:none; width:inherit'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced <em>- by %sterms</em></span></a></li>\n"
+        "<li><a href='#advancedTab'><span>Advanced</span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab'>\n",metaDbExists?"ENCODE ":"");
+        "<div id='simpleTab' style='width:inherit;'>\n");
 
-hPrintf("<table><tr><td colspan='2'>");
-hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("<table style='width:100%%;'><tr><td colspan='2'>");
+hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='width:100%%' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr><tr><td>");
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
@@ -331,28 +361,39 @@ if (simpleSearch && descSearch)
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
 hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
-hPrintf("</td><td align='right'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
+hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
+//hPrintf("</td><td align='right'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
 hPrintf("</div>\n"
         "<div id='advancedTab'>\n"
-        "<table>\n");
+        "<table cellSpacing=0 style='width:100%%;'>\n");
 
-hPrintf("<tr><td></td><td></td><td></td><td><b>Track Name:</b></td><td align='right'>contains</td>\n");
-//char *ops[] = {"is", "contains"};
-//char *op_labels[] = {"is", "contains"};
-//char *nameOp = cartOptionalString(cart, "hgt.nameOp");
-//cgiMakeDropListFull("hgt.nameOp", op_labels, ops, ArraySize(ops), nameOp == NULL ? "contains" : nameOp, NULL);
-hPrintf("</td>\n<td><input type='text' name='hgt.nameSearch' id='nameSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);'></td></tr>\n", nameSearch == NULL ? "" : nameSearch);
+// Track Name contains
+hPrintf("<tr><td colspan=3 style='width:5%%;'></td>");
+hPrintf("<td style='width:10px;' nowrap><b>Track&nbsp;Name:</b></td>");
+hPrintf("<td align='right' style='width:10px;'>contains</td>\n");
+hPrintf("<td colspan=3>");
+hPrintf("<input type='text' name='hgt.nameSearch' id='nameSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px;'>", nameSearch == NULL ? "" : nameSearch);
+hPrintf("</td></tr>\n");
 if (!simpleSearch && nameSearch)
     searchTermsExist = TRUE;
 
-hPrintf("<tr><td></td><td></td><td>and</td><td><b>Description:</b></td><td align='right'>contains</td>\n");
-hPrintf("<td><input type='text' name='hgt.descSearch' id='descSearch' value='%s' size='80' onkeyup='findTracksSearchButtonsEnable(true);'></td></tr>\n", descSearch == NULL ? "" : descSearch);
+// Description contains
+hPrintf("<tr><td colspan=2 style='width:2%%;'></td><td style='width:2%%;'>and&nbsp;</td>");
+hPrintf("<td style='width:10px;'><b>Description:</b></td>");
+hPrintf("<td align='right' style='width:10px;'>contains</td>\n");
+hPrintf("<td colspan=3>");
+hPrintf("<input type='text' name='hgt.descSearch' id='descSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:100%%;'>",
+        descSearch == NULL ? "" : descSearch);
+hPrintf("</td></tr>\n");
 if (!simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
-hPrintf("<tr><td></td><td></td><td>and</td>\n");
-hPrintf("<td><b>Group</b></td><td align='right'>is</td>\n<td>\n");
-cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, "class='groupSearch'");
+// Group is
+hPrintf("<tr><td colspan=2 style='width:2%%;'></td><td style='width:2%%;'>and&nbsp;</td>\n");
+hPrintf("<td style='width:10px;'><b>Group</b></td>");
+hPrintf("<td align='right' style='width:10px;'>is</td>\n");
+hPrintf("<td colspan=3>");
+cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%%;'");
 hPrintf("</td></tr>\n");
 if (!simpleSearch && groupSearch)
     searchTermsExist = TRUE;
@@ -433,13 +474,14 @@ if(metaDbExists)
     char **mdbVarLabels = NULL;
     int count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
 
+    hPrintf("<tr cellpadding=0><td colspan=10 class='lineOnBottom' style='height:2px; max-height:2px;'>&nbsp;</td></tr>");
     for(i = 0; i < numMetadataSelects; i++)
         {
         char **terms;
         char buf[256];
         int len;
 
-        hPrintf("<tr><td>\n");
+        hPrintf("<tr><td style='width:2%%;'>\n");
         if(numMetadataSelects > 2 || i >= 2)
             {
             safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
@@ -447,34 +489,34 @@ if(metaDbExists)
             }
         else
             hPrintf("&nbsp;");
-        hPrintf("</td><td>\n");
+        hPrintf("</td><td style='width:2%%;'>\n");
         safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
         hButtonWithOnClick(searchTracks, "+", "add another row after this row", buf);
 
-        hPrintf("</td><td>and</td>\n");
-        hPrintf("</td><td colspan=2 nowrap>\n");
+        hPrintf("</td><td style='width:2%%;'>and&nbsp;</td><td colspan=3 nowrap style='width:10%%;'>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
         cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
-        //cgiMakeDropListClassWithStyleAndJavascript(buf, mdbVars, count, mdbVar[i],
-        //                                           "mdbVar", NULL, "onchange=findTracksMdbVarChanged(this)");
-        hPrintf("is</td>\n<td>\n");
+        hPrintf("</td><td%s>is\n",(i == 0 ? "":" colspan=2"));
         len = getTermArray(conn, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' onchange='findTracksSearchButtonsEnable(true)'");
+        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' style='max-width:520px; min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
         if (!simpleSearch && mdbVal[i])
             searchTermsExist = TRUE;
+        if (i == 0)
+            hPrintf("</td><td align='right' valign='top' nowrap><em style='color:%s'>ENCODE terms</em>",COLOR_DARKGREY);
         hPrintf("</td></tr>\n");
         }
     }
 
-hPrintf("<tr><td colspan='5'>\n");
+hPrintf("<tr><td colspan='10'>\n");
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
 hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
 hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
-hPrintf("</td><td align='left'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr>\n");
+hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("</div>\n</div>\n");
 hPrintf("</form>\n");
+hPrintf("</div"); // Restricts to max-width:1000px;
 
 if(descSearch != NULL && !strlen(descSearch))
     descSearch = NULL;
@@ -498,6 +540,9 @@ if(!isEmpty(descSearch))
         descWords[i] = strLower(el->name);
     }
 
+#ifdef SORT_BY_HIERARCHY
+boolean sortByHierarchy = sameString(cartUsualString(cart,SORT_BY_VAR,SORT_BY_HIER),SORT_BY_HIER);
+#endif///def SORT_BY_HIERARCHY
 if(doSearch)
     {
     if(simpleSearch)
@@ -529,7 +574,11 @@ if(doSearch)
             //else // FIXME: Should get to the bottom of why some of these are null
             //    warn("found trix track is NULL.");
             }
+        #ifdef SORT_BY_HIERARCHY
+            slSort(&tracks, sortByHierarchy? gCmpTrackHierarchy:gCmpTrack);
+        #else///ifndef SORT_BY_HIERARCHY
         slReverse(&tracks);
+        #endif///ndef SORT_BY_HIERARCHY
         }
     else if(!isEmpty(nameSearch) || descSearch != NULL || groupSearch != NULL || numMetadataNonEmpty)
         {
@@ -616,11 +665,15 @@ if(doSearch)
                     }
                 }
             }
+        #ifdef SORT_BY_HIERARCHY
+            slSort(&tracks, sortByHierarchy? gCmpTrackHierarchy:gCmpTrack);
+        #else///ifndef SORT_BY_HIERARCHY
         slSort(&tracks, gCmpTrack);
+        #endif///ndef SORT_BY_HIERARCHY
         }
     }
 
-hPrintf("<div id='foundTracks' style='display:none;'>\n"); // This div allows the clear button to empty it
+hPrintf("<div id='found' style='display:none;'>\n"); // This div allows the clear button to empty it
 if(tracksFound < 1)
     {
     if(doSearch)
@@ -642,20 +695,30 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='View in Browser' class='viewBtn'>");
-        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
+        hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
         }
 
     // Set up json for js functionality
     struct dyString *jsonTdbVars = NULL;
 
-    hPrintf("<table><tr><td colspan='2'>\n");
+    hPrintf("<table id='foundTracks'><tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
     #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracksCheckAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
-    printf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
-    printf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
-    hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b></td></tr>\n");
-    // FIXME: I believe that only data tracks should appear in found tracks.  If composite is found, show its children instead
+    hPrintf(PM_BUTTON,"true",  "plus_all",   "add_sm.gif",  "Select");
+    hPrintf(PM_BUTTON,"false","minus_all","remove_sm.gif","Unselect");
+    hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b>\n");
+    if(tracksFound >= ENOUGH_FOUND_TRACKS)
+        {
+        #ifdef SORT_BY_HIERARCHY
+        hPrintf("<span style='float:right;'>Sort:");
+        cgiMakeOnClickRadioButton(SORT_BY_VAR, SORT_BY_ABC, !sortByHierarchy,"onchange=\"findTracksSortNow(this);\""); // FIXME: var is in wrong form!
+        hPrintf("Alphabetically");
+        cgiMakeOnClickRadioButton(SORT_BY_VAR, SORT_BY_HIER,sortByHierarchy, "onchange=\"findTracksSortNow(this);\"");
+        hPrintf("by Hierarchy&nbsp;&nbsp;</span>\n");
+        #endif///def SORT_BY_HIERARCHY
+        }
+    hPrintf("</td></tr>\n");
 
     int trackCount=0;
     boolean containerTrackCount = 0;
@@ -668,7 +731,14 @@ else
         struct track *track = (struct track *) ptr->val;
         jsonTdbSettingsBuild(&jsonTdbVars, track);
 
-        hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_BG_ALTDEFAULT);
+        #ifdef SORT_BY_HIERARCHY
+        if (tdbIsSuperTrack(track->tdb))
+            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL1);
+        if (tdbIsComposite(track->tdb))
+            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL3);
+        else
+        #endif///def SORT_BY_HIERARCHY
+            hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL2);
 
         hPrintf("<td align='center' valign='center'>\n");
         char name[256];
@@ -740,26 +810,24 @@ else
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
-hPrintf("<p><b>Recently Done</b><ul>\n"
+if(!doSearch)
+    {
+    hPrintf("<p><b>Recently Done</b><ul>\n"
+        #ifdef SORT_BY_HIERARCHY
+        "<li>Added sort toggle: Alphabetically or by Hierarchy.</li>"
+        #endif///def SORT_BY_HIERARCHY
         "<li>Composite/view visibilites in hgTrackUi get reshaped to reflect found/selected subtracks.  (In demo1: only default state composites; demo2: all composites.)</li>"
         "<li>Metadata variables have been 'white-listed' to only include vetted items.  Short text descriptions and vetted list should be reviewed.</li>"
         "<li>Clicking on shortLabel for found track will popup the description text.  Subtracks should show their composite description.</li>"
         "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
-        "<li>Simple search should now query metaDb properly (and included descriptions for cv terms like 'cell').  This had been failing earlier.</li>"
-        "<li>Short and long label searched on advanced 'Track Name' search.</li>"
         "<li>Found track list shows only the first 100 tracks with warning to narrow search.  Larry suggests this could be done by pages of results in v2.0.</li>\n"
-        "</ul></p>"
-        "<p><b>Known Problems</b><ul>"
-        "<li>Strangeness seen in finding tracks: 'ENCODE' in description combined with antibody selection results in no tracks found."
-        "<BR>QUESTION: Is that a bug? REM that description search is NOT inherited. (* Suggestions below.)</li>"
         "</ul></p>"
         "<p><b>Suggested improvments:</b><ul>\n"
         "<li>The metadata values will not be white-listed, but it would be nice to have more descriptive text for them.  A short label added to cv.ra?</li>"
         "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.  Jim suggests look and feel of hgTracks 'Configure Tracks...' list instead.</li>"
         "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
-        "<li>* 'Descrtiption' should be inherited by subtracks?</li>"
         "</ul></p>\n");
-
+    }
 hPrintf("</div"); // This div allows the clear button to empty it
 webEndSectionTables();
 }
