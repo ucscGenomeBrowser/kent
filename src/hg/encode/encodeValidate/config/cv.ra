@@ -2383,7 +2383,7 @@ termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 153,38,0
 sex U
-#protocol LICR:BoneMarrow_Ren_protocol.pdf
+protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
 tag Cerebellum
@@ -2397,7 +2397,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-#protocol LICR:Cerebellum_Ren_protocol.pdf
+protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -2429,7 +2429,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-#protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term ES-CJ7
 tag ESCJ7
@@ -2462,7 +2462,7 @@ termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
 sex U
-#protocol LICR:Colon_Ren_protocol.pdf
+protocol LICR(Ren):Colon_Ren_protocol.pdf
 
 term Cortex
 tag Cortex
@@ -2476,7 +2476,7 @@ termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
 sex U
-#protocol LICR:Cortex_Ren_protocol.pdf
+protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
 term Fibroblast
 tag Fibroblast
@@ -2539,7 +2539,7 @@ termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-#protocol LICR:Heart_Ren_protocol.pdf
+protocol LICR(Ren):Heart_Ren_protocol.pdf
 
 term Kidney
 tag Kidney
@@ -2568,7 +2568,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Limb_Ren_protocol.pdf
+#protocol LICR(Ren):Limb_Ren_protocol.pdf
 
 term Liver
 tag Liver
@@ -2582,7 +2582,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-#protocol LICR:Liver_Ren_protocol.pdf
+protocol LICR(Ren):Liver_Ren_protocol.pdf
 
 term Lung
 tag Lung
@@ -2596,7 +2596,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-#protocol LICR:Lung_Ren_protocol.pdf
+protocol LICR(Ren):Lung_Ren_protocol.pdf
 
 
 term MEF
@@ -2611,7 +2611,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-#protocol LICR:MEF_Ren_protocol.pdf
+protocol LICR(Ren):MEF_Ren_protocol.pdf
 
 #Shortened Tem
 term Megakaryo
@@ -2630,7 +2630,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7054
 color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
+protocol PSU(Hardison):Megakaryocyte_Hardison_protocol.pdf
 
 #Needs protocol, VendorName and Term Id
 term MEL
@@ -2642,7 +2642,7 @@ description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
-protocol missing
+protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
 
 #Missing VendorName and termId
 term Myocyte
@@ -2688,7 +2688,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-#protocol LICR:OlfactoryBulb_Ren_protocol.pdf
+protocol LICR(Ren):OlfactoryBulb_Ren_protocol.pdf
 
 term Pancreas
 tag Pancreas
@@ -2702,7 +2702,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-#protocol LICR:Pancreas_Ren_protocol.pdf
+protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
 term Placenta
 tag Placenta
@@ -2732,7 +2732,7 @@ termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
 sex U
-#protocol LICR:SmallIntestine_Ren_protocol.pdf
+protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
 term Spleen
 tag Spleen
@@ -2746,7 +2746,7 @@ termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
 sex U
-#protocol LICR:Spleen_Ren_protocol.pdf
+protocol LICR(Ren):Spleen_Ren_protocol.pdf
 
 term Testis
 tag Testis
@@ -2760,7 +2760,7 @@ termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
 sex U
-#protocol LICR:Testis_Ren_protocol.pdf
+protocol LICR(Ren):Testis_Ren_protocol.pdf
 
 term Thymus
 tag Thymus
@@ -2774,7 +2774,7 @@ termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
-#protocol LICR:Thymus_Ren_protocol.pdf
+protocol LICR(Ren):Thymus_Ren_protocol.pdf
 
 term T-Naive
 tag TNaive

@@ -15,16 +15,21 @@ well-suited for <span style="font-style: italic;">de novo</span>
 discovery of RNA splicing patterns and for determining unequivocally
 the presence or absence of lower abundance class RNAs.<br>
 </p>
+
 <p>RNA-Seq is performed by reverse-transcribing an RNA sample into
-cDNA followed by high throughput DNA sequencing. Most data is
-produced in one of two formats: single reads, each of which comes from
-one end of a randomly primed cDNA molecule, and paired-end reads, which
-are obtained as pairs from both ends cDNAs resulting from random
-priming. The resulting sequence reads are then informatically mapped
-onto the genome sequence (<span style="font-style: italic;">Alignments</span>).
-Those that map, mapped reads, are counted to determine their frequency of
-occurence at known gene models. Those that don't map to the genome are mapped
-to known RNA splice junctions (<span style="font-style: italic;">Splice Sites</span>).
+cDNA followed by high throughput DNA sequencing. Most data is produced
+in one of two formats: single reads, each of which comes from one end
+of a randomly primed cDNA molecule (and represent one end of one cDNA
+segment), and paired-end reads, which are obtained as pairs
+from both ends of a randomly primed cDNA (and represent two opposite
+ends of one cDNA segment). The resulting sequence reads are then
+informatically mapped onto the genome sequence (<span
+style="font-style: italic;">Alignments</span>).  Those that map,
+mapped reads, are counted to determine their frequency of occurence at
+known gene models. Those that don't map to the genome are mapped to
+known RNA splice junctions (<span style="font-style: italic;">Splice
+Sites</span>).
+
 </p>
 <p>
 Some RNA-Seq protocols do not specify the coding strand. As a result,
