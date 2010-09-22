@@ -204,6 +204,7 @@
 #include "pgPhenoAssoc.h"
 #include "pgSiftPred.h"
 #include "pgPolyphenPred.h"
+#include "bedDetail.h"
 #include "ec.h"
 #include "transMapClick.h"
 #include "retroClick.h"
@@ -265,6 +266,14 @@ boolean exprBedColorsMade = FALSE; /* Have the shades of red been made? */
 int maxRGBShade = 16;
 
 struct bed *sageExpList = NULL;
+
+struct palInfo
+{
+    char *chrom;
+    int left;
+    int right;
+    char *rnaName;
+};
 
 /* See this NCBI web doc for more info about entrezFormat:
  * http://www.ncbi.nlm.nih.gov/entrez/query/static/linking.html */
@@ -2307,9 +2316,31 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 }
 
-void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
+void linkToPal(char *track,  char *chrom, int start, int end, char *geneName)
+/* Make anchor tag to open pal window */
+{
+printf("<A TITLE=\"%s\" HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d\">",
+       geneName, hgPalName(), track, geneName, chrom, start, end);
+    printf("CDS FASTA alignment</A> from multiple alignment. ");
+}
+
+void addPalLink(struct sqlConnection *conn, char *track,
+    char *chrom, int start, int end, char *geneName)
+{
+struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");
+
+if (list != NULL)
+    {
+    puts("<LI>\n");
+    linkToPal( track, chrom, start, end, geneName);
+    puts("</LI>\n");
+    }
+}
+
+void geneShowPosAndLinksPal(char *geneName, char *pepName, struct trackDb *tdb,
 			 char *pepTable, char *pepClick,
-			 char *mrnaClick, char *genomicClick, char *mrnaDescription)
+			 char *mrnaClick, char *genomicClick, char *mrnaDescription,
+                         struct palInfo *palInfo)
 /* Show parts of gene common to everything. If pepTable is not null,
  * it's the old table name, but will check gbSeq first. */
 {
@@ -2398,7 +2429,25 @@ puts("<LI>\n");
 hgcAnchorSomewhere(genomicClick, geneName, geneTable, seqName);
 printf("Genomic Sequence</A> from assembly\n");
 puts("</LI>\n");
+
+if (palInfo)
+    {
+    struct sqlConnection *conn = hAllocConn(database);
+    addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left, 
+        palInfo->right, palInfo->rnaName);
+    hFreeConn(&conn);
+    }
+
 printf("</UL>\n");
+}
+
+void geneShowPosAndLinks(char *geneName, char *pepName, struct trackDb *tdb,
+			 char *pepTable, char *pepClick,
+			 char *mrnaClick, char *genomicClick, char *mrnaDescription)
+{
+geneShowPosAndLinksPal(geneName, pepName, tdb,
+			 pepTable, pepClick,
+			 mrnaClick, genomicClick, mrnaDescription, NULL);
 }
 
 void geneShowPosAndLinksDNARefseq(char *geneName, char *pepName, struct trackDb *tdb,
@@ -2720,14 +2769,6 @@ void linkToOtherBrowserTitle(char *otherDb, char *chrom, int start, int end, cha
 {
 printf("<A TARGET=\"_blank\" TITLE=\"%s\" HREF=\"%s?db=%s&ct=&position=%s%%3A%d-%d\">",
        title, hgTracksName(), otherDb, chrom, start+1, end);
-}
-
-void linkToPal(char *track,  char *chrom, int start, int end, char *geneName)
-/* Make anchor tag to open pal window */
-{
-printf("<A TITLE=\"%s\" HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d\">",
-       geneName, hgPalName(), track, geneName, chrom, start, end);
-    printf("%s</A>  ",geneName);
 }
 
 void chainToOtherBrowser(struct chain *chain, char *otherDb, char *otherOrg)
@@ -3660,6 +3701,11 @@ else if (wordCount > 0)
         {
 	doAltGraphXDetails(tdb,item);
 	}
+    //add bedDetail here
+    else if (startsWith("bedDetail", type))
+        {
+        doBedDetail(tdb, NULL, item);
+        }
 #ifdef USE_BAM
     else if (sameString(type, "bam"))
 	doBamDetails(tdb, item);
@@ -4347,31 +4393,38 @@ hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
 hti->type = cloneString(ct->tdb->type);
-if (ct->fieldCount >= 3)
+int fieldCount = 3;
+if (sameWord(ct->dbTrackType, "bedDetail"))
+    fieldCount = ct->fieldCount - 2;
+else if (sameWord(ct->dbTrackType, "pgSnp"))
+    fieldCount = 4;
+else
+    fieldCount = ct->fieldCount;
+if (fieldCount >= 3)
     {
     strncpy(hti->chromField, "chrom", 32);
     strncpy(hti->startField, "chromStart", 32);
     strncpy(hti->endField, "chromEnd", 32);
     }
-if (ct->fieldCount >= 4)
+if (fieldCount >= 4)
     {
     strncpy(hti->nameField, "name", 32);
     }
-if (ct->fieldCount >= 5)
+if (fieldCount >= 5)
     {
     strncpy(hti->scoreField, "score", 32);
     }
-if (ct->fieldCount >= 6)
+if (fieldCount >= 6)
     {
     strncpy(hti->strandField, "strand", 32);
     }
-if (ct->fieldCount >= 8)
+if (fieldCount >= 8)
     {
     strncpy(hti->cdsStartField, "thickStart", 32);
     strncpy(hti->cdsEndField, "thickEnd", 32);
     hti->hasCDS = TRUE;
     }
-if (ct->fieldCount >= 12)
+if (fieldCount >= 12)
     {
     strncpy(hti->countField, "blockCount", 32);
     strncpy(hti->startsField, "chromStarts", 32);
@@ -9568,18 +9621,6 @@ for (i = 0; imgExt[i] != NULL; i++)
 return NULL;
 }
 
-void addPalLink(struct sqlConnection *conn, char *track,
-    char *chrom, int start, int end, char *geneName)
-{
-struct slName *list = hTrackTablesOfType(conn, "wigMaf%%");
-
-if (list != NULL)
-    {
-    printf("<B>CDS FASTA alignment from multiple alignment: </B>\n");
-    linkToPal( track, chrom, start, end, geneName);
-    }
-}
-
 void addGeneExtra(char *geneName)
 /* create html table columns with geneExtra data, see hgdocs/geneExtra/README
  * for details */
@@ -9835,9 +9876,6 @@ printf("<table border=0>\n<tr>\n");
 prRefGeneInfo(conn, rnaName, sqlRnaName, rl, isXeno);
 addGeneExtra(rl->name);  /* adds columns if extra info is available */
 
-if (genbankIsRefSeqCodingMRnaAcc(rnaName))
-    addPalLink(conn, tdb->track,  chrom, left, right, rnaName);
-
 printf("</tr>\n</table>\n");
 
 /* optional summary text */
@@ -9861,8 +9899,19 @@ printAlignments(pslList, start, "htcCdnaAli", aliTbl, rl->mrnaAcc);
 
 htmlHorizontalLine();
 
-geneShowPosAndLinks(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
-		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence");
+struct palInfo *palInfo = NULL;
+
+if (genbankIsRefSeqCodingMRnaAcc(rnaName))
+    {
+    AllocVar(palInfo);
+    palInfo->chrom = chrom;
+    palInfo->left = left;
+    palInfo->right = right;
+    palInfo->rnaName = rnaName;
+    }
+
+geneShowPosAndLinksPal(rl->mrnaAcc, rl->protAcc, tdb, "refPep", "htcTranslatedProtein",
+		    "htcRefMrna", "htcGeneInGenome", "mRNA Sequence",palInfo);
 
 printTrackHtml(tdb);
 hFreeConn(&conn);
@@ -18578,6 +18627,14 @@ else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     hFreeConn(&conn2);
     hFreeConn(&conn);
     }
+else if (ct->dbTrack && sameWord(type, "bedDetail")) 
+    {
+    doBedDetail(ct->tdb, ct, itemName);
+    }
+else if (ct->dbTrack && sameWord(type, "pgSnp"))
+    {
+    doPgSnp(ct->tdb, itemName, ct);
+    }
 else
     {
     if (ct->dbTrack)
@@ -21483,15 +21540,26 @@ freeMem(gvPrevType);
 hFreeConn(&conn);
 }
 
-void doPgSnp(struct trackDb *tdb, char *itemName)
+void doPgSnp(struct trackDb *tdb, char *itemName, struct customTrack *ct)
 /* print detail page for personal genome track (pgSnp) */
 {
-char *table = tdb->table;
+char *table;
+struct sqlConnection *conn;
 char *escName = sqlEscapeString(itemName);
-struct sqlConnection *conn = hAllocConn(database);
 struct sqlResult *sr;
 char **row;
 char query[256];
+if (ct == NULL) 
+    {
+    table = tdb->table;
+    conn = hAllocConn(database);
+    }
+else 
+    {
+    table = ct->dbTableName;
+    conn = hAllocConn(CUSTOM_TRASH);
+    //ct->tdb
+    }
 
 genericHeader(tdb, itemName);
 
@@ -21542,6 +21610,31 @@ if ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 printTrackHtml(tdb);
 hFreeConn(&conn);
+}
+
+void doPgPhenoAssoc(struct trackDb *tdb, char *itemName)
+{
+char *table = tdb->table;
+struct pgPhenoAssoc *pheno = NULL;
+struct sqlConnection *conn = hAllocConn(database);
+struct sqlResult *sr;
+char **row;
+struct dyString *query = dyStringNew(512);
+int start = cartInt(cart, "o");
+
+genericHeader(tdb, itemName);
+
+dyStringPrintf(query, "select * from %s where chrom = '%s' and ",
+               table, seqName);
+dyStringPrintf(query, "name = '%s' and chromStart = %d", itemName, start);
+sr = sqlGetResult(conn, query->string);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    pheno = pgPhenoAssocLoad(row);
+    bedPrintPos((struct bed *)pheno, 4, tdb);
+    printf("Personal Genome phenotype: <a href=\"%s\">link to phenotype source</a><BR>\n", pheno->srcUrl);
+    }
+printTrackHtml(tdb);
 }
 
 void doAllenBrain(struct trackDb *tdb, char *itemName)
@@ -22232,6 +22325,65 @@ sqlFreeResult(&sr);
 printTrackHtml(tdb);
 }
 
+void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName)
+/* generate the detail page for a custom track of bedDetail type */
+{
+char *table; 
+struct bedDetail *r = NULL;
+struct sqlConnection *conn;
+struct sqlResult *sr;
+char **row;
+char query[256];
+char *chrom = cartString(cart,"c");  /* don't assume name is unique */
+int start = cgiInt("o");
+int end = cgiInt("t");
+int bedPart = 4;
+char *escName = NULL;
+if (ct == NULL)
+    {
+    char *words[3];
+    int cnt = chopLine(cloneString(tdb->type), words);
+    if (cnt > 1)
+        bedPart = atoi(words[1]) - 2;
+    table = tdb->table;
+    conn = hAllocConn(database);
+    genericHeader(tdb, itemName);
+    }
+else
+    {
+    table = ct->dbTableName;
+    conn = hAllocConn(CUSTOM_TRASH);
+    bedPart = ct->fieldCount - 2;
+    /* header handled by custom track handler */
+    }
+
+/* postion, band, genomic size */
+escName = sqlEscapeString(itemName);
+safef(query, sizeof(query),
+      "select * from %s where chrom = '%s' and chromStart = %d and chromEnd = %d and name = '%s'", table, chrom, start, end, escName);
+sr = sqlGetResult(conn, query);
+if ((row = sqlNextRow(sr)) != NULL)
+    {
+    r = bedDetailLoadWithGaps(row, bedPart+2);
+    bedPrintPos((struct bed*)r, bedPart, tdb);
+    //print bedPart using bed routines?
+    //printf("<B>Name:</B> %s <BR>\n", r->name);
+    //print ID as link if have url
+    if (r->id != NULL) 
+        {
+        printf("<B>ID:</B> %s <BR>\n", r->id);
+        printCustomUrl(tdb, r->id, TRUE);
+        }
+    //printf("<B>Position:</B> %s:%u-%u<BR><BR>", r->chrom, *(r->chromStart)+1, *(r->chromEnd));
+    if (r->description != NULL) 
+        printf("%s <BR>\n", r->description);
+    }
+sqlFreeResult(&sr);
+
+bedDetailFree(&r);
+freeMem(escName);
+hFreeConn(&conn);
+}
 
 struct trackDb *tdbForTableArg()
 /* get trackDb for track passed in table arg */
@@ -23438,7 +23590,12 @@ else if (sameString("pgVenter", table) ||
          sameString("pgSaqqaqHc", table) ||
          sameString("pgTest", table) )
     {
-    doPgSnp(tdb, item);
+    doPgSnp(tdb, item, NULL);
+    }
+else if (startsWith("pg", table) && 
+         (endsWith(table, "PhenCode") || endsWith(table, "Snpedia") || endsWith(table, "Hgmd")) )
+    {
+    doPgPhenoAssoc(tdb, item);
     }
 else if (sameString("gvPos", table))
     {
@@ -23521,6 +23678,10 @@ else if (sameString("par", table))
 else if (sameString("t2g", table))
     {
     doT2gDetails(tdb, item);
+    }
+else if (tdb != NULL && startsWith("bedDetail", tdb->type))
+    {
+    doBedDetail(tdb, NULL, item);
     }
 else if (startsWith("numtS", table))
        //  && (!sameString("numtSAssembled", table)))

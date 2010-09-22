@@ -13,7 +13,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -35,7 +34,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -51,8 +49,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -74,8 +72,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -103,7 +101,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -125,7 +122,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaJunctionsRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -229,8 +225,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -252,8 +248,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -280,7 +276,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -301,7 +296,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -322,7 +316,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -343,7 +336,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -365,7 +357,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -387,7 +378,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -408,7 +398,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -429,7 +418,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -450,7 +438,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -471,7 +458,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -492,7 +478,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -513,7 +498,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -534,7 +518,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -555,7 +538,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -576,7 +558,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -597,7 +578,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -612,8 +592,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -634,8 +614,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -698,8 +678,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -720,8 +700,8 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -748,7 +728,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -769,7 +748,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -790,7 +768,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -811,7 +788,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -833,7 +809,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -855,7 +830,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -877,7 +851,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -899,7 +872,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -921,7 +893,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -937,8 +908,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -982,8 +953,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1011,7 +982,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1033,7 +1003,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1055,7 +1024,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1077,7 +1045,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1093,8 +1060,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1116,8 +1083,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1145,7 +1112,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -1167,7 +1133,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaJunctionsRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -1271,8 +1236,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1294,8 +1259,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1323,7 +1288,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1345,7 +1309,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1367,7 +1330,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1389,7 +1351,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1411,7 +1372,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1433,7 +1393,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1455,7 +1414,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1477,7 +1435,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1499,7 +1456,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1521,7 +1477,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1543,7 +1498,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1565,7 +1519,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1587,7 +1540,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1609,7 +1561,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1631,7 +1582,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1653,7 +1603,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1675,7 +1624,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1697,7 +1645,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneFPKMRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1719,7 +1666,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1741,7 +1687,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1763,7 +1708,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1785,7 +1729,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1807,7 +1750,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1829,7 +1771,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1851,7 +1792,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1873,7 +1813,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1895,7 +1834,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -1917,7 +1855,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -1939,7 +1876,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -1961,7 +1897,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -1977,8 +1912,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2000,8 +1935,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2023,8 +1958,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2046,8 +1981,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2157,8 +2092,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2180,8 +2115,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2203,8 +2138,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2226,8 +2161,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2255,7 +2190,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2277,7 +2211,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -2299,7 +2232,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -2321,7 +2253,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -2343,7 +2274,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2365,7 +2295,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -2387,7 +2316,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep3
 project wgEncode
 readType 2x75
 replicate 3
@@ -2409,7 +2337,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptFPKMRep4
 project wgEncode
 readType 2x75
 replicate 4
@@ -2431,7 +2358,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2453,7 +2379,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2475,7 +2400,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2497,7 +2421,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2519,7 +2442,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2535,8 +2457,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2580,8 +2502,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2609,7 +2531,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2631,7 +2552,6 @@ insertLength 400
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2653,7 +2573,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2675,7 +2594,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2691,8 +2609,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2714,8 +2632,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2743,7 +2661,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -2765,7 +2682,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaJunctionsRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -2869,8 +2785,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2892,8 +2808,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2921,7 +2837,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2943,7 +2858,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -2965,7 +2879,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -2987,7 +2900,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3009,7 +2921,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3031,7 +2942,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3053,7 +2963,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3075,7 +2984,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3097,7 +3005,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3119,7 +3026,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3141,7 +3047,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3163,7 +3068,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3185,7 +3089,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3207,7 +3110,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3223,8 +3125,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3246,8 +3148,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3313,8 +3215,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3336,8 +3238,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3365,7 +3267,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3387,7 +3288,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3409,7 +3309,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3431,7 +3330,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3453,7 +3351,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3475,7 +3372,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3491,8 +3387,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3514,8 +3410,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3543,7 +3439,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -3565,7 +3460,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaJunctionsRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -3669,8 +3563,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3692,8 +3586,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3721,7 +3615,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3743,7 +3636,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3765,7 +3657,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3787,7 +3678,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3809,7 +3699,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3831,7 +3720,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3853,7 +3741,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3875,7 +3762,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3897,7 +3783,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3919,7 +3804,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3941,7 +3825,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -3963,7 +3846,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -3985,7 +3867,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -4007,7 +3888,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -4023,8 +3903,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4046,8 +3926,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4113,8 +3993,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4136,8 +4016,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
-fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4165,7 +4045,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -4187,7 +4066,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -4209,7 +4087,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -4231,7 +4108,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -4251,7 +4127,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4271,7 +4147,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4291,7 +4167,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4311,7 +4187,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4331,7 +4207,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4351,7 +4227,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4371,7 +4247,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4391,7 +4267,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4411,7 +4287,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4431,7 +4307,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4451,7 +4327,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4471,7 +4347,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4486,12 +4362,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4507,12 +4384,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4533,6 +4411,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4553,6 +4432,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4568,12 +4448,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4589,12 +4470,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4615,7 +4497,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4635,7 +4517,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4655,7 +4537,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -4675,7 +4557,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -4697,7 +4579,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4719,7 +4600,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4735,8 +4615,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4758,8 +4638,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4787,7 +4667,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -4809,7 +4688,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaJunctionsRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -4913,8 +4791,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4936,8 +4814,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -4965,7 +4843,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -4987,7 +4864,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5009,7 +4885,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5031,7 +4906,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5053,7 +4927,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5075,7 +4948,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5097,7 +4969,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5119,7 +4990,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5141,7 +5011,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5163,7 +5032,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5185,7 +5053,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5207,7 +5074,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5229,7 +5095,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5251,7 +5116,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5267,8 +5131,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5290,8 +5154,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5357,8 +5221,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5380,8 +5244,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5409,7 +5273,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5431,7 +5294,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5453,7 +5315,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5475,7 +5336,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5497,7 +5357,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5519,7 +5378,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -5535,8 +5393,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5558,8 +5416,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5587,7 +5445,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -5609,7 +5466,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaJunctionsRep2
 project wgEncode
 readType 1x75D
 replicate 2
@@ -5713,8 +5569,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5736,8 +5592,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
-fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5764,7 +5620,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5785,7 +5640,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5806,7 +5660,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5827,7 +5680,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5848,7 +5700,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5869,7 +5720,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5890,7 +5740,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5911,7 +5760,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5932,7 +5780,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5953,7 +5800,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -5974,7 +5820,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -5995,7 +5840,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200InsLengthRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -6016,7 +5860,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6037,7 +5880,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200JunctionsRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -6052,8 +5894,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6074,8 +5916,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6138,8 +5980,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6160,8 +6002,8 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6188,7 +6030,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6209,7 +6050,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptDeNovoRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -6230,7 +6070,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6251,7 +6090,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg19
-parentTable wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptFPKMRep2
 project wgEncode
 readType 2x75
 replicate 2
@@ -6271,7 +6109,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6291,7 +6129,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6311,7 +6149,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6331,7 +6169,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6351,7 +6189,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6371,7 +6209,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6386,12 +6224,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6412,6 +6251,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6427,12 +6267,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6453,7 +6294,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6473,7 +6314,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6495,7 +6336,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6511,8 +6351,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam
 fileIndex wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6540,7 +6380,6 @@ insertLength ilNA
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaJunctionsRep1
 project wgEncode
 readType 1x75D
 replicate 1
@@ -6600,8 +6439,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
-fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6629,7 +6468,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6649,7 +6487,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6671,7 +6509,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6691,7 +6528,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6713,7 +6550,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6733,7 +6569,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6755,7 +6591,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6775,7 +6610,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6797,7 +6632,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6817,7 +6651,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6839,7 +6673,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200InsLengthRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6861,7 +6694,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -6881,7 +6713,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6897,8 +6729,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6919,12 +6751,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6967,6 +6800,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -6983,8 +6817,8 @@ dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7005,12 +6839,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7033,7 +6868,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -7053,7 +6887,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7075,7 +6909,6 @@ insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
 origAssembly hg18
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep1
 project wgEncode
 readType 2x75
 replicate 1
@@ -7095,7 +6928,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7115,7 +6948,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7135,7 +6968,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7155,7 +6988,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7175,7 +7008,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm NA
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7195,7 +7028,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7215,7 +7048,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7235,7 +7068,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7255,7 +7088,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7275,7 +7108,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7295,7 +7128,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7315,7 +7148,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7330,12 +7163,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7351,12 +7185,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7377,6 +7212,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7397,6 +7233,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7412,12 +7249,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam.bai
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7433,12 +7271,13 @@ dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
-fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam.bai
+fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam
 grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7459,7 +7298,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 1
@@ -7479,7 +7318,7 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
@@ -7499,11 +7338,11 @@ grant Myers
 insertLength 200
 lab Caltech(Wold)
 mapAlgorithm TH1014
-parentTable wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptFPKMRep2
+origAssembly hg19
 project wgEncode
 readType 2x75
 replicate 2
 subId 1905
 view TranscriptFPKM
 
-# MAGIC: 1869789256
+# MAGIC: -619773066

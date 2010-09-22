@@ -654,7 +654,7 @@ _EOF_
     if ($qualFiles =~ /^\S+\.qac$/) {
       # Single .qac file:
       $horseScript->add(<<_EOF_
-qacToWig -fixed $qualFiles stdout \\
+qacToWig -fixed $qualFiles stdout | gzip -c > $db.qual.wigVarStep.gz
 _EOF_
         );
     } else {
@@ -667,13 +667,12 @@ else
 endif
 \$qcat $qualFiles \\
 | qaToQac stdin stdout \\
-| qacToWig -fixed stdin stdout \\
+| qacToWig -fixed stdin stdout | gzip -c > $db.qual.wigVarStep.gz
 _EOF_
       );
     }
     $horseScript->add(<<_EOF_
-| wigEncode stdin qual.{wig,wib}
-
+wigToBigWig $db.qual.wigVarStep.gz ../../chrom.sizes $db.quality.bw
 _EOF_
     );
   }
@@ -786,11 +785,11 @@ _EOF_
     $bossScript->add(<<_EOF_
 
 # Load qual
-cd $bedDir/qual
-rm -f $HgAutomate::gbdb/$db/wib/qual.wib
-ln -s $bedDir/qual/qual.wib $HgAutomate::gbdb/$db/wib/
-hgLoadWiggle -pathPrefix=$HgAutomate::gbdb/$db/wib \\
-  $db quality qual.wig
+rm -f $HgAutomate::gbdb/$db/bbi/quality.bw
+ln -s $bedDir/qual/$db.quality.bw $HgAutomate::gbdb/$db/bbi/quality.bw
+hgsql $db -e 'drop table if exists qualityBw; \\
+            create table qualityBw (fileName varchar(255) not null); \\
+            insert into qualityBw values ("$HgAutomate::gbdb/$db/bbi/quality.bw");'
 _EOF_
     );
   }

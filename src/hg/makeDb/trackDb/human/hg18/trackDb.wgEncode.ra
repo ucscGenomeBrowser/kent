@@ -3365,6 +3365,7 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 include wgEncodeYaleChIPseq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
+include wgEncodeHudsonalphaChipSeq.new.ra
 include wgEncodeHudsonalphaChipSeq.ra
 
 

@@ -1,0 +1,130 @@
+# for emacs: -*- mode: sh; -*-
+
+# Meloidogyne incognita
+# Sanger and Genoscope
+# http://www.nematode.net/Species.Summaries/Meloidogyne.incognita/index.php
+#	Genbank: CABB00000000
+
+##############################################################################
+## Fetch sequence (DONE - 2010-09-20 - Hiram)
+
+    mkdir -p /hive/data/genomes/melInc1/ws210
+    cd /hive/data/genomes/melInc1/ws210
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/m_incognita/
+
+    hgFakeAgp -minContigGap=1 \
+	sequences/dna/b_malayi.WS210.dna.fa.gz ucsc.fake.melInc1.agp
+
+##############################################################################
+## Initial browser build (DONE - 2010-09-20 - Hiram)
+    cd /hive/data/genomes/melInc1
+
+    cat << '_EOF_' > melInc1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db melInc1
+clade worm
+genomeCladePriority 84
+scientificName Meloidogyne incognita
+commonName M. incognita
+assemblyDate Feb. 2008
+assemblyLabel Sanger and Genoscope Genbank: CABB00000000
+assemblyShortLabel M. incognita WS210
+orderKey 897
+mitoAcc none
+fastaFiles /hive/data/genomes/melInc1/ws210/sequences/dna/m_incognita.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/melInc1/ws210/ucsc.fake.melInc1.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6306
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-stop=agp melInc1.config.ra > agp.log 2>&1
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-continue=db melInc1.config.ra > db.log 2>&1
+
+##############################################################################
+# REPEATMASKER (DONE - 2010-09-21 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/melInc1/bed/repeatMasker
+    cd /hive/data/genomes/melInc1/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=pk \
+	-buildDir=`pwd` melInc1 > do.log 2>&1 &
+    #	real    53m51.544s
+
+    #	from the do.log:
+    #	RepeatMasker version development-$Id:
+    #	RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp
+    #	CC   RELEASE 20090604;                                            *
+
+    cat faSize.rmsk.txt
+    #	82095019 bases (0 N's 82095019 real 73879883 upper 8215136 lower)
+    #	in 9538 sequences in 1 files
+    #	%10.01 masked total, %10.01 masked real
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2010-09-21 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/melInc1/bed/simpleRepeat
+    cd /hive/data/genomes/melInc1/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -workhorse=hgwdev \
+	-smallClusterHub=memk -buildDir=`pwd` melInc1 > do.log 2>&1 &
+    #	real    14m29.878s
+
+    cat fb.simpleRepeat 
+    #	3947412 bases of 82095019 (4.808%) in intersection
+
+#########################################################################
+# run window masker (DONE - 2010-09-21 - Hiram)
+    mkdir /hive/data/genomes/melInc1/bed/windowMasker
+    cd /hive/data/genomes/melInc1/bed/windowMasker
+    time doWindowMasker.pl -verbose=2 -workhorse=kolossus \
+	-buildDir=`pwd` melInc1 > do.log 2>&1 &
+    #	about 14 minutes
+
+    twoBitToFa melInc1.wmsk.sdust.2bit stdout | faSize stdin
+    #	82095019 bases (0 N's 82095019 real 44822089 upper 37272930 lower)
+    #	in 9538 sequences in 1 files
+    #	%45.40 masked total, %45.40 masked real
+
+    hgLoadBed melInc1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 775123 elements of size 3
+    featureBits melInc1 windowmaskerSdust
+    #	37272930 bases of 82095019 (45.402%) in intersection
+
+    #	this is the mask for the genome
+    cd /hive/data/genomes/melInc1
+    zcat bed/windowMasker/windowmasker.sdust.bed.gz \
+	| twoBitMask melInc1.unmasked.2bit stdin \
+	    -type=.bed melInc1.2bit
+    twoBitToFa melInc1.2bit stdout | faSize stdin
+    #	82095019 bases (0 N's 82095019 real 44822089 upper 37272930 lower)
+    #	in 9538 sequences in 1 files
+    #	%45.40 masked total, %45.40 masked real
+
+    ln -s `pwd`/melInc1.2bit /gbdb/melInc1/melInc1.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2010-09-21 - Hiram)
+    # numerator is melInc1 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases as reported by featureBits,
+    #	featureBits hg19 gap
+    # 1024 is threshold used for human -repMatch:
+    calc \( 82095019 / 2897310462 \) \* 1024
+    #	( 82095019 / 2897310462 ) * 1024 = 29.014944
+    # 29 is way too small, use 100 to keep the number of overused
+    #	11-mers to a smaller number
+
+    cd /hive/data/genomes/melInc1
+    blat melInc1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=melInc1.11.ooc -repMatch=100
+    #	Wrote 8613 overused 11-mers to melInc1.11.ooc
+
+    mkdir /hive/data/staging/data/melInc1
+    cp -p melInc1.2bit chrom.sizes melInc1.11.ooc \
+	/hive/data/staging/data/melInc1
+
+#########################################################################

@@ -203,7 +203,7 @@ for (group = groupList; group != NULL; group = group->next)
         {
         struct track *track = tr->track;
 	struct trackDb *tdb = track->tdb;
-        if (changeVis == -1)
+        if (changeVis == -1) // to default
                 {
                 if(tdbIsComposite(tdb))
                     {
@@ -240,7 +240,7 @@ for (group = groupList; group != NULL; group = group->next)
                     track->priority = track->defaultPriority;
                     }
                 }
-            else
+            else // to changeVis value (Usually tvHide)
                 {
                 /* change to specified visibility */
                 if (tdbIsSuperTrackChild(tdb))
@@ -258,17 +258,31 @@ for (group = groupList; group != NULL; group = group->next)
                         cartSetString(cart, parentTdb->track,
                                     changeVis == tvHide ? "hide" : "show");
                     }
-                else
+                else // Not super  child
                     {
-                    /* regular track */
                     if (changeVis == tdb->visibility)
                         /* remove if setting to default vis */
                         cartRemove(cart, track->track);
                     else
-                        cartSetString(cart, track->track,
-                                                hStringFromTv(changeVis));
+                        cartSetString(cart, track->track, hStringFromTv(changeVis));
                     track->visibility = changeVis;
                     }
+
+                #ifdef SUBTRACKS_HAVE_VIS
+                // Whether super child or not, if its a composite, then handle the children
+                if (tdbIsComposite(tdb))
+                    {
+                    struct track *subtrack;
+                    for(subtrack=track->subtracks;subtrack!=NULL;subtrack=subtrack->next)
+                        {
+                        if (changeVis == tvHide)
+                            cartRemove(cart, subtrack->track); // Since subtrack level vis is an override, simply remove it to hide it
+                        else
+                            cartSetString(cart, subtrack->track, hStringFromTv(changeVis));
+                        subtrack->visibility = changeVis;
+                        }
+                    }
+                #endif///def SUBTRACKS_HAVE_VIS
                 }
             }
         }
@@ -1305,7 +1319,7 @@ if (track->limitedVis != tvHide)
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
         if (isCenterLabelConditional(track))
-            label = track->parent->longLabel;
+            label = track->tdb->parent->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
@@ -3144,6 +3158,19 @@ else if (sameString(type, "makeItems"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
+else if (sameString(type, "bedDetail"))
+    {
+    tg = trackFromTrackDb(tdb);
+    bedDetailCtMethods(tg, ct);
+    tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
+    }
+else if (sameString(type, "pgSnp"))
+    {
+    tg = trackFromTrackDb(tdb);
+    pgSnpCtMethods(tg);
+    //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
@@ -4232,13 +4259,34 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
-void subtrackCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
-/* When composite/view settings changes, remove subtrack specific vis */
+#ifdef SUBTRACKS_HAVE_VIS
+static void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+/* When composite/view settings changes, remove subtrack specific vis
+   When superTrackChild is found and selected, shape superTrack to match. */
 {
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
-    cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+    {
+    if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
+        { // Need to update track visibility
+        if (tdbIsSuperTrackChild(track->tdb))
+            {
+            // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
+            // So now we need to find the supertrack and take changed cart values of its children
+            struct slRef *childRef;
+            for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
+                {
+                struct trackDb * childTdb = childRef->val;
+                struct track *child = hashFindVal(trackHash, childTdb->track);
+                char *cartVis = cartOptionalString(cart,child->track);
+                if (cartVis)
+                    child->visibility = hTvFromString(cartVis);
+                }
+            }
+        }
+    }
 }
+#endif///def SUBTRACKS_HAVE_VIS
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -4302,7 +4350,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     cartRemoveLike(cart, wildCard);
     }
 #ifdef SUBTRACKS_HAVE_VIS
-subtrackCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
 
 /* Honor hideAll and visAll variables */
@@ -4408,6 +4456,13 @@ if(theImgBox)
 #endif//def IMAGEv2_DRAG_SCROLL
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
+
+if(trackImgOnly)
+    {
+    makeActiveImage(trackList, psOutput);
+    fflush(stdout);
+    return;  // bail out b/c we are done
+    }
 
 
 if (!hideControls)
@@ -5471,7 +5526,7 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     hgFindMatches = NULL;     // XXXX necessary ???
     }
 
-hPrintf(commonCssStyles());
+hWrites(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
 if(dragZooming)
@@ -5503,7 +5558,6 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");

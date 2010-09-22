@@ -2063,11 +2063,10 @@ return removed;
 //#define COMPOSITE_VIS_SHAPING_PLAN_B
 
 #if defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
-static int cartTdbParentShapeVis(struct cart *cart,struct trackDb *parent,char *view,struct slRef *refSubtracks,struct slPair *subVisVars,boolean compositeAtDefault)
+static int cartTdbParentShapeVis(struct cart *cart,struct trackDb *parent,char *view,struct slRef *refSubtracks,struct hash *subVisHash,boolean compositeAtDefault)
 // This shapes one level of vis (view or composite) based upon subtrack specific visibility.  Returns count of subtracks affected
 {
 int count=0;
-struct slPair *subVisVar = NULL;
 struct trackDb *subtrack = NULL;
 char setting[512];
 if (view != NULL)
@@ -2075,41 +2074,47 @@ if (view != NULL)
 else
     safef(setting,sizeof(setting),"%s",parent->track);
 
-enum trackVisibility vis = tvHide;  // Looking for max vis of subtrack specific
+enum trackVisibility vis = tvHide;  // Looking for max vis of child subtracks
 enum trackVisibility visOrig = hTvFromString(cartUsualString(cart,setting,hStringFromTv(parent->visibility)));
-if (!compositeAtDefault)
-    vis = visOrig; // Default view vis to current vis
-for(subVisVar=subVisVars;subVisVar!=NULL;subVisVar=subVisVar->next)
-    {
-    if (endsWith(subVisVar->name,"_sel"))
-        {
-        subtrack = subVisVar->val;
-        if (parent != subtrack->parent) // This should be true whether at view level or composite level,
-            continue;                   // since composite level call only happens composite has no views
 
-        char *cartVis = cartOptionalString(cart,subtrack->track);
-        assert(cartVis != NULL); // Otherwise it wouldn't be in subVisVar
-        enum trackVisibility visSub = hTvFromString(cartVis);
+// Should walk through children and check for subtrackVis override
+struct slRef *refSub;
+for(refSub = refSubtracks;refSub != NULL;refSub = refSub->next)
+        {
+    subtrack = refSub->val;
+    if (parent != subtrack->parent) // This should work whether at view level or composite level,
+        continue;                   // since composite level call only happens if composite has no views
+
+    char *foundVis = hashFindVal(subVisHash, subtrack->track); // if the subtrack doesn't have individual vis AND...
+    if (foundVis != NULL)
+        {
+        enum trackVisibility visSub = hTvFromString(foundVis);
         if (tvCompare(vis, visSub) >= 0)
-            vis = visSub; // vis will wind up with setting of highest vis subtrack
+            vis = visSub;
+        }
+    else
+        {
+        enum trackVisibility visSub = tdbVisLimitedByAncestry(NULL, subtrack, FALSE);
+        if (tvCompare(vis, visSub) >= 0)
+            vis = visSub;
         }
     }
+
+// Now we need to update non-subtrack specific vis/sel in cart
 if (vis != visOrig)
     {
+    //warn("%s vis old:%d new:%d",parent->track,visOrig,vis);
     cartSetString(cart,setting,hStringFromTv(vis));
-    //warn("Set %s to %s",(view?view:parent->track),hStringFromTv(vis));
 
     // Now set all subtracks that inherit vis back to visOrig
-    struct slRef *refSub;
     for(refSub = refSubtracks;refSub != NULL;refSub = refSub->next)
         {
         subtrack = refSub->val;
         if (parent != subtrack->parent) // This should work whether at view level or composite level,
             continue;                   // since composite level call only happens composite has no views
 
-        if (!slPairFind(subVisVars, subtrack->track))   // if the subtrack doesn't have individual vis AND...
+        if (!hashFindVal(subVisHash, subtrack->track))   // if the subtrack doesn't have individual vis AND...
             {
-            // FIXME problem is fourState gets cached
             int fourState = subtrackFourStateChecked(subtrack,cart);
             if (fourStateChecked(fourState))            // subtrack is checked
                 {
@@ -2121,32 +2126,52 @@ if (vis != visOrig)
                 }
             }
         }
-    //warn("Altered %d subtrack(s) for %s",count,(view?view:parent->track));
 
     if (tdbIsCompositeView(parent))
-        {
         cartSetString(cart,parent->parent->track,"full");    // Now set composite to full.
-        //warn("Set composite %s to full",tdbComposite->track);
-        }
     }
 return count;
 }
 
-static boolean cartVarsAllFoundForTdb(struct cart *cart,struct slPair *subVisVars,struct trackDb *tdb)
+static boolean cartVarsNoneFoundForTdb(struct cart *cart,struct hash *subVisHash,struct trackDb *tdb)
 {
 struct slPair *cartVar,*cartVars = cartVarsWithPrefix(cart,tdb->track);
 if (cartVars != NULL)
     {
     for (cartVar = cartVars; cartVar != NULL; cartVar = cartVar->next)
         {
-        if (tdbIsCompositeView(tdb) || !slPairFind(subVisVars, cartVar->name)) // subVisVars does not contain anything prefixed by view!
+        if (tdbIsCompositeView(tdb) || !hashFindVal(subVisHash, cartVar->name)) // subVisHash does not contain anything prefixed by view!
             {
-            // NOTE: This is less than ideal!  Composites (not memebers of superTracks) are getting their cart vis set on hgTracks:config page!
+            // If composite vis changed but it is the same as trackDb default then ignore it
             if (tdbIsComposite(tdb)
             &&  sameString(cartVar->name,tdb->track)
             &&  sameString((char *)cartVar->val,hStringFromTv(tdb->visibility)) )
                 continue;
 
+            // If view vis changed but it is the same as trackDb default then ignore it
+            if (tdbIsComposite(tdb)
+            && endsWith((char *)cartVar->val,".vis"))
+                {
+                // find out view
+                char *val = skipBeyondDelimit(cartVar->name,'.');
+                char *viewFound = cloneFirstWordByDelimiter(val,'.');
+                if (viewFound)
+                    {
+                    // find tdb for View
+                    struct trackDb *viewTdb;
+                    for (viewTdb=tdb->subtracks; viewTdb!=NULL; viewTdb=viewTdb->next)
+                        {
+                        char *viewOfTdb = trackDbLocalSetting(viewTdb,"view");
+                        if (viewOfTdb && sameString(viewOfTdb,viewFound))
+                            {
+                            if(sameString((char *)cartVar->val,hStringFromTv(viewTdb->visibility)) )
+                                continue;
+                            break;
+                            }
+                        }
+                    }
+                }
+            //warn("cartVarsNoneFoundForTdb: %s=%s",cartVar->name,(char *)cartVar->val);
             slFreeList(&cartVars);
             return FALSE; // Any view cart vars means non-default so do not "shape" composite
             }
@@ -2165,10 +2190,10 @@ boolean cartTdbTreeMatchSubtrackVis(struct cart *cart,struct trackDb *tdbComposi
     return FALSE;  // Don't do any shaping
 #else/// if defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 
-// First look for subtrack vis
+// First look for subtrack level vis
 char setting[512];
 struct trackDb *subtrack = NULL;
-struct slPair *subVisVar, *subVisVars = NULL;
+struct hash *subVisHash = newHash(8);
 struct slRef *tdbRef, *tdbRefList = trackDbListGetRefsToDescendantLeaves(tdbComposite->subtracks);
 for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     {
@@ -2176,54 +2201,39 @@ for (tdbRef = tdbRefList; tdbRef != NULL; tdbRef = tdbRef->next)
     char *val=cartOptionalString(cart,subtrack->track);
     if (val && differentString(val,"hide"))  // NOTE should we include hide?
         {
-        subVisVar = slPairNew(subtrack->track,val); // subtrack has sub level vis
-        slAddHead(&subVisVars,subVisVar);
+        hashAdd(subVisHash,subtrack->track,val);
         // Add the "_sel" setting which should also exist.  Point it to subtrack
         safef(setting,sizeof(setting),"%s_sel",subtrack->track);
-        subVisVar = slPairNew(setting,subtrack);
-        slAddHead(&subVisVars,subVisVar);
+        hashAdd(subVisHash,setting,subtrack);
         }
     }
-if (slCount(subVisVars) == 0)
+if (hashNumEntries(subVisHash) == 0)
     {
-    //warn("No subtrack vis found.");
     slFreeList(&tdbRefList);
     return FALSE;
     }
 
 // Next look for any cart settings other than subtrack vis/sel
 boolean compositeAtDefault = TRUE;
-compositeAtDefault = cartVarsAllFoundForTdb(cart,subVisVars,tdbComposite);
-#ifndef COMPOSITE_VIS_SHAPING_PLAN_B
-if (!compositeAtDefault)
-    {
-    slFreeList(&tdbRefList);
-    slFreeList(&subVisVars);
-    return FALSE; // Any view cart vars means non-default so do not "shape" composite
-    }
-#endif///ndef COMPOSITE_VIS_SHAPING_PLAN_B
+compositeAtDefault = cartVarsNoneFoundForTdb(cart,subVisHash,tdbComposite);
 
 // What about view level settings?
 struct trackDb *tdbView = tdbComposite->subtracks;
 boolean hasViews = FALSE;
 if (tdbIsCompositeView(tdbView))
     {
+    hasViews = TRUE;
     if (compositeAtDefault)
         {
         for( ;tdbView != NULL; tdbView = tdbView->next )
             {
-            compositeAtDefault = cartVarsAllFoundForTdb(cart,subVisVars,tdbView);
-            #ifndef COMPOSITE_VIS_SHAPING_PLAN_B
-            if (!compositeAtDefault)
+            if(!cartVarsNoneFoundForTdb(cart,subVisHash,tdbView))
                 {
-                slFreeList(&tdbRefList);
-                slFreeList(&subVisVars);
-                return FALSE; // Any view cart vars means non-default so do not "shape" composite
+                compositeAtDefault = FALSE;
+                break;
                 }
-            #endif///ndef COMPOSITE_VIS_SHAPING_PLAN_B
             }
         }
-    hasViews = TRUE;
     }
 
 // How about subtrack level settings?  Assume that compositePrefix caught them? If views then YES
@@ -2231,17 +2241,22 @@ if (compositeAtDefault && !hasViews)
     {
     for(tdbRef = tdbRefList;tdbRef != NULL; tdbRef = tdbRef->next )
         {
-        compositeAtDefault = cartVarsAllFoundForTdb(cart,subVisVars,subtrack);
+        if (!cartVarsNoneFoundForTdb(cart,subVisHash,subtrack));
+            {
+            compositeAtDefault = FALSE;
+            break;
+            }
+        }
+    }
+//warn("compositeAtDefault:%s",compositeAtDefault?"TRUE":"FALSE");
         #ifndef COMPOSITE_VIS_SHAPING_PLAN_B
         if (!compositeAtDefault)
             {
             slFreeList(&tdbRefList);
-            slFreeList(&subVisVars);
+    hashFree(&subVisHash);
             return FALSE; // Any view cart vars means non-default so do not "shape" composite
             }
         #endif///ndef COMPOSITE_VIS_SHAPING_PLAN_B
-        }
-    }
 
 // Now shape views and composite to match subtrack specific visibility
     int count = 0;
@@ -2251,25 +2266,75 @@ if (hasViews)
         {
         char *view = trackDbSetting(tdbView,"view");
         assert(view != NULL);
-        count += cartTdbParentShapeVis(cart,tdbView,view,tdbRefList,subVisVars,compositeAtDefault);
+        count += cartTdbParentShapeVis(cart,tdbView,view,tdbRefList,subVisHash,compositeAtDefault);
         }
     }
 else // If no views then composite is not set to fuul but to max of subtracks
-    count = cartTdbParentShapeVis(cart,tdbComposite,NULL,tdbRefList,subVisVars,compositeAtDefault);
-//warn("Altered %d subtrack(s)",count);
+    count = cartTdbParentShapeVis(cart,tdbComposite,NULL,tdbRefList,subVisHash,compositeAtDefault);
 
 slFreeList(&tdbRefList);
-slFreeList(&subVisVars);
+hashFree(&subVisHash);
 return TRUE;
 #endif/// defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
+}
+
+static boolean cartTdbOverrideSuperTracks(struct trackDb *tdb,struct cart *cart)
+/* When when the child of a hidden supertrack is foudn and selected, then shape the supertrack accordingly
+   Returns TRUE if any cart changes are made */
+{
+// This is only pertinent to supertrack children just turned on
+if (!tdbIsSuperTrackChild(tdb))
+    return FALSE;
+
+// Must be from having just selected the track in findTracks.  This will carry with it the "_sel" setting.
+char setting[512];
+safef(setting,sizeof(setting),"%s_sel",tdb->track);
+if (!cartVarExists(cart,setting))
+    return FALSE;
+cartRemove(cart,setting); // Unlike composite subtracks, supertrack children keep the "_sel" setting only for detecting this moment
+
+// if parent is not hidden then nothing to do
+assert(tdb->parent != NULL && tdbIsSuperTrack(tdb->parent));
+enum trackVisibility vis = tdbVisLimitedByAncestry(cart, tdb->parent, FALSE);
+if (vis != tvHide)
+    return FALSE;
+
+// Now turn all other supertrack children to hide and the supertrack to visible
+struct slRef *childRef;
+for(childRef = tdb->parent->children;childRef != NULL; childRef = childRef->next)
+    {
+    struct trackDb *child = childRef->val;
+    if (child == tdb)
+        continue;
+
+    // Make sure this chile hasn't also just been turned on!
+    safef(setting,sizeof(setting),"%s_sel",child->track);
+    if (cartVarExists(cart,setting))
+        {
+        cartRemove(cart,setting); // Unlike composite subtracks, supertrack children keep the "_sel" setting only for detecting this moment
+        continue;
+        }
+
+    // hide this sibling if not already hidden
+    vis = child->visibility;
+    char *cartVis = cartOptionalString(cart,child->track);
+    if (cartVis != NULL)
+        vis = hTvFromString(cartVis);
+    if (vis != tvHide)
+        cartSetString(cart,child->track,"hide");
+    }
+// and finally show the parent
+cartSetString(cart,tdb->parent->track,"show");
+return TRUE;
 }
 
 boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars)
 /* When composite/view settings changes, remove subtrack specific settings
    Returns TRUE if any cart vars are removed */
 {
+boolean anythingChanged = cartTdbOverrideSuperTracks(tdb,newCart);
 if (!tdbIsComposite(tdb))
-    return FALSE;
+    return anythingChanged;
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis
 boolean compositeVisChanged = cartValueHasChanged(newCart,oldVars,tdb->track,TRUE,TRUE);
@@ -2277,16 +2342,6 @@ struct trackDb *tdbView = NULL;
 struct slPair *oneName = NULL;
 char * var = NULL;
 int clensed = 0;
-
-// Do some debugging
-boolean debug = FALSE;//sameString(tdb->track,"wgEncodeBroadHistone");
-if (debug)
-    {
-    char *newValue = cartOptionalString(newCart,tdb->track);
-    char *oldValue = hashFindVal(oldVars,tdb->track);
-    warn("Cleanup: %s  compositeVisChanged:%s  new:%s  old:%s",tdb->track,
-         (compositeVisChanged?"yes":"no"),(newValue!=NULL?newValue:"(null)"),(oldValue!=NULL?oldValue:"(null)"));
-    }
 
 // Build list of current settings for composite and views
 char setting[512];
@@ -2304,18 +2359,14 @@ for (tdbView = tdb->subtracks;tdbView != NULL; tdbView = tdbView->next)
     changedSettings = slCat(changedSettings, changeViewSettings);
     }
 if (changedSettings == NULL && !compositeVisChanged)
-    return FALSE;
+    return anythingChanged;
 
 // Prune list to only those which have changed
 if(changedSettings != NULL)
     {
-    if (debug)
-        warn("Cleanup: settings:%d",slCount(changedSettings));
     (void)cartNamesPruneChanged(newCart,oldVars,&changedSettings,TRUE,FALSE);
     if (changedSettings == NULL && !compositeVisChanged)
-        return FALSE;
-    if (debug)
-        warn("Cleanup: changed:%d",changedSettings==NULL?0:slCount(changedSettings));
+        return anythingChanged;
     }
 
 // Walk through views
@@ -2376,10 +2427,8 @@ if  (compositeVisChanged || !hasViews)
         clensed++;
     }
 
-if (debug)
-    warn("Cleaned up %d composite%s settings",clensed,hasViews?"/view":"");
-
-return (clensed > 0);
+anythingChanged = (anythingChanged || (clensed > 0));
+return anythingChanged;
 }
 
 

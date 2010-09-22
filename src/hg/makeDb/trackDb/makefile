@@ -92,9 +92,12 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	ce2 ce3 ce4 ce5 ce6 ce7 ce8 ce9 \
 	cb1 cb2 cb3 \
 	caeRem1 caeRem2 caeRem3 \
-	caeJap1 caeJap2 \
+	caeJap1 caeJap2 caeJap3 \
 	priPac1 \
 	caePb1 caePb2 \
+	bruMal1 \
+	melHap1 \
+	melInc1 \
 	falciparum \
 	choHof1 \
 	sacCer1 sacCer2 \
