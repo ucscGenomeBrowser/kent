@@ -37,8 +37,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
         release alpha
         subTrack wgEncodeRikenCageViewPlusClusters off
-        shortLabel NHEK cytosol pA-
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in NHEK cytosol)
+        shortLabel NHEK cyto pA-
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in NHEK cytosol)
         subGroups view=PlusClusters cellType=NHEK localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bigWig 0.040000 4464.319824
         color 179,0,134
@@ -47,8 +47,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 cytosol pA-
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA-
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in GM12878 cytosol)
         subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bigWig 0.040000 4464.319824
         color 153,38,0
@@ -57,8 +57,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageGm12878NucleusTotalPlusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewPlusClusters off
-#        shortLabel GM12878 nucleus total
-#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleus)
+#        shortLabel GM12878 nucl tot
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in GM12878 nucleus)
 #        subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=total
         #type bigWig 0.040000 4464.319824
 #        color 153,38,0
@@ -69,7 +69,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel HUVEC cytosol pA-
+        shortLabel HUVEC cyto pA-
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in HUVEC cytosol)
         subGroups view=PlusClusters cellType=HUVEC localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bigWig 0.040000 4464.319824
@@ -100,7 +100,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVEC cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in HUVEC cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in HUVEC whole cell)
         subGroups view=PlusClusters cellType=HUVEC localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 10398.650391
         origAssembly hg19
@@ -144,7 +144,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG2 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in HepG2 cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in HepG2 whole cell)
         subGroups view=PlusClusters cellType=HepG2 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 32286.490234
         origAssembly hg19
@@ -155,7 +155,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel H1-hESC cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in H1-hESC whole cell)
         subGroups view=PlusClusters cellType=H1hESC localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 7334.810059
         origAssembly hg19
@@ -177,7 +177,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HepG2 cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in HepG2 cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in HepG2 whole cell)
         subGroups view=PlusClusters cellType=HepG2 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 50981.449219
         origAssembly hg19
@@ -199,7 +199,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HUVEC cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in HUVEC cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in HUVEC whole cell)
         subGroups view=PlusClusters cellType=HUVEC localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 11292.700195
         origAssembly hg19
@@ -221,7 +221,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa-S3 cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in HeLa-S3 cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in HeLa-S3 whole cell)
         subGroups view=PlusClusters cellType=HeLaS3 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 11799.719727
         origAssembly hg19
@@ -243,7 +243,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in NHEK cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in NHEK whole cell)
         subGroups view=PlusClusters cellType=NHEK localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 19261.259766
         origAssembly hg19
@@ -265,7 +265,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel H1-hESC cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in H1-hESC whole cell)
         subGroups view=PlusClusters cellType=H1hESC localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 5374.350098
         origAssembly hg19
@@ -331,7 +331,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel HeLa-S3 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in HeLa-S3 cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in HeLa-S3 whole cell)
         subGroups view=PlusClusters cellType=HeLaS3 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 14674.490234
         origAssembly hg19
@@ -342,7 +342,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel K562 cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in K562 cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in K562 whole cell)
         subGroups view=PlusClusters cellType=K562 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 12450.700195
         origAssembly hg19
@@ -353,7 +353,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel NHEK cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in NHEK cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in NHEK whole cell)
         subGroups view=PlusClusters cellType=NHEK localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 16078.389648
         origAssembly hg19
@@ -375,7 +375,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
         shortLabel K562 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in K562 cell)
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in K562 whole cell)
         subGroups view=PlusClusters cellType=K562 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 12831.000000
         origAssembly hg19
@@ -451,8 +451,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageMcf7CellPapPlusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel MCF-7 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in MCF-7 cell)
+        shortLabel MCF7 cell pA+ 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in MCF-7 whole cell)
         subGroups view=PlusClusters cellType=MCF7 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 24800.419922
         origAssembly hg19
@@ -461,8 +461,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CellPapPlusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 cell longPolyA 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cell)
+        shortLabel GM12878 cell pA+ 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in GM12878 whole cell)
         subGroups view=PlusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 10789.110352
         origAssembly hg19
@@ -472,8 +472,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 cytosol longPolyA 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in GM12878 cytosol)
         subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 8459.320312
         origAssembly hg19
@@ -483,8 +483,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 nucleus longPolyA 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in GM12878 nucleus)
         subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 21429.859375
         origAssembly hg19
@@ -494,8 +494,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 cytosol longPolyA 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in GM12878 cytosol)
         subGroups view=PlusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 12842.799805
         origAssembly hg19
@@ -505,8 +505,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 nucleus longPolyA 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in GM12878 nucleus)
         subGroups view=PlusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 19231.990234
         origAssembly hg19
@@ -516,8 +516,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CellPapPlusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 cell longPolyA 1
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cell)
+        shortLabel GM12878 cell pA+ 1
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 1 (PolyA+ in GM12878 whole cell)
         subGroups view=PlusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 10785.929688
         origAssembly hg19
@@ -527,8 +527,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolPapPlusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 cytosol longPolyA 2
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Replicate 2 (longPolyA in K562 cytosol)
+        shortLabel K562 cyto pA+ 2
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites Rep 2 (PolyA+ in K562 cytosol)
         subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bigWig 0.060000 10864.750000
         origAssembly hg19
@@ -538,9 +538,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel prostate cell longNonPolyA
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in prostate cell)
-        subGroups view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
+        shortLabel pros cell pA- o
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in pros whole cell)
+        subGroups view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA rep=rep0
         type bedGraph 4
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
@@ -548,9 +548,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 cytosol longNonPolyA
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in K562 cytosol)
-        subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+        shortLabel K562 cyto pA-
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in K562 cytosol)
+        subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bedGraph 4
         origAssembly hg18
         color 46,0,184
@@ -559,9 +559,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel H1-hESC cell longNonPolyA
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (longNonPolyA in H1-hESC cell)
-        subGroups view=PlusClusters cellType=H1hESC localization=cell rnaExtract=longNonPolyA
+        shortLabel H1-hESC cell pA-
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in H1-hESC whole cell)
+        subGroups view=PlusClusters cellType=H1hESC localization=cell rnaExtract=longNonPolyA rep=rep0
         type bedGraph 4
         origAssembly hg18
         color 0,107,27
@@ -570,8 +570,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageHepg2NucleusTotalPlusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewPlusClusters off
-#        shortLabel HepG2 nucl total
-#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in HepG2 nucleus)
+#        shortLabel HepG2 nucl tot
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in HepG2 nucleus)
 #        subGroups view=PlusClusters cellType=HepG2 localization=nucleus rnaExtract=total
         type bigWig 0.040000 4464.319824
 #        color 189,0,157
@@ -581,8 +581,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562ChromatinTotalPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 chromatin total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 chromatin)
+        shortLabel K562 chrm tot
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in K562 chromatin)
         subGroups view=PlusClusters cellType=K562 localization=chromatin rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 46,0,184
@@ -591,7 +591,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolPapPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 cyto longPolyA
+        shortLabel K562 cyto pA+
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA+ in K562 cytosol)
         subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA rep=rep0
         type bigWig 0.040000 4464.319824
@@ -601,8 +601,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleolusTotalPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 nucleolus total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleolus)
+        shortLabel K562 nlos tot
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in K562 nucleolus)
         subGroups view=PlusClusters cellType=K562 localization=nucleolus rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 46,0,184
@@ -611,8 +611,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 nucleoplasm total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleoplasm)
+        shortLabel K562 nplm tot
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in K562 nucleoplasm)
         subGroups view=PlusClusters cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 46,0,184
@@ -621,8 +621,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageK562NucleusTotalPlusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewPlusClusters off
-#        shortLabel K562 nucl total
-#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in K562 nucleus)
+#        shortLabel K562 nucl tot
+#        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in K562 nucleus)
 #        subGroups view=PlusClusters cellType=K562 localization=nucleus rnaExtract=total
         type bigWig 0.040000 4464.319824
 #        color 46,0,184
@@ -632,7 +632,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel K562 polysome pA-
+        shortLabel K562 psom pA-
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in K562 polysome)
         subGroups view=PlusClusters cellType=K562 localization=polysome rnaExtract=longNonPolyA rep=rep0
     type bigWig 0.040000 4464.319824
@@ -662,8 +662,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel HepG2 nucleolus total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in HepG2 nucleolus)
+        shortLabel HepG2 nlos tot
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in HepG2 nucleolus)
         subGroups view=PlusClusters cellType=HepG2 localization=nucleolus rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 189,0,157
@@ -672,8 +672,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
         release alpha
         parent wgEncodeRikenCageViewPlusClusters off
-        shortLabel GM12878 nucleolus total
-        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (total in GM12878 nucleolus)
+        shortLabel GM12878 nlos tot
+        longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (Total in GM12878 nucleolus)
         subGroups view=PlusClusters cellType=GM12878 localization=nucleolus rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 153,38,0
@@ -716,8 +716,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageGm12878NucleusTotalMinusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewMinusClusters off
-#        shortLabel GM12878 nucl total
-#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleus)
+#        shortLabel GM12878 nucl tot
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in GM12878 nucleus)
 #        subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=total
 #type bigWig 0.040000 4464.319824
 #        color 153,38,0
@@ -757,8 +757,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageHepg2NucleusTotalMinusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewMinusClusters off
-#        shortLabel HepG2 nucl total
-#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in HepG2 nucleus)
+#        shortLabel HepG2 nucl tot
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in HepG2 nucleus)
 #        subGroups view=MinusClusters cellType=HepG2 localization=nucleus rnaExtract=total
 #type bigWig 0.040000 4464.319824
 #        color 189,0,157
@@ -768,8 +768,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562ChromatinTotalMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 chromatin total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 chromatin)
+        shortLabel K562 chrm tot
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in K562 chromatin)
         subGroups view=MinusClusters cellType=K562 localization=chromatin rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 46,0,184
@@ -778,7 +778,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolPapMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 cyto longPolyA
+        shortLabel K562 cyto pA+
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA+ in K562 cytosol)
         subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA rep=rep0
         type bigWig 0.040000 4464.319824
@@ -788,8 +788,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleolusTotalMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 nucleolus total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleolus)
+        shortLabel K562 nlos tot
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in K562 nucleolus)
         subGroups view=MinusClusters cellType=K562 localization=nucleolus rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 46,0,184
@@ -798,8 +798,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleoplasmTotalMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 nucleoplasm total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleoplasm)
+        shortLabel K562 nplm tot
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in K562 nucleoplasm)
         subGroups view=MinusClusters cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 46,0,184
@@ -808,8 +808,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageK562NucleusTotalMinusClusters
 #        release alpha
 #        parent wgEncodeRikenCageViewMinusClusters off
-#        shortLabel K562 nucl total
-#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in K562 nucleus)
+#        shortLabel K562 nucl tot
+#        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in K562 nucleus)
 #        subGroups view=MinusClusters cellType=K562 localization=nucleus rnaExtract=total
 #type bigWig 0.040000 4464.319824
 #        color 46,0,184
@@ -819,7 +819,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 polysome pA-
+        shortLabel K562 psom pA-
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in K562 polysome)
         subGroups view=MinusClusters cellType=K562 localization=polysome rnaExtract=longNonPolyA rep=rep0
         type bigWig 0.040000 4464.319824
@@ -849,8 +849,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHepg2NucleolusTotalMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel HepG2 nucleolus total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in HepG2 nucleolus)
+        shortLabel HepG2 nlos tot
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in HepG2 nucleolus)
         subGroups view=MinusClusters cellType=HepG2 localization=nucleolus rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 189,0,157
@@ -859,8 +859,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleolusTotalMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 nucleolus total
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (total in GM12878 nucleolus)
+        shortLabel GM12878 nlos tot
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (Total in GM12878 nucleolus)
         subGroups view=MinusClusters cellType=GM12878 localization=nucleolus rnaExtract=total rep=rep0
         type bigWig 0.040000 4464.319824
         color 153,38,0
@@ -870,7 +870,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVEC cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in HUVEC cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in HUVEC whole cell)
         subGroups view=MinusClusters cellType=HUVEC localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 11331.299805
         origAssembly hg19
@@ -914,7 +914,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG2 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in HepG2 cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in HepG2 whole cell)
         subGroups view=MinusClusters cellType=HepG2 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 7464.879883
         origAssembly hg19
@@ -925,7 +925,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel H1-hESC cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in H1-hESC whole cell)
         subGroups view=MinusClusters cellType=H1hESC localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 13309.480469
         origAssembly hg19
@@ -947,7 +947,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HepG2 cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in HepG2 cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in HepG2 whole cell)
         subGroups view=MinusClusters cellType=HepG2 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 9120.190430
         origAssembly hg19
@@ -969,7 +969,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HUVEC cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in HUVEC cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in HUVEC whole cell)
         subGroups view=MinusClusters cellType=HUVEC localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 12203.730469
         origAssembly hg19
@@ -991,7 +991,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa-S3 cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in HeLa-S3 cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in HeLa-S3 whole cell)
         subGroups view=MinusClusters cellType=HeLaS3 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 13169.519531
         origAssembly hg19
@@ -1013,7 +1013,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in NHEK cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in NHEK whole cell)
         subGroups view=MinusClusters cellType=NHEK localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 28717.580078
         origAssembly hg19
@@ -1035,7 +1035,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel H1-hESC cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in H1-hESC whole cell)
         subGroups view=MinusClusters cellType=H1hESC localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 11162.490234
         origAssembly hg19
@@ -1101,7 +1101,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel HeLa-S3 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in HeLa-S3 cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in HeLa-S3 whole cell)
         subGroups view=MinusClusters cellType=HeLaS3 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 10177.059570
         origAssembly hg19
@@ -1112,7 +1112,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel K562 cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in K562 cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in K562 whole cell)
         subGroups view=MinusClusters cellType=K562 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 18586.400391
         origAssembly hg19
@@ -1123,7 +1123,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel NHEK cell pA+ 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in NHEK cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in NHEK whole cell)
         subGroups view=MinusClusters cellType=NHEK localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 43836.941406
         origAssembly hg19
@@ -1145,7 +1145,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
         shortLabel K562 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in K562 cell)
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in K562 whole cell)
         subGroups view=MinusClusters cellType=K562 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 18315.849609
         origAssembly hg19
@@ -1221,8 +1221,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageMcf7CellPapMinusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel MCF-7 cell pA+ 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in MCF-7 cell)
+        shortLabel MCF7 cell pA+ 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in MCF-7 whole cell)
         subGroups view=MinusClusters cellType=MCF7 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.040000 6428.500000
         origAssembly hg19
@@ -1231,8 +1231,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CellPapMinusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 cell longPolyA 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cell)
+        shortLabel GM12878 cell pA+ 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in GM12878 whole cell)
         subGroups view=MinusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep2
         type bigWig 0.040000 13936.719727
         origAssembly hg19
@@ -1242,8 +1242,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 cytosol longPolyA 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in GM12878 cytosol)
         subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 22328.720703
         origAssembly hg19
@@ -1253,8 +1253,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 nucleus longPolyA 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in GM12878 nucleus)
         subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 5120.069824
         origAssembly hg19
@@ -1264,8 +1264,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 cytosol longPolyA 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (longPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in GM12878 cytosol)
         subGroups view=MinusClusters cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bigWig 0.050000 21908.230469
         origAssembly hg19
@@ -1275,8 +1275,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 nucleus longPolyA 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in GM12878 nucleus)
         subGroups view=MinusClusters cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 6014.189941
         origAssembly hg19
@@ -1286,8 +1286,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CellPapMinusClustersRep1
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel GM12878 cell longPolyA 1
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (longPolyA in GM12878 cell)
+        shortLabel GM12878 cell pA+ 1
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 1 (PolyA+ in GM12878 whole cell)
         subGroups view=MinusClusters cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep1
         type bigWig 0.050000 14935.410156
         origAssembly hg19
@@ -1297,8 +1297,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolPapMinusClustersRep2
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 cytosol longPolyA 2
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Replicate 2 (longPolyA in K562 cytosol)
+        shortLabel K562 cyto pA+ 2
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites Rep 2 (PolyA+ in K562 cytosol)
         subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bigWig 0.060000 18765.929688
         origAssembly hg19
@@ -1308,9 +1308,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel prostate cell longNonPolyA
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in prostate cell)
-        subGroups view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA
+        shortLabel pros cell pA- o
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in pros whole cell)
+        subGroups view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA rep=rep0
         type bedGraph 4
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
@@ -1318,9 +1318,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel K562 cytosol longNonPolyA
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in K562 cytosol)
-        subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+        shortLabel K562 cyto pA-
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in K562 cytosol)
+        subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bedGraph 4
         origAssembly hg18
         color 46,0,184
@@ -1329,9 +1329,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
         release alpha
         parent wgEncodeRikenCageViewMinusClusters off
-        shortLabel H1-hESC cell longNonPolyA
-        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (longNonPolyA in H1-hESC cell)
-        subGroups view=MinusClusters cellType=H1hESC localization=cell rnaExtract=longNonPolyA
+        shortLabel H1-hESC cell pA-
+        longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in H1-hESC whole cell)
+        subGroups view=MinusClusters cellType=H1hESC localization=cell rnaExtract=longNonPolyA rep=rep0
         type bedGraph 4
         origAssembly hg18
         color 0,107,27
@@ -1369,8 +1369,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageGm12878NucleusTotalAl
 #        release alpha
 #        parent wgEncodeRikenCageViewAlignments off
-#        shortLabel GM12878 nucl total Al
-#        longLabel ENCODE RIKEN CAGE Tags (total in GM12878 nucleus)
+#        shortLabel GM12878 nucl tot Al
+#        longLabel ENCODE RIKEN CAGE Tags (Total in GM12878 nucleus)
 #        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=total
 #        type bam
 #        color 153,38,0
@@ -1414,8 +1414,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageHepg2NucleusTotalAl
 #        release alpha
 #        parent wgEncodeRikenCageViewAlignments off
-#        shortLabel HepG2 nucl total Al
-#        longLabel ENCODE RIKEN CAGE Tags (total in HepG2 nucleus)
+#        shortLabel HepG2 nucl tot Al
+#        longLabel ENCODE RIKEN CAGE Tags (Total in HepG2 nucleus)
 #        subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=total
 #        type bam
 #        color 189,0,157
@@ -1426,8 +1426,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562ChromatinTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 chromatin total Al
-        longLabel ENCODE RIKEN CAGE Tags (total in K562 chromatin)
+        shortLabel K562 chrm tot Al
+        longLabel ENCODE RIKEN CAGE Tags (Total in K562 chromatin)
         subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=total rep=rep0
         type bam
         color 46,0,184
@@ -1448,8 +1448,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleolusTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nucleolus total Al
-        longLabel ENCODE RIKEN CAGE Tags (total in K562 nucleolus)
+        shortLabel K562 nlos tot Al
+        longLabel ENCODE RIKEN CAGE Tags (Total in K562 nucleolus)
         subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total rep=rep0
         type bam
         color 46,0,184
@@ -1459,8 +1459,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleoplasmTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nucleoplasm total Al
-        longLabel ENCODE RIKEN CAGE Tags (total in K562 nucleoplasm)
+        shortLabel K562 nplm tot Al
+        longLabel ENCODE RIKEN CAGE Tags (Total in K562 nucleoplasm)
         subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep0
         type bam
         color 46,0,184
@@ -1470,8 +1470,8 @@ superTrack wgEncodeRnaSeqSuper
 #        track wgEncodeRikenCageK562NucleusTotalAl
 #        release alpha
 #        parent wgEncodeRikenCageViewAlignments off
-#        shortLabel K562 nucl total Al
-#        longLabel ENCODE RIKEN CAGE Tags (total in K562 nucleus)
+#        shortLabel K562 nucl tot Al
+#        longLabel ENCODE RIKEN CAGE Tags (Total in K562 nucleus)
 #        subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=total
 #        type bam
 #        color 46,0,184
@@ -1482,7 +1482,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562PolysomeLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 polysome pA- Al
+        shortLabel K562 psom pA- Al
         longLabel ENCODE RIKEN CAGE Tags (PolyA- in K562 polysome)
         subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=longNonPolyA rep=rep0
         type bam
@@ -1515,8 +1515,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHepg2NucleolusTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HepG2 nucleolus total Al
-        longLabel ENCODE RIKEN CAGE Tags (total in HepG2 nucleolus)
+        shortLabel HepG2 nlos tot Al
+        longLabel ENCODE RIKEN CAGE Tags (Total in HepG2 nucleolus)
         subGroups view=Alignments cellType=HepG2 localization=nucleolus rnaExtract=total rep=rep0
         type bam
         color 189,0,157
@@ -1525,8 +1525,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleolusTotalAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 nucleolus total Al
-        longLabel ENCODE RIKEN CAGE Tags (total in GM12878 nucleolus)
+        shortLabel GM12878 nlos tot Al
+        longLabel ENCODE RIKEN CAGE Tags (Total in GM12878 nucleolus)
         subGroups view=Alignments cellType=GM12878 localization=nucleolus rnaExtract=total rep=rep0
         type bam
         color 153,38,0
@@ -1536,7 +1536,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC cell pA+ Al 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HUVEC cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HUVEC whole cell)
         subGroups view=Alignments cellType=HUVEC localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1580,7 +1580,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 cell pA+ Al 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HepG2 cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HepG2 whole cell)
         subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1591,7 +1591,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC cell pA+ Al 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in H1-hESC whole cell)
         subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1613,7 +1613,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HepG2 cell pA+ Al 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HepG2 cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HepG2 whole cell)
         subGroups view=Alignments cellType=HepG2 localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1635,7 +1635,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HUVEC cell pA+ Al 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HUVEC cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HUVEC whole cell)
         subGroups view=Alignments cellType=HUVEC localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1657,7 +1657,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 cell pA+ Al 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HeLa-S3 cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HeLa-S3 whole cell)
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1679,7 +1679,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cell pA+ Al 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in NHEK cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in NHEK whole cell)
         subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1701,7 +1701,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel H1-hESC cell pA+ Al 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in H1-hESC cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in H1-hESC whole cell)
         subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1767,7 +1767,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel HeLa-S3 cell pA+ Al 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HeLa-S3 cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HeLa-S3 whole cell)
         subGroups view=Alignments cellType=HeLaS3 localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1778,7 +1778,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ Al 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in K562 cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in K562 whole cell)
         subGroups view=Alignments cellType=K562 localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1789,7 +1789,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel NHEK cell pA+ Al 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in NHEK cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in NHEK whole cell)
         subGroups view=Alignments cellType=NHEK localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1811,7 +1811,7 @@ superTrack wgEncodeRnaSeqSuper
         release alpha
         parent wgEncodeRikenCageViewAlignments off
         shortLabel K562 cell pA+ Al 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in K562 cell)
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in K562 whole cell)
         subGroups view=Alignments cellType=K562 localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1821,7 +1821,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562NucleusPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 nucleus longPolyA Aln 2
+        shortLabel K562 nucl pA+ Al 2
         longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in K562 nucleus)
         subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=longPolyA rep=rep2
         type bam
@@ -1832,7 +1832,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHepg2CytosolPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HepG2 cytosol longPolyA Aln 1
+        shortLabel HepG2 cyto pA+ Al 1
         longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in HepG2 cytosol)
         subGroups view=Alignments cellType=HepG2 localization=cytosol rnaExtract=longPolyA rep=rep1
         type bam
@@ -1843,7 +1843,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHuvecNucleusPapAlnRep4
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HUVEC nucleus longPolyA Aln 4
+        shortLabel HUVEC nucl pA+ Al 4
         longLabel ENCODE RIKEN CAGE Tags Rep 4 (PolyA+ in HUVEC nucleus)
         subGroups view=Alignments cellType=HUVEC localization=nucleus rnaExtract=longPolyA rep=rep4
         type bam
@@ -1854,7 +1854,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHelas3CytosolPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HeLa-S3 cytosol longPolyA Aln 2
+        shortLabel HeLa-S3 cyto pA+ Al 2
         longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in HeLa-S3 cytosol)
         subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bam
@@ -1865,7 +1865,7 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageHuvecCytosolPapAlnRep4
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel HUVEC cytosol longPolyA Aln 4
+        shortLabel HUVEC cyto pA+ Al 4
         longLabel ENCODE RIKEN CAGE Tags Rep 4 (PolyA+ in HUVEC cytosol)
         subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=longPolyA rep=rep4
         type bam
@@ -1876,8 +1876,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 nucleus longNonPolyA Aln 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longNonPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA- Al 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA- in GM12878 nucleus)
         subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longNonPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1887,8 +1887,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageMcf7CellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel MCF-7 cell longPolyA Aln 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in MCF-7 cell)
+        shortLabel MCF7 cell pA+ Al 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in MCF-7 whole cell)
         subGroups view=Alignments cellType=MCF7 localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1897,8 +1897,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CellPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 cell longPolyA Aln 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (longPolyA in GM12878 cell)
+        shortLabel GM12878 cell pA+ Al 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in GM12878 whole cell)
         subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1908,8 +1908,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 cytosol longPolyA Aln 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ Al 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in GM12878 cytosol)
         subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1919,8 +1919,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 nucleus longPolyA Aln 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (longPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ Al 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in GM12878 nucleus)
         subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1930,8 +1930,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CytosolPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 cytosol longPolyA Aln 2
-        longLabel ENCODE RIKEN CAGE Tags Rep 2 (longPolyA in GM12878 cytosol)
+        shortLabel GM12878 cyto pA+ Al 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in GM12878 cytosol)
         subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1941,8 +1941,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878NucleusPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 nucleus longPolyA Aln 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longPolyA in GM12878 nucleus)
+        shortLabel GM12878 nucl pA+ Al 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in GM12878 nucleus)
         subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1952,8 +1952,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageGm12878CellPapAlnRep1
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel GM12878 cell longPolyA Aln 1
-        longLabel ENCODE RIKEN CAGE Tags Rep 1 (longPolyA in GM12878 cell)
+        shortLabel GM12878 cell pA+ Al 1
+        longLabel ENCODE RIKEN CAGE Tags Rep 1 (PolyA+ in GM12878 whole cell)
         subGroups view=Alignments cellType=GM12878 localization=cell rnaExtract=longPolyA rep=rep1
         type bam
         origAssembly hg19
@@ -1963,8 +1963,8 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolPapAlnRep2
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 cytosol longPolyA Aln 2
-        longLabel ENCODE RIKEN CAGE Tags Replicate 2 (longPolyA in K562 cytosol)
+        shortLabel K562 cyto pA+ Al 2
+        longLabel ENCODE RIKEN CAGE Tags Rep 2 (PolyA+ in K562 cytosol)
         subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA rep=rep2
         type bam
         origAssembly hg19
@@ -1974,9 +1974,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageProstateCellLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel prostate cell longNonPolyA Aln
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in prostate cell)
-        subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longNonPolyA
+        shortLabel pros cell pA- Al
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- in pros whole cell)
+        subGroups view=Alignments cellType=prostate localization=cell rnaExtract=longNonPolyA rep=rep0
         type bam
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
@@ -1984,9 +1984,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageK562CytosolLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel K562 cytosol longNonPolyA Aln
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in K562 cytosol)
-        subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA
+        shortLabel K562 cyto pA- Al
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- in K562 cytosol)
+        subGroups view=Alignments cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep0
         type bam
         origAssembly hg18
         color 46,0,184
@@ -1995,9 +1995,9 @@ superTrack wgEncodeRnaSeqSuper
         track wgEncodeRikenCageH1hescCellLongnonpolyaAln
         release alpha
         parent wgEncodeRikenCageViewAlignments off
-        shortLabel H1-hESC cell longNonPolyA Aln
-        longLabel ENCODE RIKEN CAGE Tags (longNonPolyA in H1-hESC cell)
-        subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=longNonPolyA
+        shortLabel H1-hESC cell pA- Al
+        longLabel ENCODE RIKEN CAGE Tags (PolyA- in H1-hESC whole cell)
+        subGroups view=Alignments cellType=H1hESC localization=cell rnaExtract=longNonPolyA rep=rep0
         type bam
         origAssembly hg18
         color 0,107,27
