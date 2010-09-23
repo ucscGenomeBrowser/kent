@@ -47,3 +47,106 @@ taxId 6279
     time makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
 	-continue=db bruMal1.config.ra > db.log 2>&1
     #	real    0m48.923s
+
+#########################################################################
+# REPEATMASKER (DONE - 2010-09-21 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/bruMal1/bed/repeatMasker
+    cd /hive/data/genomes/bruMal1/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=pk \
+	-buildDir=`pwd` bruMal1 > do.log 2>&1 &
+    #	real    74m4.437s
+
+    #	from the do.log:
+    #	RepeatMasker version development-$Id:
+    #	RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp
+    #	CC   RELEASE 20090604;                                            *
+
+    cat faSize.rmsk.txt 
+    #	95828100 bases (6592564 N's 89235536 real
+    #	79152210 upper 10083326 lower) in 27211 sequences in 1 files
+    #	%10.52 masked total, %11.30 masked real
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2010-09-21 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/bruMal1/bed/simpleRepeat
+    cd /hive/data/genomes/bruMal1/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -smallClusterHub=memk \
+	-buildDir=`pwd` bruMal1 > do.log 2>&1 &
+    #	real    96m47.195s
+    #	something went haywire with the featureBits measurement
+    #	too many sequences in chromInfo makes featureBits take a long time.
+
+#########################################################################
+# run window masker (DONE - 2010-09-22 - Hiram)
+    mkdir /hive/data/genomes/bruMal1/bed/windowMasker
+    cd /hive/data/genomes/bruMal1/bed/windowMasker
+    time doWindowMasker.pl -verbose=2 -workhorse=kolossus \
+	-buildDir=`pwd` bruMal1 > do.log 2>&1 &
+    #	real    1m59.029s
+
+    twoBitToFa bruMal1.wmsk.sdust.2bit stdout | faSize stdin
+    #	95828100 bases (6592564 N's 89235536 real 57075076 upper
+    #	32160460 lower) in 27211 sequences in 1 files
+    #	%33.56 masked total, %36.04 masked real
+
+    #	load this initial data to get ready to clean it
+    hgLoadBed bruMal1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 650400 elements of size 3
+    featureBits bruMal1 windowmaskerSdust
+    #	38704468 bases of 91681645 (42.216%) in intersection
+
+    #	eliminate the gaps from the masking
+    time featureBits bruMal1 -not gap -bed=notGap.bed
+    #	89235536 bases of 89235536 (100.000%) in intersection
+    #	real    0m14.056s
+    time nice -n +19 featureBits bruMal1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	32160460 bases of 89235536 (36.040%) in intersection
+    #	real    8m44.312s
+
+    #	reload track to get it clean
+    hgLoadBed bruMal1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 659259 elements of size 3
+    time featureBits bruMal1 windowmaskerSdust \
+	> fb.bruMal1.cleanWMask.txt 2>&1 &
+    #	real    0m17.374s
+    cat fb.bruMal1.cleanWMask.txt 
+    #	32160460 bases of 89235536 (36.040%) in intersection
+
+    cd /hive/data/genomes/bruMal1
+    #	mask the sequence with this clean mask
+    zcat bed/windowMasker/cleanWMask.bed.gz \
+	| twoBitMask bruMal1.unmasked.2bit stdin \
+	    -type=.bed bruMal1.2bit
+    twoBitToFa bruMal1.2bit stdout | faSize stdin \
+        > bruMal1.faSize.txt
+    cat bruMal1.faSize.txt
+    #	95828100 bases (6592564 N's 89235536 real 57075076 upper
+    #	32160460 lower) in 27211 sequences in 1 files
+    #	%33.56 masked total, %36.04 masked real
+
+    ln -s `pwd`/bruMal1.2bit /gbdb/bruMal1/bruMal1.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2010-09-22 - Hiram)
+    # numerator is bruMal1 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases as reported by featureBits,
+    #	featureBits hg19 gap
+    # 1024 is threshold used for human -repMatch:
+    calc \( 89235536 / 2897310462 \) \* 1024
+    #	( 89235536 / 2897310462 ) * 1024 = 31.538625
+    # 31 is way too small, use 100 to keep the number of overused
+    #	11-mers to a smaller number
+
+    cd /hive/data/genomes/bruMal1
+    blat bruMal1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=bruMal1.11.ooc -repMatch=100
+    #	Wrote 7849 overused 11-mers to bruMal1.11.ooc
+
+    mkdir /hive/data/staging/data/bruMal1
+    cp -p bruMal1.2bit chrom.sizes bruMal1.11.ooc \
+	/hive/data/staging/data/bruMal1
+
+########################################################################
