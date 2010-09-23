@@ -6735,9 +6735,19 @@ enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *
 // returns visibility limited by ancestry (or subtrack vis override)
 {
 enum trackVisibility vis = tdb->visibility;
-if (cart)
+if (cart != NULL)
     {
-    char *cartVis = cartOptionalString(cart, tdb->track);
+    char *cartVis = NULL;
+    if (tdbIsCompositeView(tdb))
+        {
+        char *view = trackDbLocalSetting(tdb,"view");
+        assert(view != NULL);
+        char setting[512];
+        safef(setting,sizeof(setting),"%s.%s.vis",tdb->parent->track,view);
+        cartVis = cartOptionalString(cart, setting);
+        }
+    else
+        cartVis = cartOptionalString(cart, tdb->track);
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
