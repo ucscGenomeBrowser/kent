@@ -26,7 +26,7 @@ dafVersion        2.0
 # Lab and general info
 grant             Stam
 lab               UW-Mouse
-dataType          DNase-seq
+dataType          DnaseSeq 
 compositeSuffix   UwDnase
 group             regulation
 variables         cell,strain,sex,age
