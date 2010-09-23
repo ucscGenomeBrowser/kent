@@ -1997,20 +1997,19 @@ term PBDE
 tag PBDE
 type Cell Line
 organism human
-#description (human-readable description of cell type, for cell type cellTypes.html)
-#tissue (general tissue type, for categorizing cell types)
+description Human peripheral blood-derived erythroblasts
+tissue Blood
 #vendorName (name of vendor or lab that provides these cells)
 #vendorId (the ID of the cell type in the vendor's catalog)
 #orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
 #karyotype (optional human-readable karyotype, for .html page)
 #lineage (optional human-readable source of cell lines, e.g. 18 year old male)
-#termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
-#termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
+termId BTO:0000574 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000574
 #color (specifies color code for track data of this cell type, rgb values)
-#sex (M, F, B, or U.  If "F", then the track data shouldn't contain chrY)
-#tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
-#protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
-#category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
 term PFSK-1
 tag PFSK1
