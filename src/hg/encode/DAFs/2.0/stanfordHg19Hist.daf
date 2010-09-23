@@ -27,7 +27,7 @@ dafVersion        2.0
 grant             Snyder
 lab               UCD
 # lab can be one of the following UCD, Yale, Stanford, Harvard
-dataType          ChIPseq
+dataType          ChipSeq
 compositeSuffix   SydhHistone
 group             regulation
 variables         cell, antibody, treatment, control

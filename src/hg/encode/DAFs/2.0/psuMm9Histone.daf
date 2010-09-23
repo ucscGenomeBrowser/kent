@@ -25,7 +25,7 @@
 grant             Haridson
 lab               PSU-Mouse
 #Alternative lab: Caltech-Mouse; for (H3K27ac antibodies)
-dataType          ChIP-seq
+dataType          ChipSeq 
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   PsuHistone
 assembly          mm9
