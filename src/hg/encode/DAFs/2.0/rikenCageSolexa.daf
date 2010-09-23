@@ -24,7 +24,7 @@ dafVersion        2.0
 # Lab and general info
 grant             Gingeras
 lab               RIKEN
-dataType          CAGE
+dataType          Cage
 compositeSuffix   RikenCage
 group             expression
 variables         cell, localization, rnaExtract
