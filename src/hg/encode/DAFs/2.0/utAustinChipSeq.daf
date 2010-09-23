@@ -22,7 +22,7 @@
 # Lab and general info
 grant            Crawford
 lab              UT-A
-dataType         ChIP-seq
+dataType         ChipSeq 
 compositeSuffix  OpenChromChip
 group            regulation
 variables        cell, antibody

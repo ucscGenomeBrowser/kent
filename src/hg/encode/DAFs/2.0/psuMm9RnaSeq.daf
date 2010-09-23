@@ -10,7 +10,7 @@ dafVersion        2.0
 # Lab and general info
 grant             Hardison
 lab               Caltech-Mouse
-dataType          RNA-seq
+dataType          RnaSeq 
 compositeSuffix   PsuRnaSeq
 group             expression
 variables         cell,strain,readType,mapAlgorithm,insertLength

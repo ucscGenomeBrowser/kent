@@ -3,17 +3,19 @@
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
 
-dafVersion        2.0
+# The header for the related .ddf should look like this:
+# files   view    cell  origAssembly accession
 
 # Lab and general info
 grant             Stam
-lab               UW
-dataType          ExonArray
-compositeSuffix   UwExonArray
+lab               Uw
+dataType          AffyExonArray
+compositeSuffix   UwAffyExonArray
 group             expression
 variables         cell
 assembly          hg19
-
+dafVersion        2.0
+noAutoCreate      yes
 validationSettings validateFiles.broadPeak:mmCheckOneInN=10000
 
 

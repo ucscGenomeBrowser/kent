@@ -22,7 +22,11 @@ cgi:: compile
 	fi
 	rm -f ${CGI_BIN}-${USER}/loader/$A
 	mv $A${EXE} ${CGI_BIN}-${USER}/loader/$A
-	cp ${SQL_FILES} ${CGI_BIN}-${USER}/loader
+	for F in ${SQL_FILES}; do \
+	    B=`basename $$F` ; \
+	    rm -f ${DESTDIR}${CGI_BIN}-${USER}/loader/$$B ; \
+	    cp -p $$F ${DESTDIR}${CGI_BIN}-${USER}/loader/$$B ; \
+	done
 
 alpha:: strip
 	@if [ ! -d "${CGI_BIN}/loader" ]; then \
@@ -30,7 +34,11 @@ alpha:: strip
 	fi
 	rm -f ${CGI_BIN}/loader/$A
 	mv $A${EXE} ${CGI_BIN}/loader/$A
-	cp ${SQL_FILES} ${CGI_BIN}/loader
+	for F in ${SQL_FILES}; do \
+	    B=`basename $$F` ; \
+	    rm -f ${DESTDIR}${CGI_BIN}/loader/$$B ; \
+	    cp -p $$F ${DESTDIR}${CGI_BIN}/loader/$$B ; \
+	done
 
 beta:: strip
 	@if [ ! -d "${CGI_BIN}-beta/loader" ]; then \
@@ -38,7 +46,11 @@ beta:: strip
 	fi
 	rm -f ${CGI_BIN}-beta/loader/$A
 	mv $A${EXE} ${CGI_BIN}-beta/loader/$A
-	cp ${SQL_FILES} ${CGI_BIN}-beta/loader
+	for F in ${SQL_FILES}; do \
+	    B=`basename $$F` ; \
+	    rm -f ${DESTDIR}${CGI_BIN}-beta/loader/$$B ; \
+	    cp -p $$F ${DESTDIR}${CGI_BIN}-beta/loader/$$B ; \
+	done
 
 strip::  compile
 	${STRIP} $A${EXE}
@@ -51,7 +63,11 @@ install::  strip
 	fi
 	rm -f ${DESTDIR}${CGI_BIN}/loader/$A
 	mv $A${EXE} ${DESTDIR}${CGI_BIN}/loader/$A
-	cp ${SQL_FILES} ${DESTDIR}${CGI_BIN}/loader
+	for F in ${SQL_FILES}; do \
+	    B=`basename $$F` ; \
+	    rm -f ${DESTDIR}${CGI_BIN}/loader/$$B ; \
+	    cp -p $$F ${DESTDIR}${CGI_BIN}/loader/$$B ; \
+	done
 
 debug:: $O
 	${CC} $O ${MYLIBS} ${L}
@@ -65,4 +81,3 @@ test:
 
 test_verbose:
 	cd tests && ./RunTest.sh -verbose
-
