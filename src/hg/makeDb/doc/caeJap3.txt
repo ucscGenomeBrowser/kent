@@ -154,3 +154,21 @@ taxId 281687
 	/hive/data/staging/data/caeJap3
 
 #########################################################################
+# SWAP LASTZ ce9 (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzCaeJap1.2010-09-20
+    cat fb.ce9.chainCaeJap1Link.txt
+    #	26876526 bases of 100286004 (26.800%) in intersection
+
+    #	swap, this is also in caeJap1.txt
+    mkdir /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzCaeJap1.2010-09-20/DEF \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    1m18.062s
+    cat fb.caeJap1.chainCe9Link.txt
+    #	26200691 bases of 129347181 (20.256%) in intersection
+
+#########################################################################
