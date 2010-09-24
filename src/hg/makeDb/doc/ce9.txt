@@ -1963,3 +1963,91 @@ popd > /dev/null
     #	real    0m11.928s
 
 ##############################################################################
+# 10-way Gap annotation (DONE - 2010-09-24 - Hiram)
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/anno
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno
+    mkdir maf run
+
+    #	most of these will already exist from previous multiple alignments
+    #	remove the echo from in front of the twoBitInfo command to get them
+    #	to run if this loop appears to be correct
+    for DB in `cat ../species.list`
+do
+    CDIR="/hive/data/genomes/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `sed -e "s/ce9 //" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    #	the annotation step requires large memory, run on memk nodes
+    ssh memk
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno/run
+    ls ../../maf | sed -e "s/.maf//" > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/ce9/ce9.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    ssh pk
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno/run
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         44s       0.73m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    42s       0.71m     0.01h    0.00d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:            26s       0.43m     0.01h    0.00d
+
+    ssh hgwdev
+    rm -fr /gbdb/ce9/multiz10way/maf
+    mkdir /gbdb/ce9/multiz10way/maf
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno/maf
+    ln -s `pwd`/*.maf /gbdb/ce9/multiz10way/maf/
+    #	by loading this into the table multiz10way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/ce9/multiz10way/maf ce9 multiz10way
+    #	Loaded 352790 mafs in 7 files from /gbdb/ce9/multiz10way/maf
+    #	real    0m38.998s
+
+    time nice -n +19 cat /gbdb/ce9/multiz10way/maf/*.maf \
+	| hgLoadMafSummary ce9 -minSize=10000 -verbose=2 \
+		-mergeGap=500 -maxSize=50000  multiz10waySummary stdin
+    #	Created 116808 summary blocks from 980666 components
+    #	and 352790 mafs from stdin
+    #	real    0m36.310s
+
+##############################################################################
