@@ -771,6 +771,18 @@ _EOF_
   }
 
   $bossScript->add(<<_EOF_
+# verify gold and gap tables cover everything
+featureBits -or -countGaps $db gold gap >&fb.$db.gold.gap.txt
+cat fb.$db.gold.gap.txt
+set allCovered = `awk '{print \$4-\$1}' fb.$db.gold.gap.txt`
+if (\$allCovered != 0) then
+    echo "ERROR: gold and gap tables do not cover whole genome"
+    exit 255
+endif
+_EOF_
+      );
+
+  $bossScript->add(<<_EOF_
 
 # Load gc5base
 mkdir -p $HgAutomate::gbdb/$db/bbi

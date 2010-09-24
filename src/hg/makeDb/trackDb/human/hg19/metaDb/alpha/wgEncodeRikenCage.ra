@@ -1,8 +1,30 @@
+metaObject wgEncodeRikenCageGm12878CellPapAlnRep1
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+tableName wgEncodeRikenCageGm12878CellPapAlnRep1
+view Alignments
+
 metaObject wgEncodeRikenCageGm12878CellPapAlnRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -20,11 +42,33 @@ subId 2394
 tableName wgEncodeRikenCageGm12878CellPapAlnRep2
 view Alignments
 
+metaObject wgEncodeRikenCageGm12878CellPapMinusClustersRep1
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapMinusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+tableName wgEncodeRikenCageGm12878CellPapMinusClustersRep1
+view MinusClusters
+
 metaObject wgEncodeRikenCageGm12878CellPapMinusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -42,11 +86,33 @@ subId 2394
 tableName wgEncodeRikenCageGm12878CellPapMinusClustersRep2
 view MinusClusters
 
+metaObject wgEncodeRikenCageGm12878CellPapPlusClustersRep1
+objType table
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapPlusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+tableName wgEncodeRikenCageGm12878CellPapPlusClustersRep1
+view PlusClusters
+
 metaObject wgEncodeRikenCageGm12878CellPapPlusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -64,11 +130,33 @@ subId 2394
 tableName wgEncodeRikenCageGm12878CellPapPlusClustersRep2
 view PlusClusters
 
+metaObject wgEncodeRikenCageGm12878CellPapRawDataRep1
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageGm12878CellPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId J72
+labProtocolId 003WC+cage
+localization cell
+origAssembly hg19
+parentTable wgEncodeRikenCageGm12878CellPapRawSignalRep1
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2389
+view RawData
+
 metaObject wgEncodeRikenCageGm12878CellPapRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -92,14 +180,16 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-03-09
+dateUnrestricted 2009-12-09
 fileIndex wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1797
@@ -112,13 +202,15 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-03-09
+dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1797
@@ -131,13 +223,15 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-03-09
+dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1797
@@ -148,7 +242,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapAlnRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -170,7 +264,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapAlnRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -192,7 +286,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapMinusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -214,7 +308,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapMinusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -236,7 +330,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapPlusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -258,7 +352,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapPlusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -280,7 +374,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -302,7 +396,7 @@ metaObject wgEncodeRikenCageGm12878CytosolPapRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -326,12 +420,14 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
+dateReSubmitted 2010-08-23
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageGm12878NucleolusTotalAln.bam
 grant Gingeras
 lab RIKEN
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 2125
@@ -344,12 +440,14 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
+dateReSubmitted 2010-08-23
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageGm12878NucleolusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 2125
@@ -362,12 +460,14 @@ cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
+dateReSubmitted 2010-08-23
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageGm12878NucleolusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 2125
@@ -462,7 +562,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapAlnRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -484,7 +584,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapAlnRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -506,7 +606,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapMinusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -528,7 +628,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapMinusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -550,7 +650,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapPlusClustersRep1
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -572,7 +672,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapPlusClustersRep2
 objType table
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -594,7 +694,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapRawDataRep1
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -616,7 +716,7 @@ metaObject wgEncodeRikenCageGm12878NucleusPapRawDataRep2
 objType file
 cell GM12878
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -634,62 +734,67 @@ rnaExtract longPolyA
 subId 2392
 view RawData
 
-metaObject wgEncodeRikenCageGm12878NucleusTotalAln
+metaObject wgEncodeRikenCageH1hescCellLongnonpolyaAln
 objType table
-cell GM12878
+cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileIndex wgEncodeRikenCageGm12878NucleusTotalAln.bam.bai
-fileName wgEncodeRikenCageGm12878NucleusTotalAln.bam
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
-labVersion Delve version 0.9
-localization nucleus
+localization cell
+origAssembly hg18
 project wgEncode
-rnaExtract total
-subId 1798
-tableName wgEncodeRikenCageGm12878NucleusTotalAln
+rnaExtract longNonPolyA
+softwareVersion Delve version 0.9
+subId 1799
+tableName wgEncodeRikenCageH1hescCellLongnonpolyaAln
 view Alignments
 
-metaObject wgEncodeRikenCageGm12878NucleusTotalMinusClusters
+metaObject wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
 objType table
-cell GM12878
+cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageGm12878NucleusTotalMinusClusters.bigWig
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bedGraph4.gz
 grant Gingeras
 lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleus
+localization cell
+origAssembly hg18
 project wgEncode
-rnaExtract total
-subId 1798
-tableName wgEncodeRikenCageGm12878NucleusTotalMinusClusters
+rnaExtract longNonPolyA
+softwareVersion bedtools v2.7.1
+subId 1799
+tableName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters
 view MinusClusters
 
-metaObject wgEncodeRikenCageGm12878NucleusTotalPlusClusters
+metaObject wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
 objType table
-cell GM12878
+cell H1-hESC
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageGm12878NucleusTotalPlusClusters.bigWig
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bedGraph4.gz
 grant Gingeras
 lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleus
+localization cell
+origAssembly hg18
 project wgEncode
-rnaExtract total
-subId 1798
-tableName wgEncodeRikenCageGm12878NucleusTotalPlusClusters
+rnaExtract longNonPolyA
+softwareVersion bedtools v2.7.1
+subId 1799
+tableName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
 view PlusClusters
 
 metaObject wgEncodeRikenCageH1hescCellPapAlnRep1
@@ -867,64 +972,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2370
 view RawData
-
-metaObject wgEncodeRikenCageH1hescCellTotalAln
-objType table
-cell H1-hESC
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileIndex wgEncodeRikenCageH1hescCellTotalAln.bam.bai
-fileName wgEncodeRikenCageH1hescCellTotalAln.bam
-grant Gingeras
-lab RIKEN
-labVersion Delve version 0.9
-localization cell
-project wgEncode
-rnaExtract total
-subId 1799
-tableName wgEncodeRikenCageH1hescCellTotalAln
-view Alignments
-
-metaObject wgEncodeRikenCageH1hescCellTotalMinusClusters
-objType table
-cell H1-hESC
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageH1hescCellTotalMinusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization cell
-project wgEncode
-rnaExtract total
-subId 1799
-tableName wgEncodeRikenCageH1hescCellTotalMinusClusters
-view MinusClusters
-
-metaObject wgEncodeRikenCageH1hescCellTotalPlusClusters
-objType table
-cell H1-hESC
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageH1hescCellTotalPlusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization cell
-project wgEncode
-rnaExtract total
-subId 1799
-tableName wgEncodeRikenCageH1hescCellTotalPlusClusters
-view PlusClusters
 
 metaObject wgEncodeRikenCageH1hescCytosolPapAlnRep2
 objType table
@@ -1812,14 +1859,16 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileIndex wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1801
@@ -1832,13 +1881,15 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1801
@@ -1851,13 +1902,15 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1801
@@ -2046,12 +2099,14 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
+dateReSubmitted 2010-08-23
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2NucleolusTotalAln.bam
 grant Gingeras
 lab RIKEN
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 2124
@@ -2064,12 +2119,14 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
+dateReSubmitted 2010-08-23
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2NucleolusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 2124
@@ -2082,12 +2139,14 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-23
-dateUnrestricted 2011-05-23
+dateReSubmitted 2010-08-23
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2NucleolusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 2124
@@ -2100,14 +2159,16 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileIndex wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1802
@@ -2120,13 +2181,15 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1802
@@ -2139,13 +2202,15 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1802
@@ -2334,7 +2399,7 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateReSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeRikenCageHepg2NucleusTotalAln.bam.bai
 fileName wgEncodeRikenCageHepg2NucleusTotalAln.bam
@@ -2342,6 +2407,7 @@ grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1803
@@ -2354,13 +2420,14 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateReSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeRikenCageHepg2NucleusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1803
@@ -2373,13 +2440,14 @@ cell HepG2
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateReSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeRikenCageHepg2NucleusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1803
@@ -2568,14 +2636,16 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileIndex wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1800
@@ -2588,13 +2658,15 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1800
@@ -2607,13 +2679,15 @@ cell HUVEC
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-13
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1800
@@ -3154,14 +3228,16 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileIndex wgEncodeRikenCageK562ChromatinTotalAln.bam.bai
 fileName wgEncodeRikenCageK562ChromatinTotalAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1804
@@ -3174,13 +3250,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562ChromatinTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1804
@@ -3193,17 +3271,82 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562ChromatinTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization chromatin
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalPlusClusters
+view PlusClusters
+
+metaObject wgEncodeRikenCageK562CytosolLongnonpolyaAln
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaAln.bam
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+project wgEncode
+rnaExtract longNonPolyA
+softwareVersion bowtie version 0.12.5
+subId 1805
+tableName wgEncodeRikenCageK562CytosolLongnonpolyaAln
+view Alignments
+
+metaObject wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters.bedGraph4.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+project wgEncode
+rnaExtract longNonPolyA
+softwareVersion bedtools v2.7.1
+subId 1805
+tableName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters
+view MinusClusters
+
+metaObject wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters.bedGraph4.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+project wgEncode
+rnaExtract longNonPolyA
+softwareVersion bedtools v2.7.1
+subId 1805
+tableName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
 view PlusClusters
 
 metaObject wgEncodeRikenCageK562CytosolPapAln
@@ -3212,18 +3355,42 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
 fileIndex wgEncodeRikenCageK562CytosolPapAln.bam.bai
 fileName wgEncodeRikenCageK562CytosolPapAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 1806
 tableName wgEncodeRikenCageK562CytosolPapAln
+view Alignments
+
+metaObject wgEncodeRikenCageK562CytosolPapAlnRep1
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageK562CytosolPapAlnRep1.bam
+grant Gingeras
+lab RIKEN
+labExpId J82
+labProtocolId 001C+cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2371
+tableName wgEncodeRikenCageK562CytosolPapAlnRep1
 view Alignments
 
 metaObject wgEncodeRikenCageK562CytosolPapAlnRep2
@@ -3254,17 +3421,41 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
 fileName wgEncodeRikenCageK562CytosolPapMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 1806
 tableName wgEncodeRikenCageK562CytosolPapMinusClusters
+view MinusClusters
+
+metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep1
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageK562CytosolPapMinusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J82
+labProtocolId 001C+cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2371
+tableName wgEncodeRikenCageK562CytosolPapMinusClustersRep1
 view MinusClusters
 
 metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep2
@@ -3295,17 +3486,41 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-04
+dateUnrestricted 2009-11-09
 fileName wgEncodeRikenCageK562CytosolPapPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longPolyA
 subId 1806
 tableName wgEncodeRikenCageK562CytosolPapPlusClusters
+view PlusClusters
+
+metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep1
+objType table
+cell K562
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageK562CytosolPapPlusClustersRep1.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J82
+labProtocolId 001C+cage
+localization cytosol
+origAssembly hg19
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2371
+tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep1
 view PlusClusters
 
 metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep2
@@ -3330,6 +3545,28 @@ subId 2383
 tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep2
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562CytosolPapRawDataRep1
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageK562CytosolPapRawDataRep1.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId J82
+labProtocolId 001C+cage
+localization cytosol
+origAssembly hg19
+parentTable wgEncodeRikenCageK562CytosolPapRawSignalRep1
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2371
+view RawData
+
 metaObject wgEncodeRikenCageK562CytosolPapRawDataRep2
 objType file
 cell K562
@@ -3352,78 +3589,22 @@ rnaExtract longPolyA
 subId 2383
 view RawData
 
-metaObject wgEncodeRikenCageK562CytosolTotalAln
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileIndex wgEncodeRikenCageK562CytosolTotalAln.bam.bai
-fileName wgEncodeRikenCageK562CytosolTotalAln.bam
-grant Gingeras
-lab RIKEN
-labVersion bowtie version 0.12.5
-localization cytosol
-project wgEncode
-rnaExtract total
-subId 1805
-tableName wgEncodeRikenCageK562CytosolTotalAln
-view Alignments
-
-metaObject wgEncodeRikenCageK562CytosolTotalMinusClusters
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562CytosolTotalMinusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization cytosol
-project wgEncode
-rnaExtract total
-subId 1805
-tableName wgEncodeRikenCageK562CytosolTotalMinusClusters
-view MinusClusters
-
-metaObject wgEncodeRikenCageK562CytosolTotalPlusClusters
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562CytosolTotalPlusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization cytosol
-project wgEncode
-rnaExtract total
-subId 1805
-tableName wgEncodeRikenCageK562CytosolTotalPlusClusters
-view PlusClusters
-
 metaObject wgEncodeRikenCageK562NucleolusTotalAln
 objType table
 cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileIndex wgEncodeRikenCageK562NucleolusTotalAln.bam.bai
 fileName wgEncodeRikenCageK562NucleolusTotalAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1807
@@ -3436,13 +3617,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562NucleolusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1807
@@ -3455,13 +3638,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562NucleolusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleolus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1807
@@ -3474,14 +3659,16 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileIndex wgEncodeRikenCageK562NucleoplasmTotalAln.bam.bai
 fileName wgEncodeRikenCageK562NucleoplasmTotalAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1808
@@ -3494,13 +3681,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562NucleoplasmTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1808
@@ -3513,13 +3702,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562NucleoplasmTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1808
@@ -3532,12 +3723,14 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-26
-dateUnrestricted 2011-05-26
+dateReSubmitted 2010-08-26
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 2127
@@ -3550,12 +3743,14 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-26
-dateUnrestricted 2011-05-26
+dateReSubmitted 2010-08-26
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 2127
@@ -3568,12 +3763,14 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-26
-dateUnrestricted 2011-05-26
+dateReSubmitted 2010-08-26
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 2127
@@ -3762,7 +3959,7 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateReSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeRikenCageK562NucleusTotalAln.bam.bai
 fileName wgEncodeRikenCageK562NucleusTotalAln.bam
@@ -3770,6 +3967,7 @@ grant Gingeras
 lab RIKEN
 labVersion bowtie version 0.12.5
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1809
@@ -3782,13 +3980,14 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateReSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeRikenCageK562NucleusTotalMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1809
@@ -3801,13 +4000,14 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
+dateReSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeRikenCageK562NucleusTotalPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract total
 subId 1809
@@ -3820,14 +4020,16 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileIndex wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1810
@@ -3840,13 +4042,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1810
@@ -3859,13 +4063,15 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2009-02-19
+dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization polysome
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1810
@@ -3982,6 +4188,28 @@ subId 2372
 tableName wgEncodeRikenCageNhekCellPapAlnRep1
 view Alignments
 
+metaObject wgEncodeRikenCageNhekCellPapAlnRep2
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageNhekCellPapAlnRep2.bam
+grant Gingeras
+lab RIKEN
+labExpId J77
+labProtocolId 008WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 2361
+tableName wgEncodeRikenCageNhekCellPapAlnRep2
+view Alignments
+
 metaObject wgEncodeRikenCageNhekCellPapMinusClustersRep1
 objType table
 cell NHEK
@@ -4002,6 +4230,28 @@ replicate 1
 rnaExtract longPolyA
 subId 2372
 tableName wgEncodeRikenCageNhekCellPapMinusClustersRep1
+view MinusClusters
+
+metaObject wgEncodeRikenCageNhekCellPapMinusClustersRep2
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageNhekCellPapMinusClustersRep2.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J77
+labProtocolId 008WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 2361
+tableName wgEncodeRikenCageNhekCellPapMinusClustersRep2
 view MinusClusters
 
 metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep1
@@ -4026,6 +4276,28 @@ subId 2372
 tableName wgEncodeRikenCageNhekCellPapPlusClustersRep1
 view PlusClusters
 
+metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep2
+objType table
+cell NHEK
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageNhekCellPapPlusClustersRep2.bigWig
+grant Gingeras
+lab RIKEN
+labExpId J77
+labProtocolId 008WC+cage
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 2361
+tableName wgEncodeRikenCageNhekCellPapPlusClustersRep2
+view PlusClusters
+
 metaObject wgEncodeRikenCageNhekCellPapRawDataRep1
 objType file
 cell NHEK
@@ -4048,20 +4320,44 @@ rnaExtract longPolyA
 subId 2372
 view RawData
 
+metaObject wgEncodeRikenCageNhekCellPapRawDataRep2
+objType file
+cell NHEK
+composite wgEncodeRikenCage
+dataType CAGE
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeRikenCageNhekCellPapRawDataRep2.fastq.gz
+grant Gingeras
+lab RIKEN
+labExpId J77
+labProtocolId 008WC+cage
+localization cell
+origAssembly hg19
+parentTable wgEncodeRikenCageNhekCellPapRawSignalRep2
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 2361
+view RawData
+
 metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaAln
 objType table
 cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileIndex wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1811
@@ -4074,13 +4370,15 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1811
@@ -4093,13 +4391,15 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization cytosol
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1811
@@ -4200,14 +4500,16 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileIndex wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam.bai
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
 labVersion Delve version 0.9
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1812
@@ -4220,13 +4522,15 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1812
@@ -4239,13 +4543,15 @@ cell NHEK
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
+dateReSubmitted 2010-06-21
+dateSubmitted 2010-01-14
+dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 labVersion bedtools v2.7.1
 localization nucleus
+origAssembly hg18
 project wgEncode
 rnaExtract longNonPolyA
 subId 1812
@@ -4340,62 +4646,67 @@ rnaExtract longPolyA
 subId 2382
 view RawData
 
-metaObject wgEncodeRikenCageProstateCellTotalAln
+metaObject wgEncodeRikenCageProstateCellLongnonpolyaAln
 objType table
 cell prostate
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileIndex wgEncodeRikenCageProstateCellTotalAln.bam.bai
-fileName wgEncodeRikenCageProstateCellTotalAln.bam
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageProstateCellLongnonpolyaAln.bam
 grant Gingeras
 lab RIKEN
-labVersion Delve version 0.9
 localization cell
+origAssembly hg18
 project wgEncode
-rnaExtract total
+rnaExtract longNonPolyA
+softwareVersion Delve version 0.9
 subId 1813
-tableName wgEncodeRikenCageProstateCellTotalAln
+tableName wgEncodeRikenCageProstateCellLongnonpolyaAln
 view Alignments
 
-metaObject wgEncodeRikenCageProstateCellTotalMinusClusters
+metaObject wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
 objType table
 cell prostate
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageProstateCellTotalMinusClusters.bigWig
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters.bedGraph4.gz
 grant Gingeras
 lab RIKEN
-labVersion bedtools v2.7.1
 localization cell
+origAssembly hg18
 project wgEncode
-rnaExtract total
+rnaExtract longNonPolyA
+softwareVersion bedtools v2.7.1
 subId 1813
-tableName wgEncodeRikenCageProstateCellTotalMinusClusters
+tableName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters
 view MinusClusters
 
-metaObject wgEncodeRikenCageProstateCellTotalPlusClusters
+metaObject wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
 objType table
 cell prostate
 composite wgEncodeRikenCage
 dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageProstateCellTotalPlusClusters.bigWig
+dataVersion post ENCODE June 2010 Freeze
+dateReSubmitted 2010-09-22
+dateSubmitted 2008-12-09
+dateUnrestricted 2009-09-09
+fileName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bedGraph4.gz
 grant Gingeras
 lab RIKEN
-labVersion bedtools v2.7.1
 localization cell
+origAssembly hg18
 project wgEncode
-rnaExtract total
+rnaExtract longNonPolyA
+softwareVersion bedtools v2.7.1
 subId 1813
-tableName wgEncodeRikenCageProstateCellTotalPlusClusters
+tableName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
 view PlusClusters
 
-# MAGIC: 1363823312
+# MAGIC: 1270831732

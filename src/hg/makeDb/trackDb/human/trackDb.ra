@@ -2293,7 +2293,9 @@ type bed 8 +
 urlLabel Laboratoire de Biologie Mol&#233;culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
-url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+#url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+
 
 track wgRna
 shortLabel sno/miRNA
@@ -2303,10 +2305,12 @@ priority 63.6
 visibility hide
 color 200,80,0
 type bed 8 +
+noScoreFilter .
 urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
-url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+#url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track affyHuEx1
