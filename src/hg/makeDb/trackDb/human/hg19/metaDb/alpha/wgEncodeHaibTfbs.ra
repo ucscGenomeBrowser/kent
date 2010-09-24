@@ -9739,6 +9739,100 @@ tableName wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
+metaObject wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1
+objType file
+antibody BCL3
+cell K562
+composite wgEncodeHaibTfbs
+controlId SL2455
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1196
+parentTable wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+subId 2213
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2
+objType file
+antibody BCL3
+cell K562
+composite wgEncodeHaibTfbs
+controlId SL2455
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2.bam
+grant Myers
+lab HudsonAlpha
+labExpId SL1511
+parentTable wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+subId 2213
+treatment None
+view Alignments
+
+metaObject wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
+objType table
+antibody BCL3
+cell K562
+composite wgEncodeHaibTfbs
+controlId SL2455
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1196
+project wgEncode
+protocol PCR1x
+replicate 1
+setType exp
+softwareVersion MACS
+subId 2213
+tableName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
+treatment None
+view Peaks
+
+metaObject wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
+objType table
+antibody BCL3
+cell K562
+composite wgEncodeHaibTfbs
+controlId SL2455
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-21
+dateUnrestricted 2011-06-21
+fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2.broadPeak.gz
+grant Myers
+lab HudsonAlpha
+labExpId SL1511
+project wgEncode
+protocol PCR1x
+replicate 2
+setType exp
+softwareVersion MACS
+subId 2213
+tableName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
+treatment None
+view Peaks
+
 metaObject wgEncodeHaibTfbsK562ControlPcr1xAlnRep1
 objType file
 antibody Control
@@ -10995,4 +11089,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: -477409657
+# MAGIC: -949288779
