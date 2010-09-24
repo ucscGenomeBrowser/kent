@@ -31,6 +31,9 @@ void checkMetaTables(struct mdbObj *mdbObj, char *database)
 {
 struct sqlConnection *conn = sqlConnect(database);
 
+verbose(1, "----------------------------------------------\n");
+verbose(1, "Checking that tables specified in metaDb exist in database\n");
+verbose(1, "----------------------------------------------\n");
 for(; mdbObj != NULL; mdbObj=mdbObj->next)
     {
     struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "objType");
@@ -57,7 +60,7 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
     if (!sqlTableExists(conn, tableName))
         {
         mdbObj->deleteThis = TRUE;
-        warn("tableName %s: not found in object %s",tableName, mdbObj->obj);
+        warn("metaDb table %s not found in database %s",tableName, database);
         }
     }
 sqlDisconnect(&conn);
@@ -65,6 +68,9 @@ sqlDisconnect(&conn);
 
 void checkMetaFiles(struct mdbObj *mdbObj, char *downDir)
 {
+verbose(1, "----------------------------------------------\n");
+verbose(1, "Checking that files specified in metaDb exist in download dir\n");
+verbose(1, "----------------------------------------------\n");
 for(; mdbObj != NULL; mdbObj=mdbObj->next)
     {
     struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "objType");
@@ -103,7 +109,8 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
     if (!fileExists(buffer))
         {
         mdbObj->deleteThis = TRUE;
-        warn("fileName %s: not found in object %s",buffer, mdbObj->obj);
+        warn("metaDb file %s not found in download dir %s",buffer, 
+            downDir);
         }
     }
 }
@@ -140,6 +147,9 @@ return hash;
 
 void checkMetaTrackDb(struct mdbObj *mdbObj, struct hash *trackHash)
 {
+verbose(1, "----------------------------------------------\n");
+verbose(1, "Checking that tables specified in metaDb exist in trackDb\n");
+verbose(1, "----------------------------------------------\n");
 for(; mdbObj != NULL; mdbObj=mdbObj->next)
     {
     struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "objType");
@@ -208,7 +218,7 @@ if (sqlQuickQuery(conn, buffer, fileName, sizeof fileName) != NULL)
     else
         {
         base++;
-        char *dot = strrchr(base, '.');
+        char *dot = strchr(base, '.');
         if (dot == NULL)
             warn("fileName %s in table %s does not have suffix", fileName, table);
         else
@@ -242,6 +252,9 @@ void checkDbTables(char *database, char *composite, struct hash *mdbHash)
 struct sqlConnection *conn = sqlConnect(database);
 char buffer[10 * 1024];
 
+verbose(1, "----------------------------------------------\n");
+verbose(1, "Checking that tables starting with composite in db are in metaDb\n");
+verbose(1, "----------------------------------------------\n");
 safef(buffer, sizeof buffer, "show tables like '%s%%'", composite);
 
 struct sqlResult *sr;
@@ -267,6 +280,9 @@ void checkTrackDb(struct trackDb *trackObjs, char *composite,
 {
 struct trackDb *trackObj;
 
+verbose(1, "----------------------------------------------\n");
+verbose(1, "Checking that tables in trackDb are in metaDb \n");
+verbose(1, "----------------------------------------------\n");
 for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
     {
     char *table = trackObj->table;
