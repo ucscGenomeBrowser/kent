@@ -1410,6 +1410,13 @@ TMPDIR=/scratch/tmp
     cat fb.ce9.chainCaeJap1Link.txt
     #	26876526 bases of 100286004 (26.800%) in intersection
 
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=pk \
+	-continue=syntenicNet -syntenicNet \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > synNet.log 2>&1 &
+    #	real    0m13.124s
+
     #	swap, this is also in caeJap1.txt
     mkdir /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
     cd /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
@@ -1734,3 +1741,225 @@ TMPDIR=/scratch/tmp
     #	8860569 bases of 278844984 (3.178%) in intersection
 
 ############################################################################
+## 10-Way Multiz (DONE - 2009-06-09,2009-11-10 - Hiram)
+    mkdir /hive/data/genomes/ce9/bed/multiz10way
+    cd /hive/data/genomes/ce9/bed/multiz10way
+
+    #	starting with the 10way tree created from 44 way tree
+    cat << '_EOF_' > 10way.nh
+((((((ce9:0.003,((cb3:0.005,caeRem3:0.003):0.004,caePb2:0.013):0.002):0.001,caeJap3:0.023):0.04,haeCon1:0.06):0.06,priPac1:0.12):0.06,(melHap1:0.14,melInc1:0.15):0.03):0.06,bruMal1:0.24);
+'_EOF_'
+    # << happy emacs
+
+    sed -e "s/ce9/C._elegans/; s/cb3/C._briggsae/; s/caeRem3/C._remanei/; s/caePb2/C._brenneri/; s/caeJap3/C._japonica/; s/haeCon1/H._contortus/; s/priPac1/P._pacificus/; s/melHap1/M._hapla/; s/melInc1/M._incognita/; s/bruMal1/B._malayi/;" 10way.nh > commonNames.nh
+    #	Use this commonNames specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/ce9_10way.gif
+
+    /cluster/bin/phast/all_dists 10way.nh > 10way.distances.txt
+    #	Use this output to create the table below, with this perl script:
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "grep -y ce9 10way.distances.txt | sort -k3,3n|") or
+        die "can not read 10way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($ce9, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/ce9/bed/lastz.$D/fb.ce9." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/blastz.ce9.swap/fb.${D}.chainCe9Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainCe9Link   chain    linearGap
+#    distance                              on ce9    on other   minScore
+# 01  0.0120 - C. remanei caeRem3       (% 41.722) (% 33.467)
+# 02  0.0140 - C. briggsae cb3          (% 42.300) (% 39.763)
+# 03  0.0180 - C. brenneri caePb2       (% 40.677) (% 32.313)
+# 04  0.0270 - C. japonica caeJap3      (% 27.580) (% 19.464)
+# 05  0.1040 - H. contortus haeCon1     (% 7.463) (% 3.178)
+# 06  0.2240 - P. pacificus priPac1     (% 6.234) (% 4.659)
+# 07  0.3340 - M. hapla melHap1         (% 3.922) (% 6.849)
+# 08  0.3440 - M. incognita melInc1     (% 3.301) (% 5.166)
+# 09  0.4640 - B. malayi bruMal1        (% 4.790) (% 5.457)
+
+    # create species list and stripped down tree for autoMZ
+    sed -e "s/:[0-9]\.[0-9][0-9]*//g; s/;//" 10way.nh > tmp.nh
+
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    cd /hive/data/genomes/ce9/bed/multiz10way
+    #	bash shell syntax here ...
+    export H=/hive/data/genomes/ce9/bed
+    mkdir mafLinks
+    #	verify the alignment type is correct, watch the output of this:
+    for G in `sed -e "s/ce9 //" species.list`
+    do
+	mkdir mafLinks/$G
+	if [ -s ${H}/lastz.${G}/mafRBestNet/chrI.maf.gz ]; then
+	    echo "    # $G - recipBest"
+	    ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	else
+	    if [ -s ${H}/lastz.${G}/mafSynNet/chrI.maf.gz ]; then
+		echo "    # $G - synNet"
+		ln -s ${H}/lastz.$G/mafSynNet/*.maf.gz ./mafLinks/$G
+	    else
+		if [ -s ${H}/lastz.${G}/mafNet/chrI.maf.gz ]; then
+		    echo "    # $G - mafNet"
+		    ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		else
+		    echo "missing directory lastz.${G}/*Net"
+		fi
+	    fi
+	fi
+    done
+    # cb3 - synNet
+    # caeRem3 - synNet
+    # caePb2 - synNet
+    # caeJap3 - synNet
+    # haeCon1 - recipBest
+    # priPac1 - mafNet
+    # melHap1 - mafNet
+    # melInc1 - mafNet
+    # bruMal1 - mafNet
+
+    # the autoMultiz cluster run 
+    # most interesting, this would not work on memk
+    #	on memk autoMZ somehow got the tree.nh full of back slashes ?
+    ssh swarm
+    cd /hive/data/genomes/ce9/bed/multiz10way/
+
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = ce9 
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/ce9/bed/multiz10way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            /bin/echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        /bin/echo -e "##maf version=1 scoring=autoMZ\n\n##eof maf" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/ce9/bed/multiz10way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    find ../mafLinks -type l | sed -e "s/.*chr/chr/; s/.maf.gz//" \
+	| sort -u > chr.part.list
+    ssh memk
+    cd /hive/data/genomes/ce9/bed/multiz10way/run
+    gensub2 chr.part.list single template jobList
+    para try
+    para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1438s      23.97m     0.40h    0.02d  0.000 y
+# IO & Wait Time:                   137s       2.28m     0.04h    0.00d  0.000 y
+# Average job time:                 225s       3.75m     0.06h    0.00d
+# Longest finished job:             387s       6.45m     0.11h    0.00d
+# Submission to last job:           394s       6.57m     0.11h    0.00d
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/ce9/multiz10way/maf
+    cd /hive/data/genomes/ce9/bed/multiz10way/maf
+    ln -s `pwd`/*.maf /gbdb/ce9/multiz10way/maf
+
+    # this generates an immense multiz10way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/ce9/multiz10way/maf ce9 multiz10way
+    #	Loaded 306326 mafs in 7 files from /gbdb/ce9/multiz10way/maf
+    #	real    0m6.930s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/ce9/multiz10way/maf/*.maf \
+	| hgLoadMafSummary ce9 -minSize=10000 -verbose=2 \
+		-mergeGap=500 -maxSize=50000  multiz10waySummary stdin
+    #	Created 116808 summary blocks from 980666 components
+    #	and 306326 mafs from stdin
+    #	real    0m11.928s
+
+##############################################################################
