@@ -1347,28 +1347,28 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 
 
 // ----------- Printing and Counting -----------
-static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle)
+static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle, FILE *outF)
 {
 if(mdbVar != NULL && mdbVar->var != NULL)
     {
     if(raStyle)
-        printf("\n%s ",mdbVar->var);
+        fprintf(outF, "\n%s ",mdbVar->var);
     else
-        printf(" %s=",mdbVar->var);
+        fprintf(outF, " %s=",mdbVar->var);
     if(mdbVar->val != NULL)
         {
         if(mdbVar->varType == vtBinary)
-            printf("binary");
+            fprintf(outF, "binary");
         else if(!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
-            printf("\"%s\"",mdbVar->val);
+            fprintf(outF, "\"%s\"",mdbVar->val);
         else
-            printf("%s",mdbVar->val);
+            fprintf(outF, "%s",mdbVar->val);
         }
     }
 }
 
 
-void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle)
+void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF )
 // prints objs and var=val pairs as formatted metadata lines or ra style
 {
 // Single line:
@@ -1384,9 +1384,9 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     if(mdbObj->obj == NULL)
         continue;
 
-    printf("%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
+    fprintf(outF, "%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
     if(mdbObj->deleteThis)
-        printf(" delete");
+        fprintf(outF, " delete");
 
     struct mdbVar *mdbVar = NULL;
 
@@ -1394,17 +1394,33 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     if(mdbObj->varHash != NULL)
         {
         mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
-        mdbVarValPrint(mdbVar,raStyle);
+        mdbVarValPrint(mdbVar,raStyle, outF);
         }
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if(mdbObj->varHash == NULL || !sameOk(MDB_OBJ_TYPE,mdbVar->var))
-            mdbVarValPrint(mdbVar,raStyle);
+            mdbVarValPrint(mdbVar,raStyle, outF);
         }
-    printf("%s",(raStyle?"\n\n":"\n"));
+    fprintf(outF, "%s",(raStyle?"\n\n":"\n"));
     }
 if(raStyle) // NOTE: currently only supporting validation of RA files
-    printf("%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
+    fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
+}
+
+void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle)
+// prints objs and var=val pairs as formatted metadata lines or ra style
+{
+mdbObjPrintToStream(mdbObjs, raStyle, stdout);
+}
+
+void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file)
+// prints objs and var=val pairs as formatted metadata lines or ra style
+{
+FILE *f = mustOpen(file, "w");
+
+mdbObjPrintToStream(mdbObjs, raStyle, f);
+
+fclose(f);
 }
 
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle)
