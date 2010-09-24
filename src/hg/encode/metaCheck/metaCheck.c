@@ -11,7 +11,7 @@ void usage()
 errAbort(
   "metaCheck - a program to validate that tables, files, and trackDb entries exist\n"
   "usage:\n"
-  "   metaCheck database metaDb.ra trackDb.ra downloadDir\n"
+  "   metaCheck database composite metaDb.ra trackDb.ra downloadDir\n"
   "options:\n"
   "   -outMdb=file.ra     output cruft-free metaDb ra file\n"
   );
@@ -24,7 +24,7 @@ static struct optionSpec options[] = {
    {NULL, 0},
 };
 
-void checkTables(struct mdbObj *mdbObj, char *database)
+void checkMetaTables(struct mdbObj *mdbObj, char *database)
 {
 struct sqlConnection *conn = sqlConnect(database);
 
@@ -60,7 +60,7 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
 sqlDisconnect(&conn);
 }
 
-void checkFiles(struct mdbObj *mdbObj, char *downDir)
+void checkMetaFiles(struct mdbObj *mdbObj, char *downDir)
 {
 for(; mdbObj != NULL; mdbObj=mdbObj->next)
     {
@@ -105,26 +105,38 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
     }
 }
 
-struct hash *getTrackDbHash(char *trackDb)
+struct hash *getMetaDbHash(char *metaDb, struct mdbObj **head)
 {
-struct trackDb *trackObjs = trackDbFromRa(trackDb);
+boolean validated = FALSE;
+struct mdbObj *mdbObjs = mdbObjsLoadFromFormattedFile(metaDb, &validated), *mdbObj;
 struct hash *hash = newHash(10);
 
-for(; trackObjs; trackObjs = trackObjs->next)
-    {
-    char *table = trackObjs->table;
-    if (table == NULL)
-        table = trackObjs->track;
-    hashAdd(hash, table, trackObjs);
-    }
+for(mdbObj = mdbObjs; mdbObj; mdbObj = mdbObj->next)
+    hashAdd(hash, mdbObj->obj, mdbObj);
 
+*head = mdbObjs;
 return hash;
 }
 
-void checkTrackDb(struct mdbObj *mdbObj, char *trackDb)
+struct hash *getTrackDbHash(char *trackDb, struct trackDb **head)
 {
-struct hash *trackHash = getTrackDbHash(trackDb);
+struct trackDb *trackObjs = trackDbFromRa(trackDb), *trackObj;
+struct hash *hash = newHash(10);
 
+for(trackObj = trackObjs; trackObj; trackObj = trackObj->next)
+    {
+    char *table = trackObj->table;
+    if (table == NULL)
+        table = trackObj->track;
+    hashAdd(hash, table, trackObj);
+    }
+
+*head = trackObjs;
+return hash;
+}
+
+void checkMetaTrackDb(struct mdbObj *mdbObj, struct hash *trackHash)
+{
 for(; mdbObj != NULL; mdbObj=mdbObj->next)
     {
     struct mdbVar *mdbVar = hashFindVal(mdbObj->varHash, "objType");
@@ -145,7 +157,7 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
 
     if (hashLookup(trackHash, tableName) == NULL)
         {
-        warn("table %s: not found in trackDb %s\n",tableName, trackDb);
+        warn("table %s: not found in trackDb\n",tableName);
         }
     }
 }
@@ -170,20 +182,38 @@ for(mdbObj = head; mdbObj != NULL; mdbObj = next)
 return head;
 }
 
-void metaCheck(char *database, char *metaDb, char *trackDb, char *downDir)
+void checkDbTables(char *database, char *composite, struct hash *mdbHash)
+// search the database for tables that begin with composite and check
+// to see if they are represented in the metaDb.ra
+{
+}
+
+void checkTrackDb(struct trackDb *trackDbObjs, char *composite,
+    struct hash *mdbHash)
+// check through trackDb for tables that begin with composite
+// and check to see if they are represented in the metaDb.ra
+{
+}
+
+void metaCheck(char *database, char *composite, char *metaDb, char *trackDb, 
+    char *downDir)
 /* metaCheck - a program to validate that tables, files, and trackDb entries exist. */
 {
-boolean validated = FALSE;
-struct mdbObj * mdbObjs = mdbObjsLoadFromFormattedFile(metaDb, &validated);
+struct mdbObj *mdbObjs = NULL;
+struct hash *mdbHash = getMetaDbHash(metaDb, &mdbObjs);
+struct trackDb *trackDbObjs = NULL;
+struct hash *trackHash = getTrackDbHash(trackDb, &trackDbObjs);
 
-checkTables(mdbObjs, database);
-checkFiles(mdbObjs, downDir);
+checkMetaTables(mdbObjs, database);
+checkMetaFiles(mdbObjs, downDir);
+checkMetaTrackDb(mdbObjs, trackHash);
 
-checkTrackDb(mdbObjs, trackDb);
+checkDbTables(database, composite, mdbHash);
+checkTrackDb(trackDbObjs, composite, mdbHash);
 
 if (outMdb)
     {
-    dropDeleted(mdbObjs);
+    mdbObjs = dropDeleted(mdbObjs);
     mdbObjPrintToFile(mdbObjs, TRUE, outMdb);
     }
 }
@@ -192,10 +222,10 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 5)
+if (argc != 6)
     usage();
 outMdb = optionVal("outMdb", outMdb);
 
-metaCheck(argv[1], argv[2], argv[3], argv[4]);
+metaCheck(argv[1], argv[2], argv[3], argv[4], argv[5]);
 return 0;
 }
