@@ -125,6 +125,7 @@ if(words)
 return FALSE;
 }
 
+#define MDB_VAL_TRUNC_AT 50
 static int getTermArray(struct sqlConnection *conn, char ***terms, char *type)
 // Pull out all term fields from ra entries with given type
 // Returns count of items found and items via the terms argument.
@@ -136,7 +137,7 @@ struct slName *termList = NULL;
 int i, count = 0;
 char **retVal;
 
-safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", type);
+safef(query, sizeof(query), "select distinct LEFT(val,%d) from metaDb where var = '%s'", MDB_VAL_TRUNC_AT,type);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -160,13 +161,18 @@ static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char 
 // Search the assembly's metaDb table for var; If name == NULL, we search every metadata field.
 // Search is via mysql, so it's case-insensitive.
 {
-char query[256];
+char query[512];
 char *prefix = "select distinct obj from metaDb";
 if(sameString(op, "contains"))
     if(name == NULL)
         safef(query, sizeof(query), "%s where val like  '%%%s%%'", prefix, val);
     else
         safef(query, sizeof(query), "%s where var = '%s' and val like  '%%%s%%'", prefix, name, val);
+else if (strlen(val) == MDB_VAL_TRUNC_AT)
+    if(name == NULL)
+        safef(query, sizeof(query), "%s where val like '%s%%'", prefix, val);
+    else
+        safef(query, sizeof(query), "%s where var = '%s' and val like '%s%%'", prefix, name, val);
 else
     if(name == NULL)
         safef(query, sizeof(query), "%s where val = '%s'", prefix, val);
@@ -336,8 +342,7 @@ for (group = groupList; group != NULL; group = group->next)
 
 webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
-hPrintf("<div style='max-width:1200px'>");
-// hPrintf("<div>\n");
+hPrintf("<div style='max-width:1000px;'>");
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
@@ -347,15 +352,15 @@ hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
 hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
 
-hPrintf("<div id='tabs' style='display:none; width:inherit'>\n"
+hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
         "<li><a href='#advancedTab'><span>Advanced</span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab' style='width:inherit;'>\n");
+        "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:980px;":"max-width:inherit;");
 
 hPrintf("<table style='width:100%%;'><tr><td colspan='2'>");
-hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='width:100%%' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
+hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='max-width:1000px; width:100%%' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr><tr><td>");
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
@@ -366,44 +371,41 @@ hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style=
 hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
 //hPrintf("</td><td align='right'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
 hPrintf("</div>\n"
-        "<div id='advancedTab'>\n"
-        "<table cellSpacing=0 style='width:100%%;'>\n");
+        "<div id='advancedTab' style='width:inherit;'>\n"
+        "<table cellSpacing=0 style='width:inherit;'>\n");
 
-cols = 8;
+cols = 7;
 
 // Track Name contains
-hPrintf("<tr><td colspan=3 style='width:5%%;'></td>");
-hPrintf("<td style='width:10px;' nowrap colspan='2'><b>Track&nbsp;Name:</b></td>");
-hPrintf("<td align='right' style='width:10px;'>contains</td>\n");
-hPrintf("<td colspan='%d'>", cols - 5);
+hPrintf("<tr><td colspan=3></td>");
+hPrintf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
+hPrintf("<td align='right'>contains</td>\n");
+hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='hgt.nameSearch' id='nameSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px;'>", nameSearch == NULL ? "" : nameSearch);
 hPrintf("</td></tr>\n");
-if (!simpleSearch && nameSearch)
-    searchTermsExist = TRUE;
+
 
 // Description contains
-hPrintf("<tr><td colspan=2 style='width:2%%;'></td><td style='width:2%%;'>and&nbsp;</td>");
-hPrintf("<td style='width:10px;' colspan='2'><b>Description:</b></td>");
-hPrintf("<td align='right' style='width:10px;'>contains</td>\n");
-hPrintf("<td colspan='%d'>", cols - 5);
-hPrintf("<input type='text' name='hgt.descSearch' id='descSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:100%%;'>",
+hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
+hPrintf("<td><b style='max-width:100px;'>Description:</b></td>");
+hPrintf("<td align='right'>contains</td>\n");
+hPrintf("<td colspan='%d'>", cols - 4);
+hPrintf("<input type='text' name='hgt.descSearch' id='descSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px;'>",
         descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr>\n");
 if (!simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
-// Group is
-hPrintf("<tr><td colspan=2 style='width:2%%;'></td><td style='width:2%%;'>and&nbsp;</td>\n");
-hPrintf("<td style='width:10px;' colspan='2'><b>Group</b></td>");
-hPrintf("<td align='right' style='width:10px;'>is</td>\n");
-hPrintf("<td colspan='%d'>", cols - 5);
+hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
+hPrintf("<td><b style='max-width:100px;'>Group</b></td>");
+hPrintf("<td align='right'>is</td>\n");
+hPrintf("<td colspan='%d'>", cols - 4);
 cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%%;'");
 hPrintf("</td></tr>\n");
 if (!simpleSearch && groupSearch)
     searchTermsExist = TRUE;
 
 // figure out how many metadata selects are visible.
-
 int delSearchSelect = cartUsualInt(cart, "hgt.delRow", 0);   // 1-based row to delete
 int addSearchSelect = cartUsualInt(cart, "hgt.addRow", 0);   // 1-based row to insert after
 
@@ -478,14 +480,14 @@ if(metaDbExists)
     char **mdbVarLabels = NULL;
     int count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
 
-    hPrintf("<tr nowrap cellpadding=0><td colspan='%d' class='lineOnBottom' style='height:2px; max-height:2px;'>&nbsp;</td></tr>", cols);
+    hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
     for(i = 0; i < numMetadataSelects; i++)
         {
         char **terms;
         char buf[256];
         int len;
 
-        hPrintf("<tr><td style='width:2%%;'>\n");
+        hPrintf("<tr><td>\n");
         if(numMetadataSelects > 2 || i >= 2)
             {
             safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
@@ -493,24 +495,20 @@ if(metaDbExists)
             }
         else
             hPrintf("&nbsp;");
-        hPrintf("</td><td style='width:2%%;'>\n");
+        hPrintf("</td><td>\n");
         safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
         hButtonWithOnClick(searchTracks, "+", "add another row after this row", buf);
 
-        hPrintf("</td><td style='width:2%%;'>and&nbsp;</td><td colspan=3 nowrap style='width:10%%;'>\n");
+        hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
         cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
-        hPrintf("</td><td%s nowrap>is\n",(i == 0 ? "":" colspan=2"));
+        hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
         len = getTermArray(conn, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' style='max-width:520px; min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
+        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
         if (!simpleSearch && mdbVal[i])
             searchTermsExist = TRUE;
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
-        if (i == 0)
-            hPrintf("<td align='right' valign='top' nowrap><em style='color:%s'>ENCODE terms</em></td>",COLOR_DARKGREY);
-        else
-            hPrintf("<td></td>\n");
         hPrintf("</tr>\n");
         }
     }
@@ -749,7 +747,7 @@ else
         #endif///def SORT_BY_HIERARCHY
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL2);
 
-        hPrintf("<td align='center' valign='center'>\n");
+        hPrintf("<td align='center'>\n");
         char name[256];
         safef(name,sizeof(name),"%s_sel",track->track);
         boolean checked = FALSE;
