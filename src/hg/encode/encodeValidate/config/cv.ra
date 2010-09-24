@@ -3367,7 +3367,7 @@ orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
-validation GATA1(Western_blot):mouse_Gata1_validation_Hardison.pdf
+validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 
 term GATA-2
 tag GATA2
@@ -4441,7 +4441,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation TAL1(Western_blot):mouse_Tal1_validation_Hardison.pdf
+validation TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 
 #term TAF-II
 #type Antibody
