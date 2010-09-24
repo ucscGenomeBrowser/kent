@@ -150,3 +150,22 @@ taxId 6279
 	/hive/data/staging/data/bruMal1
 
 ########################################################################
+# SWAP LASTZ (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzBruMal1.2010-09-22
+    cat fb.ce9.chainBruMal1Link.txt 
+    #	4804043 bases of 100286004 (4.790%) in intersection
+
+    #	running swap
+    mkdir /hive/data/genomes/bruMal1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/bruMal1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzBruMal1.2010-09-22/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    19m54.633s
+
+    cat fb.bruMal1.chainCe9Link.txt
+    #	4869447 bases of 89235536 (5.457%) in intersection
+
+########################################################################

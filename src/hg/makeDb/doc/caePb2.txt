@@ -733,3 +733,28 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/worms/caePb2/bed/tblastn.ce6SG
 
 ###########################################################################
+# SWAP LASTZ ce9 (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzCaePb2.2010-09-20
+    cat fb.ce9.chainCaePb2Link.txt
+    #	40793086 bases of 100286004 (40.677%) in intersection
+
+    #	running swap
+    mkdir /hive/data/genomes/caePb2/bed/blastz.ce9.swap
+    cd /hive/data/genomes/caePb2/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzCaePb2.2010-09-20/DEF \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    2m36.529s
+    cat fb.caePb2.chainCe9Link.txt
+    #	55084649 bases of 170473138 (32.313%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzCaePb2.2010-09-20/DEF \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	-continue=syntenicNet -syntenicNet \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > synNet.log 2>&1 &
+    #	real    0m42.368s
+
+###########################################################################
