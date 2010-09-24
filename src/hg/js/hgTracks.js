@@ -1323,7 +1323,7 @@ $(document).ready(function()
         findTracksNormalize();
         updateMetaDataHelpLinks(0);
     }
-    
+
     if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
         for (var id in trackDbJson) {
             var rec = trackDbJson[id];
@@ -2281,9 +2281,8 @@ function findTracksClickedOne(selCb,justClicked)
             $('input.viewBtn').val('View in Browser');
         else if($('input.selCb:checked').length == 0)
             $('input.viewBtn').val('Return to Browser');
+        findTracksCounts();
     }
-
-    findTracksCounts();
 }
 
 
@@ -2296,7 +2295,6 @@ function findTracksNormalize()
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
     findTracksViewButtoneText();
-
     findTracksCounts();
 }
 
