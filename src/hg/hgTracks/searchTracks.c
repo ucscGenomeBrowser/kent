@@ -546,6 +546,8 @@ if(!isEmpty(descSearch))
     for(i = 0, el = descList; el != NULL; i++, el = el->next)
         descWords[i] = strLower(el->name);
     }
+if (doSearch && simpleSearch && descWordCount <= 0)
+    doSearch = FALSE;
 
 #ifdef SORT_BY_HIERARCHY
 boolean sortByHierarchy = sameString(cartUsualString(cart,SORT_BY_VAR,SORT_BY_HIER),SORT_BY_HIER);
