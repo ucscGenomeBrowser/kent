@@ -186,7 +186,7 @@ img.sliceImg { position:relative; border:0; }
 div.sliceDiv { overflow:hidden; }
 
 /* These are for imageV2 sideButtons: */
-.btn  { border-style: outset; background-color: #CCCCCC; } /* border-color: #DDDDDD; works for FF but screw up IE */
+.btn  { border-style: outset; background-color: #CCCCCC; border-color: #CCCCCC; } /* border-color: works for FF but screws up IE */
 .btnN { border-width: 1px 1px 1px 1px; margin: 1px 1px 0px 1px; } /* connect none */
 .btnU { border-width: 0px 1px 1px 1px; margin: 0px 1px 0px 1px; } /* connect up */
 .btnD { border-width: 1px 1px 0px 1px; margin: 1px 1px 0px 1px; } /* connect down */
