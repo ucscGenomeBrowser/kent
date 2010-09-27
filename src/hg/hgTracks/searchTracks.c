@@ -15,6 +15,7 @@
 #include "web.h"
 #include "jksql.h"
 #include "hdb.h"
+#include "mdb.h"
 #include "trix.h"
 #include "jsHelper.h"
 #include "imageV2.h"
@@ -125,28 +126,14 @@ if(words)
 return FALSE;
 }
 
-#define MDB_VAL_TRUNC_AT 50
 static int getTermArray(struct sqlConnection *conn, char ***terms, char *type)
 // Pull out all term fields from ra entries with given type
 // Returns count of items found and items via the terms argument.
 {
-struct sqlResult *sr = NULL;
-char **row = NULL;
-char query[256];
-struct slName *termList = NULL;
 int i, count = 0;
 char **retVal;
-
-safef(query, sizeof(query), "select distinct LEFT(val,%d) from metaDb where var = '%s'", MDB_VAL_TRUNC_AT,type);
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    slNameAddHead(&termList, row[0]);
-    count++;
-    }
-sqlFreeResult(&sr);
-slSort(&termList, slNameCmpCase);
-count++; // make room for "Any"
+struct slName *termList = mdbValSearch(conn, type, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+count = slCount(termList) + 1; // make room for "Any"
 AllocArray(retVal, count);
 retVal[0] = cloneString(ANYLABEL);
 for(i = 1; termList != NULL;termList = termList->next, i++)
@@ -155,30 +142,6 @@ for(i = 1; termList != NULL;termList = termList->next, i++)
     }
 *terms = retVal;
 return count;
-}
-
-static struct slName *metaDbSearch(struct sqlConnection *conn, char *name, char *val, char *op)
-// Search the assembly's metaDb table for var; If name == NULL, we search every metadata field.
-// Search is via mysql, so it's case-insensitive.
-{
-char query[512];
-char *prefix = "select distinct obj from metaDb";
-if(sameString(op, "contains"))
-    if(name == NULL)
-        safef(query, sizeof(query), "%s where val like  '%%%s%%'", prefix, val);
-    else
-        safef(query, sizeof(query), "%s where var = '%s' and val like  '%%%s%%'", prefix, name, val);
-else if (strlen(val) == MDB_VAL_TRUNC_AT)
-    if(name == NULL)
-        safef(query, sizeof(query), "%s where val like '%s%%'", prefix, val);
-    else
-        safef(query, sizeof(query), "%s where var = '%s' and val like '%s%%'", prefix, name, val);
-else
-    if(name == NULL)
-        safef(query, sizeof(query), "%s where val = '%s'", prefix, val);
-    else
-        safef(query, sizeof(query), "%s where var = '%s' and val = '%s'", prefix, name, val);
-return sqlQuickList(conn, query);
 }
 
 static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** metaLabels)
@@ -342,7 +305,7 @@ for (group = groupList; group != NULL; group = group->next)
 
 webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
-hPrintf("<div style='max-width:1000px;'>");
+hPrintf("<div style='max-width:1080px;'>");
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
@@ -357,7 +320,7 @@ hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
         "<li><a href='#advancedTab'><span>Advanced</span></a></li>\n"
         "</ul>\n"
-        "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:980px;":"max-width:inherit;");
+        "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
 hPrintf("<table style='width:100%%;'><tr><td colspan='2'>");
 hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='max-width:1000px; width:100%%' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
@@ -599,7 +562,8 @@ if(doSearch)
             {
             if(!isEmpty(mdbVal[i]))
                 {
-                struct slName *tmp = metaDbSearch(conn, mdbVar[i], mdbVal[i], "is");
+                struct slName *tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
+                //struct slName *tmp = metaDbSearch(conn, mdbVar[i], mdbVal[i], "is");
                 if(metaTracks == NULL)
                     metaTracks = tmp;
                 else
