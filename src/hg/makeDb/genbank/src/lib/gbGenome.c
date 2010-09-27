@@ -46,6 +46,10 @@ static char *cbNames[] = {"Caenorhabditis briggsae", NULL};
 static char *caeRemNames[] = {"Caenorhabditis remanei", NULL};
 static char *caeJapNames[] = {"Caenorhabditis japonica", NULL};
 static char *caePbNames[] = {"Caenorhabditis brenneri", NULL};
+static char *haeConNames[] = {"Haemonchus contortus", NULL};
+static char *melHapNames[] = {"Meloidogyne hapla", NULL};
+static char *melIncNames[] = {"Meloidogyne incognita", NULL};
+static char *bruMalNames[] = {"Brugia malayi", NULL};
 static char *calJacNames[] = {"Callithrix jacchus", NULL};
 static char *danRerNames[] = {"Danio rerio", NULL};
 static char *echTelNames[] = {"Echinops telfairi", NULL};
@@ -115,6 +119,10 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"caeRem", caeRemNames},
     {"caeJap", caeJapNames},
     {"caePb", caePbNames},
+    {"haeCon", haeConNames},
+    {"melNap", melNapNames},
+    {"melInc", melIncNames},
+    {"bruMal", bruMalNames},
     {"caeRei", caeRemNames}, /* db spelling mistake, should be Rem */
     {"calJac", calJacNames},
     {"danRer", danRerNames},
