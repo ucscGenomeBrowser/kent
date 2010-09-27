@@ -1996,3 +1996,62 @@ if (mdbObj == NULL || mdbObj == METADATA_NOT_FOUND)
 return mdbObjFindValue(mdbObj,var);
 }
 
+struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
+// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+{  // TODO: Change this to use normal mdb struct routines?
+if (!tables && !files)
+    errAbort("mdbObjSearch requests objects for neither tables or files.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+struct dyString *dyQuery = dyStringNew(512);
+dyStringPrintf(dyQuery,"select distinct obj from %s l1 where ",tableName);
+if (!tables || !files)
+    {
+    dyStringPrintf(dyQuery,"l1.var='objType' and l1.val='%s' ",tables?"table":"file");
+    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",tableName);
+    }
+
+if(var != NULL)
+    dyStringPrintf(dyQuery,"l2.var = '%s' and l2.val ", var);
+if(sameString(op, "contains"))
+    dyStringPrintf(dyQuery,"like '%%%s%%'", val);
+else if (limit > 0 && strlen(val) == limit)
+    dyStringPrintf(dyQuery,"like '%s%%'", val);
+else
+    dyStringPrintf(dyQuery,"= '%s'", val);
+
+if (!tables || !files)
+    dyStringAppendC(dyQuery,')');
+dyStringAppend(dyQuery," order by obj");
+
+return sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+}
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
+// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+// Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+{  // TODO: Change this to use normal mdb struct routines?
+if (!tables && !files)
+    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+struct dyString *dyQuery = dyStringNew(512);
+if (limit > 0)
+    dyStringPrintf(dyQuery,"select distinct distinct LEFT(val,%d)",limit);
+else
+    dyStringPrintf(dyQuery,"select distinct distinct val");
+
+dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
+
+if (!tables || !files)
+    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
+                   tableName,tables?"table":"file");
+
+dyStringAppend(dyQuery," order by val");
+
+return sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+}
+

@@ -1626,13 +1626,6 @@ searchType bed
 shortCircuit 1
 searchPriority 15
 
-track rfamHuman
-shortLabel RfamConsensus
-longLabel Strong genomic alignments of Rfam consensus sequences with $organism annotations
-visibility hide
-group genes
-type psl mRNA
-
 track hg19ContigDiff
 shortLabel Hg18 Diff
 longLabel Contigs new to GRCh37/(hg19), not carried forward from NCBI build 36(hg18)
