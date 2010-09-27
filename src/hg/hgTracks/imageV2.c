@@ -1672,13 +1672,8 @@ imgBoxTracksNormalizeOrder(imgBox);
 //if(verbose)
 //    imgBoxShow(NULL,imgBox,0);
 
-hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
+hPrintf("<!-- - - - - - - - vvv IMAGEv2 vvv - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 jsIncludeFile("jquery.tablednd.js", NULL);
-hPrintf("<style type='text/css'>\n");
-hPrintf("div.dragZoom {cursor: text;}\n");
-//hPrintf("img.button {position:relative; border:0;}\n");
-hPrintf("img.sliceImg {position:relative; border:0;}\n");
-hPrintf("div.sliceDiv {overflow:hidden;}\n");
 if(imgBox->bgImg)
     {
     int offset = 0;
@@ -1688,12 +1683,13 @@ if(imgBox->bgImg)
         if(slice)
             offset = (slice->offsetX * -1);  // This works because the ruler has a slice
          }
+    hPrintf("<style type='text/css'>\n");
     if(offset != 0)
         hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;background-position:%dpx;}\n",imgBox->bgImg->file,offset);
     else
         hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;}\n",imgBox->bgImg->file);
+    hPrintf("</style>\n");
     }
-hPrintf("</style>\n");
 
 #ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
@@ -1787,7 +1783,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
-hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
+hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 if (!trackImgOnly && jsonTdbVars != NULL)
