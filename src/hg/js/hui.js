@@ -31,7 +31,7 @@ function _matSelectViewForSubTracks(obj,view)
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
-        exposeComposite(compositeName);
+        exposeAll();
         matSubCBsEnable(true,view);
 
         // Needed for later
@@ -94,14 +94,12 @@ function matSelectViewForSubTracks(obj,view)
     waitOnFunction( _matSelectViewForSubTracks, obj,view);
 }
 
-function exposeComposite(compositeName)
+function exposeAll()
 {
     // Make main display dropdown show full if currently hide
-    var compositeDD = $("select[name='"+compositeName+"']");
-    if($(compositeDD).attr('selectedIndex') < 1) { // Composite vis display is HIDE
-        var maxVis = ($(compositeDD).children('option').length - 1);
-        $(compositeDD).attr('selectedIndex',maxVis);
-    }
+    var visDD = $("select.visDD"); // limit to hidden
+    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0)   // limit to hidden
+        $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
 }
 
 function matSubCbClick(subCB)
@@ -122,6 +120,10 @@ function matSubCbClick(subCB)
     //if( abcCB != undefined ) {
     //    matChkBoxNormalize( abcCB, classes );
     //}
+
+    if(subCB.checked)
+        exposeAll();  // Unhide composite vis?
+
     matSubCBsSelected();
 }
 
@@ -159,6 +161,9 @@ function matCbClick(matCB)
             }
         }
     }
+
+    if(matCB.checked)
+        exposeAll();  // Unhide composite vis?
     matSubCBsSelected();
 }
 
