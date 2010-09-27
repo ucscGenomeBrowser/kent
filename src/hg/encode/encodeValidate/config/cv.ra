@@ -3129,6 +3129,21 @@ targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
+term CTCF_(C-20)
+tag CTCFC20
+type Antibody
+target CTCF
+antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin
+targetDescription Transcriptional regulator with 11 highly conserved zinc finger domains. Depending on context, can bind a histone acetyltransferase (HAT)-containing complex and function as transcriptional activator or bind a histone deacetylase (HDAC)-containing complex and function as transcriptional repressor. Involved in transcriptional regulation by binding to chromatin insulators and preventing interaction between promoter and nearby enhancers and silencers. Preferentially interacts with unmethylated DNA, preventing spreading of CpG methylation. Can dimerize, mediating long-range chromatin looping. When bound to chromatin, provides an anchor point for nucleosomes positioning. Involved in sister chromatid cohesion. Associates with both centromeres and chromosomal arms during metaphase and required for cohesin localization to CTCF sites. 
+orderUrl http://www.scbt.com/datasheet-15914-ctcf-c-20-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-15914
+lab Snyder
+targetId GeneCard:GC16P066153
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+validation missing
+
+#(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 ##This does not appear in metaDb
 term CtBP1
 tag CTBP1
@@ -4043,6 +4058,20 @@ orderUrl  http://www.scbt.com/product.php?datasheet=585
 lab Myers
 targetId GeneCard:GC22P041487 
 targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20 
+validation missing
+
+term p300_(N-15_
+tag P300N15
+type Antibody
+target P300
+targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin
+vendorName Santa Cruz Biotech
+vendorId sc-584
+orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
+lab Snyder
+targetId GeneCard:GC22P041487
+targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
 validation missing
 
 term PAX5-C20
