@@ -1984,6 +1984,26 @@ nextItemButton on
         color 46,0,184
         # subId=2214 dateSubmitted=2010-09-16
 
+        track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 BCL3 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (BCL3 in K562 cells)
+        subGroups view=Peaks factor=BCL3 cellType=K562 protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=2213 dateSubmitted=2010-09-21
+
+        track wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 BCL3 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (BCL3 in K562 cells)
+        subGroups view=Peaks factor=BCL3 cellType=K562 protocol=PCR1x treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=2213 dateSubmitted=2010-09-21
+
 
 
  
