@@ -191,6 +191,8 @@ function matSetMatrixCheckBoxes(state)
         this.checked = state;
         matSubCBsetShadow(this);
     });
+    if(state)
+        exposeAll();  // Unhide composite vis?
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
     //jQuery(this).css('cursor', '');
@@ -646,7 +648,7 @@ function popUpCfg(content, status)
         modal: true,
         closeOnEscape: true,
         autoOpen: false,
-        buttons: { "Ok": function() {
+        buttons: { "OK": function() {
             popUpCfgOk(this,popUpTrackName);
             $(this).dialog("close");
         }},
