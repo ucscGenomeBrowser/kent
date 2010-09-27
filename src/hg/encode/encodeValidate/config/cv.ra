@@ -1999,7 +1999,7 @@ type Cell Line
 organism human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
-#vendorName (name of vendor or lab that provides these cells)
+vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 #vendorId (the ID of the cell type in the vendor's catalog)
 #orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
 #karyotype (optional human-readable karyotype, for .html page)
