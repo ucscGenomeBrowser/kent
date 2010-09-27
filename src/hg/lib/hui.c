@@ -6704,7 +6704,7 @@ if (show && (visibleChild == -1))
         }
     }
 hideShowDropDown(tdb->track, show, (show && visibleChild) ?
-                            "normalText" : "hiddenText");
+                            "normalText visDD" : "hiddenText visDD");
 return TRUE;
 }
 
@@ -6735,6 +6735,8 @@ enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *
 // returns visibility limited by ancestry (or subtrack vis override)
 {
 enum trackVisibility vis = tdb->visibility;
+if (!noSupers && vis == tvHide && tdbIsSuperTrack(tdb) && tdb->isShow)
+    vis = tvFull;
 if (cart != NULL)
     {
     char *cartVis = NULL;
@@ -6751,7 +6753,7 @@ if (cart != NULL)
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
-        if (tdbIsCompositeChild(tdb))
+        if (tdbIsContainerOrCompositeChild(tdb))
             return vis; // subtrackVis override
         }
     }

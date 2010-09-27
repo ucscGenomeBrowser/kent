@@ -1958,7 +1958,7 @@ function handleTrackUi(response, status)
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
-                               buttons: { "Ok": function() {
+                               buttons: { "OK": function() {
                                     if( ! popUpTrackDescriptionOnly )
                                         hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
