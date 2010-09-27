@@ -536,7 +536,7 @@ if(doSearch)
         for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
-            if (track != NULL)
+            if (track != NULL && !tdbIsContainerChild(track->tdb)) // NOTE: Not including container children, since they don't seem to be individually viewaable
                 {
                 refAdd(&tracks, track);
                 tracksFound++;
@@ -545,7 +545,7 @@ if(doSearch)
             //    warn("found trix track is NULL.");
             }
         #ifdef SORT_BY_HIERARCHY
-            slSort(&tracks, sortByHierarchy? gCmpTrackHierarchy:gCmpTrack);
+        slSort(&tracks, sortByHierarchy? gCmpTrackHierarchy:gCmpTrack);
         #else///ifndef SORT_BY_HIERARCHY
         slReverse(&tracks);
         #endif///ndef SORT_BY_HIERARCHY
@@ -637,7 +637,7 @@ if(doSearch)
                 }
             }
         #ifdef SORT_BY_HIERARCHY
-            slSort(&tracks, sortByHierarchy? gCmpTrackHierarchy:gCmpTrack);
+        slSort(&tracks, sortByHierarchy? gCmpTrackHierarchy:gCmpTrack);
         #else///ifndef SORT_BY_HIERARCHY
         slSort(&tracks, gCmpTrack);
         #endif///ndef SORT_BY_HIERARCHY
@@ -716,7 +716,7 @@ else
         safef(name,sizeof(name),"%s_sel",track->track);
         boolean checked = FALSE;
         #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
-        if(tdbIsCompositeChild(track->tdb))
+        if(tdbIsContainerOrCompositeChild(track->tdb))
             {
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             //track->visibility = limitedVisFromComposite(track);
@@ -756,7 +756,7 @@ else
             }
 
         // If this is a container track, allow configuring...
-        if (tdbIsComposite(track->tdb) || tdbIsSuper(track->tdb))
+        if (tdbIsContainerOrComposite(track->tdb) || tdbIsSuper(track->tdb))
             {
             containerTrackCount++;
             hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
