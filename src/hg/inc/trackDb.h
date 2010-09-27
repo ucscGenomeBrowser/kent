@@ -61,9 +61,11 @@ struct trackDb
 
 #define SUPERTRACK_MASK                 0x10
 #define COMPOSITE_MASK                  0x20
-#define COMPOSITE_VIEW_MASK             0x40
+#define CONTAINER_MASK                  0x80
 #define SUPERTRACK_CHILD_MASK           0x01
 #define COMPOSITE_CHILD_MASK            0x02
+#define COMPOSITE_VIEW_MASK             0x04
+#define CONTAINER_CHILD_MASK            0x08
 #define PARENT_MASK                     0xF0
 #define CHILD_MASK                      0x0F
 #define TREETYPE_MASK                   0xFF
@@ -71,9 +73,11 @@ struct trackDb
 #define CHILD_NODE(nodeType)            ((nodeType) & CHILD_MASK)
 #define SUPERTRACK_NODE(nodeType)       (((nodeType) & SUPERTRACK_MASK) == SUPERTRACK_MASK)
 #define COMPOSITE_NODE(nodeType)        (((nodeType) & COMPOSITE_MASK ) == COMPOSITE_MASK )
-#define COMPOSITE_VIEW_NODE(nodeType)   (((nodeType) & COMPOSITE_VIEW_MASK ) == COMPOSITE_VIEW_MASK )
+#define CONTAINER_NODE(nodeType)        (((nodeType) & CONTAINER_MASK ) == CONTAINER_MASK )
 #define SUPERTRACK_CHILD_NODE(nodeType) (((nodeType) & SUPERTRACK_CHILD_MASK) == SUPERTRACK_CHILD_MASK)
 #define COMPOSITE_CHILD_NODE(nodeType)  (((nodeType) & COMPOSITE_CHILD_MASK ) == COMPOSITE_CHILD_MASK )
+#define COMPOSITE_VIEW_NODE(nodeType)   (((nodeType) & COMPOSITE_VIEW_MASK ) == COMPOSITE_VIEW_MASK )
+#define CONTAINER_CHILD_NODE(nodeType)  (((nodeType) & CONTAINER_CHILD_MASK ) == CONTAINER_CHILD_MASK )
 #define INDEPENDENT_NODE(nodeType)      (((nodeType) & TREETYPE_MASK ) == 0 )
 //#define tdbIsParent(tdb)              ((tdb)->subtracks)
 //#define tdbIsChild(tdb)               ((tdb)->parent   )
@@ -100,6 +104,18 @@ INLINE boolean tdbIsComposite( struct trackDb *tdb)
 return tdb && tdb->subtracks && COMPOSITE_NODE( tdb->treeNodeType);
 }
 
+INLINE boolean tdbIsContainer( struct trackDb *tdb)
+/* Is this trackDb struct marked as a container with children ?  */
+{
+return tdb && tdb->subtracks && CONTAINER_NODE( tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsContainerOrComposite( struct trackDb *tdb)
+/* Is this trackDb struct marked as a container with children ?  */
+{
+return tdb && tdb->subtracks && (CONTAINER_NODE( tdb->treeNodeType) || COMPOSITE_NODE( tdb->treeNodeType));
+}
+
 INLINE boolean tdbIsSuperTrackChild(struct trackDb *tdb)
 /* Is this trackDb struct marked as a child of a supertrack ?  */
 {
@@ -109,13 +125,25 @@ return tdb && tdb->parent && SUPERTRACK_CHILD_NODE(tdb->treeNodeType);
 INLINE boolean tdbIsCompositeChild(struct trackDb *tdb)
 /* Is this trackDb struct marked as a child of a composite track ?  */
 {
-return tdb && tdb->parent && COMPOSITE_CHILD_NODE( tdb->treeNodeType);
+return tdb && tdb->parent && COMPOSITE_CHILD_NODE(tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsContainerChild(struct trackDb *tdb)
+/* Is this trackDb struct marked as a child of a container track ?  */
+{
+return tdb && tdb->parent && CONTAINER_CHILD_NODE(tdb->treeNodeType);
+}
+
+INLINE boolean tdbIsContainerOrCompositeChild(struct trackDb *tdb)
+/* Is this trackDb struct marked as a child of a container track ?  */
+{
+return tdb && tdb->parent && (CONTAINER_CHILD_NODE( tdb->treeNodeType) || COMPOSITE_CHILD_NODE( tdb->treeNodeType));
 }
 
 INLINE boolean tdbIsCompositeView(struct trackDb *tdb)
-/* Is this trackDb struct marked as a child of a composite track ?  */
+/* Is this trackDb struct marked as a view of a composite track ?  */
 {
-return tdb && tdb->subtracks && COMPOSITE_VIEW_NODE( tdb->treeNodeType);
+return tdb && tdb->parent && tdb->subtracks && COMPOSITE_VIEW_NODE( tdb->treeNodeType);
 }
 
 INLINE void tdbMarkAsSuperTrack(struct trackDb *tdb)
@@ -130,6 +158,12 @@ INLINE void tdbMarkAsComposite( struct trackDb *tdb)
 tdb->treeNodeType |= COMPOSITE_MASK;
 }
 
+INLINE void tdbMarkAsContainer( struct trackDb *tdb)
+/* Marks a trackDb struct as a composite track  */
+{
+tdb->treeNodeType |= CONTAINER_MASK;
+}
+
 INLINE void tdbMarkAsSuperTrackChild(struct trackDb *tdb)
 /* Marks a trackDb struct as a child of a supertrack  */
 {
@@ -140,6 +174,12 @@ INLINE void tdbMarkAsCompositeChild( struct trackDb *tdb)
 /* Marks a trackDb struct as a child of a composite track  */
 {
 tdb->treeNodeType |= COMPOSITE_CHILD_MASK;
+}
+
+INLINE void tdbMarkAsContainerChild( struct trackDb *tdb)
+/* Marks a trackDb struct as a child of a composite track  */
+{
+tdb->treeNodeType |= CONTAINER_CHILD_MASK;
 }
 
 INLINE void tdbMarkAsCompositeView( struct trackDb *tdb)
