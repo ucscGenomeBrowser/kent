@@ -25,7 +25,7 @@
 # Lab and general info
 grant             Hardison
 lab               PSU-Mouse
-dataType          ChIP-seq
+dataType          ChipSeq 
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   PsuTfbs
 assembly          mm9

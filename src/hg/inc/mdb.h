@@ -236,6 +236,12 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle);
 // prints objs and var=val pairs as formatted metadata lines or ra style
 
+void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file);
+// prints (to file) objs and var=val pairs as formatted metadata lines or ra style
+
+void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
+// prints (to stream) objs and var=val pairs as formatted metadata lines or ra style
+
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle);
 // prints var=val pairs and objs that go with them single lines or ra style
 

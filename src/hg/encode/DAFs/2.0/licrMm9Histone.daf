@@ -29,7 +29,7 @@
 # Lab and general info
 grant             Ren 
 lab               LICR
-dataType          ChIP-seq
+dataType          ChipSeq 
 variables         cell, antibody,sex,age,strain,control
 compositeSuffix   LicrHistone
 assembly          mm9

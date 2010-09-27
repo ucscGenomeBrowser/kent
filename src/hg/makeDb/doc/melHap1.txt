@@ -129,3 +129,22 @@ taxId 6305
 	/hive/data/staging/data/melHap1
 
 #########################################################################
+# SWAP LASTZ ce9 (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzMelHap1.2010-09-22
+    cat fb.ce9.chainMelHap1Link.txt 
+    #	3933301 bases of 100286004 (3.922%) in intersection
+
+    #	running swap
+    mkdir /hive/data/genomes/melHap1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/melHap1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzMelHap1.2010-09-22/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    0m23.154s
+
+    cat fb.melHap1.chainCe9Link.txt
+    #	3631046 bases of 53017507 (6.849%) in intersection
+
+#########################################################################

@@ -176,11 +176,3 @@ lineFileClose(&lf);
 slReverse(&list);
 return list;
 }
-
-void agpFragValidate(struct agpFrag *af)
-/* Check for weirdness in agpFrag. */
-{
-if (af->chromStart >= af->chromEnd)
-  printf("unexpected coords (%d, %d) for frag %s in chrom %s\n", 
-         af->chromStart, af->chromEnd, af->frag, af->chrom);
-}

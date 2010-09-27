@@ -252,6 +252,8 @@ sGroup_placental wigMaf
 sGroup_primate wigMaf
 sGroup_vertebrate wigMaf
 sGroup_worm wigMaf
+sGroup_Caenorhabditis wigMaf
+sGroup_Nematode wigMaf
 scoreFilter broadPeak narrowPeak bed
 scoreFilterByRange bigBed bed
 scoreFilterLimits broadPeak narrowPeak bed

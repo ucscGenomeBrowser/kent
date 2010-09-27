@@ -239,16 +239,22 @@ function setCartVarAndRefresh(name,val)
     return false;
 }
 
-function catchErrorOrDispatch(obj, status)
+function errorHandler(request, textStatus)
+{
+    showWarning("ajax error: " + textStatus);
+    jQuery('body').css('cursor', '');
+    if(this.loadingId) {
+	hideLoadingImage(this.loadingId);
+    }
+}
+
+function catchErrorOrDispatch(obj, textStatus)
 {
 // generic ajax success handler (handles fact that success is not always success).
-    if(status == 'success')
-        this.trueSuccess(obj, status);
+    if(textStatus == 'success')
+        this.trueSuccess(obj, textStatus);
     else
-    {
-        showWarning("ajax error: " + status);
-        jQuery('body').css('cursor', '');
-    }
+        errorHandler.call(this, obj, textStatus);
 }
 
 function showWarning(str)
