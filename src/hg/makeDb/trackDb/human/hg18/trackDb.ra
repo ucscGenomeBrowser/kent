@@ -4104,14 +4104,6 @@ type bigWig -120 120
 autoScale Off
 maxHeightPixels 128:32:11
 
-
-track rfamHuman
-shortLabel RfamConsensus
-longLabel Strong genomic alignments of Rfam consensus sequences with $organism annotations
-visibility hide
-group genes
-type psl mRNA
-
 track hg18ContigDiff
 shortLabel Hg19 Diff
 longLabel Contigs dropped or changed from NCBI build 36(hg18) to GRCh37(hg19)
