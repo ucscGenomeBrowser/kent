@@ -3457,25 +3457,33 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     }
 }
 
-static void trackDbCompositeMarkup(struct trackDb *parent, struct trackDb *tdbList)
+static void trackDbContainerMarkup(struct trackDb *parent, struct trackDb *tdbList)
 /* Set up things so that the COMPOSITE_NODE and related macros work on tdbList. */
 {
+if (parent != NULL)
+    {
+    if (trackDbLocalSetting(parent, "compositeTrack"))
+        tdbMarkAsComposite(parent);
+    if (trackDbLocalSetting(parent, "container"))
+        tdbMarkAsContainer(parent);
+    }
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (parent != NULL)
         {
-	if (trackDbSetting(parent, "compositeTrack"))
-	    {
-            if (trackDbLocalSetting(parent, "compositeTrack"))
-	       tdbMarkAsComposite(parent);
+        if (tdbIsContainer(parent))
+            tdbMarkAsContainerChild(tdb);
+
+        if (tdbIsComposite(parent) || (parent->parent != NULL && tdbIsComposite(parent->parent)))
+            {
             if (tdb->subtracks == NULL)
-	       tdbMarkAsCompositeChild(tdb);
+                tdbMarkAsCompositeChild(tdb);
             else
                tdbMarkAsCompositeView(tdb);
-	    }
-	}
-    trackDbCompositeMarkup(tdb, tdb->subtracks);
+            }
+        }
+    trackDbContainerMarkup(tdb, tdb->subtracks);
     }
 }
 
@@ -3556,7 +3564,7 @@ struct trackDb *hTrackDb(char *db, char *chrom)
 struct trackDb *tdbList = loadTrackDb(db, NULL);
 tdbList = trackDbLinkUpGenerations(tdbList);
 tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
-trackDbCompositeMarkup(NULL, tdbList);
+trackDbContainerMarkup(NULL, tdbList);
 rInheritFields(tdbList);
 slSort(&tdbList, trackDbCmp);
 return tdbList;
