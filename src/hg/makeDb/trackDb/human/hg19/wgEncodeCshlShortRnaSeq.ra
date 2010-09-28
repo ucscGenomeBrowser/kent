@@ -35,7 +35,7 @@ superTrack wgEncodeRnaSeqSuper
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 10000000
+    maxWindowToDraw 1000000
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
         release alpha
