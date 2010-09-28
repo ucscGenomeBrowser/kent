@@ -298,5 +298,14 @@ const char *metadataFindValue(struct trackDb *tdb, char *var);
 // Finds the val associated with the var or retruns NULL
 
 
+#define MDB_VAL_STD_TRUNCATION 64
+struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files);
+// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+// Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+
 #endif /* MDB_H */
 

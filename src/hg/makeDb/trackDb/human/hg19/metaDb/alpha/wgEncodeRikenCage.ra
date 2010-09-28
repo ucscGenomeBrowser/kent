@@ -145,7 +145,6 @@ labExpId J72
 labProtocolId 003WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878CellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -167,7 +166,6 @@ labExpId J73
 labProtocolId 004WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878CellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -237,6 +235,25 @@ rnaExtract longNonPolyA
 subId 1797
 tableName wgEncodeRikenCageGm12878CytosolLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageGm12878CytosolLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageGm12878CytosolLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageGm12878CytosolPapAlnRep1
 objType table
@@ -385,7 +402,6 @@ labExpId J84
 labProtocolId 011WC+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878CytosolPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -407,7 +423,6 @@ labExpId J85
 labProtocolId 004C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878CytosolPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -473,6 +488,25 @@ rnaExtract total
 subId 2125
 tableName wgEncodeRikenCageGm12878NucleolusTotalPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageGm12878NucleolusTotalRawData
+objType file
+cell GM12878
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageGm12878NucleolusTotalRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleolus
+origAssembly hg18
+parentTable wgEncodeRikenCageGm12878NucleolusTotalRawSignal
+project wgEncode
+rnaExtract total
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageGm12878NucleusLongnonpolyaAlnRep1
 objType table
@@ -551,7 +585,6 @@ lab RIKEN
 labExpId J59
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878NucleusLongnonpolyaRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -705,7 +738,6 @@ labExpId J93
 labProtocolId 003N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878NucleusPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -727,7 +759,6 @@ labExpId J94
 labProtocolId 004N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageGm12878NucleusPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -796,6 +827,25 @@ softwareVersion bedtools v2.7.1
 subId 1799
 tableName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageH1hescCellLongnonpolyaRawData
+objType file
+cell H1-hESC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization cell
+origAssembly hg18
+parentTable wgEncodeRikenCageH1hescCellLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageH1hescCellPapAlnRep1
 objType table
@@ -944,7 +994,6 @@ labExpId J74
 labProtocolId 005WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageH1hescCellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -966,7 +1015,6 @@ labExpId J75
 labProtocolId 006WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageH1hescCellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1054,7 +1102,6 @@ labExpId J86
 labProtocolId 006C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageH1hescCytosolPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1142,7 +1189,6 @@ labExpId J95
 labProtocolId 006N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageH1hescNucleusPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1296,7 +1342,6 @@ labExpId J80
 labProtocolId 011WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageHelas3CellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1318,7 +1363,6 @@ labExpId J81
 labProtocolId 012WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageHelas3CellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1472,7 +1516,6 @@ labExpId J87
 labProtocolId 011C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageHelas3CytosolPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1494,7 +1537,6 @@ labExpId J88
 labProtocolId 012C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageHelas3CytosolPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1648,7 +1690,6 @@ labExpId J96
 labProtocolId 011N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageHelas3NucleusPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1670,7 +1711,6 @@ labExpId J97
 labProtocolId 012N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageHelas3NucleusPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1824,7 +1864,6 @@ labExpId K01
 labProtocolId 013WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageHepg2CellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1846,7 +1885,6 @@ labExpId K02
 labProtocolId 014WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageHepg2CellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1916,6 +1954,25 @@ rnaExtract longNonPolyA
 subId 1801
 tableName wgEncodeRikenCageHepg2CytosolLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageHepg2CytosolLongnonpolyaRawData
+objType file
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageHepg2CytosolLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageHepg2CytosolLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageHepg2CytosolPapAlnRep1
 objType table
@@ -2064,7 +2121,6 @@ labExpId J89
 labProtocolId 013C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageHepg2CytosolPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2086,7 +2142,6 @@ labExpId J90
 labProtocolId 014C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageHepg2CytosolPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2153,6 +2208,25 @@ subId 2124
 tableName wgEncodeRikenCageHepg2NucleolusTotalPlusClusters
 view PlusClusters
 
+metaObject wgEncodeRikenCageHepg2NucleolusTotalRawData
+objType file
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageHepg2NucleolusTotalRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleolus
+origAssembly hg18
+parentTable wgEncodeRikenCageHepg2NucleolusTotalRawSignal
+project wgEncode
+rnaExtract total
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaAln
 objType table
 cell HepG2
@@ -2216,6 +2290,25 @@ rnaExtract longNonPolyA
 subId 1802
 tableName wgEncodeRikenCageHepg2NucleusLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageHepg2NucleusLongnonpolyaRawData
+objType file
+cell HepG2
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageHepg2NucleusLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleus
+origAssembly hg18
+parentTable wgEncodeRikenCageHepg2NucleusLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageHepg2NucleusPapAlnRep1
 objType table
@@ -2364,7 +2457,6 @@ labExpId J98
 labProtocolId 013N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageHepg2NucleusPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2386,7 +2478,6 @@ labExpId J99
 labProtocolId 014N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageHepg2NucleusPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2601,7 +2692,6 @@ labExpId J78
 labProtocolId 009WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageHuvecCellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2623,7 +2713,6 @@ labExpId J79
 labProtocolId 010WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageHuvecCellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2693,6 +2782,25 @@ rnaExtract longNonPolyA
 subId 1800
 tableName wgEncodeRikenCageHuvecCytosolLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageHuvecCytosolLongnonpolyaRawData
+objType file
+cell HUVEC
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageHuvecCytosolLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageHuvecCytosolLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageHuvecCytosolPapAlnRep3
 objType table
@@ -2841,7 +2949,6 @@ labExpId K03
 labProtocolId 029C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageHuvecCytosolPapRawSignalRep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -2863,7 +2970,6 @@ labExpId K04
 labProtocolId 030C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageHuvecCytosolPapRawSignalRep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -3017,7 +3123,6 @@ labExpId K05
 labProtocolId 029N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageHuvecNucleusPapRawSignalRep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -3039,7 +3144,6 @@ labExpId K06
 labProtocolId 030N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageHuvecNucleusPapRawSignalRep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -3193,7 +3297,6 @@ labExpId J70
 labProtocolId 001WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageK562CellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3215,7 +3318,6 @@ labExpId J71
 labProtocolId 002WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageK562CellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3286,6 +3388,25 @@ subId 1804
 tableName wgEncodeRikenCageK562ChromatinTotalPlusClusters
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562ChromatinTotalRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageK562ChromatinTotalRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization chromatin
+origAssembly hg18
+parentTable wgEncodeRikenCageK562ChromatinTotalRawSignal
+project wgEncode
+rnaExtract total
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageK562CytosolLongnonpolyaAln
 objType table
 cell K562
@@ -3349,6 +3470,44 @@ subId 1805
 tableName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562CytosolLongnonpolyaRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-24
+dateUnrestricted 2011-06-24
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData.csfasta.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageK562CytosolLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2438
+view RawData
+
+metaObject wgEncodeRikenCageK562CytosolLongnonpolyaRawData2
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-24
+dateUnrestricted 2011-06-24
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData2.csqual.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageK562CytosolLongnonpolyaRawSignal2
+project wgEncode
+rnaExtract longNonPolyA
+subId 2438
+view RawData2
+
 metaObject wgEncodeRikenCageK562CytosolPapAln
 objType table
 cell K562
@@ -3375,7 +3534,7 @@ metaObject wgEncodeRikenCageK562CytosolPapAlnRep1
 objType table
 cell K562
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3440,7 +3599,7 @@ metaObject wgEncodeRikenCageK562CytosolPapMinusClustersRep1
 objType table
 cell K562
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3505,7 +3664,7 @@ metaObject wgEncodeRikenCageK562CytosolPapPlusClustersRep1
 objType table
 cell K562
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3545,11 +3704,30 @@ subId 2383
 tableName wgEncodeRikenCageK562CytosolPapPlusClustersRep2
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562CytosolPapRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageK562CytosolPapRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageK562CytosolPapRawSignal
+project wgEncode
+rnaExtract longPolyA
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageK562CytosolPapRawDataRep1
 objType file
 cell K562
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -3560,7 +3738,6 @@ labExpId J82
 labProtocolId 001C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageK562CytosolPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3582,7 +3759,6 @@ labExpId J83
 labProtocolId 002C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageK562CytosolPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3653,6 +3829,25 @@ subId 1807
 tableName wgEncodeRikenCageK562NucleolusTotalPlusClusters
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562NucleolusTotalRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageK562NucleolusTotalRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleolus
+origAssembly hg18
+parentTable wgEncodeRikenCageK562NucleolusTotalRawSignal
+project wgEncode
+rnaExtract total
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageK562NucleoplasmTotalAln
 objType table
 cell K562
@@ -3717,6 +3912,25 @@ subId 1808
 tableName wgEncodeRikenCageK562NucleoplasmTotalPlusClusters
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562NucleoplasmTotalRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageK562NucleoplasmTotalRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleoplasm
+origAssembly hg18
+parentTable wgEncodeRikenCageK562NucleoplasmTotalRawSignal
+project wgEncode
+rnaExtract total
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageK562NucleusLongnonpolyaAln
 objType table
 cell K562
@@ -3776,6 +3990,44 @@ rnaExtract longNonPolyA
 subId 2127
 tableName wgEncodeRikenCageK562NucleusLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageK562NucleusLongnonpolyaRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-24
+dateUnrestricted 2011-06-24
+fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData.csfasta.gz
+grant Gingeras
+lab RIKEN
+localization nucleus
+origAssembly hg18
+parentTable wgEncodeRikenCageK562NucleusLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2438
+view RawData
+
+metaObject wgEncodeRikenCageK562NucleusLongnonpolyaRawData2
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-24
+dateUnrestricted 2011-06-24
+fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData2.csqual.gz
+grant Gingeras
+lab RIKEN
+localization nucleus
+origAssembly hg18
+parentTable wgEncodeRikenCageK562NucleusLongnonpolyaRawSignal2
+project wgEncode
+rnaExtract longNonPolyA
+subId 2438
+view RawData2
 
 metaObject wgEncodeRikenCageK562NucleusPapAlnRep1
 objType table
@@ -3909,6 +4161,25 @@ subId 2358
 tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep2
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562NucleusPapRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageK562NucleusPapRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleus
+origAssembly hg18
+parentTable wgEncodeRikenCageK562NucleusPapRawSignal
+project wgEncode
+rnaExtract longPolyA
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageK562NucleusPapRawDataRep1
 objType file
 cell K562
@@ -3924,7 +4195,6 @@ labExpId J91
 labProtocolId 001N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageK562NucleusPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3946,7 +4216,6 @@ labExpId J92
 labProtocolId 002N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageK562NucleusPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4078,6 +4347,25 @@ subId 1810
 tableName wgEncodeRikenCageK562PolysomeLongnonpolyaPlusClusters
 view PlusClusters
 
+metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaRawData
+objType file
+cell K562
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageK562PolysomeLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization polysome
+origAssembly hg18
+parentTable wgEncodeRikenCageK562PolysomeLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
+
 metaObject wgEncodeRikenCageMcf7CellPapAlnRep1
 objType table
 cell MCF-7
@@ -4159,7 +4447,6 @@ labExpId K07
 labProtocolId 015WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageMcf7CellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4192,7 +4479,7 @@ metaObject wgEncodeRikenCageNhekCellPapAlnRep2
 objType table
 cell NHEK
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -4236,7 +4523,7 @@ metaObject wgEncodeRikenCageNhekCellPapMinusClustersRep2
 objType table
 cell NHEK
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -4280,7 +4567,7 @@ metaObject wgEncodeRikenCageNhekCellPapPlusClustersRep2
 objType table
 cell NHEK
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -4313,7 +4600,6 @@ labExpId J76
 labProtocolId 007WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageNhekCellPapRawSignalRep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4324,7 +4610,7 @@ metaObject wgEncodeRikenCageNhekCellPapRawDataRep2
 objType file
 cell NHEK
 composite wgEncodeRikenCage
-dataType CAGE
+dataType Cage
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
@@ -4335,7 +4621,6 @@ labExpId J77
 labProtocolId 008WC+cage
 localization cell
 origAssembly hg19
-parentTable wgEncodeRikenCageNhekCellPapRawSignalRep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4405,6 +4690,25 @@ rnaExtract longNonPolyA
 subId 1811
 tableName wgEncodeRikenCageNhekCytosolLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageNhekCytosolLongnonpolyaRawData
+objType file
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageNhekCytosolLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization cytosol
+origAssembly hg18
+parentTable wgEncodeRikenCageNhekCytosolLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageNhekCytosolPapAlnRep3
 objType table
@@ -4487,7 +4791,6 @@ labExpId K08
 labProtocolId 027C+cage
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeRikenCageNhekCytosolPapRawSignalRep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -4557,6 +4860,25 @@ rnaExtract longNonPolyA
 subId 1812
 tableName wgEncodeRikenCageNhekNucleusLongnonpolyaPlusClusters
 view PlusClusters
+
+metaObject wgEncodeRikenCageNhekNucleusLongnonpolyaRawData
+objType file
+cell NHEK
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-23
+dateUnrestricted 2011-06-23
+fileName wgEncodeRikenCageNhekNucleusLongnonpolyaRawData.fastq.gz
+grant Gingeras
+lab RIKEN
+localization nucleus
+origAssembly hg18
+parentTable wgEncodeRikenCageNhekNucleusLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2433
+view RawData
 
 metaObject wgEncodeRikenCageNhekNucleusPapAlnRep3
 objType table
@@ -4639,7 +4961,6 @@ labExpId K09
 labProtocolId 027N+cage
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeRikenCageNhekNucleusPapRawSignalRep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -4709,4 +5030,42 @@ subId 1813
 tableName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters
 view PlusClusters
 
-# MAGIC: 1270831732
+metaObject wgEncodeRikenCageProstateCellLongnonpolyaRawData
+objType file
+cell prostate
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-24
+dateUnrestricted 2011-06-24
+fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData.csfasta.gz
+grant Gingeras
+lab RIKEN
+localization cell
+origAssembly hg18
+parentTable wgEncodeRikenCageProstateCellLongnonpolyaRawSignal
+project wgEncode
+rnaExtract longNonPolyA
+subId 2438
+view RawData
+
+metaObject wgEncodeRikenCageProstateCellLongnonpolyaRawData2
+objType file
+cell prostate
+composite wgEncodeRikenCage
+dataType Cage
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-24
+dateUnrestricted 2011-06-24
+fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
+grant Gingeras
+lab RIKEN
+localization cell
+origAssembly hg18
+parentTable wgEncodeRikenCageProstateCellLongnonpolyaRawSignal2
+project wgEncode
+rnaExtract longNonPolyA
+subId 2438
+view RawData2
+
+# MAGIC: -1026884009

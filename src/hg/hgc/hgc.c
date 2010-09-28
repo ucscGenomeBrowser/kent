@@ -16306,7 +16306,7 @@ char **row = NULL;
 boolean first = TRUE;
 
 genericHeader(tdb, item);
-safef(aliasTable, sizeof(aliasTable), "jaxAlleleInfo");
+safef(aliasTable, sizeof(aliasTable), "%sInfo", tdb->table);
 safef(phenoTable, sizeof(phenoTable), "jaxAllelePheno");
 safef(query, sizeof(query), "name = \"%s\"", item);
 sr = hRangeQuery(conn, tdb->table, seqName, winStart, winEnd, query, &hasBin);
@@ -23366,7 +23366,7 @@ else if (startsWith("jaxQTL", table) || startsWith("jaxQtl", table))
     {
     doJaxQTL(tdb, item);
     }
-else if (startsWith("jaxAllele", table))
+else if (startsWith("jaxAllele", table) || startsWith("jaxGeneTrap", table))
     {
     doJaxAllele(tdb, item);
     }
