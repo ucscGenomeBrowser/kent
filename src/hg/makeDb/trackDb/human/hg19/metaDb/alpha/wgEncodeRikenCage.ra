@@ -2484,67 +2484,6 @@ rnaExtract longPolyA
 subId 2366
 view RawData
 
-metaObject wgEncodeRikenCageHepg2NucleusTotalAln
-objType table
-cell HepG2
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileIndex wgEncodeRikenCageHepg2NucleusTotalAln.bam.bai
-fileName wgEncodeRikenCageHepg2NucleusTotalAln.bam
-grant Gingeras
-lab RIKEN
-labVersion Delve version 0.9
-localization nucleus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1803
-tableName wgEncodeRikenCageHepg2NucleusTotalAln
-view Alignments
-
-metaObject wgEncodeRikenCageHepg2NucleusTotalMinusClusters
-objType table
-cell HepG2
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageHepg2NucleusTotalMinusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1803
-tableName wgEncodeRikenCageHepg2NucleusTotalMinusClusters
-view MinusClusters
-
-metaObject wgEncodeRikenCageHepg2NucleusTotalPlusClusters
-objType table
-cell HepG2
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageHepg2NucleusTotalPlusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1803
-tableName wgEncodeRikenCageHepg2NucleusTotalPlusClusters
-view PlusClusters
-
 metaObject wgEncodeRikenCageHuvecCellPapAlnRep1
 objType table
 cell HUVEC
@@ -4161,25 +4100,6 @@ subId 2358
 tableName wgEncodeRikenCageK562NucleusPapPlusClustersRep2
 view PlusClusters
 
-metaObject wgEncodeRikenCageK562NucleusPapRawData
-objType file
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-23
-dateUnrestricted 2011-06-23
-fileName wgEncodeRikenCageK562NucleusPapRawData.fastq.gz
-grant Gingeras
-lab RIKEN
-localization nucleus
-origAssembly hg18
-parentTable wgEncodeRikenCageK562NucleusPapRawSignal
-project wgEncode
-rnaExtract longPolyA
-subId 2433
-view RawData
-
 metaObject wgEncodeRikenCageK562NucleusPapRawDataRep1
 objType file
 cell K562
@@ -4221,67 +4141,6 @@ replicate 2
 rnaExtract longPolyA
 subId 2358
 view RawData
-
-metaObject wgEncodeRikenCageK562NucleusTotalAln
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileIndex wgEncodeRikenCageK562NucleusTotalAln.bam.bai
-fileName wgEncodeRikenCageK562NucleusTotalAln.bam
-grant Gingeras
-lab RIKEN
-labVersion bowtie version 0.12.5
-localization nucleus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1809
-tableName wgEncodeRikenCageK562NucleusTotalAln
-view Alignments
-
-metaObject wgEncodeRikenCageK562NucleusTotalMinusClusters
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562NucleusTotalMinusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1809
-tableName wgEncodeRikenCageK562NucleusTotalMinusClusters
-view MinusClusters
-
-metaObject wgEncodeRikenCageK562NucleusTotalPlusClusters
-objType table
-cell K562
-composite wgEncodeRikenCage
-dataType Cage
-dataVersion ENCODE June 2010 Freeze
-dateReSubmitted 2010-06-21
-dateUnrestricted 2011-03-21
-fileName wgEncodeRikenCageK562NucleusTotalPlusClusters.bigWig
-grant Gingeras
-lab RIKEN
-labVersion bedtools v2.7.1
-localization nucleus
-origAssembly hg18
-project wgEncode
-rnaExtract total
-subId 1809
-tableName wgEncodeRikenCageK562NucleusTotalPlusClusters
-view PlusClusters
 
 metaObject wgEncodeRikenCageK562PolysomeLongnonpolyaAln
 objType table
@@ -5068,4 +4927,4 @@ rnaExtract longNonPolyA
 subId 2438
 view RawData2
 
-# MAGIC: -1026884009
+# MAGIC: 133442981
