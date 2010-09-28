@@ -147,3 +147,61 @@ taxId 6306
     #	4240790 bases of 82095019 (5.166%) in intersection
 
 #########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add melInc1 just before caeJap2
+
+# melInc1 (Meloidogyne incognita)
+melInc1.serverGenome = /hive/data/genomes/melInc1/melInc1.2bit
+melInc1.clusterGenome = /scratch/data/melInc1/melInc1.2bit
+melInc1.ooc = /scratch/data/melInc1/melInc1.11.ooc
+melInc1.lift = no
+melInc1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+melInc1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+melInc1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+melInc1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+melInc1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+melInc1.refseq.mrna.native.load = yes
+melInc1.refseq.mrna.xeno.load  = yes
+melInc1.refseq.mrna.xeno.loadDesc = yes
+melInc1.genbank.mrna.xeno.load = yes
+melInc1.genbank.est.native.load = yes
+melInc1.genbank.est.native.loadDesc = no
+melInc1.downloadDir = melInc1
+melInc1.perChromTables = no
+
+    git commit -m "Added melInc1 M. incognita WS210" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial melInc1 &
+    #	logFile: var/build/logs/2010.09.27-13:31:08.melInc1.initalign.log
+    #	real    388m50.914s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad melInc1
+    #	logFile: var/dbload/hgwdev/logs/2010.09.28-10:56:39.dbload.log
+    #	real    28m22.985s
+XXX - running Tue Sep 28 10:56:55 PDT 2010
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add melInc1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added melInc1 - C. elegans WS210" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
