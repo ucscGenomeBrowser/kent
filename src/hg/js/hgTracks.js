@@ -1321,6 +1321,7 @@ $(document).ready(function()
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
         findTracksNormalize();
+        updateMetaDataHelpLinks(0);
     }
 
     if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
@@ -1555,6 +1556,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                                    dataType: "html",
                                    trueSuccess: handleUpdateTrackMap,
                                    success: catchErrorOrDispatch,
+                                   error: errorHandler,
                                    cmd: cmd,
                                    cache: false
                                });
@@ -1601,6 +1603,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    dataType: "html",
                    trueSuccess: handleViewImg,
                    success: catchErrorOrDispatch,
+                   error: errorHandler,
                    cmd: cmd,
                    cache: false
                });
@@ -1665,6 +1668,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                        dataType: "html",
                        trueSuccess: handleUpdateTrackMap,
                        success: catchErrorOrDispatch,
+                       error: errorHandler,
                        cmd: cmd,
                        id: id,
                        loadingId: loadingId,
@@ -1856,6 +1860,7 @@ function updateTrackImg(trackName,extraData,loadingId)
                 dataType: "html",
                 trueSuccess: handleUpdateTrackMap,
                 success: catchErrorOrDispatch,
+                error: errorHandler,
                 cmd: 'refresh',
                 loadingId: loadingId,
                 id: trackName,
@@ -1885,6 +1890,7 @@ function _hgTrackUiPopUp(trackName,descriptionOnly)
                    dataType: "html",
                    trueSuccess: handleTrackUi,
                    success: catchErrorOrDispatch,
+                   error: errorHandler,
                    cmd: selectedMenuItem,
                    cache: false
                });
@@ -1952,7 +1958,7 @@ function handleTrackUi(response, status)
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
-                               buttons: { "Ok": function() {
+                               buttons: { "OK": function() {
                                     if( ! popUpTrackDescriptionOnly )
                                         hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
@@ -2150,8 +2156,10 @@ function findTracksMdbVarChanged(obj)
                    data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
+                   error: errorHandler,
                    cache: true,
-                   cmd: "hgt.metadataValue" + num
+                   cmd: "hgt.metadataValue" + num,
+                   num: num
                });
     }
     //findTracksSearchButtonsEnable(true);
@@ -2167,6 +2175,7 @@ function findTracksHandleNewMdbVals(response, status)
     for (var i = 0; i < list.length; i++) {
         ele.append("<option>" + list[i] + "</option>");
     }
+    updateMetaDataHelpLinks(this.num);
 }
 
 function searchKeydown(event)
@@ -2239,7 +2248,15 @@ function findTracksClickedOne(selCb,justClicked)
 
     // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = (justClicked || ($(seenVis).val() != $(hiddenVis).val()));
+    var setHiddenInputs = justClicked;
+    if(!justClicked) {
+        if(needSel)
+            setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
+        else if (checked)
+            setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
+        else
+            setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
+    }
     if(setHiddenInputs) {
         if(checked)
             $(hiddenVis).val($(seenVis).val());
@@ -2264,28 +2281,20 @@ function findTracksClickedOne(selCb,justClicked)
             $('input.viewBtn').val('View in Browser');
         else if($('input.selCb:checked').length == 0)
             $('input.viewBtn').val('Return to Browser');
+        findTracksCounts();
     }
-
-    findTracksCounts();
 }
 
 
 function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
-    $('#foundTracks').show()
+    $('div#found').show()
     var selCbs = $('input.selCb');
 
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    // The "view in browser" button should be enabled/disabled
-    var disabled = ($(selCbs).length == 0 || $(selCbs).filter(':checked').length == 0);
-    //$('input.viewBtn').attr('disabled',disabled);
-    if(disabled == false)
-        $('input.viewBtn').val('View in Browser');
-    else
-        $('input.viewBtn').val('Return to Browser');
-
+    findTracksViewButtoneText();
     findTracksCounts();
 }
 
@@ -2302,11 +2311,7 @@ function findTracksCheckAll(check)
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    if(check)
-        $('input.viewBtn').val('View in Browser');
-    else
-        $('input.viewBtn').val('Return to Browser');
-
+    findTracksViewButtoneText();
     findTracksCounts();
     return false;  // Pressing button does nothing more
 }
@@ -2340,9 +2345,18 @@ function findTracksSearchButtonsEnable(enable)
     }
 }
 
+function findTracksViewButtoneText()
+{
+    var inputs = $('table#foundTracks').find('input:hidden');
+    if( $(inputs).length == $(inputs).filter(':disabled').length)
+        $('input.viewBtn').val('Return to Browser');
+    else
+        $('input.viewBtn').val('View in Browser');
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
-    var foundTracks = $('#foundTracks');
+    var foundTracks = $('div#found');
     if(foundTracks != undefined)
         $(foundTracks).remove();
     $('input[type="text"]').val(''); // This will always be found
@@ -2352,6 +2366,17 @@ function findTracksClear()
     //findTracksSearchButtonsEnable(false);
     return false;
 }
+
+function findTracksSortNow(obj)
+{// Called by radio button to sort tracks
+    if( $('#sortIt').length == 0 )
+        $('form#searchTracks').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
+    else
+        $('#sortIt').val($(obj).val());
+    $('#searchSubmit').click();
+    return true;
+}
+
 /////////////////////////////////////////////////////
 
 function delSearchSelect(obj, rowNum)
@@ -2366,4 +2391,37 @@ function addSearchSelect(obj, rowNum)
     obj = $(obj);
     $("input[name=hgt.addRow]").val(rowNum);
     return true;
+}
+
+function updateMetaDataHelpLinks(index)
+{
+// update the metadata help links based on currently selected values.
+// If index == 0 we update all help items, otherwise we only update the one == index.
+    var i;
+    var db = getDb();
+    for(i=1;true;i++) {
+        var span = $("#helpLink" + i);
+        if(span.length > 0) {
+            if(index == 0 || i == index) {
+                var val = $("select[name='hgt.metadataName" + i + "']").val();
+                var text = $("select[name='hgt.metadataName" + i + "'] option:selected").text();
+                var str;
+                span.empty();
+                if(val == 'cell') {
+                    if(db.substr(0, 2) == "mm") {
+                        str = "../ENCODE/cellTypesMouse.html";
+                    } else {
+                        str = "../ENCODE/cellTypes.html";
+                    }
+                } else if (val == 'antibody') {
+                    str = "../ENCODE/antibodies.html";
+                } else {
+                    str = "../ENCODE/otherTerms.html#" + val;
+                }
+                span.html("<a target='_blank' href='" + str + "'>" + text + "</a>");
+            }
+        } else {
+            return;
+        }
+    }
 }

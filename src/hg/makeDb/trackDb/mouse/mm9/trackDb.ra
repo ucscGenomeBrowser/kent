@@ -102,6 +102,10 @@ spectrum on
 type psl .
 url http://lgsun.grc.nia.nih.gov/geneindex/mm9/bin/giT.cgi?genename=$$
 
+track jaxAllele override
+release alpha
+html jaxAllele
+
 track jaxRepTranscriptLift
 shortLabel MGI RepTrns LftO
 longLabel Mouse Genome Informatics Representative Transcript ***Lifted from NCBI36 (mm8)***

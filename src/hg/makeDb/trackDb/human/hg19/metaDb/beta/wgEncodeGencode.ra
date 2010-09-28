@@ -1,11 +1,11 @@
 metaObject wgEncodeGencode2wayConsPseudoV4
 objType table
-composite wgEncodeGencode
 annotation Automatic
+composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
-dateUnrestricted 2011-02-01
+dateUnrestricted 2010-07-27
 fileName wgEncodeGencode2wayConsPseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
@@ -22,7 +22,7 @@ composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
-dateUnrestricted 2011-02-01
+dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeAutoV4.gtf.gz
 grant Hubbard
 lab Sanger
@@ -38,7 +38,7 @@ composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
-dateUnrestricted 2011-02-01
+dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeClassesV4.tab.gz
 grant Hubbard
 lab Sanger
@@ -54,7 +54,7 @@ composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
-dateUnrestricted 2011-02-01
+dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeManualV4.gtf.gz
 grant Hubbard
 lab Sanger
@@ -71,7 +71,7 @@ composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
-dateUnrestricted 2011-02-01
+dateUnrestricted 2010-07-27
 fileName wgEncodeGencodePolyAV4.gtf.gz
 grant Hubbard
 lab Sanger
@@ -87,7 +87,7 @@ composite wgEncodeGencode
 dataType Gencode
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-01
-dateUnrestricted 2011-02-01
+dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeYalePseudoV4.gtf.gz
 grant Hubbard
 lab Sanger
@@ -96,4 +96,4 @@ subId 2094
 submittedDataVersion V4
 tableName wgEncodeGencodeYalePseudoV4
 
-# MAGIC: -1613831667
+# MAGIC: -1536766821

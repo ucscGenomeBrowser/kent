@@ -27,7 +27,7 @@ superTrack wgEncodeRnaSeqSuper
     pairEndsByName on
     showNames off
     noColorTag .
-    bamColorMode gray
+    bamColorMode off 
     bamGrayMode aliQual
     baseColorDefault diffBases
     baseColorUseSequence lfExtra
@@ -35,7 +35,7 @@ superTrack wgEncodeRnaSeqSuper
     indelQueryInsert on
     showDiffBasesAllScales .
     showDiffBasesMaxZoom 100
-    maxWindowToDraw 1000000
+    maxWindowToDraw 10000000
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
         release alpha
@@ -403,7 +403,7 @@ superTrack wgEncodeRnaSeqSuper
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 100
-    scoreFilterLimits 100:1000
+    scoreFilterLimits 0:1000
     scoreMin 100
     minGrayLevel 4
 

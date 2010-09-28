@@ -78,6 +78,7 @@ struct hTableInfo *ctToHti(struct customTrack *ct)
 /* Create an hTableInfo from a customTrack. */
 {
 struct hTableInfo *hti;
+int fieldCount = 3;
 
 if (ct == NULL)
     return(NULL);
@@ -88,31 +89,37 @@ hti->isPos = TRUE;
 hti->isSplit = FALSE;
 hti->hasBin = FALSE;
 hti->type = cloneString(ct->tdb->type);
-if (ct->fieldCount >= 3)
+if (sameString("pgSnp", hti->type))
+    fieldCount = 4; /* only 4 bed-like */
+else if (sameString("bedDetail", hti->type))
+    fieldCount = ct->fieldCount - 2; /* bed part 4-12 */
+else
+    fieldCount = ct->fieldCount;
+if (fieldCount >= 3)
     {
     strncpy(hti->chromField, "chrom", 32);
     strncpy(hti->startField, "chromStart", 32);
     strncpy(hti->endField, "chromEnd", 32);
     }
-if (ct->fieldCount >= 4)
+if (fieldCount >= 4)
     {
     strncpy(hti->nameField, "name", 32);
     }
-if (ct->fieldCount >= 5)
+if (fieldCount >= 5)
     {
     strncpy(hti->scoreField, "score", 32);
     }
-if (ct->fieldCount >= 6)
+if (fieldCount >= 6)
     {
     strncpy(hti->strandField, "strand", 32);
     }
-if (ct->fieldCount >= 8)
+if (fieldCount >= 8)
     {
     strncpy(hti->cdsStartField, "thickStart", 32);
     strncpy(hti->cdsEndField, "thickEnd", 32);
     hti->hasCDS = TRUE;
     }
-if (ct->fieldCount >= 12)
+if (fieldCount >= 12)
     {
     strncpy(hti->countField, "blockCount", 32);
     strncpy(hti->startsField, "chromStarts", 32);
@@ -478,13 +485,17 @@ if (ct == NULL)
     errAbort("Can't find custom track %s", name);
 char *type = ct->dbTrackType;
 
-if (type != NULL && startsWithWord("makeItems", type))
+if (type != NULL && (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type)))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     bedList = dbGetFilteredBedsOnRegions(conn, CUSTOM_TRASH, db, ct->dbTableName, name,
     	regionList, lm, retFieldCount);
     hFreeConn(&conn);
     fieldCount = 9;
+    if (sameWord("bedDetail", type))
+        fieldCount = *retFieldCount;
+    else if (sameWord("pgSnp", type))
+        fieldCount = 4;
     }
 else if (ct->wiggle)
     {
@@ -571,7 +582,7 @@ void doTabOutCustomTracks(char *db, char *table, struct sqlConnection *conn,
 {
 struct customTrack *ct = ctLookupName(table);
 char *type = ct->tdb->type;
-if (startsWithWord("makeItems", type))
+if (startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type))
     {
     struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
     doTabOutDb(CUSTOM_TRASH, db, ct->dbTableName, table, f, conn, fields);

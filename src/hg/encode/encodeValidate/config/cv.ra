@@ -1997,20 +1997,19 @@ term PBDE
 tag PBDE
 type Cell Line
 organism human
-#description (human-readable description of cell type, for cell type cellTypes.html)
-#tissue (general tissue type, for categorizing cell types)
-#vendorName (name of vendor or lab that provides these cells)
+description Human peripheral blood-derived erythroblasts
+tissue Blood
+vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 #vendorId (the ID of the cell type in the vendor's catalog)
 #orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
 #karyotype (optional human-readable karyotype, for .html page)
 #lineage (optional human-readable source of cell lines, e.g. 18 year old male)
-#termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
-#termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
+termId BTO:0000574 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000574
 #color (specifies color code for track data of this cell type, rgb values)
-#sex (M, F, B, or U.  If "F", then the track data shouldn't contain chrY)
-#tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
-#protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
-#category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
 term PFSK-1
 tag PFSK1
@@ -2383,7 +2382,7 @@ termId 6943
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6943
 color 153,38,0
 sex U
-#protocol LICR:BoneMarrow_Ren_protocol.pdf
+protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
 tag Cerebellum
@@ -2397,7 +2396,7 @@ termId 7012
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7012
 color 153,38,0
 sex U
-#protocol LICR:Cerebellum_Ren_protocol.pdf
+protocol LICR(Ren):Cerebellum_Ren_protocol.pdf
 
 term Cerebrum
 tag Cerebrum
@@ -2429,7 +2428,7 @@ termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
 sex U
-#protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
+protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term ES-CJ7
 tag ESCJ7
@@ -2462,7 +2461,7 @@ termId 6984
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6984
 color 153,38,0
 sex U
-#protocol LICR:Colon_Ren_protocol.pdf
+protocol LICR(Ren):Colon_Ren_protocol.pdf
 
 term Cortex
 tag Cortex
@@ -2476,7 +2475,7 @@ termId 4465
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=4465
 color 153,38,0
 sex U
-#protocol LICR:Cortex_Ren_protocol.pdf
+protocol LICR(Ren):Cortex_Ren_protocol.pdf
 
 term Fibroblast
 tag Fibroblast
@@ -2525,7 +2524,7 @@ termId 7079
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7079
 color 153,38,0
 sex U
-protocol PSU(Hardison):G1E_E4_E2_Hardison_protocol.pdf
+protocol PSU(Hardison):G1E_ER4_E2_Hardison_protocol.pdf
 
 term Heart
 tag Heart
@@ -2539,7 +2538,7 @@ termId 7103
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7103
 color 153,38,0
 sex U
-#protocol LICR:Heart_Ren_protocol.pdf
+protocol LICR(Ren):Heart_Ren_protocol.pdf
 
 term Kidney
 tag Kidney
@@ -2568,7 +2567,7 @@ termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7127
 color 153,38,0
 sex U
 # Procotol doesn't exist htdocsExtras/ENCODE/protocols/cell/mouse
-#protocol LICR:Limb_Ren_protocol.pdf
+#protocol LICR(Ren):Limb_Ren_protocol.pdf
 
 term Liver
 tag Liver
@@ -2582,7 +2581,7 @@ termId 6963
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6963
 color 153,38,0
 sex U
-#protocol LICR:Liver_Ren_protocol.pdf
+protocol LICR(Ren):Liver_Ren_protocol.pdf
 
 term Lung
 tag Lung
@@ -2596,7 +2595,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-#protocol LICR:Lung_Ren_protocol.pdf
+protocol LICR(Ren):Lung_Ren_protocol.pdf
 
 
 term MEF
@@ -2611,7 +2610,7 @@ termId 6948
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6948
 color 153,38,0
 sex U
-#protocol LICR:MEF_Ren_protocol.pdf
+protocol LICR(Ren):MEF_Ren_protocol.pdf
 
 #Shortened Tem
 term Megakaryo
@@ -2642,7 +2641,7 @@ description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
 sex U
-protocol missing
+protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
 
 #Missing VendorName and termId
 term Myocyte
@@ -2688,7 +2687,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-#protocol LICR:OlfactoryBulb_Ren_protocol.pdf
+protocol LICR(Ren):OlfactoryBulb_Ren_protocol.pdf
 
 term Pancreas
 tag Pancreas
@@ -2702,7 +2701,7 @@ termId 7015
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7015
 color 153,38,0
 sex U
-#protocol LICR:Pancreas_Ren_protocol.pdf
+protocol LICR(Ren):Pancreas_Ren_protocol.pdf
 
 term Placenta
 tag Placenta
@@ -2732,7 +2731,7 @@ termId 6978
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=6978
 color 153,38,0
 sex U
-#protocol LICR:SmallIntestine_Ren_protocol.pdf
+protocol LICR(Ren):SmallIntestine_Ren_protocol.pdf
 
 term Spleen
 tag Spleen
@@ -2746,7 +2745,7 @@ termId 7038
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7038
 color 153,38,0
 sex U
-#protocol LICR:Spleen_Ren_protocol.pdf
+protocol LICR(Ren):Spleen_Ren_protocol.pdf
 
 term Testis
 tag Testis
@@ -2760,7 +2759,7 @@ termId 9201
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=9201
 color 153,38,0
 sex U
-#protocol LICR:Testis_Ren_protocol.pdf
+protocol LICR(Ren):Testis_Ren_protocol.pdf
 
 term Thymus
 tag Thymus
@@ -2774,7 +2773,7 @@ termId 7037
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7037
 color 153,38,0
 sex U
-#protocol LICR:Thymus_Ren_protocol.pdf
+protocol LICR(Ren):Thymus_Ren_protocol.pdf
 
 term T-Naive
 tag TNaive
@@ -3130,6 +3129,21 @@ targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
+term CTCF_(C-20)
+tag CTCFC20
+type Antibody
+target CTCF
+antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin
+targetDescription Transcriptional regulator with 11 highly conserved zinc finger domains. Depending on context, can bind a histone acetyltransferase (HAT)-containing complex and function as transcriptional activator or bind a histone deacetylase (HDAC)-containing complex and function as transcriptional repressor. Involved in transcriptional regulation by binding to chromatin insulators and preventing interaction between promoter and nearby enhancers and silencers. Preferentially interacts with unmethylated DNA, preventing spreading of CpG methylation. Can dimerize, mediating long-range chromatin looping. When bound to chromatin, provides an anchor point for nucleosomes positioning. Involved in sister chromatid cohesion. Associates with both centromeres and chromosomal arms during metaphase and required for cohesin localization to CTCF sites. 
+orderUrl http://www.scbt.com/datasheet-15914-ctcf-c-20-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-15914
+lab Snyder
+targetId GeneCard:GC16P066153
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+validation missing
+
+#(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 ##This does not appear in metaDb
 term CtBP1
 tag CTBP1
@@ -3172,7 +3186,7 @@ vendorId 05-379
 lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1
-validation missing
+validation E2F1(IP-WB,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
 term E2F4
 tag E2F4
@@ -3368,7 +3382,7 @@ orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
-validation GATA1(Western_blot):mouse_Gata1_validation_Hardison.pdf
+validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 
 term GATA-2
 tag GATA2
@@ -3702,7 +3716,7 @@ vendorId MMS-101P
 lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
-validation missing
+validation HA-E2F1(IP-WB,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
 term HEY1
 tag HEY1
@@ -4046,6 +4060,20 @@ targetId GeneCard:GC22P041487
 targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20 
 validation missing
 
+term p300_(N-15)
+tag P300N15
+type Antibody
+target P300
+targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin
+vendorName Santa Cruz Biotech
+vendorId sc-584
+orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
+lab Snyder
+targetId GeneCard:GC22P041487
+targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
+validation missing
+
 term PAX5-C20
 tag PAX5C20
 type Antibody
@@ -4073,6 +4101,20 @@ lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation missing
+
+term PAX5_(N-15)
+tag PAX5N15
+type Antibody
+target PAX5
+antibodyDescription rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5
+targetDescription The PAX5 gene is a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA binding motif, known as the paired box. The PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation. The PAX5 gene encodes the B cell lineage specific activator protein (BSAP) that is expressed at early, but not late stages of B cell differentiation.
+vendorName Abcam
+vendorId ab12000
+orderUrl http://www.abcam.com/PAX5-antibody-ab12000.html
+lab Hardison
+targetId GeneCard:GC09M036828
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+validation PAX_N-15(WB):mouse_PAX_N-15_validation_Hardison.pdf
 
 term Pbx3
 tag PBX3
@@ -4442,7 +4484,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation TAL1(Western_blot):mouse_Tal1_validation_Hardison.pdf
+validation TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 
 #term TAF-II
 #type Antibody
@@ -4732,7 +4774,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/12419
-validation RipChip
+validation 
 
 
 term CELF1
@@ -4748,7 +4790,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10658
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term CELF2
@@ -4764,7 +4806,7 @@ lab Tenenbaum
 lots
 targetId 
 targetUrl http://www.ncbi.nlm.nih.gov/gene/14007
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term EEF1A1
@@ -4780,7 +4822,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1915
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term EIF4E
@@ -4796,7 +4838,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/45525
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term EIF4EBP1
@@ -4812,7 +4854,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/1978
-validation RipChip
+validation 
 
 term ELAVL1
 tag ELAVL1
@@ -4827,7 +4869,7 @@ lab Tenenbaum
 lots 1) B2508(Nov2008)
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/1994
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term FXR1
@@ -4843,7 +4885,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/8087
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term Hexim1
@@ -4859,7 +4901,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/10614
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term HNRNPD
@@ -4875,7 +4917,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/3184
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term hnRNPM
@@ -4890,7 +4932,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.ncbi.nlm.nih.gov/gene/76936
-validation RipChip
+validation 
 
 
 term IGF2BP1
@@ -4906,7 +4948,7 @@ lab Tenenbaum
 lots I0607(Nov2008)
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term NONO
@@ -4922,7 +4964,7 @@ lab Tenenbaum
 lots
 targetId GeneCard:GC0XP070503
 targetUrl http://www.ncbi.nlm.nih.gov/gene/4841
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term PABP
@@ -4938,7 +4980,7 @@ lab Tenenbaum
 lots
 targetId 37070
 targetUrl http://www.ncbi.nlm.nih.gov/gene/37070
-Validation RipChip
+Validation 
 
 term PABPC1
 tag PABPC1
@@ -4954,7 +4996,7 @@ lab Tenenbaum
 lots 044K4810 (Nov 2008)
 targetId 26986
 targetUrl http://view.ncbi.nlm.nih.gov/gene/26986
-validation RipChip
+validation 
 
 ##This does not appear in metaDb
 term QKI
@@ -4970,7 +5012,7 @@ lab Tenenbaum
 lots
 targetId 9444
 targetUrl http://www.ncbi.nlm.nih.gov/gene/9444
-validation RipChip
+validation 
 
 
 ##This does not appear in metaDb
@@ -4987,7 +5029,7 @@ lab Tenenbaum
 lots
 targetId 6195
 targetUrl http://www.ncbi.nlm.nih.gov/gene/6195
-validation RipChip
+validation 
 
 
 term ripInput
@@ -5003,7 +5045,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl
-validation RipChip
+validation 
 
 term SLBP
 tag SLBP
@@ -5018,7 +5060,7 @@ lab Tenenbaum
 lots 3) 7308-S2
 targetId 7884
 targetUrl http://view.ncbi.nlm.nih.gov/gene/7884
-validation RipChip
+validation 
 
 term T7Tag
 tag T7Tag
@@ -5033,7 +5075,7 @@ lab Tenenbaum
 lots
 targetId
 targetUrl http://www.emdbiosciences.com/usa/life-science-research/t7-tag-monoclonal-antibody/EMD_B###IO-69522/p_uuid
-validation RipChip
+validation
 
 
 ### ripTgtProtein - Tenenbaum RIP-chip / RIP-seq project
@@ -5690,6 +5732,11 @@ description 12hrs, 1nM Methyltrienolone (R1881) (Crawford)
 type treatment
 label Methyltrienolone
 
+term Alpha-amanitin_50ug_9hr
+tag AMA50ug9h
+type treatement
+description 9h with 50ug/ml alpha-amanitin
+
 term Betamethasone_100nM
 tag BMETH
 description 1h,100nM Betamethasone (Myers)
@@ -5942,6 +5989,12 @@ tag chipSeq
 type dataType
 label ChIP-seq
 
+term Cluster
+tag cluster
+type dataType
+label Integ Cluster
+description Element cluster by integrative analysis
+
 #tag not standard to match hg18
 term Cnv
 tag CNV
@@ -5987,6 +6040,11 @@ tag rnaSeqPolya
 type dataType
 label RNA-seq
 
+term Orchid    
+tag orchid
+type dataType
+label ORChID    
+
 term Mapability
 tag mapability
 type dataType
@@ -6006,9 +6064,9 @@ tag methylRrbs
 type dataType
 label Methyl RRBS
 
-# Not currently in the metaDB
-term NRE
-tag nre
+# tag not standard to match hg18
+term Nre
+tag NRE
 type dataType
 
 # tag not standard to match hg18

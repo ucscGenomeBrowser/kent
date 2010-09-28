@@ -106,6 +106,7 @@
 #include "oreganno.h"
 #include "oregannoUi.h"
 #include "pgSnp.h"
+#include "bedDetail.h"
 #include "bed12Source.h"
 #include "dbRIP.h"
 #include "wikiLink.h"
@@ -9509,6 +9510,20 @@ tg->customInt = slCount(tg->items);
 hFreeConn(&conn);
 }
 
+void loadPgSnpCt(struct track *tg)
+/* Load up pgSnp (personal genome SNP) type custom tracks */
+{
+char query[256];
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+struct customTrack *ct = tg->customPt;
+char *table = ct->dbTableName;
+safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", table, chromName, winEnd, winStart);
+tg->items = pgSnpLoadByQuery(conn, query);
+/* base coloring/display decision on count of items */
+tg->customInt = slCount(tg->items);
+hFreeConn(&conn);
+}
+
 void pgSnpMapItem(struct track *tg, struct hvGfx *hvg, void *item,
         char *itemName, char *mapItemName, int start, int end, int x, int y, int width, int height)
 /* create a special map box item with different
@@ -9587,6 +9602,93 @@ tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = blastColor;
 tg->itemNameColor = blastNameColor;
+}
+
+
+char *cactusName(struct track *tg, void *item)
+/* Get name to use for refGene item. */
+{
+return "";
+}
+
+
+void cactusDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+struct slList *item;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, hvg);
+    char *name = tg->itemName(tg, item);
+    name = strchr(name, '.');
+
+    if (name != NULL)
+        name++;
+    int y = atoi(name) * tg->lineHeight + yOff;
+
+    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    }
+//linkedFeaturesDraw(tg, seqStart, seqEnd,
+        //hvg, xOff, yOff, width,
+        //font, color, vis);
+}
+
+void cactusDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+linkedFeaturesDrawAt(tg, item,
+	hvg, xOff, y, scale,
+	font, color, vis);
+}
+
+int cactusHeight(struct track *tg, enum trackVisibility vis)
+{
+tg->height = 3 * tg->lineHeight;
+return tg->height;
+}
+
+int cactusItemHeight(struct track *tg, void *item)
+{
+return tg->lineHeight;
+}
+
+Color cactusNameColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+return MG_WHITE;
+}
+
+void cactusLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+{
+}
+
+void cactusBedMethods(struct track *tg)
+/* cactus bed track methods */
+{
+tg->freeItems = linkedFeaturesFreeItems;
+tg->drawItems = cactusDraw;
+tg->drawItemAt = cactusDrawAt;
+tg->mapItemName = linkedFeaturesName;
+tg->totalHeight = cactusHeight;
+tg->itemHeight = cactusItemHeight;
+tg->itemStart = linkedFeaturesItemStart;
+tg->itemEnd = linkedFeaturesItemEnd;
+tg->itemNameColor = linkedFeaturesNameColor;
+tg->nextPrevExon = linkedFeaturesNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->loadItems = loadGappedBed;
+//tg->itemName = cactusName;
+tg->itemName = linkedFeaturesName;
+//tg->mapItemName = refGeneMapName;
+//tg->itemColor = blastColor;
+tg->itemNameColor = cactusNameColor;
+tg->drawLeftLabels = cactusLeftLabels;
 }
 
 void blastMethods(struct track *tg)
@@ -10320,6 +10422,118 @@ else
 */
 }
 
+struct linkedFeatures *bedDetailLoadAsLf (char **row, int rowOffset, int fieldCount, boolean useItemRgb)
+/* load as a linked features track and use default displays */
+{
+struct bed *bedPart = bedLoadN(row+rowOffset, fieldCount);
+struct linkedFeatures *lf;
+if (fieldCount < 12)
+    bed8To12(bedPart);
+lf = lfFromBed(bedPart);
+if (useItemRgb)
+    {            
+    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->filterColor=bedPart->itemRgb;
+    }
+return lf;
+}
+
+struct bed *bedDetailLoadAsBed (char **row, int rowOffset, int fieldCount)
+/* load as a bed track and use default displays */
+{
+return bedLoadN(row+rowOffset, fieldCount);
+}
+
+void loadBedDetailCtSimple(struct track *tg)
+/* Load bedDetails custom track as bed 4-7, other fields are for hgc clicks */
+{
+struct bed *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+int rowOffset = 0;
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+struct customTrack *ct = tg->customPt;
+char *table = ct->dbTableName;
+int fieldCount = ct->fieldCount - 2; /* field count of bed part */
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bedDetailLoadAsBed(row, rowOffset, fieldCount);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+tg->bedSize = fieldCount;
+}
+
+void loadBedDetailSimple(struct track *tg)
+/* Load bedDetails track as bed 4-7, other fields are for hgc clicks */
+{
+struct bed *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+int rowOffset = 0;
+struct sqlConnection *conn = hAllocConn(database);
+char *table = tg->table;
+int bedSize = tg->bedSize; /* count of fields in bed part */
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bedDetailLoadAsBed(row, rowOffset, bedSize);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+}
+
+void loadBedDetailCt(struct track *tg) 
+/* Load bedDetails type track as linked features, other fields are for hgc clicks */
+{
+struct linkedFeatures *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+int rowOffset = 0;
+struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
+struct customTrack *ct = tg->customPt;
+char *table = ct->dbTableName;
+int fieldCount = ct->fieldCount - 2; /* field count of bed part */
+boolean useItemRgb = bedItemRgb(ct->tdb);
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bedDetailLoadAsLf(row, rowOffset, fieldCount, useItemRgb);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+//tg->bedSize = fieldCount;
+}
+
+void loadBedDetail(struct track *tg)
+/* Load bedDetails type track as linked features, other fields are for hgc clicks */
+{
+struct linkedFeatures *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+int rowOffset = 0;
+struct sqlConnection *conn = hAllocConn(database);
+char *table = tg->table;
+int bedSize = tg->bedSize; /* field count of bed part */
+boolean useItemRgb = bedItemRgb(tg->tdb);
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bedDetailLoadAsLf(row, rowOffset, bedSize, useItemRgb);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+}
+
 void loadProtVar(struct track *tg)
 /* Load UniProt Variants with labels */
 {
@@ -10380,6 +10594,73 @@ tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+}
+
+char *pgSnpCtMapItemName(struct track *tg, void *item)
+/* Return composite item name for pgSnp custom tracks. */
+{
+struct pgSnp *myItem = item;
+char *itemName = myItem->name;
+static char buf[256];
+if (strlen(itemName) > 0)
+  sprintf(buf, "%s %s", ctFileName, itemName);
+else
+  sprintf(buf, "%s NoItemName", ctFileName);
+return buf;
+}
+
+void bedDetailCtMethods (struct track *tg, struct customTrack *ct)
+/* Load bed detail track from custom tracks as bed 4-12 */
+{
+if (ct != NULL && ct->fieldCount >= (9+2)) /* at least bed9 */
+    {
+    linkedFeaturesMethods(tg);
+    tg->loadItems = loadBedDetailCt;
+    }
+else  /* when in doubt set up as simple bed */
+    { 
+    bedMethods(tg);
+    tg->loadItems = loadBedDetailCtSimple;
+    }
+tg->nextItemButtonable = TRUE;
+tg->customPt = ct;
+tg->canPack = TRUE;
+}
+
+void pgSnpCtMethods (struct track *tg)
+/* Load pgSnp track from custom tracks */
+{
+/* start with the pgSnp methods */
+pgSnpMethods(tg);
+/* loader must access CUSTOM_TRASH */
+tg->loadItems = loadPgSnpCt;
+tg->mapItemName = pgSnpCtMapItemName;
+tg->canPack = TRUE;
+}
+
+void bedDetailMethods (struct track *tg)
+/* Load bed detail track as bed 4-12 */
+{
+struct trackDb *tdb = tg->tdb;
+char *words[3];
+int size, cnt = chopLine(cloneString(tdb->type), words);
+if (cnt > 1) 
+    size = atoi(words[1]) - 2;
+else 
+    size = 4;
+tg->bedSize = size;
+if (size >= 9) /* at least bed9 */
+    {
+    linkedFeaturesMethods(tg);
+    tg->loadItems = loadBedDetail;
+    }
+else  /* when in doubt set up as simple bed */
+    {
+    bedMethods(tg);
+    tg->loadItems = loadBedDetailSimple;
+    }
+tg->nextItemButtonable = TRUE;
+tg->canPack = TRUE;
 }
 
 void protVarMethods (struct track *tg)
@@ -10875,6 +11156,14 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
+    }
+else if (startsWith(type, "bedDetail"))
+    {
+    bedDetailMethods(track);
+    }
+else if (sameWord(type, "pgSnp"))
+    {
+    pgSnpCtMethods(track);
     }
 #ifndef GBROWSE
 else if (sameWord(type, "coloredExon"))
@@ -11427,6 +11716,7 @@ registerTrackHandler("transfacHit", triangleMethods );
 registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 registerTrackHandler("igtc", igtcMethods );
+registerTrackHandler("cactusBed", cactusBedMethods );
 /* Lowe lab related */
 #ifdef LOWELAB
 registerTrackHandler("refSeq", archaeaGeneMethods);

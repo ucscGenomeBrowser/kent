@@ -115,5 +115,10 @@ void printSeqCodDisplay (char *db, struct pgSnp *item);
 void printPgDbLink(char *db, struct trackDb *tdb, struct pgSnp *item);
 /* print the links to phenotype and other databases for pgSnps */
 
+extern char *pgSnpAutoSqlString;
+
+struct pgSnp *pgSnpLoadNoBin (char **row);
+/* load struct from row without bin */
+
 #endif /* PGSNP_H */
 
