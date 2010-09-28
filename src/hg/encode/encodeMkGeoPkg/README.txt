@@ -38,7 +38,7 @@ by metaDb for that composite.
 
 7) Use aspera to send bzipped dir and .soft to GEO:
 
-ascp -i ~/encode_geo_key/encode_geo_key -QTr -l300m \
+ascp -i ~/encode_geo_key/encode_geo_key.ppk -QTr -l300m \
     ucsc_encode_dcc_wgEncodeCaltechRnaSeq.tar.bz2 \
     ucsc_encode_dcc_wgEncodeCaltechRnaSeq.soft \
     asp-geo@upload.ncbi.nlm.nih.gov:ENCODE/
