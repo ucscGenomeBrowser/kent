@@ -148,3 +148,69 @@ taxId 6305
     #	3631046 bases of 53017507 (6.849%) in intersection
 
 #########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add melHap1 just before caeJap2
+
+# melHap1 (Meloidogyne hapla)
+melHap1.serverGenome = /hive/data/genomes/melHap1/melHap1.2bit
+melHap1.clusterGenome = /scratch/data/melHap1/melHap1.2bit
+melHap1.ooc = /scratch/data/melHap1/melHap1.11.ooc
+melHap1.lift = no
+melHap1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+melHap1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+melHap1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+melHap1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+melHap1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter} 
+melHap1.refseq.mrna.native.load = yes
+melHap1.refseq.mrna.xeno.load  = yes
+melHap1.refseq.mrna.xeno.loadDesc = yes
+melHap1.genbank.mrna.xeno.load = yes
+melHap1.genbank.est.native.load = yes
+melHap1.genbank.est.native.loadDesc = no
+melHap1.downloadDir = melHap1
+melHap1.perChromTables = no
+
+    git commit -m "Added melHap1 M. hapla WS210" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial melHap1 &
+    #	logFile: var/build/logs/2010.09.27-13:30:40.melHap1.initalign.log
+    #	real    119m17.816s
+    # this had a failure during the fetch:
+    # Exception: process signaled 9: "gbAlignGet
+    # -workdir=work/initial.melHap1/align -orgCats=xeno,native -polyASizes
+    # -fasize=4194304 -noMigrate genbank.179.0 full mrna melHap1"
+
+    #	remove the work/initial.melHap1 directory and start over:
+    time nice -n +19 bin/gbAlignStep -initial melHap1 &
+    #	logFile: var/build/logs/2010.09.28-10:10:02.melHap1.initalign.log
+    #	real    201m42.832s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad melHap1
+    #	logFile: var/dbload/hgwdev/logs/2010.09.28-14:33:02.dbload.log
+    #	real    20m26.836s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add melHap1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added melHap1 - C. elegans WS210" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
