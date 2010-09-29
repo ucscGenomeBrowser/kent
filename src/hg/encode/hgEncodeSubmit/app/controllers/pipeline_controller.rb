@@ -429,7 +429,6 @@ class PipelineController < ApplicationController
 
       end
     end
-    autoResume = @params['auto_resume']['0'] == "1" ? " -c" : ""
     allowReloads = "";
     if (defined? @params['allow_reloads']) and (@params['allow_reloads']['0'] == "1")
        allowReloads = "-allowReloads"
@@ -446,7 +445,7 @@ class PipelineController < ApplicationController
 
     new_status @project, "upload requested"
     upload_name = @upload.blank? ? "" : @upload.original_filename
-    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{autoResume}\", \"#{allowReloads}\""
+    param_string = "#{@project.id},\"#{@upurl}\", \"#{@upftp}\", \"#{upload_name}\", \"#{bg_local_path}\", \"#{allowReloads}\""
     unless queue_job @project.id, "upload_background(#{param_string})"
       flash[:error] = "System error - queued_jobs save failed."
       return

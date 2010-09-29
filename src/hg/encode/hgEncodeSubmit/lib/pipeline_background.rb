@@ -207,7 +207,7 @@ module PipelineBackground
   end
  
 
-  def upload_background(project_id, upurl, upftp, upload, local_path, autoResume, allowReloads)
+  def upload_background(project_id, upurl, upftp, upload, local_path, allowReloads)
 
     project = Project.find(project_id)
 
