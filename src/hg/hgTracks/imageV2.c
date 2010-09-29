@@ -122,9 +122,9 @@ if (tdbIsSuperTrackChild(track->tdb))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
     }
-else if (tdbIsCompositeChild(track->tdb))
+else if (tdbIsContainerChild(track->tdb))
     {
-    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
+    struct trackDb *parentTdb = tdbGetContainer(track->tdb);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
     if (!track->canPack)
@@ -133,7 +133,7 @@ else if (tdbIsCompositeChild(track->tdb))
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsContainerChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
 if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
@@ -1560,7 +1560,7 @@ else
             {
             struct trackDb * tdb = imgTrack->tdb;
             if(tdbIsCompositeChild(tdb))
-                tdb = trackDbCompositeParent(tdb);
+                tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
         hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
