@@ -804,7 +804,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateReSubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bedGraph4.gz
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
@@ -825,7 +825,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateReSubmitted 2010-09-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
-fileName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bedGraph4.gz
+fileName wgEncodeRikenCageH1hescCellLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
@@ -3411,7 +3411,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateReSubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-fileName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters.bedGraph4.gz
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -3432,7 +3432,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateReSubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-fileName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters.bedGraph4.gz
+fileName wgEncodeRikenCageK562CytosolLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cytosol
@@ -4902,7 +4902,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateReSubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-fileName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters.bedGraph4.gz
+fileName wgEncodeRikenCageProstateCellLongnonpolyaMinusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
@@ -4923,7 +4923,7 @@ dataVersion post ENCODE June 2010 Freeze
 dateReSubmitted 2010-09-22
 dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
-fileName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bedGraph4.gz
+fileName wgEncodeRikenCageProstateCellLongnonpolyaPlusClusters.bigWig
 grant Gingeras
 lab RIKEN
 localization cell
