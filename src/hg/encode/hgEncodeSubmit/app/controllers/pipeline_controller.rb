@@ -190,9 +190,6 @@ class PipelineController < ApplicationController
   def validate
     @project = Project.find(params[:id])
     allowReloads = ""
-    if (defined? @params['allow_reloads'])
-      allowReloads = @params['allow_reloads']['0'] == "1" ? "-allowReloads" : ""
-    end
     if @project.run_stat 
       flash[:error] = "Please wait, a background job is still running."
       redirect_to :action => 'show', :id => @project.id
