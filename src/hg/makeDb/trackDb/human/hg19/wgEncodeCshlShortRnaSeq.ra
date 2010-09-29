@@ -150,7 +150,7 @@ superTrack wgEncodeRnaSeqSuper
     viewLimits 0:500
     minLimit 0
     maxLimit 5059134
-    autoScale off
+    autoScale on
     transformFunc NONE
     windowingFunction mean
     maxHeightPixels 100:24:16

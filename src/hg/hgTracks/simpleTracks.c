@@ -504,7 +504,7 @@ dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
-    struct trackDb *tdbParent = trackDbCompositeParent(toggleGroup->tdb);
+    struct trackDb *tdbParent = tdbGetComposite(toggleGroup->tdb);
     char *parentName = tdbParent->track;
     // Find parent track (as opposed to trackDb)
     struct track *tgParent =toggleGroup->parent;
@@ -10431,7 +10431,7 @@ if (fieldCount < 12)
     bed8To12(bedPart);
 lf = lfFromBed(bedPart);
 if (useItemRgb)
-    {            
+    {
     lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
     lf->filterColor=bedPart->itemRgb;
     }
@@ -10488,7 +10488,7 @@ sqlFreeResult(&sr);
 tg->items = list;
 }
 
-void loadBedDetailCt(struct track *tg) 
+void loadBedDetailCt(struct track *tg)
 /* Load bedDetails type track as linked features, other fields are for hgc clicks */
 {
 struct linkedFeatures *list = NULL, *el;
@@ -10618,7 +10618,7 @@ if (ct != NULL && ct->fieldCount >= (9+2)) /* at least bed9 */
     tg->loadItems = loadBedDetailCt;
     }
 else  /* when in doubt set up as simple bed */
-    { 
+    {
     bedMethods(tg);
     tg->loadItems = loadBedDetailCtSimple;
     }
@@ -10644,9 +10644,9 @@ void bedDetailMethods (struct track *tg)
 struct trackDb *tdb = tg->tdb;
 char *words[3];
 int size, cnt = chopLine(cloneString(tdb->type), words);
-if (cnt > 1) 
+if (cnt > 1)
     size = atoi(words[1]) - 2;
-else 
+else
     size = 4;
 tg->bedSize = size;
 if (size >= 9) /* at least bed9 */

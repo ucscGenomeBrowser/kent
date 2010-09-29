@@ -556,7 +556,8 @@ module PipelineBackground
           return status.exitstatus
         end
         if ( (Time.now - before) > myTimeout)
-          Process.kill("ABRT",cpid)
+          killAllDescendantsOf(cpid)   # kill any descendents of this child first.
+          Process.kill("ABRT",cpid)    # kill this child
 	  pid, status = Process.wait2(cpid) # clean up zombies
           return -1
         end
@@ -806,5 +807,18 @@ private
     end
     return true
   end
+
+  def killAllDescendantsOf(pid)
+    f = open("|pgrep -P #{pid}")
+    lines = f.readlines
+    f.close
+    lines.each do |line|
+      dpid = Integer(line)
+      killAllDescendantsOf(dpid)   # Recurse
+      Process.kill("ABRT",dpid)
+    end
+
+  end
+
 
 end

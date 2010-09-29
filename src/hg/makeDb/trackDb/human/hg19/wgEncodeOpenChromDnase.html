@@ -20,10 +20,10 @@ second platform, high-resolution 1% ENCODE tiled microarrays supplied by NimbleG
 The particular tracks described in this page detail results from the FAIRE experiments.
 Data for the DNaseI HS experiments can be found in the <B>ENC DNase/FAIRE Super-track</B>
 in the <A TARGET=_BLANK HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromFaire">
-Open Chrom FAIRE track</A>.  Data for the ChIP experiments can be found
+UNC Faire track</A>.  Data for the ChIP experiments can be found
 <B>ENC TF Binding Super-track</B> in the <A TARGET=_BLANK
 HREF="/cgi-bin/hgTrackUi?db=hg19&g=wgEncodeOpenChromChip">
-Open Chrom TBFS super-track</A>.
+UTA TFBS track</A>.
 </P>
 <P>
 <B>DNaseI HS data</B>: DNaseI is an enzyme that has long been used to map general
@@ -72,16 +72,16 @@ option when viewing signal data in full mode to see the <EM>full</EM> dynamic ra
 Note that in regions that do not have open chromatin sites, autoscale will rescale the data
 and inflate the background signal, making the regions appear noisy.  Changing back to fixed
 scale will alleviate this issue. In general, for each experiment in each of the cell types,
-the Open Chrom DNase tracks contain the following views:
-<DT><I>Peaks</I></DT><DD>Regions of enriched signal in FAIRE experiments.
+the Duke DNaseI HS tracks contain the following views:
+<BR>
+<P><DT><I>Peaks</I></DT><DD>Regions of enriched signal in FAIRE experiments.
 Peaks were called based on signals created using F-Seq, a software program developed
 at Duke (Boyle <em>et al.</em>, 2008b). Significant regions were determined
 by fitting the data to a gamma distribution to calculate p-values.
 Contiguous regions where p-values were below a 0.05/0.01 threshold were
 considered significant.  The solid vertical line in the peak represents the
-point with highest signal.</DD>
-
-<DT><I>Peaks (Zinba)</I></DT><DD> Enriched regions for FAIRE data were called
+point with highest signal.</DD></P>
+<P><DT><I>Peaks (Zinba)</I></DT><DD> Enriched regions for FAIRE data were called
 using ZINBA (Zero Inflated Negative Binomial Algorithm). ZINBA is a flexible
 statistical method that uses a generalized linear model to select genomic
 windows with enriched sequence counts after adjusting for relevant confounding
@@ -89,9 +89,8 @@ factors such as mapability, GC content, and copy number alterations.
 Significant regions are selected using the set of standardized residuals
 below a false discovery rate (qvalue) threshold. Peaks were further refined
 using a shape detection algorithm to identify local maxima and boundaries of
-the Signal (Base Overlap) data within each significant region.</DD>
-
-<DT><I>Signal (F-Seq Density)</I></DT><DD> Density graph (wiggle) of signal
+the Raw Base Overlap Signal data within each significant region.</DD></P>
+<P><DT><I>F-Seq Density Signal</I></DT><DD> Density graph (wiggle) of signal
 enrichment calculated using F-Seq for the combined set of sequences from all
 replicates. F-Seq employs Parzen kernel density estimation to create base pair
 scores (Boyle <em>et al.</em>, 2008b). This method does not look at fixed-length
@@ -100,30 +99,28 @@ their distance from that base.  It only considers sequences aligned 4 or less
 times in the genome, and uses an alignability background model to try to correct
 for regions where sequences cannot be aligned. For each cell type, especially
 important for those with an abnormal karyotype, a model to try to correct for
-amplifications and deletions that is based on control input data was also used. </DD>
-
-<DT><I>Signal (Base Overlap)</I></DT><DD> An alternative version of the
-<I>Signal (F-Seq Density)</I> track annotation that provides a higher resolution
+amplifications and deletions that is based on control input data was also used. </DD> <P>
+<P><DT><I>Raw Base Overlap Signal</I></DT><DD> An alternative version of the
+<I>F-Seq Density Signal</I> track annotation that provides a higher resolution
 view of the raw sequence data. This track also includes the combined set of
 sequences from all replicates.  For each sequence, the aligned read is extended
 to a fragment length of 134 bp from the 5' aligned end
 representing the approximate average fragment length.  The score at each base
 pair represents the number of extended fragments that overlap the base pair.
-</DD>
-
-<DT><I>Uniqueness</I></DT><DD>
+</DD></P>
+<P><DT><I>Uniqueness</I></DT><DD>
 The <EM>Duke uniqueness</EM> tracks were used in
 the background models for use with F-seq.  These tracks identify regions of
 sequence that appear one, two, three, four, or more than four times within the
 genome for different tag lengths. The tracks help identify regions where
 high-throughput sequence tags cannot be mapped.
-</DD>
+</DD></P>
 
-<DT><I>Excluded Regions</I></DT><DD>The <EM>Duke excluded regions</EM> track
+<P><DT><I>Excluded Regions</I></DT><DD>The <EM>Duke excluded regions</EM> track
 was used to identify problematic regions for short sequence tag signal
 detection (such as satellites and rRNA genes). These regions of the genome were
 excluded from the Open Chromatin FAIRE Peaks tracks.</DD>
-</DD>
+</DD></P>
 </P>
 
 
@@ -153,7 +150,9 @@ cutting step of the approximately >50kb DNA fragments extracted after DNaseI
 digestion. Sequences from each experiment were aligned to the genome using 
 BWA (Li <em>et al.</em>, 2010) for the NCBI 36 (hg19) assembly.  
 The command used for these alignments was:
+<BR>
 <DT> > bwa aln -t 8 genome.fa s_1.sequence.txt.bfq > s_1.sequence.txt.sai </DT>
+<BR>
 Where genome.fa is the whole genome sequence and s_1.sequence.txt.bfq is one lane
 of sequences convert into the required bfq format.  Sequences from multiple lanes
 are combined for a single replicate using the bwa samse command, and converted
@@ -178,7 +177,9 @@ directly for other cell lines. Instead, a general background model was derived
 from the available Input data sets. This should provide corrections for
 sequencing biases and alignment artifacts, but will not correct for cell
 type specific copy number changes.  The exact command used for this step is:
+<BR.
 <DT> > fseq -l 800 -v -b (bff files) -p (iff files) aligments.bed</DT>
+<BR>
 Where the (bff files) are the background files based on alignability, the
 (iff files) are the background files based on the Input experiments,
 and alignments.bed are a bed file of filtered sequence alignments.</P>
