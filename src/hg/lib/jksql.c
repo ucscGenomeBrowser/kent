@@ -1139,7 +1139,7 @@ struct sqlResult *sqlGetResultExt(struct sqlConnection *sc, char *query, unsigne
  * and *error will be set to the mysql error string, which MUST NOT be freed. */
 {
 struct sqlResult *sr = sqlUseOrStore(sc, query, mysql_use_result, FALSE);
-if (sr)
+if (sr == NULL)
     {
     MYSQL *conn = sc->conn;
     if (errorNo)

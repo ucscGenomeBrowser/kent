@@ -541,7 +541,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel pros cell pA- o
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in pros whole cell)
         subGroups view=PlusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA rep=rep0
-        type bedGraph 4
+        type bigWig 0.070000 10635.549805
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
 
@@ -551,7 +551,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 cyto pA-
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in K562 cytosol)
         subGroups view=PlusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep0
-        type bedGraph 4
+        type bigWig 0.120000 6131.720215
         origAssembly hg18
         color 46,0,184
         # subId=1805 dateSubmitted=2010-09-22
@@ -562,7 +562,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel H1-hESC cell pA-
         longLabel ENCODE RIKEN CAGE Plus Strand Predicted Start Sites (PolyA- in H1-hESC whole cell)
         subGroups view=PlusClusters cellType=H1hESC localization=cell rnaExtract=longNonPolyA rep=rep0
-        type bedGraph 4
+        type 0.040000 23004.330078
         origAssembly hg18
         color 0,107,27
         # subId=1799 dateSubmitted=2010-09-22
@@ -1311,7 +1311,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel pros cell pA- o
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in pros whole cell)
         subGroups view=MinusClusters cellType=prostate localization=cell rnaExtract=longNonPolyA rep=rep0
-        type bedGraph 4
+        type bigWig 0.070000 1982.420044
         origAssembly hg18
         # subId=1813 dateSubmitted=2010-09-22
 
@@ -1321,7 +1321,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel K562 cyto pA-
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in K562 cytosol)
         subGroups view=MinusClusters cellType=K562 localization=cytosol rnaExtract=longNonPolyA rep=rep0
-        type bedGraph 4
+        type bigWig 0.120000 9517.360352
         origAssembly hg18
         color 46,0,184
         # subId=1805 dateSubmitted=2010-09-22
@@ -1332,7 +1332,7 @@ superTrack wgEncodeRnaSeqSuper
         shortLabel H1-hESC cell pA-
         longLabel ENCODE RIKEN CAGE Minus Strand Predicted Start Sites (PolyA- in H1-hESC whole cell)
         subGroups view=MinusClusters cellType=H1hESC localization=cell rnaExtract=longNonPolyA rep=rep0
-        type bedGraph 4
+        type 0.040000 10790.110352
         origAssembly hg18
         color 0,107,27
         # subId=1799 dateSubmitted=2010-09-22

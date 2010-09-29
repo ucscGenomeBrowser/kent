@@ -2418,7 +2418,7 @@ function updateMetaDataHelpLinks(index)
                 } else {
                     str = "../ENCODE/otherTerms.html#" + val;
                 }
-                span.html("<a target='_blank' href='" + str + "'>" + text + "</a>");
+                span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
             }
         } else {
             return;
