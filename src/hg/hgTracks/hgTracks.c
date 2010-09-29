@@ -1592,7 +1592,7 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
-    struct trackDb *parentTdb = trackDbCompositeParent(tdb);
+    struct trackDb *parentTdb = tdbGetComposite(tdb);
     assert(parentTdb != NULL);
 
     char *viewName = NULL;
@@ -2223,7 +2223,7 @@ if (withLeftLabels && psOutput == NULL)
             {
             if(tdbIsCompositeChild(track->tdb))
                 {
-                struct trackDb *parent = trackDbCompositeParent(track->tdb);
+                struct trackDb *parent = tdbGetComposite(track->tdb);
                 mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
                     parent->track, parent->shortLabel, track->track);
                 }
@@ -4267,6 +4267,10 @@ static void parentChildCartCleanup(struct track *trackList,struct cart *newCart,
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
+    if (tdbIsMultiTrack(track->tdb))
+        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb)) // Note, this is done for found multi-track kids but composites are only straightened up in hgTrackUi
+            track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
+
     if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
         { // Need to update track visibility
         if (tdbIsSuperTrackChild(track->tdb))

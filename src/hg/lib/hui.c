@@ -6753,7 +6753,7 @@ if (cart != NULL)
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
-        if (tdbIsContainerOrCompositeChild(tdb))
+        if (tdbIsContainer(tdb))
             return vis; // subtrackVis override
         }
     }
