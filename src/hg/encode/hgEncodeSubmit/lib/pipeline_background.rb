@@ -18,6 +18,30 @@ module PipelineBackground
     return nil
   end
 
+  def get_paraFetch_config()
+    paraFetchConfig = open("#{RAILS_ROOT}/config/paraFetch.yml") { |f| YAML.load(f.read) }
+    if paraFetchConfig == nil
+      print "unable to load config/paraFetch.yml\n"
+      exit 1
+    end
+    if paraFetchConfig["default"] == nil
+      print "error: default setting missing in config/paraFetch.yml\n" 
+      exit 1
+    end
+    if paraFetchConfig["default"]["conns"] == nil
+      print "error: conns setting missing from default setting in config/paraFetch.yml\n" 
+      exit 1
+    end
+    if paraFetchConfig["default"]["instances"] == nil
+      print "error: instances setting missing from default setting in config/paraFetch.yml\n"  
+      exit 1
+    end
+    return paraFetchConfig
+  rescue
+    print "unable to load config/paraFetch.yml\n" 
+    exit 1
+  end
+
   def yell(msg)
     # stupid simple logging:
     f = File.open(File.expand_path(File.dirname(__FILE__) + "/../log/yell.log"),"a")
@@ -183,7 +207,7 @@ module PipelineBackground
   end
  
 
-  def upload_background(project_id, upurl, upftp, upload, local_path, autoResume, allowReloads)
+  def upload_background(project_id, upurl, upftp, upload, local_path, allowReloads)
 
     project = Project.find(project_id)
 
@@ -253,7 +277,16 @@ module PipelineBackground
       #  Speeds up downloads from distant sites.
       #  Tries 30 simultaneous connections.
       #  Performs up to 10 retries with sleeps in between of currently 30 seconds between retries.
-      cmd = "paraFetch 30 10 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
+      protoSite = get_proto_site(upurl)
+      paraFetchConfig = get_paraFetch_config
+      if paraFetchConfig[protoSite] == nil
+        protoSite = "default"
+      end
+      conns = paraFetchConfig[protoSite]["conns"]
+      if conns == nil  # not supposed to happen
+        conns = "10"
+      end
+      cmd = "paraFetch #{conns} 10 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
 
       #yell "\n\nGALT! cmd=[#{cmd}]\n\n"   # DEBUG remove
 
@@ -820,5 +853,10 @@ private
 
   end
 
+  def get_proto_site(url)
+    pastProto = url.index("://") + 3
+    pastSite = url.index("/", pastProto) + 1
+    return url[0,pastSite]
+  end
 
 end

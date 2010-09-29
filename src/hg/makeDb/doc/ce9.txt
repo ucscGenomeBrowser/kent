@@ -1747,11 +1747,11 @@ TMPDIR=/scratch/tmp
 
     #	starting with the 10way tree created from 44 way tree
     cat << '_EOF_' > 10way.nh
-((((((ce9:0.003,((cb3:0.005,caeRem3:0.003):0.004,caePb2:0.013):0.002):0.001,caeJap3:0.023):0.04,haeCon1:0.06):0.06,priPac1:0.12):0.06,(melHap1:0.14,melInc1:0.15):0.03):0.06,bruMal1:0.24);
+((((((ce9:0.003,((cb3:0.005,caeRem3:0.003):0.004,caePb2:0.013):0.002):0.001,caeJap3:0.023):0.04,haeCon1:0.06):0.06,priPac2:0.12):0.06,(melHap1:0.14,melInc1:0.15):0.03):0.06,bruMal1:0.24);
 '_EOF_'
     # << happy emacs
 
-    sed -e "s/ce9/C._elegans/; s/cb3/C._briggsae/; s/caeRem3/C._remanei/; s/caePb2/C._brenneri/; s/caeJap3/C._japonica/; s/haeCon1/H._contortus/; s/priPac1/P._pacificus/; s/melHap1/M._hapla/; s/melInc1/M._incognita/; s/bruMal1/B._malayi/;" 10way.nh > commonNames.nh
+    sed -e "s/ce9/C._elegans/; s/cb3/C._briggsae/; s/caeRem3/C._remanei/; s/caePb2/C._brenneri/; s/caeJap3/C._japonica/; s/haeCon1/H._contortus/; s/priPac2/P._pacificus/; s/melHap1/M._hapla/; s/melInc1/M._incognita/; s/bruMal1/B._malayi/;" 10way.nh > commonNames.nh
     #	Use this commonNames specification in the phyloGif tool:
     #	http://genome.ucsc.edu/cgi-bin/phyloGif
     #	to obtain a gif image for htdocs/images/phylo/ce9_10way.gif
@@ -1820,7 +1820,8 @@ close (FH);
 # 03  0.0180 - C. brenneri caePb2       (% 40.677) (% 32.313)
 # 04  0.0270 - C. japonica caeJap3      (% 27.580) (% 19.464)
 # 05  0.1040 - H. contortus haeCon1     (% 7.463) (% 3.178)
-# 06  0.2240 - P. pacificus priPac1     (% 6.234) (% 4.659)
+# 06  0.2240 - P. pacificus priPac2     (% 6.234) (% 4.659)
+# 06  0.2240 - P. pacificus priPac2     (% 5.862) (% 4.692)
 # 07  0.3340 - M. hapla melHap1         (% 3.922) (% 6.849)
 # 08  0.3440 - M. incognita melInc1     (% 3.301) (% 5.166)
 # 09  0.4640 - B. malayi bruMal1        (% 4.790) (% 5.457)
@@ -1862,7 +1863,7 @@ close (FH);
     # caePb2 - synNet
     # caeJap3 - synNet
     # haeCon1 - recipBest
-    # priPac1 - mafNet
+    # priPac2 - mafNet
     # melHap1 - mafNet
     # melInc1 - mafNet
     # bruMal1 - mafNet
@@ -1931,14 +1932,15 @@ popd > /dev/null
     ssh memk
     cd /hive/data/genomes/ce9/bed/multiz10way/run
     gensub2 chr.part.list single template jobList
+    para create jobList
     para try
     para time
 # Completed: 7 of 7 jobs
-# CPU time in finished jobs:       1438s      23.97m     0.40h    0.02d  0.000 y
-# IO & Wait Time:                   137s       2.28m     0.04h    0.00d  0.000 y
-# Average job time:                 225s       3.75m     0.06h    0.00d
-# Longest finished job:             387s       6.45m     0.11h    0.00d
-# Submission to last job:           394s       6.57m     0.11h    0.00d
+# CPU time in finished jobs:       1382s      23.04m     0.38h    0.02d  0.000 y
+# IO & Wait Time:                   204s       3.39m     0.06h    0.00d  0.000 y
+# Average job time:                 227s       3.78m     0.06h    0.00d
+# Longest finished job:             398s       6.63m     0.11h    0.00d
+# Submission to last job:           405s       6.75m     0.11h    0.00d
 
     # load tables for a look
     ssh hgwdev
@@ -2023,11 +2025,11 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/ce9/ce9.2bit $outMaf
     para create jobList
     para try
 # Completed: 7 of 7 jobs
-# CPU time in finished jobs:         44s       0.73m     0.01h    0.00d  0.000 y
-# IO & Wait Time:                    42s       0.71m     0.01h    0.00d  0.000 y
-# Average job time:                  12s       0.20m     0.00h    0.00d
-# Longest finished job:              16s       0.27m     0.00h    0.00d
-# Submission to last job:            26s       0.43m     0.01h    0.00d
+# CPU time in finished jobs:         19s       0.31m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    29s       0.49m     0.01h    0.00d  0.000 y
+# Average job time:                   7s       0.11m     0.00h    0.00d
+# Longest finished job:               9s       0.15m     0.00h    0.00d
+# Submission to last job:            18s       0.30m     0.01h    0.00d
 
     ssh hgwdev
     rm -fr /gbdb/ce9/multiz10way/maf
@@ -2040,18 +2042,19 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/ce9/ce9.2bit $outMaf
     cd /data/tmp
     time nice -n +19 hgLoadMaf \
 	-pathPrefix=/gbdb/ce9/multiz10way/maf ce9 multiz10way
-    #	Loaded 352790 mafs in 7 files from /gbdb/ce9/multiz10way/maf
-    #	real    0m38.998s
+    #	Loaded 350998 mafs in 7 files from /gbdb/ce9/multiz10way/maf
+    #	real    0m16.821s
 
     time nice -n +19 cat /gbdb/ce9/multiz10way/maf/*.maf \
 	| hgLoadMafSummary ce9 -minSize=10000 -verbose=2 \
 		-mergeGap=500 -maxSize=50000  multiz10waySummary stdin
-    #	Created 116808 summary blocks from 980666 components
-    #	and 352790 mafs from stdin
-    #	real    0m36.310s
+    #	Created 115975 summary blocks from 969482 components and 350998 mafs
+    #	from stdin
+    #	real    0m14.745s
 
 ##############################################################################
 # Phylogenetic tree from 10-way  (DONE - 2010-09-24 - Hiram)
+XXX reworking stuff with priPac2 from previous priPac1
 
     # Extract 4-fold degenerate sites based on 
     # of sangerGenes, coding
@@ -2120,7 +2123,7 @@ rm -f $c.gp $c.maf $c.ss
 	--subst-mod REV --tree ../tree-commas.nh 4d.all.mfa
     #	real    37m4.800s
 
-TREE: ((((((ce9:0.493597,((cb3:0.459180,caeRem3:0.411537):0.051063,caePb2:0.455061):0.112749):0.117493,caeJap3:0.522910):0.127938,haeCon1:1.203176):0.098413,priPac1:0.857529):0.428754,(melHap1:0.218602,melInc1:0.211924):0.643495):0.633675,bruMal1:0.633675);
+TREE: ((((((ce9:0.493597,((cb3:0.459180,caeRem3:0.411537):0.051063,caePb2:0.455061):0.112749):0.117493,caeJap3:0.522910):0.127938,haeCon1:1.203176):0.098413,priPac2:0.857529):0.428754,(melHap1:0.218602,melInc1:0.211924):0.643495):0.633675,bruMal1:0.633675);
 XXX - done Fri Sep 24 16:09:19 PDT 2010
 
     #	real    111m23.119s
@@ -2172,11 +2175,11 @@ done
 
     #	the tree in use
     cat ../tree-commas.nh
-# ((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac1),(melHap1,melInc1)),bruMal1)
+# ((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac2),(melHap1,melInc1)),bruMal1)
 
     #  this s1.*.ss should match only one item
     time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloFit \
-    -i SS s1.*.ss --tree "((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac1),(melHap1,melInc1)),bruMal1)" \
+    -i SS s1.*.ss --tree "((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac2),(melHap1,melInc1)),bruMal1)" \
     --out-root starting-tree
     #	real    5m2.175s
 
@@ -2276,5 +2279,63 @@ XXX - running 62 minutes at: Mon Sep 27 11:39:46 PDT 2010
     #	Expected max. length: L_max=5.097039 sites
     #	Phylogenetic information threshold: PIT=L_min*H=10.1095858 bits
     # Recommended expected length: omega=39.474822 sites (for L_min*H=9.780000)
+
+############################################################################
+## LASTZ priPac2 (DONE - 2010-09-29 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce9/bed/blastzPriPac2.2010-09-29
+    cd /hive/data/genomes/ce9/bed/blastzPriPac2.2010-09-29
+
+    cat << '_EOF_' > DEF
+# ce9 vs priPac2
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce9
+SEQ1_DIR=/scratch/data/ce9/ce9.2bit
+SEQ1_LEN=/scratch/data/ce9/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae priPac2
+SEQ2_DIR=/scratch/data/priPac2/priPac2.2bit
+SEQ2_LEN=/scratch/data/priPac2/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce9/bed/blastzPriPac2.2010-09-29
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -verbose=2 -bigClusterHub=swarm \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > do.log 2>&1 &
+    #	real    7m33.978s
+    #	trouble during chainRun due to missing files on memk kluster
+    #	finish that manually, then continuing:
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=chainMerge \
+	-workhorse=hgwdev -verbose=2 -bigClusterHub=swarm \
+	-qRepeats=windowmaskerSdust -smallClusterHub=swarm \
+	> chainMerge.log 2>&1 &
+    #	real    3m14.461s
+    cat fb.ce9.chainPriPac2Link.txt 
+    #	5878567 bases of 100286004 (5.862%) in intersection
+
+    #	swap, this is also in priPac2.txt
+    mkdir /hive/data/genomes/priPac2/bed/blastz.ce9.swap
+    cd /hive/data/genomes/priPac2/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzPriPac2.2010-09-29/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=swarm \
+	-smallClusterHub=swarm -swap > swap.log 2>&1 &
+    #	real    1m6.706s
+    cat fb.priPac2.chainCe9Link.txt
+    #	6269492 bases of 133634773 (4.692%) in intersection
+
 
 ############################################################################
