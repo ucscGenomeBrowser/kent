@@ -1,5 +1,6 @@
 metaObject wgEncodeSydh
 objType table
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -14,6 +15,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain Unknown
 subId 1168
 tableName wgEncodeSydh
 treatment None
@@ -21,6 +23,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12CjunIggrabAlnRep1
 objType file
+age immortalized
 antibody c-Jun
 cell CH12
 composite wgEncodeSydhTfbs
@@ -37,12 +40,14 @@ parentTable wgEncodeSydhTfbsCh12CjunIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12CjunIggrabAlnRep2
 objType file
+age immortalized
 antibody c-Jun
 cell CH12
 composite wgEncodeSydhTfbs
@@ -59,12 +64,14 @@ parentTable wgEncodeSydhTfbsCh12CjunIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12CjunIggrabPk
 objType table
+age immortalized
 antibody c-Jun
 cell CH12
 composite wgEncodeSydhTfbs
@@ -80,6 +87,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1157
 tableName wgEncodeSydhTfbsCh12CjunIggrabPk
 treatment None
@@ -87,6 +95,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12CjunIggrabRawDataRep1
 objType file
+age immortalized
 antibody c-Jun
 cell CH12
 composite wgEncodeSydhTfbs
@@ -103,12 +112,14 @@ parentTable wgEncodeSydhTfbsCh12CjunIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12CjunIggrabRawDataRep2
 objType file
+age immortalized
 antibody c-Jun
 cell CH12
 composite wgEncodeSydhTfbs
@@ -125,12 +136,14 @@ parentTable wgEncodeSydhTfbsCh12CjunIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1157
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12CjunIggrabSig
 objType table
+age immortalized
 antibody c-Jun
 cell CH12
 composite wgEncodeSydhTfbs
@@ -146,6 +159,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1157
 tableName wgEncodeSydhTfbsCh12CjunIggrabSig
 treatment None
@@ -153,6 +167,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12CmycIggrabAlnRep1
 objType file
+age immortalized
 antibody c-Myc
 cell CH12
 composite wgEncodeSydhTfbs
@@ -169,12 +184,14 @@ parentTable wgEncodeSydhTfbsCh12CmycIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12CmycIggrabAlnRep2
 objType file
+age immortalized
 antibody c-Myc
 cell CH12
 composite wgEncodeSydhTfbs
@@ -191,12 +208,14 @@ parentTable wgEncodeSydhTfbsCh12CmycIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12CmycIggrabPk
 objType table
+age immortalized
 antibody c-Myc
 cell CH12
 composite wgEncodeSydhTfbs
@@ -212,6 +231,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1159
 tableName wgEncodeSydhTfbsCh12CmycIggrabPk
 treatment None
@@ -219,6 +239,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12CmycIggrabRawDataRep1
 objType file
+age immortalized
 antibody c-Myc
 cell CH12
 composite wgEncodeSydhTfbs
@@ -235,12 +256,14 @@ parentTable wgEncodeSydhTfbsCh12CmycIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12CmycIggrabRawDataRep2
 objType file
+age immortalized
 antibody c-Myc
 cell CH12
 composite wgEncodeSydhTfbs
@@ -257,12 +280,14 @@ parentTable wgEncodeSydhTfbsCh12CmycIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1159
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12CmycIggrabSig
 objType table
+age immortalized
 antibody c-Myc
 cell CH12
 composite wgEncodeSydhTfbs
@@ -278,6 +303,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1159
 tableName wgEncodeSydhTfbsCh12CmycIggrabSig
 treatment None
@@ -285,6 +311,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1
 objType file
+age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodeSydhTfbs
@@ -302,12 +329,14 @@ parentTable wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2
 objType file
+age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodeSydhTfbs
@@ -325,12 +354,14 @@ parentTable wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12CtcfIggyalePk
 objType table
+age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodeSydhTfbs
@@ -346,6 +377,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1858
 tableName wgEncodeSydhTfbsCh12CtcfIggyalePk
 treatment None
@@ -353,6 +385,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep1
 objType file
+age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodeSydhTfbs
@@ -369,12 +402,14 @@ parentTable wgEncodeSydhTfbsCh12CtcfIggyaleRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep2
 objType file
+age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodeSydhTfbs
@@ -391,12 +426,14 @@ parentTable wgEncodeSydhTfbsCh12CtcfIggyaleRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1858
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12CtcfIggyaleSig
 objType table
+age immortalized
 antibody CTCF
 cell CH12
 composite wgEncodeSydhTfbs
@@ -412,6 +449,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1858
 tableName wgEncodeSydhTfbsCh12CtcfIggyaleSig
 treatment None
@@ -419,6 +457,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1
 objType file
+age immortalized
 antibody E2F4
 cell CH12
 composite wgEncodeSydhTfbs
@@ -435,12 +474,14 @@ parentTable wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2
 objType file
+age immortalized
 antibody E2F4
 cell CH12
 composite wgEncodeSydhTfbs
@@ -457,12 +498,14 @@ parentTable wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12E2f4IggrabPk
 objType table
+age immortalized
 antibody E2F4
 cell CH12
 composite wgEncodeSydhTfbs
@@ -478,6 +521,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1153
 tableName wgEncodeSydhTfbsCh12E2f4IggrabPk
 treatment None
@@ -485,6 +529,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep1
 objType file
+age immortalized
 antibody E2F4
 cell CH12
 composite wgEncodeSydhTfbs
@@ -501,12 +546,14 @@ parentTable wgEncodeSydhTfbsCh12E2f4IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep2
 objType file
+age immortalized
 antibody E2F4
 cell CH12
 composite wgEncodeSydhTfbs
@@ -523,12 +570,14 @@ parentTable wgEncodeSydhTfbsCh12E2f4IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1153
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12E2f4IggrabSig
 objType table
+age immortalized
 antibody E2F4
 cell CH12
 composite wgEncodeSydhTfbs
@@ -544,6 +593,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1153
 tableName wgEncodeSydhTfbsCh12E2f4IggrabSig
 treatment None
@@ -551,6 +601,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12InputIggmusAln
 objType file
+age immortalized
 antibody Input
 cell CH12
 composite wgEncodeSydhTfbs
@@ -566,12 +617,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsCh12InputIggmusAln
 project wgEncode
 setType input
+strain B10.H-2aH-4bp/Wts
 subId 1154
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12InputIggmusRawData
 objType file
+age immortalized
 antibody Input
 cell CH12
 composite wgEncodeSydhTfbs
@@ -587,12 +640,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsCh12InputIggmusRawSignal
 project wgEncode
 setType input
+strain B10.H-2aH-4bp/Wts
 subId 1154
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12InputIggmusSig
 objType table
+age immortalized
 antibody Input
 cell CH12
 composite wgEncodeSydhTfbs
@@ -608,6 +663,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain B10.H-2aH-4bp/Wts
 subId 1154
 tableName wgEncodeSydhTfbsCh12InputIggmusSig
 treatment None
@@ -615,6 +671,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12InputIggrabAln
 objType file
+age immortalized
 antibody Input
 cell CH12
 composite wgEncodeSydhTfbs
@@ -630,12 +687,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsCh12InputIggrabAln
 project wgEncode
 setType input
+strain B10.H-2aH-4bp/Wts
 subId 1125
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12InputIggrabRawData
 objType file
+age immortalized
 antibody Input
 cell CH12
 composite wgEncodeSydhTfbs
@@ -651,12 +710,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsCh12InputIggrabRawSignal
 project wgEncode
 setType input
+strain B10.H-2aH-4bp/Wts
 subId 1125
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12InputIggrabSig
 objType table
+age immortalized
 antibody Input
 cell CH12
 composite wgEncodeSydhTfbs
@@ -672,6 +733,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain B10.H-2aH-4bp/Wts
 subId 1125
 tableName wgEncodeSydhTfbsCh12InputIggrabSig
 treatment None
@@ -679,6 +741,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12JundIggrabAlnRep1
 objType file
+age immortalized
 antibody JunD
 cell CH12
 composite wgEncodeSydhTfbs
@@ -695,12 +758,14 @@ parentTable wgEncodeSydhTfbsCh12JundIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12JundIggrabAlnRep2
 objType file
+age immortalized
 antibody JunD
 cell CH12
 composite wgEncodeSydhTfbs
@@ -717,12 +782,14 @@ parentTable wgEncodeSydhTfbsCh12JundIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12JundIggrabPk
 objType table
+age immortalized
 antibody JunD
 cell CH12
 composite wgEncodeSydhTfbs
@@ -738,6 +805,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1126
 tableName wgEncodeSydhTfbsCh12JundIggrabPk
 treatment None
@@ -745,6 +813,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12JundIggrabRawDataRep1
 objType file
+age immortalized
 antibody JunD
 cell CH12
 composite wgEncodeSydhTfbs
@@ -761,12 +830,14 @@ parentTable wgEncodeSydhTfbsCh12JundIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12JundIggrabRawDataRep2
 objType file
+age immortalized
 antibody JunD
 cell CH12
 composite wgEncodeSydhTfbs
@@ -783,12 +854,14 @@ parentTable wgEncodeSydhTfbsCh12JundIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1126
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12JundIggrabSig
 objType table
+age immortalized
 antibody JunD
 cell CH12
 composite wgEncodeSydhTfbs
@@ -804,6 +877,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1126
 tableName wgEncodeSydhTfbsCh12JundIggrabSig
 treatment None
@@ -811,6 +885,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12MaxIggrabAlnRep1
 objType file
+age immortalized
 antibody Max
 cell CH12
 composite wgEncodeSydhTfbs
@@ -828,12 +903,14 @@ parentTable wgEncodeSydhTfbsCh12MaxIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12MaxIggrabAlnRep2
 objType file
+age immortalized
 antibody Max
 cell CH12
 composite wgEncodeSydhTfbs
@@ -851,12 +928,14 @@ parentTable wgEncodeSydhTfbsCh12MaxIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12MaxIggrabPk
 objType table
+age immortalized
 antibody Max
 cell CH12
 composite wgEncodeSydhTfbs
@@ -872,6 +951,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1859
 tableName wgEncodeSydhTfbsCh12MaxIggrabPk
 treatment None
@@ -879,6 +959,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12MaxIggrabRawDataRep1
 objType file
+age immortalized
 antibody Max
 cell CH12
 composite wgEncodeSydhTfbs
@@ -895,12 +976,14 @@ parentTable wgEncodeSydhTfbsCh12MaxIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12MaxIggrabRawDataRep2
 objType file
+age immortalized
 antibody Max
 cell CH12
 composite wgEncodeSydhTfbs
@@ -917,12 +1000,14 @@ parentTable wgEncodeSydhTfbsCh12MaxIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1859
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12MaxIggrabSig
 objType table
+age immortalized
 antibody Max
 cell CH12
 composite wgEncodeSydhTfbs
@@ -938,6 +1023,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1859
 tableName wgEncodeSydhTfbsCh12MaxIggrabSig
 treatment None
@@ -945,6 +1031,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep1
 objType file
+age immortalized
 antibody p300
 cell CH12
 composite wgEncodeSydhTfbs
@@ -962,12 +1049,14 @@ parentTable wgEncodeSydhTfbsCh12P300IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12P300IggrabAlnRep2
 objType file
+age immortalized
 antibody p300
 cell CH12
 composite wgEncodeSydhTfbs
@@ -985,12 +1074,14 @@ parentTable wgEncodeSydhTfbsCh12P300IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12P300IggrabPk
 objType table
+age immortalized
 antibody p300
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1006,6 +1097,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1855
 tableName wgEncodeSydhTfbsCh12P300IggrabPk
 treatment None
@@ -1013,6 +1105,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep1
 objType file
+age immortalized
 antibody p300
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1029,12 +1122,14 @@ parentTable wgEncodeSydhTfbsCh12P300IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12P300IggrabRawDataRep2
 objType file
+age immortalized
 antibody p300
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1051,12 +1146,14 @@ parentTable wgEncodeSydhTfbsCh12P300IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1855
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12P300IggrabSig
 objType table
+age immortalized
 antibody p300
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1072,6 +1169,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1855
 tableName wgEncodeSydhTfbsCh12P300IggrabSig
 treatment None
@@ -1079,6 +1177,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1
 objType file
+age immortalized
 antibody Pol2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1095,12 +1194,14 @@ parentTable wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2
 objType file
+age immortalized
 antibody Pol2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1117,12 +1218,14 @@ parentTable wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12Pol2IggmusPk
 objType table
+age immortalized
 antibody Pol2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1138,6 +1241,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1155
 tableName wgEncodeSydhTfbsCh12Pol2IggmusPk
 treatment None
@@ -1145,6 +1249,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep1
 objType file
+age immortalized
 antibody Pol2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1161,12 +1266,14 @@ parentTable wgEncodeSydhTfbsCh12Pol2IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep2
 objType file
+age immortalized
 antibody Pol2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1183,12 +1290,14 @@ parentTable wgEncodeSydhTfbsCh12Pol2IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1155
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12Pol2IggmusSig
 objType table
+age immortalized
 antibody Pol2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1204,6 +1313,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1155
 tableName wgEncodeSydhTfbsCh12Pol2IggmusSig
 treatment None
@@ -1211,6 +1321,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1
 objType file
+age immortalized
 antibody Rad21
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1228,12 +1339,14 @@ parentTable wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2
 objType file
+age immortalized
 antibody Rad21
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1251,12 +1364,14 @@ parentTable wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12Rad21IggrabPk
 objType table
+age immortalized
 antibody Rad21
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1272,6 +1387,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1860
 tableName wgEncodeSydhTfbsCh12Rad21IggrabPk
 treatment None
@@ -1279,6 +1395,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep1
 objType file
+age immortalized
 antibody Rad21
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1295,12 +1412,14 @@ parentTable wgEncodeSydhTfbsCh12Rad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep2
 objType file
+age immortalized
 antibody Rad21
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1317,12 +1436,14 @@ parentTable wgEncodeSydhTfbsCh12Rad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1860
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12Rad21IggrabSig
 objType table
+age immortalized
 antibody Rad21
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1338,6 +1459,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1860
 tableName wgEncodeSydhTfbsCh12Rad21IggrabSig
 treatment None
@@ -1345,6 +1467,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12TbpIggmusAlnRep1
 objType file
+age immortalized
 antibody TBP
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1361,12 +1484,14 @@ parentTable wgEncodeSydhTfbsCh12TbpIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12TbpIggmusAlnRep2
 objType file
+age immortalized
 antibody TBP
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1383,12 +1508,14 @@ parentTable wgEncodeSydhTfbsCh12TbpIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12TbpIggmusPk
 objType table
+age immortalized
 antibody TBP
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1404,6 +1531,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1156
 tableName wgEncodeSydhTfbsCh12TbpIggmusPk
 treatment None
@@ -1411,6 +1539,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12TbpIggmusRawDataRep1
 objType file
+age immortalized
 antibody TBP
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1427,12 +1556,14 @@ parentTable wgEncodeSydhTfbsCh12TbpIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12TbpIggmusRawDataRep2
 objType file
+age immortalized
 antibody TBP
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1449,12 +1580,14 @@ parentTable wgEncodeSydhTfbsCh12TbpIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1156
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12TbpIggmusSig
 objType table
+age immortalized
 antibody TBP
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1470,6 +1603,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1156
 tableName wgEncodeSydhTfbsCh12TbpIggmusSig
 treatment None
@@ -1477,6 +1611,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1
 objType file
+age immortalized
 antibody USF2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1494,12 +1629,14 @@ parentTable wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2
 objType file
+age immortalized
 antibody USF2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1517,12 +1654,14 @@ parentTable wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsCh12Usf2IggmusPk
 objType table
+age immortalized
 antibody USF2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1538,6 +1677,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1861
 tableName wgEncodeSydhTfbsCh12Usf2IggmusPk
 treatment None
@@ -1545,6 +1685,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep1
 objType file
+age immortalized
 antibody USF2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1561,12 +1702,14 @@ parentTable wgEncodeSydhTfbsCh12Usf2IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep2
 objType file
+age immortalized
 antibody USF2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1583,12 +1726,14 @@ parentTable wgEncodeSydhTfbsCh12Usf2IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1861
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsCh12Usf2IggmusSig
 objType table
+age immortalized
 antibody USF2
 cell CH12
 composite wgEncodeSydhTfbs
@@ -1604,6 +1749,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain B10.H-2aH-4bp/Wts
 subId 1861
 tableName wgEncodeSydhTfbsCh12Usf2IggmusSig
 treatment None
@@ -1611,6 +1757,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelCmycIggrabAlnRep1
 objType file
+age immortalized
 antibody c-Myc
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1627,12 +1774,14 @@ parentTable wgEncodeSydhTfbsMelCmycIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1163
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelCmycIggrabAlnRep2
 objType file
+age immortalized
 antibody c-Myc
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1649,12 +1798,14 @@ parentTable wgEncodeSydhTfbsMelCmycIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1163
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelCmycIggrabPk
 objType table
+age immortalized
 antibody c-Myc
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1670,6 +1821,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1163
 tableName wgEncodeSydhTfbsMelCmycIggrabPk
 treatment None
@@ -1677,6 +1829,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelCmycIggrabRawDataRep1
 objType file
+age immortalized
 antibody c-Myc
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1693,12 +1846,14 @@ parentTable wgEncodeSydhTfbsMelCmycIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1163
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelCmycIggrabRawDataRep2
 objType file
+age immortalized
 antibody c-Myc
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1715,12 +1870,14 @@ parentTable wgEncodeSydhTfbsMelCmycIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1163
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelCmycIggrabSig
 objType table
+age immortalized
 antibody c-Myc
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1736,6 +1893,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1163
 tableName wgEncodeSydhTfbsMelCmycIggrabSig
 treatment None
@@ -1743,6 +1901,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1
 objType file
+age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1760,12 +1919,14 @@ parentTable wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1857
 treatment DMSO_2.0pct
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2
 objType file
+age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1783,12 +1944,14 @@ parentTable wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1857
 treatment DMSO_2.0pct
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdPk
 objType table
+age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1804,6 +1967,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1857
 tableName wgEncodeSydhTfbsMelCtcfDmso20StdPk
 treatment DMSO_2.0pct
@@ -1811,6 +1975,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep1
 objType file
+age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1827,12 +1992,14 @@ parentTable wgEncodeSydhTfbsMelCtcfDmso20StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1857
 treatment DMSO_2.0pct
 view RawData
 
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep2
 objType file
+age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1849,12 +2016,14 @@ parentTable wgEncodeSydhTfbsMelCtcfDmso20StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1857
 treatment DMSO_2.0pct
 view RawData
 
 metaObject wgEncodeSydhTfbsMelCtcfDmso20StdSig
 objType table
+age immortalized
 antibody CTCF
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1870,6 +2039,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1857
 tableName wgEncodeSydhTfbsMelCtcfDmso20StdSig
 treatment DMSO_2.0pct
@@ -1877,6 +2047,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabAlnRep1
 objType file
+age immortalized
 antibody E2F4
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1894,12 +2065,14 @@ parentTable wgEncodeSydhTfbsMelE2f4IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1193
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabAlnRep2
 objType file
+age immortalized
 antibody E2F4
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1917,12 +2090,14 @@ parentTable wgEncodeSydhTfbsMelE2f4IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1193
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabPk
 objType table
+age immortalized
 antibody E2F4
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1938,6 +2113,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1193
 tableName wgEncodeSydhTfbsMelE2f4IggrabPk
 treatment None
@@ -1945,6 +2121,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabRawDataRep1
 objType file
+age immortalized
 antibody E2F4
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1961,12 +2138,14 @@ parentTable wgEncodeSydhTfbsMelE2f4IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1193
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabRawDataRep2
 objType file
+age immortalized
 antibody E2F4
 cell MEL
 composite wgEncodeSydhTfbs
@@ -1983,12 +2162,14 @@ parentTable wgEncodeSydhTfbsMelE2f4IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1193
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelE2f4IggrabSig
 objType table
+age immortalized
 antibody E2F4
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2004,6 +2185,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1193
 tableName wgEncodeSydhTfbsMelE2f4IggrabSig
 treatment None
@@ -2011,6 +2193,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelGata1IggratAlnRep1
 objType file
+age immortalized
 antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2027,12 +2210,14 @@ parentTable wgEncodeSydhTfbsMelGata1IggratAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1165
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelGata1IggratAlnRep2
 objType file
+age immortalized
 antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2049,12 +2234,14 @@ parentTable wgEncodeSydhTfbsMelGata1IggratAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1165
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelGata1IggratPk
 objType table
+age immortalized
 antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2070,6 +2257,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1165
 tableName wgEncodeSydhTfbsMelGata1IggratPk
 treatment None
@@ -2077,6 +2265,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelGata1IggratRawDataRep1
 objType file
+age immortalized
 antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2093,12 +2282,14 @@ parentTable wgEncodeSydhTfbsMelGata1IggratRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1165
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelGata1IggratRawDataRep2
 objType file
+age immortalized
 antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2115,12 +2306,14 @@ parentTable wgEncodeSydhTfbsMelGata1IggratRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1165
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelGata1IggratSig
 objType table
+age immortalized
 antibody GATA-1
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2136,6 +2329,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1165
 tableName wgEncodeSydhTfbsMelGata1IggratSig
 treatment None
@@ -2143,6 +2337,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelInputDmso20StdAln
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2159,12 +2354,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputDmso20StdAln
 project wgEncode
 setType input
+strain Unknown
 subId 1862
 treatment DMSO_2.0pct
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelInputDmso20StdRawData
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2180,12 +2377,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputDmso20StdRawSignal
 project wgEncode
 setType input
+strain Unknown
 subId 1862
 treatment DMSO_2.0pct
 view RawData
 
 metaObject wgEncodeSydhTfbsMelInputDmso20StdSig
 objType table
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2201,6 +2400,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain Unknown
 subId 1862
 tableName wgEncodeSydhTfbsMelInputDmso20StdSig
 treatment DMSO_2.0pct
@@ -2208,6 +2408,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelInputIggmusAln
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2223,12 +2424,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggmusAln
 project wgEncode
 setType input
+strain Unknown
 subId 1162
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelInputIggmusRawData
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2244,12 +2447,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggmusRawSignal
 project wgEncode
 setType input
+strain Unknown
 subId 1162
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelInputIggmusSig
 objType table
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2265,6 +2470,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain Unknown
 subId 1162
 tableName wgEncodeSydhTfbsMelInputIggmusSig
 treatment None
@@ -2272,6 +2478,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelInputIggrabAln
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2287,12 +2494,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggrabAln
 project wgEncode
 setType input
+strain Unknown
 subId 1164
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelInputIggrabRawData
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2308,12 +2517,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggrabRawSignal
 project wgEncode
 setType input
+strain Unknown
 subId 1164
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelInputIggrabSig
 objType table
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2329,6 +2540,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain Unknown
 subId 1164
 tableName wgEncodeSydhTfbsMelInputIggrabSig
 treatment None
@@ -2336,6 +2548,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelInputIggratAln
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2351,12 +2564,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggratAln
 project wgEncode
 setType input
+strain Unknown
 subId 1167
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelInputIggratRawData
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2372,12 +2587,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggratRawSignal
 project wgEncode
 setType input
+strain Unknown
 subId 1167
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelInputIggratSig
 objType table
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2393,6 +2610,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType input
+strain Unknown
 subId 1167
 tableName wgEncodeSydhTfbsMelInputIggratSig
 treatment None
@@ -2400,6 +2618,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelInputIggyaleAln
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2415,12 +2634,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggyaleAln
 project wgEncode
 setType input
+strain Unknown
 subId 1168
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelInputIggyaleRawData
 objType file
+age immortalized
 antibody Input
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2436,12 +2657,14 @@ lab Stanford
 parentTable wgEncodeSydhTfbsMelInputIggyaleRawSignal
 project wgEncode
 setType input
+strain Unknown
 subId 1168
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelJundIggrabAlnRep1
 objType file
+age immortalized
 antibody JunD
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2459,12 +2682,14 @@ parentTable wgEncodeSydhTfbsMelJundIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1192
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelJundIggrabAlnRep2
 objType file
+age immortalized
 antibody JunD
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2482,12 +2707,14 @@ parentTable wgEncodeSydhTfbsMelJundIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1192
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelJundIggrabPk
 objType table
+age immortalized
 antibody JunD
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2503,6 +2730,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1192
 tableName wgEncodeSydhTfbsMelJundIggrabPk
 treatment None
@@ -2510,6 +2738,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelJundIggrabRawDataRep1
 objType file
+age immortalized
 antibody JunD
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2526,12 +2755,14 @@ parentTable wgEncodeSydhTfbsMelJundIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1192
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelJundIggrabRawDataRep2
 objType file
+age immortalized
 antibody JunD
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2548,12 +2779,14 @@ parentTable wgEncodeSydhTfbsMelJundIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1192
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelJundIggrabSig
 objType table
+age immortalized
 antibody JunD
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2569,6 +2802,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1192
 tableName wgEncodeSydhTfbsMelJundIggrabSig
 treatment None
@@ -2576,6 +2810,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelMaxIggmusAlnRep1
 objType file
+age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2593,12 +2828,14 @@ parentTable wgEncodeSydhTfbsMelMaxIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1863
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelMaxIggmusAlnRep2
 objType file
+age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2616,12 +2853,14 @@ parentTable wgEncodeSydhTfbsMelMaxIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1863
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelMaxIggmusPk
 objType table
+age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2637,6 +2876,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1863
 tableName wgEncodeSydhTfbsMelMaxIggmusPk
 treatment None
@@ -2644,6 +2884,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelMaxIggmusRawDataRep1
 objType file
+age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2660,12 +2901,14 @@ parentTable wgEncodeSydhTfbsMelMaxIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1863
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelMaxIggmusRawDataRep2
 objType file
+age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2682,12 +2925,14 @@ parentTable wgEncodeSydhTfbsMelMaxIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1863
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelMaxIggmusSig
 objType table
+age immortalized
 antibody Max
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2703,6 +2948,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1863
 tableName wgEncodeSydhTfbsMelMaxIggmusSig
 treatment None
@@ -2710,6 +2956,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep1
 objType file
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2727,12 +2974,14 @@ parentTable wgEncodeSydhTfbsMelP300IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1864
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelP300IggmusAlnRep2
 objType file
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2750,12 +2999,14 @@ parentTable wgEncodeSydhTfbsMelP300IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1864
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelP300IggmusPk
 objType table
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2771,6 +3022,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1864
 tableName wgEncodeSydhTfbsMelP300IggmusPk
 treatment None
@@ -2778,6 +3030,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep1
 objType file
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2794,12 +3047,14 @@ parentTable wgEncodeSydhTfbsMelP300IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1864
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelP300IggmusRawDataRep2
 objType file
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2816,12 +3071,14 @@ parentTable wgEncodeSydhTfbsMelP300IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1864
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelP300IggmusSig
 objType table
+age immortalized
 antibody p300
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2837,6 +3094,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1864
 tableName wgEncodeSydhTfbsMelP300IggmusSig
 treatment None
@@ -2844,6 +3102,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelPol2IggmusAlnRep1
 objType file
+age immortalized
 antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2860,12 +3119,14 @@ parentTable wgEncodeSydhTfbsMelPol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1161
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelPol2IggmusAlnRep2
 objType file
+age immortalized
 antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2882,12 +3143,14 @@ parentTable wgEncodeSydhTfbsMelPol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1161
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelPol2IggmusPk
 objType table
+age immortalized
 antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2903,6 +3166,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1161
 tableName wgEncodeSydhTfbsMelPol2IggmusPk
 treatment None
@@ -2910,6 +3174,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelPol2IggmusRawDataRep1
 objType file
+age immortalized
 antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2926,12 +3191,14 @@ parentTable wgEncodeSydhTfbsMelPol2IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1161
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelPol2IggmusRawDataRep2
 objType file
+age immortalized
 antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2948,12 +3215,14 @@ parentTable wgEncodeSydhTfbsMelPol2IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1161
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelPol2IggmusSig
 objType table
+age immortalized
 antibody Pol2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2969,6 +3238,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1161
 tableName wgEncodeSydhTfbsMelPol2IggmusSig
 treatment None
@@ -2976,6 +3246,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelTbpIggmusAlnRep1
 objType file
+age immortalized
 antibody TBP
 cell MEL
 composite wgEncodeSydhTfbs
@@ -2992,12 +3263,14 @@ parentTable wgEncodeSydhTfbsMelTbpIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1160
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelTbpIggmusAlnRep2
 objType file
+age immortalized
 antibody TBP
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3014,12 +3287,14 @@ parentTable wgEncodeSydhTfbsMelTbpIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1160
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelTbpIggmusPk
 objType table
+age immortalized
 antibody TBP
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3035,6 +3310,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1160
 tableName wgEncodeSydhTfbsMelTbpIggmusPk
 treatment None
@@ -3042,6 +3318,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelTbpIggmusRawDataRep1
 objType file
+age immortalized
 antibody TBP
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3058,12 +3335,14 @@ parentTable wgEncodeSydhTfbsMelTbpIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1160
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelTbpIggmusRawDataRep2
 objType file
+age immortalized
 antibody TBP
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3080,12 +3359,14 @@ parentTable wgEncodeSydhTfbsMelTbpIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1160
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelTbpIggmusSig
 objType table
+age immortalized
 antibody TBP
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3101,6 +3382,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1160
 tableName wgEncodeSydhTfbsMelTbpIggmusSig
 treatment None
@@ -3108,6 +3390,7 @@ view Signal
 
 metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep1
 objType file
+age immortalized
 antibody USF2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3125,12 +3408,14 @@ parentTable wgEncodeSydhTfbsMelUsf2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1865
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelUsf2IggmusAlnRep2
 objType file
+age immortalized
 antibody USF2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3148,12 +3433,14 @@ parentTable wgEncodeSydhTfbsMelUsf2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1865
 treatment None
 view Alignments
 
 metaObject wgEncodeSydhTfbsMelUsf2IggmusPk
 objType table
+age immortalized
 antibody USF2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3169,6 +3456,7 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1865
 tableName wgEncodeSydhTfbsMelUsf2IggmusPk
 treatment None
@@ -3176,6 +3464,7 @@ view Peaks
 
 metaObject wgEncodeSydhTfbsMelUsf2IggmusRawDataRep1
 objType file
+age immortalized
 antibody USF2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3192,12 +3481,14 @@ parentTable wgEncodeSydhTfbsMelUsf2IggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
+strain Unknown
 subId 1865
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelUsf2IggmusRawDataRep2
 objType file
+age immortalized
 antibody USF2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3214,12 +3505,14 @@ parentTable wgEncodeSydhTfbsMelUsf2IggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
+strain Unknown
 subId 1865
 treatment None
 view RawData
 
 metaObject wgEncodeSydhTfbsMelUsf2IggmusSig
 objType table
+age immortalized
 antibody USF2
 cell MEL
 composite wgEncodeSydhTfbs
@@ -3235,9 +3528,10 @@ lab Stanford
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
+strain Unknown
 subId 1865
 tableName wgEncodeSydhTfbsMelUsf2IggmusSig
 treatment None
 view Signal
 
-# MAGIC: -1672499370
+# MAGIC: 2096999538
