@@ -460,7 +460,7 @@ _EOF_
   } else {
     # No AGP -- just make an unmasked 2bit.
     $bossScript->add(<<_EOF_
-$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' \\
+$fcat $fastaFiles | sed -e 's/^>.*gb\|/>/; s/\|.*//' | \\
     faToTwoBit -noMask stdin $chrM $db.unmasked.2bit
 _EOF_
     );
@@ -1354,7 +1354,7 @@ Then copy these files to your ~/kent/src/hg/makeDb/trackDb/$dbDbSpeciesDir/$db
  - edit makefile to add $db to DBS.
  - git add $dbDbSpeciesDir/$db/*.{ra,html}
  - git commit -m "Added $db to DBS." makefile
- - git commit -m "Initial descriptions for $db." $dbDbSpeciesDir/$db/*.{ra.html}
+ - git commit -m "Initial descriptions for $db." $dbDbSpeciesDir/$db/*.{ra,html}
  - git pull; git push
  - Run make update DBS=$db and make alpha when done.
  - (optional) Clean up $runDir

@@ -8,7 +8,7 @@ longLabel ENCODE Transcription Factor Binding Sites by ChIP-seq from HudsonAlpha
 group regulation
 subGroup1 view Views Peaks=Peaks  RawSignal=Raw_Signal 
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;<i>Tier1</i> H1hESC=H1-hESC&nbsp;<i>Tier1</i> K562=K562&nbsp;<i>Tier1</i>  HeLaS3=HeLa-S3&nbsp;<i>Tier2</i> HepG2=HepG2&nbsp;<i>Tier2</i> A549=A549 ECC1=ECC-1 GM12891=GM12891 GM12892=GM12892 HTB11=HTB-11 PANC1=PANC-1 PFSK1=PFSK-1 SKNMC=SK-N-MC T47D=T-47D U87=U87  
-subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF1M33=BCLAF1_(M33) BHLHE40=BHLHE40 CTCF=CTCF EBF=EBF EGR1=Egr-1 ETS1=ETS1 ERalpha(a)=ERalpha_a FOSL2=FOSL2 GABP=GABP GR=GR HEY1=HEY1 IRF4=IRF4 JUND=JunD MEF2A=MEF2A NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SRF=SRF TAF1=TAF1 TCF12=TCF12 USF1=USF-1 YY1C20=YY1_(C20) ZBTB33=ZBTB33 zControl=Input(control)
+subGroup3 factor Factor ATF3=ATF3 BATF=BATF BCL11A=BCL11A BCL3=BCL3 BCLAF1M33=BCLAF1_(M33) BHLHE40=BHLHE40 CTCF=CTCF EBF=EBF EGR1=Egr-1 ETS1=ETS1 ERalpha(a)=ERalpha_a FOSL2=FOSL2 GABP=GABP GATA2CG2=GATA2_(CG2-96) GR=GR HEY1=HEY1 IRF4=IRF4 JUND=JunD MEF2A=MEF2A NRSF=NRSF P300=p300 PAX5C20=PAX5-C20 PAX5N19=PAX5-N19 PBX3=PBx3 POL2=Pol2 POL24H8=Pol2-4H8 POU2F2=POU2F2 PU1=PU.1 RXRA=RXRA SIN3AK20=Sin3Ak-20 SIX5=SIX5 SP1=SP1 SRF=SRF TAF1=TAF1 TCF12=TCF12 USF1=USF-1 YY1C20=YY1_(C20) ZBTB33=ZBTB33 zControl=Input(control)
 subGroup4 protocol Protocol PCR1x=PCR1x PCR2x=PCR2x V0416101=v041610.1 V0416102=v041610.2
 subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX_500pM DMSO2=DMSO_0.02pct ESTRADIa1h=Estradiol_10nM ETOH02=EtOH_0.02pct GEN1h=Genistein_100nM None=None
 subGroup6 rep Replicate rep1=1 rep2=2
@@ -2003,6 +2003,138 @@ nextItemButton on
         type broadPeak
         color 46,0,184
         # subId=2213 dateSubmitted=2010-09-21
+
+        track wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel ECC-1 Pol2 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (Pol2 in ECC-1 cells)
+        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DMSO2 rep=rep2
+        type broadPeak
+        # subId=2429 dateSubmitted=2010-09-27
+
+        track wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel ECC-1 Pol2 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (Pol2 in ECC-1 cells)
+        subGroups view=Peaks factor=POL2 cellType=ECC1 protocol=V0416102 treatment=DMSO2 rep=rep1
+        type broadPeak
+        # subId=2429 dateSubmitted=2010-09-27
+
+        track wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel ECC-1 ERalpha_a Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (ERalpha_a in ECC-1 cells)
+        subGroups view=Peaks factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=GEN1h rep=rep2
+        type broadPeak
+        # subId=2451 dateSubmitted=2010-09-28
+
+        track wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel ECC-1 ERalpha_a Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (ERalpha_a in ECC-1 cells)
+        subGroups view=Peaks factor=ERalpha(a) cellType=ECC1 protocol=V0416102 treatment=GEN1h rep=rep1
+        type broadPeak
+        # subId=2451 dateSubmitted=2010-09-28
+
+        track wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12891 YY1_(C-20) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (YY1_(C-20) in GM12891 cells)
+        subGroups view=Peaks factor=YY1C20 cellType=GM12891 protocol=V0416101 treatment=None rep=rep1
+        type broadPeak
+        # subId=2203 dateSubmitted=2010-09-27
+
+        track wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel GM12891 YY1_(C-20) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (YY1_(C-20) in GM12891 cells)
+        subGroups view=Peaks factor=YY1C20 cellType=GM12891 protocol=V0416101 treatment=None rep=rep2
+        type broadPeak
+        # subId=2203 dateSubmitted=2010-09-27
+
+        track wgEncodeHaibTfbsH1hescP300V0416102PkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel H1-hESC p300 Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (p300 in H1-hESC cells)
+        subGroups view=Peaks factor=P300 cellType=H1hESC protocol=V0416102 treatment=None rep=rep1
+        type broadPeak
+        color 0,107,27
+        # subId=2426 dateSubmitted=2010-09-27
+
+        track wgEncodeHaibTfbsH1hescP300Pcr1xPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel H1-hESC p300 Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (p300 in H1-hESC cells)
+        subGroups view=Peaks factor=P300 cellType=H1hESC protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 0,107,27
+        # subId=2426 dateSubmitted=2010-09-27
+
+        track wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 BCLAF1_(M33-P5B11) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (BCLAF1_(M33-P5B11) in K562 cells)
+        subGroups view=Peaks factor=BCLAF1M33 cellType=K562 protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=2209 dateSubmitted=2010-09-21
+
+        track wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 BCLAF1_(M33-P5B11) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (BCLAF1_(M33-P5B11) in K562 cells)
+        subGroups view=Peaks factor=BCLAF1M33 cellType=K562 protocol=PCR1x treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=2209 dateSubmitted=2010-09-21
+
+        track wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 GATA2_(CG2-96) Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (GATA2_(CG2-96) in K562 cells)
+        subGroups view=Peaks factor=GATA2CG2 cellType=K562 protocol=PCR1x treatment=None rep=rep2
+        type broadPeak
+        color 46,0,184
+        # subId=2453 dateSubmitted=2010-09-28
+
+        track wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel K562 GATA2_(CG2-96) Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (GATA2_(CG2-96) in K562 cells)
+        subGroups view=Peaks factor=GATA2CG2 cellType=K562 protocol=PCR1x treatment=None rep=rep1
+        type broadPeak
+        color 46,0,184
+        # subId=2453 dateSubmitted=2010-09-28
+
+        track wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel T-47D ERalpha_a Pk 2
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 2 (ERalpha_a in T-47D cells)
+        subGroups view=Peaks factor=ERalpha(a) cellType=T47D protocol=V0416102 treatment=ESTRADIa1h rep=rep2
+        type broadPeak
+        # subId=2450 dateSubmitted=2010-09-28
+
+        track wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep1
+        release alpha
+        parent wgEncodeHaibTfbsViewPeaks off
+        shortLabel T-47D ERalpha_a Pk 1
+        longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (ERalpha_a in T-47D cells)
+        subGroups view=Peaks factor=ERalpha(a) cellType=T47D protocol=V0416102 treatment=ESTRADIa1h rep=rep1
+        type broadPeak
+        # subId=2450 dateSubmitted=2010-09-28
 
 
 
