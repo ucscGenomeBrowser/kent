@@ -2461,7 +2461,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
-if(tdbIsComposite(tdb))
+if(tdbIsContainer(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
