@@ -7,7 +7,7 @@ require File.dirname(__FILE__) + '/config/boot'
 
 require RAILS_ROOT + '/config/environment'
 
-#require "pp"
+#require "pp"  # debug remove
 
 #pp User.find(:all)
 
@@ -110,6 +110,10 @@ alljobs = {}
 validators = {}
 loaders = {}
 
+paraFetchRunCount = {}
+paraFetchRunProtoSite = {}
+paraFetchConfig = get_paraFetch_config
+
 while true
 
   # debug
@@ -160,6 +164,11 @@ while true
       validators.delete(project_id)
       loaders.delete(project_id)
       alljobs.delete(project_id)
+      protoSite = paraFetchRunProtoSite[project_id]
+      if protoSite != nil
+        paraFetchRunCount[protoSite] = paraFetchRunCount[protoSite] - 1
+        paraFetchRunProtoSite.delete(project_id)
+      end
 
       # remove this simple done message immediately
       job.destroy
@@ -182,12 +191,35 @@ while true
           doRun = false
         end
       end
+      if source.starts_with? "upload_background("
+        firstComma = source.index(",")
+        secondComma = source.index(",", firstComma+1)
+        upurl = source[firstComma+1,secondComma]
+        if upurl != ""
+          protoSite = get_proto_site(upurl)
+          maxParaFetches = paraFetchConfig["default"]["instances"]
+          if paraFetchConfig[protoSite] != nil
+            if paraFetchConfig[protoSite]["instances"] != nil
+              maxParaFetches = paraFetchConfig[protoSite]["instances"]
+            end
+          end
+          paraRunCount = paraFetchRunCount[protoSite]
+          if paraRunCount == nil
+            paraRunCount = 0
+          end
+          if paraRunCount >= maxParaFetches
+            doRun = false
+          end
+        end
+      end
+
+
       # is it already running, or trying to start?
       if alljobs[project_id] 
         doRun = false  
       end
 
-      # check the 
+      # check the load
       if doRun
         myLoad = (`cat /proc/loadavg | gawk '{print $2}'`).to_f
         if (myLoad > maxServerLoad)
@@ -224,6 +256,12 @@ while true
         end
         if source.starts_with? "load_background("
           loaders[project_id] = true
+        end
+        if source.starts_with? "upload_background("
+          if upurl != ""
+            paraFetchRunCount[protoSite] = paraRunCount + 1
+            paraFetchRunProtoSite[project_id] = protoSite
+          end
         end
         alljobs[project_id] = true
 
