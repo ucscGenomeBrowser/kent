@@ -154,3 +154,88 @@ taxId 281687
 	/hive/data/staging/data/caeJap3
 
 #########################################################################
+# SWAP LASTZ ce9 (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzCaeJap1.2010-09-20
+    cat fb.ce9.chainCaeJap1Link.txt
+    #	26876526 bases of 100286004 (26.800%) in intersection
+
+    #	swap, this is also in caeJap1.txt
+    mkdir /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzCaeJap1.2010-09-20/DEF \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    1m18.062s
+    cat fb.caeJap1.chainCe9Link.txt
+    #	26200691 bases of 129347181 (20.256%) in intersection
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add caeJap3 just before caeJap2
+
+# caeJap3 (C. japonica)
+caeJap3.serverGenome = /hive/data/genomes/caeJap3/caeJap3.2bit
+caeJap3.clusterGenome = /scratch/data/caeJap3/caeJap3.2bit
+caeJap3.ooc = /scratch/data/caeJap3/caeJap3.11.ooc
+caeJap3.lift = no
+caeJap3.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+caeJap3.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+caeJap3.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+caeJap3.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+caeJap3.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+caeJap3.refseq.mrna.native.load = yes
+caeJap3.refseq.mrna.xeno.load  = yes
+caeJap3.refseq.mrna.xeno.loadDesc = yes
+caeJap3.genbank.mrna.xeno.load = yes
+caeJap3.genbank.est.native.load = yes
+caeJap3.genbank.est.native.loadDesc = no
+caeJap3.downloadDir = caeJap3
+caeJap3.perChromTables = no
+
+    git commit -m "Added caeJap3 C. japonica WUGSC 7.0.1" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial caeJap3 &
+    #	logFile: var/build/logs/2010.09.27-13:22:49.caeJap3.initalign.log
+    #	real    548m31.324s
+    # this had a temporary failure:
+# Cannot allocate memory
+# can't fork
+# command failed: gbAlignInstall  -noMigrate -workdir=work/initial.caeJap3/align -orgCats=native genbank.179.0 daily.0827 mrna caeJap3 at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272. at /cluster/genbank/genbank/bin/../lib/gbCommon.pm line 272.
+
+    # continuing
+    time ./etc/align-genbank -finish -workdir work/initial.caeJap3/align
+    #	logFile: var/build/logs/2010.09.28-10:08:30.align.log
+    #	real    5m47.281s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap3
+    #	logFile: var/dbload/hgwdev/logs/2010.09.28-10:27:34.dbload.log
+    #	real    17m14.683s
+XXX - done
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add caeJap3 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added caeJap3 - C. elegans WS210" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################

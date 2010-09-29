@@ -775,12 +775,14 @@ return hashOptionalVal(tdb->extras, name, defaultVal);
 boolean tdbIsView(struct trackDb *tdb,char **viewName)
 // Is this tdb a view?  Will fill viewName if provided
 {
-if(tdb && tdb->parent && tdb->subtracks)
+if (tdbIsCompositeView(tdb))
     {
-    char *view = trackDbLocalSetting(tdb, "view");
-    if(viewName)
-        *viewName = view;
-    return (view != NULL);
+    if (viewName)
+        {
+        *viewName = trackDbLocalSetting(tdb, "view");
+        assert(*viewName != NULL);
+        }
+    return TRUE;
     }
 return FALSE;
 }

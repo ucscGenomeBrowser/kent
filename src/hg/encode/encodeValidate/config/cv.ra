@@ -1997,20 +1997,19 @@ term PBDE
 tag PBDE
 type Cell Line
 organism human
-#description (human-readable description of cell type, for cell type cellTypes.html)
-#tissue (general tissue type, for categorizing cell types)
-#vendorName (name of vendor or lab that provides these cells)
+description Human peripheral blood-derived erythroblasts
+tissue Blood
+vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 #vendorId (the ID of the cell type in the vendor's catalog)
 #orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
 #karyotype (optional human-readable karyotype, for .html page)
 #lineage (optional human-readable source of cell lines, e.g. 18 year old male)
-#termId (ID for best term in the BTO.  Optional but encouraged. Shown in cellTypes.html)
-#termUrl (URL for term in the ontology. Links with termId on cellTypes.html)
+termId BTO:0000574 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000574
 #color (specifies color code for track data of this cell type, rgb values)
-#sex (M, F, B, or U.  If "F", then the track data shouldn't contain chrY)
-#tier (1,2, or 3.  Specifies which table the cell type appears in in cellTypes.html.  Not used in mouse)
-#protocol (comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
-#category: (T for tissue, L for cell line, or P for primary cells.  Not used in human)
+sex M
+tier 3
+protocol SYDH_TFBS(Farnham):PBDE_Farnham_protocol.pdf
 
 term PFSK-1
 tag PFSK1
@@ -3130,6 +3129,21 @@ targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
+term CTCF_(C-20)
+tag CTCFC20
+type Antibody
+target CTCF
+antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin
+targetDescription Transcriptional regulator with 11 highly conserved zinc finger domains. Depending on context, can bind a histone acetyltransferase (HAT)-containing complex and function as transcriptional activator or bind a histone deacetylase (HDAC)-containing complex and function as transcriptional repressor. Involved in transcriptional regulation by binding to chromatin insulators and preventing interaction between promoter and nearby enhancers and silencers. Preferentially interacts with unmethylated DNA, preventing spreading of CpG methylation. Can dimerize, mediating long-range chromatin looping. When bound to chromatin, provides an anchor point for nucleosomes positioning. Involved in sister chromatid cohesion. Associates with both centromeres and chromosomal arms during metaphase and required for cohesin localization to CTCF sites. 
+orderUrl http://www.scbt.com/datasheet-15914-ctcf-c-20-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-15914
+lab Snyder
+targetId GeneCard:GC16P066153
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+validation missing
+
+#(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 ##This does not appear in metaDb
 term CtBP1
 tag CTBP1
@@ -3368,7 +3382,7 @@ orderUrl http://www.scbt.com/datasheet-265-gata-1-n6-antibody.html
 targetId GeneCard:Gata1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=Gata1
 lab Hardison
-validation GATA1(Western_blot):mouse_Gata1_validation_Hardison.pdf
+validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 
 term GATA-2
 tag GATA2
@@ -4045,6 +4059,20 @@ targetId GeneCard:GC22P041487
 targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20 
 validation missing
 
+term p300_(N-15)
+tag P300N15
+type Antibody
+target P300
+targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin
+vendorName Santa Cruz Biotech
+vendorId sc-584
+orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
+lab Snyder
+targetId GeneCard:GC22P041487
+targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
+validation missing
+
 term PAX5-C20
 tag PAX5C20
 type Antibody
@@ -4072,6 +4100,20 @@ lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation missing
+
+term PAX5_(N-15)
+tag PAX5N15
+type Antibody
+target PAX5
+antibodyDescription rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5
+targetDescription The PAX5 gene is a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA binding motif, known as the paired box. The PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation. The PAX5 gene encodes the B cell lineage specific activator protein (BSAP) that is expressed at early, but not late stages of B cell differentiation.
+vendorName Abcam
+vendorId ab12000
+orderUrl http://www.abcam.com/PAX5-antibody-ab12000.html
+lab Hardison
+targetId GeneCard:GC09M036828
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+validation PAX_N-15(WB):mouse_PAX_N-15_validation_Hardison.pdf
 
 term Pbx3
 tag PBX3
@@ -4441,7 +4483,7 @@ targetDescription TAL1 (also designated SCL) is a serine phosphoprotein and basi
 targetId GeneCard:Tal1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TAL1
 lab Hardison
-validation TAL1(Western_blot):mouse_Tal1_validation_Hardison.pdf
+validation TAL1(Western_blot):mouse_TAL1_validation_Hardison.pdf
 
 #term TAF-II
 #type Antibody

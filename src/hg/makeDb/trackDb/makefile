@@ -98,11 +98,12 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	bruMal1 \
 	melHap1 \
 	melInc1 \
+	haeCon1 \
 	falciparum \
 	choHof1 \
 	sacCer1 sacCer2 \
 	sc1 \
-	h1n1 
+	cacTus1 h1n1 
 
 GSID_DBS = \
 	hiv1 vax004 hivgne8 hivmn hivmn1 hivmn2 hivgne8v2 hivVax003Vax004

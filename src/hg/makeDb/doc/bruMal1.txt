@@ -150,3 +150,79 @@ taxId 6279
 	/hive/data/staging/data/bruMal1
 
 ########################################################################
+# SWAP LASTZ (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzBruMal1.2010-09-22
+    cat fb.ce9.chainBruMal1Link.txt 
+    #	4804043 bases of 100286004 (4.790%) in intersection
+
+    #	running swap
+    mkdir /hive/data/genomes/bruMal1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/bruMal1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzBruMal1.2010-09-22/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    19m54.633s
+
+    cat fb.bruMal1.chainCe9Link.txt
+    #	4869447 bases of 89235536 (5.457%) in intersection
+
+########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add bruMal1 just before caeJap2
+
+# bruMal1 (Brugia malayi)
+bruMal1.serverGenome = /hive/data/genomes/bruMal1/bruMal1.2bit
+bruMal1.clusterGenome = /scratch/data/bruMal1/bruMal1.2bit
+bruMal1.ooc = /scratch/data/bruMal1/bruMal1.11.ooc
+bruMal1.lift = no
+bruMal1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+bruMal1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+bruMal1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+bruMal1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+bruMal1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+bruMal1.refseq.mrna.native.load = yes
+bruMal1.refseq.mrna.xeno.load  = yes
+bruMal1.refseq.mrna.xeno.loadDesc = yes
+bruMal1.genbank.mrna.xeno.load = yes
+bruMal1.genbank.est.native.load = yes
+bruMal1.genbank.est.native.loadDesc = no
+bruMal1.downloadDir = bruMal1
+bruMal1.perChromTables = no
+
+    git commit -m "Added bruMal1 B. malayi WS210" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial bruMal1 &
+    #	logFile: var/build/logs/2010.09.27-13:31:44.bruMal1.initalign.log
+    #	real    698m21.115s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad bruMal1
+    #	logFile: var/dbload/hgwdev/logs/2010.09.28-14:10:17.dbload.log
+    #	real    21m50.206s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add bruMal1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added bruMal1 - C. elegans WS210" \
+	etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################

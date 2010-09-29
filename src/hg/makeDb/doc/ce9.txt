@@ -1209,6 +1209,14 @@ TMPDIR=/scratch/tmp
     cat fb.ce9.chainCb3Link.txt 
     #	42421395 bases of 100286004 (42.300%) in intersection
 
+    # syntenic mapping
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=syntenicNet -syntenicNet \
+	-workhorse=hgwdev -bigClusterHub=pk -smallClusterHub=memk \
+	> synNet.log 2>&1 &
+    #	real    0m39.019s
+
     #	swap, this is also in cb3.txt
     mkdir /hive/data/genomes/cb3/bed/blastz.ce9.swap
     cd /hive/data/genomes/cb3/bed/blastz.ce9.swap
@@ -1220,6 +1228,11 @@ TMPDIR=/scratch/tmp
 
     cat fb.cb3.chainCe9Link.txt
     #	43115973 bases of 108433446 (39.763%) in intersection
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzCb3.2010-09-20/DEF \
+	-workhorse=hgwdev -bigClusterHub=pk  -smallClusterHub=memk \
+	-continue=syntenicNet -syntenicNet -swap > synNet.log 2>&1 &
+    #	real    0m39.439s
 
 ############################################################################
 ## LASTZ caeRem3 (DONE - 2010-09-20 - Hiram)
@@ -1262,6 +1275,14 @@ TMPDIR=/scratch/tmp
     cat fb.ce9.chainCaeRem3Link.txt
     #	41841184 bases of 100286004 (41.722%) in intersection
 
+    # syntenic mapping
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=syntenicNet -syntenicNet \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk > synNet.log 2>&1 &
+    #	real    2m48.968s
+
     #	swap, this is also in caeRem3.txt
     mkdir /hive/data/genomes/caeRem3/bed/blastz.ce9.swap
     cd /hive/data/genomes/caeRem3/bed/blastz.ce9.swap
@@ -1272,6 +1293,14 @@ TMPDIR=/scratch/tmp
     #	real    2m11.777s
     cat fb.caeRem3.chaince9Link.txt
     #	46320775 bases of 138406388 (33.467%) in intersection
+
+    # syntenic mapping
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	/hive/data/genomes/ce9/bed/blastzCaeRem3.2010-09-20/DEF \
+	-continue=syntenicNet -syntenicNet \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > synNet.log 2>&1 &
+    #	real    0m38.257s
 
 ############################################################################
 ## LASTZ caePb2 (DONE - 2010-09-20 - Hiram)
@@ -1314,6 +1343,14 @@ TMPDIR=/scratch/tmp
     cat fb.ce9.chainCaePb2Link.txt
     #	40793086 bases of 100286004 (40.677%) in intersection
 
+    # syntenic mapping
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-continue=syntenicNet -syntenicNet \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk > synNet.log 2>&1 &
+    #	real    3m21.202s
+
     #	swap, this is also in caePb2.txt
     mkdir /hive/data/genomes/caePb2/bed/blastz.ce9.swap
     cd /hive/data/genomes/caePb2/bed/blastz.ce9.swap
@@ -1325,9 +1362,16 @@ TMPDIR=/scratch/tmp
     cat fb.caePb2.chainCe9Link.txt
     #	55084649 bases of 170473138 (32.313%) in intersection
 
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzCaePb2.2010-09-20/DEF \
+	-workhorse=hgwdev -qRepeats=windowmaskerSdust \
+	-continue=syntenicNet -syntenicNet \
+	-bigClusterHub=pk -smallClusterHub=memk -swap > synNet.log 2>&1 &
+    #	real    0m42.368s
+
 ############################################################################
 ## LASTZ caeJap1 (DONE - 2010-09-20 - Hiram)
-    ssh kkstore06
+    # these tables were dropped, the caeJap3 is more appropriate
     screen 	#	use screen to control the job
     mkdir /hive/data/genomes/ce9/bed/blastzCaeJap1.2010-09-20
     cd /hive/data/genomes/ce9/bed/blastzCaeJap1.2010-09-20
@@ -1365,6 +1409,13 @@ TMPDIR=/scratch/tmp
     #	real    16m16.650s
     cat fb.ce9.chainCaeJap1Link.txt
     #	26876526 bases of 100286004 (26.800%) in intersection
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -bigClusterHub=pk \
+	-continue=syntenicNet -syntenicNet \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > synNet.log 2>&1 &
+    #	real    0m13.124s
 
     #	swap, this is also in caeJap1.txt
     mkdir /hive/data/genomes/caeJap1/bed/blastz.ce9.swap
@@ -1411,23 +1462,22 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-workhorse=hgwdev -smallClusterHub=memk \
 	> do.log 2>&1 &
-XXX - running Wed Sep 22 16:20:38 PDT 2010
-    #	real    13m52.946s
+    #	real    12m35.686s
 
     cat fb.ce9.chainMelHap1Link.txt 
-    #	42421395 bases of 100286004 (42.300%) in intersection
+    #	3933301 bases of 100286004 (3.922%) in intersection
 
     #	swap, this is also in melHap1.txt
     mkdir /hive/data/genomes/melHap1/bed/blastz.ce9.swap
     cd /hive/data/genomes/melHap1/bed/blastz.ce9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/ce9/bed/blastzMelHap1.2010-09-22/DEF \
-	-workhorse=hgwdev -bigClusterHub=pk  -smallClusterHub=memk \
-	-swap > swap.log 2>&1 &
-    #	real    2m48.539s
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    0m23.154s
 
     cat fb.melHap1.chainCe9Link.txt
-    #	43115973 bases of 108433446 (39.763%) in intersection
+    #	3631046 bases of 53017507 (6.849%) in intersection
 
 ############################################################################
 ## LASTZ melInc1 (DONE - 2010-09-22 - Hiram)
@@ -1463,23 +1513,21 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-workhorse=hgwdev -smallClusterHub=memk \
 	> do.log 2>&1 &
-XXX - running Wed Sep 22 16:21:38 PDT 2010
-    #	real    13m52.946s
-
+    #	real    28m11.154s
     cat fb.ce9.chainMelInc1Link.txt 
-    #	42421395 bases of 100286004 (42.300%) in intersection
+    #	3310201 bases of 100286004 (3.301%) in intersection
 
     #	swap, this is also in melInc1.txt
     mkdir /hive/data/genomes/melInc1/bed/blastz.ce9.swap
     cd /hive/data/genomes/melInc1/bed/blastz.ce9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/ce9/bed/blastzMelInc1.2010-09-22/DEF \
-	-workhorse=hgwdev -bigClusterHub=pk  -smallClusterHub=memk \
-	-swap > swap.log 2>&1 &
-    #	real    2m48.539s
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    0m36.095s
 
     cat fb.melInc1.chainCe9Link.txt
-    #	43115973 bases of 108433446 (39.763%) in intersection
+    #	4240790 bases of 82095019 (5.166%) in intersection
 
 ############################################################################
 ## LASTZ bruMal1 (DONE - 2010-09-22 - Hiram)
@@ -1515,23 +1563,22 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-workhorse=hgwdev -smallClusterHub=memk \
 	> do.log 2>&1 &
-XXX - running Wed Sep 22 16:23:08 PDT 2010
-    #	real    13m52.946s
+    #	real    60m27.833s
 
     cat fb.ce9.chainBruMal1Link.txt 
-    #	42421395 bases of 100286004 (42.300%) in intersection
+    #	4804043 bases of 100286004 (4.790%) in intersection
 
     #	swap, this is also in bruMal1.txt
     mkdir /hive/data/genomes/bruMal1/bed/blastz.ce9.swap
     cd /hive/data/genomes/bruMal1/bed/blastz.ce9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/ce9/bed/blastzBruMal1.2010-09-22/DEF \
-	-workhorse=hgwdev -bigClusterHub=pk  -smallClusterHub=memk \
-	-swap > swap.log 2>&1 &
-    #	real    2m48.539s
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    19m54.633s
 
     cat fb.bruMal1.chainCe9Link.txt
-    #	43115973 bases of 108433446 (39.763%) in intersection
+    #	4869447 bases of 89235536 (5.457%) in intersection
 
 ############################################################################
 ## LASTZ caeJap3 (DONE - 2010-09-22 - Hiram)
@@ -1567,22 +1614,667 @@ TMPDIR=/scratch/tmp
 	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
 	-workhorse=hgwdev -smallClusterHub=memk \
 	> do.log 2>&1 &
-XXX - running Wed Sep 22 16:25:38 PDT 2010
-    #	real    13m52.946s
+    #	real    67m37.407s
 
     cat fb.ce9.chainCaeJap3Link.txt 
-    #	42421395 bases of 100286004 (42.300%) in intersection
+    #	27658992 bases of 100286004 (27.580%) in intersection
 
     #	swap, this is also in caeJap3.txt
     mkdir /hive/data/genomes/caeJap3/bed/blastz.ce9.swap
     cd /hive/data/genomes/caeJap3/bed/blastz.ce9.swap
     time nice -n +19 doBlastzChainNet.pl -verbose=2 \
 	/hive/data/genomes/ce9/bed/blastzCaeJap3.2010-09-22/DEF \
-	-workhorse=hgwdev -bigClusterHub=pk  -smallClusterHub=memk \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk \
 	-swap > swap.log 2>&1 &
-    #	real    2m48.539s
+    #	real    5m37.231s
 
     cat fb.caeJap3.chainCe9Link.txt
-    #	43115973 bases of 108433446 (39.763%) in intersection
+    #	29986108 bases of 154057934 (19.464%) in intersection
+
+############################################################################
+## LASTZ priPac1 (DONE - 2010-09-23 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce9/bed/blastzPriPac1.2010-09-23
+    cd /hive/data/genomes/ce9/bed/blastzPriPac1.2010-09-23
+
+    cat << '_EOF_' > DEF
+# ce9 vs priPac1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce9
+SEQ1_DIR=/scratch/data/ce9/ce9.2bit
+SEQ1_LEN=/scratch/data/ce9/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae priPac1
+SEQ2_DIR=/scratch/data/priPac1/priPac1.2bit
+SEQ2_LEN=/scratch/data/priPac1/chrom.sizes
+SEQ2_CTGDIR=/hive/data/genomes/priPac1/trfWM.maskedContigs/priPac1.TrfWM.supers.2bit
+SEQ2_CTGLEN=/hive/data/genomes/priPac1/trfWM.maskedContigs/priPac1.TrfWM.supers.sizes
+SEQ2_LIFT=/hive/data/genomes/priPac1/downloads/super.lift
+SEQ2_CHUNK=1000000
+SEQ2_LAP=0
+SEQ2_LIMIT=50
+
+BASE=/hive/data/genomes/ce9/bed/blastzPriPac1.2010-09-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-workhorse=hgwdev -verbose=2 -bigClusterHub=pk \
+	-qRepeats=windowmaskerSdust -smallClusterHub=memk > do.log 2>&1 &
+    #	real    14m20.785s
+
+    cat fb.ce9.chainPriPac1Link.txt 
+    #	6251889 bases of 100286004 (6.234%) in intersection
+
+    #	swap, this is also in priPac1.txt
+    mkdir /hive/data/genomes/priPac1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/priPac1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzPriPac1.2010-09-23/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk -smallClusterHub=memk \
+	-swap > swap.log 2>&1 &
+    #	real    0m43.464s
+    cat fb.priPac1.chainCe9Link.txt
+    #	6799226 bases of 145948246 (4.659%) in intersection
+
+############################################################################
+## LASTZ haeCon1 (DONE - 2010-09-22 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/ce9/bed/blastzHaeCon1.2010-09-23
+    cd /hive/data/genomes/ce9/bed/blastzHaeCon1.2010-09-23
+
+    cat << '_EOF_' > DEF
+# ce9 vs haeCon1
+BLASTZ_H=2000
+BLASTZ_M=50
+
+# TARGET: elegans Ce9
+SEQ1_DIR=/scratch/data/ce9/ce9.2bit
+SEQ1_LEN=/scratch/data/ce9/chrom.sizes
+SEQ1_CHUNK=1000000
+SEQ1_LAP=10000
+
+# QUERY: C. briggsae haeCon1
+SEQ2_DIR=/scratch/data/haeCon1/haeCon1.2bit
+SEQ2_LEN=/scratch/data/haeCon1/chrom.sizes
+SEQ2_CHUNK=1000000
+SEQ2_LIMIT=50
+SEQ2_LAP=0
+
+BASE=/hive/data/genomes/ce9/bed/blastzHaeCon1.2010-09-23
+TMPDIR=/scratch/tmp
+'_EOF_'
+    # << happy emacs
+
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	`pwd`/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk \
+	> do.log 2>&1 &
+    #	real    62m3.845s
+
+    cat fb.ce9.chainHaeCon1Link.txt 
+    #	7484042 bases of 100286004 (7.463%) in intersection
+
+    # recip best to see how it looks
+    time doRecipBest.pl -workhorse=hgwdev -verbose=2 -buildDir=`pwd` \
+	ce9 haeCon1 > rbest.log 2>&1 &
+    #	real    4m5.408s
+
+    #	swap, this is also in haeCon1.txt
+    mkdir /hive/data/genomes/haeCon1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/haeCon1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzHaeCon1.2010-09-23/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    7m35s
+
+    cat fb.haeCon1.chainCe9Link.txt
+    #	8860569 bases of 278844984 (3.178%) in intersection
+
+############################################################################
+## 10-Way Multiz (DONE - 2009-06-09,2009-11-10 - Hiram)
+    mkdir /hive/data/genomes/ce9/bed/multiz10way
+    cd /hive/data/genomes/ce9/bed/multiz10way
+
+    #	starting with the 10way tree created from 44 way tree
+    cat << '_EOF_' > 10way.nh
+((((((ce9:0.003,((cb3:0.005,caeRem3:0.003):0.004,caePb2:0.013):0.002):0.001,caeJap3:0.023):0.04,haeCon1:0.06):0.06,priPac1:0.12):0.06,(melHap1:0.14,melInc1:0.15):0.03):0.06,bruMal1:0.24);
+'_EOF_'
+    # << happy emacs
+
+    sed -e "s/ce9/C._elegans/; s/cb3/C._briggsae/; s/caeRem3/C._remanei/; s/caePb2/C._brenneri/; s/caeJap3/C._japonica/; s/haeCon1/H._contortus/; s/priPac1/P._pacificus/; s/melHap1/M._hapla/; s/melInc1/M._incognita/; s/bruMal1/B._malayi/;" 10way.nh > commonNames.nh
+    #	Use this commonNames specification in the phyloGif tool:
+    #	http://genome.ucsc.edu/cgi-bin/phyloGif
+    #	to obtain a gif image for htdocs/images/phylo/ce9_10way.gif
+
+    /cluster/bin/phast/all_dists 10way.nh > 10way.distances.txt
+    #	Use this output to create the table below, with this perl script:
+    cat << '_EOF_' > sizeStats.pl
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+open (FH, "grep -y ce9 10way.distances.txt | sort -k3,3n|") or
+        die "can not read 10way.distances.txt";
+
+my $count = 0;
+while (my $line = <FH>) {
+    chomp $line;
+    my ($ce9, $D, $dist) = split('\s+', $line);
+    my $chain = "chain" . ucfirst($D);
+    my $B="/hive/data/genomes/ce9/bed/lastz.$D/fb.ce9." .
+        $chain . "Link.txt";
+    my $chainLinkMeasure =
+        `awk '{print \$5}' ${B} 2> /dev/null | sed -e "s/(//; s/)//"`;
+    chomp $chainLinkMeasure;
+    $chainLinkMeasure = 0.0 if (length($chainLinkMeasure) < 1);
+    $chainLinkMeasure =~ s/\%//;
+    my $swapFile="/hive/data/genomes/${D}/bed/blastz.ce9.swap/fb.${D}.chainCe9Link.txt";
+    my $swapMeasure = "N/A";
+    if ( -s $swapFile ) {
+        $swapMeasure =
+            `awk '{print \$5}' ${swapFile} 2> /dev/null | sed -e "s/(//; s/)//"`;
+        chomp $swapMeasure;
+        $swapMeasure = 0.0 if (length($swapMeasure) < 1);
+        $swapMeasure =~ s/\%//;
+    }
+    my $orgName=
+    `hgsql -N -e "select organism from dbDb where name='$D';" hgcentraltest`;
+    chomp $orgName;
+    if (length($orgName) < 1) {
+        $orgName="N/A";
+    }
+    ++$count;
+    if ($swapMeasure eq "N/A") {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%s)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    } else {
+        printf "# %02d  %.4f - %s %s\t(%% %.3f) (%% %.3f)\n", $count, $dist,
+            $orgName, $D, $chainLinkMeasure, $swapMeasure
+    }
+}
+close (FH);
+'_EOF_'
+    # << happy emacs
+    chmod +x ./sizeStats.pl
+    ./sizeStats.pl
+#
+#	If you can fill in all the numbers in this table, you are ready for
+#	the multiple alignment procedure
+#
+#                         featureBits chainLink measures
+#                                        chainCe9Link   chain    linearGap
+#    distance                              on ce9    on other   minScore
+# 01  0.0120 - C. remanei caeRem3       (% 41.722) (% 33.467)
+# 02  0.0140 - C. briggsae cb3          (% 42.300) (% 39.763)
+# 03  0.0180 - C. brenneri caePb2       (% 40.677) (% 32.313)
+# 04  0.0270 - C. japonica caeJap3      (% 27.580) (% 19.464)
+# 05  0.1040 - H. contortus haeCon1     (% 7.463) (% 3.178)
+# 06  0.2240 - P. pacificus priPac1     (% 6.234) (% 4.659)
+# 07  0.3340 - M. hapla melHap1         (% 3.922) (% 6.849)
+# 08  0.3440 - M. incognita melInc1     (% 3.301) (% 5.166)
+# 09  0.4640 - B. malayi bruMal1        (% 4.790) (% 5.457)
+
+    # create species list and stripped down tree for autoMZ
+    sed -e "s/:[0-9]\.[0-9][0-9]*//g; s/;//" 10way.nh > tmp.nh
+
+    echo `cat tmp.nh` > tree-commas.nh
+    echo `cat tree-commas.nh` | sed 's/ //g; s/,/ /g' > tree.nh
+    sed 's/[()]//g; s/,/ /g' tree.nh > species.list
+
+    cd /hive/data/genomes/ce9/bed/multiz10way
+    #	bash shell syntax here ...
+    export H=/hive/data/genomes/ce9/bed
+    mkdir mafLinks
+    #	verify the alignment type is correct, watch the output of this:
+    for G in `sed -e "s/ce9 //" species.list`
+    do
+	mkdir mafLinks/$G
+	if [ -s ${H}/lastz.${G}/mafRBestNet/chrI.maf.gz ]; then
+	    echo "    # $G - recipBest"
+	    ln -s ${H}/lastz.$G/mafRBestNet/*.maf.gz ./mafLinks/$G
+	else
+	    if [ -s ${H}/lastz.${G}/mafSynNet/chrI.maf.gz ]; then
+		echo "    # $G - synNet"
+		ln -s ${H}/lastz.$G/mafSynNet/*.maf.gz ./mafLinks/$G
+	    else
+		if [ -s ${H}/lastz.${G}/mafNet/chrI.maf.gz ]; then
+		    echo "    # $G - mafNet"
+		    ln -s ${H}/lastz.$G/mafNet/*.maf.gz ./mafLinks/$G
+		else
+		    echo "missing directory lastz.${G}/*Net"
+		fi
+	    fi
+	fi
+    done
+    # cb3 - synNet
+    # caeRem3 - synNet
+    # caePb2 - synNet
+    # caeJap3 - synNet
+    # haeCon1 - recipBest
+    # priPac1 - mafNet
+    # melHap1 - mafNet
+    # melInc1 - mafNet
+    # bruMal1 - mafNet
+
+    # the autoMultiz cluster run 
+    # most interesting, this would not work on memk
+    #	on memk autoMZ somehow got the tree.nh full of back slashes ?
+    ssh swarm
+    cd /hive/data/genomes/ce9/bed/multiz10way/
+
+    mkdir maf run
+    cd run
+    mkdir penn
+    cp -p /cluster/bin/penn/multiz.2008-11-25/multiz penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/maf_project penn 
+    cp -p /cluster/bin/penn/multiz.2008-11-25/autoMZ penn 
+
+    #	set the db and pairs directories here
+    cat > autoMultiz.csh << '_EOF_'
+#!/bin/csh -ef
+set db = ce9 
+set c = $1
+set result = $2
+set run = `/bin/pwd`
+set tmp = /scratch/tmp/$db/multiz.$c
+set pairs = /hive/data/genomes/ce9/bed/multiz10way/mafLinks
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+/bin/cp -p ../tree.nh ../species.list $tmp
+pushd $tmp > /dev/null
+foreach s (`/bin/sed -e "s/ $db//" species.list`)
+    set in = $pairs/$s/$c.maf
+    set out = $db.$s.sing.maf
+    if (-e $in.gz) then
+        /bin/zcat $in.gz > $out
+        if (! -s $out) then
+            /bin/echo "##maf version=1 scoring=autoMZ" > $out
+        endif
+    else if (-e $in) then
+        /bin/ln -s $in $out
+    else
+        /bin/echo -e "##maf version=1 scoring=autoMZ\n\n##eof maf" > $out
+    endif
+end
+set path = ($run/penn $path); rehash
+$run/penn/autoMZ + T=$tmp E=$db "`cat tree.nh`" $db.*.sing.maf $c.maf \
+        > /dev/null
+popd > /dev/null
+/bin/rm -f $result
+/bin/cp -p $tmp/$c.maf $result
+/bin/rm -fr $tmp
+/bin/rmdir --ignore-fail-on-non-empty /scratch/tmp/$db
+'_EOF_'
+# << happy emacs
+    chmod +x autoMultiz.csh
+
+    cat  << '_EOF_' > template
+#LOOP
+./autoMultiz.csh $(root1) {check out line+ /hive/data/genomes/ce9/bed/multiz10way/maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+# << happy emacs
+
+    find ../mafLinks -type l | sed -e "s/.*chr/chr/; s/.maf.gz//" \
+	| sort -u > chr.part.list
+    ssh memk
+    cd /hive/data/genomes/ce9/bed/multiz10way/run
+    gensub2 chr.part.list single template jobList
+    para try
+    para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:       1438s      23.97m     0.40h    0.02d  0.000 y
+# IO & Wait Time:                   137s       2.28m     0.04h    0.00d  0.000 y
+# Average job time:                 225s       3.75m     0.06h    0.00d
+# Longest finished job:             387s       6.45m     0.11h    0.00d
+# Submission to last job:           394s       6.57m     0.11h    0.00d
+
+    # load tables for a look
+    ssh hgwdev
+    mkdir -p /gbdb/ce9/multiz10way/maf
+    cd /hive/data/genomes/ce9/bed/multiz10way/maf
+    ln -s `pwd`/*.maf /gbdb/ce9/multiz10way/maf
+
+    # this generates an immense multiz10way.tab file in the directory
+    #	where it is running.  Best to run this over in scratch.
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/ce9/multiz10way/maf ce9 multiz10way
+    #	Loaded 306326 mafs in 7 files from /gbdb/ce9/multiz10way/maf
+    #	real    0m6.930s
+
+    # load summary table
+    time nice -n +19 cat /gbdb/ce9/multiz10way/maf/*.maf \
+	| hgLoadMafSummary ce9 -minSize=10000 -verbose=2 \
+		-mergeGap=500 -maxSize=50000  multiz10waySummary stdin
+    #	Created 116808 summary blocks from 980666 components
+    #	and 306326 mafs from stdin
+    #	real    0m11.928s
+
+##############################################################################
+# 10-way Gap annotation (DONE - 2010-09-24 - Hiram)
+    # Gap Annotation
+    # prepare bed files with gap info
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/anno
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno
+    mkdir maf run
+
+    #	most of these will already exist from previous multiple alignments
+    #	remove the echo from in front of the twoBitInfo command to get them
+    #	to run if this loop appears to be correct
+    for DB in `cat ../species.list`
+do
+    CDIR="/hive/data/genomes/${DB}"
+    if [ ! -f ${CDIR}/${DB}.N.bed ]; then
+	echo "creating ${DB}.N.bed"
+	echo twoBitInfo -nBed ${CDIR}/${DB}.2bit ${CDIR}/${DB}.N.bed
+    else
+	ls -og ${CDIR}/${DB}.N.bed
+    fi
+done
+
+    cd run
+    rm -f nBeds sizes
+    for DB in `sed -e "s/ce9 //" ../../species.list`
+do
+    echo "${DB} "
+    ln -s  /hive/data/genomes/${DB}/${DB}.N.bed ${DB}.bed
+    echo ${DB}.bed  >> nBeds
+    ln -s  /hive/data/genomes/${DB}/chrom.sizes ${DB}.len
+    echo ${DB}.len  >> sizes
+done
+
+    #	the annotation step requires large memory, run on memk nodes
+    ssh memk
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno/run
+    ls ../../maf | sed -e "s/.maf//" > chr.list
+    cat << '_EOF_' > template
+#LOOP
+./anno.csh $(root1) {check out line+ ../maf/$(root1).maf}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > anno.csh
+#!/bin/csh -fe
+
+set inMaf = ../../maf/$1.maf
+set outMaf = ../maf/$1.maf
+rm -f $outMaf
+mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/ce9/ce9.2bit $outMaf
+'_EOF_'
+    # << happy emacs
+    chmod +x anno.csh
+
+    ssh pk
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno/run
+    gensub2 chr.list single template jobList
+    para create jobList
+    para try
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         44s       0.73m     0.01h    0.00d  0.000 y
+# IO & Wait Time:                    42s       0.71m     0.01h    0.00d  0.000 y
+# Average job time:                  12s       0.20m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:            26s       0.43m     0.01h    0.00d
+
+    ssh hgwdev
+    rm -fr /gbdb/ce9/multiz10way/maf
+    mkdir /gbdb/ce9/multiz10way/maf
+    cd /hive/data/genomes/ce9/bed/multiz10way/anno/maf
+    ln -s `pwd`/*.maf /gbdb/ce9/multiz10way/maf/
+    #	by loading this into the table multiz10way, it will replace the
+    #	previously loaded table with the unannotated mafs
+    #	huge temp files are made, do them on local disk
+    cd /data/tmp
+    time nice -n +19 hgLoadMaf \
+	-pathPrefix=/gbdb/ce9/multiz10way/maf ce9 multiz10way
+    #	Loaded 352790 mafs in 7 files from /gbdb/ce9/multiz10way/maf
+    #	real    0m38.998s
+
+    time nice -n +19 cat /gbdb/ce9/multiz10way/maf/*.maf \
+	| hgLoadMafSummary ce9 -minSize=10000 -verbose=2 \
+		-mergeGap=500 -maxSize=50000  multiz10waySummary stdin
+    #	Created 116808 summary blocks from 980666 components
+    #	and 352790 mafs from stdin
+    #	real    0m36.310s
+
+##############################################################################
+# Phylogenetic tree from 10-way  (DONE - 2010-09-24 - Hiram)
+
+    # Extract 4-fold degenerate sites based on 
+    # of sangerGenes, coding
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/4d
+    cd /hive/data/genomes/ce9/bed/multiz10way/4d
+
+    hgsql ce9 -Ne "select * from sangerGene;" | cut -f1-10 > sangerGene.gp
+    wc -l sangerGene.gp
+    #	28152 sangerGene.gp
+    genePredSingleCover sangerGene.gp stdout | sort > sangerGeneNR.gp
+    wc -l sangerGeneNR.gp
+    #	20227 sangerGeneNR.gp
+
+    ssh memk
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/4d/run
+    cd /hive/data/genomes/ce9/bed/multiz10way/4d/run
+    mkdir ../mfa
+
+# whole chrom mafs version, using new version of 
+# uses memory-efficient version of phast, from Melissa Hubisz at Cornell
+#	mjhubisz at gmail.com
+    cat << '_EOF_' > 4d.csh
+#!/bin/csh -fe
+set r = "/hive/data/genomes/ce9/bed/multiz10way"
+set c = $1
+set infile = $r/maf/$2
+set outfile = $3:t
+cd /scratch/tmp
+# 'clean' maf
+perl -wpe 's/^s ([^.]+)\.\S+/s $1/' $infile > $c.maf    
+awk -v C=$c '$2 == C {print}' $r/4d/sangerGeneNR.gp > $c.gp
+set PHASTBIN=/cluster/bin/phast.2008-12-18
+$PHASTBIN/msa_view --4d --features $c.gp --do-cats 3 -i MAF $c.maf -o SS > $c.ss
+$PHASTBIN/msa_view -i SS --tuple-size 1 $c.ss > $r/4d/mfa/$outfile
+rm -f $c.gp $c.maf $c.ss
+'_EOF_'
+    # << happy emacs
+    chmod +x 4d.csh
+
+    ls /hive/data/genomes/ce9/bed/multiz10way/maf > maf.list
+
+    cat << '_EOF_' > template
+#LOOP
+4d.csh $(root1) $(path1) {check out line+ ../mfa/$(root1).mfa}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    gensub2 maf.list single template jobList
+    rm -fr /cluster/data/ce9/bed/multiz10way/4d/mfa
+    mkdir /cluster/data/ce9/bed/multiz10way/4d/mfa
+    para create jobList
+    para try
+    para check
+    para push
+
+    # combine mfa files
+    cd ..
+    sed -e "s/ /,/g" ../species.list > species.lst
+    /cluster/bin/phast/msa_view --aggregate `cat species.lst` mfa/*.mfa | \
+        sed s/"> "/">"/ > 4d.all.mfa
+
+    # use phyloFit to create tree model (output is phyloFit.mod)
+    export PHASTBIN=/cluster/bin/phast.2008-12-18
+    time $PHASTBIN/phyloFit --EM --precision MED --msa-format FASTA \
+	--subst-mod REV --tree ../tree-commas.nh 4d.all.mfa
+    #	real    37m4.800s
+
+TREE: ((((((ce9:0.493597,((cb3:0.459180,caeRem3:0.411537):0.051063,caePb2:0.455061):0.112749):0.117493,caeJap3:0.522910):0.127938,haeCon1:1.203176):0.098413,priPac1:0.857529):0.428754,(melHap1:0.218602,melInc1:0.211924):0.643495):0.633675,bruMal1:0.633675);
+XXX - done Fri Sep 24 16:09:19 PDT 2010
+
+    #	real    111m23.119s
+    mv phyloFit.mod phyloFit.all.mod
+    grep TREE phyloFit.all.mod | sed 's/TREE\:\ //' > tree_4d.10way.nh
+
+    sed -e 's/,haeCon1.*//' species.lst > caenorhabditis.list
+
+    $PHASTBIN/tree_doctor \
+        --prune-all-but=`cat caenorhabditis.list` \
+                tree_4d.10way.nh > tree_4d.10way.caenorhabditis.nh
+
+#########################################################################
+# CREATE CONSERVATION WIGGLE WITH PHASTCONS - 10-WAY
+#		(DONE - 2010-09-27 - Hiram)
+
+# Estimate phastCons parameters
+    #	We need the fasta sequence for this business
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/ce9Fasta
+    cd /hive/data/genomes/ce9/bed/multiz10way/ce9Fasta
+    for C in `cut -f1 ../../../chrom.sizes`
+do
+    echo "twoBitToFa -seq=${C} ../../../ce9.2bit ${C}.fa"
+    twoBitToFa -seq=${C} ../../../ce9.2bit ${C}.fa
+done
+    #	verify nothing lost, should be the same as previously:
+    faSize *.fa
+    #	100286004 bases (0 N's 100286004 real 86863769 upper
+    #	13422235 lower) in 7 sequences in 7 files
+    #	%13.38 masked total, %13.38 masked real
+
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/cons
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons
+
+    # Create a starting-tree.mod based on chrV (the largest one)
+    #	Set -windows large enough so it only makes one piece
+    faSize ../ce9Fasta/chrV.fa
+    #	20924143 bases (0 N's 20924143 real 17986951 upper
+    #	2937192 lower) in 1 sequences in 1 files
+    #	%14.04 masked total, %14.04 masked real
+
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split \
+	../maf/chrV.maf --refseq ../ce9Fasta/chrV.fa --in-format MAF \
+	--windows 30000000,1000 --out-format SS \
+	--between-blocks 5000 --out-root s1
+    #	Creating partition 1 (column 1 to column 20924143)...
+    #	Writing partition 1 to s1.1-20924143.ss...
+    #	real    0m8.755s
+
+    #	the tree in use
+    cat ../tree-commas.nh
+# ((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac1),(melHap1,melInc1)),bruMal1)
+
+    #  this s1.*.ss should match only one item
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloFit \
+    -i SS s1.*.ss --tree "((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac1),(melHap1,melInc1)),bruMal1)" \
+    --out-root starting-tree
+    #	real    5m2.175s
+
+    rm s1.*.ss
+    # add up the C and G:
+    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
+    #	0.378
+    #	This 0.378 is used in the --gc argument below
+
+    # Create SS files
+    #	The size here is large enough to leave all chroms whole
+    #	This is pretty big compared to the ordinary phastCons and phyloP
+    #	runs for the big ways on Mouse and Human.  But the whole MAF size
+    #	is much smaller so it will still work.  (some of the human and mouse
+    #	chunk sizes are still larger than 21,000,000)
+    mkdir /cluster/data/ce9/bed/multiz10way/cons/mafSplit
+    cd /cluster/data/ce9/bed/multiz10way/cons/mafSplit
+    time for C in `cut -f1 /hive/data/genomes/ce9/chrom.sizes`
+    do
+      if [ -s /hive/data/genomes/ce9/bed/multiz10way/maf/${C}.maf ]; then
+	echo msa_split $C
+	/cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split \
+	    /hive/data/genomes/ce9/bed/multiz10way/maf/${C}.maf \
+	    --refseq /hive/data/genomes/ce9/bed/multiz10way/ce9Fasta/${C}.fa \
+	    --in-format MAF --windows 21000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}
+      fi
+    done
+    #	real    0m47.078s
+
+    mkdir /cluster/data/ce9/bed/multiz10way/cons/tree1
+    cd /cluster/data/ce9/bed/multiz10way/cons/tree1
+    mkdir log tree
+    #	this starts 6 processes on hgwdev
+    for C in I II III IV V X
+do
+    echo chr${C}
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phastCons \
+    ../mafSplit/chr${C}.1-*.ss \
+	../starting-tree.mod \
+	--gc 0.378 --nrates 1,1 --no-post-probs --ignore-missing \
+	--expected-lengths 15 --target-coverage 0.55 \
+	--quiet --log log/chr${C} --estimate-trees tree/chr${C} &
+done
+    #	chrV finished in about 37 minutes, chrX finished last at ~45 minutes
+
+    # Now combine parameter estimates.  We can average the .mod files
+    # using phyloBoot.  This must be done separately for the conserved
+    # and nonconserved models
+    cd /cluster/data/ce9/bed/multiz10way/cons/tree1
+    ls -1 tree/chr*.cons.mod > cons.list
+    # the '*cons.list' is a signal to phyloBoot that it is reading
+    #	a list of files to work with from cons.list
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
+    --read-mods '*cons.list' --output-average ../ave.cons.mod \
+	> cons_summary.txt 2>&1
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
+    --read-mods tree/chrV.cons.mod --output-average ../ave.cons.mod \
+	> cons_summary.txt 2>&1
+    ls -1 tree/chr*.noncons.mod > noncons.list
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
+    --read-mods '*noncons.list' --output-average ../ave.noncons.mod \
+	> noncons_summary.txt 2>&1 &
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
+    --read-mods tree/chrV.noncons.mod --output-average ../ave.noncons.mod \
+	> noncons_summary.txt 2>&1 &
+XXX - running - Tue Sep 28 09:24:15 PDT 2010
+XXX - running 62 minutes at: Mon Sep 27 11:39:46 PDT 2010
+    #	these did not finish after 22 hours on all the chromosomes
+    #	fall back to just running on chrV
+
+    cd /cluster/data/ce9/bed/multiz10way/cons
+    #	measuring entropy
+    #	consEntopy <target coverage> <expected lengths>
+    #		 ave.cons.mod ave.noncons.mod --NH 9.78
+    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/consEntropy \
+    --NH 9.78 .55 15 ave.cons.mod ave.noncons.mod
+    ###	for treeRun2: --expected-lengths 15 --target-coverage 0.55
+    #	( Solving for new omega: 15.000000 710.253180 42.4109155 35.3891019
+    #		34.810297 34.805819 )
+
+    #	Transition parameters: gamma=0.550000, omega=15.000000, mu=0.0101010107,
+    #		nu=0.081481
+    #	Relative entropy: H=1.172307 bits/site
+    #	Expected min. length: L_min=10.1085104 sites
+    #	Expected max. length: L_max=5.51102100 sites
+    #	Phylogenetic information threshold: PIT=L_min*H=7.1101112 bits
+    # Recommended expected length: omega=34.805819 sites (for L_min*H=9.780000)
+
+    ###	for treeRun1: --expected-lengths 15 --target-coverage 0.100
+    #	( Solving for new omega: 15.000000 140.7010073 101.140093 42.355284
+    #		39.5101113 39.474822 )
+    #	Transition parameters: gamma=0.1000000, omega=15.000000, mu=0.0101010107,
+    #		nu=0.100000
+    #	Relative entropy: H=1.2483510 bits/site
+    #	Expected min. length: L_min=5.3103742 sites
+    #	Expected max. length: L_max=5.097039 sites
+    #	Phylogenetic information threshold: PIT=L_min*H=10.1095858 bits
+    # Recommended expected length: omega=39.474822 sites (for L_min*H=9.780000)
 
 ############################################################################

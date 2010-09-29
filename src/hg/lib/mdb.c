@@ -1347,28 +1347,28 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 
 
 // ----------- Printing and Counting -----------
-static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle)
+static void mdbVarValPrint(struct mdbVar *mdbVar,boolean raStyle, FILE *outF)
 {
 if(mdbVar != NULL && mdbVar->var != NULL)
     {
     if(raStyle)
-        printf("\n%s ",mdbVar->var);
+        fprintf(outF, "\n%s ",mdbVar->var);
     else
-        printf(" %s=",mdbVar->var);
+        fprintf(outF, " %s=",mdbVar->var);
     if(mdbVar->val != NULL)
         {
         if(mdbVar->varType == vtBinary)
-            printf("binary");
+            fprintf(outF, "binary");
         else if(!raStyle && strchr(mdbVar->val, ' ') != NULL) // Has blanks
-            printf("\"%s\"",mdbVar->val);
+            fprintf(outF, "\"%s\"",mdbVar->val);
         else
-            printf("%s",mdbVar->val);
+            fprintf(outF, "%s",mdbVar->val);
         }
     }
 }
 
 
-void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle)
+void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF )
 // prints objs and var=val pairs as formatted metadata lines or ra style
 {
 // Single line:
@@ -1384,9 +1384,9 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     if(mdbObj->obj == NULL)
         continue;
 
-    printf("%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
+    fprintf(outF, "%s %s",(raStyle?MDB_METAOBJ_RAKEY:MDB_METADATA_KEY),mdbObj->obj);
     if(mdbObj->deleteThis)
-        printf(" delete");
+        fprintf(outF, " delete");
 
     struct mdbVar *mdbVar = NULL;
 
@@ -1394,17 +1394,33 @@ for(mdbObj=mdbObjs;mdbObj!=NULL;mdbObj=mdbObj->next)
     if(mdbObj->varHash != NULL)
         {
         mdbVar = hashFindVal(mdbObj->varHash,MDB_OBJ_TYPE);
-        mdbVarValPrint(mdbVar,raStyle);
+        mdbVarValPrint(mdbVar,raStyle, outF);
         }
     for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         {
         if(mdbObj->varHash == NULL || !sameOk(MDB_OBJ_TYPE,mdbVar->var))
-            mdbVarValPrint(mdbVar,raStyle);
+            mdbVarValPrint(mdbVar,raStyle, outF);
         }
-    printf("%s",(raStyle?"\n\n":"\n"));
+    fprintf(outF, "%s",(raStyle?"\n\n":"\n"));
     }
 if(raStyle) // NOTE: currently only supporting validation of RA files
-    printf("%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
+    fprintf(outF, "%s%d\n",MDB_MAGIC_PREFIX,mdbObjCRC(mdbObjs));
+}
+
+void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle)
+// prints objs and var=val pairs as formatted metadata lines or ra style
+{
+mdbObjPrintToStream(mdbObjs, raStyle, stdout);
+}
+
+void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file)
+// prints objs and var=val pairs as formatted metadata lines or ra style
+{
+FILE *f = mustOpen(file, "w");
+
+mdbObjPrintToStream(mdbObjs, raStyle, f);
+
+fclose(f);
 }
 
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle)
@@ -1978,5 +1994,64 @@ if (mdbObj == NULL || mdbObj == METADATA_NOT_FOUND)
     return NULL;
 
 return mdbObjFindValue(mdbObj,var);
+}
+
+struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files)
+// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+{  // TODO: Change this to use normal mdb struct routines?
+if (!tables && !files)
+    errAbort("mdbObjSearch requests objects for neither tables or files.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+struct dyString *dyQuery = dyStringNew(512);
+dyStringPrintf(dyQuery,"select distinct obj from %s l1 where ",tableName);
+if (!tables || !files)
+    {
+    dyStringPrintf(dyQuery,"l1.var='objType' and l1.val='%s' ",tables?"table":"file");
+    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and ",tableName);
+    }
+
+if(var != NULL)
+    dyStringPrintf(dyQuery,"l2.var = '%s' and l2.val ", var);
+if(sameString(op, "contains"))
+    dyStringPrintf(dyQuery,"like '%%%s%%'", val);
+else if (limit > 0 && strlen(val) == limit)
+    dyStringPrintf(dyQuery,"like '%s%%'", val);
+else
+    dyStringPrintf(dyQuery,"= '%s'", val);
+
+if (!tables || !files)
+    dyStringAppendC(dyQuery,')');
+dyStringAppend(dyQuery," order by obj");
+
+return sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+}
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
+// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+// Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+{  // TODO: Change this to use normal mdb struct routines?
+if (!tables && !files)
+    errAbort("mdbValSearch requests values for neither table nor file objects.\n");
+
+char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
+
+struct dyString *dyQuery = dyStringNew(512);
+if (limit > 0)
+    dyStringPrintf(dyQuery,"select distinct distinct LEFT(val,%d)",limit);
+else
+    dyStringPrintf(dyQuery,"select distinct distinct val");
+
+dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
+
+if (!tables || !files)
+    dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
+                   tableName,tables?"table":"file");
+
+dyStringAppend(dyQuery," order by val");
+
+return sqlQuickList(conn, dyStringCannibalize(&dyQuery));
 }
 

@@ -1,11 +1,56 @@
 <H2>Description</H2>
 <P>
 This track shows multiple alignments of 13 vertebrate
-species with a measure of evolutionary conservation,
-based on a phylogenetic hidden Markov model, phastCons
-(Siepel <EM>et al.</EM>, 2005). 
+species and measurements of evolutionary conservation using
+two methods (<em>phastCons</em> and <em>phyloP</em>) from the
+<A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
+PHAST package</A>, for all 13 species. 
+The multiple alignments were generated using multiz and
+other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
+TARGET=_blank>Penn State Bioinformatics</A>
+comparative genomics alignment pipeline.
+Conserved elements identified by phastCons are also displayed in
+this track. 
 </P>
 <P>
+PhastCons (which has been used in previous Conservation tracks) is a hidden
+Markov model-based method that estimates the probability that each
+nucleotide belongs to a conserved element, based on the multiple alignment.
+It considers not just each individual alignment column, but also its
+flanking columns.  By contrast, phyloP separately measures conservation at
+individual columns, ignoring the effects of their neighbors.  As a
+consequence, the phyloP plots have a less smooth appearance than the
+phastCons plots, with more "texture" at individual sites.  The two methods
+have different strengths and weaknesses.  PhastCons is sensitive to "runs"
+of conserved sites, and is therefore effective for picking out conserved
+elements.  PhyloP, on the other hand, is more appropriate for evaluating
+signatures of selection at particular nucleotides or classes of nucleotides
+(e.g., third codon positions, or first positions of miRNA target sites).
+</P>
+<P>
+Another important difference is that phyloP can measure acceleration
+(faster evolution than expected under neutral drift) as well as
+conservation (slower than expected evolution).  In the phyloP plots, sites
+predicted to be conserved are assigned positive scores (and shown in blue),
+while sites predicted to be fast-evolving are assigned negative scores (and
+shown in red).  The absolute values of the scores represent -log p-values
+under a null hypothesis of neutral evolution.  The phastCons scores, by
+contrast, represent probabilities of negative selection and range between 0
+and 1.
+</P>
+<P>
+Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
+missing data, and both were run with the same parameters for each
+species set (vertebrates, placental mammals, and glires).
+Thus, in regions in which only glires appear in the alignment, all three
+sets of scores will be the same, but in regions in which additional species
+are available, the mammalian and/or vertebrate scores may differ from the
+glire scores.  The alternative
+plots help to identify sequences that are under different evolutionary
+pressures in, say, glires and non-glires, or mammals and non-mammals.
+</P>
+
+
 The multiple alignments were generated using multiz and 
 other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
 TARGET=_blank>Penn State Bioinformatics</A>
@@ -14,8 +59,11 @@ The conservation measurements were created using the phastCons package from
 <A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" TARGET=_blank>
 Adam Siepel</A> at Cornell University. </P>
 <P>
-Multiz alignments of the following assemblies were used to generate this track:
-</P>
+UCSC has repeatmasked and aligned the low-coverage genome assemblies, and
+provides the sequence for download; however, we do not construct
+genome browsers for them. Missing sequence in the low-coverage assemblies is
+highlighted in the track display by regions of yellow when zoomed out
+and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
@@ -64,6 +112,15 @@ Multiz alignments of the following assemblies were used to generate this track:
 track.</EM>
 <BR>* Data download only, browser not available.
 </BLOCKQUOTE></P>
+
+Downloads for data in this track are available:
+<UL>
+<LI>
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac3/multiz13way/">Multiz alignments</A> (MAF format), and phylogenetic trees <LI>
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac3/phyloP13way/">PhyloP conservation</A> (WIG format)
+<LI>
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac3/phastCons13way/">PhastCons conservation</A> (WIG format)
+</UL>
 
 
 <H2>Display Conventions and Configuration</H2>
@@ -217,7 +274,7 @@ The multiple alignments were post-processed to
 add annotations indicating alignment gaps, genomic breaks,
 and base quality of the component sequences.
 The annotated multiple alignments, in MAF format, are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac1/multiz9way"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac3/multiz13way"
 TARGET=_blank>bulk download</A>.
 An alignment summary table containing an entry for each
 alignment block in each species was generated to improve
@@ -232,7 +289,7 @@ PhastCons measurements rely on a tree model containing the tree topology,
 branch lengths representing evolutionary distance at neutrally
 evolving sites, the background distribution of nucleotides, and a substitution
 rate matrix.  The 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac1/phastCons9way/9way.mod"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/calJac3/phastCons13way/all.mod"
 TARGET=_blank>vertebrate tree model</A> for this track was
 generated using the phyloFit program from the phastCons package  
 (REV model, EM algorithm, medium precision) using multiple alignments of 
