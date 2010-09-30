@@ -192,9 +192,9 @@ while true
         end
       end
       if source.starts_with? "upload_background("
-        firstComma = source.index(",")
-        secondComma = source.index(",", firstComma+1)
-        upurl = source[firstComma+1,secondComma]
+        pastFirstComma = source.index(',"')+2
+        secondComma = source.index('",', pastFirstComma)
+        upurl = source[pastFirstComma,secondComma]
         if upurl != ""
           protoSite = get_proto_site(upurl)
           maxParaFetches = paraFetchConfig["default"]["instances"]
