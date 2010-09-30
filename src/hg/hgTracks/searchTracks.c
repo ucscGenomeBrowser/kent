@@ -47,17 +47,17 @@ const struct slRef *aa = *((struct slRef **)va);
 const struct slRef *bb = *((struct slRef **)vb);
 const struct track *a = ((struct track *) aa->val);
 const struct track *b = ((struct track *) bb->val);
-     if ( tdbIsSuperTrack(a->tdb) && !tdbIsSuperTrack(b->tdb))
+     if ( tdbIsFolder(a->tdb) && !tdbIsFolder(b->tdb))
         return -1;
-else if (!tdbIsSuperTrack(a->tdb) &&  tdbIsSuperTrack(b->tdb))
+else if (!tdbIsFolder(a->tdb) &&  tdbIsFolder(b->tdb))
         return 1;
-     if ( tdbIsComposite(a->tdb) && !tdbIsComposite(b->tdb))
+     if ( tdbIsContainer(a->tdb) && !tdbIsContainer(b->tdb))
         return -1;
-else if (!tdbIsComposite(a->tdb) &&  tdbIsComposite(b->tdb))
+else if (!tdbIsContainer(a->tdb) &&  tdbIsContainer(b->tdb))
         return 1;
-     if (!tdbIsCompositeChild(a->tdb) &&  tdbIsCompositeChild(b->tdb))
+     if (!tdbIsContainerChild(a->tdb) &&  tdbIsContainerChild(b->tdb))
         return -1;
-else if ( tdbIsCompositeChild(a->tdb) && !tdbIsCompositeChild(b->tdb))
+else if ( tdbIsContainerChild(a->tdb) && !tdbIsContainerChild(b->tdb))
         return 1;
 return strcasecmp(a->longLabel, b->longLabel);
 }
@@ -536,7 +536,7 @@ if(doSearch)
         for(tsList = trixSearch(trix, descWordCount, descWords, TRUE); tsList != NULL; tsList = tsList->next)
             {
             struct track *track = (struct track *) hashFindVal(trackHash, tsList->itemId);
-            if (track != NULL && !tdbIsContainerChild(track->tdb)) // NOTE: Not including container children, since they don't seem to be individually viewaable
+            if (track != NULL)
                 {
                 refAdd(&tracks, track);
                 tracksFound++;
@@ -703,45 +703,38 @@ else
         jsonTdbSettingsBuild(&jsonTdbVars, track);
 
         #ifdef SORT_BY_HIERARCHY
-        if (tdbIsSuperTrack(track->tdb))
+        if (tdbIsFolder(track->tdb)) // supertrack
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL1);
-        if (tdbIsComposite(track->tdb))
+        if (tdbIsContainer(track->tdb))
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL3);
         else
         #endif///def SORT_BY_HIERARCHY
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL2);
 
         hPrintf("<td align='center'>\n");
-        char name[256];
-        safef(name,sizeof(name),"%s_sel",track->track);
-        boolean checked = FALSE;
-        #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
-        if(tdbIsContainerOrCompositeChild(track->tdb))
+
+        // Determine visibility and checked state
+        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
+        boolean checked = ( track->visibility != tvHide );
+        if(tdbIsContainerChild(track->tdb))
             {
-            checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             //track->visibility = limitedVisFromComposite(track);
-            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
-
+            checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
-            // Only subtracks get "_sel" var
-            hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
-            }
-        else
-            {
-            track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
-            checked = ( track->visibility != tvHide );
-            if (tdbIsSuperTrackChild(track->tdb))
-                hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
             }
 
+        // Setup the check box
+        #define CB_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s_sel' VALUE='%s'>"
+        if (tdbIsContainerChild(track->tdb) || tdbIsFolderContent(track->tdb))  // subtracks and folder children get "_sel" var.  ("_sel" var is temporary on folder children)
+            hPrintf(CB_HIDDEN_VAR,track->track,checked?"1":CART_VAR_EMPTY);
         #define CB_SEEN "<INPUT TYPE=CHECKBOX id='%s_sel_id' VALUE='on' class='selCb' onclick='findTracksClickedOne(this,true);'%s>"
         hPrintf(CB_SEEN,track->track,(checked?" CHECKED":""));
-
         hPrintf("</td><td>\n");
 
+        // Setup the visibility drop down
         #define VIS_HIDDEN_VAR "<INPUT TYPE=HIDDEN disabled=true NAME='%s' VALUE='%s'>"
         hPrintf(VIS_HIDDEN_VAR,track->track,CART_VAR_EMPTY); // All tracks get vis hidden var
-        if (tdbIsSuper(track->tdb))
+        if (tdbIsFolder(track->tdb))
             {
             // FIXME: Replace this with select box WITHOUT NAME but with id
             // HOWEVER, I haven't seen a single supertrack in found tracks so I think they are excluded and this is dead code
@@ -756,13 +749,13 @@ else
             }
 
         // If this is a container track, allow configuring...
-        if (tdbIsContainerOrComposite(track->tdb) || tdbIsSuper(track->tdb))
+        if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
             containerTrackCount++;
             hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
             }
         hPrintf("</td>\n");
-        //if(tdbIsSuper(track->tdb) || tdbIsComposite(track->tdb))
+        //if(tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
         //    hPrintf("<td><a target='_top' href='%s' title='Configure track...'>%s</a></td>\n", trackUrl(track->track, NULL), track->shortLabel);
         //else
             hPrintf("<td><a target='_top' onclick=\"hgTrackUiPopUp('%s',true); return false;\" href='%s' title='Display track details'>%s</a></td>\n", track->track, trackUrl(track->track, NULL), track->shortLabel);

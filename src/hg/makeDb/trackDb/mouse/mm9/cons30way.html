@@ -69,13 +69,13 @@ and 1.
 <P>
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters for each
-species set (vertebrates, placental mammals, and glires).
-Thus, in regions in which only glires appear in the alignment, all three
+species set (vertebrates, placental mammals, and euarchontoglires).
+Thus, in regions in which only euarchontoglires appear in the alignment, all three
 sets of scores will be the same, but in regions in which additional species
 are available, the mammalian and/or vertebrate scores may differ from the
-glire scores.  The alternative
+euarchontoglire scores.  The alternative
 plots help to identify sequences that are under different evolutionary
-pressures in, say, glires and non-glires, or mammals and non-mammals.
+pressures in, say, euarchontoglires and non-euarchontoglires, or mammals and non-mammals.
 </P>
 
 <P>
@@ -222,11 +222,8 @@ Downloads for data in this track are available:
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-The track configuration options allow the user to display either
-the vertebrate or placental mammal conservation scores, or both
-simultaneously.
-In full and pack display modes, conservation scores are displayed as a
-<EM>wiggle track</EM> (histogram) in which the height reflects the 
+In full and pack display modes, conservation scores are displayed as
+<EM>wiggle tracks</EM> (histogram) in which the height reflects the 
 size of the score. 
 The conservation wiggles can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
@@ -317,7 +314,7 @@ displayed without translation.
 <LI>
 <B>Use default species reading frames for translation:</B> the annotations from the genome
 displayed 
-in the <EM>Default species for translation</EM>; pull-down menu are used to
+in the <EM>Default species for translation</EM> pull-down menu are used to
 translate all the aligned species present in the alignment. 
 <LI>
 <B>Use reading frames for species if available, otherwise no translation:</B> codon
@@ -400,9 +397,9 @@ rate matrix.  The
 TARGET=_blank>vertebrate tree model</A> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package  
 (REV model, EM algorithm, medium precision) using multiple alignments of 
-4-fold degenerate sites extracted from the 30way alignment
+4-fold degenerate sites extracted from the 30-way alignment
 (msa_view).  The 4d sites were derived from the 
-<A HREF="http://genome.imim.es/gencode" TARGET=_blank>Oct 2005 Gencode 
+<A HREF="http://www.sanger.ac.uk/PostGenomics/encode/" TARGET=_blank>Oct 2005 Gencode 
 Reference Gene set</A>,
 which was filtered to select single-coverage long transcripts.  A second, 
 <A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/placental.mod" 
