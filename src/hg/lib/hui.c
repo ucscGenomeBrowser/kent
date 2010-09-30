@@ -6753,10 +6753,18 @@ if (cart != NULL)
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
-        if (tdbIsContainer(tdb))
+        if (tdbIsContainerChild(tdb))
             return vis; // subtrackVis override
         }
     }
+
+// subtracks without explicit (cart) vis but are selected, should get inherited vis
+if (vis == tvHide && tdbIsContainerChild(tdb))
+    {
+    if (fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+        vis = tvFull;
+    }
+
 if (vis == tvHide || tdb->parent == NULL)
     return vis;
 
