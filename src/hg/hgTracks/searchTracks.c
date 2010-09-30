@@ -554,7 +554,6 @@ if(doSearch)
         {
         // First do the metaDb searches, which can be done quickly for all tracks with db queries.
         struct hash *matchingTracks = newHash(0);
-        struct hash *trackMetadata = newHash(0);
         struct slName *el, *metaTracks = NULL;
         int i;
 
@@ -572,23 +571,6 @@ if(doSearch)
             }
         for (el = metaTracks; el != NULL; el = el->next)
             hashAddInt(matchingTracks, el->name, 1);
-
-        if(metaDbExists && !isEmpty(descSearch))
-            {
-            // Load all metadata words for each track to facilitate metadata search.
-            char query[256];
-            struct sqlResult *sr = NULL;
-            char **row;
-            safef(query, sizeof(query), "select obj, val from metaDb");
-            sr = sqlGetResult(conn, query);
-            while ((row = sqlNextRow(sr)) != NULL)
-                {
-                char *str = cloneString(row[1]);
-                hashAdd(trackMetadata, row[0], str);
-                }
-            sqlFreeResult(&sr);
-            }
-
         for (group = groupList; group != NULL; group = group->next)
             {
             if(groupSearch == NULL || sameString(group->name, groupSearch))
