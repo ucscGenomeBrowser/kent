@@ -6121,6 +6121,7 @@ term B10.H-2aH-4bp/Wts
 tag 2a4b
 type strain
 description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+# Used for the CH12 Cell Line
 
 term C3H
 tag C3H
