@@ -2033,6 +2033,8 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 {  // TODO: Change this to use normal mdb struct routines?
+struct slName *retVal;
+
 if (!tables && !files)
     errAbort("mdbValSearch requests values for neither table nor file objects.\n");
 
@@ -2050,8 +2052,8 @@ if (!tables || !files)
     dyStringPrintf(dyQuery,"and exists (select l2.obj from %s l2 where l2.obj = l1.obj and l2.var='objType' and l2.val='%s')",
                    tableName,tables?"table":"file");
 
-dyStringAppend(dyQuery," order by val");
-
-return sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+retVal = sqlQuickList(conn, dyStringCannibalize(&dyQuery));
+slNameSortCase(&retVal);
+return retVal;
 }
 
