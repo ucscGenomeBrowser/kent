@@ -116,6 +116,7 @@ struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test or public browser */
 char *organization;             /* UCSC */
 
+struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -1852,11 +1853,12 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
-static void makeGlobalTrackHash(struct track *trackList)
-/* Start a global track hash. */
+struct hash *makeGlobalTrackHash(struct track *trackList)
+/* Create a global track hash and returns a pointer to it. */
 {
 trackHash = newHash(8);
 rAddToTrackHash(trackHash, trackList);
+return trackHash;
 }
 
 
@@ -3902,11 +3904,22 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         if (hTvFromString(cartUsualString(cart, track->track,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
+//#define SUPER_PARENTS   // Turns out this wasn't necessary to solve my problem, but it is the right thing to do, so saving it for later
+#ifdef SUPER_PARENTS
+        assert(track->parent == NULL);
+        track->parent = hashFindVal(superHash, track->tdb->parentName);
+        if (track->parent)
+            continue;
+        /* create track and reference for the supertrack */
+        struct track *superTrack = track->parent = trackFromTrackDb(track->tdb->parent);
+        track->parent = superTrack;
+#else///ifndef SUPER_PARENTS
         if (hashLookup(superHash, track->tdb->parentName))
             /* ignore supertrack if it's already been handled */
             continue;
         /* create track and reference for the supertrack */
         struct track *superTrack = trackFromTrackDb(track->tdb->parent);
+#endif///ndef SUPER_PARENTS
         superTrack->hasUi = TRUE;
         superTrack->group = group;
         superTrack->groupName = cloneString(group->name);
@@ -3925,7 +3938,7 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         AllocVar(ref);
         ref->track = superTrack;
         slAddHead(&newList, ref);
-        hashAdd(superHash, track->tdb->parentName, track->tdb->parent);
+        hashAdd(superHash, track->tdb->parentName, superTrack);
         }
     }
 slSort(&newList, trackRefCmpPriority);
@@ -4260,7 +4273,7 @@ else
 }
 
 #ifdef SUBTRACKS_HAVE_VIS
-static void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
 {
