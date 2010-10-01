@@ -1,0 +1,101 @@
+metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep1
+objType file
+age adult-8wks
+antibody H3K4me3
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-13
+dateUnrestricted 2011-06-13
+fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep1.bam
+grant Ren
+lab LICR
+labVersion 11/19/09 Lane 3
+parentTable wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2205
+view Alignments
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-13
+dateUnrestricted 2011-06-13
+fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep2.bam
+grant Ren
+lab LICR
+labVersion 12/09/09 Lane 2
+parentTable wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdAlnRep2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2205
+view Alignments
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep1
+objType file
+age adult-8wks
+antibody H3K4me3
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-13
+dateUnrestricted 2011-06-13
+fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep1.fastq.gz
+grant Ren
+lab LICR
+labVersion 11/19/09 Lane 3
+parentTable wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawSignalRep1
+project wgEncode
+replicate 1
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2205
+view RawData
+
+metaObject wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep2
+objType file
+age adult-8wks
+antibody H3K4me3
+cell BoneMarrow
+composite wgEncodeLicrHistone
+control std
+dataType ChIP-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-13
+dateUnrestricted 2011-06-13
+fileName wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawDataRep2.fastq.gz
+grant Ren
+lab LICR
+labVersion 12/09/09 Lane 2
+parentTable wgEncodeLicrHistoneBmarrowH3k4me3MAdult8wksC57bl6StdRawSignalRep2
+project wgEncode
+replicate 2
+seqPlatform Illumina_GA2
+sex M
+softwareVersion ELAND
+strain C57BL/6
+subId 2205
+view RawData
+
+# MAGIC: 845932750
