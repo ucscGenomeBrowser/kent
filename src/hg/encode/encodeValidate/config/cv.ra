@@ -5549,11 +5549,18 @@ type rnaExtract
 description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
+# Short should be retired turning into short total
 term short
 tag short
 type rnaExtract
 description RNA shorter than 200 nt
 label short_RNA
+
+term shortTotal
+tag shortTotal
+type rnaExtract
+description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
+label short_Total_RNA
 
 term shortDeplRrna
 tag shortDeplRrna
