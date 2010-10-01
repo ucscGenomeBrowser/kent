@@ -10,11 +10,13 @@ static char const rcsid[] = "$Id: bedIntersect.c,v 1.7 2007/03/07 01:46:42 angie
 static boolean aHitAny = FALSE;
 static boolean bScore = FALSE;
 static float aCoverage = 0.00001;
+static boolean strictTab = FALSE;
 
 static struct optionSpec optionSpecs[] = {
     {"aHitAny", OPTION_BOOLEAN},
     {"bScore", OPTION_BOOLEAN},
     {"aCoverage", OPTION_FLOAT},
+    {"tab", OPTION_BOOLEAN},
     {NULL, 0}
 };
 
@@ -27,9 +29,10 @@ errAbort(
   "usage:\n"
   "   bedIntersect a.bed b.bed output.bed\n"
   "options:\n"
-  "   -aHitAny output all of a if any of it is hit by b\n"
-  "   -aCoverage=0.N min coverage of b to output match.  Default .00001\n"
-  "   -bScore output score from b.bed (must be at least 5 field bed)\n"
+  "   -aHitAny        output all of a if any of it is hit by b\n"
+  "   -aCoverage=0.N  min coverage of b to output match.  Default .00001\n"
+  "   -bScore         output score from b.bed (must be at least 5 field bed)\n"
+  "   -tab            chop input at tabs not spaces\n"
   );
 }
 
@@ -134,7 +137,7 @@ if (bScore)
     bHash = readBed5(bFile);
 else
     bHash = readBed(bFile);
-while ((wordCount = lineFileChop(lf, row)) != 0)
+while ((wordCount = (strictTab ? lineFileChopTab(lf, row) : lineFileChop(lf, row))) != 0)
     {
     name = row[0];
     start = lineFileNeedNum(lf, row, 1);
@@ -213,6 +216,7 @@ optionInit(&argc, argv, optionSpecs);
 aHitAny = optionExists("aHitAny");
 bScore = optionExists("bScore");
 aCoverage = optionFloat("aCoverage", aCoverage);
+strictTab = optionExists("tab");
 if (argc != 4)
     usage();
 bedIntersect(argv[1], argv[2], argv[3]);
