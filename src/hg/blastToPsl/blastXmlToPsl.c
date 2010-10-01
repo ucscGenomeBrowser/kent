@@ -94,8 +94,12 @@ struct coords qUcsc = blastToUcsc(hspRec->ncbiBlastHspQueryFrom->text, hspRec->n
                                   ((hspRec->ncbiBlastHspQueryFrame == NULL) ? 0 : hspRec->ncbiBlastHspQueryFrame->text));
 struct coords tUcsc = blastToUcsc(hspRec->ncbiBlastHspHitFrom->text, hspRec->ncbiBlastHspHitTo->text, hitRec->ncbiBlastHitLen->text,
                                   ((hspRec->ncbiBlastHspHitFrame == NULL) ? 0 : hspRec->ncbiBlastHspHitFrame->text));
-struct psl *psl = pslBuildFromHsp(firstWordInLine(iterRec->ncbiBlastIterationQueryDef->text), qUcsc.size, qUcsc.start, qUcsc.end, qUcsc.strand, hspRec->ncbiBlastHspQseq->text,
-                                  firstWordInLine(hitRec->ncbiBlastHitDef->text), tUcsc.size, tUcsc.start, tUcsc.end, tUcsc.strand, hspRec->ncbiBlastHspHseq->text,
+char *qId = firstWordInLine(iterRec->ncbiBlastIterationQueryDef->text);
+char *tId = (flags & psiblast)
+    ? firstWordInLine(hitRec->ncbiBlastHitId->text)
+    : firstWordInLine(hitRec->ncbiBlastHitDef->text);
+struct psl *psl = pslBuildFromHsp(qId, qUcsc.size, qUcsc.start, qUcsc.end, qUcsc.strand, hspRec->ncbiBlastHspQseq->text,
+                                  tId, tUcsc.size, tUcsc.start, tUcsc.end, tUcsc.strand, hspRec->ncbiBlastHspHseq->text,
                                   flags);
 if  ((psl->blockCount > 0) && ((hspRec->ncbiBlastHspEvalue->text <= eVal) || (eVal == -1)))
     outputPsl(psl, hspRec, pslFh, scoreFh);
