@@ -2278,8 +2278,10 @@ function findTracksClickedOne(selCb,justClicked)
     }
 
     // The "view in browser" button should be enabled/disabled
-    if(justClicked)
+    if(justClicked) {
+        $('input.viewBtn').val('View in Browser');
         findTracksCounts();
+    }
 }
 
 
@@ -2307,6 +2309,7 @@ function findTracksCheckAll(check)
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
+    $('input.viewBtn').val('View in Browser');
     findTracksCounts();
     return false;  // Pressing button does nothing more
 }
@@ -2331,7 +2334,7 @@ function findTracksSearchButtonsEnable(enable)
 
 function findTracksViewButtoneText()
 { // Update View in Browser buttn text
-    var inputs = $('table#foundTracks').find('input[name!="hgsid"]:hidden:enabled');
+    var inputs = $('table#foundTracks').find('input:hidden:enabled');  // Doesn't work!!!
     if( $(inputs).length == 0)
         $('input.viewBtn').val('Return to Browser');
     else
@@ -2340,7 +2343,7 @@ function findTracksViewButtoneText()
 
 function findTracksCounts()
 {// Displays visible and checked track count
-    findTracksViewButtoneText();
+    //findTracksViewButtoneText();   // Doesn't work!!!
     var counter = $('.selCbCount');
     if(counter != undefined) {
         var selCbs =  $("input.selCb");
