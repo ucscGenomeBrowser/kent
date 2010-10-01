@@ -309,6 +309,13 @@ else
     simpleSearch = FALSE;
     }
 
+trackList = getTrackList(&groupList, -2); // global
+makeGlobalTrackHash(trackList);
+
+// NOTE: This is necessary when container cfg by '*' results in vis changes
+// This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
+parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
+
 getSearchTrixFile(database, trixFile, sizeof(trixFile));
 trix = trixOpen(trixFile);
 slSort(&groupList, gCmpGroup);
@@ -327,13 +334,6 @@ for (group = groupList; group != NULL; group = group->next)
             internalErr();
         }
     }
-struct track *trackList = getTrackList(&groupList, -2);
-makeGlobalTrackHash(trackList);
-
-// NOTE: This is necessary when container cfg by '*' results in vis changes
-// This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
-parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
-
 webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");
@@ -771,7 +771,7 @@ if(!doSearch)
     {
     hPrintf("<p><b>Recently Done</b><ul>\n"
         #ifdef FIND_SUPERS_TOO
-        "<li>SuperTracks can now be found in 'Advanced' search.  Still need to be added to simple search 'trix'.</li>"
+        "<li>SuperTracks can now be found.</li>"
         "<li>Configuration of superTrack children's vis should result in proper superTrack reshaping. (This is really an hgTrackUi feature.)</li>"
         #endif///def FIND_SUPERS_TOO
         #ifdef FINDTRACKS_SORT

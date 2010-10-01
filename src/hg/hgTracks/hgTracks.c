@@ -3904,8 +3904,6 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         if (hTvFromString(cartUsualString(cart, track->track,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
-//#define SUPER_PARENTS   // Turns out this wasn't necessary to solve my problem, but it is the right thing to do, so saving it for later
-#ifdef SUPER_PARENTS
         assert(track->parent == NULL);
         track->parent = hashFindVal(superHash, track->tdb->parentName);
         if (track->parent)
@@ -3913,13 +3911,8 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         /* create track and reference for the supertrack */
         struct track *superTrack = track->parent = trackFromTrackDb(track->tdb->parent);
         track->parent = superTrack;
-#else///ifndef SUPER_PARENTS
-        if (hashLookup(superHash, track->tdb->parentName))
-            /* ignore supertrack if it's already been handled */
-            continue;
-        /* create track and reference for the supertrack */
-        struct track *superTrack = trackFromTrackDb(track->tdb->parent);
-#endif///ndef SUPER_PARENTS
+        if (trackHash != NULL)
+            hashAddUnique(trackHash,superTrack->track,superTrack);
         superTrack->hasUi = TRUE;
         superTrack->group = group;
         superTrack->groupName = cloneString(group->name);
