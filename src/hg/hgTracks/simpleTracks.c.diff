@@ -1,9 +1,0 @@
-1 simpleTracks.c
-diff --git a/src/hg/hgTracks/simpleTracks.c b/src/hg/hgTracks/simpleTracks.c
-index 6ae8b7e..916ce6a 100644
---- a/src/hg/hgTracks/simpleTracks.c
-+++ b/src/hg/hgTracks/simpleTracks.c
-@@ -509,2 +509 @@ if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
--    struct track *tgParent = hashFindVal(trackHash, parentName);
--    assert(tgParent!=NULL);
-+    struct track *tgParent =toggleGroup->parent;
