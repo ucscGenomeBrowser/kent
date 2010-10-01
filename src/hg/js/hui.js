@@ -604,6 +604,19 @@ function registerFormSubmit(formName)
     $('form[name="'+formName+'"]').each(function(i) { formSubmitWaitOnAjax(this)});
 }
 
+function visTriggersHiddenSelect(obj)
+{ // SuperTrack child changing vis should trigger superTrack reshaping.
+  // This is done by setting hidden input "_sel"
+    var trackName_Sel = $(obj).attr('name') + "_sel";
+    var theForm = $(obj).closest("form");
+    var visible = (obj.selectedIndex != 0);
+    if (visible) {
+        updateOrMakeNamedVariable(theForm,trackName_Sel,"1");
+    } else
+        disableNamedVariable(theForm,trackName_Sel);
+    return true;
+}
+
 function subtrackCfgHideAll(table)
 {
 // hide all the subtrack configuration stuff
