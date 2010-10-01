@@ -2278,13 +2278,8 @@ function findTracksClickedOne(selCb,justClicked)
     }
 
     // The "view in browser" button should be enabled/disabled
-    if(justClicked) {
-        if(checked)
-            $('input.viewBtn').val('View in Browser');
-        else if($('input.selCb:checked').length == 0)
-            $('input.viewBtn').val('Return to Browser');
+    if(justClicked)
         findTracksCounts();
-    }
 }
 
 
@@ -2296,7 +2291,6 @@ function findTracksNormalize()
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    findTracksViewButtoneText();
     findTracksCounts();
 }
 
@@ -2313,7 +2307,6 @@ function findTracksCheckAll(check)
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    findTracksViewButtoneText();
     findTracksCounts();
     return false;  // Pressing button does nothing more
 }
@@ -2323,19 +2316,8 @@ function findTracksCheckAllWithWait(check)
     waitOnFunction( findTracksCheckAll, check);
 }
 
-function findTracksCounts()
-{
-// Displays visible and checked track count
-    var counter = $('.selCbCount');
-    if(counter != undefined) {
-        var selCbs =  $("input.selCb");
-        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
-    }
-}
-
 function findTracksSearchButtonsEnable(enable)
-{
-// Displays visible and checked track count
+{ // Displays visible and checked track count
     var searchButton = $('input[name="hgt_searchTracks"]');
     var clearButton  = $('input.clear');
     if(enable) {
@@ -2348,12 +2330,22 @@ function findTracksSearchButtonsEnable(enable)
 }
 
 function findTracksViewButtoneText()
-{
-    var inputs = $('table#foundTracks').find('input:hidden');
-    if( $(inputs).length == $(inputs).filter(':disabled').length)
+{ // Update View in Browser buttn text
+    var inputs = $('table#foundTracks').find('input[name!="hgsid"]:hidden:enabled');
+    if( $(inputs).length == 0)
         $('input.viewBtn').val('Return to Browser');
     else
         $('input.viewBtn').val('View in Browser');
+}
+
+function findTracksCounts()
+{// Displays visible and checked track count
+    findTracksViewButtoneText();
+    var counter = $('.selCbCount');
+    if(counter != undefined) {
+        var selCbs =  $("input.selCb");
+        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+    }
 }
 
 function findTracksClear()
