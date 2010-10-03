@@ -103,6 +103,47 @@ if(flatTracks && *flatTracks)
     }
 }
 
+// TODO: Move to trackDb.h and trackDbCustom.c
+enum kindOfParent {
+    kopChildless     = 0,
+    kopFolder        = 1,
+    kopComposite     = 2,
+    kopMultiTrack    = 3,
+    kopCompositeView = 4
+};
+enum kindOfChild {
+    kocOrphan          = 0,
+    kocFolderContent   = 1,
+    kocCompositeChild  = 2,
+    kocMultiTrackChild = 3
+};
+
+enum kindOfParent tdbKindOfParent(struct trackDb *tdb)
+{
+enum kindOfParent kindOfParent = kopChildless;
+if (tdbIsFolder(tdb))
+    kindOfParent = kopFolder;
+else if (tdbIsComposite(tdb))
+    kindOfParent = kopComposite;
+else if (tdbIsMultiTrack(tdb))
+    kindOfParent = kopMultiTrack;
+else if (tdbIsCompositeView(tdb))   // NOTE: This should not be needed in js
+    kindOfParent = kopCompositeView;
+return kindOfParent;
+}
+
+enum kindOfChild tdbKindOfChild(struct trackDb *tdb)
+{
+enum kindOfChild kindOfChild = kocOrphan;
+if (tdbIsFolderContent(tdb))
+    kindOfChild = kocFolderContent;
+else if (tdbIsCompositeChild(tdb))
+    kindOfChild = kocCompositeChild;
+else if (tdbIsMultiTrackChild(tdb))
+    kindOfChild = kocMultiTrackChild;
+return kindOfChild;
+}
+
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
 void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
@@ -116,32 +157,40 @@ if (*jsonTdbSettingsString==NULL)
     }
 else
     dyStringAppend(*jsonTdbSettingsString, ",\n");
+
+// track name and type
 dyStringPrintf(*jsonTdbSettingsString, "\t%s: {", track->track);
-if (tdbIsSuperTrackChild(track->tdb))
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+
+// Tell which kind of parent and which kind of child
+enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
+enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tkindOfParent: %d,\n\t\tkindOfChild: %d,",kindOfParent,kindOfChild);
+
+// Tell something about the parent and/or children
+if (kindOfChild != kocOrphan)
     {
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
-    }
-else if (tdbIsContainerChild(track->tdb))
-    {
-    struct trackDb *parentTdb = tdbGetContainer(track->tdb);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
-    if (!track->canPack)
+    struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
+
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',\n\t\tparentLabel: '%s',",
+                    parentTdb->track, parentTdb->shortLabel);
+    if (kindOfChild != kocFolderContent && !track->canPack)
         {
         dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsContainerChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+
+// Now some miscellaneous tidbids
 if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+
+// Close with some standard vars
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
