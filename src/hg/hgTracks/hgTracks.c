@@ -4273,8 +4273,8 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
-    if (tdbIsMultiTrack(track->tdb))
-        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb)) // Note, this is done for found multi-track kids but composites are only straightened up in hgTrackUi
+    if (tdbIsContainer(track->tdb))
+        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb))
             track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
 
     if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))

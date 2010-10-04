@@ -9502,21 +9502,16 @@ void loadPgSnp(struct track *tg)
 /* Load up pgSnp (personal genome SNP) type tracks */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn(database);
-safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", tg->table, chromName, winEnd, winStart);
-tg->items = pgSnpLoadByQuery(conn, query);
-/* base coloring/display decision on count of items */
-tg->customInt = slCount(tg->items);
-hFreeConn(&conn);
-}
-
-void loadPgSnpCt(struct track *tg)
-/* Load up pgSnp (personal genome SNP) type custom tracks */
-{
-char query[256];
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 struct customTrack *ct = tg->customPt;
-char *table = ct->dbTableName;
+char *table = tg->table;
+struct sqlConnection *conn; 
+if (ct == NULL) 
+    conn = hAllocConn(database);
+else 
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
 safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", table, chromName, winEnd, winStart);
 tg->items = pgSnpLoadByQuery(conn, query);
 /* base coloring/display decision on count of items */
@@ -10444,29 +10439,6 @@ struct bed *bedDetailLoadAsBed (char **row, int rowOffset, int fieldCount)
 return bedLoadN(row+rowOffset, fieldCount);
 }
 
-void loadBedDetailCtSimple(struct track *tg)
-/* Load bedDetails custom track as bed 4-7, other fields are for hgc clicks */
-{
-struct bed *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-int rowOffset = 0;
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-struct customTrack *ct = tg->customPt;
-char *table = ct->dbTableName;
-int fieldCount = ct->fieldCount - 2; /* field count of bed part */
-sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = bedDetailLoadAsBed(row, rowOffset, fieldCount);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-tg->items = list;
-tg->bedSize = fieldCount;
-}
-
 void loadBedDetailSimple(struct track *tg)
 /* Load bedDetails track as bed 4-7, other fields are for hgc clicks */
 {
@@ -10474,9 +10446,19 @@ struct bed *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
-struct sqlConnection *conn = hAllocConn(database);
+struct customTrack *ct = tg->customPt;
+struct sqlConnection *conn; 
 char *table = tg->table;
 int bedSize = tg->bedSize; /* count of fields in bed part */
+
+if (ct == NULL)
+    conn = hAllocConn(database);
+else 
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    tg->bedSize = ct->fieldCount - 2; /* field count of bed part */
+    }
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -10488,30 +10470,6 @@ sqlFreeResult(&sr);
 tg->items = list;
 }
 
-void loadBedDetailCt(struct track *tg)
-/* Load bedDetails type track as linked features, other fields are for hgc clicks */
-{
-struct linkedFeatures *list = NULL, *el;
-struct sqlResult *sr;
-char **row;
-int rowOffset = 0;
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-struct customTrack *ct = tg->customPt;
-char *table = ct->dbTableName;
-int fieldCount = ct->fieldCount - 2; /* field count of bed part */
-boolean useItemRgb = bedItemRgb(ct->tdb);
-sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
-while ((row = sqlNextRow(sr)) != NULL)
-    {
-    el = bedDetailLoadAsLf(row, rowOffset, fieldCount, useItemRgb);
-    slAddHead(&list, el);
-    }
-slReverse(&list);
-sqlFreeResult(&sr);
-tg->items = list;
-//tg->bedSize = fieldCount;
-}
-
 void loadBedDetail(struct track *tg)
 /* Load bedDetails type track as linked features, other fields are for hgc clicks */
 {
@@ -10519,10 +10477,21 @@ struct linkedFeatures *list = NULL, *el;
 struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
-struct sqlConnection *conn = hAllocConn(database);
+struct sqlConnection *conn; // = hAllocConn(database);
 char *table = tg->table;
 int bedSize = tg->bedSize; /* field count of bed part */
 boolean useItemRgb = bedItemRgb(tg->tdb);
+struct customTrack *ct = tg->customPt;
+
+if (ct == NULL)
+    conn = hAllocConn(database);
+else 
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    bedSize = ct->fieldCount - 2;
+    useItemRgb = bedItemRgb(ct->tdb);
+    }
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
     {
@@ -10603,9 +10572,9 @@ struct pgSnp *myItem = item;
 char *itemName = myItem->name;
 static char buf[256];
 if (strlen(itemName) > 0)
-  sprintf(buf, "%s %s", ctFileName, itemName);
+  safef(buf, sizeof(buf), "%s %s", ctFileName, itemName);
 else
-  sprintf(buf, "%s NoItemName", ctFileName);
+  safef(buf, sizeof(buf), "%s NoItemName", ctFileName);
 return buf;
 }
 
@@ -10615,12 +10584,12 @@ void bedDetailCtMethods (struct track *tg, struct customTrack *ct)
 if (ct != NULL && ct->fieldCount >= (9+2)) /* at least bed9 */
     {
     linkedFeaturesMethods(tg);
-    tg->loadItems = loadBedDetailCt;
+    tg->loadItems = loadBedDetail;
     }
 else  /* when in doubt set up as simple bed */
     {
     bedMethods(tg);
-    tg->loadItems = loadBedDetailCtSimple;
+    tg->loadItems = loadBedDetailSimple;
     }
 tg->nextItemButtonable = TRUE;
 tg->customPt = ct;
@@ -10632,8 +10601,6 @@ void pgSnpCtMethods (struct track *tg)
 {
 /* start with the pgSnp methods */
 pgSnpMethods(tg);
-/* loader must access CUSTOM_TRASH */
-tg->loadItems = loadPgSnpCt;
 tg->mapItemName = pgSnpCtMapItemName;
 tg->canPack = TRUE;
 }

@@ -15,9 +15,6 @@ enum
     cnvNucCoords = 0x100,
 };
 
-/* score file header */
-extern char *pslBuildScoreHdr;
-
 unsigned pslBuildGetBlastAlgo(char *program);
 /* determine blast algorithm flags */
 
@@ -26,8 +23,14 @@ struct psl *pslBuildFromHsp(char *qName, int qSize, int qStart, int qEnd, char q
                             unsigned flags);
 /* construct a new psl from an HSP.  Chaining is left to other programs. */
 
-void pslBuildWriteScores(FILE* scoreFh, struct psl *psl, double bitScore, double eValue);
+FILE *pslBuildScoresOpen(char *scoreFile, bool inclDefs);
+/* open score file and write headers */
+
+void pslBuildScoresWrite(FILE* scoreFh, struct psl *psl, double bitScore, double eValue);
 /* write scores for a PSL */
+
+void pslBuildScoresWriteWithDefs(FILE* scoreFh, struct psl *psl, double bitScore, double eValue, char *qDef, char *tDef);
+/* write scores and definitions for a PSL */
 
 #endif
 
