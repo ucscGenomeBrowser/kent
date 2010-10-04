@@ -225,7 +225,6 @@ caeJap3.perChromTables = no
     time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad caeJap3
     #	logFile: var/dbload/hgwdev/logs/2010.09.28-10:27:34.dbload.log
     #	real    17m14.683s
-XXX - done
 
     # enable daily alignment and update of hgwdev
     cd ~/kent/src/hg/makeDb/genbank
@@ -237,5 +236,23 @@ XXX - done
 	etc/align.dbs etc/hgwdev.dbs
     git push
     make etc-update
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-06-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeJap3", "blat9", "17790", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("caeJap3", "blat9", "17791", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# reset default position to ZC101.2e protein blat result
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="ABLE03026714:2543-32231"
+	where name="caeJap3";' hgcentraltest
 
 ############################################################################

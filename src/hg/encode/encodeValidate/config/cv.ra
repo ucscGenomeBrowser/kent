@@ -2427,7 +2427,7 @@ orderUrl
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
-sex U
+sex F
 protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term ES-CJ7
@@ -2640,7 +2640,7 @@ category Cell Line
 description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
-sex U
+sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
 
 #Missing VendorName and termId
@@ -5549,11 +5549,18 @@ type rnaExtract
 description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
+# Short should be retired turning into short total
 term short
 tag short
 type rnaExtract
 description RNA shorter than 200 nt
 label short_RNA
+
+term shortTotal
+tag shortTotal
+type rnaExtract
+description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
+label short_Total_RNA
 
 term shortDeplRrna
 tag shortDeplRrna
@@ -5734,7 +5741,7 @@ label Methyltrienolone
 
 term Alpha-amanitin_50ug_9hr
 tag AMA50ug9h
-type treatement
+type treatment
 description 9h with 50ug/ml alpha-amanitin
 
 term Betamethasone_100nM
@@ -6117,6 +6124,12 @@ type version
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
 
+term B10.H-2aH-4bp/Wts
+tag 2a4b
+type strain
+description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+# Used for the CH12 Cell Line
+
 term C3H
 tag C3H
 type strain
@@ -6131,6 +6144,11 @@ term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+
+term Unknown
+tag UKN
+type strain
+description Unknown strain origin
 
 ### Age
 # Used in conjunction with mouse submissions
@@ -6183,6 +6201,12 @@ tag adult8wks
 type age
 Stage Adult
 description Adult 8 weeks
+
+term immortalized
+tag immortal
+type age
+stage Cell Line
+description Immortal cells 
 
 # Expected fields:
 # ----------------

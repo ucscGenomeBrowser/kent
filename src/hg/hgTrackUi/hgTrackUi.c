@@ -2515,8 +2515,9 @@ if (ct && sameString(tdb->type, "maf"))
             }
         else
             vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-        hTvDropDownClassVisOnly(tdb->track,vis,
-            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"));
+        hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,
+            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
+                               (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
         }
 if (!ajax)
     {
