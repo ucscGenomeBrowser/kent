@@ -47,7 +47,7 @@ static void outputPsl(struct blastBlock *bb, unsigned flags, struct psl *psl,
 {
 pslTabOut(psl, pslFh);
 if (scoreFh != NULL)
-    pslBuildWriteScores(scoreFh, psl, bb->bitScore, bb->eVal);
+    pslBuildScoresWrite(scoreFh, psl, bb->bitScore, bb->eVal);
 pslCheck("blastToPsl", stderr, psl);
 }
 
@@ -89,10 +89,7 @@ struct blastQuery *bq;
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
-    {
-    scoreFh = mustOpen(scoreFile, "w");
-    fputs(pslBuildScoreHdr, scoreFh);
-    }
+    scoreFh = pslBuildScoresOpen(scoreFile, FALSE);
 unsigned flags =  pslBuildGetBlastAlgo(bf->program) |  (pslxFmt ? bldPslx : 0);
 
 while ((bq = blastFileNextQuery(bf)) != NULL)
