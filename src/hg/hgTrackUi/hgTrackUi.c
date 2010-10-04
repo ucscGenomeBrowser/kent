@@ -2461,7 +2461,7 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
     }
-if(tdbIsComposite(tdb))
+if(tdbIsContainer(tdb))
     {
     safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
     // NOTE: if you want track vis to not be reset, move to after vis dropdown
@@ -2515,8 +2515,9 @@ if (ct && sameString(tdb->type, "maf"))
             }
         else
             vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-        hTvDropDownClassVisOnly(tdb->track,vis,
-            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"));
+        hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,
+            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
+                               (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
         }
 if (!ajax)
     {

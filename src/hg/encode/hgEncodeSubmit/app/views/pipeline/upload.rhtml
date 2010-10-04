@@ -6,11 +6,6 @@
   <p><label for="project_upload_url">Upload from URL</label><br/>
   <%= text_field_tag 'upload_url', "http://", :size => 40 %><br/>
 
-  <label for="project_upload_auto_resume"></label>
-  <%= check_box 'auto_resume', '0' %>
-Resume if the previous upload  was interrupted.
-<br/>
-
   <p><label for="project_upload_file">or Upload a local file</label><br/>
   <%= file_field_tag 'upload_file', :size => 25 %><br/>
 

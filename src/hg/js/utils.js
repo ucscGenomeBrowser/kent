@@ -197,10 +197,18 @@ function makeHiddenInput(theForm,aName,aValue)
 function updateOrMakeNamedVariable(theForm,aName,aValue)
 {   // Store a value to a named input.  Will make the input if necessary
     var inp = $(theForm).find("input[name='"+aName+"']:last");
-    if(inp != undefined && inp.length > 0)
+    if(inp != undefined && inp.length > 0) {
         inp.val(aValue);
-    else
+        inp.disabled = false;
+    } else
         makeHiddenInput(theForm,aName,aValue);
+}
+
+function disableNamedVariable(theForm,aName)
+{   // Store a value to a named input.  Will make the input if necessary
+    var inp = $(theForm).find("input[name='"+aName+"']:last");
+    if(inp != undefined && inp.length > 0)
+        inp.disabled = true;
 }
 
 function parseUrlAndUpdateVars(theForm,href)
@@ -251,6 +259,20 @@ function setVarAndPostForm(aName,aValue,formName)
     }
     return postTheForm(formName,window.location.href);
 }
+
+// json help routines
+function tdbGetJsonRecord(trackName)  { return trackDbJson[trackName]; }
+function tdbIsFolder(tdb)             { return (tdb.kindOfParent == 1); } // NOTE: These must jive with tdbKindOfParent() and tdbKindOfChild() in trackDb.h
+function tdbIsComposite(tdb)          { return (tdb.kindOfParent == 2); }
+function tdbIsMultiTrack(tdb)         { return (tdb.kindOfParent == 3); }
+function tdbIsView(tdb)               { return (tdb.kindOfParent == 4); } // Don't expect to use
+function tdbIsContainer(tdb)          { return (tdb.kindOfParent == 2 || tdb.kindOfParent == 3); }
+function tdbIsLeaf(tdb)               { return (tdb.kindOfParent == 0); }
+function tdbIsFolderContent(tdb)      { return (tdb.kindOfChild  == 1); }
+function tdbIsCompositeSubtrack(tdb)  { return (tdb.kindOfChild  == 2); }
+function tdbIsMultiTrackSubtrack(tdb) { return (tdb.kindOfChild  == 3); }
+function tdbIsSubtrack(tdb)           { return (tdb.kindOfChild  == 2 || tdb.kindOfChild == 3); }
+function tdbHasParent(tdb)            { return (tdb.kindOfChild  != 0 && tdb.parentTrack); }
 
 function aryFind(ary,val)
 {// returns the index of a value on the array or -1;
@@ -752,7 +774,7 @@ function Rectangle()
         this.endX = arguments[1];
         this.startY = arguments[2];
         this.endY = arguments[3];
-    } else if(arguments.length > 0)  { 
+    } else if(arguments.length > 0)  {
         var coords = arguments[0].split(",");
         this.startX = coords[0];
         this.endX = coords[2];

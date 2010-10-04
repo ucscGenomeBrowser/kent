@@ -1576,7 +1576,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
             var id = selectedMenuItem.id;
             var rec = trackDbJson[id];
-            if (rec.parentTrack && rec.hasChildren == 0)
+            if (tdbHasParent(rec) && tdbIsLeaf(rec))
                 url += rec.parentTrack
             else
                 url = selectedMenuItem.id;
@@ -1792,7 +1792,7 @@ function loadContextMenu(img)
             if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
-            if(rec.hasChildren == 0) {
+            if(tdbIsLeaf(rec)) {
                 o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
                 if(rec.parentTrack != undefined)
                     o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
@@ -1905,7 +1905,7 @@ function hgTrackUiPopUp(trackName,descriptionOnly)
 function hgTrackUiPopCfgOk(popObj, trackName)
 { // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
     var rec = trackDbJson[trackName];
-    var subtrack = rec.isSubtrack ? trackName :undefined;  // If subtrack then vis rules differ
+    var subtrack = tdbIsSubtrack(rec) ? trackName :undefined;  // If subtrack then vis rules differ
     var allVars = getAllVars($('#pop'), subtrack );
     var changedVars = varHashChanges(allVars,popSaveAllVars);
     //warn("cfgVars:"+varHashToQueryString(changedVars));
@@ -1964,7 +1964,7 @@ function handleTrackUi(response, status)
                                     $(this).dialog("close");
                                }},
                                open: function() {
-                                    var subtrack = trackDbJson[popUpTrackName].isSubtrack ? popUpTrackName :"";  // If subtrack then vis rules differ
+                                    var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
                                     popSaveAllVars = getAllVars( $('#pop'), subtrack );
                                },
                                close: function() {
@@ -2194,20 +2194,20 @@ function findTracksChangeVis(seenVis)
     var visName = $(seenVis).attr('id');
     var trackName = visName.substring(0,visName.length - "_id".length)
     var hiddenVis = $("input[name='"+trackName+"']");
-    var rec = trackDbJson[trackName];
+    var tdb = tdbGetJsonRecord(trackName);
     if($(seenVis).val() != "hide")
         $(hiddenVis).val($(seenVis).val());
     else {
         var selCb = $("input#"+trackName+"_sel_id");
         $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
         $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        var needSel = (rec.parentTrack != undefined);
+        var needSel = (tdb.parentTrack != undefined);
         if (needSel) {
             var hiddenSel = $("input[name='"+trackName+"_sel']");
             $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
             $(hiddenSel).attr('disabled',false);
         }
-        if(rec.isSubtrack)
+        if(tdbIsSubtrack(tdb))
             $(hiddenVis).val("[]");
         else
             $(hiddenVis).val("hide");
@@ -2224,10 +2224,10 @@ function findTracksClickedOne(selCb,justClicked)
     var seenVis = $('select#' + trackName + "_id");
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
-    var rec = trackDbJson[trackName];
-    var needSel = (rec.parentTrack != undefined);
-    var shouldPack = rec.canPack;
-    if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
+    var tdb = tdbGetJsonRecord(trackName);
+    var needSel = (tdb.parentTrack != undefined);
+    var shouldPack = tdb.canPack;
+    if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
         shouldPack = false;
     var checked = $(selCb).attr('checked');
     //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
@@ -2236,7 +2236,9 @@ function findTracksClickedOne(selCb,justClicked)
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(shouldPack)
+            if(tdbIsFolder(tdb))
+                $(seenVis).attr('selectedIndex',1);  // show
+            else if(shouldPack)
                 $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
             else
                 $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
@@ -2260,7 +2262,7 @@ function findTracksClickedOne(selCb,justClicked)
     if(setHiddenInputs) {
         if(checked)
             $(hiddenVis).val($(seenVis).val());
-        else if(rec.isSubtrack)
+        else if(tdbIsSubtrack(tdb))
             $(hiddenVis).val("[]");
         else
             $(hiddenVis).val("hide");
@@ -2277,10 +2279,7 @@ function findTracksClickedOne(selCb,justClicked)
 
     // The "view in browser" button should be enabled/disabled
     if(justClicked) {
-        if(checked)
-            $('input.viewBtn').val('View in Browser');
-        else if($('input.selCb:checked').length == 0)
-            $('input.viewBtn').val('Return to Browser');
+        $('input.viewBtn').val('View in Browser');
         findTracksCounts();
     }
 }
@@ -2294,7 +2293,6 @@ function findTracksNormalize()
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    findTracksViewButtoneText();
     findTracksCounts();
 }
 
@@ -2311,7 +2309,7 @@ function findTracksCheckAll(check)
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    findTracksViewButtoneText();
+    $('input.viewBtn').val('View in Browser');
     findTracksCounts();
     return false;  // Pressing button does nothing more
 }
@@ -2321,19 +2319,8 @@ function findTracksCheckAllWithWait(check)
     waitOnFunction( findTracksCheckAll, check);
 }
 
-function findTracksCounts()
-{
-// Displays visible and checked track count
-    var counter = $('.selCbCount');
-    if(counter != undefined) {
-        var selCbs =  $("input.selCb");
-        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
-    }
-}
-
 function findTracksSearchButtonsEnable(enable)
-{
-// Displays visible and checked track count
+{ // Displays visible and checked track count
     var searchButton = $('input[name="hgt_searchTracks"]');
     var clearButton  = $('input.clear');
     if(enable) {
@@ -2346,12 +2333,22 @@ function findTracksSearchButtonsEnable(enable)
 }
 
 function findTracksViewButtoneText()
-{
-    var inputs = $('table#foundTracks').find('input:hidden');
-    if( $(inputs).length == $(inputs).filter(':disabled').length)
+{ // Update View in Browser buttn text
+    var inputs = $('table#foundTracks').find('input:hidden:enabled');  // Doesn't work!!!
+    if( $(inputs).length == 0)
         $('input.viewBtn').val('Return to Browser');
     else
         $('input.viewBtn').val('View in Browser');
+}
+
+function findTracksCounts()
+{// Displays visible and checked track count
+    //findTracksViewButtoneText();   // Doesn't work!!!
+    var counter = $('.selCbCount');
+    if(counter != undefined) {
+        var selCbs =  $("input.selCb");
+        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+    }
 }
 
 function findTracksClear()
@@ -2418,7 +2415,7 @@ function updateMetaDataHelpLinks(index)
                 } else {
                     str = "../ENCODE/otherTerms.html#" + val;
                 }
-                span.html("<a target='_blank' href='" + str + "'>" + text + "</a>");
+                span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
             }
         } else {
             return;
