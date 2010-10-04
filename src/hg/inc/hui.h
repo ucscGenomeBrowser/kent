@@ -182,10 +182,12 @@ char *hStringFromTv(enum trackVisibility vis);
 /* Standard width for visibility dropdowns */
 #define TV_DROPDOWN_STYLE "width: 70px"
 
-void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
-	boolean canPack, char *class, char *visOnly);
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+	boolean canPack, char *class, char *visOnly, char *extra);
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
+#define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
+        hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
 void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack, char *class,char *javascript);
 /* Make track visibility drop down for varName with style class and javascript */
@@ -198,7 +200,8 @@ void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boo
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
-void hideShowDropDown(char *varName, boolean show, char *class);
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra);
+#define hideShowDropDown(varName,show,class) hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
 /* Make hide/show dropdown for varName */
 
 /****** Some stuff for stsMap related controls *******/
@@ -901,8 +904,8 @@ boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
         boolean embeddedInText,boolean showLongLabel, struct hash *trackHash);
 /* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
-boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int visibleChild);
+boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
+                                int visibleChild,char *extra);
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -911,6 +914,7 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  *   -1 don't know (this function should determine)
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
+#define superTrackDropDown(cart,tdb,visibleChild) superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
 
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */

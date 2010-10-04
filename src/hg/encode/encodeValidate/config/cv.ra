@@ -1999,7 +1999,7 @@ type Cell Line
 organism human
 description Human peripheral blood-derived erythroblasts
 tissue Blood
-#vendorName (name of vendor or lab that provides these cells)
+vendorName PBDE were cultured from blood drawn from volunteers using an IRB approved protocol.
 #vendorId (the ID of the cell type in the vendor's catalog)
 #orderUrl (URL for ordering the cell type. Links with vendorId on cellTypes.html)
 #karyotype (optional human-readable karyotype, for .html page)
@@ -2427,7 +2427,7 @@ orderUrl
 termId 7069
 termUrl http://www.informatics.jax.org/searches/anatdict.cgi?id=7069
 color 153,38,0
-sex U
+sex F
 protocol Stan/Yale(Weissman):CH12_Weissman_protocol.pdf
 
 term ES-CJ7
@@ -2640,7 +2640,7 @@ category Cell Line
 description Leukemia (K562 analog)
 tissue Blood
 color 46,0,184
-sex U
+sex M
 protocol Stan/Yale(Weissman):MEL_Weissman_protocol.pdf
 
 #Missing VendorName and termId
@@ -3129,6 +3129,21 @@ targetId GeneCard:GC16P066153
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
 validation CTCF(Western_blot):mouse_CTCF_validation_Hardison.pdf
 
+term CTCF_(C-20)
+tag CTCFC20
+type Antibody
+target CTCF
+antibodyDescription Goat polyclonal, epitope mapping near the C-terminus of CTCF of human origin
+targetDescription Transcriptional regulator with 11 highly conserved zinc finger domains. Depending on context, can bind a histone acetyltransferase (HAT)-containing complex and function as transcriptional activator or bind a histone deacetylase (HDAC)-containing complex and function as transcriptional repressor. Involved in transcriptional regulation by binding to chromatin insulators and preventing interaction between promoter and nearby enhancers and silencers. Preferentially interacts with unmethylated DNA, preventing spreading of CpG methylation. Can dimerize, mediating long-range chromatin looping. When bound to chromatin, provides an anchor point for nucleosomes positioning. Involved in sister chromatid cohesion. Associates with both centromeres and chromosomal arms during metaphase and required for cohesin localization to CTCF sites. 
+orderUrl http://www.scbt.com/datasheet-15914-ctcf-c-20-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-15914
+lab Snyder
+targetId GeneCard:GC16P066153
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC16P066153
+validation missing
+
+#(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
 ##This does not appear in metaDb
 term CtBP1
 tag CTBP1
@@ -4045,6 +4060,20 @@ targetId GeneCard:GC22P041487
 targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20 
 validation missing
 
+term p300_(N-15)
+tag P300N15
+type Antibody
+target P300
+targetDescription Encodes the adenovirus E1A-associated cellular p300 transcriptional co-activator protein. Functions as histone acetyltransferase and regulates transcription via chromatin remodeling. Acetylates all four core histones in nucleosomes. Mediates cAMP-gene regulation by binding specifically to phosphorylated CREB protein
+antibodyDescription Rabbit polyclonal IgG, epitope mapping at the N-terminus of p300 of human origin
+vendorName Santa Cruz Biotech
+vendorId sc-584
+orderUrl http://www.scbt.com/datasheet-584-p300-n-15-antibody.html
+lab Snyder
+targetId GeneCard:GC22P041487
+targetUrl http://www.genecards.org//index.php?path=/Search/keyword/p300/0/20
+validation missing
+
 term PAX5-C20
 tag PAX5C20
 type Antibody
@@ -4072,6 +4101,20 @@ lab Myers
 targetId GeneCard:GC09M036828
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
 validation missing
+
+term PAX5_(N-15)
+tag PAX5N15
+type Antibody
+target PAX5
+antibodyDescription rabbit polyclonal antibody; epitope is a synthetic peptide: MDLEKNYPTPRTSRT, corresponding to amino acids 1-15 of Human PAX5, cross-reacts with human and mouse PAX5
+targetDescription The PAX5 gene is a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA binding motif, known as the paired box. The PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation. The PAX5 gene encodes the B cell lineage specific activator protein (BSAP) that is expressed at early, but not late stages of B cell differentiation.
+vendorName Abcam
+vendorId ab12000
+orderUrl http://www.abcam.com/PAX5-antibody-ab12000.html
+lab Hardison
+targetId GeneCard:GC09M036828
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=PAX5
+validation PAX_N-15(WB):mouse_PAX_N-15_validation_Hardison.pdf
 
 term Pbx3
 tag PBX3
@@ -5506,11 +5549,18 @@ type rnaExtract
 description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
+# Short should be retired turning into short total
 term short
 tag short
 type rnaExtract
 description RNA shorter than 200 nt
 label short_RNA
+
+term shortTotal
+tag shortTotal
+type rnaExtract
+description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
+label short_Total_RNA
 
 term shortDeplRrna
 tag shortDeplRrna
@@ -5691,7 +5741,7 @@ label Methyltrienolone
 
 term Alpha-amanitin_50ug_9hr
 tag AMA50ug9h
-type treatement
+type treatment
 description 9h with 50ug/ml alpha-amanitin
 
 term Betamethasone_100nM
@@ -6074,6 +6124,12 @@ type version
 # type (informs pipeline code of stanza type.  Should always be strain)
 # description (human-readable description.  Can't say where/how it's used)
 
+term B10.H-2aH-4bp/Wts
+tag 2a4b
+type strain
+description Derived by inbreeding from selected F2 progeny of B10.A X B10.129
+# Used for the CH12 Cell Line
+
 term C3H
 tag C3H
 type strain
@@ -6088,6 +6144,11 @@ term 129
 tag S129
 type strain
 description Strain 129, has widely available embryonic stem cells
+
+term Unknown
+tag UKN
+type strain
+description Unknown strain origin
 
 ### Age
 # Used in conjunction with mouse submissions
@@ -6140,6 +6201,12 @@ tag adult8wks
 type age
 Stage Adult
 description Adult 8 weeks
+
+term immortalized
+tag immortal
+type age
+stage Cell Line
+description Immortal cells 
 
 # Expected fields:
 # ----------------
