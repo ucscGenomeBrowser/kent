@@ -2122,9 +2122,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&pairs, pair);
     }
 sqlFreeResult(&sr);
-slReverse(&pairs);
-
-slPairSortCase(&pair);
+slPairSortCase(&pairs);
 return pairs;
 }
 
