@@ -3465,15 +3465,15 @@ if (parent != NULL)
     if (trackDbLocalSetting(parent, "compositeTrack"))
         tdbMarkAsComposite(parent);
     if (trackDbLocalSetting(parent, "container"))
-        tdbMarkAsContainer(parent);
+        tdbMarkAsMultiTrack(parent);
     }
 struct trackDb *tdb;
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     {
     if (parent != NULL)
         {
-        if (tdbIsContainer(parent))
-            tdbMarkAsContainerChild(tdb);
+        if (tdbIsMultiTrack(parent))
+            tdbMarkAsMultiTrackChild(tdb);
 
         if (tdbIsComposite(parent) || (parent->parent != NULL && tdbIsComposite(parent->parent)))
             {

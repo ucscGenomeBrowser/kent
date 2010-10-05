@@ -197,9 +197,6 @@ for (el = *pList; el != NULL; el = next)
 void pgSnpOutput(struct pgSnp *el, FILE *f, char sep, char lastSep) 
 /* Print out pgSnp.  Separate fields with sep. Follow last field with lastSep. */
 {
-fprintf(f, "%u", el->bin);
-fputc(sep,f);
-if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->chrom);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);

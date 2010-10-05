@@ -67,7 +67,7 @@ if (sameString(value, "hide") || sameString(value, "0"))
     return tvHide;
 else if (sameString(value, "dense") || sameString(value, "1"))
     return tvDense;
-else if (sameString(value, "full") || sameString(value, "2"))
+else if (sameString(value, "full") || sameString(value, "2") || sameString(value, "show"))
     return tvFull;
 else if (sameString(value, "pack") || sameString(value, "3"))
     return tvPack;
@@ -972,23 +972,11 @@ struct trackDb *a = aRef->val, *b = bRef->val;
 return trackDbCmp(&a, &b);
 }
 
-struct trackDb *trackDbCompositeParent(struct trackDb *tdb)
-/* Return closest ancestor who is a composite track. */
-{
-struct trackDb *parent;
-for (parent = tdb->parent; parent != NULL; parent = parent->parent)
-    {
-    if (trackDbLocalSetting(parent, "compositeTrack"))
-        return parent;
-    }
-return NULL;
-}
-
 struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb)
-/* Look for a parent who is a composite track and return that.  Failing that
+/* Look for a parent who is a composite or multiTrack track and return that.  Failing that
  * just return self. */
 {
-struct trackDb *parent = trackDbCompositeParent(tdb);
+struct trackDb *parent = tdbGetContainer(tdb);
 if (parent != NULL)
     return parent;
 else

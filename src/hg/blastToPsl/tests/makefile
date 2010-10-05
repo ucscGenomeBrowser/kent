@@ -1,10 +1,10 @@
 include ../../../inc/common.mk
 
-#blastToPsl = valgrind --tool=memcheck ../blastToPsl
-blastToPsl = ../blastToPsl
+#blastToPsl = valgrind --tool=memcheck  ${DESTDIR}${BINDIR}/blastToPsl
+blastToPsl = ${DESTDIR}${BINDIR}/blastToPsl
 
-#blastXmlToPsl = valgrind --tool=memcheck ../blastToPsl
-blastXmlToPsl = ../blastXmlToPsl
+#blastXmlToPsl = valgrind --tool=memcheck  ${DESTDIR}${BINDIR}/blastXmlToPsl
+blastXmlToPsl =  ${DESTDIR}${BINDIR}/blastXmlToPsl
 
 all:
 
@@ -140,7 +140,7 @@ psiBadFormatTest: mkdirs
 ###
 # blastXmlToPsl
 ###
-testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest
+testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test
 
 mrna1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
@@ -165,9 +165,23 @@ prot1NucCoordTest: mkdirs
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
+sp1PsiBlastTest: mkdirs
+	${blastXmlToPsl} -tName=Hit_accession input/sp1.psiBlast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+qtName1Test: mkdirs
+	${blastXmlToPsl} -qName=Iteration_query-ID -tName=Hit_id input/sp1.psiBlast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+qtName2Test: mkdirs
+	${blastXmlToPsl} -qName=Iteration_query-def0 -tName=Hit_def0 input/sp1.psiBlast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
 
 clean::
 	rm -rf output
 
 mkdirs:
-	@${MKDIR} output
+	@${MKDIR} -p output

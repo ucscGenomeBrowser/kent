@@ -17,7 +17,6 @@ else
 end
 
 if [
-"loaded",
 "approved",
 "displayed",
 "released",
@@ -93,7 +92,7 @@ needShowDafLink = false
 needShowDdfLink = false
 
 
-if (not busy) and authorized and ((not nonActive) or current_user.role == "admin")
+if (not busy) and authorized and ((not nonActive) or advancedView)
 
 
   if @project.status == "validated" 
@@ -114,13 +113,11 @@ if (not busy) and authorized and ((not nonActive) or current_user.role == "admin
      needUploadLink = true
   end
 
-  if @project.status != "displayed" or advancedView
-    needDeleteLink = true
-  end
+  needDeleteLink = true
 
   needRenameLink = true
 
-  if advancedView and @project_status != "new"
+  if (advancedView and @project_status != "new") or @project.status == "loaded"
     needUnloadLink = true
   end
 
@@ -214,26 +211,6 @@ or needShowDdfLink
   </table>
 <% end %>
 
-
-<% if current_user.login == "galtx" %>
-<table style="margin-top:10px;" cellpadding=1 cellspacing=1>
-<tr>
-    <td><%= link_to 'Validate', {:action => 'validate', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
-    <td><%= link_to 'Load', {:action => 'db_load', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
-    <td><%= link_to 'Submit Data', {:action => 'upload', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
-    <td><%= link_to 'Delete Submission', {:action => 'delete', :id => @project.id},
-      :confirm => "Are you sure you want to delete this project?" -%>
-    <%= ' | ' -%> </td>
-    <td><%= link_to 'Rename Submission', {:action => 'edit', :id => @project.id} -%>
-    <%= ' | ' -%> </td>
-    <td><%= link_to 'Expand', {:action => 'reexpand_all', :id => @project.id} -%>
-    </td>
-</tr>
-</table>
-<% end %>
 
 <p>
 <% if !@project.project_archives.blank? && @project.status != "new"  %>

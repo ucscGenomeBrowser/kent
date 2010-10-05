@@ -12,10 +12,14 @@
 #
 # requires the xmlproc_val command from the xmlproc package.
 #
-
+#
 # to test timing, try sometime like:
 #  (hgsql -e 'flush tables'; time  wget -nv --save-headers -O output/typesTest.das 'http://hgwdev-markd.cse.ucsc.edu/cgi-bin/das/hg18/types?segment=22')>&log
-
+#
+# to debug:
+#  set env HGDB_CONF hg.conf
+#  set env PATH_INFO dm1/features # or what ever
+#  r segment=chr2L:827700,845800 >& out
 
 sandbox=-${USER}
 dasUrl = http://hgwdev${sandbox}.cse.ucsc.edu/cgi-bin/das
@@ -71,7 +75,7 @@ doTest:
 	wget -nv --save-headers -O output/${id}.das '${request}'
 	@awk '/^Date:/{next} {print $$0} /^$$/{exit}' output/${id}.das > output/${id}.hdrs
 	@awk 'on{print $$0} /^$$/{on=1}' output/${id}.das > output/${id}.xml
-	xmlproc_val output/${id}.xml
+	./dasXmlValidate output/${id}.xml
 	@if [ -e expected/${id}.hdrs ] ; then diff expected/${id}.hdrs output/${id}.hdrs ; else echo "NOTE: no expected/${id}.hdrs" ; fi
 	@if [ -e expected/${id}.xml ] ; then diff expected/${id}.xml output/${id}.xml ; else echo "NOTE: no expected/${id}.xml" ; fi
 
