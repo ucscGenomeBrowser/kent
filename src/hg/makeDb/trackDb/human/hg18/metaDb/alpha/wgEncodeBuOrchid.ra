@@ -2,7 +2,7 @@ metaObject wgEncodeBuOrchidSignalRep1Gm12878
 objType table
 cell GM12878
 composite wgEncodeBuOrchid
-dataType orchid
+dataType Orchid
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
@@ -19,7 +19,7 @@ metaObject wgEncodeBuOrchidSignalRep2Gm12878
 objType table
 cell GM12878
 composite wgEncodeBuOrchid
-dataType orchid
+dataType Orchid
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-24
 dateUnrestricted 2010-10-24
@@ -32,4 +32,4 @@ subId 1095
 tableName wgEncodeBuOrchidSignalRep2Gm12878
 view Signal
 
-# MAGIC: 391057919
+# MAGIC: 390992319
