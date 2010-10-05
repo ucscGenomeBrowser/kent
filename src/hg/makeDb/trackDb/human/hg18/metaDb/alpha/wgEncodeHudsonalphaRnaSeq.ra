@@ -19,7 +19,7 @@ rnaExtract longPolyA
 subId 902
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Dexa
 treatment DEX_100nM
-view Aligns
+view Alignments
 
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02
 objType table
@@ -42,7 +42,7 @@ rnaExtract longPolyA
 subId 902
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep1A549CellPapErng3R1x36Etoh02
 treatment EtOH_0.02pct
-view Aligns
+view Alignments
 
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25
 objType table
@@ -65,7 +65,7 @@ rnaExtract longPolyA
 subId 1084
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep1JurkatCellPapBow10R1x25
 treatment None
-view Aligns
+view Alignments
 
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Dexa
 objType table
@@ -88,7 +88,7 @@ rnaExtract longPolyA
 subId 902
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Dexa
 treatment DEX_100nM
-view Aligns
+view Alignments
 
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02
 objType table
@@ -111,7 +111,7 @@ rnaExtract longPolyA
 subId 902
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep2A549CellPapErng3R1x36Etoh02
 treatment EtOH_0.02pct
-view Aligns
+view Alignments
 
 metaObject wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25
 objType table
@@ -134,7 +134,7 @@ rnaExtract longPolyA
 subId 1084
 tableName wgEncodeHudsonalphaRnaSeqAlignsRep2JurkatCellPapBow10R1x25
 treatment None
-view Aligns
+view Alignments
 
 metaObject wgEncodeHudsonalphaRnaSeqRPKMRep1A549CellPapErng3R1x36Dexa
 objType table
@@ -276,4 +276,4 @@ tableName wgEncodeHudsonalphaRnaSeqRPKMRep2JurkatCellPapBow10R1x25
 treatment None
 view RPKM
 
-# MAGIC: -2049254096
+# MAGIC: -1891417448

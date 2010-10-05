@@ -33,7 +33,7 @@ dafVersion        2.0
 grant             Snyder
 lab               Stanford
 #Alternative labs: lab Yale
-dataType          ChIP-seq
+dataType          ChipSeq 
 compositeSuffix   SydhHist
 group             regulation
 variables         cell,strain, antibody, treatment, input

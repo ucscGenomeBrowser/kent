@@ -103,6 +103,47 @@ if(flatTracks && *flatTracks)
     }
 }
 
+// TODO: Move to trackDb.h and trackDbCustom.c
+enum kindOfParent {
+    kopChildless     = 0,
+    kopFolder        = 1,
+    kopComposite     = 2,
+    kopMultiTrack    = 3,
+    kopCompositeView = 4
+};
+enum kindOfChild {
+    kocOrphan          = 0,
+    kocFolderContent   = 1,
+    kocCompositeChild  = 2,
+    kocMultiTrackChild = 3
+};
+
+enum kindOfParent tdbKindOfParent(struct trackDb *tdb)
+{
+enum kindOfParent kindOfParent = kopChildless;
+if (tdbIsFolder(tdb))
+    kindOfParent = kopFolder;
+else if (tdbIsComposite(tdb))
+    kindOfParent = kopComposite;
+else if (tdbIsMultiTrack(tdb))
+    kindOfParent = kopMultiTrack;
+else if (tdbIsCompositeView(tdb))   // NOTE: This should not be needed in js
+    kindOfParent = kopCompositeView;
+return kindOfParent;
+}
+
+enum kindOfChild tdbKindOfChild(struct trackDb *tdb)
+{
+enum kindOfChild kindOfChild = kocOrphan;
+if (tdbIsFolderContent(tdb))
+    kindOfChild = kocFolderContent;
+else if (tdbIsCompositeChild(tdb))
+    kindOfChild = kocCompositeChild;
+else if (tdbIsMultiTrackChild(tdb))
+    kindOfChild = kocMultiTrackChild;
+return kindOfChild;
+}
+
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
 void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
@@ -116,32 +157,40 @@ if (*jsonTdbSettingsString==NULL)
     }
 else
     dyStringAppend(*jsonTdbSettingsString, ",\n");
+
+// track name and type
 dyStringPrintf(*jsonTdbSettingsString, "\t%s: {", track->track);
-if (tdbIsSuperTrackChild(track->tdb))
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+
+// Tell which kind of parent and which kind of child
+enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
+enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\tkindOfParent: %d,\n\t\tkindOfChild: %d,",kindOfParent,kindOfChild);
+
+// Tell something about the parent and/or children
+if (kindOfChild != kocOrphan)
     {
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", track->tdb->parent->track);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", track->tdb->parent->shortLabel);
-    }
-else if (tdbIsCompositeChild(track->tdb))
-    {
-    struct trackDb *parentTdb = trackDbCompositeParent(track->tdb);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',", parentTdb->track);
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentLabel: '%s',", parentTdb->shortLabel);
-    if (!track->canPack)
+    struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
+
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',\n\t\tparentLabel: '%s',",
+                    parentTdb->track, parentTdb->shortLabel);
+    if (kindOfChild != kocFolderContent && !track->canPack)
         {
         dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tisSubtrack: %d,",tdbIsCompositeChild(track->tdb)?1:0);
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+
+// Now some miscellaneous tidbids
 if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+
+// Close with some standard vars
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
-               javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
+    javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
@@ -1560,7 +1609,7 @@ else
             {
             struct trackDb * tdb = imgTrack->tdb;
             if(tdbIsCompositeChild(tdb))
-                tdb = trackDbCompositeParent(tdb);
+                tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
         hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
@@ -1672,13 +1721,8 @@ imgBoxTracksNormalizeOrder(imgBox);
 //if(verbose)
 //    imgBoxShow(NULL,imgBox,0);
 
-hPrintf("<!---------------vvv IMAGEv2 vvv---------------->\n");
+hPrintf("<!-- - - - - - - - vvv IMAGEv2 vvv - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 jsIncludeFile("jquery.tablednd.js", NULL);
-hPrintf("<style type='text/css'>\n");
-hPrintf("div.dragZoom {cursor: text;}\n");
-//hPrintf("img.button {position:relative; border:0;}\n");
-hPrintf("img.sliceImg {position:relative; border:0;}\n");
-hPrintf("div.sliceDiv {overflow:hidden;}\n");
 if(imgBox->bgImg)
     {
     int offset = 0;
@@ -1688,12 +1732,13 @@ if(imgBox->bgImg)
         if(slice)
             offset = (slice->offsetX * -1);  // This works because the ruler has a slice
          }
+    hPrintf("<style type='text/css'>\n");
     if(offset != 0)
         hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;background-position:%dpx;}\n",imgBox->bgImg->file,offset);
     else
         hPrintf("td.tdData {background-image:url(\"%s\");background-repeat:repeat-y;}\n",imgBox->bgImg->file);
+    hPrintf("</style>\n");
     }
-hPrintf("</style>\n");
 
 #ifdef IMAGEv2_DRAG_SCROLL
 if(imgBox->showPortal)
@@ -1787,7 +1832,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     hPrintf("</TR>\n");
     }
 hPrintf("</TABLE>\n");
-hPrintf("<!---------------^^^ IMAGEv2 ^^^---------------->\n");
+hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 if (!trackImgOnly && jsonTdbVars != NULL)

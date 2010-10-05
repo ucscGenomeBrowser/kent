@@ -21,6 +21,8 @@
 #include "hgTables.h"
 #include "wikiTrack.h"
 #include "makeItemsItem.h"
+#include "bedDetail.h"
+#include "pgSnp.h"
 
 static char const rcsid[] = "$Id: schema.c,v 1.66 2010/06/07 16:53:10 angie Exp $";
 
@@ -529,16 +531,16 @@ else
     }
 }
 
-static void showSchemaMakeItems(char *db, char *trackId, struct customTrack *ct)
-/* Show schema on makeItems format custom track. */
+static void showSchemaWithAutoSqlString(char *db, char *trackId, struct customTrack *ct, char *autoSqlString)
+/* Show schema on custom track using autoSqlString defined for this track type. */
 {
-struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
+struct asObject *asObj = asParseText(autoSqlString);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char *table = ct->dbTableName;
 
 hPrintf("<B>Genome Database:</B> %s ", db);
 hPrintf("<B>Track ID:</B> %s ", trackId);
-hPrintf("<B>MySQL table:</B> %s", table); 
+hPrintf("<B>MySQL table:</B> %s", table);
 hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
 printLongWithCommas(stdout, sqlTableSize(conn, table));
 hPrintf("<BR>\n");
@@ -568,7 +570,11 @@ else if (startsWithWord("maf", type))
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
 else if (startsWithWord("makeItems", type))
-    showSchemaMakeItems(db, table, ct);
+    showSchemaWithAutoSqlString(db, table, ct, makeItemsItemAutoSqlString);
+else if (sameWord("bedDetail", type))
+    showSchemaWithAutoSqlString(db, table, ct, bedDetailAutoSqlString);
+else if (sameWord("pgSnp", type))
+    showSchemaWithAutoSqlString(db, table, ct, pgSnpAutoSqlString);
 else
     errAbort("Unrecognized customTrack type %s", type);
 }

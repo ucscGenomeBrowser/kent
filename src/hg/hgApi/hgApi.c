@@ -2,6 +2,7 @@
 
 #include "common.h"
 #include "hdb.h"
+#include "mdb.h"
 #include "cheapcgi.h"
 #include "hPrint.h"
 #include "dystring.h"
@@ -50,6 +51,8 @@ makeIndent(tabs, sizeof(tabs), indent);
 dyStringPrintf(json, "\n%s}", tabs);
 }
 
+#define MDB_VAL_TRUNC_AT 64
+
 int main(int argc, char *argv[])
 {
 struct dyString *output = newDyString(10000);
@@ -93,22 +96,14 @@ else if(!strcmp(cmd, "metaDb"))
     boolean metaDbExists = sqlTableExists(conn, "metaDb");
     if(metaDbExists)
         {
-        char query[256];
-        struct sqlResult *sr = NULL;
-        char **row;
         int i;
-        struct slName *el, *termList = NULL;
         char *var = cgiOptionalString("var");
         if(var)
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", var);
-        sr = sqlGetResult(conn, query);
-        while ((row = sqlNextRow(sr)) != NULL)
-            slNameAddHead(&termList, row[0]);
-        sqlFreeResult(&sr);
-        slSort(&termList, slNameCmpCase);
+        struct slName *termList = mdbValSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+        struct slName *el;
         dyStringPrintf(output, "[\n");
         for (el = termList, i = 0; el != NULL; el = el->next, i++)
             {

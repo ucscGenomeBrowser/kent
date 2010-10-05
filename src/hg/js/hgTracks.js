@@ -1321,6 +1321,7 @@ $(document).ready(function()
         $('#descSearch').keydown(searchKeydown);
         $('#nameSearch').keydown(searchKeydown);
         findTracksNormalize();
+        updateMetaDataHelpLinks(0);
     }
 
     if(typeof(trackDbJson) != "undefined" && trackDbJson != null) {
@@ -1555,6 +1556,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                                    dataType: "html",
                                    trueSuccess: handleUpdateTrackMap,
                                    success: catchErrorOrDispatch,
+                                   error: errorHandler,
                                    cmd: cmd,
                                    cache: false
                                });
@@ -1574,7 +1576,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             var url = "hgTrackUi?hgsid=" + getHgsid() + "&g=";
             var id = selectedMenuItem.id;
             var rec = trackDbJson[id];
-            if (rec.parentTrack && rec.hasChildren == 0)
+            if (tdbHasParent(rec) && tdbIsLeaf(rec))
                 url += rec.parentTrack
             else
                 url = selectedMenuItem.id;
@@ -1601,6 +1603,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    dataType: "html",
                    trueSuccess: handleViewImg,
                    success: catchErrorOrDispatch,
+                   error: errorHandler,
                    cmd: cmd,
                    cache: false
                });
@@ -1665,6 +1668,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                        dataType: "html",
                        trueSuccess: handleUpdateTrackMap,
                        success: catchErrorOrDispatch,
+                       error: errorHandler,
                        cmd: cmd,
                        id: id,
                        loadingId: loadingId,
@@ -1751,9 +1755,9 @@ function loadContextMenu(img)
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
                     && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
                         if(selectedMenuItem.title.indexOf("Click to alter") != 0 || selectedMenuItem.title.indexOf("and similar subtracks") != -1) {
-                            o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
-                            any = true;
-                        }
+                        o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                        any = true;
+                    }
                     }
                     if(any) {
                         menu.push($.contextMenu.separator);
@@ -1788,7 +1792,7 @@ function loadContextMenu(img)
             if(selectedMenuItem) {
             // Add cfg options at just shy of end...
             var o = new Object();
-            if(rec.hasChildren == 0) {
+            if(tdbIsLeaf(rec)) {
                 o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
                 if(rec.parentTrack != undefined)
                     o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
@@ -1856,6 +1860,7 @@ function updateTrackImg(trackName,extraData,loadingId)
                 dataType: "html",
                 trueSuccess: handleUpdateTrackMap,
                 success: catchErrorOrDispatch,
+                error: errorHandler,
                 cmd: 'refresh',
                 loadingId: loadingId,
                 id: trackName,
@@ -1885,6 +1890,7 @@ function _hgTrackUiPopUp(trackName,descriptionOnly)
                    dataType: "html",
                    trueSuccess: handleTrackUi,
                    success: catchErrorOrDispatch,
+                   error: errorHandler,
                    cmd: selectedMenuItem,
                    cache: false
                });
@@ -1899,7 +1905,7 @@ function hgTrackUiPopUp(trackName,descriptionOnly)
 function hgTrackUiPopCfgOk(popObj, trackName)
 { // When hgTrackUi Cfg popup closes with ok, then update cart and refresh parts of page
     var rec = trackDbJson[trackName];
-    var subtrack = rec.isSubtrack ? trackName :undefined;  // If subtrack then vis rules differ
+    var subtrack = tdbIsSubtrack(rec) ? trackName :undefined;  // If subtrack then vis rules differ
     var allVars = getAllVars($('#pop'), subtrack );
     var changedVars = varHashChanges(allVars,popSaveAllVars);
     //warn("cfgVars:"+varHashToQueryString(changedVars));
@@ -1952,13 +1958,13 @@ function handleTrackUi(response, status)
                                modal: true,
                                closeOnEscape: true,
                                autoOpen: false,
-                               buttons: { "Ok": function() {
+                               buttons: { "OK": function() {
                                     if( ! popUpTrackDescriptionOnly )
                                         hgTrackUiPopCfgOk($('#pop'), popUpTrackName);
                                     $(this).dialog("close");
                                }},
                                open: function() {
-                                    var subtrack = trackDbJson[popUpTrackName].isSubtrack ? popUpTrackName :"";  // If subtrack then vis rules differ
+                                    var subtrack = tdbIsSubtrack(trackDbJson[popUpTrackName]) ? popUpTrackName :"";  // If subtrack then vis rules differ
                                     popSaveAllVars = getAllVars( $('#pop'), subtrack );
                                },
                                close: function() {
@@ -2150,8 +2156,10 @@ function findTracksMdbVarChanged(obj)
                    data: "db=" + getDb() +  "&cmd=metaDb&var=" + newVar,
                    trueSuccess: findTracksHandleNewMdbVals,
                    success: catchErrorOrDispatch,
+                   error: errorHandler,
                    cache: true,
-                   cmd: "hgt.metadataValue" + num
+                   cmd: "hgt.metadataValue" + num,
+                   num: num
                });
     }
     //findTracksSearchButtonsEnable(true);
@@ -2167,6 +2175,7 @@ function findTracksHandleNewMdbVals(response, status)
     for (var i = 0; i < list.length; i++) {
         ele.append("<option>" + list[i] + "</option>");
     }
+    updateMetaDataHelpLinks(this.num);
 }
 
 function searchKeydown(event)
@@ -2185,20 +2194,20 @@ function findTracksChangeVis(seenVis)
     var visName = $(seenVis).attr('id');
     var trackName = visName.substring(0,visName.length - "_id".length)
     var hiddenVis = $("input[name='"+trackName+"']");
-    var rec = trackDbJson[trackName];
+    var tdb = tdbGetJsonRecord(trackName);
     if($(seenVis).val() != "hide")
         $(hiddenVis).val($(seenVis).val());
     else {
         var selCb = $("input#"+trackName+"_sel_id");
         $(selCb).attr('checked',false);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
         $(seenVis).attr('disabled',true);  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
-        var needSel = (rec.parentTrack != undefined);
+        var needSel = (tdb.parentTrack != undefined);
         if (needSel) {
             var hiddenSel = $("input[name='"+trackName+"_sel']");
             $(hiddenSel).val('0');  // Can't set it to [] because that means default setting is used.  However, we are explicitly hiding this!
             $(hiddenSel).attr('disabled',false);
         }
-        if(rec.isSubtrack)
+        if(tdbIsSubtrack(tdb))
             $(hiddenVis).val("[]");
         else
             $(hiddenVis).val("hide");
@@ -2215,10 +2224,10 @@ function findTracksClickedOne(selCb,justClicked)
     var seenVis = $('select#' + trackName + "_id");
     var hiddenVis = $("input[name='"+trackName+"']");
     var tr = $(selCb).parents('tr.found');
-    var rec = trackDbJson[trackName];
-    var needSel = (rec.parentTrack != undefined);
-    var shouldPack = rec.canPack;
-    if (shouldPack && rec.shouldPack != undefined && !rec.shouldPack)
+    var tdb = tdbGetJsonRecord(trackName);
+    var needSel = (tdb.parentTrack != undefined);
+    var shouldPack = tdb.canPack;
+    if (shouldPack && tdb.shouldPack != undefined && !tdb.shouldPack)
         shouldPack = false;
     var checked = $(selCb).attr('checked');
     //warn(trackName +" selName:"+selName +" justClicked:"+justClicked +" hiddenSel:"+$(hiddenSel).attr('name') +" seenVis:"+$(seenVis).attr('id') +" hiddenVis:"+$(hiddenVis).attr('name') +" needSel:"+needSel +" shouldPack:"+shouldPack);
@@ -2227,7 +2236,9 @@ function findTracksClickedOne(selCb,justClicked)
     if(checked) {
         $(seenVis).attr('disabled', false);
         if($(seenVis).attr('selectedIndex') == 0) {
-            if(shouldPack)
+            if(tdbIsFolder(tdb))
+                $(seenVis).attr('selectedIndex',1);  // show
+            else if(shouldPack)
                 $(seenVis).attr('selectedIndex',3);  // packed  // FIXME: Must be a better way to select pack/full
             else
                 $(seenVis).attr('selectedIndex',$(seenVis).attr('length') - 1);
@@ -2239,11 +2250,19 @@ function findTracksClickedOne(selCb,justClicked)
 
     // Deal with hiddenSel and hiddenVis so that submit does the right thing
     // Setting these requires justClicked OR seen vs. hidden to be different
-    var setHiddenInputs = (justClicked || (checked != ($(hiddenSel).val() == '1')));
+    var setHiddenInputs = justClicked;
+    if(!justClicked) {
+        if(needSel)
+            setHiddenInputs = (checked != ($(hiddenSel).val() == '1'));
+        else if (checked)
+            setHiddenInputs = ($(seenVis).val() != $(hiddenVis).val());
+        else
+            setHiddenInputs = ($(hiddenVis).val() != "hide" && $(hiddenVis).val() != "[]");
+    }
     if(setHiddenInputs) {
         if(checked)
             $(hiddenVis).val($(seenVis).val());
-        else if(rec.isSubtrack)
+        else if(tdbIsSubtrack(tdb))
             $(hiddenVis).val("[]");
         else
             $(hiddenVis).val("hide");
@@ -2260,31 +2279,19 @@ function findTracksClickedOne(selCb,justClicked)
 
     // The "view in browser" button should be enabled/disabled
     if(justClicked) {
-        if(checked)
-            $('input.viewBtn').val('View in Browser');
-        else if($('input.selCb:checked').length == 0)
-            $('input.viewBtn').val('Return to Browser');
+        $('input.viewBtn').val('View in Browser');
+        findTracksCounts();
     }
-
-    findTracksCounts();
 }
 
 
 function findTracksNormalize()
 { // Normalize the page based upon current state of all found tracks
-    $('#foundTracks').show()
+    $('div#found').show()
     var selCbs = $('input.selCb');
 
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
-
-    // The "view in browser" button should be enabled/disabled
-    var disabled = ($(selCbs).length == 0 || $(selCbs).filter(':checked').length == 0);
-    //$('input.viewBtn').attr('disabled',disabled);
-    if(disabled == false)
-        $('input.viewBtn').val('View in Browser');
-    else
-        $('input.viewBtn').val('Return to Browser');
 
     findTracksCounts();
 }
@@ -2302,11 +2309,7 @@ function findTracksCheckAll(check)
     // All should have their vis enabled/disabled appropriately (false means don't update cart)
     $(selCbs).each( function(i) { findTracksClickedOne(this,false); });
 
-    if(check)
-        $('input.viewBtn').val('View in Browser');
-    else
-        $('input.viewBtn').val('Return to Browser');
-
+    $('input.viewBtn').val('View in Browser');
     findTracksCounts();
     return false;  // Pressing button does nothing more
 }
@@ -2316,19 +2319,8 @@ function findTracksCheckAllWithWait(check)
     waitOnFunction( findTracksCheckAll, check);
 }
 
-function findTracksCounts()
-{
-// Displays visible and checked track count
-    var counter = $('.selCbCount');
-    if(counter != undefined) {
-        var selCbs =  $("input.selCb");
-        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
-    }
-}
-
 function findTracksSearchButtonsEnable(enable)
-{
-// Displays visible and checked track count
+{ // Displays visible and checked track count
     var searchButton = $('input[name="hgt_searchTracks"]');
     var clearButton  = $('input.clear');
     if(enable) {
@@ -2340,9 +2332,28 @@ function findTracksSearchButtonsEnable(enable)
     }
 }
 
+function findTracksViewButtoneText()
+{ // Update View in Browser buttn text
+    var inputs = $('table#foundTracks').find('input:hidden:enabled');  // Doesn't work!!!
+    if( $(inputs).length == 0)
+        $('input.viewBtn').val('Return to Browser');
+    else
+        $('input.viewBtn').val('View in Browser');
+}
+
+function findTracksCounts()
+{// Displays visible and checked track count
+    //findTracksViewButtoneText();   // Doesn't work!!!
+    var counter = $('.selCbCount');
+    if(counter != undefined) {
+        var selCbs =  $("input.selCb");
+        $(counter).text("("+$(selCbs).filter(":enabled:checked").length + " of " +$(selCbs).length+ " selected)");
+    }
+}
+
 function findTracksClear()
 {// Clear found tracks and all input controls
-    var foundTracks = $('#foundTracks');
+    var foundTracks = $('div#found');
     if(foundTracks != undefined)
         $(foundTracks).remove();
     $('input[type="text"]').val(''); // This will always be found
@@ -2352,6 +2363,17 @@ function findTracksClear()
     //findTracksSearchButtonsEnable(false);
     return false;
 }
+
+function findTracksSortNow(obj)
+{// Called by radio button to sort tracks
+    if( $('#sortIt').length == 0 )
+        $('form#searchTracks').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
+    else
+        $('#sortIt').val($(obj).val());
+    $('#searchSubmit').click();
+    return true;
+}
+
 /////////////////////////////////////////////////////
 
 function delSearchSelect(obj, rowNum)
@@ -2366,4 +2388,52 @@ function addSearchSelect(obj, rowNum)
     obj = $(obj);
     $("input[name=hgt.addRow]").val(rowNum);
     return true;
+}
+
+function updateMetaDataHelpLinks(index)
+{
+// update the metadata help links based on currently selected values.
+// If index == 0 we update all help items, otherwise we only update the one == index.
+    var i;
+    var db = getDb();
+    var disabled = {
+        'accession': 1,
+        'dataVersion': 1,
+        'grant': 1,
+        'lab': 1,
+        'labVersion': 1,
+        'replicate': 1,
+        'setType': 1,
+        'softwareVersion': 1,
+        'subId': 1,
+        'view': 1,
+    }
+    for(i=1;true;i++) {
+        var span = $("#helpLink" + i);
+        if(span.length > 0) {
+            if(index == 0 || i == index) {
+                var val = $("select[name='hgt.metadataName" + i + "']").val();
+                var text = $("select[name='hgt.metadataName" + i + "'] option:selected").text();
+                var str;
+                span.empty();
+                if(val == 'cell') {
+                    if(db.substr(0, 2) == "mm") {
+                        str = "../ENCODE/cellTypesMouse.html";
+                    } else {
+                        str = "../ENCODE/cellTypes.html";
+                    }
+                } else if (val == 'antibody') {
+                    str = "../ENCODE/antibodies.html";
+                } else {
+                    str = "../ENCODE/otherTerms.html#" + val;
+                }
+                if(typeof(disabled[val]) == 'undefined')
+                    span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                else
+                    span.empty();
+            }
+        } else {
+            return;
+        }
+    }
 }

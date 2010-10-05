@@ -341,7 +341,7 @@ extern struct trackLayout tl;
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
 extern struct track *trackList;    /* List of all tracks. */
-struct hash *trackHash; /* Hash of the tracks by their name. */
+extern struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
@@ -1071,6 +1071,9 @@ void initTl();
 void setLayoutGlobals();
 /* Figure out basic dimensions of display.  */
 
+struct hash *makeGlobalTrackHash(struct track *trackList);
+/* Create a global track hash and returns a pointer to it. */
+
 void makeActiveImage(struct track *trackList, char *psOutput);
 /* Make image and image map. */
 
@@ -1231,6 +1234,18 @@ char *bbiNameFromTable(struct sqlConnection *conn, char *table);
 
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */
+
+void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
+/* Load bedDetail track from custom tracks as bed or linked features */
+
+void pgSnpCtMethods (struct track *tg);
+/* Load pgSnp track from custom tracks */
+
+#ifdef SUBTRACKS_HAVE_VIS
+void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
+/* When composite/view settings changes, remove subtrack specific vis
+   When superTrackChild is found and selected, shape superTrack to match. */
+#endif//def SUBTRACKS_HAVE_VIS
 
 #endif /* HGTRACKS_H */
 

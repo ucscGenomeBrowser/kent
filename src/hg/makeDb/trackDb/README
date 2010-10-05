@@ -300,8 +300,13 @@ The format of the type fields:
 	sourceTable <tableName>
     Use the program hgBedsToBedExp to create the tables from a collection of
     (simpler) bed's one for each txn factor/cell combination.
-
-
+    
+21. type bedDetail 
+    This type is used for mostly bed like files but where you want to include 
+    some extra text for the details page or table browser filtering.  It also
+    includes an ID field, so if an URL is specified can link to another 
+    resource without affecting the name displayed in the track.  
+    
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing

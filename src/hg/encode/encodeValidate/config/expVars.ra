@@ -18,3 +18,8 @@ composite wgEncodeUwChIPSeq
 expVar1 cell
 expVar2 antibody
 expVar3 rank
+
+composite wgEncodeCshlShortRnaSeq
+expVar1 cell
+expVar2 localization
+

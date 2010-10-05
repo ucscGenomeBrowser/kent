@@ -67,7 +67,7 @@ if (sameString(value, "hide") || sameString(value, "0"))
     return tvHide;
 else if (sameString(value, "dense") || sameString(value, "1"))
     return tvDense;
-else if (sameString(value, "full") || sameString(value, "2"))
+else if (sameString(value, "full") || sameString(value, "2") || sameString(value, "show"))
     return tvFull;
 else if (sameString(value, "pack") || sameString(value, "3"))
     return tvPack;
@@ -107,6 +107,18 @@ hashAdd(bt->settingsHash, var, cloneString(value));
 
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
+}
+
+//not needed?
+int bedDetailSizeFromType(char *type)
+/* parse bedSize from type line for bedDetail, assume 4 if none */
+{
+int ret = 4;  /* minimal expected */
+char *words[3];
+int wordCount = chopLine(cloneString(type), words);
+if (wordCount > 1)
+    ret = atoi(words[1]) - 2; /* trackDb has field count, we want bedSize */
+return ret;
 }
 
 void trackDbFieldsFromSettings(struct trackDb *bt)
@@ -192,7 +204,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
-		   sameString("bam", s));
+		   sameString("bam", s) || sameString("bedDetail", s));
 freeMem(t);
 return canPack;
 }
@@ -763,12 +775,14 @@ return hashOptionalVal(tdb->extras, name, defaultVal);
 boolean tdbIsView(struct trackDb *tdb,char **viewName)
 // Is this tdb a view?  Will fill viewName if provided
 {
-if(tdb && tdb->parent && tdb->subtracks)
+if (tdbIsCompositeView(tdb))
     {
-    char *view = trackDbLocalSetting(tdb, "view");
-    if(viewName)
-        *viewName = view;
-    return (view != NULL);
+    if (viewName)
+        {
+        *viewName = trackDbLocalSetting(tdb, "view");
+        assert(*viewName != NULL);
+        }
+    return TRUE;
     }
 return FALSE;
 }
@@ -958,23 +972,11 @@ struct trackDb *a = aRef->val, *b = bRef->val;
 return trackDbCmp(&a, &b);
 }
 
-struct trackDb *trackDbCompositeParent(struct trackDb *tdb)
-/* Return closest ancestor who is a composite track. */
-{
-struct trackDb *parent;
-for (parent = tdb->parent; parent != NULL; parent = parent->parent)
-    {
-    if (trackDbLocalSetting(parent, "compositeTrack"))
-        return parent;
-    }
-return NULL;
-}
-
 struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb)
-/* Look for a parent who is a composite track and return that.  Failing that
+/* Look for a parent who is a composite or multiTrack track and return that.  Failing that
  * just return self. */
 {
-struct trackDb *parent = trackDbCompositeParent(tdb);
+struct trackDb *parent = tdbGetContainer(tdb);
 if (parent != NULL)
     return parent;
 else

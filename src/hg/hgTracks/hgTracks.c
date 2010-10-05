@@ -116,6 +116,7 @@ struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test or public browser */
 char *organization;             /* UCSC */
 
+struct hash *trackHash = NULL; /* Hash of the tracks by their name. */
 
 struct track *trackFindByName(struct track *tracks, char *trackName)
 /* find a track in tracks by name, recursively searching subtracks */
@@ -1319,7 +1320,7 @@ if (track->limitedVis != tvHide)
 	boolean toggleDone = FALSE;
         char *label = track->longLabel;
         if (isCenterLabelConditional(track))
-            label = track->parent->longLabel;
+            label = track->tdb->parent->longLabel;
         Color labelColor = (track->labelColor ?
                             track->labelColor : track->ixColor);
         hvGfxTextCentered(hvg, insideX, y+1, insideWidth, insideHeight,
@@ -1592,7 +1593,7 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
-    struct trackDb *parentTdb = trackDbCompositeParent(tdb);
+    struct trackDb *parentTdb = tdbGetComposite(tdb);
     assert(parentTdb != NULL);
 
     char *viewName = NULL;
@@ -1852,11 +1853,12 @@ for (track = trackList; track != NULL; track = track->next)
     }
 }
 
-static void makeGlobalTrackHash(struct track *trackList)
-/* Start a global track hash. */
+struct hash *makeGlobalTrackHash(struct track *trackList)
+/* Create a global track hash and returns a pointer to it. */
 {
 trackHash = newHash(8);
 rAddToTrackHash(trackHash, trackList);
+return trackHash;
 }
 
 
@@ -2223,7 +2225,7 @@ if (withLeftLabels && psOutput == NULL)
             {
             if(tdbIsCompositeChild(track->tdb))
                 {
-                struct trackDb *parent = trackDbCompositeParent(track->tdb);
+                struct trackDb *parent = tdbGetComposite(track->tdb);
                 mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
                     parent->track, parent->shortLabel, track->track);
                 }
@@ -3158,6 +3160,19 @@ else if (sameString(type, "makeItems"))
     tg->nextItemButtonable = TRUE;
     tg->customPt = ct;
     }
+else if (sameString(type, "bedDetail"))
+    {
+    tg = trackFromTrackDb(tdb);
+    bedDetailCtMethods(tg, ct);
+    tg->mapItemName = ctMapItemName; /* must be here to see ctMapItemName */
+    }
+else if (sameString(type, "pgSnp"))
+    {
+    tg = trackFromTrackDb(tdb);
+    pgSnpCtMethods(tg);
+    //tg->mapItemName = ctMapItemName;
+    tg->customPt = ct;
+    }
 else
     {
     errAbort("Unrecognized custom track type %s", type);
@@ -3889,11 +3904,15 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         if (hTvFromString(cartUsualString(cart, track->track,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
-        if (hashLookup(superHash, track->tdb->parentName))
-            /* ignore supertrack if it's already been handled */
+        assert(track->parent == NULL);
+        track->parent = hashFindVal(superHash, track->tdb->parentName);
+        if (track->parent)
             continue;
         /* create track and reference for the supertrack */
-        struct track *superTrack = trackFromTrackDb(track->tdb->parent);
+        struct track *superTrack = track->parent = trackFromTrackDb(track->tdb->parent);
+        track->parent = superTrack;
+        if (trackHash != NULL)
+            hashAddUnique(trackHash,superTrack->track,superTrack);
         superTrack->hasUi = TRUE;
         superTrack->group = group;
         superTrack->groupName = cloneString(group->name);
@@ -3912,7 +3931,7 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         AllocVar(ref);
         ref->track = superTrack;
         slAddHead(&newList, ref);
-        hashAdd(superHash, track->tdb->parentName, track->tdb->parent);
+        hashAdd(superHash, track->tdb->parentName, superTrack);
         }
     }
 slSort(&newList, trackRefCmpPriority);
@@ -4247,13 +4266,17 @@ else
 }
 
 #ifdef SUBTRACKS_HAVE_VIS
-static void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
+void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
 {
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
+    if (tdbIsContainer(track->tdb))
+        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb))
+            track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
+
     if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
         { // Need to update track visibility
         if (tdbIsSuperTrackChild(track->tdb))
@@ -4443,6 +4466,13 @@ if(theImgBox)
 #endif//def IMAGEv2_DRAG_SCROLL
 /* Center everything from now on. */
 hPrintf("<CENTER>\n");
+
+if(trackImgOnly)
+    {
+    makeActiveImage(trackList, psOutput);
+    fflush(stdout);
+    return;  // bail out b/c we are done
+    }
 
 
 if (!hideControls)
@@ -5538,7 +5568,6 @@ hPrintf("<div id='hgTrackUiDialog' style='display: none'></div>\n");
 hPrintf("<div id='warning' class='ui-state-error ui-corner-all hidden' style='font-size: 0.75em; display: none;' onclick='$(this).hide();'><p><span class='ui-icon ui-icon-alert' style='float: left; margin-right: 0.3em;'></span><strong></strong><span id='warningText'></span> (click to hide)</p></div>\n");
     }
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-
 if (cartVarExists(cart, "chromInfoPage"))
     {
     cartRemove(cart, "chromInfoPage");

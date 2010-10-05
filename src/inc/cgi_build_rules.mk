@@ -19,12 +19,12 @@ install::  strip
 	@if [ ! -d "${DESTDIR}${CGI_BIN}" ]; then \
 		${MKDIR} "${DESTDIR}${CGI_BIN}"; \
 	fi
+	rm -f ${DESTDIR}${CGI_BIN}/$A
 	mv $A${EXE} ${DESTDIR}${CGI_BIN}/$A
 
 debug:: $O
 	${CC} ${COPT} ${CFLAGS} $O ${MYLIBS} ${L}
 	mv ${AOUT} $A${EXE}
-
 
 lib::
 	cd ../../lib; make
@@ -34,4 +34,3 @@ clean::
 
 tags::
 	ctags *.h *.c ../lib/*.c ../inc/*.h ../../lib/*.c ../../inc/*.h
-
