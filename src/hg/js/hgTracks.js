@@ -2180,9 +2180,10 @@ function findTracksHandleNewMdbVals(response, status)
     var list = eval(response);
     var ele = $('select[name=' + this.cmd + ']');
     ele.empty();
-    ele.append("<option>Any</option>");
+    ele.append("<option VALUE='Any'>Any</option>");
     for (var i = 0; i < list.length; i++) {
-        ele.append("<option>" + list[i] + "</option>");
+        var pair = list[i];
+        ele.append("<option VALUE='" + pair[1] + "'>" + pair[0] + "</option>");
     }
     updateMetaDataHelpLinks(this.num);
 }

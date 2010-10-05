@@ -148,21 +148,29 @@ if(words)
 return FALSE;
 }
 
-static int getTermArray(struct sqlConnection *conn, char ***terms, char *type)
+static int getTermArray(struct sqlConnection *conn, char ***pLabels, char ***pTerms, char *type)
 // Pull out all term fields from ra entries with given type
 // Returns count of items found and items via the terms argument.
 {
-int i, count = 0;
-char **retVal;
-struct slName *termList = mdbValSearch(conn, type, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
-count = slCount(termList) + 1; // make room for "Any"
-AllocArray(retVal, count);
-retVal[0] = cloneString(ANYLABEL);
-for(i = 1; termList != NULL;termList = termList->next, i++)
+int ix = 0, count = 0;
+char **labels;
+char **values;
+struct slPair *pairs = mdbValLabelSearch(conn, type, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+count = slCount(pairs) + 1; // make room for "Any"
+AllocArray(labels, count);
+AllocArray(values, count);
+labels[ix] = cloneString(ANYLABEL);
+values[ix] = cloneString(ANYLABEL);
+struct slPair *pair = NULL;
+while((pair = slPopHead(&pairs)) != NULL)
     {
-    retVal[i] = cloneString(termList->name);
+    ix++;
+    labels[ix] = pair->name;
+    values[ix] = pair->val;
+    freeMem(pair);
     }
-*terms = retVal;
+*pLabels = labels;
+*pTerms = values;
 return count;
 }
 
@@ -534,7 +542,7 @@ if(metaDbExists)
     hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
     for(i = 0; i < numMetadataSelects; i++)
         {
-        char **terms;
+        char **terms = NULL, **labels = NULL;
         char buf[256];
         int len;
 
@@ -554,9 +562,9 @@ if(metaDbExists)
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
         cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
         hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
-        len = getTermArray(conn, &terms, mdbVar[i]);
+        len = getTermArray(conn, &labels, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, terms, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
+        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
         if (!simpleSearch && mdbVal[i])
             searchTermsExist = TRUE;
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
@@ -864,6 +872,8 @@ else
 if(!doSearch)
     {
     hPrintf("<p><b>Recently Done</b><ul>\n"
+        "<li>Can now page through found tracks 100 at a time.</li>"
+        "<li>Added <IMG SRC='../images/folderWrench.png'> icon for contqainers with a configuration link.  Is this okay?</li>"
         #ifdef FIND_SUPERS_TOO
         "<li>SuperTracks can now be found.</li>"
         "<li>Configuration of superTrack children's vis should result in proper superTrack reshaping. (This is really an hgTrackUi feature.)</li>"
@@ -878,7 +888,6 @@ if(!doSearch)
         "<li>The metadata values will not be white-listed, but it would be nice to have more descriptive text for them.  A short label added to cv.ra?</li>"
         "<li>Look and feel of found track list (here) and composite subtrack list (hgTrackUi) should converge.  Jim suggests look and feel of hgTracks 'Configure Tracks...' list instead.</li>"
         "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
-        "<li>Found track list shows only the first 100 tracks with warning to narrow search.  Larry suggests this could be done by pages of results in v2.0.</li>\n"
         "</ul></p>\n");
     }
 hPrintf("</div"); // This div allows the clear button to empty it
