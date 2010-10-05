@@ -18,7 +18,6 @@ view Alignments
 
 metaObject wgEncodeGisPetAlignmentsHuvecCytosolLongpolya
 objType table
-accession SAT2G_version_2.0
 cell HUVEC
 composite wgEncodeGisPet
 dataType RnaPet
@@ -1602,7 +1601,6 @@ view MinusRawSignal
 
 metaObject wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 objType table
-accession SAT2G_version_2.0
 cell HUVEC
 composite wgEncodeGisPet
 dataType RnaPet
@@ -1965,7 +1963,6 @@ view PlusRawSignal
 
 metaObject wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 objType table
-accession SAT2G_version_2.0
 cell HUVEC
 composite wgEncodeGisPet
 dataType RnaPet
@@ -2308,4 +2305,4 @@ subId 777
 tableName wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
 view PlusRawSignal
 
-# MAGIC: -112364207
+# MAGIC: -421248444
