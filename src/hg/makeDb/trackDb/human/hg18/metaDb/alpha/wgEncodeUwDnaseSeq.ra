@@ -1642,7 +1642,6 @@ view Hotspots
 
 metaObject wgEncodeUwDnaseSeqHotspotsRep1Bjtert
 objType table
-accession Hotspot-v5.0
 cell BJ
 composite wgEncodeUwDnaseSeq
 dataType DnaseSeq
@@ -7605,4 +7604,4 @@ submittedDataVersion V2 - Improved DNA Library
 tableName wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 view RawSignal
 
-# MAGIC: -1334939149
+# MAGIC: -1802223902

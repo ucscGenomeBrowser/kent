@@ -2396,6 +2396,18 @@ function updateMetaDataHelpLinks(index)
 // If index == 0 we update all help items, otherwise we only update the one == index.
     var i;
     var db = getDb();
+    var disabled = {
+        'accession': 1,
+        'dataVersion': 1,
+        'grant': 1,
+        'lab': 1,
+        'labVersion': 1,
+        'replicate': 1,
+        'setType': 1,
+        'softwareVersion': 1,
+        'subId': 1,
+        'view': 1,
+    }
     for(i=1;true;i++) {
         var span = $("#helpLink" + i);
         if(span.length > 0) {
@@ -2415,7 +2427,10 @@ function updateMetaDataHelpLinks(index)
                 } else {
                     str = "../ENCODE/otherTerms.html#" + val;
                 }
-                span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                if(typeof(disabled[val]) == 'undefined')
+                    span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                else
+                    span.empty();
             }
         } else {
             return;

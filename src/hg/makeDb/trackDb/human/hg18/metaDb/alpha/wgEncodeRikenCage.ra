@@ -18,7 +18,6 @@ view Alignments
 
 metaObject wgEncodeRikenCageAlignmentsGm12878NucleolusTotal
 objType table
-accession Nexalign
 cell GM12878
 composite wgEncodeRikenCage
 dataType Cage
@@ -31,7 +30,7 @@ lab Riken
 localization nucleolus
 project wgEncode
 rnaExtract total
-softwareVersion 1.3.5
+softwareVersion Nexalign 1.3.5
 subId 1001
 tableName wgEncodeRikenCageAlignmentsGm12878NucleolusTotal
 view Alignments
@@ -1437,4 +1436,4 @@ rnaExtract longNonPolyA
 subId 9
 view RawData
 
-# MAGIC: 1683250323
+# MAGIC: 654321639
