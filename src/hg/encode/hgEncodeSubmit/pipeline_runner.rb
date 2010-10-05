@@ -192,10 +192,14 @@ while true
         end
       end
       if source.starts_with? "upload_background("
+        # parse out the url parameter from the source command
+        #  the parameters are comma-separated, and literal strings are surrounded by quotes.
         pastFirstComma = source.index(',"')+2
         beforeSecondComma = source.index('",', pastFirstComma) - 1
         upurl = source[pastFirstComma..beforeSecondComma]
         if upurl != ""
+          # load-balance paraFetch in a site-specific manner 
+          # determined by the config/paraFetch.yml settings.
           protoSite = get_proto_site(upurl)
           maxParaFetches = paraFetchConfig["default"]["instances"]
           if paraFetchConfig[protoSite] != nil
