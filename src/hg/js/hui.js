@@ -687,6 +687,7 @@ function _popUpSubrackCfg(trackName,label)
         dataType: "html",
         trueSuccess: popUpCfg,
         success: catchErrorOrDispatch,
+        error: errorHandler,
         cmd: "cfg",
         cache: false
     });

@@ -267,6 +267,61 @@ return count;
 #endif///ndef WHITE_LIST_COUNT
 }
 
+#define MAX_FOUND_TRACKS 100
+#define FOUND_TRACKS_PAGING "hgt_startFrom"
+void findTracksPageLinks(int tracksFound, int startFrom)
+{
+if (tracksFound <= MAX_FOUND_TRACKS)
+    return;
+
+// Opener
+int curPage  = (startFrom/MAX_FOUND_TRACKS) + 1;
+int endAt = startFrom+MAX_FOUND_TRACKS;
+if (endAt > tracksFound)
+    endAt = tracksFound;
+hPrintf("<em>Listing %d - %d of %d tracks</em>&nbsp;&nbsp;&nbsp;",startFrom+1,endAt,tracksFound);
+
+// << and <
+hPrintf("<a href='' title='First page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,0);
+if (startFrom >= MAX_FOUND_TRACKS)
+    hPrintf("&nbsp;<a href='' title='Previous page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,startFrom - MAX_FOUND_TRACKS);
+else
+    hPrintf("&nbsp;<em>&lt;</em>&nbsp;");
+
+// page number links
+int lastPage = (tracksFound/MAX_FOUND_TRACKS);
+if ((tracksFound % MAX_FOUND_TRACKS) > 0)
+    lastPage++;
+
+int thisPage = curPage - 3; // Window of 3 pages above and below
+if (thisPage < 1)
+    thisPage = 1;
+for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
+    {
+    if (thisPage != curPage)
+        {
+        int willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
+        endAt = willStartAt+ MAX_FOUND_TRACKS;
+        if (endAt > tracksFound)
+            endAt = tracksFound;
+        hPrintf("&nbsp;<a href='' title='Page %d (%d - %d) tracks' onclick='return findTracksPage(\"%s\",%d);'>%d</a>&nbsp;",
+                thisPage,willStartAt+1,endAt,FOUND_TRACKS_PAGING,((thisPage - 1) * MAX_FOUND_TRACKS),thisPage);
+        }
+    else
+        hPrintf("&nbsp;<em>%d</em>&nbsp;",thisPage);
+    }
+
+// > and >>
+if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
+    hPrintf("&nbsp;<a href='' title='Next page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;</a>&nbsp;",FOUND_TRACKS_PAGING,(startFrom + MAX_FOUND_TRACKS));
+else
+    hPrintf("&nbsp;<em>&gt;</em>&nbsp;");
+thisPage =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
+if (thisPage == tracksFound)
+    thisPage -= MAX_FOUND_TRACKS;
+hPrintf("&nbsp;<a href='' title='Last page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;&gt;</a>\n",FOUND_TRACKS_PAGING,thisPage);
+}
+
 void doSearchTracks(struct group *groupList)
 {
 struct group *group;
@@ -644,23 +699,47 @@ else
     struct hash *tdbHash = makeTrackHash(database, chromName);
     hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
     cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
-    #define MAX_FOUND_TRACKS 100
+
+    #ifdef FOUND_TRACKS_PAGING
+    int startFrom = 0;
+    #else///ifndef FOUND_TRACKS_PAGING
     if(tracksFound > MAX_FOUND_TRACKS)
         {
         hPrintf("<table class='redBox'><tr><td>Found %d tracks, but only the first %d are displayed.",tracksFound,MAX_FOUND_TRACKS);
         hPrintf("<BR><B><I>Please narrow search criteria to find fewer tracks.</I></B></div></td></tr></table>\n");
         }
+    #endif///ndef FOUND_TRACKS_PAGING
+
+    hPrintf("<table id='foundTracks'>\n");
 
     // Opening view in browser button and foundTracks count
     #define ENOUGH_FOUND_TRACKS 10
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
+        hPrintf("<tr><td colspan=3>\n");
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
+
+    #ifdef FOUND_TRACKS_PAGING
+        startFrom = cartUsualInt(cart,FOUND_TRACKS_PAGING,0);
+        if (startFrom > 0 && startFrom < tracksFound)
+            {
+            int countUp = 0;
+            for(countUp=0; countUp < startFrom;countUp++)
+                {
+                if (slPopHead(&tracks) == NULL) // memory waste
+                    break;
+                }
+            }
+        hPrintf("</td><td align='right'>\n");
+        findTracksPageLinks(tracksFound,startFrom);
+        hPrintf("</td></tr>\n");
+    #endif///ndef FOUND_TRACKS_PAGING
         }
 
     // Begin foundTracks table
-    hPrintf("<table id='foundTracks'><tr><td colspan='2'>\n");
+    //hPrintf("<table id='foundTracks'><tr><td colspan='2'>\n");
+    hPrintf("<tr><td colspan='2'>\n");
     hPrintf("</td><td align='right'>\n");
     #define PM_BUTTON "<IMG height=18 width=18 onclick=\"return findTracksCheckAllWithWait(%s);\" id='btn_%s' src='../images/%s' title='%s all found tracks'>"
     hPrintf("</td></tr><tr bgcolor='#%s'><td>",HG_COL_HEADER);
@@ -746,7 +825,8 @@ else
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
             containerTrackCount++;
-            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
+            //hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
+            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track);
             }
         hPrintf("</td>\n");
 
@@ -756,13 +836,25 @@ else
         compositeMetadataToggle(database, track->tdb, "...", TRUE, FALSE, tdbHash);
         hPrintf("</td></tr>\n");
         }
-    hPrintf("</table>\n");
-    if(containerTrackCount > 0)
-        hPrintf("* Tracks so marked are containers which group related data tracks.  These may not be visible unless further configuration is done.  Click on the * to configure these.<BR><BR>\n");
+    //hPrintf("</table>\n");
 
     // Closing view in browser button and foundTracks count
+    hPrintf("<tr><td colspan=3>");
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
+    #ifdef FOUND_TRACKS_PAGING
+    if(tracksFound >= ENOUGH_FOUND_TRACKS)
+        {
+        hPrintf("</td><td align='right'>\n");
+        findTracksPageLinks(tracksFound,startFrom);
+        hPrintf("</td></tr>\n");
+        }
+    #endif///ndef FOUND_TRACKS_PAGING
+    hPrintf("</table>\n");
+
+    if(containerTrackCount > 0)
+        hPrintf("<BR><IMG SRC='../images/folderWrench.png'>&nbsp;Tracks so marked are containers which group related data tracks.  Containers may need additional configuration (by clicking on the <IMG SRC='../images/folderWrench.png'> icon) before they can be viewed in the browser.<BR>\n");
+        //hPrintf("* Tracks so marked are containers which group related data tracks.  These may not be visible unless further configuration is done.  Click on the * to configure these.<BR><BR>\n");
     hPrintf("\n</form>\n");
 
     // be done with json
