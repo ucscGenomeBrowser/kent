@@ -3,7 +3,7 @@ objType table
 annotation Automatic
 composite wgEncodeSangerGencode
 dataType Gencode
-dataVersion ENCODE September 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeAutoV3.gtf.gz
@@ -21,7 +21,7 @@ objType table
 annotation Manual
 composite wgEncodeSangerGencode
 dataType Gencode
-dataVersion ENCODE September 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
 fileName wgEncodeGencodeManualV3.gtf.gz
@@ -39,7 +39,7 @@ objType table
 annotation Automatic
 composite wgEncodeSangerGencode
 dataType Gencode
-dataVersion ENCODE September 2009 Freeze
+dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-27
 dateUnrestricted 2010-07-27
 fileName wgEncodeGencodePolyaV3.gtf.gz
@@ -52,4 +52,4 @@ subId 453
 submittedDataVersion V3c
 tableName wgEncodeGencodePolyaV3
 
-# MAGIC: -2116885967
+# MAGIC: -338502988
