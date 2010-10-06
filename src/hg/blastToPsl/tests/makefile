@@ -140,7 +140,7 @@ psiBadFormatTest: mkdirs
 ###
 # blastXmlToPsl
 ###
-testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest
+testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test
 
 mrna1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
@@ -166,7 +166,17 @@ prot1NucCoordTest: mkdirs
 	diff -u expected/$@.psl output/$@.psl
 
 sp1PsiBlastTest: mkdirs
-	${blastXmlToPsl} input/sp1.psiBlast.xml output/$@.psl
+	${blastXmlToPsl} -tName=Hit_accession input/sp1.psiBlast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+qtName1Test: mkdirs
+	${blastXmlToPsl} -qName=Iteration_query-ID -tName=Hit_id input/sp1.psiBlast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+
+qtName2Test: mkdirs
+	${blastXmlToPsl} -qName=Iteration_query-def0 -tName=Hit_def0 input/sp1.psiBlast.xml output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
@@ -174,4 +184,4 @@ clean::
 	rm -rf output
 
 mkdirs:
-	@${MKDIR} output
+	@${MKDIR} -p output

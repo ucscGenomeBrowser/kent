@@ -96,20 +96,19 @@ else if(!strcmp(cmd, "metaDb"))
     boolean metaDbExists = sqlTableExists(conn, "metaDb");
     if(metaDbExists)
         {
-        int i;
         char *var = cgiOptionalString("var");
         if(var)
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        struct slName *termList = mdbValSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
-        struct slName *el;
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+        struct slPair *pair;
         dyStringPrintf(output, "[\n");
-        for (el = termList, i = 0; el != NULL; el = el->next, i++)
+        for (pair = pairs; pair != NULL; pair = pair->next)
             {
-            if(i)
+            if(pair != pairs)
                 dyStringPrintf(output, ",\n");
-            dyStringPrintf(output, "'%s'", javaScriptLiteralEncode(el->name));
+            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(pair->name), javaScriptLiteralEncode(pair->val));
             }
         dyStringPrintf(output, "\n]\n");
         }

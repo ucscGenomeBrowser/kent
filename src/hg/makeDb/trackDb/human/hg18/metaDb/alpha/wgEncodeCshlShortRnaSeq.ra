@@ -11,7 +11,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 tableName wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
 view Alignments
@@ -29,7 +29,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
 view Alignments
@@ -47,7 +47,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
 view Alignments
@@ -65,7 +65,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
 view Alignments
@@ -83,7 +83,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
 view Alignments
@@ -101,7 +101,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
 view Alignments
@@ -119,7 +119,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
 view Alignments
@@ -137,7 +137,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
 view Alignments
@@ -155,7 +155,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
 view Alignments
@@ -173,7 +173,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
 view Alignments
@@ -191,7 +191,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
 view Alignments
@@ -208,7 +208,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
 type wig
@@ -226,7 +226,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
 type wig
@@ -244,7 +244,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
 type wig
@@ -262,7 +262,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
 type wig
@@ -280,7 +280,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
 type wig
@@ -298,7 +298,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
 type wig
@@ -316,7 +316,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
 type wig
@@ -334,7 +334,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
 type wig
@@ -352,7 +352,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
 type wig
@@ -370,7 +370,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
 type wig
@@ -388,7 +388,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
 type wig
@@ -406,7 +406,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
 type wig
@@ -424,7 +424,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
 type wig
@@ -442,7 +442,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
 type wig
@@ -460,7 +460,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
 type wig
@@ -478,7 +478,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
 type wig
@@ -496,7 +496,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
 type wig
@@ -514,7 +514,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
 type wig
@@ -532,7 +532,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
 type wig
@@ -550,7 +550,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
 type wig
@@ -568,7 +568,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
 type wig
@@ -586,7 +586,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
 type wig
@@ -604,9 +604,8 @@ fileName wgEncodeCshlShortRnaSeqRawDataGm12878CellShort.fastq.gz
 grant Gingeras
 lab Cshl
 localization cell
-parentTable wgEncodeCshlShortRnaSeqRawSignalGm12878CellShort
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 view RawData
 
@@ -623,7 +622,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -640,7 +639,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -656,9 +655,8 @@ fileName wgEncodeCshlShortRnaSeqRawDataK562CellShort.fastq.gz
 grant Gingeras
 lab Cshl
 localization cell
-parentTable wgEncodeCshlShortRnaSeqRawSignalK562CellShort
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 view RawData
 
@@ -675,7 +673,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -692,7 +690,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -709,7 +707,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -726,7 +724,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -743,7 +741,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -760,7 +758,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -777,7 +775,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -794,7 +792,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1056
 tableName wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
 view Transfrags
@@ -812,7 +810,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort
 view Transfrags
@@ -830,7 +828,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
 view Transfrags
@@ -848,7 +846,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1056
 tableName wgEncodeCshlShortRnaSeqTransfragsK562CellShort
 view Transfrags
@@ -866,7 +864,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
 view Transfrags
@@ -884,7 +882,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
 view Transfrags
@@ -902,7 +900,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
 view Transfrags
@@ -920,7 +918,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
 view Transfrags
@@ -938,7 +936,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
 view Transfrags
@@ -956,7 +954,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
 view Transfrags
@@ -974,9 +972,9 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
 view Transfrags
 
-# MAGIC: 892924271
+# MAGIC: 1854777163

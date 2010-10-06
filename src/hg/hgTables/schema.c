@@ -531,56 +531,10 @@ else
     }
 }
 
-static void showSchemaMakeItems(char *db, char *trackId, struct customTrack *ct)
-/* Show schema on makeItems format custom track. */
+static void showSchemaWithAutoSqlString(char *db, char *trackId, struct customTrack *ct, char *autoSqlString)
+/* Show schema on custom track using autoSqlString defined for this track type. */
 {
-struct asObject *asObj = asParseText(makeItemsItemAutoSqlString);
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-char *table = ct->dbTableName;
-
-hPrintf("<B>Genome Database:</B> %s ", db);
-hPrintf("<B>Track ID:</B> %s ", trackId);
-hPrintf("<B>MySQL table:</B> %s", table); 
-hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
-printLongWithCommas(stdout, sqlTableSize(conn, table));
-hPrintf("<BR>\n");
-if (asObj != NULL)
-    hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
-describeFields(CUSTOM_TRASH, table, asObj, conn);
-
-webNewSection("Sample Rows");
-printSampleRows(10, conn, ct->dbTableName);
-printTrackHtml(ct->tdb);
-hFreeConn(&conn);
-}
-
-static void showSchemaBedDetail(char *db, char *trackId, struct customTrack *ct)
-/* Show schema on bedDetail format custom track. */
-{
-struct asObject *asObj = asParseText(bedDetailAutoSqlString);
-struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
-char *table = ct->dbTableName;
-
-hPrintf("<B>Genome Database:</B> %s ", db);
-hPrintf("<B>Track ID:</B> %s ", trackId);
-hPrintf("<B>MySQL table:</B> %s", table);
-hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<B>Row Count:</B> ");
-printLongWithCommas(stdout, sqlTableSize(conn, table));
-hPrintf("<BR>\n");
-if (asObj != NULL)
-    hPrintf("<B>Format description:</B> %s<BR>", asObj->comment);
-describeFields(CUSTOM_TRASH, table, asObj, conn);
-
-webNewSection("Sample Rows");
-printSampleRows(10, conn, ct->dbTableName);
-printTrackHtml(ct->tdb);
-hFreeConn(&conn);
-}
-
-static void showSchemaPgSnp(char *db, char *trackId, struct customTrack *ct)
-/* Show schema on pgSnp format custom track. */
-{
-struct asObject *asObj = asParseText(pgSnpAutoSqlString);
+struct asObject *asObj = asParseText(autoSqlString);
 struct sqlConnection *conn = hAllocConn(CUSTOM_TRASH);
 char *table = ct->dbTableName;
 
@@ -616,11 +570,11 @@ else if (startsWithWord("maf", type))
 else if (startsWithWord("array", type))
     showSchemaCtArray(table, ct);
 else if (startsWithWord("makeItems", type))
-    showSchemaMakeItems(db, table, ct);
+    showSchemaWithAutoSqlString(db, table, ct, makeItemsItemAutoSqlString);
 else if (sameWord("bedDetail", type))
-    showSchemaBedDetail(db, table, ct);
+    showSchemaWithAutoSqlString(db, table, ct, bedDetailAutoSqlString);
 else if (sameWord("pgSnp", type))
-    showSchemaPgSnp(db, table, ct);
+    showSchemaWithAutoSqlString(db, table, ct, pgSnpAutoSqlString);
 else
     errAbort("Unrecognized customTrack type %s", type);
 }

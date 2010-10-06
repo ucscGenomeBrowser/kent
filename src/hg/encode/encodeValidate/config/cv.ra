@@ -5549,11 +5549,18 @@ type rnaExtract
 description Total RNA extract (longer than 200 nt)
 label Total_RNA
 
+# Short should be retired turning into short total
 term short
 tag short
 type rnaExtract
 description RNA shorter than 200 nt
 label short_RNA
+
+term shortTotal
+tag shortTotal
+type rnaExtract
+description Rna shorter than 200 nt that has not been seperated based on Poly Adenalyation
+label short_Total_RNA
 
 term shortDeplRrna
 tag shortDeplRrna
@@ -6645,71 +6652,85 @@ organism human
 # projectName is the name we use to call the project
 
 term Bernstein
+tag bernstein
 type grant
 grantInst Broad Institute
 projectName Broad
 
 term Tullius
+tag tullius
 type grant
 grantInst Boston University
 projectName BU
 
 term Ruan
+tag ruan
 type grant
 grantInst Genome Institute of Singapore
 projectName Chia PET??
 
 term Hubbard
+tag hubbard
 type grant
 grantInst Sanger Institute
 projectName Sanger
 
 term Tenenbaum
+tag tenenbaum
 type grant
 grantInst SUNY-Albany
 projectName SUNY
  
 term Stam
+tag stam
 type grant
 grantInst University of Washington
 projectName UW
 
 term Crawford
+tag crawford
 type grant
 grantInst Duke
 projectName OpenChrom
 
 term Myers
+tag myers
 type grant
 grantInst Hudson Alpha Institute of Biotechnology
 projectName HAIB   
 
 term Elnitski
+tag elnitski
 type grant
 grantInst National Human Genome Research Institute
 projectName NHGRI-Elnitski
 
 term Margulies
+tag margulies
 type grant
 grantInst National Human Genome Research Institute
 projectName NHGRI-Margulies
 
 term Gingeras
+tag gingeras
 type grant
 grantInst Cold Spring Harbor Laboratory
 projectName Transcriptome
 
 term Dekker
+tag dekker
 type grant
 grantInst University of Massachusetts Amherst
 projectName
 
 term Weng
+tag weng
 type grant
 grantInst University of Massachusetts Amherst
 projectName
 
 term Snyder
+tag snyder
 type grant
 grantInst Stanford
 projectName SYDH
@@ -6717,21 +6738,25 @@ projectName SYDH
 
 
 term Ren
+tag ren
 type grant
 grantInst LICR
 project LICR
 
 term Hardison
+tag hardison
 type grant
 grantInst Penn State University
 projectName PSU
 
 term White
+tag white
 type grant
 grantInst University of Chicago
 projectName
 
 term Giddings
+tag giddings
 type grant
 grantInst University of North Carolina
 projectName UNC-Giddings

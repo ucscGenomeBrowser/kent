@@ -4,8 +4,8 @@ shortLabel CSHL Sm RNA-seq
 longLabel ENCODE CSHL Small RNA-seq
 group expression
 subGroup1 view Views 1-Transfrags=TransFrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments 
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562 prostate=prostate 
-subGroup3 localization Localization cell=cell chromatin=chromatin cytosol=cytosol nucleus=nucleus nucleolus=nucleolus nucleoplasm=nucleoplasm polysome=polysome
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) prostate=prostate 
+subGroup3 localization Localization cell=cell cytosol=cytosol nucleus=nucleus chromatin=chromatin nucleolus=nucleolus nucleoplasm=nucleoplasm polysome=polysome
 subGroup4 rnaExtract RnaExtract short=ShortRNA
 dimensions dimensionX=localization dimensionY=cellType 
 sortOrder cellType=+ localization=+ view=+
@@ -148,8 +148,8 @@ superTrack wgEncodeRnaSeqSuper
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
+    #minLimit 0
+    #maxLimit 5059134
     autoScale on
     transformFunc NONE
     windowingFunction mean
@@ -259,8 +259,8 @@ superTrack wgEncodeRnaSeqSuper
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
+    #minLimit 0
+    #maxLimit 5059134
     autoScale on
     transformFunc NONE
     windowingFunction mean
