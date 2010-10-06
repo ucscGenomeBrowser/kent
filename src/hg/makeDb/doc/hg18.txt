@@ -30763,7 +30763,7 @@ close (DR);
     hgLoadBed hg19 hg19ContigDiff hg19.itemRgb.bed
 
 ##############################################################################
-# 1000 GENOMES COVERAGE MASK (DONE 9/14/10 angie)
+# 1000 GENOMES COVERAGE MASK (DONE 10/1/10 angie)
     mkdir /hive/data/genomes/hg18/bed/1000GenomesMask
     cd /hive/data/genomes/hg18/bed/1000GenomesMask
     wget --timestamping \
@@ -30844,26 +30844,148 @@ close($OUTD); close($OUTM); close($OUTU);
       echo $tBase
       ./pseudoFastaToBed.pl $tBase $f
     end
+    # Use featureBits to merge adjacent regions
     foreach f (covMask*.bed.gz)
-      hgLoadBed hg18 $f:r:r $f
+      echo $f:r:r
+      featureBits hg18 $f -bed=stdout \
+      | cut -f 1-3 \
+      | hgLoadBed hg18 $f:r:r stdin
     end
-#Reading covMask1kGPilotLowCovCeuDepth.bed.gz
-#Loaded 136902 elements of size 3
-#Reading covMask1kGPilotLowCovCeuMapQ.bed.gz
-#Loaded 4176529 elements of size 3
-#Reading covMask1kGPilotLowCovCeuUncov.bed.gz
-#Loaded 311 elements of size 3
-#Reading covMask1kGPilotLowCovChbJptDepth.bed.gz
-#Loaded 261381 elements of size 3
-#Reading covMask1kGPilotLowCovChbJptMapQ.bed.gz
-#Loaded 4492217 elements of size 3
-#Reading covMask1kGPilotLowCovChbJptUncov.bed.gz
-#Loaded 2108 elements of size 3
-#Reading covMask1kGPilotLowCovYriDepth.bed.gz
-#Loaded 256837 elements of size 3
-#Reading covMask1kGPilotLowCovYriMapQ.bed.gz
-#Loaded 4623392 elements of size 3
-#Reading covMask1kGPilotLowCovYriUncov.bed.gz
-#Loaded 1255 elements of size 3
+# covMask1kGPilotLowCovCeuDepth
+# 6718955 bases of 2881515245 (0.233%) in intersection
+# Loaded 97777 elements of size 3
+# covMask1kGPilotLowCovCeuMapQ
+# 408568477 bases of 2881515245 (14.179%) in intersection
+# Loaded 4052843 elements of size 3
+# covMask1kGPilotLowCovCeuUncov
+# 3942 bases of 2881515245 (0.000%) in intersection
+# Loaded 311 elements of size 3
+# covMask1kGPilotLowCovChbJptDepth
+# 12143572 bases of 2881515245 (0.421%) in intersection
+# Loaded 198277 elements of size 3
+# covMask1kGPilotLowCovChbJptMapQ
+# 429343803 bases of 2881515245 (14.900%) in intersection
+# Loaded 4198464 elements of size 3
+# covMask1kGPilotLowCovChbJptUncov
+# 50676 bases of 2881515245 (0.002%) in intersection
+# Loaded 2108 elements of size 3
+# covMask1kGPilotLowCovYriDepth
+# 11875006 bases of 2881515245 (0.412%) in intersection
+# Loaded 193700 elements of size 3
+# covMask1kGPilotLowCovYriMapQ
+# 454810959 bases of 2881515245 (15.784%) in intersection
+# Loaded 4338322 elements of size 3
+# covMask1kGPilotLowCovYriUncov
+# 21232 bases of 2881515245 (0.001%) in intersection
+# Loaded 1255 elements of size 3
+
+    # Make some union tables
+    featureBits hg18 -or covMask1kGPilotLowCovCeuDepth \
+                         covMask1kGPilotLowCovChbJptDepth \
+                         covMask1kGPilotLowCovYriDepth \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnionDepth.bed.gz
+#14033969 bases of 2881515245 (0.487%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnionDepth covMask1kGPilotLowCovUnionDepth.bed.gz
+#Loaded 232479 elements of size 3
+
+    featureBits hg18 -or covMask1kGPilotLowCovCeuMapQ \
+                         covMask1kGPilotLowCovChbJptMapQ \
+                         covMask1kGPilotLowCovYriMapQ \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnionMapQ.bed.gz
+#463864561 bases of 2881515245 (16.098%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnionMapQ covMask1kGPilotLowCovUnionMapQ.bed.gz
+#Loaded 4319382 elements of size 3
+
+    featureBits hg18 -or covMask1kGPilotLowCovCeuUncov \
+                         covMask1kGPilotLowCovChbJptUncov \
+                         covMask1kGPilotLowCovYriUncov \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnionUncov.bed.gz
+#66237 bases of 2881515245 (0.002%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnionUncov covMask1kGPilotLowCovUnionUncov.bed.gz
+#Loaded 3129 elements of size 3
+
+    # Make intersection of uncovered bits too:
+    featureBits hg18 covMask1kGPilotLowCovCeuUncov \
+                     covMask1kGPilotLowCovChbJptUncov \
+                     covMask1kGPilotLowCovYriUncov \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovIntersectionUncov.bed.gz
+#676 bases of 2881515245 (0.000%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovIntersectionUncov covMask1kGPilotLowCovIntersectionUncov.bed.gz
+#Loaded 49 elements of size 3
+
+    featureBits hg18 -or covMask1kGPilotLowCovCeuDepth covMask1kGPilotLowCovCeuMapQ \
+                         covMask1kGPilotLowCovCeuUncov \
+                         covMask1kGPilotLowCovChbJptDepth covMask1kGPilotLowCovChbJptMapQ \
+                         covMask1kGPilotLowCovChbJptUncov \
+                         covMask1kGPilotLowCovYriDepth covMask1kGPilotLowCovYriMapQ \
+                         covMask1kGPilotLowCovYriUncov \
+                     -bed=stdout \
+    | cut -f 1-3 | gzip -c > covMask1kGPilotLowCovUnion.bed.gz
+#467348829 bases of 2881515245 (16.219%) in intersection
+    hgLoadBed hg18 covMask1kGPilotLowCovUnion covMask1kGPilotLowCovUnion.bed.gz
+#Loaded 4339659 elements of size 3
+
+
+#########################################################################
+# SNP "BAD APPLES" TRACK (IN PROGRESS 10/4/10 angie)
+    cd /hive/data/genomes/gs.19/build36/bed/1000GenomesMask
+    foreach t (Depth MapQ Uncov "")
+      echo $t
+      bedIntersect -tab -aHitAny -allowStartEqualEnd ../snp130/snp130.bed \
+        covMask1kGPilotLowCovUnion$t.bed.gz snp130BadApplesUnion$t.bed
+    end
+    wc -l snp130BadApplesUnion*.bed
+#   5240097 snp130BadApplesUnion.bed
+#    502329 snp130BadApplesUnionDepth.bed
+#   5150686 snp130BadApplesUnionMapQ.bed
+#      1491 snp130BadApplesUnionUncov.bed
+    cut -f 4 snp130BadApplesUnion.bed | sort -u | wc -l
+#4452279
+    sed -e 's/snp130/snp130BadApples/' /hive/data/outside/dbSNP/130/human/snp130.sql \
+      > snp130BadApples.sql
+    foreach t (Depth MapQ Uncov "")
+      echo $t
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd -renameSqlTable \
+        hg18 snp130BadApples$t -sqlTable=snp130BadApples.sql snp130BadApplesUnion$t.bed
+    end
+# Reading snp130BadApplesUnionDepth.bed
+# Loaded 502329 elements of size 17
+# Reading snp130BadApplesUnionMapQ.bed
+# Loaded 5150686 elements of size 17
+# Reading snp130BadApplesUnionUncov.bed
+# Loaded 1491 elements of size 17
+# Reading snp130BadApplesUnion.bed
+# Loaded 5240097 elements of size 17
+    hgsql hg18 -e 'rename table snp130BadApples to snp130BadApplesUnion'
+    gzip snp130BadApples*.bed
+
+    # rs ID lists
+    foreach f (snp130BadApples*.bed.gz)
+      zcat $f | cut -f 4 | sort -u > $f:r:r.rsIDs.txt
+    end
+    wc -l *.txt
+# 4452279 snp130BadApplesUnion.rsIDs.txt
+#  392307 snp130BadApplesUnionDepth.rsIDs.txt
+# 4376753 snp130BadApplesUnionMapQ.rsIDs.txt
+#    1477 snp130BadApplesUnionUncov.rsIDs.txt
+
+# use list of SNPs to port to hg19?  Try to port masked regions??  
+
+# asked richard and sendu to repeat for hg19/GRCh37.  Richard's reply:
+# --------------------------
+# No, we haven't done that.  We would be doing it for new call sets I
+# expect, not for the pilot calls.
+# We are developing new approaches to variant calling that might well
+# change the accessibility criteria and
+# masks.
+#
+# I am copying the 1000GP data processing group to remind ourselves that
+# amongst all the current discussion
+# about calling, we need to return to how we handle accessibility.
+# --------------------------
 
 #########################################################################
