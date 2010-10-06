@@ -371,7 +371,7 @@ superTrack wgEncodeRnaSeqSuper
     subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 100
     scoreFilterLimits 0:1000
-    scoreMin 100
+    scoreMin 0
     minGrayLevel 4
 
         track wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
