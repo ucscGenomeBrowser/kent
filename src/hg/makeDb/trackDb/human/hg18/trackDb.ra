@@ -4156,29 +4156,27 @@ noInherit on
 type bed 3 .
 html numtSeq
 
+    track numtS
+    parent NumtSeq
+    shortLabel NumtS
+    longLabel NumtS
+    color 0,60,120
+     #itemRgb on
+    useScore 1
+    priority 1
+    type bed 6 .
+    html numtSeq
 
     track numtSAssembled
     parent NumtSeq
     shortLabel NumtS assembled
     longLabel NumtS assembled
     color 0,60,120
-    priority 1
+    priority 2
     useScore 1
     type bed 12 .
     html numtSeq
     
-
-    track numtS
-    parent NumtSeq
-    shortLabel NumtS
-    longLabel NumtS mitochondrial sequences
-    color 0,60,120
-     #itemRgb on
-    useScore 1
-    priority 2
-    type bed 6 .
-    html numtSeq
-
     track numtSMitochondrion
     parent NumtSeq
     shortLabel NumtS on mitochondrion

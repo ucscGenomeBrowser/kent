@@ -11811,7 +11811,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeUtaustinChIPseqAlignmentsHuvecInput.tagAlign.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster.pl v 1
 parentTable wgEncodeUtaustinChIPseqRawSignalHuvecInput
 project wgEncode
@@ -11851,7 +11851,7 @@ dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqAlignmentsMcf7.tagAlign.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster.pl v 1
 parentTable wgEncodeUtaustinChIPseqRawSignalMcf7
 project wgEncode
@@ -11871,7 +11871,7 @@ dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqAlignmentsProgfib.tagAlign.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster.pl v 1
 parentTable wgEncodeUtaustinChIPseqRawSignalProgfib
 project wgEncode
@@ -11950,7 +11950,7 @@ dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeUtaustinChIPseqRawDataHuvecInput.fastq.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 parentTable wgEncodeUtaustinChIPseqRawSignalHuvecInput
 project wgEncode
 setType input
@@ -11989,7 +11989,7 @@ dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqRawDataMcf7.fastq.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 parentTable wgEncodeUtaustinChIPseqRawSignalMcf7
 project wgEncode
 setType input
@@ -12136,4 +12136,4 @@ subId 871
 tableName wgEncodeUtaustinChIPseqSignalProgfib
 view Signal
 
-# MAGIC: -323656390
+# MAGIC: -359811030

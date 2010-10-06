@@ -307,5 +307,10 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
+// Can impose (non-zero) limit on returned string size of name.  Search is via mysql, so it's case-insensitive.
+// Return is sorted on name (label or else val).
+
 #endif /* MDB_H */
 

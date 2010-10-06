@@ -1,39 +1,19 @@
-<H2>Description</H2>
+<H2>Description and display conventions</H2>
 <P>
-<b>NumtS</b> (NumtS mitochondrial sequences) are genomic sequences showing
-significant similarity with mitochondrial genome. The most credited
-hypothesis concerning their generation suggests that in presence of
-mutagenic agents or under stress conditions fragments of mtDNA escape
-from mitochondria, reach the nucleus and insert into chromosomes
-during break repair, although NumtS can derive from duplication of
-genomic fragments. NumtS may be cause of contamination during human
-mtDNA sequencing and hence frequent false low heteroplasmic evidences
-have been reported.
+<b>NumtS</b>(Nuclear mitochondrial sequences) are mitochondrial fragments inserted in nuclear genomic sequences. The most credited hypothesis concerning their generation suggests that in presence of mutagenic agents or under stress conditions fragments of mtDNA escape from mitochondria, reach the nucleus and insert into chromosomes during break repair, although NumtS can derive from duplication of genomic fragments. NumtS may be cause of contamination during human mtDNA sequencing and hence frequent false low heteroplasmic evidences have been reported.
+The Bioinformatics group chaired by M.Attimonelli (Bari, Italy) has produced the RHNumtS compilation annotating more than 600 Human NumtS. To allow the scientific community to access to the compilation and to perform genomics comparative analyses inclusive of the NumtS data, the group has designed the Human NumtS tracks below described.
 
+ tracks show the High Score Pairs (HSPs) obtained by aligning the mitochondrial reference genome (NC_012920) with the hg18 release of the human genome.
 
-
-<H2>Methods</H2>
-<P>
-These tracks show the High Score Pairs (HSPs) obtained by aligning the
-mitochondrial reference genome (NC_012920) with the hg18 release of the
-human genome. Four different tracks were produced:
 <ol>
-<li><b>"NumtS"</b> track:
+<li><b> "NumtS (Nuclear mitochondrial Sequences)"</b> Track
 <p>
-The "NumtS" track shows the mapping of the HSPs aforementioned on the
-nuclear genome. The shading of the items reflects the similarity
-returned by BlastN, and the direction of the arrows is concordant with
-the strand of the alignment.
-<p>
-For every item, a link pointing to
-the mitochondrial mapping is provided, thus allowing a fast cross
-among the NumtS genomic contexts.
+The "NumtS mitochondrial sequences" track shows the mapping of the HSPs returned by BlastN on the nuclear genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the mitochondrial mapping is provided, thus allowing a fast cross among the NumtS genomic contexts.
 </li>
 
-<li><b>"NumtS assembled"</b> track:
+<li><b>"NumtS assembled"</b> Track
 <p>
-The "NumtS assembled" track shows items obtained by assembling HSPs
-fulfilling the following conditions:
+The "NumtS assembled" track shows items obtained by assembling HSPs annotated in the "NumtS" track fulfilling the following conditions:
  <ul type="disc">  
  <li> the orientation of their alignments must be concordant.
  <li> the distance between them must be less than 2 kb, on the
@@ -42,24 +22,13 @@ mitochondrial genome as well as on the nuclear genome.
 <p>
  Exceptions for the second condition arise when a long repetitive
 element is present between two HSPs.
+
+<li><b>"NumtS on mitochondrion"</b> Track
 <p>
- Every item has an external link providing additional information
-[work in progress].
+The "NumtS on mitochondrion" track shows the mapping of the HSPs on the mitochondrial genome. The shading of the items reflects the similarity returned by BlastN, and the direction of the arrows is concordant with the strand of the alignment. For every item, a link pointing to the nuclear mapping is provided.
 
-<li><b>"NumtS on mitochondrion"</b> track:
-<p>
-The "NumtS on mitochondrion" track shows the mapping of the HSPs on
-the mitochondrial genome. The shading of the items reflects the
-similarity returned by BlastN, and the direction of the arrows is
-concordant with the strand of the alignment.
-
-
-<li><b>"NumtS on mitochondrion with chromosome placement"</b> track:
-The "NumtS on mitochondrion with chromosome placement" shows the
-mapping of the HSPs on the mitochondrial genome, but the items are
-coloured according to the colours assigned to each human chromosome on the UCSC genome browser. No shading is here provided.
-
-
+<li><b>"NumtS on mitochondrion with chromosome placement"</b> Track
+The "NumtS on mitochondrion with chromosome placement" shows the mapping of the HSPs on the mitochondrial genome, but the items are coloured according to the colours assigned to each human chromosome on the UCSC genome browser. No shading is here provided. For every item, a link pointing to the nuclear mapping is provided.
 
 </ol>
 
