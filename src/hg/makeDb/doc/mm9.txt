@@ -8276,7 +8276,6 @@ while (<>) {
   my ($chr, undef, $type, $start, $end, undef, $strand, undef, $info) =
     split("\t");
   if ($type eq "mRNA") {
-    chomp;
     my ($name1, $latter) = split(/_MGI:/, $info);
     $name1 =~ s/^mRNA //
       || die "line parse, $type line $.:\n$info\n";
@@ -8295,7 +8294,6 @@ while (<>) {
     $txNameIndx{$name}++;
   } elsif ($type eq "exon" || $type eq "CDS") {
     $type = "exon" if ($type eq "CDS"); # They set cdsStart=txStart, cdsEnd=txEnd! even for N.C.
-    chomp;
     my ($name1, $latter) = split(/_MGI:/, $info);
     $name1 =~ s/^mRNA //
       || die "line parse, $type line $.:\n$info\n";

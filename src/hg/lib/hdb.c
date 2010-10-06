@@ -3378,8 +3378,8 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-static void addTrackIfDataAccessible(char *database, struct trackDb *tdb, char *chrom,
-                           boolean privateHost, struct trackDb **tdbRetList)
+static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
+	       boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
@@ -3489,7 +3489,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 
 static struct trackDb *pruneEmpties(struct trackDb *tdbList, char *db,
-	char *chrom, boolean privateHost, int level)
+	boolean privateHost, int level)
 /* Remove tracks without data.  For parent tracks data in any child is sufficient to keep
  * them alive. */
 {
@@ -3499,7 +3499,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     next = tdb->next;
     if (tdb->subtracks != NULL)
 	{
-	tdb->subtracks = pruneEmpties(tdb->subtracks, db, chrom, privateHost, level+1);
+	tdb->subtracks = pruneEmpties(tdb->subtracks, db, privateHost, level+1);
 	}
     if (tdb->subtracks != NULL)
         {
@@ -3507,7 +3507,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	}
     else
         {
-        addTrackIfDataAccessible(db, tdb, chrom, privateHost, &newList);
+        addTrackIfDataAccessible(db, tdb, privateHost, &newList);
 	}
     }
 slReverse(&newList);
@@ -3561,12 +3561,19 @@ struct trackDb *hTrackDb(char *db, char *chrom)
  * incompatible with the returned list).
  * Returns list sorted by priority */
 {
-struct trackDb *tdbList = loadTrackDb(db, NULL);
-tdbList = trackDbLinkUpGenerations(tdbList);
-tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
-trackDbContainerMarkup(NULL, tdbList);
-rInheritFields(tdbList);
-slSort(&tdbList, trackDbCmp);
+static char *existingDb = NULL;
+static struct trackDb *tdbList = NULL;
+if (differentStringNullOk(existingDb, db))
+    {
+    tdbList = loadTrackDb(db, NULL);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    freeMem(existingDb);
+    existingDb = cloneString(db);
+    tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
+    trackDbContainerMarkup(NULL, tdbList);
+    rInheritFields(tdbList);
+    slSort(&tdbList, trackDbCmp);
+    }
 return tdbList;
 }
 

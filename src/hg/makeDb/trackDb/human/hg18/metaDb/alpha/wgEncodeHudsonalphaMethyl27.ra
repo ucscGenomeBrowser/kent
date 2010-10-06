@@ -2,7 +2,7 @@ metaObject wgEncodeHudsonalphaMethyl27GM12878r1
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaMethyl27
-dataType methyl27
+dataType Methyl27
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
@@ -18,7 +18,7 @@ metaObject wgEncodeHudsonalphaMethyl27GM12878r2
 objType table
 cell GM12878
 composite wgEncodeHudsonalphaMethyl27
-dataType methyl27
+dataType Methyl27
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
@@ -34,7 +34,7 @@ metaObject wgEncodeHudsonalphaMethyl27HepG2r1
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaMethyl27
-dataType methyl27
+dataType Methyl27
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
@@ -50,7 +50,7 @@ metaObject wgEncodeHudsonalphaMethyl27HepG2r2
 objType table
 cell HepG2
 composite wgEncodeHudsonalphaMethyl27
-dataType methyl27
+dataType Methyl27
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
@@ -66,7 +66,7 @@ metaObject wgEncodeHudsonalphaMethyl27K562r1
 objType table
 cell K562
 composite wgEncodeHudsonalphaMethyl27
-dataType methyl27
+dataType Methyl27
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
@@ -82,7 +82,7 @@ metaObject wgEncodeHudsonalphaMethyl27K562r2
 objType table
 cell K562
 composite wgEncodeHudsonalphaMethyl27
-dataType methyl27
+dataType Methyl27
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-23
 dateUnrestricted 2009-09-23
@@ -94,4 +94,4 @@ replicate 2
 subId 685
 tableName wgEncodeHudsonalphaMethyl27K562r2
 
-# MAGIC: -484542167
+# MAGIC: -487688087

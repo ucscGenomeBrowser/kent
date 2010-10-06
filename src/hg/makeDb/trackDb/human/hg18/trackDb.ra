@@ -1529,6 +1529,41 @@ searchType bed
 searchPriority 10
 termRegex har[0-9]+
 
+track snp130BadApples
+compositeTrack on
+shortLabel Bad Apples (130)
+longLabel SNPs from dbSNP that overlap regions masked by 1000 Genomes pilot
+group varRep
+priority 99.093
+type bed 6 +
+exonArrows off
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+
+    track snp130BadApplesDepth
+    parent snp130BadApples
+    shortLabel Depth
+    longLabel SNPs that overlap 1000 Genomes pilot high-read-depth masked regions
+    color 180,0,0
+
+    track snp130BadApplesMapQ
+    parent snp130BadApples
+    shortLabel Mapping Qual
+    longLabel SNPs that overlap 1000 Genomes pilot low-mapping-quality masked regions
+    color 224,108,108
+
+    track snp130BadApplesUncov
+    parent snp130BadApples
+    shortLabel No Coverage
+    longLabel SNPs that overlap 1000 Genomes pilot no-read-coverage regions
+    color 150,150,150
+
+    track snp130BadApplesUnion
+    parent snp130BadApples
+    shortLabel Union
+    longLabel SNPs that overlap union of 1000 Genomes pilot masked regions
+
+
 track snp130 override
 chimpOrangMacOrthoTable snp130OrthoPt2Pa2Rm2
 chimpDb panTro2
@@ -4156,29 +4191,27 @@ noInherit on
 type bed 3 .
 html numtSeq
 
+    track numtS
+    parent NumtSeq
+    shortLabel NumtS
+    longLabel NumtS
+    color 0,60,120
+     #itemRgb on
+    useScore 1
+    priority 1
+    type bed 6 .
+    html numtSeq
 
     track numtSAssembled
     parent NumtSeq
     shortLabel NumtS assembled
     longLabel NumtS assembled
     color 0,60,120
-    priority 1
+    priority 2
     useScore 1
     type bed 12 .
     html numtSeq
     
-
-    track numtS
-    parent NumtSeq
-    shortLabel NumtS
-    longLabel NumtS mitochondrial sequences
-    color 0,60,120
-     #itemRgb on
-    useScore 1
-    priority 2
-    type bed 6 .
-    html numtSeq
-
     track numtSMitochondrion
     parent NumtSeq
     shortLabel NumtS on mitochondrion
