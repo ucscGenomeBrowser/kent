@@ -3392,7 +3392,7 @@ else
 filterBy_t *filterBy = NULL;
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
-printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
@@ -6139,7 +6139,7 @@ if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or fi
     return FALSE;
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
-printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 
 // TODO:
 // 1) Make this work with matrix
