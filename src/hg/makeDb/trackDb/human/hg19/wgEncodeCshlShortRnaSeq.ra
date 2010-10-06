@@ -369,9 +369,9 @@ superTrack wgEncodeRnaSeqSuper
     view 1-Transfrags
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
-    scoreFilter 100
+    scoreFilter 0
     scoreFilterLimits 0:1000
-    scoreMin 100
+    scoreMin 0
     minGrayLevel 4
 
         track wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
