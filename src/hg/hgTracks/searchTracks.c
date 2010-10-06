@@ -891,5 +891,6 @@ if(!doSearch)
         "</ul></p>\n");
     }
 hPrintf("</div"); // This div allows the clear button to empty it
+hFreeConn(&conn);
 webEndSectionTables();
 }
