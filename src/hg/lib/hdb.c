@@ -3565,7 +3565,7 @@ struct trackDb *hTrackDb(char *db)
 {
 static char *existingDb = NULL;
 static struct trackDb *tdbList = NULL;
-if ((NULL == db) || differentStringNullOk(existingDb, db))
+if (differentStringNullOk(existingDb, db))
     {
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
