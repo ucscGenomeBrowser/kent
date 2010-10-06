@@ -230,6 +230,7 @@ while((row = sqlNextRow(sr)) != NULL)
     }
 slReverse(&agList);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 tg->items = agList;
 }
 
@@ -307,6 +308,7 @@ slReverse(&agList);
 tg->items = agList;
 altGraphXCalcHeight(tg, tg->visibility);
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 tg->items = agList;
 }
 
