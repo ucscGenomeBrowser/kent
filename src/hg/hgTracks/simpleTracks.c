@@ -10710,7 +10710,6 @@ else
     {
     return hvGfxFindColorIx(hvg, 0, 0, 200);
     }
-hFreeConn(&conn);
 }
 
 void omimGeneMethods (struct track *tg)
@@ -10780,6 +10779,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, lf);
     }
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 slSort(&list, lfExtraCmp);
 tg->items = list;
 }
