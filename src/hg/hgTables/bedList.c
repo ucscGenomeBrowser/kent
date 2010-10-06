@@ -224,46 +224,17 @@ char *dbTable = NULL;
 
 if (isCustomTrack(table))
     {
-    /* cache these calls to prevent abuse of lower level code with
-     * massive contig counts in an assembly
-     */
-    static char *existingTable = NULL;
-    static struct hTableInfo *existingHti = NULL;
-    static struct customTrack *ct = NULL;
-    if (differentStringNullOk(existingTable, table))
-	{
-	freeMem(existingTable);
-	ct = ctLookupName(table);
-	existingTable = cloneString(table);
-	existingHti = hFindTableInfo(CUSTOM_TRASH, region->chrom, dbTable);
-	}
+    struct customTrack *ct = ctLookupName(table);
     dbTable = ct->dbTableName;
     conn = hAllocConn(CUSTOM_TRASH);
-    hti = existingHti;
+    hti = hFindTableInfo(CUSTOM_TRASH, region->chrom, dbTable);
     }
 else
     {
-    /* cache these calls to prevent abuse of lower level code with
-     * massive contig counts in an assembly
-     */
     dbTable = table;
-    static struct trackDb *tdb = NULL;
-    static char *existingDb = NULL;
-    static char *existingTable = NULL;
-    static struct hTableInfo *existingHti = NULL;
-    if (differentStringNullOk(existingDb, db) ||
-	differentStringNullOk(existingTable, table))
-	{
-	freeMem(existingDb);
-	freeMem(existingTable);
-	freeMem(tdb);
-	tdb = hTrackDbForTrack(db, table);
-	existingHti = hFindTableInfo(db, region->chrom, table);
-	existingDb = cloneString(db);
-	existingTable = cloneString(table);
-	}
+    struct trackDb *tdb = hTrackDbForTrack(db, table);
     conn = (tdb ? hAllocConnTrack(db, tdb) : hAllocConn(db));
-    hti = existingHti;
+    hti = hFindTableInfo(db, region->chrom, table);
     }
 if (hti == NULL)
     errAbort("Could not find table info for table %s.%s", db,table);
