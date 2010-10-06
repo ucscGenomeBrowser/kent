@@ -2706,7 +2706,7 @@ void loadFromTrackDb(struct track **pTrackList)
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
 struct trackDb *tdbList;
 if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database, chromName);
+    tdbList = hTrackDb(database);
 else
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);

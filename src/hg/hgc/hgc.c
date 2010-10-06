@@ -3984,7 +3984,7 @@ else
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
-struct trackDb *tdbList = hTrackDb(database, seqName), *tdb;
+struct trackDb *tdbList = hTrackDb(database), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 boolean isRc     = cartUsualBoolean(cart, "hgc.dna.rc", FALSE);
@@ -4602,7 +4602,7 @@ boolean defaultUpper = sameString(cartString(cart, "case"), "upper");
 int winSize;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
-struct trackDb *tdbList = hTrackDb(database, seqName), *tdb;
+struct trackDb *tdbList = hTrackDb(database), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 char *pos = NULL;

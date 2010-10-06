@@ -3553,17 +3553,19 @@ else
 }
 #endif /* DEBUG */
 
-struct trackDb *hTrackDb(char *db, char *chrom)
-/* Load tracks associated with current chromosome (which may be NULL for
- * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
+struct trackDb *hTrackDb(char *db)
+/* Load tracks associated with current db.
+ * Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
  * the supertrack trackDb subtrack fields are not set here (would be
- * incompatible with the returned list).
- * Returns list sorted by priority */
+ * incompatible with the returned list)
+ * Returns list sorted by priority
+ *	NOTE: this result is cached, do not free it !
+ */
 {
 static char *existingDb = NULL;
 static struct trackDb *tdbList = NULL;
-if (differentStringNullOk(existingDb, db))
+if ((NULL == db) || differentStringNullOk(existingDb, db))
     {
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
@@ -3629,7 +3631,7 @@ struct trackDb *hTrackDbForTrack(char *db, char *track)
  * a trackDb, but will return NULL if track is not found. */
 {
 /* Get track list .*/
-struct trackDb *tdbList = hTrackDb(db, NULL);
+struct trackDb *tdbList = hTrackDb(db);
 return rFindTrack(0, tdbList, track);
 }
 

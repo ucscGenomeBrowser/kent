@@ -1890,7 +1890,7 @@ struct hash *makeTrackHashWithComposites(char *database, char *chrom,
 /* Make hash of trackDb items for this chromosome, including composites,
    not just the subtracks. */
 {
-struct trackDb *tdbs = hTrackDb(database, chrom);
+struct trackDb *tdbs = hTrackDb(database);
 struct hash *trackHash = newHash(7);
 rAddTrackListToHash(trackHash, tdbs, chrom, !withComposites);
 return trackHash;
