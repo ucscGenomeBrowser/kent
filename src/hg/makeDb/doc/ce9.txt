@@ -2126,8 +2126,6 @@ rm -f $c.gp $c.maf $c.ss
     time $PHASTBIN/phyloFit --EM --precision MED --msa-format FASTA \
 	--subst-mod REV --tree ../tree-commas.nh 4d.all.mfa
     #	real    40m4.132s
-XXX - running - Fri Oct  1 15:42:34 PDT 2010
-    #	real    37m4.800s
 
 # second one with priPac2:
 # TREE: ((((((ce9:0.494072,((cb3:0.459335,caeRem3:0.411553):0.050715,caePb2:0.455175):0.112394):0.115572,caeJap3:0.524552):0.126211,haeCon1:1.207917):0.101818,priPac2:0.852081):0.424500,(melHap1:0.215350,melInc1:0.215677):0.651712):0.631468,bruMal1:0.631468);
@@ -2265,7 +2263,7 @@ done
     #   $cwd:t which is the "grp" in this script.
 
     cat << '_EOF_' > doPhast.csh
-#!/bin/csh -fex
+#!/bin/csh -fe
 set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
 set c = $1
 set cX = $1:r
@@ -2276,24 +2274,34 @@ set rho = $5
 set grp = $cwd:t
 set cons = /hive/data/genomes/ce9/bed/multiz10way/cons
 set tmp = $cons/tmp/$f
-mkdir -p $tmp
+/bin/mkdir -p $tmp
 set ssSrc = $cons
 set useGrp = "$grp.mod"
-ln -s $ssSrc/msa.split/$cX/$f.ss $tmp
-ln -s $cons/$grp/$grp.mod $tmp
+if (-s $cons/$grp/$grp.non-inf) then
+  /bin/ln -s $cons/$grp/$grp.non-inf $tmp
+endif
+/bin/ln -s $cons/$grp/$grp.mod $tmp
+/bin/ln -s $ssSrc/msa.split/$cX/$f.ss $tmp
 pushd $tmp > /dev/null
-$PHASTBIN/phastCons $f.ss $useGrp \
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $useGrp \
     --rho $rho --expected-length $len --target-coverage $cov --quiet \
     --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
 popd > /dev/null
-mkdir -p pp/$c bed/$c
-sleep 4
-touch pp/$c bed/$c
-rm -f pp/$c/$f.pp
-rm -f bed/$c/$f.bed
-mv $tmp/$f.pp pp/$c
-mv $tmp/$f.bed bed/$c
-rm -fr $tmp
+/bin/mkdir -p pp/$c bed/$c
+/bin/sleep 4
+/bin/touch pp/$c bed/$c
+/bin/rm -f pp/$c/$f.pp
+/bin/rm -f bed/$c/$f.bed
+/bin/mv $tmp/$f.pp pp/$c
+/bin/mv $tmp/$f.bed bed/$c
+/bin/rm -fr $tmp
 '_EOF_'
     # << happy emacs
     chmod a+x doPhast.csh
@@ -2382,6 +2390,7 @@ done | xargs cat | gzip > downloads/phastCons10way.wigFix.gz
         phastCons10way phastCons10way.wig
 
     ########################################################################
+    #	(DONE - 2010-10-06 - Hiram)
     cd /hive/data/genomes/ce9/bed/multiz10way/cons
     mkdir caenorhabditis
     cd caenorhabditis
@@ -2392,6 +2401,156 @@ XXX need to fix the script to use the non-inf
     echo "haeCon1,priPac2,melHap1,melInc1,bruMal1" > caenorhabditis.non-inf
     gensub2 ../run.cons/ss.list single ../run.cons/template jobList
     para try ... check ... push ... etc.
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        249s       4.15m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                   703s      11.72m     0.20h    0.01d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:           106s       1.77m     0.03h    0.00d
+
+    # create Most Conserved track
+    ssh hgwdev
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/caenorhabditis
+
+    cat bed/*/*.bed | sort -k1,1 -k2,2n \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    hgLoadBed ce9 phastConsElements10wayCaenorhabditis mostConserved.bed
+    # Loaded 339396 elements of size 5
+
+    # see what this looks like compared to the all species above:
+    featureBits ce9 -enrichment sangerGene:cds \
+	phastConsElements10wayCaenorhabditis
+    #	sangerGene:cds 25.328%, phastConsElements10wayCaenorhabditis 37.524%,
+    #	both 17.349%, cover 68.50%, enrich 1.83x
+    # all species above was:
+    #	sangerGene:cds 25.328%, phastConsElements10way 38.607%,
+    #	both 17.822%, cover 70.37%, enrich 1.82x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/caenorhabditis
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./pp/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/phastCons10way.caenorhabditis.wigFix.gz
+
+    #   encode those files into wiggle data
+    zcat downloads/phastCons10way.caenorhabditis.wigFix.gz \
+        | wigEncode stdin phastCons10wayCaenorhabditis.wig \
+	phastCons10wayCaenorhabditis.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+
+    du -hsc phastCons10wayCaenorhabditis.wi?
+    #	47M     phastCons10wayCaenorhabditis.wib
+    #	8.3M    phastCons10wayCaenorhabditis.wig
+    #	55M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons10wayCaenorhabditis.wib \
+	/gbdb/ce9/multiz10way/phastCons10wayCaenorhabditis.wib
+    hgLoadWiggle -pathPrefix=/gbdb/ce9/multiz10way ce9 \
+        phastCons10wayCaenorhabditis phastCons10wayCaenorhabditis.wig
+
+############################################################################
+# phyloP conservation (DONE - 2010-10-06 - Hiram)
+    # run phyloP with score=LRT 
+    ssh swarm
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/consPhyloP
+    cd /hive/data/genomes/ce9/bed/multiz10way/consPhyloP
+    mkdir run.phyloP
+    cd run.phyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.340
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/modFreqs \
+	../../cons/all/all.mod 0.542 > all.mod
+
+    grep BACKGROUND ../../cons/caenorhabditis/caenorhabditis.mod \
+	| awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.342
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/modFreqs \
+	../../cons/caenorhabditis/caenorhabditis.mod 0.342 \
+	> all.caenorhabditis.mod
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
+set f = $1
+set out = $2
+set cName = $f:r:r
+set chrDir = $f:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/ce9/bed/multiz10way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = /hive/data/genomes/ce9/bed/multiz10way/cons/msa.split/$cName/$f.ss
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $f.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+mv $tmp/$f.wigFix $out
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find  ../../cons/msa.split -type f | grep ".ss$" \
+	| sed -e "s#../../cons/msa.split/##" | sed -e "s/.ss//" > ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(file1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/consPhyloP/all
+    cd /hive/data/genomes/ce9/bed/multiz10way/consPhyloP/all
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push
+    para time
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        669s      11.16m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                   754s      12.56m     0.21h    0.01d  0.000 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           143s       2.38m     0.04h    0.00d
+
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./wigFix/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/phyloP10way.wigFix.gz
+
+    wigEncode downloads/phyloP10way.wigFix.gz phyloP10way.wig phyloP10way.wib
+    #	upper limit 3.71, lower limit -1.82
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP10way.wib /gbdb/ce9/multiz10way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ce9/multiz10way ce9 \
+	phyloP10way phyloP10way.wig
+
 
 ############################################################################
 ## LASTZ priPac2 (DONE - 2010-09-29 - Hiram)
