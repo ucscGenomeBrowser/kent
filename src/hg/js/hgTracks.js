@@ -2426,7 +2426,7 @@ function updateMetaDataHelpLinks(index)
         'setType': 1,
         'softwareVersion': 1,
         'subId': 1,
-        'view': 1,
+        'view': 1
     }
     for(i=1;true;i++) {
         var span = $("#helpLink" + i);
