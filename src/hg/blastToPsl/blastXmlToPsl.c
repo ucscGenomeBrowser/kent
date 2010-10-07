@@ -18,7 +18,7 @@ errAbort(
   "\n"
   "options:\n"
   "  -scores=file - Write score information to this file.  Format is:\n"
-  "       strands qName qStart qEnd tName tStart tEnd bitscore eVal\n"
+  "       strands qName qStart qEnd tName tStart tEnd bitscore eVal qDef tDef\n"
   "  -verbose=n - n >= 3 prints each line of file after parsing.\n"
   "               n >= 4 dumps the result of each query\n"
   "  -eVal=n n is e-value threshold to filter results. Format can be either\n"
@@ -26,6 +26,19 @@ errAbort(
   "  -pslx - create PSLX output (includes sequences for blocks)\n"
   "  -convertToNucCoords - convert protein to nucleic alignments to nucleic\n"
   "   to nucleic coordinates\n"
+  "  -qName=src - define element used to obtain the qName.  The following\n"
+  "   values are support:\n"
+  "     o Iteration_query-ID - use contents of the <Iteration_query-ID> element.\n"
+  "     o Iteration_query-def0 - use the first white-space separated word of the\n"
+  "       <Iteration_query-def> element.\n"
+  "   Default is query-def0.\n"
+  "  -tName=src - define element used to obtain the tName.  The following\n"
+  "   values are support:\n"
+  "     o Hit_id - use contents of the <Hit-id> element.\n"
+  "     o Hit_def0 - use the first white-space separated word of the\n"
+  "       <Hit_def> element.\n"
+  "     o Hit_accession - contents of the <Hit_accession> element.\n"
+  "   Default is Hit-def0.\n"
   "\n"
   "Output only results of last round from PSI BLAST\n");
 }
@@ -35,13 +48,29 @@ static struct optionSpec options[] = {
     {"eVal", OPTION_DOUBLE},
     {"pslx", OPTION_BOOLEAN},
     {"convertToNucCoords", OPTION_BOOLEAN},
+    {"qName", OPTION_STRING},
+    {"tName", OPTION_STRING},
     {NULL, 0},
 };
+
+enum qNameSrc {
+    qNameSrcIterationQueryId,
+    qNameSrcIterationQueryDef0
+};
+
+enum tNameSrc {
+    tNameSrcHitId,
+    tNameSrcHitDef0,
+    tNameSrcHitAccession
+};
+
 
 static double eVal = -1; /* default Expect value signifying no filtering */
 static boolean pslxFmt = FALSE; /* output in pslx format */
 static int errCount = 0; /* count of  PSLs failing checks */
-static boolean convertToNucCoords = 1; /* adjust query coordinates */
+static boolean convertToNucCoords = FALSE; /* adjust query coordinates */
+static enum qNameSrc qNameSrc = qNameSrcIterationQueryDef0;   /* source of qName */
+static enum tNameSrc tNameSrc = tNameSrcHitDef0;   /* source of tName */
 
 struct coords
 /* structure to return converted coordinates */
@@ -77,13 +106,67 @@ if (convertToNucCoords && (algo != tblastn))
 return algo | (convertToNucCoords ? cnvNucCoords : 0) | (pslxFmt ? bldPslx : 0);
 }
 
-static void outputPsl(struct psl *psl, struct ncbiBlastHsp *hspRec, FILE* pslFh, FILE* scoreFh)
-/* output a psl and optional score */
+static void outputPsl(struct psl *psl, FILE* pslFh)
+/* output a psl */
 {
 pslTabOut(psl, pslFh);
-if (scoreFh != NULL)
-    pslBuildWriteScores(scoreFh, psl, hspRec->ncbiBlastHspBitScore->text, hspRec->ncbiBlastHspEvalue->text);
 pslCheck("blastXmlToPsl", stderr, psl);
+}
+
+static void outputScore(struct psl *psl, struct ncbiBlastIteration *iterRec, struct ncbiBlastHit *hitRec, struct ncbiBlastHsp *hspRec, FILE* scoreFh)
+/* output score record */
+{
+pslBuildScoresWriteWithDefs(scoreFh, psl, hspRec->ncbiBlastHspBitScore->text, hspRec->ncbiBlastHspEvalue->text, iterRec->ncbiBlastIterationQueryDef->text, hitRec->ncbiBlastHitDef->text);
+}
+
+static void appendFirstWord(struct dyString *buf, char *str)
+/* append the first white-spaced word from str */
+{
+char *end = skipToSpaces(str);
+if (end == NULL)
+    end = str + strlen(str);
+dyStringAppendN(buf, str, (end - str));
+}
+
+static char *getQName(struct ncbiBlastIteration *iterRec)
+/* obtain the qName give the requested source */
+{
+static struct dyString *buf = NULL;
+if (buf == NULL)
+    buf = dyStringNew(32);
+dyStringClear(buf);
+switch (qNameSrc)
+    {
+    case qNameSrcIterationQueryId:
+        dyStringAppend(buf, iterRec->ncbiBlastIterationQueryID->text);
+        break;
+    case qNameSrcIterationQueryDef0:
+        appendFirstWord(buf, iterRec->ncbiBlastIterationQueryDef->text);
+        break;        
+    }
+return buf->string;
+}
+
+static char *getTName(struct ncbiBlastHit *hitRec)
+/* obtain the tName give the requested source */
+{
+static struct dyString *buf = NULL;
+if (buf == NULL)
+    buf = dyStringNew(32);
+dyStringClear(buf);
+switch (tNameSrc)
+    {
+    case tNameSrcHitId:
+        dyStringAppend(buf, hitRec->ncbiBlastHitId->text);
+        break;
+    case tNameSrcHitDef0:
+        appendFirstWord(buf, hitRec->ncbiBlastHitDef->text);
+        break;        
+    case tNameSrcHitAccession:
+        dyStringAppend(buf, hitRec->ncbiBlastHitAccession->text);
+        break;
+    }
+return buf->string;
 }
 
 static void processHspRec(struct ncbiBlastIteration *iterRec, struct ncbiBlastHit *hitRec,
@@ -94,15 +177,15 @@ struct coords qUcsc = blastToUcsc(hspRec->ncbiBlastHspQueryFrom->text, hspRec->n
                                   ((hspRec->ncbiBlastHspQueryFrame == NULL) ? 0 : hspRec->ncbiBlastHspQueryFrame->text));
 struct coords tUcsc = blastToUcsc(hspRec->ncbiBlastHspHitFrom->text, hspRec->ncbiBlastHspHitTo->text, hitRec->ncbiBlastHitLen->text,
                                   ((hspRec->ncbiBlastHspHitFrame == NULL) ? 0 : hspRec->ncbiBlastHspHitFrame->text));
-char *qId = firstWordInLine(iterRec->ncbiBlastIterationQueryDef->text);
-char *tId = (flags & psiblast)
-    ? firstWordInLine(hitRec->ncbiBlastHitId->text)
-    : firstWordInLine(hitRec->ncbiBlastHitDef->text);
-struct psl *psl = pslBuildFromHsp(qId, qUcsc.size, qUcsc.start, qUcsc.end, qUcsc.strand, hspRec->ncbiBlastHspQseq->text,
-                                  tId, tUcsc.size, tUcsc.start, tUcsc.end, tUcsc.strand, hspRec->ncbiBlastHspHseq->text,
+struct psl *psl = pslBuildFromHsp(getQName(iterRec), qUcsc.size, qUcsc.start, qUcsc.end, qUcsc.strand, hspRec->ncbiBlastHspQseq->text,
+                                  getTName(hitRec),  tUcsc.size, tUcsc.start, tUcsc.end, tUcsc.strand, hspRec->ncbiBlastHspHseq->text,
                                   flags);
 if  ((psl->blockCount > 0) && ((hspRec->ncbiBlastHspEvalue->text <= eVal) || (eVal == -1)))
-    outputPsl(psl, hspRec, pslFh, scoreFh);
+    {
+    outputPsl(psl, pslFh);
+    if (scoreFh != NULL)
+        outputScore(psl, iterRec, hitRec, hspRec, scoreFh);
+    }
 pslFree(&psl);
 }
 
@@ -158,12 +241,8 @@ static void convertPsiBlast(struct ncbiBlastBlastOutput *outputRec, unsigned fla
 struct ncbiBlastBlastOutputIterations *itersRec;
 for (itersRec = outputRec->ncbiBlastBlastOutputIterations; itersRec != NULL; itersRec = itersRec->next)
     {
-    struct ncbiBlastIteration *iterRec;
-    for (iterRec = itersRec->ncbiBlastIteration; iterRec != NULL; iterRec = iterRec->next)
-        {
-        iterRec = findLastIterForQuery(iterRec);
-        processIterRec(iterRec, flags, pslFh, scoreFh);
-        }
+    struct ncbiBlastIteration *iterRec = findLastIterForQuery(itersRec->ncbiBlastIteration);
+    processIterRec(iterRec, flags, pslFh, scoreFh);
     }
 }
 
@@ -175,10 +254,7 @@ xapParseFile(xap, blastXmlFile);
 FILE *pslFh = mustOpen(pslFile, "w");
 FILE *scoreFh = NULL;
 if (scoreFile != NULL)
-    {
-    scoreFh = mustOpen(scoreFile, "w");
-    fputs(pslBuildScoreHdr, scoreFh);
-    }
+    scoreFh = pslBuildScoresOpen(scoreFile, TRUE);
 
 if (xap->topObject == NULL)
     errAbort("empty BLAST XML file: %s", blastXmlFile);
@@ -208,6 +284,25 @@ if (argc != 3)
 eVal = optionDouble("eVal", eVal);
 pslxFmt = optionExists("pslx");
 convertToNucCoords = optionExists("convertToNucCoords");
+
+char *qNameSrcStr = optionVal("qName", "Iteration_query-def0");
+if (sameString(qNameSrcStr, "Iteration_query-ID"))
+    qNameSrc = qNameSrcIterationQueryId;
+else if (sameString(qNameSrcStr, "Iteration_query-def0"))
+    qNameSrc = qNameSrcIterationQueryDef0;
+else
+    errAbort("invalid value for -qName, expect on of: \"Iteration_query-ID\", or \"Iteration_query-def0\", got \"%s\"", qNameSrcStr);
+
+char *tNameSrcStr = optionVal("tName", "Hit_def0");
+if (sameString(tNameSrcStr, "Hit_id"))
+    tNameSrc = tNameSrcHitId;
+else if (sameString(tNameSrcStr, "Hit_def0"))
+    tNameSrc = tNameSrcHitDef0;
+else if (sameString(tNameSrcStr, "Hit_accession"))
+    tNameSrc = tNameSrcHitAccession;
+else
+    errAbort("invalid value for -tName, expect on of: \"Hit_id\",  \"Hit_def0\", or \"Hit_accession\", got \"%s\"", tNameSrcStr);
+
 blastXmlToPsl(argv[1], argv[2], optionVal("scores", NULL));
 if (errCount > 0)
     errAbort("%d invalid PSLs created", errCount);

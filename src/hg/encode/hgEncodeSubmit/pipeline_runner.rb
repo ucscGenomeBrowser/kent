@@ -185,17 +185,19 @@ while true
         if validators.length >= maxValidators
           doRun = false
         end
-      end
-      if source.starts_with? "load_background("
+      elsif source.starts_with? "load_background("
         if loaders.length >= maxLoaders
           doRun = false
         end
-      end
-      if source.starts_with? "upload_background("
+      elsif source.starts_with? "upload_background("
+        # parse out the url parameter from the source command
+        #  the parameters are comma-separated, and literal strings are surrounded by quotes.
         pastFirstComma = source.index(',"')+2
         beforeSecondComma = source.index('",', pastFirstComma) - 1
         upurl = source[pastFirstComma..beforeSecondComma]
         if upurl != ""
+          # load-balance paraFetch in a site-specific manner 
+          # determined by the config/paraFetch.yml settings.
           protoSite = get_proto_site(upurl)
           maxParaFetches = paraFetchConfig["default"]["instances"]
           if paraFetchConfig[protoSite] != nil
@@ -253,11 +255,9 @@ while true
         # add the project id to running lists
         if source.starts_with? "validate_background("
           validators[project_id] = true
-        end
-        if source.starts_with? "load_background("
+        elsif source.starts_with? "load_background("
           loaders[project_id] = true
-        end
-        if source.starts_with? "upload_background("
+        elsif source.starts_with? "upload_background("
           if upurl != ""
             paraFetchRunCount[protoSite] = paraRunCount + 1
             paraFetchRunProtoSite[project_id] = protoSite

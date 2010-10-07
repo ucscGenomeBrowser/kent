@@ -2706,7 +2706,7 @@ void loadFromTrackDb(struct track **pTrackList)
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
 struct trackDb *tdbList;
 if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database, chromName);
+    tdbList = hTrackDb(database);
 else
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
@@ -3904,8 +3904,6 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         if (hTvFromString(cartUsualString(cart, track->track,
                         hStringFromTv(track->tdb->visibility))) != tvHide)
             setSuperTrackHasVisibleMembers(track->tdb->parent);
-//#define SUPER_PARENTS   // Turns out this wasn't necessary to solve my problem, but it is the right thing to do, so saving it for later
-#ifdef SUPER_PARENTS
         assert(track->parent == NULL);
         track->parent = hashFindVal(superHash, track->tdb->parentName);
         if (track->parent)
@@ -3913,13 +3911,8 @@ for (tr = group->trackList; tr != NULL; tr = tr->next)
         /* create track and reference for the supertrack */
         struct track *superTrack = track->parent = trackFromTrackDb(track->tdb->parent);
         track->parent = superTrack;
-#else///ifndef SUPER_PARENTS
-        if (hashLookup(superHash, track->tdb->parentName))
-            /* ignore supertrack if it's already been handled */
-            continue;
-        /* create track and reference for the supertrack */
-        struct track *superTrack = trackFromTrackDb(track->tdb->parent);
-#endif///ndef SUPER_PARENTS
+        if (trackHash != NULL)
+            hashAddUnique(trackHash,superTrack->track,superTrack);
         superTrack->hasUi = TRUE;
         superTrack->group = group;
         superTrack->groupName = cloneString(group->name);
@@ -4280,8 +4273,8 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
-    if (tdbIsMultiTrack(track->tdb))
-        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb)) // Note, this is done for found multi-track kids but composites are only straightened up in hgTrackUi
+    if (tdbIsContainer(track->tdb))
+        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb))
             track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
 
     if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
@@ -5550,7 +5543,7 @@ if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("ajax.js", NULL);
-    hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
+    webIncludeResourceFile("autocomplete.css");
     jsIncludeFile("jquery.autocomplete.js", NULL);
     jsIncludeFile("autocomplete.js", NULL);
     }
@@ -5561,8 +5554,8 @@ jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-hPrintf("<link href='../style/jquery.contextmenu.css' rel='stylesheet' type='text/css' />\n");
-hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+webIncludeResourceFile("jquery.contextmenu.css");
+webIncludeResourceFile("jquery-ui.css");
 #ifdef CONTEXT_MENU
 jsIncludeFile("jquery.contextmenu.js", NULL);
 #endif/// def CONTEXT_MENU
