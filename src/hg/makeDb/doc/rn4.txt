@@ -5298,3 +5298,143 @@ _EOF_
 # *** Check these tables in rn4:
 # *** knownBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
 #######################################################################################
+# RGD GENES BUILD (2010-10-05, Fan, DONE)
+
+ssh hgwdev
+
+# download raw data from RGD
+
+mkdir –p /hive/data/outside/rgd/rat/093010
+cd /hive/data/outside/rgd/rat/093010
+
+# ftp over all files under ftp://rgd.mcw.edu/pub/data_release/GFF/Corrected_GFF3/
+ 
+cd /hive/data/genomes/rn4/bed
+mkdir rgdGene
+cd rgdGene
+mkdir 093010
+cd 093010
+
+mkdir gff
+cp -p /hive/data/outside/rgd/rat/093010/rn* gff
+
+cat gff/rn*.gff3|fgrep -v "##gff-version 3" >RGDgenes_all.gff3
+
+hgsql rn4 -e 'drop table rgdGeneRaw0'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw0.sql
+hgsql rn4 -e 'load data local infile "RGDgenes_all.gff3" into table rgdGeneRaw0'
+
+# build the rgdId.tab file 
+hgsql rn4 -N -e 'select "RGD:",seqname from rgdGeneRaw0 where feature="gene"'|cut -f 1 >j.rgd
+hgsql rn4 -N -e 'select * from rgdGeneRaw0 where feature = "gene"'|cut -f 9 >j.0
+
+cat j.0 |sed -e 's/RGD:/\t/'|cut -f 2 >j.1
+cat j.1 |sed -e 's/,/\t/'|sed -e 's/;/\t/'|cut -f 1 >j.2
+
+paste j.rgd j.2 |sed -e 's/\t//' >rgdId.tab
+rm j.*
+
+# fix some currently known problems of RGD Genes
+
+# First, remove gene records that contains exons of different strands.
+# create two temp tables rgdGeneRaw2 and rgdGeneRaw3 
+
+hgsql rn4 -N -e 'select * from rgdGeneRaw0 where feature = "gene" or feature ="CDS" or feature = "exon"' >j.tmp
+
+cut -f 1 j.tmp|sed -e 's/Chr//' >j.1
+cut -f 2-8 j.tmp >j.2
+paste j.1 j.2 >j.temp8
+cut -f 9 j.tmp >j.9
+cat j.9 |sed -e 's/RGD:/\tRGD:/'|cut -f 2 >j.1
+cat j.1 |sed -e 's/,/\t/'|sed -e 's/;/\t/'|cut -f 1 >j.temp9
+
+paste j.temp8 j.temp9 >rgdGeneRaw2.tab
+
+hgsql rn4 -e 'drop table rgdGeneRaw2'
+hgsql rn4 -e 'drop table rgdGeneRaw3'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw2.sql
+hgsql rn4 < ~/kent/src/hg/lib/rgdGeneRaw3.sql
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2.tab" into table rgdGeneRaw2'
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2.tab" into table rgdGeneRaw3'
+
+hgsql rn4 -N -e 'select * from rgdGeneRaw2 where feature = "gene"' > rgdGeneRaw2gene.tab
+hgsql rn4 -N -e 'select * from rgdGeneRaw2 where feature = "exon"' > rgdGeneRaw2exon.tab
+hgsql rn4 -N -e 'select * from rgdGeneRaw2 where feature = "CDS"'  > rgdGeneRaw2cds.tab
+
+hgsql rn4 -e 'drop table rgdGeneRaw2gene'
+hgsql rn4 -e 'drop table rgdGeneRaw2exon'
+hgsql rn4 -e 'drop table rgdGeneRaw2cds'
+hgsql rn4 < ~/src/hg/lib/rgdGeneRaw2gene.sql
+hgsql rn4 < ~/src/hg/lib/rgdGeneRaw2exon.sql
+hgsql rn4 < ~/src/hg/lib/rgdGeneRaw2cds.sql
+
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2gene.tab" into table rgdGeneRaw2gene'
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2exon.tab" into table rgdGeneRaw2exon'
+hgsql rn4 -e 'load data local infile "rgdGeneRaw2cds.tab" into table rgdGeneRaw2cds'
+
+
+hgsql rn4 -N -e \
+'select g.rgdId, g.strand, e.strand from rgdGeneRaw2gene g, rgdGeneRaw2exon e where e.rgdId=g.rgdId and g.strand <> e.strand'\
+|cut -f 1|sort -u|sed -e 's/RGD/del1 RGD/' >delAll
+chmod +x delAll
+
+
+# create the one line script del1 containing the following line:
+
+hgsql rn4 -N -e "delete from rgdGeneRaw2 where rgdId='${1}'"
+
+chmod +x del1
+./delAll
+
+hgsql rn4 -N -e 'select "chr" from rgdGeneRaw2 where feature != "CDS"' >j.chr
+hgsql rn4 -N -e 'select * from rgdGeneRaw2  where feature != "CDS"' >j.1
+paste j.chr j.1 |sed -e 's/chr\t/chr/'>j.2
+
+# remove two problematic gene
+cat j.2|grep -v "RGD:3683" |grep -v "RGD:2549" >rgdGeneTemp.gff
+
+ldHgGene -gtf rn4 rgdGeneTemp rgdGeneTemp.gff
+#Read 18327 transcripts in 358867 lines in 1 files
+#  18327 groups 21 seqs 2 sources 2 feature types
+#18245 gene predictions
+
+getRgdGeneCds rn4  > rgdGeneCds.tab
+
+hgsql rn4 -e 'delete from rgdGeneCds'
+hgsql rn4 -e 'load data local infile "rgdGeneCds.tab" into table rgdGeneCds'
+
+doRgdGene2 rn4 > rgdGene2.tab
+
+hgsql rn4 -e 'delete from rgdGene2'
+hgsql rn4 -e 'load data local infile "rgdGene2.tab" into table rgdGene2'
+
+# drop the rgdGeneTemp table to avoid nightly build/check complaint.
+hgsql rn4 -e 'drop table rgdGeneTemp'
+
+rm j.*
+
+doRgdGeneXref rn4 j.xref1 j.xref2
+cat j.xref1 j.xref2 |sort -u >rgdGene2Xref.tab
+
+hgsql rn4 -e 'drop table rgdGene2Xref'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Xref.sql
+hgsql rn4 -e 'load data local infile "rgdGene2Xref.tab" into table rgdGene2Xref'
+
+sed -e 's/genericAlias/rgdGene2ToUniProt/' \
+~/kent/src/hg/lib/genericAlias.sql > rgdGene2ToUniProt.sql
+hgLoadSqlTab rn4 rgdGene2ToUniProt rgdGene2ToUniProt.sql rgdGene2ToUniProtLoad.txt
+
+hgsql rn4 -N -e \
+'select rgdGeneId, info from rgdGene2Xref where infoType="Note"' > rgdGene2ToDescription.tab
+hgsql rn4 -e 'drop table rgdGene2ToDescription'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToDescription.sql
+hgsql rn4 -e 'load data local infile "rgdGene2ToDescription.tab" into table rgdGene2ToDescription'
+
+hgsql rn4 -N -e \
+'select name, u.val from rgdGene2ToUniProt, uniProt.protein u where acc=alias' > rgdGene2Pep.tab
+
+hgsql rn4 -e 'drop table rgdGene2Pep'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Pep.sql
+hgsql rn4 -e 'load data local infile "rgdGene2.tab" into table rgdGene2Pep'
+
+#############################################################################

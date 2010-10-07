@@ -75,7 +75,7 @@ priority 103.29
         subTrack cons10wayViewalign on
         shortLabel Multiz Align
         longLabel Multiz Alignments of 10 Nematodes
-        subGroups view=align clade=caenor
+        subGroups view=align clade=nematode
         noInherit on
         irows on
         summary multiz10waySummary
@@ -109,9 +109,9 @@ priority 103.29
         longLabel Caenorhabditis Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -9.06 0.66
+        type wig -1.08 1.88
         maxHeightPixels 100:50:11
-        viewLimits -4:1
+        viewLimits -1.08:1.88
         autoScale off
         spanList 1
         windowingFunction mean
