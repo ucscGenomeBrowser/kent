@@ -979,6 +979,29 @@ return list;
 }
 
 
+int slPairCmpCase(const void *va, const void *vb)
+/* Compare two slPairs, ignore case. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcasecmp(a->name, b->name);
+}
+
+void slPairSortCase(struct slPair **pList)
+/* Sort slPair list, ignore case. */
+{
+slSort(pList, slPairCmpCase);
+}
+
+int slPairCmp(const void *va, const void *vb)
+/* Compare two slPairs. */
+{
+const struct slPair *a = *((struct slPair **)va);
+const struct slPair *b = *((struct slPair **)vb);
+return strcmp(a->name, b->name);
+}
+
+
 void gentleFree(void *pt)
 {
 if (pt != NULL) freeMem((char*)pt);

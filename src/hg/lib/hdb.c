@@ -3378,8 +3378,8 @@ trackDbAddTableField(tdbList);
 return tdbList;
 }
 
-static void addTrackIfDataAccessible(char *database, struct trackDb *tdb, char *chrom,
-                           boolean privateHost, struct trackDb **tdbRetList)
+static void addTrackIfDataAccessible(char *database, struct trackDb *tdb,
+	       boolean privateHost, struct trackDb **tdbRetList)
 /* check if a trackDb entry should be included in display, and if so
  * add it to the list, otherwise free it */
 {
@@ -3489,7 +3489,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 
 
 static struct trackDb *pruneEmpties(struct trackDb *tdbList, char *db,
-	char *chrom, boolean privateHost, int level)
+	boolean privateHost, int level)
 /* Remove tracks without data.  For parent tracks data in any child is sufficient to keep
  * them alive. */
 {
@@ -3499,7 +3499,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
     next = tdb->next;
     if (tdb->subtracks != NULL)
 	{
-	tdb->subtracks = pruneEmpties(tdb->subtracks, db, chrom, privateHost, level+1);
+	tdb->subtracks = pruneEmpties(tdb->subtracks, db, privateHost, level+1);
 	}
     if (tdb->subtracks != NULL)
         {
@@ -3507,7 +3507,7 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
 	}
     else
         {
-        addTrackIfDataAccessible(db, tdb, chrom, privateHost, &newList);
+        addTrackIfDataAccessible(db, tdb, privateHost, &newList);
 	}
     }
 slReverse(&newList);
@@ -3553,20 +3553,29 @@ else
 }
 #endif /* DEBUG */
 
-struct trackDb *hTrackDb(char *db, char *chrom)
-/* Load tracks associated with current chromosome (which may be NULL for
- * all).  Supertracks are loaded as a trackDb, but are not in the returned list,
+struct trackDb *hTrackDb(char *db)
+/* Load tracks associated with current db.
+ * Supertracks are loaded as a trackDb, but are not in the returned list,
  * but are accessible via the parent pointers of the member tracks.  Also,
  * the supertrack trackDb subtrack fields are not set here (would be
- * incompatible with the returned list).
- * Returns list sorted by priority */
+ * incompatible with the returned list)
+ * Returns list sorted by priority
+ *	NOTE: this result is cached, do not free it !
+ */
 {
-struct trackDb *tdbList = loadTrackDb(db, NULL);
-tdbList = trackDbLinkUpGenerations(tdbList);
-tdbList = pruneEmpties(tdbList, db, chrom, hIsPrivateHost(), 0);
-trackDbContainerMarkup(NULL, tdbList);
-rInheritFields(tdbList);
-slSort(&tdbList, trackDbCmp);
+static char *existingDb = NULL;
+static struct trackDb *tdbList = NULL;
+if (differentStringNullOk(existingDb, db))
+    {
+    tdbList = loadTrackDb(db, NULL);
+    tdbList = trackDbLinkUpGenerations(tdbList);
+    freeMem(existingDb);
+    existingDb = cloneString(db);
+    tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
+    trackDbContainerMarkup(NULL, tdbList);
+    rInheritFields(tdbList);
+    slSort(&tdbList, trackDbCmp);
+    }
 return tdbList;
 }
 
@@ -3622,7 +3631,7 @@ struct trackDb *hTrackDbForTrack(char *db, char *track)
  * a trackDb, but will return NULL if track is not found. */
 {
 /* Get track list .*/
-struct trackDb *tdbList = hTrackDb(db, NULL);
+struct trackDb *tdbList = hTrackDb(db);
 return rFindTrack(0, tdbList, track);
 }
 

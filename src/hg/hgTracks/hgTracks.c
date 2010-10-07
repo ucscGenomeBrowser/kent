@@ -2706,7 +2706,7 @@ void loadFromTrackDb(struct track **pTrackList)
 char *trackNameFilter = cartOptionalString(cart, "hgt.trackNameFilter");
 struct trackDb *tdbList;
 if(trackNameFilter == NULL)
-    tdbList = hTrackDb(database, chromName);
+    tdbList = hTrackDb(database);
 else
     tdbList = hTrackDbForTrack(database, trackNameFilter);
 addTdbListToTrackList(tdbList, trackNameFilter, pTrackList);
@@ -5543,7 +5543,7 @@ if(dragZooming)
     {
     jsIncludeFile("jquery.imgareaselect.js", NULL);
     jsIncludeFile("ajax.js", NULL);
-    hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
+    webIncludeResourceFile("autocomplete.css");
     jsIncludeFile("jquery.autocomplete.js", NULL);
     jsIncludeFile("autocomplete.js", NULL);
     }
@@ -5554,8 +5554,8 @@ jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-hPrintf("<link href='../style/jquery.contextmenu.css' rel='stylesheet' type='text/css' />\n");
-hPrintf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+webIncludeResourceFile("jquery.contextmenu.css");
+webIncludeResourceFile("jquery-ui.css");
 #ifdef CONTEXT_MENU
 jsIncludeFile("jquery.contextmenu.js", NULL);
 #endif/// def CONTEXT_MENU
