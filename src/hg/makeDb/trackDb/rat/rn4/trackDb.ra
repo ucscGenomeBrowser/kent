@@ -4,6 +4,19 @@ track knownGene override
 shortLabel Known Genes
 longLabel UCSC Known Genes Based on UniProt, RefSeq, and GenBank mRNA
 
+track rgdGene2
+shortLabel RGD Genes 2
+longLabel RGD Genes 2
+group genes
+priority 34
+hgGene on
+hgsid on
+directUrl ../cgi-bin/hgGene?hgg_gene=%s&hgg_chrom=%s&hgg_start=%d&hgg_end=%d&hgg_type=%s&db=%s
+visibility pack
+color 0,100,180
+type genePred rgdGene2Pep
+symbolTable rgdGene2Xref
+
 track multiz9way
 shortLabel Conservation
 longLabel Vertebrate Multiz Alignment & Conservation
