@@ -1,4 +1,4 @@
-CREATE TABLE rgdGeneRaw0  (
+CREATE TABLE rgdGeneRaw2exon  (
     seqname varchar(40),
     source varchar(255),
     feature varchar(40),
@@ -7,6 +7,6 @@ CREATE TABLE rgdGeneRaw0  (
     score  varchar(40),		
     strand varchar(40),	
     frame varchar(40),
-    rgdId text,
-    KEY(rgdId(20))
+    rgdId varchar(255),
+    KEY(rgdId)
 );
