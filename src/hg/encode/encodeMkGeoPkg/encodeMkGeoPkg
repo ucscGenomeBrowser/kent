@@ -326,8 +326,10 @@ while(scalar(keys %objsSet) > 0) {
     my %cellLines = %{$cvTerms{"Cell Line"}};
     my %cellLineInfo = %{$cellLines{$cell}};
     my $organism = $cellLineInfo{"organism"};
+    my $lowerOrganism = $organism;
+    $lowerOrganism=~ tr/[A-Z]/[a-z]/;
     my $provider = $cellLineInfo{"vendorName"};
-    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/" . $cellLineInfo{"protocol"};
+    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/$lowerOrganism/" . $cellLineInfo{"protocol"};
     my $growthProtocol = "Cells were grown according to ENCODE cell culture protocols: $growthProtocolUrl";
 
     my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
