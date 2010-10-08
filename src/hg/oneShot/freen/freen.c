@@ -1,14 +1,9 @@
 /* freen - My Pet Freen. */
-#include <unistd.h>
-#include <math.h>
-
 #include "common.h"
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "net.h"
-
-#define TRAVERSE FALSE
+#include "hdb.h"
 
 void usage()
 {
@@ -16,17 +11,21 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
+void rPrintTdb(struct trackDb *tdbList)
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    printf("%s\t%s\n", tdb->track, tdb->shortLabel);
+    rPrintTdb(tdb->subtracks);
+    }
+}
 
 void freen(char *input)
 /* Test some hair-brained thing. */
 {
-struct lineFile *lf = netLineFileOpen(input);
-char *line;
-if (lineFileNext(lf, &line, NULL))
-    printf("%s\n", line);
-else
-    printf("%s is empty\n", input);
-lineFileClose(&lf);
+struct trackDb *tdbList = hTrackDb(input, NULL);
+rPrintTdb(tdbList);
 }
 
 int main(int argc, char *argv[])
