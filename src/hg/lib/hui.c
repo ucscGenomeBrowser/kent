@@ -470,8 +470,8 @@ else
                             noPack[vis], class, TV_DROPDOWN_STYLE,javascript);
 }
 
-void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
-	boolean canPack, char *class, char *visOnly)
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+	boolean canPack, char *class, char *visOnly,char *extra)
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
 {
@@ -514,34 +514,34 @@ if (visOnly != NULL)
     {
     int visIx = (vis > 0) ? 1 : 0;
     if (sameWord(visOnly,"dense"))
-	cgiMakeDropListClassWithStyle(varName, denseOnly, ArraySize(denseOnly),
-		denseOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     else if (sameWord(visOnly,"squish"))
-	cgiMakeDropListClassWithStyle(varName, squishOnly,
+	cgiMakeDropListClassWithStyleAndJavascript(varName, squishOnly,
                 ArraySize(squishOnly), squishOnly[visIx],
-                class, TV_DROPDOWN_STYLE);
+                class, TV_DROPDOWN_STYLE,extra);
     else if (sameWord(visOnly,"pack"))
-	cgiMakeDropListClassWithStyle(varName, packOnly, ArraySize(packOnly),
-		packOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, packOnly, ArraySize(packOnly),
+		packOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     else if (sameWord(visOnly,"full"))
-	cgiMakeDropListClassWithStyle(varName, fullOnly, ArraySize(fullOnly),
-		fullOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, fullOnly, ArraySize(fullOnly),
+		fullOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     else			/* default when not recognized */
-	cgiMakeDropListClassWithStyle(varName, denseOnly, ArraySize(denseOnly),
-		denseOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     }
     else
     {
     if (canPack)
-	cgiMakeDropListClassWithStyle(varName, pack, ArraySize(pack),
-                            pack[packIx[vis]], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, pack, ArraySize(pack),
+                            pack[packIx[vis]], class, TV_DROPDOWN_STYLE,extra);
     else
-	cgiMakeDropListClassWithStyle(varName, noPack, ArraySize(noPack),
-                            noPack[vis], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, noPack, ArraySize(noPack),
+                            noPack[vis], class, TV_DROPDOWN_STYLE,extra);
     }
 }
 
-void hideShowDropDown(char *varName, boolean show, char *class)
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra)
 /* Make hide/show dropdown for varName */
 {
 static char *hideShow[] =
@@ -549,8 +549,8 @@ static char *hideShow[] =
     "hide",
     "show"
     };
-cgiMakeDropListClassWithStyle(varName, hideShow, ArraySize(hideShow),
-                    hideShow[show], class, TV_DROPDOWN_STYLE);
+cgiMakeDropListClassWithStyleAndJavascript(varName, hideShow, ArraySize(hideShow),
+                            hideShow[show], class, TV_DROPDOWN_STYLE,extra);
 }
 
 
@@ -1890,7 +1890,7 @@ struct hash *makeTrackHashWithComposites(char *database, char *chrom,
 /* Make hash of trackDb items for this chromosome, including composites,
    not just the subtracks. */
 {
-struct trackDb *tdbs = hTrackDb(database, chrom);
+struct trackDb *tdbs = hTrackDb(database);
 struct hash *trackHash = newHash(7);
 rAddTrackListToHash(trackHash, tdbs, chrom, !withComposites);
 return trackHash;
@@ -3392,7 +3392,7 @@ else
 filterBy_t *filterBy = NULL;
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
-printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
@@ -6139,7 +6139,7 @@ if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or fi
     return FALSE;
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
-printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 
 // TODO:
 // 1) Make this work with matrix
@@ -6667,8 +6667,8 @@ if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not
     }
 }
 
-boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int visibleChild)
+boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
+                                int visibleChild,char *extra)
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -6703,8 +6703,8 @@ if (show && (visibleChild == -1))
             visibleChild = 1;
         }
     }
-hideShowDropDown(tdb->track, show, (show && visibleChild) ?
-                            "normalText visDD" : "hiddenText visDD");
+hideShowDropDownWithClassAndExtra(tdb->track, show, (show && visibleChild) ?
+                            "normalText visDD" : "hiddenText visDD",extra);
 return TRUE;
 }
 
@@ -6735,8 +6735,8 @@ enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *
 // returns visibility limited by ancestry (or subtrack vis override)
 {
 enum trackVisibility vis = tdb->visibility;
-if (!noSupers && vis == tvHide && tdbIsSuperTrack(tdb) && tdb->isShow)
-    vis = tvFull;
+if (tdbIsSuperTrack(tdb))
+    vis = (tdb->isShow ? tvFull : tvHide);
 if (cart != NULL)
     {
     char *cartVis = NULL;

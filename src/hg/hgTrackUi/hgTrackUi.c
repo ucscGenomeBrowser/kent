@@ -2424,7 +2424,7 @@ void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 if (!ajax)
     {
     jsIncludeFile("jquery.js", NULL);
-    printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+    webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
     }
@@ -2515,8 +2515,9 @@ if (ct && sameString(tdb->type, "maf"))
             }
         else
             vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
-        hTvDropDownClassVisOnly(tdb->track,vis,
-            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"));
+        hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,
+            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
+                               (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
         }
 if (!ajax)
     {

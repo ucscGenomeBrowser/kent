@@ -1,10 +1,12 @@
 #include "common.h"
+#include <regex.h>
 #include "hCommon.h"
 #include "obscure.h"
 #include "dnautil.h"
 #include "errabort.h"
 #include "htmshell.h"
 #include "web.h"
+#include "hPrint.h"
 #include "hdb.h"
 #include "hui.h"
 #include "hgConfig.h"
@@ -147,9 +149,8 @@ if (withHtmlHeader)
 	}
     *ptr1 = 0;
     htmlTextOut(newString);
-    puts(
-	"	</TITLE>" "\n"
-	"	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">" "\n");
+    printf("	</TITLE>\n    ");
+    webIncludeResourceFile("HGStyle.css");
     if (extraStyle != NULL)
         puts(extraStyle);
     printf("</HEAD>" "\n"
@@ -1201,3 +1202,129 @@ void webFinishPartialLinkTable(int rowIx, int itemPos, int maxPerRow)
 finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 }
 
+char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
+// Returns full path of timestamped link to the requested resource file (js, or css).
+// If wrapInHtml, then returns link embedded in style or script html. Free after use.
+{
+char baseName[PATH_LEN];
+char extension[FILEEXT_LEN];
+splitPath(fileName, NULL, baseName, extension);
+boolean js = sameString(".js",extension);
+boolean style = !js && sameString(".css",extension);
+boolean image = !js && !style && (sameString(".png",extension) || sameString(".jpg",extension) || sameString(".gif",extension));
+if(!js && !style && !image)
+    errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
+
+// Build and verify directory
+char *dirName = NULL;
+if (js)
+    dirName = cfgOptionDefault("browser.javaScriptDir", "js");
+else if (style)
+    dirName = "style";
+else
+    dirName = "style/images";
+struct dyString *fullDirName = NULL;
+char *docRoot = hDocumentRoot();
+if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
+    fullDirName = dyStringCreate("%s/%s", docRoot, dirName);
+else
+    fullDirName = dyStringCreate("%s", dirName);
+if(!fileExists(dyStringContents(fullDirName)))
+    errAbort("webTimeStampedLinkToResource: dir: %s doesn't exist.\n", dyStringContents(fullDirName));
+
+// build and verify real path to file
+struct dyString *realFileName = dyStringCreate("%s/%s", dyStringContents(fullDirName), fileName);
+if(!fileExists(dyStringContents(realFileName)))
+    errAbort("webTimeStampedLinkToResource: file: %s doesn't exist.\n", dyStringContents(realFileName));
+
+// build and verify link path including timestamp in the form of dir/baseName-timeStamp.ext
+long mtime = fileModTime(dyStringContents(realFileName));   // We add mtime to create a pseudo-version; this forces browsers to reload css/js file when it changes
+struct dyString *linkWithTimestamp = dyStringCreate("%s/%s-%ld%s", dyStringContents(fullDirName), baseName, mtime, extension);
+
+// If link does not exist, then create it !!
+if(!fileExists(dyStringContents(linkWithTimestamp)))
+    {
+    // The versioned copy should be created by the install process; however, mirrors may fail
+    // to preserve mtime's when copying over the javascript/css files, in which case the
+    // versioned softlinks won't match the real file; in that case, we try to create
+    // the versioned links on the fly (which requires write access to the javascript or style directory!).
+
+        // Remove older links
+    struct dyString *pattern = dyStringCreate("%s-[0-9]+\\%s", baseName, extension);
+    struct slName *file, *files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
+    struct dyString *oldLink = dyStringNew(256);
+    for (file = files; file != NULL; file = file->next)
+        {
+        dyStringClear(oldLink);
+        dyStringPrintf(oldLink, "%s/%s", dyStringContents(fullDirName), file->name);
+        unlink(dyStringContents(oldLink));
+        }
+    dyStringFree(&oldLink);
+    slFreeList(&files);
+    dyStringFree(&pattern);
+
+    // Create new link
+    if(symlink(dyStringContents(realFileName), dyStringContents(linkWithTimestamp)))
+        {
+        int err = errno;
+        errAbort("webTimeStampedLinkToResource: symlink failed: errno: %d (%s); the directory '%s' must be writeable by user '%s'; alternatively, the installation process must create the versioned files\n",
+                    err, strerror(err), dyStringContents(fullDirName), getUser());
+        }
+    }
+// Free up all that extra memory
+dyStringFree(&realFileName);
+dyStringFree(&fullDirName);
+char *linkFull = dyStringCannibalize(&linkWithTimestamp);
+char *link = linkFull;
+if (docRoot != NULL)
+    link = cloneString(linkFull + strlen(docRoot) + 1);
+freeMem(linkFull);
+
+if (wrapInHtml) // wrapped for christmas
+    {
+    struct dyString *wrapped = dyStringNew(0);
+    if (js)
+        dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
+    else if (style)
+        dyStringPrintf(wrapped,"<LINK rel='STYLESHEET' href='../%s' TYPE='text/css' />\n", link);
+    else // assume image!
+        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link); // NOTE: perhaps it is better to errAbort!
+    freeMem(link);
+    link = dyStringCannibalize(&wrapped);
+    }
+
+return link;
+}
+
+char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml)
+// If this is the first call, will
+//   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
+// else returns NULL.  Useful to ensure multiple references to the same resource file are not made
+{
+static struct hash *includedResourceFiles = NULL;
+if(!includedResourceFiles)
+    includedResourceFiles = newHash(0);
+
+if(hashLookup(includedResourceFiles, fileName))
+    return NULL;
+
+char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
+if (link)
+    hashAdd(includedResourceFiles, fileName, link);
+return link;
+}
+
+boolean webIncludeResourceFile(char *fileName)
+// Converts fileName to web Resource link and hPrintfs the html reference
+// This only prints and returns TRUE on first call for this resource.
+// The reference will be to a link with timestamp.
+{
+char *link = webTimeStampedLinkToResourceOnFirstCall(fileName,TRUE);
+if (link)
+    {
+    hPrintf("%s",link);
+    freeMem(link);
+    return TRUE;
+    }
+return FALSE;
+}

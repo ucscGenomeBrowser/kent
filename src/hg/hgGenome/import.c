@@ -276,7 +276,7 @@ return track;
 struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(database, NULL);
+struct trackDb *list = hTrackDb(database);
 struct customTrack *ctList, *ct;
 
 /* Create dummy group for custom tracks if any */

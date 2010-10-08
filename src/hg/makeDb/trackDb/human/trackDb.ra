@@ -1190,8 +1190,8 @@ longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase
 group varRep
 priority 101.5
 visibility hide
-subGroup1 view Views Depth=Abnormal_Depth MapQ=Mapping_Quality_Failure Uncov=No_Coverage
-subGroup2 pop Population Ceu=CEU ChbJpt=CHB/JPT Yri=YRI
+subGroup1 view Views Depth=Abnormal_Depth MapQ=Mapping_Quality_Failure Uncov=No_Coverage sum=Summary
+subGroup2 pop Population Ceu=CEU ChbJpt=CHB/JPT Yri=YRI all=All
 dimensions dimX=view dimY=pop
 sortOrder view=+ pop=+
 dragAndDrop subTracks
@@ -1200,7 +1200,7 @@ type bed 3
     track covMask1kGPilotLowCovDepth
     view Depth
     shortLabel Abnormal Depth
-    visibility dense
+    visibility hide
     parent covMask1kGPilotLowCov
     color 180,0,0
 
@@ -1225,7 +1225,7 @@ type bed 3
     track covMask1kGPilotLowCovMapQ
     view MapQ
     shortLabel Map Qual Failure
-    visibility dense
+    visibility hide
     parent covMask1kGPilotLowCov
     color 224,108,108
 
@@ -1250,7 +1250,7 @@ type bed 3
     track covMask1kGPilotLowCovUncov
     view Uncov
     shortLabel No Coverage
-    visibility dense
+    visibility hide
     parent covMask1kGPilotLowCov
     color 150,150,150
 
@@ -1272,6 +1272,45 @@ type bed 3
 	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, YRI
 	subGroups view=Uncov pop=Yri
 
+    track covMask1kGPilotLowCovSumView
+    view sum
+    shortLabel Summary
+    visibility dense
+    parent covMask1kGPilotLowCov
+
+	track covMask1kGPilotLowCovUnionDepth
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Depth Union
+	longLabel Union of all populations' depth masks
+	subGroups view=sum pop=all
+	color 180,0,0
+
+	track covMask1kGPilotLowCovUnionMapQ
+	parent covMask1kGPilotLowCovSumView
+	shortLabel MapQ Union
+	longLabel Union of all populations' mapping quality masks
+	subGroups view=sum pop=all
+	color 224,108,108
+
+	track covMask1kGPilotLowCovUnionUncov
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Uncov Union
+	longLabel Union of all populations' uncovered regions
+	subGroups view=sum pop=all
+	color 150,150,150
+
+	track covMask1kGPilotLowCovIntersectionUncov
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Uncov Intsct
+	longLabel Intersection of all populations' uncovered regions
+	subGroups view=sum pop=all
+	color 150,150,150
+
+	track covMask1kGPilotLowCovUnion
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Union
+	longLabel Union of all masks
+	subGroups view=sum pop=all
 
 
 track kiddEichlerDisc

@@ -2279,7 +2279,7 @@ for (gp = gpList; gp != NULL; gp = gp->next)
                       printf("<b>Gene Type :</b> %s<br>\n", row[0]);
                }
            }
-        } 
+        }
     if (gp->next != NULL)
         printf("<br>");
     }
@@ -2433,7 +2433,7 @@ puts("</LI>\n");
 if (palInfo)
     {
     struct sqlConnection *conn = hAllocConn(database);
-    addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left, 
+    addPalLink(conn, tdb->track,  palInfo->chrom, palInfo->left,
         palInfo->right, palInfo->rnaName);
     hFreeConn(&conn);
     }
@@ -3984,7 +3984,7 @@ else
 void doGetDnaExtended1()
 /* Do extended case/color get DNA options. */
 {
-struct trackDb *tdbList = hTrackDb(database, seqName), *tdb;
+struct trackDb *tdbList = hTrackDb(database), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 boolean isRc     = cartUsualBoolean(cart, "hgc.dna.rc", FALSE);
@@ -4602,7 +4602,7 @@ boolean defaultUpper = sameString(cartString(cart, "case"), "upper");
 int winSize;
 int lineWidth = cartInt(cart, "lineWidth");
 struct rgbColor *colors;
-struct trackDb *tdbList = hTrackDb(database, seqName), *tdb;
+struct trackDb *tdbList = hTrackDb(database), *tdb;
 struct trackDb *ctdbList = tdbForCustomTracks();
 struct trackDb *utdbList = tdbForUserPsl();
 char *pos = NULL;
@@ -11130,7 +11130,7 @@ if (startsWith("genePred", tdb->type))
 	printf("Predicted Protein</A> \n");
 	puts("</LI>\n");
 	}
-    else 
+    else
         errAbort("Doh, no go for %s from %s<BR>\n", geneName, pepTable);
 
     puts("<LI>\n");
@@ -17675,7 +17675,7 @@ printTrackHtml(tdb);
 hFreeConn(&conn);
 }
 
-void doGcDetails(struct trackDb *tdb, char *itemName) 
+void doGcDetails(struct trackDb *tdb, char *itemName)
 /* Show details for gc percent */
 {
 int start = cartInt(cart, "o");
@@ -17713,6 +17713,7 @@ void chuckHtmlStart(char *title)
  */
 {
 printf("<HTML>\n<HEAD>\n");
+//FIXME blueStyle should not be absolute to genome-test and should bae called by: webIncludeResourceFile("blueStyle.css");
 printf("<LINK REL=STYLESHEET TYPE=\"text/css\" href=\"http://genome-test.cse.ucsc.edu/style/blueStyle.css\" title=\"Chuck Style\">\n");
 printf("<title>%s</title>\n</head><body bgcolor=\"#f3f3ff\">",title);
 }
@@ -18627,7 +18628,7 @@ else if (ct->dbTrack && sameString(ct->dbTrackType, "maf"))
     hFreeConn(&conn2);
     hFreeConn(&conn);
     }
-else if (ct->dbTrack && sameWord(type, "bedDetail")) 
+else if (ct->dbTrack && sameWord(type, "bedDetail"))
     {
     doBedDetail(ct->tdb, ct, itemName);
     }
@@ -21549,12 +21550,12 @@ char *escName = sqlEscapeString(itemName);
 struct sqlResult *sr;
 char **row;
 char query[256];
-if (ct == NULL) 
+if (ct == NULL)
     {
     table = tdb->table;
     conn = hAllocConn(database);
     }
-else 
+else
     {
     table = ct->dbTableName;
     conn = hAllocConn(CUSTOM_TRASH);
@@ -21763,7 +21764,7 @@ char *chrom,*chromStart,*chromEnd,*fibroblast,*iPS,*absArea,*gene,*dist2gene,*re
 
 genericHeader(tdb, item);
 
-safef(query, sizeof(query), 
+safef(query, sizeof(query),
 "select chrom,chromStart,chromEnd,fibroblast,iPS,absArea,gene,dist2gene,relation2gene,dist2island,relation2island,fdr from rdmrRaw where gene = '%s'",
 item);
 sr = sqlGetResult(conn, query);
@@ -21908,7 +21909,7 @@ if (gotExtra)
     ptr = strchr(ptr, ',');
     *ptr = '\0';
 
-    // Show entries with the MGI ID and design ID 
+    // Show entries with the MGI ID and design ID
     safef(query, sizeof(query), "select name,alias from %s where alias like '%s,%s%%'",
 	  extraTable, mgiId, designId);
     sr = sqlGetResult(conn, query);
@@ -22328,7 +22329,7 @@ printTrackHtml(tdb);
 void doBedDetail(struct trackDb *tdb, struct customTrack *ct, char *itemName)
 /* generate the detail page for a custom track of bedDetail type */
 {
-char *table; 
+char *table;
 struct bedDetail *r = NULL;
 struct sqlConnection *conn;
 struct sqlResult *sr;
@@ -22369,13 +22370,13 @@ if ((row = sqlNextRow(sr)) != NULL)
     //print bedPart using bed routines?
     //printf("<B>Name:</B> %s <BR>\n", r->name);
     //print ID as link if have url
-    if (r->id != NULL) 
+    if (r->id != NULL)
         {
         printf("<B>ID:</B> %s <BR>\n", r->id);
         printCustomUrl(tdb, r->id, TRUE);
         }
     //printf("<B>Position:</B> %s:%u-%u<BR><BR>", r->chrom, *(r->chromStart)+1, *(r->chromEnd));
-    if (r->description != NULL) 
+    if (r->description != NULL)
         printf("%s <BR>\n", r->description);
     }
 sqlFreeResult(&sr);
@@ -22480,7 +22481,7 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
     }
     sr = sqlGetResult(conn, query);
     firstTime = TRUE;
-    
+
     while ((row = sqlNextRow(sr)) != NULL)
         {
         printf("<PRE><TT>");
@@ -22511,7 +22512,7 @@ else if (sameString("numtSMitochondrionChrPlacement", table))
         }
 
  printf("<BR>");
- printTrackHtml(tdb); 
+ printTrackHtml(tdb);
  hFreeConn(&conn);
 }
 
@@ -23592,7 +23593,7 @@ else if (sameString("pgVenter", table) ||
     {
     doPgSnp(tdb, item, NULL);
     }
-else if (startsWith("pg", table) && 
+else if (startsWith("pg", table) &&
          (endsWith(table, "PhenCode") || endsWith(table, "Snpedia") || endsWith(table, "Hgmd")) )
     {
     doPgPhenoAssoc(tdb, item);
