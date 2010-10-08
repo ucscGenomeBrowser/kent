@@ -2766,6 +2766,8 @@ else
     }
 }
 
+boolean uglyOne = FALSE;
+
 void addTdbListToTrackList(struct trackDb *tdbList, char *trackNameFilter,
 	struct track **pTrackList)
 /* Convert a list of trackDb's to tracks, and append these to trackList. */
@@ -2773,14 +2775,19 @@ void addTdbListToTrackList(struct trackDb *tdbList, char *trackNameFilter,
 struct trackDb *tdb, *next;
 struct track *track;
 TrackHandler handler;
+if (uglyOne) uglyf("ok1<BR>\n");
 tdbSortPrioritiesFromCart(cart, &tdbList);
+if (uglyOne) uglyf("ok2<BR>\n");
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
+if (uglyOne) uglyf("ok3.1 %s<BR>\n", tdb->track);
     next = tdb->next;
     if(trackNameFilter != NULL && strcmp(trackNameFilter, tdb->track))
         // suppress loading & display of all tracks except for the one passed in via trackNameFilter
         continue;
+if (uglyOne) uglyf("ok3.2 %s<BR>\n", tdb->track);
     track = trackFromTrackDb(tdb);
+if (uglyOne) uglyf("ok3.3 %s, %d subtracks<BR>\n", tdb->track, slCount(tdb->subtracks));
     track->hasUi = TRUE;
     if (slCount(tdb->subtracks) != 0)
         {
@@ -2792,19 +2799,25 @@ for (tdb = tdbList; tdb != NULL; tdb = next)
         }
     else
         {
+	if (uglyOne) uglyf("about to look up handler on %s<BR>\n", tdb->table);
         handler = lookupTrackHandler(tdb->table);
+	if (uglyOne) uglyf("handler=%p<BR>\n", handler);
         if (handler != NULL)
             handler(track);
         }
+if (uglyOne) uglyf("ok3.4 %s<BR>\n", tdb->track);
     if (cgiVarExists("hgGenomeClick"))
 	makeHgGenomeTrackVisible(track);
+if (uglyOne) uglyf("ok3.5 %s<BR>\n", tdb->track);
     if (track->loadItems == NULL)
         warn("No load handler for %s; possible missing trackDb `type' or `subTrack' attribute", tdb->track);
     else if (track->drawItems == NULL)
         warn("No draw handler for %s", tdb->track);
     else
         slAddHead(pTrackList, track);
+if (uglyOne) uglyf("ok3.6 %s<BR>\n", tdb->track);
     }
+if (uglyOne) uglyf("ok4<BR>\n");
 }
 
 void loadFromTrackDb(struct track **pTrackList)
@@ -3424,29 +3437,37 @@ splitPath(hubUrl, hubDir, NULL, NULL);
 
 /* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl);
+uglyf("Got %d tracks from %s<BR>\n", slCount(tdbList), hubUrl);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
      {
      trackDbFieldsFromSettings(tdb);
      trackDbPolish(tdb);
      }
+uglyf("About to link up generations<BR>\n");
 trackDbLinkUpGenerations(tdbList);
+uglyf("About to addTdbListToTrackList<BR>\n");
+uglyOne = TRUE;
 addTdbListToTrackList(tdbList, NULL, pTrackList);
+uglyf("Used to crash by here<BR>\n");
 }
 
 void loadDataHubs(struct track **pTrackList)
 /* Load up stuff from data hubs and append to list. */
 {
 char *dataHubs = cloneString(cartUsualString(cart, "dataHubs", NULL));
+uglyf("<BR>dataHubs=%s\n<BR>\n", dataHubs);
 if (dataHubs == NULL)
     return;
 int hubCount = chopByWhite(dataHubs, NULL, 10);
 char *hubArrays[hubCount];
 chopByWhite(dataHubs, hubArrays, hubCount);
+uglyf("hubCount=%d, hubArrays[0]=%s\n<BR>\n", hubCount, hubArrays[0]);
 int i;
 for (i = 0; i<hubCount; ++i)
     {
     addTracksFromDataHub(hubArrays[i], pTrackList);
     }
+uglyf("addTracksFromDataHub loop done<BR>\n");
 }
 
 boolean restrictionEnzymesOk()
@@ -4126,8 +4147,8 @@ if (restrictionEnzymesOk())
     }
 if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
-#ifdef SOON
 loadDataHubs(&trackList);
+#ifdef SOON
 #endif /* SOON */
 loadCustomTracks(&trackList);
 groupTracks(&trackList, pGroupList, vis);
