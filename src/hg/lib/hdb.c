@@ -3563,19 +3563,20 @@ struct trackDb *hTrackDb(char *db)
  *	NOTE: this result is cached, do not free it !
  */
 {
-static char *existingDb = NULL;
-static struct trackDb *tdbList = NULL;
-if (differentStringNullOk(existingDb, db))
-    {
+// static char *existingDb = NULL;
+// static struct trackDb *tdbList = NULL;
+struct trackDb *tdbList = NULL;
+//if (differentStringNullOk(existingDb, db))
+//    {
     tdbList = loadTrackDb(db, NULL);
     tdbList = trackDbLinkUpGenerations(tdbList);
-    freeMem(existingDb);
-    existingDb = cloneString(db);
+//    freeMem(existingDb);
+//    existingDb = cloneString(db);
     tdbList = pruneEmpties(tdbList, db, hIsPrivateHost(), 0);
     trackDbContainerMarkup(NULL, tdbList);
     rInheritFields(tdbList);
     slSort(&tdbList, trackDbCmp);
-    }
+//    }
 return tdbList;
 }
 
