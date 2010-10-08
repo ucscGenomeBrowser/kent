@@ -8366,7 +8366,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 9/1/10 angie)
+# NHGRI GWAS CATALOG (DONE 10/6/10 angie)
+# Updated 9/1/10
 # Updated 8/2/10
 # Updated 6/2/10
 # Updated 5/12/10 (last one to use snp130)
@@ -8390,7 +8391,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4233 elements of size 22
+#Loaded 4550 elements of size 22
 
 
 ######################################################################## 
@@ -10153,8 +10154,10 @@ EOF
     # Load probes and alignments into database.
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/affyProbes/affyU133Plus2
+    #perl -pi.bak -e "s/U133\+2://" affyU133Plus2.psl
     hgLoadPsl hg19 affyU133Plus2.psl
-    hgLoadSeq -abbr=U133+2: hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    #hgLoadSeq -abbr=U133+2: hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    hgLoadSeq  hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     #   Creating seq.tab file
     #   Adding /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     #   54613 sequences
@@ -10162,9 +10165,9 @@ EOF
     #   All done
     #  hgsql -e "select count(*) from affyU133Plus2;" hg19
     #     58592  
- 
+
 #############################################################################
-# AFFY U95 (working 2010-05-13 Chin)
+# AFFY U95 (DONE 2010-10-07 Chin)
     # Align probes 
     ssh swarm
     cd /hive/data/genomes/hg19/bed
@@ -10214,7 +10217,6 @@ EOF
     #   Updating seq table
     #   All done
 
-############################################################################
 #############################################################################
 # ucscRetro track (2010-03-31, baertsch,hartera DONE)
 mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19

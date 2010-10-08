@@ -1,5 +1,6 @@
 metaObject wgEncodeYaleChIPseqAlignmentsHelas3ifngInput
 objType file
+accession GSE12782
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -13,7 +14,7 @@ fileName wgEncodeYaleChIPseqAlignmentsHelas3ifngInput.tagAlign.gz
 fragLength 200
 grant Snyder
 lab Yale
-labVersion GSE12782 uncorrected
+labVersion uncorrected
 project wgEncode
 setType input
 subId 107
@@ -22,6 +23,7 @@ view Alignments
 
 metaObject wgEncodeYaleChIPseqAlignmentsHelas3Input
 objType file
+accession GSE12781
 antibody Input
 cell HeLa-S3
 composite wgEncodeYaleChIPseq
@@ -35,7 +37,7 @@ fileName wgEncodeYaleChIPseqAlignmentsHelas3Input.tagAlign.gz
 fragLength 200
 grant Snyder
 lab Yale
-labVersion GSE12781, uncorrected
+labVersion uncorrected
 project wgEncode
 setType input
 subId 107
@@ -24033,4 +24035,4 @@ tableName wgEncodeYaleChIPseqSignalRep1K562InputV2
 treatment None
 view Signal
 
-# MAGIC: -1136463649
+# MAGIC: 2071444698
