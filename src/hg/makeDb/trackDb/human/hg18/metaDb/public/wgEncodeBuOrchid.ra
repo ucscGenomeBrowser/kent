@@ -1,0 +1,35 @@
+metaObject wgEncodeBuOrchidSignalRep1Gm12878
+objType table
+cell GM12878
+composite wgEncodeBuOrchid
+dataType Orchid
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-24
+dateUnrestricted 2010-10-24
+fileName wgEncodeBuOrchidSignalRep1Gm12878.bw
+grant Tullius
+lab BU
+project wgEncode
+replicate 1
+subId 1095
+tableName wgEncodeBuOrchidSignalRep1Gm12878
+view Signal
+
+metaObject wgEncodeBuOrchidSignalRep2Gm12878
+objType table
+cell GM12878
+composite wgEncodeBuOrchid
+dataType Orchid
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2010-01-24
+dateUnrestricted 2010-10-24
+fileName wgEncodeBuOrchidSignalRep2Gm12878.bw
+grant Tullius
+lab BU
+project wgEncode
+replicate 2
+subId 1095
+tableName wgEncodeBuOrchidSignalRep2Gm12878
+view Signal
+
+# MAGIC: 390992319
