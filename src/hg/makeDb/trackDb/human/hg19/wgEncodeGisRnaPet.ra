@@ -36,16 +36,6 @@ wgEncode 1
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetK562NucleusPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 nucl pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 nucleus)
-        subGroups view=Clusters cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
-
         track wgEncodeGisRnaPetK562PolysomePapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
@@ -55,26 +45,6 @@ wgEncode 1
         type bed 12
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 chro pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 chromatin)
-        subGroups view=Clusters cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 nucleoplasm pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 nucleoplasm)
-        subGroups view=Clusters cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562NucleolusPapClustersRep1
         release alpha
@@ -264,16 +234,6 @@ wgEncode 1
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetK562NucleusPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 nucleus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 nucleus)
-        subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
-
         track wgEncodeGisRnaPetK562PolysomePapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
@@ -283,26 +243,6 @@ wgEncode 1
         type bam
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 chromatin longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 chromatin)
-        subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 nucleoplasm longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 nucleoplasm)
-        subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562NucleolusPapAlnRep1
         release alpha
@@ -499,16 +439,6 @@ wgEncode 1
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 nucleus)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 203666.000000
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
-
         track wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
@@ -518,26 +448,6 @@ wgEncode 1
         type bigWig 1.000000 1469476.000000
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 chro pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 chromatin)
-        subGroups view=MinusRawSig cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 331367.000000
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 nucleoplasm pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 nucleoplasm)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 5294.000000
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562NucleolusPapMinusRawSigRep1
         release alpha
@@ -715,16 +625,6 @@ wgEncode 1
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 nucleus)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 83090.000000
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
-
         track wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
@@ -734,26 +634,6 @@ wgEncode 1
         type bigWig 1.000000 424954.000000
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 chro pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 chromatin)
-        subGroups view=PlusRawSig cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 9878.000000
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 nucleoplasm pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 nucleoplasm)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 202.000000
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562NucleolusPapPlusRawSigRep1
         release alpha
