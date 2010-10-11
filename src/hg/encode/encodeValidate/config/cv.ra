@@ -2125,6 +2125,23 @@ sex U
 tier 3
 protocol UW_Stam:SAEC_Stam_protocol.pdf
 
+term SH-SY5Y
+tag SHSY5Y
+type Cell Line
+organism Human
+description neuroblastoma
+tissue brain
+vendorName ATCC
+vendorId CC-2266
+orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=CRL-2266&Template=cellBiology
+lineage Human neuroblastoma clonal subline of the neuroepithelioma cell line SK-N-SH that had been established in 1970 from the bone marrow biopsy of a 4-year-old girl with metastatic neuroblastoma
+karyotype cancer, trisomy of 1q
+termId BTO:0000793
+termUrl http://www.ebi.ac.uk/ontology-lookup/?termId=BTO:0000793
+sex F
+tier 3
+protocol SYDH_TFBS(Farnham):SH-SY5Y_Farnham_protocol.pdf
+
 term SK-N-MC
 tag SKNMC
 type Cell Line
