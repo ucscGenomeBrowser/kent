@@ -129,7 +129,7 @@ struct hash *cvHash;
 if (argc < 2)
     usage();
 database = argv[1];
-tdbList = hTrackDb(database, NULL);
+tdbList = hTrackDb(database);
 struct sqlConnection *conn = hAllocConn(database);
 
 grps = hLoadGrps(database);

@@ -11,6 +11,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "web.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
@@ -65,7 +66,10 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n");
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
+if (link)
+    htmlSetStyle(link);
+
 oldVars = hashNew(10);
 if (hIsGsidServer())
     cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);

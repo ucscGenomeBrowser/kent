@@ -77,7 +77,7 @@ if(!strcmp(cmd, "trackList"))
     // e.g. http://genome.ucsc.edu/hgApi?db=hg18&cmd=trackList
 
     struct trackDb *tdb, *tdbList = NULL;
-    tdbList = hTrackDb(database, NULL);
+    tdbList = hTrackDb(database);
     dyStringPrintf(output, "[\n");
     int count = 0;
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)

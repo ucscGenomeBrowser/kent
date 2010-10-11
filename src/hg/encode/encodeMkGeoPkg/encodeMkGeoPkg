@@ -326,8 +326,10 @@ while(scalar(keys %objsSet) > 0) {
     my %cellLines = %{$cvTerms{"Cell Line"}};
     my %cellLineInfo = %{$cellLines{$cell}};
     my $organism = $cellLineInfo{"organism"};
+    my $lowerOrganism = $organism;
+    $lowerOrganism=~ tr/[A-Z]/[a-z]/;
     my $provider = $cellLineInfo{"vendorName"};
-    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/" . $cellLineInfo{"protocol"};
+    my $growthProtocolUrl = "http://genome.ucsc.edu/ENCODE/protocols/cell/$lowerOrganism/" . $cellLineInfo{"protocol"};
     my $growthProtocol = "Cells were grown according to ENCODE cell culture protocols: $growthProtocolUrl";
 
     my $extractProtocolUrl = "http://genome.ucsc.edu/cgi-bin/hgTrackUi?db=$database&g=$compositeName";
@@ -343,7 +345,7 @@ while(scalar(keys %objsSet) > 0) {
     my $ibrarySource    = $dataTypeLibrarySource{$dataType};
     my $ibrarySelection = $dataTypeLibrarySelection{$dataType};
 
-    # generate the POST
+    # generate the SOFT
     print MANIFEST "^SAMPLE=$sampleIdentifier" . "\n";
     print MANIFEST "!Sample_title = $sampleTitle" . "\n";
     print MANIFEST "!Sample_source_name = $cell" . "\n";
@@ -358,7 +360,7 @@ while(scalar(keys %objsSet) > 0) {
             $currentExpVars[$i] eq "None" or
             $currentExpVars[$i] eq "none" or
             ($expVars[$i] eq "antibody" and $currentExpVars[$i] eq "Input") or
-            $expVars[$i] eq "replicate") {
+            $expVars[$i] eq "replicate" or $expVars[$i] eq "rank") {
             # do nothing more
         } else {
             # otherwise output the fields given by %expVarDetails from the cv.ra
@@ -366,10 +368,12 @@ while(scalar(keys %objsSet) > 0) {
             my %cvData = %{$cvType{$currentExpVars[$i]}};
             for $j (@{$expVarDetails{$expVars[$i]}}) {
                 # if there's a better label for this term use it
-                if (defined $detailsCleaner{$j}) {
-                    print MANIFEST "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
-                } else {
-                    print MANIFEST "!Sample_characteristics = $expVars[$i] $j: ",  $cvData{$j}, "\n";
+                if (defined $cvData{$j}) {
+                    if (defined $detailsCleaner{$j}) {
+                        print MANIFEST "!Sample_characteristics = $expVars[$i] $detailsCleaner{$j}: ",  $cvData{$j}, "\n";
+                    } else {
+                        print MANIFEST "!Sample_characteristics = $expVars[$i] $j: ", $cvData{$j}, "\n";
+                    }
                 }
             }
         }

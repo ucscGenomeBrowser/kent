@@ -35,6 +35,7 @@ struct group
 {
 struct group *next;
 struct hash *viewHash;
+struct hash *repHash;
 
 struct pairList *pairs;
 };
@@ -43,9 +44,14 @@ void printGroup(struct group *group)
 {
 struct pairList *pairs = group->pairs;
 
-printf("group is: ");
+printf("{");
 for(; pairs; pairs=pairs->next)
-    printf("%s + %s,",pairs->name, pairs->val);
+    {
+    printf("%s = %s",pairs->name, pairs->val);
+    if (pairs->next)
+        printf(",");
+    }
+printf("}");
 printf("\n");
 }
 
@@ -173,7 +179,7 @@ for(listIter = list; listIter; listIter = listIter->next)
     printf("%s\n", listIter->expVar);
     struct pairList *pair;
     for (pair=listIter->pairs; pair; pair = pair->next)
-        printf("%s + %s,",pair->name, pair->val);
+        printf("%s = %s,",pair->name, pair->val);
     printf("\n");
     }
 #endif
@@ -185,19 +191,47 @@ return groups;
 
 void checkForReqView(struct group *groups, struct slName *reqViews)
 {
+int errs = 0;
 for(; groups; groups = groups->next)
     {
     struct slName *view = reqViews;
     for(; view; view = view->next)
         {
-        if ((groups->viewHash != NULL) && (hashLookup(groups->viewHash, view->name) == NULL))
+        if (groups->viewHash != NULL)
             {
-            printf("didn't find view %s in group\n", view->name);
-            printGroup(groups);
-            errAbort("aborting");
+            if (groups->repHash != NULL)
+                {
+                struct hashCookie cook = hashFirst(groups->repHash);
+                struct hashEl *hel;
+
+                while((hel = hashNext(&cook)) != NULL)
+                    {
+                    char buffer[10*1024];
+                    safef(buffer, sizeof buffer, "%s-%s",view->name, 
+                        (char *)hel->name);
+                    if (hashLookup(groups->viewHash, buffer) == NULL)
+                        {
+                        printf("didn't find view %s for replicate %s in ", 
+                            view->name,(char *)hel->name);
+                        printGroup(groups);
+                        errs++;
+                        }
+                    }
+                }
+            else
+                {
+                if (hashLookup(groups->viewHash, view->name) == NULL)
+                    {
+                    printf("didn't find view %s in group\n", view->name);
+                    printGroup(groups);
+                    errs++;
+                    }
+                }
             }
         }
     }
+if (errs > 0)
+    errAbort("aborting");
 }
 
 struct group *findGroup(struct mdbObj *mdbObjs, struct group *groups)
@@ -224,6 +258,7 @@ return NULL;
 
 void checkOverlap(struct mdbObj *mdbObjs, struct group *groups)
 {
+int errs = 0;
 for(; mdbObjs; mdbObjs = mdbObjs->next)
     {
     struct mdbVar *mdbVar = hashFindVal(mdbObjs->varHash, "objType");
@@ -242,16 +277,31 @@ for(; mdbObjs; mdbObjs = mdbObjs->next)
     if (ourGroup->viewHash == NULL)
         ourGroup->viewHash = newHash(10);
 
-    if ((hel = hashLookup(ourGroup->viewHash, mdbVar->val)) != NULL)
+    struct mdbVar *mdbReplicate = hashFindVal(mdbObjs->varHash, "replicate");
+    char buffer[10*1024];
+
+    if (mdbReplicate != NULL)
         {
-        printf("two views of type %s in same group\n", mdbVar->val);
-        printf("objects are %s and %s\n", (char *)hel->val, mdbObjs->obj);
-        printGroup(ourGroup);
-        errAbort("aborting");
+        if (ourGroup->repHash == NULL)
+            ourGroup->repHash = newHash(10);
+        hashStore(ourGroup->repHash, mdbReplicate->val);
+        safef(buffer, sizeof buffer, "%s-%s",mdbVar->val, mdbReplicate->val);
         }
     else
-        hashAdd(ourGroup->viewHash, mdbVar->val, mdbObjs->obj);
+        safef(buffer, sizeof buffer, "%s",mdbVar->val);
+
+    if ((hel = hashLookup(ourGroup->viewHash, buffer)) != NULL)
+        {
+        printf("two views of type %s in same group\n",buffer);
+        printf("objects are %s and %s\n", (char *)hel->val, mdbObjs->obj);
+        printGroup(ourGroup);
+        errs++;
+        }
+    else
+        hashAdd(ourGroup->viewHash, buffer, mdbObjs->obj);
     }
+if (errs)
+    errAbort("aborting");
 }
 
 void metaCollect(char *metaDb, char *reqViewsName, 

@@ -196,7 +196,7 @@ char *whiteList[WHITE_LIST_COUNT][2] = {
     //{"freezeDate",       "Gencode freeze date"},
     //{"level",            "Gencode level"},
     //{"annotation",       "Gencode annotation"},
-    {"accession",        "GEO accession"},
+    {"geoSample",        "GEO accession"},
     {"growthProtocol",   "Growth Protocol"},
     {"lab",              "Lab producing data"},
     {"labVersion",       "Lab specific details"},

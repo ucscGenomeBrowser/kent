@@ -289,7 +289,7 @@ if (newAlloced > carefulMaxToAlloc)
     char allocRequest[32];
     sprintLongWithCommas(maxAlloc, (long long)carefulMaxToAlloc);
     sprintLongWithCommas(allocRequest, (long long)newAlloced);
-    errAbort("Allocated too much memory - more than %s bytes (%s)",
+    errAbort("carefulAlloc: Allocated too much memory - more than %s bytes (%s)",
 	maxAlloc, allocRequest);
     }
 carefulAlloced = newAlloced;
