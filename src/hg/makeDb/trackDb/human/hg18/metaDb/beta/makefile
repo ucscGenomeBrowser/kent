@@ -13,5 +13,6 @@ wgEncodeSunyalbanyRnaGeneChip.ra\
 wgEncodeBuOrchid.ra\
 wgEncodeGisPet.ra\
 wgEncodeHudsonalphaMethyl27.ra\
+wgEncodeHudsonalphaRnaSeq.ra\
 
 include ../../../../makefile.metaDb
