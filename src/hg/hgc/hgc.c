@@ -6990,8 +6990,9 @@ if ((addp == 1) || (pred != NULL))
     sprintf(buffer, "%s",readName);
 
     if (!(sameString(pred, "ce3.blastWBPep01")
-	    || sameString(pred, "ce6.blastSGPep01") ||
-		sameString(pred, "ce4.blastSGPep01"))  &&
+	    || sameString(pred, "ce9.blastSGPep01")
+	    || sameString(pred, "ce6.blastSGPep01")
+	    || sameString(pred, "ce4.blastSGPep01"))  &&
 	(ptr = strchr(buffer, '.')) != NULL)
 	{
 	*ptr = 0;
@@ -18810,6 +18811,8 @@ if (pos != NULL)
 	char *assembly;
 	if (sameString("blastWBRef01", tdb->table))
 	    assembly = "ce3";
+	else if (sameString("blastCe9SG", tdb->table))
+	    assembly = "ce9";
 	else if (sameString("blastCe6SG", tdb->table))
 	    assembly = "ce6";
 	else if (sameString("blastCe4SG", tdb->table))
@@ -22960,8 +22963,7 @@ else if (sameWord(table, "firstEF"))
 else if ( sameWord(table, "blastHg16KG") ||  sameWord(table, "blatHg16KG" ) ||
         startsWith("blastDm",  table) || sameWord(table, "blastMm6KG") ||
         sameWord(table, "blastSacCer1SG") || sameWord(table, "blastHg17KG") ||
-        sameWord(table, "blastCe4SG") || sameWord(table, "blastCe6SG") ||
-        sameWord(table, "blastCe3WB") || sameWord(table, "blastHg18KG") )
+        startsWith("blastCe", table) || sameWord(table, "blastHg18KG") )
     {
     blastProtein(tdb, item);
     }
