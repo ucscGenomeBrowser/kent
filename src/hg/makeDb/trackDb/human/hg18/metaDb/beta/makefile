@@ -14,5 +14,6 @@ wgEncodeBuOrchid.ra\
 wgEncodeGisPet.ra\
 wgEncodeHudsonalphaMethyl27.ra\
 wgEncodeHudsonalphaRnaSeq.ra\
+wgEncodeRikenCage.ra\
 
 include ../../../../makefile.metaDb
