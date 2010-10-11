@@ -2,14 +2,13 @@ metaObject wgEncodeYaleRnaSeqPolyaAlignmentsGm12878
 objType file
 cell GM12878
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaAlignmentsGm12878.tagAlign.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalGm12878
 project wgEncode
 subId 539
 view Alignments
@@ -18,7 +17,7 @@ metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2009-11-24
 dateSubmitted 2009-03-17
@@ -28,7 +27,6 @@ fragLength 200
 grant Snyder
 lab Yale
 labVersion corrected locations
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562
 project wgEncode
 subId 788
 view Alignments
@@ -37,14 +35,13 @@ metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifna30m
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifna30m.tagAlign.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifna30m
 project wgEncode
 subId 540
 treatment IFNa30m
@@ -54,14 +51,13 @@ metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifna6h
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifna6h.tagAlign.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifna6h
 project wgEncode
 subId 541
 treatment IFNa6h
@@ -71,14 +67,13 @@ metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifng30m
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifng30m.tagAlign.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifng30m
 project wgEncode
 subId 542
 treatment IFNg30m
@@ -88,14 +83,13 @@ metaObject wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifng6h
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaAlignmentsK562Ifng6h.tagAlign.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifng6h
 project wgEncode
 subId 543
 treatment IFNg6h
@@ -105,14 +99,13 @@ metaObject wgEncodeYaleRnaSeqPolyaRawDataGm12878
 objType file
 cell GM12878
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaRawDataGm12878.fastq.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalGm12878
 project wgEncode
 subId 539
 view RawData
@@ -121,14 +114,13 @@ metaObject wgEncodeYaleRnaSeqPolyaRawDataK562
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-17
 dateUnrestricted 2009-12-17
 fileName wgEncodeYaleRnaSeqPolyaRawDataK562.fastq.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562
 project wgEncode
 subId 276
 view RawData
@@ -137,14 +129,13 @@ metaObject wgEncodeYaleRnaSeqPolyaRawDataK562Ifna30m
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaRawDataK562Ifna30m.fastq.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifna30m
 project wgEncode
 subId 540
 treatment IFNa30m
@@ -154,14 +145,13 @@ metaObject wgEncodeYaleRnaSeqPolyaRawDataK562Ifna6h
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaRawDataK562Ifna6h.fastq.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifna6h
 project wgEncode
 subId 541
 treatment IFNa6h
@@ -171,14 +161,13 @@ metaObject wgEncodeYaleRnaSeqPolyaRawDataK562Ifng30m
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaRawDataK562Ifng30m.fastq.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifng30m
 project wgEncode
 subId 542
 treatment IFNg30m
@@ -188,14 +177,13 @@ metaObject wgEncodeYaleRnaSeqPolyaRawDataK562Ifng6h
 objType file
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqPolyaRawDataK562Ifng6h.fastq.gz
 grant Snyder
 lab Yale
-parentTable wgEncodeYaleRnaSeqPolyaRawSignalK562Ifng6h
 project wgEncode
 subId 543
 treatment IFNg6h
@@ -205,7 +193,7 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalGm12878
 objType table
 cell GM12878
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -222,7 +210,7 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalK562
 objType table
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-17
 dateUnrestricted 2009-12-17
@@ -239,7 +227,7 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifna30m
 objType table
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -257,7 +245,7 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifna6h
 objType table
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -275,7 +263,7 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifng30m
 objType table
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -293,7 +281,7 @@ metaObject wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 objType table
 cell K562
 composite wgEncodeYaleRNAseq
-dataType RnaSeqPolya
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -307,4 +295,4 @@ tableName wgEncodeYaleRnaSeqPolyaSignalK562Ifng6h
 treatment IFNg6h
 view Signal
 
-# MAGIC: 1444430197
+# MAGIC: 18630115

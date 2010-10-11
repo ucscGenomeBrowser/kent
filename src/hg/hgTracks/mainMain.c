@@ -11,6 +11,7 @@
 #include "hash.h"
 #include "cheapcgi.h"
 #include "htmshell.h"
+#include "web.h"
 #include "cart.h"
 #include "hdb.h"
 #include "hui.h"
@@ -43,7 +44,7 @@ char *excludeVars[] = { "submit", "Submit", "hgt.reset",
 	    "hgt.trackImgOnly", "hgt.ideogramToo", "hgt.trackNameFilter", "hgt.imageV1",
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 #ifdef TRACK_SEARCH
-             searchTracks, "hgt.delRow", "hgt.addRow", "hgt.forceSearch",
+             searchTracks, "hgt.delRow", "hgt.addRow", "hgt.forceSearch", "hgt_startFrom",
 #endif
             NULL };
 
@@ -65,7 +66,10 @@ organization = (hIsGisaidServer() ? "GISAID" : organization);
 htmlPushEarlyHandlers();
 cgiSpoof(&argc, argv);
 htmlSetBackground(hBackgroundImage());
-htmlSetStyle("<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\" TYPE=\"text/css\">\n");
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
+if (link)
+    htmlSetStyle(link);
+
 oldVars = hashNew(10);
 if (hIsGsidServer())
     cartHtmlShell("GSID Sequence View", doMiddle, hUserCookie(), excludeVars, oldVars);

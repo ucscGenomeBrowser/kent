@@ -229,7 +229,7 @@ if (s != NULL)
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(database, NULL);
+struct trackDb *list = hTrackDb(database);
 struct customTrack *ctList, *ct;
 
 /* exclude any track with a 'tableBrowser off' setting */
