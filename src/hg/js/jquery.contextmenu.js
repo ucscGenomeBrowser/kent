@@ -221,7 +221,8 @@
 				cmenu.shown=true;
 				$(document).one('click',null,function(){cmenu.hide()}); // Handle a single click to the document to hide the menu
                                     $(document).one('keyup', null, function(event){
-                                     // hide menu when user presses the escape key
+                                    // hide menu when user presses the escape key
+                                    // XXXX This doesn't work on the Mac (we never get any keyup events).
                                     if (event.keyCode == 27) {
                                         cmenu.hide();
                                     }
