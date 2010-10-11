@@ -3266,3 +3266,180 @@ Using table named 'hg19.metaDb_tdreszer'.
 objects:252  vars:5772
 mdbUpdate hg19 table=metaDb -replace wgEncodeHaibTfbs.ra
 
+2010-06-21 forgot to update status when tracks were released
+============================================================
+select id,name,status,user_id from projects where user_id = 8 and status = "reviewing";
++------+----------------------------------------------------+-----------+---------+
+| id   | name                                               | status    | user_id |
++------+----------------------------------------------------+-----------+---------+
+|    6 | HudsonAlpha PFSK-1/SK-N-MC Control                 | reviewing |       8 | 
+|    7 | HudsonAlpha PFSK-1/SK-N-MC FOXP2                   | reviewing |       8 | 
+|  259 | HudsonAlpha_ChIPSeq_Sin3Ak-20_K562_GM12878_Feb2709 | reviewing |       8 | 
+|  260 | HudsonAlpha_ChIPSeq_Egr-1_K562_GM12878_Feb2709     | reviewing |       8 | 
+|  261 | HudsonAlpha_ChIPSeq_USF-1_K562_GM12878_Feb2709     | reviewing |       8 | 
+|  262 | HudsonAlpha_ChIPSeq_CONTROL_K562_GM12878_Feb2709   | reviewing |       8 | 
+|  268 | HudsonAlpha_ChIP-Seq-FEB09_FASTQ                   | reviewing |       8 | 
+|  422 | HudsonAlpha_GM12878_Jul-09                         | reviewing |       8 | 
+|  432 | HudsonAlpha_HepG2_Jul-09                           | reviewing |       8 | 
+|  433 | HudsonAlpha_HeLa_Jul-09                            | reviewing |       8 | 
+|  434 | HudsonAlpha_U87_Jul-09                             | reviewing |       8 | 
+|  435 | HudsonAlpha_PANC1_Jul-09                           | reviewing |       8 | 
+|  436 | HudsonAlpha_PFSK1_Jul-09                           | reviewing |       8 | 
+|  437 | HudsonAlpha_BE2C_Jul-09                            | reviewing |       8 | 
+|  438 | HudsonAlpha_HTB11_Jul-09                           | reviewing |       8 | 
+|  741 | HudsonAlpha_ChIP-seq_Oct-09                        | reviewing |       8 | 
+|  756 | HudsonAlpha_ChIP-seq_Oct-09_noReps                 | reviewing |       8 | 
+|  759 | HudsonAlpha_ChIP-seq_Oct-09_RestOf                 | reviewing |       8 | 
+|  768 | HAIBChIPseq_RawData_Oct09                          | reviewing |       8 | 
+|  774 | HudsonAlpha_GR_ChIP-seq                            | reviewing |       8 | 
+|  776 | HudsonAlpha_ChIP-seq_HepG2_GABPa-Nov09             | reviewing |       8 | 
+|  780 | HudsonAlpha_ChIP-seq_HepG2_TAF250-Nov09            | reviewing |       8 | 
+|  781 | HudsonAlpha_ChIP-seq_HeLa_GABPa-Nov09              | reviewing |       8 | 
+|  782 | HudsonAlpha_ChIP-seq_HeLa_TAFIIp250-Nov09          | reviewing |       8 | 
+|  783 | HudsonAlpha_ChIP-seq_GM12878_Bcl11a-Nov09          | reviewing |       8 | 
+|  795 | HAIB_Chipseq_p300_GM12878-Nov09                    | reviewing |       8 | 
+|  798 | HudsonAlpha_Chipseq_ZBTB33_GM12878-Nov09           | reviewing |       8 | 
+|  801 | Hudsonalpha_Chipseq_A549_GR_5nMDex_09Dec           | reviewing |       8 | 
+|  802 | HudsonAlpha_Chipseq_A549_GR_50nMDex_Dec09          | reviewing |       8 | 
+|  803 | HudsonAlpha_Chipseq_A549_GR_500pMDex_Dec09         | reviewing |       8 | 
+|  804 | HudsonAlpha_Chipseq_GM12878_Pax5_c20_Dec09         | reviewing |       8 | 
+|  814 | HudsonAlpha_Chipseq_hESC_NRSF_Dec09                | reviewing |       8 | 
+|  806 | HudsonAlpha_Chipseq_GM12878_Pax5-N19_Dec09         | reviewing |       8 | 
+|  807 | HudsonAlpha_Chipseq_K562_TAF1_Dec09                | reviewing |       8 | 
+|  809 | HudsonAlpha_Chipseq_A549_Pol2_Dex_Dec09            | reviewing |       8 | 
+|  812 | HudsonAlpha_Chipseq_GM12878_Bcl3_Dec09             | reviewing |       8 | 
+|  813 | HudsonAlpha_ChIPSeq_A549_Pol2_1hEtOH_Dec09         | reviewing |       8 | 
+|  832 | HudsonAlpha_Chipseq_ZBTB33_HepG2                   | reviewing |       8 | 
+|  830 | HudsonAlpha_Chipseq_GM12878_Sp1                    | reviewing |       8 | 
+|  833 | HudsonAlpha_ChIPSeq_H1-hESC_Taf1                   | reviewing |       8 | 
+|  867 | HAIB_Chipseq_HepG2_FosL2                           | reviewing |       8 | 
+|  876 | HAIB_Chipseq_HepG2_HEY1_Dec09                      | reviewing |       8 | 
+|  878 | HAIB_Chipseq_HepG2_RXRA_Dec09                      | reviewing |       8 | 
+|  879 | HAIB_Chipseq_H1-hESC_Pol2_Dec09                    | reviewing |       8 | 
+| 1191 | HudsonAlpha_ReloadedFastqFiles                     | reviewing |       8 | 
+| 1060 | HudsonAlpha_Chipseq_Dec1_HepG2_Jan10               | reviewing |       8 | 
+| 1028 | HudsonAlpha_Chipseq_Jurkat_Pol2_Jan10              | reviewing |       8 | 
+| 1003 | HudsonAlpha_Chipseq_CTCF_A549_EtOH_Jan10           | reviewing |       8 | 
+|  994 | HudsonAlpha_ChIP-seq_GM12892_TAF1_Jan10            | reviewing |       8 | 
+|  980 | HudsonAlpha_ChIP-seq_GM12892_Pol2_Jan10            | reviewing |       8 | 
+|  981 | HudsonAlpha_ChIP-seq_GM12892_Pol2-4H8_Jan10        | reviewing |       8 | 
+|  978 | HudsonAlpha_Chipseq_Oct2_GM12891_Jan10             | reviewing |       8 | 
+|  979 | HudsonAlpha_ChIP-seq_GM12891_TAF1_Jan10            | reviewing |       8 | 
+|  977 | HudsonAlpha_Chipseq_pol2WG-GM12891_Jan10           | reviewing |       8 | 
+|  976 | HAIB_Chipseq_pol2-4H8-GM12891                      | reviewing |       8 | 
+|  880 | HAIB FASTQ_Submissions_Dec09                       | reviewing |       8 | 
+|  899 | HudsonAlpha_Chipseq_A549_CTCF_Jan10                | reviewing |       8 | 
+|  913 | HudsonAlpha_ChipSeq_USF1_A549_Dex_Jan10            | reviewing |       8 | 
+|  901 | HudsonAlpha__Chipseq_A549_USF1_Jan10               | reviewing |       8 | 
+|  920 | HudsonAlpha_Chipseq_Pol2-4H8_GM12878_Jan10         | reviewing |       8 | 
+|  958 | HudsonAlpha_Chipseq_Pol2-4H8_hESC_Jan10            | reviewing |       8 | 
+|  973 | HudsonAlpha_ChIP-seq_GM12891_SPI1_Jan10            | reviewing |       8 | 
++------+----------------------------------------------------+-----------+---------+
+62 rows in set (0.00 sec)
+/cluster/data/encode/pipeline/bin/encodeStatus.pl    6 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl    7 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  259 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  260 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  261 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  262 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  268 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  422 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  432 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  433 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  434 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  435 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  436 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  437 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  438 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  741 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  756 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  759 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  768 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  774 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  776 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  780 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  781 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  782 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  783 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  795 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  798 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  801 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  802 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  803 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  804 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  814 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  806 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  807 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  809 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  812 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  813 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  832 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  830 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  833 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  867 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  876 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  878 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  879 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1191 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1060 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1028 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1003 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  994 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  980 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  981 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  978 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  979 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  977 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  976 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  880 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  899 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  913 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  901 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  920 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  958 released
+/cluster/data/encode/pipeline/bin/encodeStatus.pl  973 released
+select id,name,status,user_id from projects where user_id = 8 and status = "reviewing";
+Empty set (0.00 sec)
+
+2010-06-22 Change all those downloads to displayed
+==================================================
+select id,name,status,user_id from projects where status = "downloads" and user_id = 8 order by id;
++------+--------------------------------------------------------+-----------+---------+
+| id   | name                                                   | status    | user_id |
++------+--------------------------------------------------------+-----------+---------+
+| 1215 | HudsonAlpha_ChIP_hESC_EGR1_May10                       | downloads |       8 | 
+| 1216 | HudsonAlpha_ECC1_ESR1sc-543_May10                      | downloads |       8 | 
+| 1224 | HudsonAlpha_ChIP_RaisedLibraries_GM12891_May10         | downloads |       8 | 
+| 1225 | HudsonAlpha_ChIP_RaisedLibraries_GM12892_May10         | downloads |       8 | 
+| 1226 | HudsonAlpha_ChIP_RaisedLibraries_hESC_May10            | downloads |       8 | 
+| 1227 | HudsonAlpha_ChIP_RaisedLibraries_HepG2_BioRupter_May10 | downloads |       8 | 
+| 1239 |        HudsonAlpha_ChIP_RaisedLibraries_HepG21PCR_June10    | downloads |       8 | 
+| 1240 |        HudsonAlpha_ChIP_RaisedLibraries_K562_1PCR_June10    | downloads |       8 | 
+| 1241 |        HudsonAlpha_ChIP_RaisedLibraries_GM12878_1PCR_June10 | downloads |       8 | 
+| 1242 |        HudsonAlpha_ChIP_RaisedLibraries_Hela_1PCR_June10    | downloads |       8 | 
+| 1251 | HudsonAlpha_ChIPseq_HEB_HepG2_June10                   | downloads |       8 | 
+| 1252 | HudsonAlpha_ChIPseq_Six5_GM12878_June10                | downloads |       8 | 
+| 1253 | HudsonAlpha_ChIPseq_RxRalpha_GM12878_June10            | downloads |       8 | 
+| 1254 | HudsonAlpha_ChIPseq_GR_ECC1-Dex_June10                 | downloads |       8 | 
+| 1258 | HudsonAlpha_ChIPseq_A549_Raised_June10_Set1            | downloads |       8 | 
+| 1261 | HudsonAlpha_ChIP_RandomRaised_June10_Set1              | downloads |       8 | 
++------+--------------------------------------------------------+-----------+---------+
+16 rows in set (0.00 sec)
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1215 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1216 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1224 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1225 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1226 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1227 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1239 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1240 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1241 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1242 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1251 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1252 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1253 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1254 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1258 displayed -force
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 1261 displayed -force
+select id,name,status,user_id from projects where status = "downloads" and user_id = 8 order by id;
+Empty set (0.00 sec)

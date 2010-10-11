@@ -31,7 +31,7 @@ function _matSelectViewForSubTracks(obj,view)
     } else {
         // Make main display dropdown show full if currently hide
         compositeName = obj.name.substring(0,obj.name.indexOf(".")); // {trackName}.{view}.vis
-        exposeComposite(compositeName);
+        exposeAll();
         matSubCBsEnable(true,view);
 
         // Needed for later
@@ -94,14 +94,12 @@ function matSelectViewForSubTracks(obj,view)
     waitOnFunction( _matSelectViewForSubTracks, obj,view);
 }
 
-function exposeComposite(compositeName)
+function exposeAll()
 {
     // Make main display dropdown show full if currently hide
-    var compositeDD = $("select[name='"+compositeName+"']");
-    if($(compositeDD).attr('selectedIndex') < 1) { // Composite vis display is HIDE
-        var maxVis = ($(compositeDD).children('option').length - 1);
-        $(compositeDD).attr('selectedIndex',maxVis);
-    }
+    var visDD = $("select.visDD"); // limit to hidden
+    if ($(visDD).length == 1 && $(visDD).attr('selectedIndex') == 0)   // limit to hidden
+        $(visDD).attr('selectedIndex',$(visDD).children('option').length - 1);
 }
 
 function matSubCbClick(subCB)
@@ -122,6 +120,10 @@ function matSubCbClick(subCB)
     //if( abcCB != undefined ) {
     //    matChkBoxNormalize( abcCB, classes );
     //}
+
+    if(subCB.checked)
+        exposeAll();  // Unhide composite vis?
+
     matSubCBsSelected();
 }
 
@@ -159,6 +161,9 @@ function matCbClick(matCB)
             }
         }
     }
+
+    if(matCB.checked)
+        exposeAll();  // Unhide composite vis?
     matSubCBsSelected();
 }
 
@@ -186,6 +191,8 @@ function matSetMatrixCheckBoxes(state)
         this.checked = state;
         matSubCBsetShadow(this);
     });
+    if(state)
+        exposeAll();  // Unhide composite vis?
     showOrHideSelectedSubtracks();
     matSubCBsSelected();
     //jQuery(this).css('cursor', '');
@@ -575,6 +582,40 @@ function compositeCfgRegisterOnchangeAction(prefix)
     $(list).change(function(){compositeCfgUpdateSubtrackCfgs(this);});
 }
 
+function registerViewOnchangeAction(viewTrackName)
+{
+// After composite level view settings are written to HTML it is necessary to go back and
+// make sure that each time they change, the change is ajaxed over
+    var list = $("input[name^='"+viewTrackName+"\.']");
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+
+    list = $("select[name^='"+viewTrackName+"\.']"); // includes composite.view.vis
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+
+    list = $("select[name='"+viewTrackName+"']"); // is 'composite' vis
+    $(list).each(function(){setIdRemoveName(this);});
+    $(list).change(function(){setCartVarFromObjId(this);});
+}
+
+function registerFormSubmit(formName)
+{
+    $('form[name="'+formName+'"]').each(function(i) { formSubmitWaitOnAjax(this)});
+}
+
+function visTriggersHiddenSelect(obj)
+{ // SuperTrack child changing vis should trigger superTrack reshaping.
+  // This is done by setting hidden input "_sel"
+    var trackName_Sel = $(obj).attr('name') + "_sel";
+    var theForm = $(obj).closest("form");
+    var visible = (obj.selectedIndex != 0);
+    if (visible) {
+        updateOrMakeNamedVariable(theForm,trackName_Sel,"1");
+    } else
+        disableNamedVariable(theForm,trackName_Sel);
+    return true;
+}
 
 function subtrackCfgHideAll(table)
 {
@@ -587,6 +628,24 @@ function subtrackCfgHideAll(table)
 
 var popUpTrackName;
 var popUpTitle = "";
+var popSaveAllVars = null;
+function popUpCfgOk(popObj, trackName)
+{ // Kicks off a Modal Dialog for the provided content.
+    var allVars = getAllVars(popObj, trackName );   // always subtrack cfg
+    var changedVars = varHashChanges(allVars,popSaveAllVars);
+    //warn("cfgVars:"+varHashToQueryString(changedVars));
+    setVarsFromHash(changedVars);
+    var newVis = changedVars[trackName];
+    if(newVis != null) {
+        var sel = $('input[name="'+trackName+'_sel"]:checkbox');
+        var checked = (newVis != 'hide' && newVis != '[]');  // subtracks do not have "hide", thus '[]'
+        if( $(sel) != undefined ) {
+            $(sel).each( function (i) { matSubCBcheckOne(this,checked); });  // Though there is only one, the each works but the direct call does not!
+            matSubCBsSelected();
+        }
+    }
+}
+
 function popUpCfg(content, status)
 { // Kicks off a Modal Dialog for the provided content.
     // Set up the modal dialog
@@ -594,8 +653,7 @@ function popUpCfg(content, status)
     $(popit).html("<div style='font-size:80%'>" + content + "</div>");
     $(popit).dialog({
         ajaxOptions: { cache: true }, // This doesn't work
-        resizable: true,
-        bgiframe: true,
+        resizable: false,
         height: 'auto',
         width: 'auto',
         minHeight: 200,
@@ -603,19 +661,11 @@ function popUpCfg(content, status)
         modal: true,
         closeOnEscape: true,
         autoOpen: false,
-        buttons: { "Ok": function() {
-            setAllVars($('#popit'),popUpTrackName); // Assumes subtrack, will do the right thing with "_sel" on hide // FIXME: sets vis even if same as inherited or unchanged!
-            var vis = $(this).find('select[name="'+popUpTrackName+'"]');
-            var sel = $('input[name="'+popUpTrackName+'_sel"]:checkbox');
-            if(vis != undefined && sel != undefined) {
-                var check = ($(vis).attr('selectedIndex') > 0);
-                $(sel).each( function (i) { matSubCBcheckOne(this,check); });  // Though there is only one, the each works but the direct call does not!
-                setCartVar( $(sel).attr('name'), $(sel).val() );
-                matSubCBsSelected();
-                // FIXME: These settings will be lost, unless the composite/view settings are ajaxed over on change!
-            }
+        buttons: { "OK": function() {
+            popUpCfgOk(this,popUpTrackName);
             $(this).dialog("close");
         }},
+        open: function() { popSaveAllVars = getAllVars( this, popUpTrackName ); }, // always subtrack cfg
         close: function() { $('#popit').empty(); }
     });
     // Apparently the options above to dialog take only once, so we set title explicitly.
@@ -631,13 +681,13 @@ function _popUpSubrackCfg(trackName,label)
     popUpTrackName = trackName;
     popUpTitle = label;
 
-    // FIXME: Avoid this getting into history and making the back button not work!
     $.ajax({
         type: "GET",
         url: "../cgi-bin/hgTrackUi?ajax=1&g=" + trackName + "&hgsid=" + getHgsid() + "&db=" + getDb(),
         dataType: "html",
         trueSuccess: popUpCfg,
         success: catchErrorOrDispatch,
+        error: errorHandler,
         cmd: "cfg",
         cache: false
     });
@@ -646,6 +696,7 @@ function _popUpSubrackCfg(trackName,label)
 function popUpSubtrackCfg(trackName,label)
 {
     waitOnFunction( _popUpSubrackCfg, trackName, label );  // Launches the popup but shields the ajax with a waitOnFunction
+    return false;
 }
 
 function subtrackCfgShow(tableName)
@@ -1322,19 +1373,20 @@ $(document).ready(function()
     //});
 
     // Allows rows to have their positions updated after a drag event
-    if($(".tableWithDragAndDrop").length > 0) {
-        $(".tableWithDragAndDrop").tableDnD({
+    var tblDnd = $(".tableWithDragAndDrop");
+    if($(tblDnd).length > 0) {
+        $(tblDnd).tableDnD({
             onDragClass: "trDrag",
-            //dragHandle: "dragHandle",
+            dragHandle: "dragHandle",
             onDrop: function(table, row, dragStartIndex) {
                     if(tableSetPositions) {
                         tableSetPositions(table);
                     }
                 }
             });
-        $(".trDraggable").hover(
-            function(){ $(this).addClass('trDrag'); },
-            function(){ $(this).removeClass('trDrag'); }
+        $(".dragHandle").hover(
+            function(){ $(this).parent('tr').addClass('trDrag'); },
+            function(){ $(this).parent('tr').removeClass('trDrag'); }
         );
     }
     $('.halfVis').css('opacity', '0.5'); // The 1/2 opacity just doesn't get set from cgi!

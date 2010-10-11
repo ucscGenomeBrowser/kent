@@ -373,7 +373,7 @@ for my $line (@fileList) {
     #my @sortFields = ("cell","dataType","rnaExtract","localization","fragSize","mapAlgorithm","ripAntibody","ripTgtProtein","treatment","antibody","protocol","input","lab","type","view","level","annotation","rank","replicate","subId");
     # Complete sort order, (I hope)
     my @sortFields = ("species","assembly","dataType","cell","rnaExtract","localization","phase","treatment","antibody","protocol","ripAntibody",
-                      "ripTgtProtein","restrictionEnzyme","promoter","control","replicate","setType","inputType","submitteDataVersion","subId","dataVersion",
+                      "ripTgtProtein","restrictionEnzyme","promoter","control","replicate","expId","labExpId","setType","controlId","submittedDataVersion","subId","dataVersion",
                       "dateSubmitted","dateResubmitted","dateReloaded","dateUnrestricted","project","grant","lab","labVersion","softwareVersion",
                       "mapAlgorithm","fragSize","fragLength","medianFragmentLength","fragmentLengthRange","chromStart","view","type","composite",
                       "tableName","parentTable","fileName","accession");

@@ -18,6 +18,30 @@ module PipelineBackground
     return nil
   end
 
+  def get_paraFetch_config()
+    paraFetchConfig = open("#{RAILS_ROOT}/config/paraFetch.yml") { |f| YAML.load(f.read) }
+    if paraFetchConfig == nil
+      print "unable to load config/paraFetch.yml\n"
+      exit 1
+    end
+    if paraFetchConfig["default"] == nil
+      print "error: default setting missing in config/paraFetch.yml\n" 
+      exit 1
+    end
+    if paraFetchConfig["default"]["conns"] == nil
+      print "error: conns setting missing from default setting in config/paraFetch.yml\n" 
+      exit 1
+    end
+    if paraFetchConfig["default"]["instances"] == nil
+      print "error: instances setting missing from default setting in config/paraFetch.yml\n"  
+      exit 1
+    end
+    return paraFetchConfig
+  rescue
+    print "unable to load config/paraFetch.yml\n" 
+    exit 1
+  end
+
   def yell(msg)
     # stupid simple logging:
     f = File.open(File.expand_path(File.dirname(__FILE__) + "/../log/yell.log"),"a")
@@ -58,7 +82,7 @@ module PipelineBackground
     exitCode = run_with_timeout(cmd, timeout)
 
     if exitCode == -1
-      ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/validate_error"
+      ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/validate_error"
       run_with_timeout(ecmd, 60)
     end
 
@@ -102,7 +126,7 @@ module PipelineBackground
     exitCode = run_with_timeout(cmd, timeout)
 
     if exitCode == -1
-      ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/load_error"
+      ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/load_error"
       run_with_timeout(ecmd, 60)
     end
 
@@ -154,7 +178,7 @@ module PipelineBackground
       exitCode = run_with_timeout(cmd, timeout)
 
       if exitCode == -1
-        ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/unload_error"
+        ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/unload_error"
         run_with_timeout(ecmd, 60)
       end
 
@@ -183,7 +207,7 @@ module PipelineBackground
   end
  
 
-  def upload_background(project_id, upurl, upftp, upload, local_path, autoResume, allowReloads)
+  def upload_background(project_id, upurl, upftp, upload, local_path, allowReloads)
 
     project = Project.find(project_id)
 
@@ -253,7 +277,16 @@ module PipelineBackground
       #  Speeds up downloads from distant sites.
       #  Tries 30 simultaneous connections.
       #  Performs up to 10 retries with sleeps in between of currently 30 seconds between retries.
-      cmd = "paraFetch 30 10 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
+      protoSite = get_proto_site(upurl)
+      paraFetchConfig = get_paraFetch_config
+      if paraFetchConfig[protoSite] == nil
+        protoSite = "default"
+      end
+      conns = paraFetchConfig[protoSite]["conns"]
+      if conns == nil  # not supposed to happen
+        conns = "10"
+      end
+      cmd = "paraFetch #{conns} 10 '#{upurl}' #{pf} &> #{projectDir}/upload_error" 
 
       #yell "\n\nGALT! cmd=[#{cmd}]\n\n"   # DEBUG remove
 
@@ -261,7 +294,7 @@ module PipelineBackground
       exitCode = run_with_timeout(cmd, timeout)
 
       if exitCode == -1
-        ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/upload_error"
+        ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/upload_error"
         run_with_timeout(ecmd, 60)
       end
 
@@ -404,7 +437,7 @@ module PipelineBackground
     fullPath = my_join(uploadDir,relativePath)
     Dir.entries(fullPath).each do
       |f| 
-      if (f == ".") or (f == "..")
+      if (f == ".") or (f == "..") or f.starts_with?("._")  # ignore . .. and mac resource forks (._)
         next
       end
       fullName = my_join(fullPath,f)
@@ -463,7 +496,7 @@ module PipelineBackground
     exitCode = run_with_timeout(cmd, timeout)
 
     if exitCode == -1
-      ecmd = "echo Timeout #{timeout} exceeded running [#{cmd}] >> #{projectDir}/upload_error"
+      ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/upload_error"
       run_with_timeout(ecmd, 60)
     end
 
@@ -556,7 +589,8 @@ module PipelineBackground
           return status.exitstatus
         end
         if ( (Time.now - before) > myTimeout)
-          Process.kill("ABRT",cpid)
+          killAllDescendantsOf(cpid)   # kill any descendents of this child first.
+          Process.kill("ABRT",cpid)    # kill this child
 	  pid, status = Process.wait2(cpid) # clean up zombies
           return -1
         end
@@ -805,6 +839,24 @@ private
       return false
     end
     return true
+  end
+
+  def killAllDescendantsOf(pid)
+    f = open("|pgrep -P #{pid}")
+    lines = f.readlines
+    f.close
+    lines.each do |line|
+      dpid = Integer(line)
+      killAllDescendantsOf(dpid)   # Recurse
+      Process.kill("ABRT",dpid)
+    end
+
+  end
+
+  def get_proto_site(url)
+    pastProto = url.index("://") + 3
+    pastSite = url.index("/", pastProto) + 1
+    return url[0,pastSite]
   end
 
 end

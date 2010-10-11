@@ -85,6 +85,12 @@ void cartRemoveExcept(struct cart *cart, char **except);
  * from cart.  Except array may be NULL in which case all
  * are removed. */
 
+struct slPair *cartVarsLike(struct cart *cart, char *wildCard);
+/* Return a slPair list of cart vars that match the wildcard */
+
+struct slPair *cartVarsWithPrefix(struct cart *cart, char *prefix);
+/* Return a slPair list of cart vars that begin with prefix */
+
 void cartRemoveLike(struct cart *cart, char *wildCard);
 /* Remove all variable from cart that match wildCard. */
 
@@ -284,8 +290,9 @@ void cartSaveSession(struct cart *cart);
 void cartDump(struct cart *cart);
 /* Dump contents of cart. */
 
-void cartDumpList(struct hashEl *elList);
-/* Dump list of cart variables. */
+#define CART_DUMP_AS_TABLE "cartDumpAsTable"
+void cartDumpList(struct hashEl *elList,boolean asTable);
+/* Dump list of cart variables optionally as a table with ajax update support. */
 
 void cartDumpPrefix(struct cart *cart, char *prefix);
 /* Dump all cart variables with prefix */
@@ -516,20 +523,18 @@ double cartOrTdbDouble(struct cart *cart, struct trackDb *tdb, char *var, double
 boolean cartValueHasChanged(struct cart *newCart,struct hash *oldVars,char *setting,boolean ignoreRemoved,boolean ignoreCreated);
 /* Returns TRUE if new cart setting has changed from old cart setting */
 
-struct slRef *cartNamesLike(struct cart *cart, char *wildCard);
-/* Returns reference list of all variable names that match wildCard. */
-
-struct slRef *cartNamesPrefixedBy(struct cart *cart, char *prefix);
-/* Returns reference list of all variable names with given prefix. */
-
 int cartNamesPruneChanged(struct cart *newCart,struct hash *oldVars,
-                          struct slRef **cartNames,boolean ignoreRemoved,boolean unChanged);
+                          struct slPair **cartNames,boolean ignoreRemoved,boolean unChanged);
 /* Prunes a list of cartNames if the settings have changed between new and old cart.
    Returns pruned count */
 
 int cartRemoveFromTdbTree(struct cart *cart,struct trackDb *tdb,char *suffix,boolean skipParent);
 /* Removes a 'trackName.suffix' from all tdb descendents (but not parent).
    If suffix NULL then removes 'trackName' which holds visibility */
+
+boolean cartTdbTreeMatchSubtrackVis(struct cart *cart,struct trackDb *tdbComposite);
+/* When subtrack vis is set via findTracks, and composite has no cart settings,
+   then fashion composite to match found */
 
 boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,struct hash *oldVars);
 /* When composite/view settings changes, remove subtrack specific settings

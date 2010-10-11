@@ -1,0 +1,253 @@
+# for emacs: -*- mode: sh; -*-
+
+# Haemonchus contortus
+# Sanger Institute and WormBase
+#	http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=6289
+#	Barber Pole worm
+
+##############################################################################
+## Fetch sequence (DONE - 2010-09-22 - Hiram)
+
+    mkdir -p /hive/data/genomes/haeCon1/ws210
+    cd /hive/data/genomes/haeCon1/ws210
+
+    wget --no-parent --timestamping -m -nH --cut-dirs=5 \
+	ftp://ftp.sanger.ac.uk/pub/wormbase/WS210/genomes/h_contortus/
+
+    hgFakeAgp -minScaffoldGap=100000 -minContigGap=1 \
+	sequences/dna/h_contortus.WS210.dna.fa.gz haeCon1.ucsc.agp
+
+##############################################################################
+## Initial browser build (DONE - 2010-09-23 - Hiram)
+    cd /hive/data/genomes/haeCon1
+
+    cat << '_EOF_' > haeCon1.config.ra
+# Config parameters for makeGenomeDb.pl:
+db haeCon1
+clade worm
+genomeCladePriority 86
+scientificName Haemonchus contortus
+commonName H. contortus
+assemblyDate Dec. 2009
+assemblyLabel Sanger Institute
+assemblyShortLabel WormBase WS210
+orderKey 898
+mitoAcc NC_010383.2
+fastaFiles
+/hive/data/genomes/haeCon1/ws210/sequences/dna/h_contortus.WS210.dna.fa.gz
+agpFiles /hive/data/genomes/haeCon1/ws210/haeCon1.ucsc.agp
+# qualFiles none
+dbDbSpeciesDir worm
+taxId 6289
+'_EOF_'
+    # << happy emacs
+
+    makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-stop=agp haeCon1.config.ra > agp.log 2>&1
+    time makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-continue=db -stop=db haeCon1.config.ra > db.log 2>&1
+    time makeGenomeDb.pl -workhorse=hgwdev -verbose=2 \
+	-continue=dbDb haeCon1.config.ra > dbDb.log 2>&1
+    #	real    0m2.452s
+
+#########################################################################
+# REPEATMASKER (DONE - 2010-09-23 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/haeCon1/bed/repeatMasker
+    cd /hive/data/genomes/haeCon1/bed/repeatMasker
+    time nice -n +19 doRepeatMasker.pl -noSplit -bigClusterHub=pk \
+	-buildDir=`pwd` haeCon1 > do.log 2>&1 &
+    #	real    49m9.090s
+
+    #	from the do.log:
+    #	RepeatMasker version development-$Id:
+    #	RepeatMasker,v 1.25 2010/09/08 21:32:26 angie Exp
+    #	CC   RELEASE 20090604;                                            *
+    #   June 30 2010 (open-3-2-9) version of RepeatMasker
+
+    cat faSize.rmsk.txt 
+    #	297989404 bases (19144420 N's 278844984 real 276673660 upper
+    #	2171324 lower) in 59708 sequences in 1 files
+    #	%0.73 masked total, %0.78 masked real
+
+#########################################################################
+# SIMPLE REPEATS (DONE - 2010-09-23 - Hiram)
+    screen 	#	use screen to control the job
+    mkdir /hive/data/genomes/haeCon1/bed/simpleRepeat
+    cd /hive/data/genomes/haeCon1/bed/simpleRepeat
+    time nice -n +19 doSimpleRepeat.pl -workhorse=hgwdev \
+	-smallClusterHub=memk -buildDir=`pwd` haeCon1 > do.log 2>&1 &
+    #	real    68m5.964s
+
+    cat fb.simpleRepeat 
+    #	9422991 bases of 278844984 (3.379%) in intersection
+
+#########################################################################
+# run window masker (DONE - 2010-09-23 - Hiram)
+    mkdir /hive/data/genomes/haeCon1/bed/windowMasker
+    cd /hive/data/genomes/haeCon1/bed/windowMasker
+    time doWindowMasker.pl -verbose=2 -workhorse=kolossus \
+	-buildDir=`pwd` haeCon1 > do.log 2>&1 &
+    #	real    12m36.101s
+
+    twoBitToFa haeCon1.wmsk.sdust.2bit stdout | faSize stdin
+    #	297989404 bases (19144420 N's 278844984 real 229219802 upper
+    #	49625182 lower) in 59708 sequences in 1 files
+    #	%16.65 masked total, %17.80 masked real
+
+    #	load this initial data to get ready to clean it
+    hgLoadBed haeCon1 windowmaskerSdust windowmasker.sdust.bed.gz
+    #	Loaded 1245986 elements of size 3
+    featureBits haeCon1 windowmaskerSdust
+    #	68752934 bases of 278844984 (24.656%) in intersection
+
+    #	eliminate the gaps from the masking
+    time featureBits haeCon1 -not gap -bed=notGap.bed
+    #	278844984 bases of 278844984 (100.000%) in intersection
+    #	real    0m21.941s
+    time nice -n +19 featureBits haeCon1 windowmaskerSdust notGap.bed \
+        -bed=stdout | gzip -c > cleanWMask.bed.gz
+    #	real    25m33.134s
+    #	49625182 bases of 278844984 (17.797%) in intersection
+
+    #	reload track to get it clean
+    hgLoadBed haeCon1 windowmaskerSdust cleanWMask.bed.gz
+    #	Loaded 1227338  elements of size 3
+    time featureBits haeCon1 windowmaskerSdust \
+	> fb.haeCon1.cleanWMask.txt 2>&1 &
+    #	real    0m34.903s
+    cat fb.haeCon1.cleanWMask.txt 
+    #	49625182 bases of 278844984 (17.797%) in intersection
+
+    cd /hive/data/genomes/haeCon1
+    #	mask the sequence with this clean mask
+    zcat bed/windowMasker/cleanWMask.bed.gz \
+	| twoBitMask haeCon1.unmasked.2bit stdin \
+	    -type=.bed haeCon1.2bit
+    twoBitToFa haeCon1.2bit stdout | faSize stdin \
+        > haeCon1.faSize.txt
+    cat haeCon1.faSize.txt
+    #	297989404 bases (19144420 N's 278844984 real 229219802 upper
+    #	49625182 lower) in 59708 sequences in 1 files
+    #	%16.65 masked total, %17.80 masked real
+
+    ln -s `pwd`/haeCon1.2bit /gbdb/haeCon1/haeCon1.2bit
+
+########################################################################
+# MAKE 11.OOC FILE FOR BLAT/GENBANK (DONE - 2010-09-22 - Hiram)
+    # numerator is haeCon1 gapless bases "real" as reported by faSize 
+    # denominator is hg19 gapless bases as reported by featureBits,
+    #	featureBits hg19 gap
+    # 1024 is threshold used for human -repMatch:
+    calc \( 278844984 / 2897310462 \) \* 1024
+    #	( 278844984 / 2897310462 ) * 1024 = 98.552526
+    # rounding up 100 is good enough for this one
+
+    cd /hive/data/genomes/haeCon1
+    blat haeCon1.2bit /dev/null /dev/null -tileSize=11 \
+      -makeOoc=haeCon1.11.ooc -repMatch=100
+    #	Wrote 7849 overused 11-mers to haeCon1.11.ooc
+
+    mkdir /hive/data/staging/data/haeCon1
+    cp -p haeCon1.2bit chrom.sizes haeCon1.11.ooc \
+	/hive/data/staging/data/haeCon1
+
+########################################################################
+# LASTZ SWAP ce9 (DONE - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzHaeCon1.2010-09-23
+    cat fb.ce9.chainHaeCon1Link.txt 
+    #	7484042 bases of 100286004 (7.463%) in intersection
+
+    # recip best to see how it looks
+    time doRecipBest.pl -workhorse=hgwdev -verbose=2 -buildDir=`pwd` \
+	ce9 haeCon1 > rbest.log 2>&1 &
+    #	real    4m5.408s
+
+    #	swap, this is also in haeCon1.txt
+    mkdir /hive/data/genomes/haeCon1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/haeCon1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzHaeCon1.2010-09-23/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk \
+	-workhorse=hgwdev -smallClusterHub=memk -swap > swap.log 2>&1 &
+    #	real    7m35s
+
+    cat fb.haeCon1.chainCe9Link.txt
+    #	8860569 bases of 278844984 (3.178%) in intersection
+
+#########################################################################
+# GENBANK AUTO UPDATE (DONE - 2010-09-27 - Hiram)
+    # align with latest genbank process.
+    ssh hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # edit etc/genbank.conf to add haeCon1 just before caeJap2
+
+# haeCon1 (Haemonchus contortus)
+haeCon1.serverGenome = /hive/data/genomes/haeCon1/haeCon1.2bit
+haeCon1.clusterGenome = /scratch/data/haeCon1/haeCon1.2bit
+haeCon1.ooc = /scratch/data/haeCon1/haeCon1.11.ooc
+haeCon1.lift = no
+haeCon1.refseq.mrna.native.pslCDnaFilter  = ${lowCover.refseq.mrna.native.pslCDnaFilter}
+haeCon1.refseq.mrna.xeno.pslCDnaFilter    = ${lowCover.refseq.mrna.xeno.pslCDnaFilter}
+haeCon1.genbank.mrna.native.pslCDnaFilter = ${lowCover.genbank.mrna.native.pslCDnaFilter}
+haeCon1.genbank.mrna.xeno.pslCDnaFilter   = ${lowCover.genbank.mrna.xeno.pslCDnaFilter}
+haeCon1.genbank.est.native.pslCDnaFilter  = ${lowCover.genbank.est.native.pslCDnaFilter}
+haeCon1.refseq.mrna.native.load = yes
+haeCon1.refseq.mrna.xeno.load  = yes  
+haeCon1.refseq.mrna.xeno.loadDesc = yes
+haeCon1.genbank.mrna.xeno.load = yes
+haeCon1.genbank.est.native.load = yes
+haeCon1.genbank.est.native.loadDesc = no
+haeCon1.downloadDir = haeCon1
+haeCon1.perChromTables = no
+
+    git commit -m "Added haeCon1 H. contortus WS210" etc/genbank.conf
+    git push
+    # update /cluster/data/genbank/:
+    make etc-update
+
+    ssh genbank
+    screen		#	use a screen to manage this job
+    cd /cluster/data/genbank
+    time nice -n +19 bin/gbAlignStep -initial haeCon1 &
+    #	logFile: var/build/logs/2010.09.27-13:30:01.haeCon1.initalign.log
+    #	real    737m20.406s
+
+    # load database when finished
+    ssh hgwdev
+    cd /cluster/data/genbank
+    time nice -n +19 ./bin/gbDbLoadStep -drop -initialLoad haeCon1
+    #	logFile: var/dbload/hgwdev/logs/2010.09.28-09:59:58.dbload.log
+    #	real    23m57.519s
+
+    # enable daily alignment and update of hgwdev
+    cd ~/kent/src/hg/makeDb/genbank
+    git pull
+    # add haeCon1 to:
+        etc/align.dbs
+        etc/hgwdev.dbs
+    git commit -m "Added haeCon1" etc/align.dbs etc/hgwdev.dbs
+    git push
+    make etc-update
+
+############################################################################
+#  BLATSERVERS ENTRY (DONE - 2008-06-04 - Hiram)
+#	After getting a blat server assigned by the Blat Server Gods,
+    ssh hgwdev
+
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("haeCon1", "blat5", "17792", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("haeCon1", "blat5", "17793", "0", "1");' \
+	    hgcentraltest
+    #	test it with some sequence
+
+############################################################################
+# reset default position to ZC101.2e protein blat result
+    ssh hgwdev
+    hgsql -e 'update dbDb set defaultPos="Hcon_Contig0059139:30257-50430"
+	where name="haeCon1";' hgcentraltest
+
+############################################################################

@@ -2,7 +2,7 @@ metaObject wgEncodeUwDGFAlignmentsGm06990
 objType file
 cell GM06990
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -19,7 +19,7 @@ metaObject wgEncodeUwDGFAlignmentsHepg2
 objType file
 cell HepG2
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -36,7 +36,7 @@ metaObject wgEncodeUwDGFAlignmentsK562
 objType file
 cell K562
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
@@ -53,7 +53,7 @@ metaObject wgEncodeUwDGFAlignmentsSknshra
 objType file
 cell SK-N-SH_RA
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -70,7 +70,7 @@ metaObject wgEncodeUwDGFAlignmentsTh1
 objType file
 cell Th1
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
@@ -87,7 +87,7 @@ metaObject wgEncodeUwDGFHotspotsGm06990
 objType table
 cell GM06990
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -104,7 +104,7 @@ metaObject wgEncodeUwDGFHotspotsHepg2
 objType table
 cell HepG2
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -121,7 +121,7 @@ metaObject wgEncodeUwDGFHotspotsK562
 objType table
 cell K562
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
@@ -138,7 +138,7 @@ metaObject wgEncodeUwDGFHotspotsSknshra
 objType table
 cell SK-N-SH_RA
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -155,7 +155,7 @@ metaObject wgEncodeUwDGFHotspotsTh1
 objType table
 cell Th1
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
@@ -172,7 +172,7 @@ metaObject wgEncodeUwDGFPeaksGm06990
 objType table
 cell GM06990
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -189,7 +189,7 @@ metaObject wgEncodeUwDGFPeaksHepg2
 objType table
 cell HepG2
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -206,7 +206,7 @@ metaObject wgEncodeUwDGFPeaksK562
 objType table
 cell K562
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
@@ -223,7 +223,7 @@ metaObject wgEncodeUwDGFPeaksSknshra
 objType table
 cell SK-N-SH_RA
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -240,7 +240,7 @@ metaObject wgEncodeUwDGFPeaksTh1
 objType table
 cell Th1
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
@@ -257,7 +257,7 @@ metaObject wgEncodeUwDGFRawDataHepg2
 objType file
 cell HepG2
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -273,7 +273,7 @@ metaObject wgEncodeUwDGFRawDataSknshra
 objType file
 cell SK-N-SH_RA
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -289,7 +289,7 @@ metaObject wgEncodeUwDGFRawDataTh1
 objType file
 cell Th1
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
@@ -305,7 +305,7 @@ metaObject wgEncodeUwDGFRawSignalGm06990
 objType table
 cell GM06990
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -322,7 +322,7 @@ metaObject wgEncodeUwDGFRawSignalHepg2
 objType table
 cell HepG2
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -339,7 +339,7 @@ metaObject wgEncodeUwDGFRawSignalK562
 objType table
 cell K562
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
@@ -356,7 +356,7 @@ metaObject wgEncodeUwDGFRawSignalSknshra
 objType table
 cell SK-N-SH_RA
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -373,7 +373,7 @@ metaObject wgEncodeUwDGFRawSignalTh1
 objType table
 cell Th1
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
@@ -390,7 +390,7 @@ metaObject wgEncodeUwDGFSignalGm06990
 objType table
 cell GM06990
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -406,7 +406,7 @@ metaObject wgEncodeUwDGFSignalHepg2
 objType table
 cell HepG2
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -422,7 +422,7 @@ metaObject wgEncodeUwDGFSignalK562
 objType table
 cell K562
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
@@ -438,7 +438,7 @@ metaObject wgEncodeUwDGFSignalSknshra
 objType table
 cell SK-N-SH_RA
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -454,7 +454,7 @@ metaObject wgEncodeUwDGFSignalTh1
 objType table
 cell Th1
 composite wgEncodeUwDGF
-dataType DGF
+dataType DnaseDgf
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-05
 dateUnrestricted 2010-07-05
@@ -466,4 +466,4 @@ subId 637
 tableName wgEncodeUwDGFSignalTh1
 view Signal
 
-# MAGIC: -1136509973
+# MAGIC: -1088892641

@@ -162,6 +162,7 @@ our %validators = (
     origAssembly => \&validateNoValidation,
     controlId => \&validateNoValidation,
     labExpId => \&validateNoValidation,
+    labProtocolId => \&validateNoValidation,
     softwareVersion => \&validateNoValidation,
     accession => \&validateNoValidation,
     replicate => \&validateNoValidation,
@@ -1058,8 +1059,29 @@ sub isDownloadOnly {
     # Riken group have RawData and RawData2 because they have colorspace fasta and quality files
     # Wold group have RawData, RawData[2-7]
     # Wold group alignments are called 'Aligns', 'Splices', 'Paired'
-    return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
-	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
+    my $downOnly = $daf->{TRACKS}->{$view}->{downloadOnly};
+    if (!defined($daf->{TRACKS}->{$view}->{downloadOnly})) {
+        $downOnly = 'no';  # downloadsOnly not defined so assumes view in browser
+        if (lc($daf->{TRACKS}->{$view}->{type}) eq 'fastq') { # fastqs are explicitly always download only
+            $downOnly = 'yes';
+        } elsif ($view =~ m/^RawData\d*$/) { # To be backwards compatible, we are leaving this restriction
+            $downOnly = 'yes';
+        } elsif ($view eq 'Comparative') { # Again, left for backwards campatibility.  Is this wise?
+            $downOnly = 'yes';
+        } elsif ($view eq 'Alignments') { # DNA data will be special cased to dowload only BAMs
+            my $dataType = lc($daf->{dataType});
+            if ($dataType =~m/^chip.*$/ or $dataType =~m/^dna.*$/ or $dataType =~m/^faire.*$/ or $dataType =~m/^methyl.*$/) {
+                $downOnly = 'yes';
+            }
+        }
+    }
+    if ($downOnly eq 'yes') {
+        return 1;
+    } else {
+        return 0;
+    }
+    #return ( (($daf->{TRACKS}->{$view}->{downloadOnly} || "") eq 'yes') or ($view =~ m/^RawData\d*$/ or $view eq 'Comparative'
+    #	or ($view eq 'Alignments' and $grant ne "Gingeras" and $grant ne "Wold"))) ? 1 : 0;
 
 }
 
@@ -1584,7 +1606,7 @@ if(!@errors) {
         # Also note that any project (like transcriptome) that doesnt have replicates should also use
         # this for their auto-create signals.
         HgAutomate::verbose(2, "ddfReplicateSets loop key=[$key] aln=[".(defined($ddfReplicateSets{$key}{VIEWS}{Alignments}))."] rawsig=[".(defined($ddfReplicateSets{$key}{VIEWS}{RawSignal}))."]\n");
-        if( ( !defined($daf->{noAutoCreate}) || $daf->{noAutoCreate} ne "yes")
+        if($daf->{noAutoCreate} && ( $daf->{noAutoCreate} eq "no") #We are no longer AutoCreateing, we only create under duress, 9-17-10
         && defined($ddfReplicateSets{$key}{VIEWS}{Alignments})
         ##&& !defined($ddfReplicateSets{$key}{VIEWS}{RawSignal})   ## No longer create RawSignals
         && !defined($ddfReplicateSets{$key}{VIEWS}{PlusRawSignal})

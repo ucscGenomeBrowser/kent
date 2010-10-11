@@ -2742,7 +2742,7 @@ dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
 
 
 #########################################################################
-# LIFTOVER BDTNP DATA FROM DM2 (DONE 1/29/09 angie - REDONE with more data 2/2/09)
+# LIFTOVER BDTNP DATA FROM DM2 (DONE 1/29/09 angie - REDONE with more data 2/2/09, more 9/14/10)
     ssh hgwdev
     mkdir /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver
     cd /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver
@@ -2856,6 +2856,50 @@ dm3.upstreamMaf = multiz15way /hive/data/genomes/dm3/bed/multiz15way/species.lst
       hgLoadWiggle -pathPrefix=/gbdb/dm3/bdtnp dm3 $f:r $f
     end
     rm wiggle.tab
+
+    # New data 8/27, 8/30/10, 9/14/10
+    mkdir /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver/100827
+    cd /hive/data/genomes/dm3/bed/bdtnpChipperLiftOver/100827
+    # DNase and ChIP/chip:
+    foreach f (/hive/data/genomes/dm2/bed/bdtnpChipper/100819/*.bw)
+      echo $f:t:r
+      bigWigToBedGraph $f stdout \
+      | liftOver -bedPlus=4 -minMatch=0.5 stdin /hive/data/genomes/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
+          stdout $f:t:r.unmapped \
+      | sort -k1,1 -k2n,2n \
+      | perl -wpe 'chomp; @w=split("\t"); next unless defined $w[3]; \
+          print "variableStep chrom=$w[0]\n" if (\!defined $prevChr || $prevChr ne $w[0]); \
+          $_ = "$w[2]\t$w[3]\n";  $prevChr = $w[0];' \
+      | wigToBigWig -clip stdin /hive/data/genomes/dm3/chrom.sizes $f:t:r.bw
+    end
+    foreach f (bdtnp*.bw)
+      ln -s `pwd`/$f /gbdb/dm3/bdtnp/$f
+      hgBbiDbLink dm3 $f:t:r /gbdb/dm3/bdtnp/$f
+    end
+    # Accessible regions:
+    foreach f (/hive/data/genomes/dm2/bed/bdtnpChipper/100819/5%*.txt)
+      set t = `echo "$f" | perl -wpe 's/^.*stage (\d+).txt/bdtnpDnaseAccS$1/'`
+      echo $f --\> $t
+      tail -n +3 "$f" \
+      | awk '{print $1, ($2-1), $3;}' \
+      | liftOver -bedPlus=3 -minMatch=0.5 stdin /hive/data/genomes/dm2/bed/liftOver/dm2ToDm3.over.chain.gz \
+          stdout $t.unmapped \
+      | hgLoadBed dm3 $t stdin
+    end
+    # How many unmapped?  With default minMatch, we only lost one ChIP/chip region, but
+    # lost ~235k DNase datapoints.  Lowering minMatch to 0.5 didn't really help (~232k):
+    wc -l *.unmapped | egrep -v '^ +0 '
+#  465424 bdtnpDnaseS10R8816.unmapped
+#  465424 bdtnpDnaseS10R8820.unmapped
+#  465424 bdtnpDnaseS11R9485.unmapped
+#  465424 bdtnpDnaseS11R9486.unmapped
+#  465424 bdtnpDnaseS14R9477.unmapped
+#  465424 bdtnpDnaseS14R9478.unmapped
+#  465424 bdtnpDnaseS5R9481.unmapped
+#  465424 bdtnpDnaseS5R9482.unmapped
+#  465424 bdtnpDnaseS9R9127.unmapped
+#  465424 bdtnpDnaseS9R9128.unmapped
+
 
 #########################################################################
 # AFFYMETRIX TIMECOURSE (DONE 6/10/10 Fan)

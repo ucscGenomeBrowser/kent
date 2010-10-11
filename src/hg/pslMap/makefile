@@ -10,7 +10,7 @@ O = pslMap.o
 all: ${BINDIR}/pslMap
 
 
-pslMap: ${O} ${MYLIBS}
+${BINDIR}/pslMap: ${O} ${MYLIBS}
 	${CC} ${COPT} ${CFLAGS} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} ${L}
 	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

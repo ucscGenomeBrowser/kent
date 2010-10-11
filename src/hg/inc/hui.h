@@ -166,6 +166,7 @@ enum trackVisibility
     tvPack=3,           /* Zig zag it up and down. */
     tvSquish=4,         /* Pack with thin boxes and no labels. */
     };
+#define tvShow tvFull
 
 enum trackVisibility hTvFromString(char *s);
 /* Given a string representation of track visibility, return as
@@ -181,10 +182,12 @@ char *hStringFromTv(enum trackVisibility vis);
 /* Standard width for visibility dropdowns */
 #define TV_DROPDOWN_STYLE "width: 70px"
 
-void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
-	boolean canPack, char *class, char *visOnly);
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+	boolean canPack, char *class, char *visOnly, char *extra);
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
+#define hTvDropDownClassVisOnly(varName,vis,canPack,class,visOnly) \
+        hTvDropDownClassVisOnlyAndExtra(varName,vis,canPack,class,visOnly,NULL)
 
 void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boolean canPack, char *class,char *javascript);
 /* Make track visibility drop down for varName with style class and javascript */
@@ -197,7 +200,8 @@ void hTvDropDownClassWithJavascript(char *varName, enum trackVisibility vis, boo
 
 #define SUPERTRACK_DEFAULT_VIS  "hide"
 
-void hideShowDropDown(char *varName, boolean show, char *class);
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra);
+#define hideShowDropDown(varName,show,class) hideShowDropDownWithClassAndExtra(varName,show,class,NULL)
 /* Make hide/show dropdown for varName */
 
 /****** Some stuff for stsMap related controls *******/
@@ -892,12 +896,16 @@ char *compositeLabelWithVocabLink(char *db,struct trackDb *parentTdb, struct tra
 /* If the parentTdb has a controlledVocabulary setting and the vocabType is found,
    then label will be wrapped with the link to display it.  Return string is cloned. */
 
+char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean
+        showLongLabel,boolean showShortLabel, struct hash *trackHash);
+/* If metadata from metaDb exists, return string of html with table definition */
+
 boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
         boolean embeddedInText,boolean showLongLabel, struct hash *trackHash);
-/* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
+/* If metadata from metaTbl exists, create a link that will allow toggling it's display */
 
-boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int visibleChild);
+boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
+                                int visibleChild,char *extra);
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -906,6 +914,7 @@ boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
  *   -1 don't know (this function should determine)
  * If -1,i the subtracks field must be populated with the child trackDbs.
  * Returns false if not a supertrack */
+#define superTrackDropDown(cart,tdb,visibleChild) superTrackDropDownWithExtra(cart,tdb,visibleChild,NULL)
 
 boolean dimensionsExist(struct trackDb *parentTdb);
 /* Does this parent track contain dimensions? */
@@ -937,6 +946,9 @@ int tvCompare(enum trackVisibility a, enum trackVisibility b);
 
 enum trackVisibility tvMin(enum trackVisibility a, enum trackVisibility b);
 /* Return the less visible of a and b. */
+
+enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers);
+/* returns visibility limited by ancestry (or subtrack vis override) */
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb);
 /* Returns a string with the composite view control name if one exists */
@@ -974,6 +986,9 @@ void bedUi(struct trackDb *tdb, struct cart *cart, char *title, boolean boxed);
 
 void scoreCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *name,char *title,int maxScore,boolean boxed);
 /* Put up UI for filtering bed track based on a score */
+
+void pslCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
+/* Put up UI for psl tracks */
 
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *parentTdb, char *prefix ,char *title, boolean boxed);
 /* Put up UI for net tracks */
@@ -1141,5 +1156,8 @@ void hPrintAbbreviationTable(struct sqlConnection *conn, char *sourceTable, char
 
 int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
 /* Returns the four state checked state of the subtrack */
+
+void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
+/* Sets the fourState Checked in the cart and updates cached state */
 
 #endif /* HUI_H */

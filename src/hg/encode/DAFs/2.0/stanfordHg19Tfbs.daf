@@ -26,9 +26,8 @@ dafVersion        2.0
 # Lab and general info
 grant             Snyder
 lab               Stanford
-dataType          ChIPseq
+dataType          ChipSeq
 compositeSuffix   SydhTfbs
-dataAgreementSuffix Stanf
 group             regulation
 variables         cell, antibody, treatment, control
 assembly          hg19

@@ -3365,6 +3365,7 @@ include trackDb.wgEncodeYaleRnaSeq.ra
 include wgEncodeYaleChIPseq.ra
 
 # HudsonAlpha (aka HAIB) TFBS (Venkat, assisted by Tim)
+include wgEncodeHudsonalphaChipSeq.new.ra
 include wgEncodeHudsonalphaChipSeq.ra
 
 
@@ -4394,7 +4395,6 @@ dimensions dimensionX=cellType dimensionY=fragSize
 sortOrder cellType=+ fragSize=+ view=+
 controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
-priority 0
 type bed 3
 noInherit on
 wgEncode 1

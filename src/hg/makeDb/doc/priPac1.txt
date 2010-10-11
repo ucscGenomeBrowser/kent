@@ -866,3 +866,21 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/worms/priPac1/bed/tblastn.ce6SG
 
 #########################################################################
+# SWAP LASTZ ce9 (DONR - 2010-09-23 - Hiram)
+    # original alignment
+    cd /hive/data/genomes/ce9/bed/blastzPriPac1.2010-09-23
+    cat fb.ce9.chainPriPac1Link.txt 
+    #	6251889 bases of 100286004 (6.234%) in intersection
+
+    #	swap, this is also in priPac1.txt
+    mkdir /hive/data/genomes/priPac1/bed/blastz.ce9.swap
+    cd /hive/data/genomes/priPac1/bed/blastz.ce9.swap
+    time nice -n +19 doBlastzChainNet.pl -verbose=2 \
+	/hive/data/genomes/ce9/bed/blastzPriPac1.2010-09-23/DEF \
+	-qRepeats=windowmaskerSdust -bigClusterHub=pk -smallClusterHub=memk \
+	-swap > swap.log 2>&1 &
+    #	real    0m43.464s
+    cat fb.priPac1.chainCe9Link.txt
+    #	6799226 bases of 145948246 (4.659%) in intersection
+
+#########################################################################

@@ -17,7 +17,8 @@ static float minScoreCutoff;
 static char *motifTable = "transRegCodeMotifPseudoCounts";
 static char *markovTable;
 static boolean originalCoordinates = FALSE;
-static int topOnly = 0;
+static boolean topOnly = FALSE;
+static boolean uniformBackground = FALSE;
 struct chromInfo *chromInfo;
 static float prior = 0.5;                 // our prior belief that there is at least one binding site in a peak
 static float priorBackoff = 0.01;         // our prior belief that there are > 1 binding sites in a given peak = PRIOR * priorBackoff^n)
@@ -39,10 +40,12 @@ errAbort(
 
 static struct optionSpec options[] = {
     {"markovTable", OPTION_STRING},
+    {"minScoreCutoff", OPTION_FLOAT},
     {"originalCoordinates", OPTION_BOOLEAN},
     {"prior", OPTION_FLOAT},
     {"priorBackoff", OPTION_FLOAT},
-    {"topOnly", OPTION_INT},
+    {"topOnly", OPTION_BOOLEAN},
+    {"uniformBackground", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
@@ -114,7 +117,17 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
             {
             dnaLength = length;
             seq = hDnaFromSeq(database, chrom, chromStart, chromEnd, dnaUpper);
-            dnaMark0(seq, mark0, NULL);
+            if(uniformBackground)
+                {
+                int i;
+                mark0[0] = 1;
+                for(i = 1; i <= 4; i++)
+                    mark0[i] = 0.25;
+                }
+            else
+                {
+                dnaMark0(seq, mark0, NULL);
+                }
             }
         else
             {
@@ -162,7 +175,7 @@ for (fileNum = 0; fileNum < fileCount; fileNum++)
                     score = dnaMotifBitScoreWithMarkovBg(motif, seq->dna + j, mark2);
                 else
                     score = dnaMotifBitScoreWithMark0Bg(motif, seq->dna + j, mark0Copy);
-                if(score >= 0)
+                if(score >= minScoreCutoff)
                     {
                     int start;
                     if(strand == '-')
@@ -239,7 +252,8 @@ originalCoordinates = optionExists("originalCoordinates");
 minScoreCutoff = optionFloat("minScoreCutoff", 0);
 prior = optionFloat("prior", prior);
 priorBackoff = optionFloat("priorBackoff", priorBackoff);
-topOnly = optionInt("topOnly", topOnly);
+topOnly = optionExists("topOnly");
+uniformBackground = optionExists("uniformBackground");
 if (argc < 4)
     usage();
 motifFinder(argv[1], argv[2], argc-3, argv+3);

@@ -7,7 +7,7 @@ require File.dirname(__FILE__) + '/config/boot'
 
 require RAILS_ROOT + '/config/environment'
 
-#require "pp"
+#require "pp"  # debug remove
 
 #pp User.find(:all)
 
@@ -110,6 +110,10 @@ alljobs = {}
 validators = {}
 loaders = {}
 
+paraFetchRunCount = {}
+paraFetchRunProtoSite = {}
+paraFetchConfig = get_paraFetch_config
+
 while true
 
   # debug
@@ -160,6 +164,11 @@ while true
       validators.delete(project_id)
       loaders.delete(project_id)
       alljobs.delete(project_id)
+      protoSite = paraFetchRunProtoSite[project_id]
+      if protoSite != nil
+        paraFetchRunCount[protoSite] = paraFetchRunCount[protoSite] - 1
+        paraFetchRunProtoSite.delete(project_id)
+      end
 
       # remove this simple done message immediately
       job.destroy
@@ -176,18 +185,43 @@ while true
         if validators.length >= maxValidators
           doRun = false
         end
-      end
-      if source.starts_with? "load_background("
+      elsif source.starts_with? "load_background("
         if loaders.length >= maxLoaders
           doRun = false
         end
+      elsif source.starts_with? "upload_background("
+        # parse out the url parameter from the source command
+        #  the parameters are comma-separated, and literal strings are surrounded by quotes.
+        pastFirstComma = source.index(',"')+2
+        beforeSecondComma = source.index('",', pastFirstComma) - 1
+        upurl = source[pastFirstComma..beforeSecondComma]
+        if upurl != ""
+          # load-balance paraFetch in a site-specific manner 
+          # determined by the config/paraFetch.yml settings.
+          protoSite = get_proto_site(upurl)
+          maxParaFetches = paraFetchConfig["default"]["instances"]
+          if paraFetchConfig[protoSite] != nil
+            if paraFetchConfig[protoSite]["instances"] != nil
+              maxParaFetches = paraFetchConfig[protoSite]["instances"]
+            end
+          end
+          paraRunCount = paraFetchRunCount[protoSite]
+          if paraRunCount == nil
+            paraRunCount = 0
+          end
+          if paraRunCount >= maxParaFetches
+            doRun = false
+          end
+        end
       end
+
+
       # is it already running, or trying to start?
       if alljobs[project_id] 
         doRun = false  
       end
 
-      # check the 
+      # check the load
       if doRun
         myLoad = (`cat /proc/loadavg | gawk '{print $2}'`).to_f
         if (myLoad > maxServerLoad)
@@ -221,9 +255,13 @@ while true
         # add the project id to running lists
         if source.starts_with? "validate_background("
           validators[project_id] = true
-        end
-        if source.starts_with? "load_background("
+        elsif source.starts_with? "load_background("
           loaders[project_id] = true
+        elsif source.starts_with? "upload_background("
+          if upurl != ""
+            paraFetchRunCount[protoSite] = paraRunCount + 1
+            paraFetchRunProtoSite[project_id] = protoSite
+          end
         end
         alljobs[project_id] = true
 

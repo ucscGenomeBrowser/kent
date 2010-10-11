@@ -1,0 +1,2 @@
+filter out chr1 95 105 100 200 overlap 5 10 100 0.500
+filter out chr1 195 205 100 200 overlap 5 10 100 0.500

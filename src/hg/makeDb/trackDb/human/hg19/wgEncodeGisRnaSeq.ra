@@ -4,7 +4,7 @@ shortLabel GIS RNA-seq
 longLabel ENCODE Genome Institute of Singapore RNA-seq
 group expression
 subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 
-subGroup2 cellType Cell_Line 1-GM12878=GM12878_<i>Tier_1</i> 2-K562=K562_<i>Tier_1</i> H1hESC=H1-hESC 
+subGroup2 cellType Cell_Line 1-GM12878=GM12878_<i>Tier_1</i> 2-K562=K562_<i>Tier_1</i> H1hESC=H1-hESC_<i>Tier_1</i>
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=Long_PolyA+
 subGroup5 localization Localization cell=Cell cytosol=Cytosol 
@@ -31,7 +31,7 @@ superTrack wgEncodeRnaSeqSuper
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewPlusRawSignal on
         shortLabel K562 cy  S+ 1
         longLabel ENCODE GIS RNA-seq Plus Raw Signal Rep1 (longPolyA+ in K562 cytosol)
@@ -41,7 +41,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewPlusRawSignal off
         shortLabel K562 cy  S+ 2
         longLabel ENCODE GIS RNA-seq Plus Raw Signal Rep2 (longPolyA+ in K562 cytosol)
@@ -51,7 +51,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewPlusRawSignal on 
         shortLabel GM12878 cy  S+ 1
         longLabel ENCODE GIS RNA-seq Plus Raw Signal Rep1 (longPolyA+ in GM12878 cytosol)
@@ -61,7 +61,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1399 dateSubmitted=2010-07-03
 
         track wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewPlusRawSignal off
         shortLabel H1-hESC cl  S+ 1
         longLabel ENCODE GIS RNA-seq Plus Raw Signal Rep1 (longPolyA+ in H1-hESC cell)
@@ -82,7 +82,7 @@ superTrack wgEncodeRnaSeqSuper
     viewLimits 0:200
 
         track wgEncodeGisRnaSeqK562CytosolPapMinusRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewMinusRawSignal on 
         shortLabel K562 cy  S- 1
         longLabel ENCODE GIS RNA-seq Minus Raw Signal Rep1 (longPolyA+ in K562 cytosol)
@@ -92,7 +92,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewMinusRawSignal off
         shortLabel K562 cy  S- 2
         longLabel ENCODE GIS RNA-seq Minus Raw Signal Rep2 (longPolyA+ in K562 cytosol)
@@ -102,7 +102,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewMinusRawSignal on 
         shortLabel GM12878 cy  S- 1
         longLabel ENCODE GIS RNA-seq Minus Raw Signal Rep1 (longPolyA+ in GM12878 cytosol)
@@ -112,7 +112,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1399 dateSubmitted=2010-07-03
 
         track wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewMinusRawSignal off
         shortLabel H1-hESC cl  S- 1
         longLabel ENCODE GIS RNA-seq Minus Raw Signal Rep1 (longPolyA+ in H1-hESC cell)
@@ -142,7 +142,7 @@ superTrack wgEncodeRnaSeqSuper
     color 46,0,184
 
         track wgEncodeGisRnaSeqK562CytosolPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel K562 cy  Al 1
         longLabel ENCODE GIS RNA-seq Alignments Rep1 (longPolyA+ in K562 cytosol)
@@ -152,7 +152,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqK562CytosolPapAlnRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewAlignments off
         shortLabel K562 cy  Al 2
         longLabel ENCODE GIS RNA-seq Alignments Rep2 (longPolyA+ in K562 cytosol)
@@ -163,7 +163,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel GM12878 cy  Al 1
         longLabel ENCODE GIS RNA-seq Alignments Rep1 (longPolyA+ in GM12878 cytosol)
@@ -174,7 +174,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeGisRnaSeqH1hescCellPapAlnRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeGisRnaSeqViewAlignments off
         shortLabel H1-hESC cl  Al 1
         longLabel ENCODE GIS RNA-seq Alignments Rep1 (longPolyA+ in H1-hESC cell)

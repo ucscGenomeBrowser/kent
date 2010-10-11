@@ -3,9 +3,6 @@
 #include "pslBuild.h"
 #include "psl.h"
 
-/* score file header */
-char *pslBuildScoreHdr = "#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal\n";
-
 unsigned pslBuildGetBlastAlgo(char *program)
 /* determine blast algorithm flags */
 {
@@ -293,10 +290,35 @@ finishPsl(psl, flags);
 return psl;
 }
 
-void pslBuildWriteScores(FILE* scoreFh, struct psl *psl, double bitScore, double eValue)
-/* write scores for a PSL */
+FILE *pslBuildScoresOpen(char *scoreFile, bool inclDefs)
+/* open score file and write headers */
 {
-fprintf(scoreFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%g\t%g\n", psl->strand,
+FILE *fh = mustOpen(scoreFile, "w");
+fputs("#strand\tqName\tqStart\tqEnd\ttName\ttStart\ttEnd\tbitScore\teVal", fh);
+if (inclDefs)
+    fputs("\tqDef\ttDef", fh);
+fputc('\n', fh);
+return fh;
+}
+
+static void writeBasicScores(FILE* scoreFh, struct psl *psl, double bitScore, double eValue)
+/* write first part of row */
+{
+fprintf(scoreFh, "%s\t%s\t%d\t%d\t%s\t%d\t%d\t%g\t%g", psl->strand,
         psl->qName, psl->qStart, psl->qEnd, psl->tName, psl->tStart, psl->tEnd,
         bitScore, eValue);
+}
+
+void pslBuildScoresWrite(FILE* scoreFh, struct psl *psl, double bitScore, double eValue)
+/* write scores for a PSL */
+{
+writeBasicScores(scoreFh, psl, bitScore, eValue);
+fputc('\n', scoreFh);
+}
+
+void pslBuildScoresWriteWithDefs(FILE* scoreFh, struct psl *psl, double bitScore, double eValue, char *qDef, char *tDef)
+/* write scores and definitions for a PSL */
+{
+writeBasicScores(scoreFh, psl, bitScore, eValue);
+fprintf(scoreFh, "\t%s\t%s\n", qDef, tDef);
 }

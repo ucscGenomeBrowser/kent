@@ -229,7 +229,7 @@ if (s != NULL)
 static struct trackDb *getFullTrackList()
 /* Get all tracks including custom tracks if any. */
 {
-struct trackDb *list = hTrackDb(database, NULL);
+struct trackDb *list = hTrackDb(database);
 struct customTrack *ctList, *ct;
 
 /* exclude any track with a 'tableBrowser off' setting */
@@ -952,6 +952,8 @@ if (useJoiner)
     for (jp = jpList; jp != NULL; jp = jp->next)
 	{
 	struct joinerDtf *dtf = jp->b;
+	if (accessControlDenied(dtf->database, dtf->table))
+	    continue;
 	char buf[256];
 	char *s;
 	if (sameString(dtf->database, database))
@@ -1309,7 +1311,7 @@ else if (isCustomTrack(table))
     if (type != NULL)
         {
 	conn = hAllocConn(CUSTOM_TRASH);
-	if (startsWithWord("maf", type) || startsWithWord("makeItems", type))
+	if (startsWithWord("maf", type) || startsWithWord("makeItems", type) || sameWord("bedDetail", type) || sameWord("pgSnp", type))
 	    fieldList = sqlListFields(conn, ct->dbTableName);
 	hFreeConn(&conn);
 	}

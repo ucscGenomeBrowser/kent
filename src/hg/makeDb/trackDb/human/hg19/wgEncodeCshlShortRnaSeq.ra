@@ -1,16 +1,15 @@
-
 track wgEncodeCshlShortRnaSeq
 compositeTrack off
 shortLabel CSHL Sm RNA-seq
-longLabel ENCODE CSHL Gingeras Small RNA-seq
+longLabel ENCODE CSHL Small RNA-seq
 group expression
 subGroup1 view Views 1-Transfrags=TransFrags 2-PlusRawSignal=Plus_Raw_Signal 3-MinusRawSignal=Minus_Raw_Signal 4-Alignments=Alignments 
-subGroup2 cellType Cell_Line GM12878=GM12878_<i>Tier_1</i> K562=K562_<i>Tier_1</i> prostate=prostate 
-subGroup3 localization Localization cell=cell chromatin=chromatin cytosol=cytosol nucleus=nucleus nucleolus=nucleolus nucleoplasm=nucleoplasm polysome=polysome
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) prostate=prostate 
+subGroup3 localization Localization cell=cell cytosol=cytosol nucleus=nucleus chromatin=chromatin nucleolus=nucleolus nucleoplasm=nucleoplasm polysome=polysome
 subGroup4 rnaExtract RnaExtract short=ShortRNA
 dimensions dimensionX=localization dimensionY=cellType 
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+sortOrder cellType=+ localization=+ view=+
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
 visibilityViewDefaults  MinusRawSignal=hide PlusRawSignal=hide Alignments=hide
 priority 0
@@ -28,7 +27,7 @@ superTrack wgEncodeRnaSeqSuper
     pairEndsByName on
     showNames off
     noColorTag .
-    bamColorMode gray
+    bamColorMode off 
     bamGrayMode aliQual
     baseColorDefault diffBases
     baseColorUseSequence lfExtra
@@ -39,7 +38,6 @@ superTrack wgEncodeRnaSeqSuper
     maxWindowToDraw 1000000
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShortAln
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel K562 chrm sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 chromatin
@@ -49,7 +47,6 @@ superTrack wgEncodeRnaSeqSuper
         ## subId=1405 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqProstateCellTotalAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments on
         shortLabel Pros cell tl Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in prostate cell
@@ -58,7 +55,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1837 dateSubmitted=2010-06-30
 
         track wgEncodeCshlShortRnaSeqGm12878CellShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments on
         shortLabel GM12878 cell sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in GM12878 cell
@@ -69,7 +65,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqGm12878CytosolShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel GM12878 cyto sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in GM12878 cytosol
@@ -80,7 +75,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqK562CytosolShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel K562 cyto sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 cytosol
@@ -91,7 +85,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqK562NucleusShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel K562 nucl sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 nucleus
@@ -102,7 +95,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel K562 nlos sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 nucleolus
@@ -113,7 +105,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqK562CellShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments on
         shortLabel K562 cell sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 cell
@@ -124,7 +115,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqK562PolysomeShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel K562 psom sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 polysome
@@ -135,7 +125,6 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShortAln
-        release alpha
         parent wgEncodeCshlShortRnaSeqView4Alignments off
         shortLabel K562 nplm sh Al
         longLabel ENCODE CSHL Small RNA-seq Alignments in K562 nucleoplasm
@@ -144,15 +133,14 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1411 dateSubmitted=2010-06-14
 
-    track wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
-    release alpha
-    parent wgEncodeCshlShortRnaSeqView4Alignments off
-    shortLabel GM12878 nucl sh Al
-    longLabel ENCODE CSHL Small RNA-seq Alignments in GM12878 nucleus
-    subGroups view=4-Alignments cellType=GM12878 localization=nucleus rnaExtract=short
-    type bam
-    color 153,38,0
-    # subId=1402 dateSubmitted=2010-06-14
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortAln
+        parent wgEncodeCshlShortRnaSeqView4Alignments off
+        shortLabel GM12878 nucl sh Al
+        longLabel ENCODE CSHL Small RNA-seq Alignments in GM12878 nucleus
+        subGroups view=4-Alignments cellType=GM12878 localization=nucleus rnaExtract=short
+        type bam
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
 
     track wgEncodeCshlShortRnaSeqView3MinusRawSignal
     shortLabel Minus Raw Signal
@@ -160,15 +148,14 @@ superTrack wgEncodeRnaSeqSuper
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
-    autoScale off
+    #minLimit 0
+    #maxLimit 5059134
+    autoScale on
     transformFunc NONE
     windowingFunction mean
     maxHeightPixels 100:24:16
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShortMinusRaw
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 chrm sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 chromatin
@@ -178,7 +165,6 @@ superTrack wgEncodeRnaSeqSuper
         ## subId=1405 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqProstateCellTotalMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
         shortLabel Pros cell tl R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in prostate cell
@@ -187,7 +173,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1837 dateSubmitted=2010-06-30
 
         track wgEncodeCshlShortRnaSeqGm12878CellShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on
         shortLabel GM12878 cell sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in GM12878 cell
@@ -197,7 +182,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1403 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqGm12878CytosolShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel GM12878 cyto sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in GM12878 cytosol
@@ -207,7 +191,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1404 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562CytosolShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 cyto sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 cytosol
@@ -217,7 +200,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1406 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562NucleusShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nucl sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 nucleus
@@ -227,7 +209,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1407 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nlos sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 nucleolus
@@ -237,7 +218,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1408 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562CellShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal on 
         shortLabel K562 cell sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 cell
@@ -247,7 +227,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1409 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562PolysomeShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 psom sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 polysome
@@ -257,7 +236,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1410 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShortMinusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
         shortLabel K562 nplm sh R-
         longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in K562 nucleoplasm
@@ -266,15 +244,14 @@ superTrack wgEncodeRnaSeqSuper
         color 46,0,184
         # subId=1411 dateSubmitted=2010-06-14
 
-    track wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
-    release alpha
-    parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
-    shortLabel GM12878 nucl sh R-
-    longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in GM12878 nucleus
-    subGroups view=3-MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=short
-    type bigWig 1.000000 4933762.000000
-    color 153,38,0
-    # subId=1402 dateSubmitted=2010-06-14
+        track wgEncodeCshlShortRnaSeqGm12878NucleusShortMinusRaw
+        parent wgEncodeCshlShortRnaSeqView3MinusRawSignal off
+        shortLabel GM12878 nucl sh R-
+        longLabel ENCODE CSHL Small RNA-seq Minus Strand Raw Signal in GM12878 nucleus
+        subGroups view=3-MinusRawSignal cellType=GM12878 localization=nucleus rnaExtract=short
+        type bigWig 1.000000 4933762.000000
+        color 153,38,0
+        # subId=1402 dateSubmitted=2010-06-14
 
     track wgEncodeCshlShortRnaSeqView2PlusRawSignal
     shortLabel Plus Raw Signal
@@ -282,15 +259,14 @@ superTrack wgEncodeRnaSeqSuper
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
     viewLimits 0:500
-    minLimit 0
-    maxLimit 5059134
+    #minLimit 0
+    #maxLimit 5059134
     autoScale on
     transformFunc NONE
     windowingFunction mean
     maxHeightPixels 100:24:16
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShortPlusRaw
-        release alpha
         subTrack wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 chrm sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 chromatin
@@ -300,7 +276,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1405 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
         shortLabel Pros cell tl R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in prostate cell
@@ -309,7 +284,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1837 dateSubmitted=2010-06-30
 
         track wgEncodeCshlShortRnaSeqGm12878CellShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
         shortLabel GM12878 cell sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in GM12878 cell
@@ -319,7 +293,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1403 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqGm12878CytosolShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel GM12878 cyto sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in GM12878 cytosol
@@ -329,7 +302,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1404 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562CytosolShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 cyto sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 cytosol
@@ -339,7 +311,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1406 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562NucleusShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nucl sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 nucleus
@@ -349,7 +320,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1407 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nlos sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 nucleolus
@@ -359,7 +329,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1408 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562CellShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal on
         shortLabel K562 cell sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 cell
@@ -369,7 +338,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1409 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562PolysomeShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 psom sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 polysome
@@ -379,7 +347,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1410 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel K562 nplm sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in K562 nucleoplasm
@@ -389,7 +356,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1411 dateSubmitted=2010-06-14
 
         track wgEncodeCshlShortRnaSeqGm12878NucleusShortPlusRaw
-        release alpha
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
         shortLabel GM12878 nucl sh R+
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in GM12878 nucleus
@@ -403,13 +369,12 @@ superTrack wgEncodeRnaSeqSuper
     view 1-Transfrags
     visibility dense
     subTrack wgEncodeCshlShortRnaSeq
-    scoreFilter 100
-    scoreFilterLimits 100:1000
-    scoreMin 100
+    scoreFilter 0
+    scoreFilterLimits 0:1000
+    scoreMin 0
     minGrayLevel 4
 
         track wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel Pros cell sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in prostate cell
@@ -418,7 +383,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqGm12878CytosolShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel GM12878 cyto sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in GM12878 cytosol
@@ -428,7 +392,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqGm12878NucleusShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel GM12878 nucl sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in GM12878 nucleus
@@ -438,7 +401,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqGm12878CellShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel GM12878 cell sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in GM12878 cell
@@ -448,7 +410,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562ChromatinShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 chrm sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 chromatin
@@ -458,7 +419,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562CytosolShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 cyto sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 cytosol
@@ -468,7 +428,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562NucleusShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 nucl sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 nucleus
@@ -478,7 +437,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562NucleolusShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 nlos sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 nucleolus
@@ -488,7 +446,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562NucleoplasmShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 nplm sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 nucleoplasm
@@ -498,7 +455,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562PolysomeShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags off
         shortLabel K562 psom sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 polysome
@@ -508,7 +464,6 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1965 dateSubmitted=2010-07-20
 
         track wgEncodeCshlShortRnaSeqK562CellShortTransfrags
-        release alpha
         parent wgEncodeCshlShortRnaSeqView1-Transfrags on
         shortLabel K562 cell sh Tf
         longLabel ENCODE CSHL Small RNA-seq Transfrags in K562 cell

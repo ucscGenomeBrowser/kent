@@ -19,9 +19,14 @@ errAbort(
   "   makeTrackIndex database\n\n");
 }
 
-static void printTrack(char *database, struct sqlConnection *conn, struct trackDb *tdb, char *html, 
-                       struct hash *grpHash, struct hash *cvHash)
+static void printTrack(struct sqlConnection *conn, struct trackDb *tdb, char *html,
+                       struct hash *grpHash, struct hash *cvHash,struct hash *tdbHash)
 {
+// Don't duplicate superTracks
+if (hashLookup(tdbHash,tdb->track))
+    return;
+hashAdd(tdbHash,tdb->track,tdb);
+
 char query[256];
 struct sqlResult *sr = NULL;
 char **row = NULL;
@@ -53,9 +58,15 @@ if(metaDbExists && cvHash)
         struct hash *hash = hashFindVal(cvHash, row[0]);
         if(hash != NULL)
             {
-            char *str = hashFindVal(hash, "description");
-            if(str)
-                printf("%s ", str);
+            // hand-curated list of which cv.ra fields to include in fulltext index.
+            char *fields[] = {"description", "targetDescription", NULL};
+            int i;
+            for(i = 0; fields[i] != NULL; i++)
+                {
+                char *str = hashFindVal(hash, fields[i]);
+                if(str)
+                    printf("%s ", str);
+                }
             }
         }
     sqlFreeResult(&sr);
@@ -94,15 +105,14 @@ if(html != NULL)
     }
 printf("\n");
 
-// if(tdbIsComposite(tdb) && tdb->subtracks != NULL)
-if(tdbIsSuper(tdb))
-    hTrackDbLoadSuper(database, tdb);
+if(tdbIsSuper(tdb->parent))
+    printTrack(conn, tdb->parent, NULL, grpHash, cvHash, tdbHash);
 if(tdb->subtracks != NULL)
     {
     struct trackDb *subtrack;
     for (subtrack = tdb->subtracks; subtrack != NULL; subtrack = subtrack->next)
         // We have decided NOT to populate html down to children.
-        printTrack(database, conn, subtrack, NULL, grpHash, cvHash);
+        printTrack(conn, subtrack, NULL, grpHash, cvHash, tdbHash);
     }
 }
 
@@ -111,6 +121,7 @@ int main(int argc, char *argv[])
 char *database;
 struct trackDb *tdb, *tdbList = NULL;
 struct hash *grpHash = newHash(0);
+struct hash *tdbHash = newHash(0);
 struct grp *grp, *grps;
 char filePath[PATH_LEN];
 struct hash *cvHash;
@@ -118,7 +129,7 @@ struct hash *cvHash;
 if (argc < 2)
     usage();
 database = argv[1];
-tdbList = hTrackDb(database, NULL);
+tdbList = hTrackDb(database);
 struct sqlConnection *conn = hAllocConn(database);
 
 grps = hLoadGrps(database);
@@ -131,7 +142,7 @@ if(!fileExists(filePath))
 cvHash = raReadAll(filePath, "term");
 
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    printTrack(database, conn, tdb, NULL, grpHash, cvHash);
+    printTrack(conn, tdb, NULL, grpHash, cvHash, tdbHash);
 
 return 0;
 }

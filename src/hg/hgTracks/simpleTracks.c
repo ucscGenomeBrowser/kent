@@ -106,6 +106,7 @@
 #include "oreganno.h"
 #include "oregannoUi.h"
 #include "pgSnp.h"
+#include "bedDetail.h"
 #include "bed12Source.h"
 #include "dbRIP.h"
 #include "wikiLink.h"
@@ -503,14 +504,14 @@ dyStringPrintf(dy, "%s=%u", cartSessionVarName(), cartSessionId(cart));
 if(toggleGroup != NULL && tdbIsCompositeChild(toggleGroup->tdb))
     {
     int vis = toggleGroup->visibility;
-    struct trackDb *tdbParent = trackDbCompositeParent(toggleGroup->tdb);
+    struct trackDb *tdbParent = tdbGetComposite(toggleGroup->tdb);
     char *parentName = tdbParent->track;
     // Find parent track (as opposed to trackDb)
     struct track *tgParent =toggleGroup->parent;
     char *encodedTableName = cgiEncode(parentName);
     char *view = NULL;
     boolean setView = subgroupFind(toggleGroup->tdb,"view",&view);
-    if(tgParent!=NULL && tvCompare(tgParent->visibility,vis) > 0)
+    if(tgParent!=NULL&& tgParent->visibility != tvHide && tvCompare(tgParent->visibility,vis) > 0)
         {
         setView = FALSE; // Must open parent to see opened child
         vis = tgParent->visibility;
@@ -564,7 +565,7 @@ return dy;
 boolean isWithCenterLabels(struct track *track)
 /* Cases: only TRUE when global withCenterLabels is TRUE
  * If track->tdb has a centerLabelDense setting, go with it.
- * If composite child then no center labels in dense mode. */
+// * If composite child then no center labels in dense mode. */
 {
 if(!withCenterLabels)
     return FALSE;
@@ -575,10 +576,19 @@ if (track != NULL)
         {
         return sameWord(centerLabelsDense, "on");
         }
-    if ((limitVisibility(track) == tvDense) && tdbIsCompositeChild(track->tdb))
-	   return FALSE;
     }
 return withCenterLabels;
+}
+
+boolean isCenterLabelConditionallySeen(struct track *track)
+// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+{
+if (isCenterLabelConditional(track))
+    {
+    if (track->prevTrack && track->parent == track->prevTrack->parent && isCenterLabelConditional(track->prevTrack))
+        return FALSE;
+    }
+return isWithCenterLabels(track);
 }
 
 void mapStatusMessage(char *format, ...)
@@ -624,7 +634,6 @@ if(theImgBox && curImgTrack)
     {
     char link[512];
     safef(link,sizeof(link),"%s?position=%s:%d-%d&%s",hgTracksName(), chrom, start+1, end, ui->string); // NOTE: position may need removing due to portal
-#if defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
     if(!revCmplDisp && x < insideX)  // Do not toggle on side label!
         {
         width -= (insideX+1 - x);
@@ -644,7 +653,6 @@ if(theImgBox && curImgTrack)
             return;
             }
         }
-#endif// defined(IMAGEv2_DRAG_REORDER) && defined(FLAT_TRACK_LIST)
     //#ifdef IMAGEv2_SHORT_MAPITEMS
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
@@ -2791,10 +2799,8 @@ void genericMapItem(struct track *tg, struct hvGfx *hvg, void *item,
 /* This is meant to be used by genericDrawItems to set to tg->mapItem in */
 /* case tg->mapItem isn't set to anything already. */
 {
-#ifdef FLAT_TRACK_LIST
-// Don't bother if we are flat, imgV2, dense and a child.
+// Don't bother if we are imageV2 and a dense child.
 if(!theImgBox || tg->limitedVis != tvDense || !tdbIsCompositeChild(tg->tdb))
-#endif//def FLAT_TRACK_LIST
     {
     char *directUrl = trackDbSetting(tg->tdb, "directUrl");
     boolean withHgsid = (trackDbSetting(tg->tdb, "hgsid") != NULL);
@@ -9060,6 +9066,7 @@ bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
+#ifndef SUBTRACKS_HAVE_VIS
 /* Remove redundant cart settings to avoid cart bloat. */
 if (enabled == enabledInTdb)
     {
@@ -9067,6 +9074,7 @@ if (enabled == enabledInTdb)
     if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
         cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
     }
+#endif///def SUBTRACKS_HAVE_VIS
 #ifdef SUBTRACKS_HAVE_VIS
 if(overrideComposite)
     enabled = TRUE;
@@ -9494,8 +9502,17 @@ void loadPgSnp(struct track *tg)
 /* Load up pgSnp (personal genome SNP) type tracks */
 {
 char query[256];
-struct sqlConnection *conn = hAllocConn(database);
-safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", tg->table, chromName, winEnd, winStart);
+struct customTrack *ct = tg->customPt;
+char *table = tg->table;
+struct sqlConnection *conn; 
+if (ct == NULL) 
+    conn = hAllocConn(database);
+else 
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    }
+safef(query, sizeof(query), "select * from %s where chrom = '%s' and chromStart < %d and chromEnd > %d", table, chromName, winEnd, winStart);
 tg->items = pgSnpLoadByQuery(conn, query);
 /* base coloring/display decision on count of items */
 tg->customInt = slCount(tg->items);
@@ -9580,6 +9597,93 @@ tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = blastColor;
 tg->itemNameColor = blastNameColor;
+}
+
+
+char *cactusName(struct track *tg, void *item)
+/* Get name to use for refGene item. */
+{
+return "";
+}
+
+
+void cactusDraw(struct track *tg, int seqStart, int seqEnd,
+        struct hvGfx *hvg, int xOff, int yOff, int width,
+        MgFont *font, Color color, enum trackVisibility vis)
+{
+double scale = scaleForWindow(width, seqStart, seqEnd);
+struct slList *item;
+for (item = tg->items; item != NULL; item = item->next)
+    {
+    if(tg->itemColor != NULL)
+        color = tg->itemColor(tg, item, hvg);
+    char *name = tg->itemName(tg, item);
+    name = strchr(name, '.');
+
+    if (name != NULL)
+        name++;
+    int y = atoi(name) * tg->lineHeight + yOff;
+
+    tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
+    }
+//linkedFeaturesDraw(tg, seqStart, seqEnd,
+        //hvg, xOff, yOff, width,
+        //font, color, vis);
+}
+
+void cactusDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y, double scale,
+	MgFont *font, Color color, enum trackVisibility vis)
+{
+linkedFeaturesDrawAt(tg, item,
+	hvg, xOff, y, scale,
+	font, color, vis);
+}
+
+int cactusHeight(struct track *tg, enum trackVisibility vis)
+{
+tg->height = 3 * tg->lineHeight;
+return tg->height;
+}
+
+int cactusItemHeight(struct track *tg, void *item)
+{
+return tg->lineHeight;
+}
+
+Color cactusNameColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+return MG_WHITE;
+}
+
+void cactusLeftLabels(struct track *tg, int seqStart, int seqEnd,
+	struct hvGfx *hvg, int xOff, int yOff, int width, int height,
+	boolean withCenterLabels, MgFont *font, Color color,
+	enum trackVisibility vis)
+{
+}
+
+void cactusBedMethods(struct track *tg)
+/* cactus bed track methods */
+{
+tg->freeItems = linkedFeaturesFreeItems;
+tg->drawItems = cactusDraw;
+tg->drawItemAt = cactusDrawAt;
+tg->mapItemName = linkedFeaturesName;
+tg->totalHeight = cactusHeight;
+tg->itemHeight = cactusItemHeight;
+tg->itemStart = linkedFeaturesItemStart;
+tg->itemEnd = linkedFeaturesItemEnd;
+tg->itemNameColor = linkedFeaturesNameColor;
+tg->nextPrevExon = linkedFeaturesNextPrevItem;
+tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+tg->loadItems = loadGappedBed;
+//tg->itemName = cactusName;
+tg->itemName = linkedFeaturesName;
+//tg->mapItemName = refGeneMapName;
+//tg->itemColor = blastColor;
+tg->itemNameColor = cactusNameColor;
+tg->drawLeftLabels = cactusLeftLabels;
 }
 
 void blastMethods(struct track *tg)
@@ -10313,6 +10417,92 @@ else
 */
 }
 
+struct linkedFeatures *bedDetailLoadAsLf (char **row, int rowOffset, int fieldCount, boolean useItemRgb)
+/* load as a linked features track and use default displays */
+{
+struct bed *bedPart = bedLoadN(row+rowOffset, fieldCount);
+struct linkedFeatures *lf;
+if (fieldCount < 12)
+    bed8To12(bedPart);
+lf = lfFromBed(bedPart);
+if (useItemRgb)
+    {
+    lf->extra = (void *)USE_ITEM_RGB;   /* signal for coloring */
+    lf->filterColor=bedPart->itemRgb;
+    }
+return lf;
+}
+
+struct bed *bedDetailLoadAsBed (char **row, int rowOffset, int fieldCount)
+/* load as a bed track and use default displays */
+{
+return bedLoadN(row+rowOffset, fieldCount);
+}
+
+void loadBedDetailSimple(struct track *tg)
+/* Load bedDetails track as bed 4-7, other fields are for hgc clicks */
+{
+struct bed *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+int rowOffset = 0;
+struct customTrack *ct = tg->customPt;
+struct sqlConnection *conn; 
+char *table = tg->table;
+int bedSize = tg->bedSize; /* count of fields in bed part */
+
+if (ct == NULL)
+    conn = hAllocConn(database);
+else 
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    tg->bedSize = ct->fieldCount - 2; /* field count of bed part */
+    }
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bedDetailLoadAsBed(row, rowOffset, bedSize);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+}
+
+void loadBedDetail(struct track *tg)
+/* Load bedDetails type track as linked features, other fields are for hgc clicks */
+{
+struct linkedFeatures *list = NULL, *el;
+struct sqlResult *sr;
+char **row;
+int rowOffset = 0;
+struct sqlConnection *conn; // = hAllocConn(database);
+char *table = tg->table;
+int bedSize = tg->bedSize; /* field count of bed part */
+boolean useItemRgb = bedItemRgb(tg->tdb);
+struct customTrack *ct = tg->customPt;
+
+if (ct == NULL)
+    conn = hAllocConn(database);
+else 
+    {
+    conn = hAllocConn(CUSTOM_TRASH);
+    table = ct->dbTableName;
+    bedSize = ct->fieldCount - 2;
+    useItemRgb = bedItemRgb(ct->tdb);
+    }
+sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    el = bedDetailLoadAsLf(row, rowOffset, bedSize, useItemRgb);
+    slAddHead(&list, el);
+    }
+slReverse(&list);
+sqlFreeResult(&sr);
+tg->items = list;
+}
+
 void loadProtVar(struct track *tg)
 /* Load UniProt Variants with labels */
 {
@@ -10373,6 +10563,71 @@ tg->itemName = gvName;
 tg->mapItemName = gvPosMapName;
 tg->nextItemButtonable = TRUE;
 tg->nextPrevItem = linkedFeaturesLabelNextPrevItem;
+}
+
+char *pgSnpCtMapItemName(struct track *tg, void *item)
+/* Return composite item name for pgSnp custom tracks. */
+{
+struct pgSnp *myItem = item;
+char *itemName = myItem->name;
+static char buf[256];
+if (strlen(itemName) > 0)
+  safef(buf, sizeof(buf), "%s %s", ctFileName, itemName);
+else
+  safef(buf, sizeof(buf), "%s NoItemName", ctFileName);
+return buf;
+}
+
+void bedDetailCtMethods (struct track *tg, struct customTrack *ct)
+/* Load bed detail track from custom tracks as bed 4-12 */
+{
+if (ct != NULL && ct->fieldCount >= (9+2)) /* at least bed9 */
+    {
+    linkedFeaturesMethods(tg);
+    tg->loadItems = loadBedDetail;
+    }
+else  /* when in doubt set up as simple bed */
+    {
+    bedMethods(tg);
+    tg->loadItems = loadBedDetailSimple;
+    }
+tg->nextItemButtonable = TRUE;
+tg->customPt = ct;
+tg->canPack = TRUE;
+}
+
+void pgSnpCtMethods (struct track *tg)
+/* Load pgSnp track from custom tracks */
+{
+/* start with the pgSnp methods */
+pgSnpMethods(tg);
+tg->mapItemName = pgSnpCtMapItemName;
+tg->canPack = TRUE;
+}
+
+void bedDetailMethods (struct track *tg)
+/* Load bed detail track as bed 4-12 */
+{
+struct trackDb *tdb = tg->tdb;
+char *words[3];
+int size, cnt = chopLine(cloneString(tdb->type), words);
+if (cnt > 1)
+    size = atoi(words[1]) - 2;
+else
+    size = 4;
+tg->bedSize = size;
+if (size >= 9) /* at least bed9 */
+    {
+    linkedFeaturesMethods(tg);
+    tg->loadItems = loadBedDetail;
+    }
+else  /* when in doubt set up as simple bed */
+    {
+    bedMethods(tg);
+    tg->loadItems = loadBedDetailSimple;
+    }
+tg->nextItemButtonable = TRUE;
+tg->canPack = TRUE;
 }
 
 void protVarMethods (struct track *tg)
@@ -10455,7 +10710,6 @@ else
     {
     return hvGfxFindColorIx(hvg, 0, 0, 200);
     }
-hFreeConn(&conn);
 }
 
 void omimGeneMethods (struct track *tg)
@@ -10525,6 +10779,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     slAddHead(&list, lf);
     }
 sqlFreeResult(&sr);
+hFreeConn(&conn);
 slSort(&list, lfExtraCmp);
 tg->items = list;
 }
@@ -10868,6 +11123,14 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
+    }
+else if (startsWith(type, "bedDetail"))
+    {
+    bedDetailMethods(track);
+    }
+else if (sameWord(type, "pgSnp"))
+    {
+    pgSnpCtMethods(track);
     }
 #ifndef GBROWSE
 else if (sameWord(type, "coloredExon"))
@@ -11420,6 +11683,7 @@ registerTrackHandler("transfacHit", triangleMethods );
 registerTrackHandler("esRegGeneToMotif", eranModuleMethods );
 registerTrackHandler("leptin", mafMethods );
 registerTrackHandler("igtc", igtcMethods );
+registerTrackHandler("cactusBed", cactusBedMethods );
 /* Lowe lab related */
 #ifdef LOWELAB
 registerTrackHandler("refSeq", archaeaGeneMethods);

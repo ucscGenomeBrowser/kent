@@ -645,6 +645,15 @@ struct slPair *slPairFromString(char *s);
  * name1=val1 name2=val2 ...
  * Returns NULL if parse error */
 
+int slPairCmpCase(const void *va, const void *vb);
+/* Compare two slPairs, ignore case. */
+
+void slPairSortCase(struct slPair **pList);
+/* Sort slPair list, ignore case. */
+
+int slPairCmp(const void *va, const void *vb);
+/* Compare two slPairs. */
+
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing.
  * (Actually plain old freeMem does that these days.) */

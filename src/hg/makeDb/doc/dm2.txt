@@ -5736,7 +5736,7 @@ chainOne $(path1)
 
 #########################################################################
 # BDTNP CHIP-CHIP (DONE 4/9/08 angie)
-# New data added 2/2/09, see next section.
+# New data added 2/2/09 and 8/25/10, see next sections.
     # Berkeley Drosophila Transcription Network Project's ChIP-Chip data,
     # from Mark Biggin (MDBiggin at lbl dot gov).
     ssh kkstore04
@@ -5935,6 +5935,100 @@ chainOne $(path1)
       echo "    priority $pri"
       echo ""
       set pri = `expr $pri + 1`
+    end
+
+
+#########################################################################
+# BDTNP CHIP-CHIP UPDATE (DONE 9/14/10 angie)
+    mkdir /hive/data/genomes/dm2/bed/bdtnpChipper/100819
+    cd /hive/data/genomes/dm2/bed/bdtnpChipper/100819
+    # Unpacked chip-chip and DNase accessible regions files emailed by 
+    # Mark Biggins Aug. 9th, 13th, 16th and Sep. 13, 2010.
+    # Download some additional DNase accessibility files:
+    alias wg 'wget --timestamping --no-check-certificate --user=biggin --password=xxxx'
+    # NOTE: these files were replaced 8/30, see below...
+    wg https://data.htseq.org/biggin/wig/s5_rep9481.wig
+    wg https://data.htseq.org/biggin/wig/s5_rep9482.wig
+    wg https://data.htseq.org/biggin/wig/s9_rep9127.wig
+    wg https://data.htseq.org/biggin/wig/s9_rep9128.wig
+    wg https://data.htseq.org/biggin/wig/s10_rep8816.wig
+    wg https://data.htseq.org/biggin/wig/s10_rep8820.wig
+    wg https://data.htseq.org/biggin/wig/s11_rep9485.wig
+    wg https://data.htseq.org/biggin/wig/s11_rep9486.wig
+    wg https://data.htseq.org/biggin/wig/s14_rep9477.wig
+    wg https://data.htseq.org/biggin/wig/s14_rep9478.wig
+
+    # Accessibility levels:
+    foreach f (s*_rep*.wig)
+      set t = `echo $f | perl -wpe 's/^s(\d+)_rep(\d+).wig$/bdtnpDnaseS{$1}R$2/'`
+      echo $f --\> $t
+      tail -n +1 $f \
+      | sed -e 's/step=65/step=20/' \
+      | wigToBigWig -clip stdin /hive/data/genomes/dm2/chrom.sizes $t.bw
+    end
+    # All files have a few items off the end of some chroms:
+#line 2243431 of stdin: chromosome chr2h has 1694122 bases, but item ends at 1694124
+#line 3432024 of stdin: chromosome chr3L has 23771897 bases, but item ends at 23771904
+#line 4975059 of stdin: chromosome chr3h has 2955737 bases, but item ends at 2955744
+#line 5039139 of stdin: chromosome chr4 has 1281640 bases, but item ends at 1281644
+    foreach f (bdtnpDnase*.bw)
+      ln -s `pwd`/$f /gbdb/dm2/bdtnp/$f
+      hgBbiDbLink dm2 $f:r /gbdb/dm2/bdtnp/$f
+    end
+    # Accessible regions (updated stage 9 9/14/10 with corrected data):
+    foreach f (5%*.txt)
+      mac2unix "$f"
+      set t = `echo "$f" | perl -wpe 's/^.*stage (\d+).txt/bdtnpDnaseAccS$1/'`
+      echo $f --\> $t
+      tail -n +3 "$f" \
+      | awk '{print $1, ($2-1), $3;}' \
+      | hgLoadBed dm2 $t stdin
+    end
+#5% FDR regions stage 10.txt --> bdtnpDnaseAccS10
+#Loaded 23766 elements of size 3
+#5% FDR regions stage 11.txt --> bdtnpDnaseAccS11
+#Loaded 19743 elements of size 3
+#5% FDR regions stage 14.txt --> bdtnpDnaseAccS14
+#Loaded 23065 elements of size 3
+#5% FDR regions stage 5.txt --> bdtnpDnaseAccS5
+#Loaded 22694 elements of size 3
+#5% FDR regions stage 9.txt --> bdtnpDnaseAccS9
+#Loaded 16217 elements of size 3
+    # New ChIP/chip data:
+    foreach f ({hb,med}*.wig)
+      set t = `echo $f | perl -wpe 'm/^([a-z]+)_(\d+)(S\d+).*-(\d+).wig$/ || die; \
+                                    ($fac, $ab, $s, $fdr) = ($1, $2, $3, $4); \
+                                    $fac = ucfirst($fac); \
+                                    $_ = "bdtnp$fac$ab${s}Fdr$fdr"'`
+      echo $f --\> $t
+      wigToBigWig $f /hive/data/genomes/dm2/chrom.sizes $t.bw
+    end
+    foreach f (bdtnp[HM]*.bw)
+      echo $f:t
+      ln -s `pwd`/$f /gbdb/dm2/bdtnp/$f
+      hgBbiDbLink dm2 $f:r /gbdb/dm2/bdtnp/$f
+    end
+
+    # 8/30/10: new DNase data (normalized; password in email 8/27):
+    alias wg 'wget --timestamping --no-check-certificate --user=encode --password=xxxx'
+    wg http://www.uwencode.org/~sthomas/data/biggin/wiggle.tar.gz
+    tar xvzf wiggle.tar.gz
+    foreach f (wiggle/p5_S*_DS*.wig)
+      set t = `echo $f | perl -wpe 's/^wiggle\/p5_(S\d+)_DS(\d+).wig$/bdtnpDnase{$1}R$2/'`
+      echo $f --\> $t
+      wigToBigWig -clip $f /hive/data/genomes/dm2/chrom.sizes $t.bw
+    end
+    # again, all files have a few items that extend past end of chrom, NBD:
+#line 2243431 of wiggle/p5_S9_DS9128.wig: chromosome chr2h has 1694122 bases, but item ends at 1694124
+#line 3432024 of wiggle/p5_S9_DS9128.wig: chromosome chr3L has 23771897 bases, but item ends at 23771904
+#line 4975059 of wiggle/p5_S9_DS9128.wig: chromosome chr3h has 2955737 bases, but item ends at 2955744
+#line 5039139 of wiggle/p5_S9_DS9128.wig: chromosome chr4 has 1281640 bases, but item ends at 1281644
+    # No need to re-run hgBbiDbLink -- filenames are same.
+    # Get new max for trackDb bigWig specs:
+    foreach f ( bdtnpDnaseS*.bw )
+      echo $f
+      bigWigInfo $f | egrep '^(min|max)'
+      echo ""
     end
 
 

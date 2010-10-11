@@ -99,7 +99,7 @@ return psl;
 }
 
 struct simpleFeature *sfFromNumericCigar(const bam1_t *bam, int *retLength)
-/* Translate BAM's numeric CIGAR encoding into a list of simpleFeatures, 
+/* Translate BAM's numeric CIGAR encoding into a list of simpleFeatures,
  * and tally up length on reference sequence while we're at it. */
 {
 const bam1_core_t *core = &bam->core;
@@ -280,7 +280,7 @@ return TRUE;
 }
 
 int addBam(const bam1_t *bam, void *data)
-/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
+/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeatures item, and add it to tg->items. */
 {
 struct bamTrackData *btd = (struct bamTrackData *)data;
@@ -326,7 +326,7 @@ return lfs;
 }
 
 int addBamPaired(const bam1_t *bam, void *data)
-/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
+/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam
  * into a linkedFeaturesSeries item, and either store it until we find its mate
  * or add it to tg->items. */
 {
@@ -340,6 +340,10 @@ if (!(core->flag & BAM_FPAIRED) || (core->flag & BAM_FMUNMAP))
     {
     if (lf->start < winEnd && lf->end > winStart)
 	slAddHead(&(tg->items), lfsFromLf(lf));
+    if ((core->flag & BAM_FMUNMAP) && sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
+	sameString(btd->grayMode, BAM_GRAY_MODE_UNPAIRED))
+	// not properly paired: make it a lighter shade.
+	lf->grayIx -= 4;
     }
 else
     {
@@ -629,7 +633,7 @@ static void maybeDrawLeftLabels(struct track *tg, int seqStart, int seqEnd, stru
 if (tg->limitedVis == tvDense)
     {
     int fontHeight = mgFontLineHeight(font);
-    if (isWithCenterLabels(tg))
+    if (isCenterLabelIncluded(tg))
 	yOff += fontHeight;
     hvGfxTextRight(hvg, xOff, yOff, width, tg->lineHeight, color, font, tg->shortLabel);
     }

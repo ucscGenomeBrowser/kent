@@ -236,6 +236,12 @@ struct mdbObj *mdbObjsQueryByVars(struct sqlConnection *conn,char *table,struct 
 void mdbObjPrint(struct mdbObj *mdbObjs,boolean raStyle);
 // prints objs and var=val pairs as formatted metadata lines or ra style
 
+void mdbObjPrintToFile(struct mdbObj *mdbObjs,boolean raStyle, char *file);
+// prints (to file) objs and var=val pairs as formatted metadata lines or ra style
+
+void mdbObjPrintToStream(struct mdbObj *mdbObjs,boolean raStyle, FILE *outF);
+// prints (to stream) objs and var=val pairs as formatted metadata lines or ra style
+
 void mdbByVarPrint(struct mdbByVar *mdbByVars,boolean raStyle);
 // prints var=val pairs and objs that go with them single lines or ra style
 
@@ -291,6 +297,20 @@ const struct mdbObj *metadataForTable(char *db,struct trackDb *tdb,char *table);
 const char *metadataFindValue(struct trackDb *tdb, char *var);
 // Finds the val associated with the var or retruns NULL
 
+
+#define MDB_VAL_STD_TRUNCATION 64
+struct slName *mdbObjSearch(struct sqlConnection *conn, char *var, char *val, char *op, int limit, boolean tables, boolean files);
+// Search the metaDb table for objs by var and val.  Can restrict by op "is" or "like" and accept (non-zero) limited string size
+// Search is via mysql, so it's case-insensitive.  Return is sorted on obj.
+
+struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+// Search the metaDb table for vals by var.  Can impose (non-zero) limit on returned string size of val
+// Search is via mysql, so it's case-insensitive.  Return is sorted on val.
+
+struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
+// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
+// Can impose (non-zero) limit on returned string size of name.  Search is via mysql, so it's case-insensitive.
+// Return is sorted on name (label or else val).
 
 #endif /* MDB_H */
 

@@ -67,7 +67,7 @@ if (sameString(value, "hide") || sameString(value, "0"))
     return tvHide;
 else if (sameString(value, "dense") || sameString(value, "1"))
     return tvDense;
-else if (sameString(value, "full") || sameString(value, "2"))
+else if (sameString(value, "full") || sameString(value, "2") || sameString(value, "show"))
     return tvFull;
 else if (sameString(value, "pack") || sameString(value, "3"))
     return tvPack;
@@ -107,6 +107,18 @@ hashAdd(bt->settingsHash, var, cloneString(value));
 
 if (bt->overrides != NULL)
     hashAdd(bt->overrides, var, NULL);
+}
+
+//not needed?
+int bedDetailSizeFromType(char *type)
+/* parse bedSize from type line for bedDetail, assume 4 if none */
+{
+int ret = 4;  /* minimal expected */
+char *words[3];
+int wordCount = chopLine(cloneString(type), words);
+if (wordCount > 1)
+    ret = atoi(words[1]) - 2; /* trackDb has field count, we want bedSize */
+return ret;
 }
 
 void trackDbFieldsFromSettings(struct trackDb *bt)
@@ -192,7 +204,7 @@ boolean canPack = (sameString("psl", s) || sameString("chain", s) ||
                    sameString("expRatio", s) || sameString("wigMaf", s) ||
 		   sameString("factorSource", s) || sameString("bed5FloatScore", s) ||
 		   sameString("bed6FloatScore", s) || sameString("altGraphX", s) ||
-		   sameString("bam", s));
+		   sameString("bam", s) || sameString("bedDetail", s));
 freeMem(t);
 return canPack;
 }
@@ -475,12 +487,15 @@ void trackDbSuperMemberSettings(struct trackDb *tdb)
  * supertrack. */
 {
 struct superTrackInfo *stInfo = getSuperTrackInfo(tdb);
+if(stInfo == NULL || stInfo->isSuper)
+    return;
 tdb->parentName = cloneString(stInfo->parentName);
 tdb->visibility = stInfo->defaultVis;
 tdbMarkAsSuperTrackChild(tdb);
 if(tdb->parent)
     {
     tdbMarkAsSuperTrack(tdb->parent);
+    refAddUnique(&(tdb->parent->children),tdb);
     }
 freeMem(stInfo);
 }
@@ -504,6 +519,7 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
         tdb->isShow = stInfo->isShow;
         if (!hashLookup(superHash, tdb->track))
             hashAdd(superHash, tdb->track, tdb);
+        tdb->children = NULL; // assertable?
         }
     freeMem(stInfo);
     }
@@ -595,6 +611,8 @@ else if(startsWith("chain",type))
     cType = cfgChain;
 else if (startsWith("bam", type))
     cType = cfgBam;
+else if (startsWith("psl", type))
+    cType = cfgPsl;
 // TODO: Only these are configurable so far
 
 if(cType == cfgNone && warnIfNecessary)
@@ -692,8 +710,39 @@ if(tdb == NULL && db != NULL)
 return tdb;
 }
 
+#ifdef OMIT
+// NOTE: This may not be needed.
+struct trackDb *tdbFillInAncestry(char *db,struct trackDb *tdbChild)
+/* Finds parents and fills them in.  Does not find siblings, however! */
+{
+assert(tdbChild != NULL);
+struct trackDb *tdb = tdbChild;
+struct sqlConnection *conn = NULL;
+for (;tdb->parent != NULL;tdb = tdb->parent)
+    ; // advance to highest parent already known
+
+// If track with no tdbParent has a parent setting then fill it in.
+for (;tdb->parent == NULL; tdb = tdb->parent)
+    {
+    char *parentTrack = trackDbLocalSetting(tdb,"parent");
+    if (parentTrack == NULL)
+        break;
+
+    if (conn == NULL)
+        conn = hAllocConn(db);
+    tdb->parent = hMaybeTrackInfo(conn, parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    printf("tdbFillInAncestry(%s): has %d children.",parentTrack,slCount(tdb->parent->subtracks));
+    //tdb->parent = tdbFindOrCreate(db,tdb,parentTrack); // Now there are 2 versions of this child!  And what to do about views?
+    }
+if (conn != NULL)
+    hFreeConn(&conn);
+
+return tdb;
+}
+#endif///def OMIT
+
 void tdbExtrasAddOrUpdate(struct trackDb *tdb,char *name,void *value)
-/* Adds some "extra" nformation to the extras hash.  Creates hash if necessary. */
+/* Adds some "extra" information to the extras hash.  Creates hash if necessary. */
 {
 if(tdb->extras == NULL)
     {
@@ -704,6 +753,13 @@ else
     {
     hashReplace(tdb->extras, name, value);
     }
+}
+
+void tdbExtrasRemove(struct trackDb *tdb,char *name)
+/* Removes a value from the extras hash. */
+{
+if(tdb->extras != NULL)
+    hashMayRemove(tdb->extras, name);
 }
 
 void *tdbExtrasGetOrDefault(struct trackDb *tdb,char *name,void *defaultVal)
@@ -719,12 +775,14 @@ return hashOptionalVal(tdb->extras, name, defaultVal);
 boolean tdbIsView(struct trackDb *tdb,char **viewName)
 // Is this tdb a view?  Will fill viewName if provided
 {
-if(tdb && tdb->parent && tdb->subtracks)
+if (tdbIsCompositeView(tdb))
     {
-    char *view = trackDbLocalSetting(tdb, "view");
-    if(viewName)
-        *viewName = view;
-    return (view != NULL);
+    if (viewName)
+        {
+        *viewName = trackDbLocalSetting(tdb, "view");
+        assert(*viewName != NULL);
+        }
+    return TRUE;
     }
 return FALSE;
 }
@@ -772,31 +830,14 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
 /* Do superTrack inheritance.  This involves setting up the parent pointers to superTracks,
  * but removing the superTracks themselves from the list. */
 struct trackDb *superlessList = NULL;
+trackDbSuperMarkup(tdbList);
 for (tdb = tdbList; tdb != NULL; tdb = next)
     {
     next = tdb->next;
-    char *superTrack = trackDbSetting(tdb, "superTrack");
-    if (superTrack != NULL)
-        {
-	if (startsWithWord("on", superTrack))
-	    {
-	    tdb->next = NULL;
-	    }
-	else
-	    {
-	    char *parentName = tdb->parentName = cloneFirstWord(superTrack);
-	    struct trackDb *parent = hashFindVal(trackHash, parentName);
-	    if (parent == NULL)
-		errAbort("Parent track %s of supertrack %s doesn't exist",
-			parentName, tdb->track);
-	    tdb->parent = parent;
-	    slAddHead(&superlessList, tdb);
-	    }
-	}
+    if (tdbIsSuperTrack(tdb))
+        tdb->next = NULL;
     else
-        {
-	slAddHead(&superlessList, tdb);
-	}
+        slAddHead(&superlessList, tdb);
     }
 
 /* Do subtrack hierarchy - filling in parent and subtracks fields. */
@@ -931,23 +972,11 @@ struct trackDb *a = aRef->val, *b = bRef->val;
 return trackDbCmp(&a, &b);
 }
 
-struct trackDb *trackDbCompositeParent(struct trackDb *tdb)
-/* Return closest ancestor who is a composite track. */
-{
-struct trackDb *parent;
-for (parent = tdb->parent; parent != NULL; parent = parent->parent)
-    {
-    if (trackDbLocalSetting(parent, "compositeTrack"))
-        return parent;
-    }
-return NULL;
-}
-
 struct trackDb *trackDbTopLevelSelfOrParent(struct trackDb *tdb)
-/* Look for a parent who is a composite track and return that.  Failing that
+/* Look for a parent who is a composite or multiTrack track and return that.  Failing that
  * just return self. */
 {
-struct trackDb *parent = trackDbCompositeParent(tdb);
+struct trackDb *parent = tdbGetContainer(tdb);
 if (parent != NULL)
     return parent;
 else

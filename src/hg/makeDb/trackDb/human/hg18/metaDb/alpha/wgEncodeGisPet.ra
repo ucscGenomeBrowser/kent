@@ -2,7 +2,7 @@ metaObject wgEncodeGisPetAlignmentsHelas3NucleusLongpolya
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -18,10 +18,9 @@ view Alignments
 
 metaObject wgEncodeGisPetAlignmentsHuvecCytosolLongpolya
 objType table
-accession SAT2G_version_2.0
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -31,6 +30,7 @@ lab Gis
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
+softwareVersion SAT2G_version_2.0
 subId 793
 tableName wgEncodeGisPetAlignmentsHuvecCytosolLongpolya
 view Alignments
@@ -39,7 +39,7 @@ metaObject wgEncodeGisPetAlignmentsRep1Gm12878CytosolLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -58,7 +58,7 @@ metaObject wgEncodeGisPetAlignmentsRep1Gm12878NucleusLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -77,7 +77,7 @@ metaObject wgEncodeGisPetAlignmentsRep1H1hescCellLongpolya
 objType table
 cell H1-hESC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -96,7 +96,7 @@ metaObject wgEncodeGisPetAlignmentsRep1Helas3CytosolLongpolya
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -115,7 +115,7 @@ metaObject wgEncodeGisPetAlignmentsRep1Hepg2CytosolLongpolya
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -134,7 +134,7 @@ metaObject wgEncodeGisPetAlignmentsRep1Hepg2NucleusLongpolya
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -153,7 +153,7 @@ metaObject wgEncodeGisPetAlignmentsRep1HuvecNucleusLongpolya
 objType table
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -172,7 +172,7 @@ metaObject wgEncodeGisPetAlignmentsRep1K562ChromatinTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -191,7 +191,7 @@ metaObject wgEncodeGisPetAlignmentsRep1K562CytosolLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -210,7 +210,7 @@ metaObject wgEncodeGisPetAlignmentsRep1K562NucleolusTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -229,7 +229,7 @@ metaObject wgEncodeGisPetAlignmentsRep1K562NucleoplasmTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -248,7 +248,7 @@ metaObject wgEncodeGisPetAlignmentsRep1K562NucleusLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -267,7 +267,7 @@ metaObject wgEncodeGisPetAlignmentsRep1K562PolysomeLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -286,7 +286,7 @@ metaObject wgEncodeGisPetAlignmentsRep1NhekCytosolLongpolya
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -305,7 +305,7 @@ metaObject wgEncodeGisPetAlignmentsRep1NhekNucleusLongpolya
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -324,7 +324,7 @@ metaObject wgEncodeGisPetAlignmentsRep1ProstateCellLongpolya
 objType table
 cell prostate
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -343,7 +343,7 @@ metaObject wgEncodeGisPetAlignmentsRep2Gm12878CytosolLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -362,7 +362,7 @@ metaObject wgEncodeGisPetAlignmentsRep2K562CytosolLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -381,7 +381,7 @@ metaObject wgEncodeGisPetClustersRep1Gm12878CytosolPap
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -400,7 +400,7 @@ metaObject wgEncodeGisPetClustersRep1Gm12878NucleusPap
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -419,7 +419,7 @@ metaObject wgEncodeGisPetClustersRep1H1hescCellPap
 objType table
 cell H1-hESC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -438,7 +438,7 @@ metaObject wgEncodeGisPetClustersRep1Helas3CytosolPap
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -457,7 +457,7 @@ metaObject wgEncodeGisPetClustersRep1Helas3NucleusPap
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -476,7 +476,7 @@ metaObject wgEncodeGisPetClustersRep1Hepg2CytosolPap
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -495,7 +495,7 @@ metaObject wgEncodeGisPetClustersRep1Hepg2NucleusPap
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -514,7 +514,7 @@ metaObject wgEncodeGisPetClustersRep1HuvecCytosolPap
 objType table
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -533,7 +533,7 @@ metaObject wgEncodeGisPetClustersRep1HuvecNucleusPap
 objType table
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -552,7 +552,7 @@ metaObject wgEncodeGisPetClustersRep1K562ChromatinTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -571,7 +571,7 @@ metaObject wgEncodeGisPetClustersRep1K562CytosolPap
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -590,7 +590,7 @@ metaObject wgEncodeGisPetClustersRep1K562NucleolusTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -609,7 +609,7 @@ metaObject wgEncodeGisPetClustersRep1K562NucleoplasmTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -628,7 +628,7 @@ metaObject wgEncodeGisPetClustersRep1K562NucleusPap
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -647,7 +647,7 @@ metaObject wgEncodeGisPetClustersRep1K562PolysomePap
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -666,7 +666,7 @@ metaObject wgEncodeGisPetClustersRep1NhekCytosolPap
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -685,7 +685,7 @@ metaObject wgEncodeGisPetClustersRep1NhekNucleusPap
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -704,7 +704,7 @@ metaObject wgEncodeGisPetClustersRep1ProstateCellPap
 objType table
 cell prostate
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -723,7 +723,7 @@ metaObject wgEncodeGisPetClustersRep2Gm12878CytosolPap
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -742,7 +742,7 @@ metaObject wgEncodeGisPetClustersRep2K562CytosolPap
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -761,7 +761,7 @@ metaObject wgEncodeGisPetFastaRd1K562CytosolLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -779,7 +779,7 @@ metaObject wgEncodeGisPetFastaRd1Rep2K562CytosolLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
@@ -797,7 +797,7 @@ metaObject wgEncodeGisPetFastaRd2K562CytosolLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -815,7 +815,7 @@ metaObject wgEncodeGisPetFastaRd2Rep2K562CytosolLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
@@ -833,7 +833,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1Gm12878CytosolLongpolya
 objType file
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -852,7 +852,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1Gm12878NucleusLongpolya
 objType file
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -871,7 +871,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1H1hescCellLongpolya
 objType file
 cell H1-hESC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -890,7 +890,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1Helas3CytosolLongpolya
 objType file
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -908,7 +908,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1Helas3CytosolLongpolyaRep1
 objType file
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
@@ -927,7 +927,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1Hepg2CytosolLongpolya
 objType file
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -946,7 +946,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1Hepg2NucleusLongpolya
 objType file
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -965,7 +965,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1HuvecCytosolLongpolya
 objType file
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -983,7 +983,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1HuvecNucleusLongpolya
 objType file
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1002,7 +1002,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1K562CytosolLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1021,7 +1021,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1K562NucleolusLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1040,7 +1040,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1K562NucleolusTotal
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -1058,7 +1058,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1K562NucleusLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1077,7 +1077,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1K562PolysomeLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1096,7 +1096,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1NhekCytosolLongpolya
 objType file
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1115,7 +1115,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1NhekNucleusLongpolya
 objType file
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1134,7 +1134,7 @@ metaObject wgEncodeGisPetFastqRd1Rep1ProstateCellLongpolya
 objType file
 cell prostate
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1153,7 +1153,7 @@ metaObject wgEncodeGisPetFastqRd1Rep2Gm12878CytosolLongpolya
 objType file
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1172,7 +1172,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1Gm12878CytosolLongpolya
 objType file
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1191,7 +1191,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1Gm12878NucleusLongpolya
 objType file
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1210,7 +1210,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1H1hescCellLongpolya
 objType file
 cell H1-hESC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1229,7 +1229,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1Helas3CytosolLongpolya
 objType file
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -1247,7 +1247,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1Helas3CytosolLongpolyaRep1
 objType file
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-13
 dateUnrestricted 2011-01-13
@@ -1266,7 +1266,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1Hepg2CytosolLongpolya
 objType file
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1285,7 +1285,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1Hepg2NucleusLongpolya
 objType file
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1304,7 +1304,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1HuvecCytosolLongpolya
 objType file
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -1322,7 +1322,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1HuvecNucleusLongpolya
 objType file
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1341,7 +1341,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1K562CytosolLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1360,7 +1360,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1K562NucleolusLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1379,7 +1379,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1K562NucleolusTotal
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -1397,7 +1397,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1K562NucleusLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1416,7 +1416,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1K562PolysomeLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1435,7 +1435,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1NhekCytosolLongpolya
 objType file
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1454,7 +1454,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1NhekNucleusLongpolya
 objType file
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1473,7 +1473,7 @@ metaObject wgEncodeGisPetFastqRd2Rep1ProstateCellLongpolya
 objType file
 cell prostate
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1492,7 +1492,7 @@ metaObject wgEncodeGisPetFastqRd2Rep2Gm12878CytosolLongpolya
 objType file
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1511,7 +1511,7 @@ metaObject wgEncodeGisPetFastqRep1K562ChromatinLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1530,7 +1530,7 @@ metaObject wgEncodeGisPetFastqRep1K562ChromatinTotal
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -1548,7 +1548,7 @@ metaObject wgEncodeGisPetFastqRep1K562NucleoplasmLongpolya
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-17
 dateUnrestricted 2010-08-17
@@ -1567,7 +1567,7 @@ metaObject wgEncodeGisPetFastqRep1K562NucleoplasmTotal
 objType file
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-07
 dateUnrestricted 2011-01-07
@@ -1585,7 +1585,7 @@ metaObject wgEncodeGisPetMinusRawSignalHelas3NucleusLongpolya
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1601,10 +1601,9 @@ view MinusRawSignal
 
 metaObject wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 objType table
-accession SAT2G_version_2.0
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1613,6 +1612,7 @@ lab Gis
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
+softwareVersion SAT2G_version_2.0
 subId 793
 tableName wgEncodeGisPetMinusRawSignalHuvecCytosolLongpolya
 type bedGraph
@@ -1622,7 +1622,7 @@ metaObject wgEncodeGisPetMinusRawSignalRep1Helas3CytosolLongpolya
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -1641,7 +1641,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1Gm12878CytosolLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1659,7 +1659,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1Gm12878NucleusLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1677,7 +1677,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1H1hescCellLongpolya
 objType table
 cell H1-hESC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1695,7 +1695,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1Hepg2CytosolLongpolya
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1713,7 +1713,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1Hepg2NucleusLongpolya
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1731,7 +1731,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1HuvecNucleusLongpolya
 objType table
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1749,7 +1749,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1K562ChromatinTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1767,7 +1767,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1K562CytosolLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1785,7 +1785,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1K562NucleolusTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1803,7 +1803,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1K562NucleoplasmTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1821,7 +1821,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1K562NucleusLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1839,7 +1839,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1K562PolysomeLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1857,7 +1857,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1NhekCytosolLongpolya
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1875,7 +1875,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1NhekNucleusLongpolya
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1893,7 +1893,7 @@ metaObject wgEncodeGisPetMinusRawSigRep1ProstateCytosolLongpolya
 objType table
 cell prostate
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1911,7 +1911,7 @@ metaObject wgEncodeGisPetMinusRawSigRep2Gm12878CytosolLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1929,7 +1929,7 @@ metaObject wgEncodeGisPetMinusRawSigRep2K562CytosolLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1947,7 +1947,7 @@ metaObject wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1963,10 +1963,9 @@ view PlusRawSignal
 
 metaObject wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 objType table
-accession SAT2G_version_2.0
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -1975,6 +1974,7 @@ lab Gis
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
+softwareVersion SAT2G_version_2.0
 subId 793
 tableName wgEncodeGisPetPlusRawSignalHuvecCytosolLongpolya
 type bedGraph
@@ -1984,7 +1984,7 @@ metaObject wgEncodeGisPetPlusRawSignalRep1Helas3CytosolLongpolya
 objType table
 cell HeLa-S3
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -2003,7 +2003,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1Gm12878CytosolLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2021,7 +2021,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1Gm12878NucleusLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2039,7 +2039,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1H1hescCellLongpolya
 objType table
 cell H1-hESC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2057,7 +2057,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1Hepg2CytosolLongpolya
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2075,7 +2075,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1Hepg2NucleusLongpolya
 objType table
 cell HepG2
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2093,7 +2093,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1HuvecNucleusLongpolya
 objType table
 cell HUVEC
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2111,7 +2111,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1K562ChromatinTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2129,7 +2129,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1K562CytosolLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2147,7 +2147,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1K562NucleolusTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2165,7 +2165,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1K562NucleoplasmTotal
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2183,7 +2183,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1K562NucleusLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2201,7 +2201,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1K562PolysomeLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2219,7 +2219,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1NhekCytosolLongpolya
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2237,7 +2237,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1NhekNucleusLongpolya
 objType table
 cell NHEK
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2255,7 +2255,7 @@ metaObject wgEncodeGisPetPlusRawSigRep1ProstateCytosolLongpolya
 objType table
 cell prostate
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2273,7 +2273,7 @@ metaObject wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
 objType table
 cell GM12878
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2285,13 +2285,13 @@ replicate 2
 rnaExtract longPolyA
 subId 777
 tableName wgEncodeGisPetPlusRawSigRep2Gm12878CytosolLongpolya
-view 1-PlusRawSignal
+view PlusRawSignal
 
 metaObject wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
 objType table
 cell K562
 composite wgEncodeGisPet
-dataType Pet
+dataType RnaPet
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -2305,4 +2305,4 @@ subId 777
 tableName wgEncodeGisPetPlusRawSigRep2K562CytosolLongpolya
 view PlusRawSignal
 
-# MAGIC: 1106623195
+# MAGIC: -421248444

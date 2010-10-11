@@ -75,7 +75,7 @@ endif
 ifeq (${SAMDIR},)
   SAMDIR = /hive/data/outside/samtools/svn_${MACHTYPE}/samtools
   ifneq ($(wildcard ${SAMDIR}),)
-     KNETFILE_HOOK=1
+     KNETFILE_HOOKS=1
   endif
 endif
 ifeq (${USE_BAM},)
@@ -150,7 +150,7 @@ GIT=git
 # portable naming of compiled executables: add ".exe" if compiled on 
 # Windows (with cygwin).
 ifeq (${OS}, Windows_NT)
-  AOUT=a.exe
+  AOUT=a
   EXE=.exe
 else
   AOUT=a.out

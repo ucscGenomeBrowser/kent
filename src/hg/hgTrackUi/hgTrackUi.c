@@ -2176,7 +2176,6 @@ void specificUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 {
 char *track = tdb->track;
 
-
 if (sameString(track, "stsMap"))
         stsMapUi(tdb);
 else if (sameString(track, "affyTxnPhase2"))
@@ -2335,7 +2334,7 @@ else if (sameString(track, "dgv") || (startsWith("dgvV", track) && isdigit(track
     dgvUi(tdb);
 #ifdef USE_BAM
 else if (sameString(tdb->type, "bam"))
-    bamCfgUi(cart, tdb, track, NULL, FALSE);
+    bamCfgUi(cart, tdb, track, NULL, FALSE); // tim would like to see this boxed when at composite level: tdbIsComposite(tdb));
 #endif
 else if (tdb->type != NULL)
     {
@@ -2425,7 +2424,7 @@ void trackUi(struct trackDb *tdb, struct customTrack *ct, boolean ajax)
 if (!ajax)
     {
     jsIncludeFile("jquery.js", NULL);
-    printf("<link href='../style/jquery-ui.css' rel='stylesheet' type='text/css' />\n");
+    webIncludeResourceFile("jquery-ui.css");
     jsIncludeFile("jquery-ui.js", NULL);
     jsIncludeFile("utils.js",NULL);
     }
@@ -2440,13 +2439,6 @@ if (trackDbLocalSetting(tdb, "container"))
     {
     /* For the moment, be a composite... */
     tdbMarkAsComposite(tdb);
-    }
-if(tdbIsComposite(tdb))
-    {
-    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
-    // NOTE: if you want track vis to not be reset, move to after vis dropdown
-    if(1 == cartUsualInt(cart, setting, 0))
-        cartRemoveAllForTdbAndChildren(cart,tdb);
     }
 if (ajax && cartOptionalString(cart, "descriptionOnly"))
     {
@@ -2468,6 +2460,15 @@ if (ajax && cartOptionalString(cart, "descriptionOnly"))
         }
     cartRemove(cart,"descriptionOnly"); // This is a once only request and should be deleted
     return;
+    }
+if(tdbIsContainer(tdb))
+    {
+    safef(setting,sizeof(setting),"%s.%s",tdb->track,RESET_TO_DEFAULTS);
+    // NOTE: if you want track vis to not be reset, move to after vis dropdown
+    if (1 == cartUsualInt(cart, setting, 0))
+        cartRemoveAllForTdbAndChildren(cart,tdb);
+    else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
+        cartTdbTreeMatchSubtrackVis(cart,tdb);
     }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
@@ -2504,10 +2505,19 @@ if (ct && sameString(tdb->type, "maf"))
     else
         {
         /* normal visibility control dropdown */
-        char *vis = hStringFromTv(tdb->visibility);
-        hTvDropDownClassVisOnly(tdb->track,
-            hTvFromString(cartUsualString(cart,tdb->track, vis)),
-            tdb->canPack, "normalText", trackDbSetting(tdb, "onlyVisibility"));
+        enum trackVisibility vis = tdb->visibility;
+        boolean canPack = tdb->canPack;
+        if (ajax)
+            {
+            vis = tdbVisLimitedByAncestry(cart, tdb, TRUE);  // ajax popups should show currently inherited visability
+            if (tdbIsCompositeChild(tdb))
+                canPack = TRUE;
+            }
+        else
+            vis = hTvFromString(cartUsualString(cart,tdb->track, hStringFromTv(vis))); // But hgTrackUi page should show local vis
+        hTvDropDownClassVisOnlyAndExtra(tdb->track,vis,
+            canPack, "normalText visDD", trackDbSetting(tdb, "onlyVisibility"),
+                               (tdb->parent != NULL ?"onchange='return visTriggersHiddenSelect(this);'":NULL));
         }
 if (!ajax)
     {
