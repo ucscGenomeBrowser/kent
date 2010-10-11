@@ -35,8 +35,6 @@ return strcmp(a->label, b->label);
 }
 
 // Would like to do a radio button choice ofsorts
-#define FINDTRACKS_SORT
-#ifdef FINDTRACKS_SORT
 #define SORT_BY_VAR           "hgt_sortFound"
 enum sortBy
     {
@@ -65,7 +63,6 @@ else if ( tdbIsContainerChild(a->tdb) && !tdbIsContainerChild(b->tdb))
         return 1;
 return strcasecmp(a->longLabel, b->longLabel);
 }
-#endif///def FINDTRACKS_SORT
 
 static int gCmpTrack(const void *va, const void *vb)
 /* Compare tracks based on longLabel. */
@@ -79,19 +76,12 @@ return strcasecmp(a->longLabel, b->longLabel);
 
 static void findTracksSort(struct slRef **pTrack, boolean simpleSearch, enum sortBy sortBy)
 {
-#ifdef FINDTRACKS_SORT
 if (sortBy == sbHierarchy)
     slSort(pTrack, gCmpTrackHierarchy);
 else if (sortBy == sbAbc)
     slSort(pTrack, gCmpTrack);
 else
     slReverse(pTrack);
-#else///ifndef FINDTRACKS_SORT
-if (simpleSearch)
-    slReverse(pTrack);
-else
-    slSort(&tracks, gCmpTrack);
-#endif///ndef FINDTRACKS_SORT
 }
 
 
@@ -386,10 +376,7 @@ trix = trixOpen(trixFile);
 slSort(&groupList, gCmpGroup);
 for (group = groupList; group != NULL; group = group->next)
     {
-#define FIND_SUPERS_TOO
-#ifdef FIND_SUPERS_TOO
     groupTrackListAddSuper(cart, group);
-#endif///def FIND_SUPERS_TOO
     if (group->trackList != NULL)
         {
         groups[numGroups] = cloneString(group->name);
@@ -606,9 +593,7 @@ if(!isEmpty(descSearch))
 if (doSearch && simpleSearch && descWordCount <= 0)
     doSearch = FALSE;
 
-#ifdef FINDTRACKS_SORT
 enum sortBy sortBy = cartUsualInt(cart,SORT_BY_VAR,sbRelevance);
-#endif///def FINDTRACKS_SORT
 if(doSearch)
     {
     if(simpleSearch)
@@ -756,7 +741,6 @@ else
     hPrintf("</td><td><b>Visibility</b></td><td colspan=2>&nbsp;&nbsp;<b>Track Name</b>\n");
 
     // Sort options?
-    #ifdef FINDTRACKS_SORT
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<span style='float:right;'>Sort:");
@@ -767,7 +751,6 @@ else
         cgiMakeOnClickRadioButton(SORT_BY_VAR, "2",(sortBy == sbHierarchy), "onchange=\"findTracksSortNow(this);\"");
         hPrintf("by Hierarchy&nbsp;&nbsp;</span>\n");
         }
-    #endif///def FINDTRACKS_SORT
     hPrintf("</td></tr>\n");
 
     // Set up json for js functionality
@@ -784,13 +767,11 @@ else
         struct track *track = (struct track *) ptr->val;
         jsonTdbSettingsBuild(&jsonTdbVars, track);
 
-        #ifdef FINDTRACKS_SORT
         if (tdbIsFolder(track->tdb)) // supertrack
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n","#EED5B7");//"#DEB887");//"#E6B426");//#FCECC0//COLOR_LTGREY);//COLOR_LTGREEN);//COLOR_TRACKLIST_LEVEL1);
         else if (tdbIsContainer(track->tdb))
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL3);
         else
-        #endif///def FINDTRACKS_SORT
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n",COLOR_TRACKLIST_LEVEL2);
 
         hPrintf("<td align='center'>\n");
@@ -874,13 +855,9 @@ if(!doSearch)
     hPrintf("<p><b>Recently Done</b><ul>\n"
         "<li>Can now page through found tracks 100 at a time.</li>"
         "<li>Added <IMG SRC='../images/folderWrench.png'> icon for contqainers with a configuration link.  Is this okay?</li>"
-        #ifdef FIND_SUPERS_TOO
         "<li>SuperTracks can now be found.</li>"
         "<li>Configuration of superTrack children's vis should result in proper superTrack reshaping. (This is really an hgTrackUi feature.)</li>"
-        #endif///def FIND_SUPERS_TOO
-        #ifdef FINDTRACKS_SORT
         "<li>Added sort toggle: Relevance, Alphabetically or by Hierarchy.</li>"
-        #endif///def FINDTRACKS_SORT
         "<li>Composite/view visibilites in hgTrackUi get reshaped to reflect found/selected subtracks.  (In demo1: only default state composites; demo2: all composites.)</li>"
         "<li>Non-data 'container' tracks (composites and supertracks) have '*' to mark them, and can be configured before displaying.  Better suggestions?</li>"
         "</ul></p>"
