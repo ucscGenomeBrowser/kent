@@ -2418,8 +2418,10 @@ function updateMetaDataHelpLinks(index)
     var db = getDb();
     var disabled = {
         'accession': 1,
+        'dataType': 1,
         'dataVersion': 1,
         'grant': 1,
+        'geoSample': 1,
         'lab': 1,
         'labVersion': 1,
         'replicate': 1,
