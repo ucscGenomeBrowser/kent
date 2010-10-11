@@ -380,10 +380,18 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     # check coverage
     featureBits melInc1 blastCe9SG
     #	3882043 bases of 82095019 (4.729%) in intersection
-    featureBits bruMal1 blastCe9SG 
-    #	4424694 bases of 89235536 (4.958%) in intersection
     featureBits melHap1 blastCe9SG
     #	4376245 bases of 53017507 (8.254%) in intersection
+    featureBits bruMal1 blastCe9SG 
+    #	4424694 bases of 89235536 (4.958%) in intersection
+    featureBits priPac2 blastCe9SG
+    #	5436779 bases of 133634773 (4.068%) in intersection
+    featureBits haeCon1 blastCe9SG
+    #	4990746 bases of 278844984 (1.790%) in intersection
+    featureBits caeJap3 blastCe9SG
+    #	12894398 bases of 154057934 (8.370%) in intersection
+    featureBits caePb2 blastCe9SG
+    #	23730009 bases of 170473138 (13.920%) in intersection
     featureBits caeRem3 blastCe9SG
     #	20302540 bases of 138406388 (14.669%) in intersection
     featureBits cb3 blastCe9SG
