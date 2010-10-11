@@ -426,9 +426,8 @@ return ret;
 static void parseIntRangeSetting(struct trackDb *tdb, char *settingName,
 				    int *retMin, int *retMax)
 /* If setting is an integer range, store the values into retMin and retMax */
-
-// This must be duplicating somebody else's code.
-
+// This is highly similar to lib/wiggleCart.c's static void parseColonRange,
+// though that expects doubles.  For quality scores we do want unsigned.
 {
 char *range = trackDbSetting(tdb, settingName);
 if (range != NULL)
