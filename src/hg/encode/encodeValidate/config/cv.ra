@@ -3561,7 +3561,7 @@ lab Bernstein
 lots 383111
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K4me1(dot_plot):human_H3K4me1_validation_Bernstein.pdf
 
 term H3K4me2
 tag H3K4me2
@@ -3576,7 +3576,7 @@ lab Bernstein
 lots 56293
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K4me2(dot_plot):human_H3K4me2_validation_Bernstein.pdf
 
 term H3K4me3
 tag H3K4me3
@@ -3594,7 +3594,7 @@ lab Bernstein
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K4me3(dot_plot):human_H3K4me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K4me3B
@@ -3672,7 +3672,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=8898
 lab Farnham
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K9me3(dot_plot):human_H3K9me3_validation_Bernstein.pdf
 
 term H3K27ac
 tag H3K27ac
@@ -3687,7 +3687,7 @@ lab Bernstein
 lots 31456
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K27ac(dot_plot):human_H3K27ac_validation_Bernstein.pdf
 
 term H3K27me3
 tag H3K27me3
@@ -3702,7 +3702,7 @@ lab Bernstein
 lots DAM1387952
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K27me3(dot_plot):human_H3K27me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K27me3B
@@ -3734,7 +3734,7 @@ lab Bernstein
 lots 136353
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K36me3(dot_plot):human_H3K36me3_validation_Bernstein.pdf
 
 term H3K36me3B
 tag H3K36me3B
@@ -3765,7 +3765,7 @@ lab Bernstein
 lots 177/0100800
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation missing
+validation H3K79me2(dot_plot):human_H3K79me2_validation_Bernstein.pdf
 
 term H4K20me1
 tag H4K20me1
@@ -3780,7 +3780,7 @@ lab Bernstein
 lots 104513
 targetId GeneCard:GC01P148070
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P148070
-validation missing
+validation H4K20me1(dot_plot):human_H4K20me1_validation_Bernstein.pdf
 
 term HA-E2F1
 tag HAE2F1
