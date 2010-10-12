@@ -2108,6 +2108,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(pair);
     pair = slPairNew(row[0],cloneString(row[0]));  // defaults the label to the val
     ra = hashFindVal(cvHash,row[0]);
+    if (ra == NULL && sameString(var,"lab"))  // ugly special case
+        {
+        char *val = cloneString(row[0]);
+        ra = hashFindVal(cvHash,strUpper(val));
+        if (ra == NULL)
+            ra = hashFindVal(cvHash,strLower(val));
+        }
     if (ra != NULL)
         {
         char *label = hashFindVal(ra,"label");

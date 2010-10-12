@@ -153,7 +153,7 @@ void trackDbFree(struct trackDb **pEl)
  * with trackDbLoad(). */
 {
 return;
-#ifdef NOT
+// #ifdef NOT
 struct trackDb *el;
 
 if ((el = *pEl) == NULL) return;
@@ -173,14 +173,14 @@ hashFree(&el->settingsHash);
 hashFree(&el->overrides);
 hashFree(&el->extras);
 freez(pEl);
-#endif /* NOT */
+// #endif /* NOT */
 }
 
 void trackDbFreeList(struct trackDb **pList)
 /* Free a list of dynamically allocated trackDb's */
 {
 return;
-#ifdef NOT
+// #ifdef NOT
 struct trackDb *el, *next;
 
 for (el = *pList; el != NULL; el = next)
@@ -189,7 +189,7 @@ for (el = *pList; el != NULL; el = next)
     trackDbFree(&el);
     }
 *pList = NULL;
-#endif /* NOT */
+// #endif /* NOT */
 }
 
 void trackDbOutput(struct trackDb *el, FILE *f, char sep, char lastSep)

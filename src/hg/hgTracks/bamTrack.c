@@ -28,6 +28,10 @@ struct bamTrackData
     char *colorMode;
     char *grayMode;
     char *userTag;
+    int aliQualShadeMin;
+    int aliQualShadeMax;
+    int baseQualShadeMin;
+    int baseQualShadeMax;
     };
 
 struct psl *pslFromBam(const bam1_t *bam)
@@ -157,7 +161,7 @@ return ix;
 }
 
 static struct simpleFeature *expandSfQuals(struct simpleFeature *blocksIn, UBYTE *quals,
-					   int orientation, int qLen)
+					   int orientation, int qLen, int minQual, int maxQual)
 /* Chop up blocksIn into one sf per query base, with sf->grayIx set according to
  * base quality score. */
 {
@@ -174,8 +178,7 @@ for (sf = blocksIn;  sf != NULL;  sf = sf->next)
 	newSf->qStart = i;
 	newSf->qEnd = i + 1;
 	int offset = (orientation < 0) ? (qLen - i - 1) : i;
-	// hardcode min & max for now; if user demand, make into tdb/cart vars.
-	newSf->grayIx = shadeTransform(0, 40, quals[offset]);
+	newSf->grayIx = shadeTransform(minQual, maxQual, quals[offset]);
 	if (blocksOut == NULL)
 	    blocksOut = tail = newSf;
 	else
@@ -223,14 +226,14 @@ bamGetSoftClipping(bam, NULL, NULL, &clippedQLen);
 if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
     sameString(btd->grayMode, BAM_GRAY_MODE_ALI_QUAL))
     {
-    // hardcode min & max for now; if user demand, make into tdb/cart vars.
-    lf->grayIx = shadeTransform(0, 99, core->qual);
+    lf->grayIx = shadeTransform(btd->aliQualShadeMin, btd->aliQualShadeMax, core->qual);
     }
 else if (sameString(btd->colorMode, BAM_COLOR_MODE_GRAY) &&
 	 sameString(btd->grayMode, BAM_GRAY_MODE_BASE_QUAL))
     {
     UBYTE *quals = bamGetQueryQuals(bam, TRUE);
-    lf->components = expandSfQuals(lf->components, quals, lf->orientation, clippedQLen);
+    lf->components = expandSfQuals(lf->components, quals, lf->orientation, clippedQLen,
+				   btd->baseQualShadeMin, btd->baseQualShadeMax);
     lf->grayIx = maxShade - 3;
     }
 else if (sameString(btd->colorMode, BAM_COLOR_MODE_TAG) && isNotEmpty(btd->userTag))
@@ -420,6 +423,33 @@ if (ret == 0)
 return ret;
 }
 
+static void parseIntRangeSetting(struct trackDb *tdb, char *settingName,
+				    int *retMin, int *retMax)
+/* If setting is an integer range, store the values into retMin and retMax */
+// This is highly similar to lib/wiggleCart.c's static void parseColonRange,
+// though that expects doubles.  For quality scores we do want unsigned.
+{
+char *range = trackDbSetting(tdb, settingName);
+if (range != NULL)
+    {
+    char rangeCopy[16]; // if it's longer than this, there's a problem.
+    safecpy(rangeCopy, sizeof(rangeCopy), range);
+    char *words[3];
+    int wordCount = chopByChar(rangeCopy, ':', words, ArraySize(words));
+    if (wordCount == 2)
+	{
+	if (retMin != NULL)
+	    *retMin = sqlUnsigned(words[0]);
+	if (retMax != NULL)
+	    *retMax = sqlUnsigned(words[1]);
+	return;
+	}
+    else
+	warn("track %s table %s: setting %s should be integer range min:max but is %s",
+	     tdb->track, tdb->table, settingName, range);
+    }
+}
+
 void bamLoadItemsCore(struct track *tg, boolean isPaired)
 /* Load BAM data into tg->items item list, unless zoomed out so far
  * that the data would just end up in dense mode and be super-slow. */
@@ -429,7 +459,11 @@ int minAliQual = atoi(cartOrTdbString(cart, tg->tdb, BAM_MIN_ALI_QUAL, BAM_MIN_A
 char *colorMode = cartOrTdbString(cart, tg->tdb, BAM_COLOR_MODE, BAM_COLOR_MODE_DEFAULT);
 char *grayMode = cartOrTdbString(cart, tg->tdb, BAM_GRAY_MODE, BAM_GRAY_MODE_DEFAULT);
 char *userTag = cartOrTdbString(cart, tg->tdb, BAM_COLOR_TAG, BAM_COLOR_TAG_DEFAULT);
-struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag};
+int aliQualShadeMin = 0, aliQualShadeMax = 99, baseQualShadeMin = 0, baseQualShadeMax = 40;
+parseIntRangeSetting(tg->tdb, "aliQualRange", &aliQualShadeMin, &aliQualShadeMax);
+parseIntRangeSetting(tg->tdb, "baseQualRange", &baseQualShadeMin, &baseQualShadeMax);
+struct bamTrackData btd = {tg, pairHash, minAliQual, colorMode, grayMode, userTag,
+			   aliQualShadeMin, aliQualShadeMax, baseQualShadeMin, baseQualShadeMax};
 char *fileName;
 if (tg->customPt)
     {

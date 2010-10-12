@@ -10154,8 +10154,10 @@ EOF
     # Load probes and alignments into database.
     ssh hgwdev
     cd /hive/data/genomes/hg19/bed/affyProbes/affyU133Plus2
+    #perl -pi.bak -e "s/U133\+2://" affyU133Plus2.psl
     hgLoadPsl hg19 affyU133Plus2.psl
-    hgLoadSeq -abbr=U133+2: hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    #hgLoadSeq -abbr=U133+2: hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
+    hgLoadSeq  hg19 /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     #   Creating seq.tab file
     #   Adding /gbdb/hgFixed/affyProbes/U133Plus2_all.fa
     #   54613 sequences
@@ -10163,9 +10165,9 @@ EOF
     #   All done
     #  hgsql -e "select count(*) from affyU133Plus2;" hg19
     #     58592  
- 
+
 #############################################################################
-# AFFY U95 (working 2010-05-13 Chin)
+# AFFY U95 (DONE 2010-10-07 Chin)
     # Align probes 
     ssh swarm
     cd /hive/data/genomes/hg19/bed
@@ -10215,7 +10217,6 @@ EOF
     #   Updating seq table
     #   All done
 
-############################################################################
 #############################################################################
 # ucscRetro track (2010-03-31, baertsch,hartera DONE)
 mkdir -p /hive/groups/gencode/pseudogenes/retroFinder/retro/hg19
