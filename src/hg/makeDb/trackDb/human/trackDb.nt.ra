@@ -79,6 +79,7 @@ showNames off
 noColorTag .
 bamColorMode gray
 bamGrayMode aliQual
+aliQualRange 0:60
 baseColorDefault diffBases
 baseColorUseSequence lfExtra
 indelDoubleInsert on

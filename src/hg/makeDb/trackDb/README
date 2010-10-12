@@ -288,6 +288,10 @@ The format of the type fields:
     bamColorTag     <XX>                        # optional tag for RGB color, default is "YC"
     minAliQual      <N>                         # display only items with alignment quality
                                                 #   at least N, default 0
+    aliQualRange    <min:max>			# shade alignment qualities within this range
+						#   default: 0:99
+    baseQualRange   <min:max>			# shade base qualities within this range
+						#   default: 0:40
     Additional general settings that may be useful to speed up display for extremely
     dense data e.g. next-gen sequencing reads: maxWindowToDraw, chromosomes (see below)
 

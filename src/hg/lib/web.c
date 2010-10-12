@@ -1310,7 +1310,7 @@ if(hashLookup(includedResourceFiles, fileName))
 
 char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
 if (link)
-    hashAdd(includedResourceFiles, fileName, link);
+    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because memory will be freed by caller!!!
 return link;
 }
 
