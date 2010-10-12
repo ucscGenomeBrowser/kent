@@ -1,0 +1,210 @@
+metaObject wgEncodeYaleRnaSeqGm12878NonpolyaAln
+objType file
+cell GM12878
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqGm12878NonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg18
+parentTable wgEncodeYaleRnaSeqGm12878NonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2007
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaAln
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg19
+parentTable wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2084
+treatment Alpha-amanitin_50ug_9hr
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaRawData
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg19
+parentTable wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaRawSignal
+project wgEncode
+rnaExtract nonPolyA
+subId 2084
+treatment Alpha-amanitin_50ug_9hr
+view RawData
+
+metaObject wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaSig
+objType table
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaSig.bigWig
+grant Snyder
+lab Yale
+origAssembly hg19
+project wgEncode
+rnaExtract nonPolyA
+subId 2084
+tableName wgEncodeYaleRnaSeqK562Ama50ug9hNonpolyaSig
+treatment Alpha-amanitin_50ug_9hr
+view Signal
+
+metaObject wgEncodeYaleRnaSeqK562Ifna30NonpolyaAln
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ifna30NonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg18
+parentTable wgEncodeYaleRnaSeqK562Ifna30NonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2007
+treatment IFNa30
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ifna6hNonpolyaAln
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ifna6hNonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg18
+parentTable wgEncodeYaleRnaSeqK562Ifna6hNonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2007
+treatment IFNa6h
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ifng30NonpolyaAln
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ifng30NonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg18
+parentTable wgEncodeYaleRnaSeqK562Ifng30NonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2007
+treatment IFNg30
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562Ifng6hNonpolyaAln
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562Ifng6hNonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg18
+parentTable wgEncodeYaleRnaSeqK562Ifng6hNonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2007
+treatment IFNg6h
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562NonpolyaAln
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-30
+dateUnrestricted 2011-06-30
+fileName wgEncodeYaleRnaSeqK562NonpolyaAln.bam
+grant Snyder
+lab Yale
+origAssembly hg18
+parentTable wgEncodeYaleRnaSeqK562NonpolyaAln
+project wgEncode
+rnaExtract nonPolyA
+subId 2007
+treatment None
+view Alignments
+
+metaObject wgEncodeYaleRnaSeqK562NonpolyaRawData
+objType file
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-18
+dateUnrestricted 2011-06-18
+fileName wgEncodeYaleRnaSeqK562NonpolyaRawData.fastq.gz
+grant Snyder
+lab Yale
+origAssembly hg19
+parentTable wgEncodeYaleRnaSeqK562NonpolyaRawSignal
+project wgEncode
+rnaExtract nonPolyA
+subId 2085
+treatment None
+view RawData
+
+metaObject wgEncodeYaleRnaSeqK562NonpolyaSig
+objType table
+cell K562
+composite wgEncodeYaleRnaSeq
+dataType RnaSeq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-09-18
+dateUnrestricted 2011-06-18
+fileName wgEncodeYaleRnaSeqK562NonpolyaSig.bigWig
+grant Snyder
+lab Yale
+origAssembly hg19
+project wgEncode
+rnaExtract nonPolyA
+subId 2085
+tableName wgEncodeYaleRnaSeqK562NonpolyaSig
+treatment None
+view Signal
+
+# MAGIC: -749390023

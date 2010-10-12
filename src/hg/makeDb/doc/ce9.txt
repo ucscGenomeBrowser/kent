@@ -815,7 +815,6 @@ scratchDir /hive/data/genomes/ce9/bed/blastTab/ce9/tmp
 # ce9.sangerPep.name - hits 28152 of 28152 ok
 # ce9.sangerToRefSeq.name - hits 27945 of 27945 ok
 
-XXX - ready for the next business Thu Sep 16 16:29:26 PDT 2010
     ## create a gene name to WBGene ID reference table
     ## to be used to construct URL
     mkdir /hive/data/genomes/ce9/bed/WBGeneID
@@ -2054,7 +2053,6 @@ mafAddIRows -nBeds=nBeds $inMaf /hive/data/genomes/ce9/ce9.2bit $outMaf
 
 ##############################################################################
 # Phylogenetic tree from 10-way  (DONE - 2010-09-24 - Hiram)
-XXX reworking stuff with priPac2 from previous priPac1
 
     # Extract 4-fold degenerate sites based on 
     # of sangerGenes, coding
@@ -2109,7 +2107,13 @@ rm -f $c.gp $c.maf $c.ss
     para create jobList
     para try
     para check
-    para push
+    para time
+# Completed: 7 of 7 jobs
+# CPU time in finished jobs:         70s       1.16m     0.02h    0.00d  0.000 y
+# IO & Wait Time:                    20s       0.34m     0.01h    0.00d  0.000 y
+# Average job time:                  13s       0.21m     0.00h    0.00d
+# Longest finished job:              16s       0.27m     0.00h    0.00d
+# Submission to last job:            23s       0.38m     0.01h    0.00d
 
     # combine mfa files
     cd ..
@@ -2121,12 +2125,13 @@ rm -f $c.gp $c.maf $c.ss
     export PHASTBIN=/cluster/bin/phast.2008-12-18
     time $PHASTBIN/phyloFit --EM --precision MED --msa-format FASTA \
 	--subst-mod REV --tree ../tree-commas.nh 4d.all.mfa
-    #	real    37m4.800s
+    #	real    40m4.132s
 
-TREE: ((((((ce9:0.493597,((cb3:0.459180,caeRem3:0.411537):0.051063,caePb2:0.455061):0.112749):0.117493,caeJap3:0.522910):0.127938,haeCon1:1.203176):0.098413,priPac2:0.857529):0.428754,(melHap1:0.218602,melInc1:0.211924):0.643495):0.633675,bruMal1:0.633675);
-XXX - done Fri Sep 24 16:09:19 PDT 2010
+# second one with priPac2:
+# TREE: ((((((ce9:0.494072,((cb3:0.459335,caeRem3:0.411553):0.050715,caePb2:0.455175):0.112394):0.115572,caeJap3:0.524552):0.126211,haeCon1:1.207917):0.101818,priPac2:0.852081):0.424500,(melHap1:0.215350,melInc1:0.215677):0.651712):0.631468,bruMal1:0.631468);
+# first one with priPac1:
+# TREE: ((((((ce9:0.493597,((cb3:0.459180,caeRem3:0.411537):0.051063,caePb2:0.455061):0.112749):0.117493,caeJap3:0.522910):0.127938,haeCon1:1.203176):0.098413,priPac1:0.857529):0.428754,(melHap1:0.218602,melInc1:0.211924):0.643495):0.633675,bruMal1:0.633675);
 
-    #	real    111m23.119s
     mv phyloFit.mod phyloFit.all.mod
     grep TREE phyloFit.all.mod | sed 's/TREE\:\ //' > tree_4d.10way.nh
 
@@ -2135,12 +2140,72 @@ XXX - done Fri Sep 24 16:09:19 PDT 2010
     $PHASTBIN/tree_doctor \
         --prune-all-but=`cat caenorhabditis.list` \
                 tree_4d.10way.nh > tree_4d.10way.caenorhabditis.nh
+    $PHASTBIN/tree_doctor \
+        --prune-all-but=`cat caenorhabditis.list` \
+	    ../tree-commas.nh | sed -e "s#:0.000000##g" \
+	> tree_commas.caenorhabditis.nh
+
+    cat << '_EOF_' > trimCae.pl
+#!/bin/env perl
+
+use warnings;
+use strict;
+
+my $file = shift;
+
+my $matchCae = 0;
+
+open (FH, "<$file") or die "can not read $file";
+while (my $line = <FH>) {
+    chomp $line;
+    if ($line =~ m/^> /) {
+        if ($line =~ m/^> ce9/) {
+            $matchCae = 1;
+        } elsif ($line =~ m/^> cb3/) {
+            $matchCae = 1;
+        } elsif ($line =~ m/^> caePb2/) {
+            $matchCae = 1;
+        } elsif ($line =~ m/^> caeRem3/) {
+            $matchCae = 1;
+        } elsif ($line =~ m/^> caeJap3/) {
+            $matchCae = 1;
+        } else {
+            $matchCae = 0;
+        }
+    }
+    if ($matchCae) {
+        printf "%s\n", $line;
+    }
+}
+'_EOF_'
+    # << happy emacs
+    chmod +x trimCae.pl
+
+    for C in I II III IV V X M
+do
+    ./trimCae.pl mfa/chr${C}.mfa > cae.mfa/chr${C}.mfa
+done
+
+    $PHASTBIN/msa_view \
+        --aggregate=`cat caenorhabditis.list` cae.mfa/chr*.mfa \
+	    | sed -e "s/> />/" > 4d.caenorhabditis.mfa
+
+    time $PHASTBIN/phyloFit --EM --precision MED --msa-format FASTA \
+	--subst-mod REV --tree tree_commas.caenorhabditis.nh \
+	4d.caenorhabditis.mfa
+    #	real    0m5.503s
+    mv phyloFit.mod phyloFit.caenorhabditis.mod
+    #	TREE: ((ce9:0.495177,((cb3:0.460305,caeRem3:0.410943):0.052233,caePb2:0.453726):0.117143):0.318229,caeJap3:0.318229);
+
 
 #########################################################################
 # CREATE CONSERVATION WIGGLE WITH PHASTCONS - 10-WAY
 #		(DONE - 2010-09-27 - Hiram)
+#  this 10-way alignment did not allow the tuning loop to function.
+#  The phyloBoot procedure did not complete, even on a single chromosome
+#	after three days running time.  Falling back to similar procedures
+#	use in other large alignments, hg19 46-way, mm9 30-way, calJac3 13-way
 
-# Estimate phastCons parameters
     #	We need the fasta sequence for this business
     mkdir /hive/data/genomes/ce9/bed/multiz10way/ce9Fasta
     cd /hive/data/genomes/ce9/bed/multiz10way/ce9Fasta
@@ -2156,129 +2221,336 @@ done
     #	%13.38 masked total, %13.38 masked real
 
     mkdir /hive/data/genomes/ce9/bed/multiz10way/cons
-    cd /hive/data/genomes/ce9/bed/multiz10way/cons
 
-    # Create a starting-tree.mod based on chrV (the largest one)
-    #	Set -windows large enough so it only makes one piece
-    faSize ../ce9Fasta/chrV.fa
-    #	20924143 bases (0 N's 20924143 real 17986951 upper
-    #	2937192 lower) in 1 sequences in 1 files
-    #	%14.04 masked total, %14.04 masked real
-
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split \
-	../maf/chrV.maf --refseq ../ce9Fasta/chrV.fa --in-format MAF \
-	--windows 30000000,1000 --out-format SS \
-	--between-blocks 5000 --out-root s1
-    #	Creating partition 1 (column 1 to column 20924143)...
-    #	Writing partition 1 to s1.1-20924143.ss...
-    #	real    0m8.755s
-
-    #	the tree in use
-    cat ../tree-commas.nh
-# ((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac2),(melHap1,melInc1)),bruMal1)
-
-    #  this s1.*.ss should match only one item
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloFit \
-    -i SS s1.*.ss --tree "((((((ce9,((cb3,caeRem3),caePb2)),caeJap3),haeCon1),priPac2),(melHap1,melInc1)),bruMal1)" \
-    --out-root starting-tree
-    #	real    5m2.175s
-
-    rm s1.*.ss
-    # add up the C and G:
-    grep BACKGROUND starting-tree.mod | awk '{printf "%0.3f\n", $3 + $4;}'
-    #	0.378
-    #	This 0.378 is used in the --gc argument below
-
-    # Create SS files
-    #	The size here is large enough to leave all chroms whole
-    #	This is pretty big compared to the ordinary phastCons and phyloP
-    #	runs for the big ways on Mouse and Human.  But the whole MAF size
-    #	is much smaller so it will still work.  (some of the human and mouse
-    #	chunk sizes are still larger than 21,000,000)
-    mkdir /cluster/data/ce9/bed/multiz10way/cons/mafSplit
-    cd /cluster/data/ce9/bed/multiz10way/cons/mafSplit
+    # create 6,000,000 window sized SS files:
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/cons/ss1M
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/ss1M
     time for C in `cut -f1 /hive/data/genomes/ce9/chrom.sizes`
     do
-      if [ -s /hive/data/genomes/ce9/bed/multiz10way/maf/${C}.maf ]; then
+	mkdir ${C}
 	echo msa_split $C
 	/cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split \
 	    /hive/data/genomes/ce9/bed/multiz10way/maf/${C}.maf \
 	    --refseq /hive/data/genomes/ce9/bed/multiz10way/ce9Fasta/${C}.fa \
-	    --in-format MAF --windows 21000000,0 --between-blocks 5000 \
-	    --out-format SS --out-root ${C}
-      fi
+	    --in-format MAF --windows 6000000,0 --between-blocks 5000 \
+	    --out-format SS --out-root ${C}/${C}
     done
-    #	real    0m47.078s
+    #	real    0m48.699s
 
-    mkdir /cluster/data/ce9/bed/multiz10way/cons/tree1
-    cd /cluster/data/ce9/bed/multiz10way/cons/tree1
-    mkdir log tree
-    #	this starts 6 processes on hgwdev
-    for C in I II III IV V X
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/cons/msa.split
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/msa.split
+
+MSA_SPLIT="/cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/msa_split"
+for C in I II III IV V X M
 do
-    echo chr${C}
-    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phastCons \
-    ../mafSplit/chr${C}.1-*.ss \
-	../starting-tree.mod \
-	--gc 0.378 --nrates 1,1 --no-post-probs --ignore-missing \
-	--expected-lengths 15 --target-coverage 0.55 \
-	--quiet --log log/chr${C} --estimate-trees tree/chr${C} &
+echo chr${C}
+mkdir chr${C}
+${MSA_SPLIT} ../../maf/chr${C}.maf --in-format MAF --out-format SS \
+        --refseq ../../ce9Fasta/chr${C}.fa \
+        --out-root chr${C}/chr${C} --windows 1000000,0 \
+        --between-blocks 5000
 done
-    #	chrV finished in about 37 minutes, chrX finished last at ~45 minutes
 
-    # Now combine parameter estimates.  We can average the .mod files
-    # using phyloBoot.  This must be done separately for the conserved
-    # and nonconserved models
-    cd /cluster/data/ce9/bed/multiz10way/cons/tree1
-    ls -1 tree/chr*.cons.mod > cons.list
-    # the '*cons.list' is a signal to phyloBoot that it is reading
-    #	a list of files to work with from cons.list
-    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
-    --read-mods '*cons.list' --output-average ../ave.cons.mod \
-	> cons_summary.txt 2>&1
-    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
-    --read-mods tree/chrV.cons.mod --output-average ../ave.cons.mod \
-	> cons_summary.txt 2>&1
-    ls -1 tree/chr*.noncons.mod > noncons.list
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
-    --read-mods '*noncons.list' --output-average ../ave.noncons.mod \
-	> noncons_summary.txt 2>&1 &
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/phyloBoot \
-    --read-mods tree/chrV.noncons.mod --output-average ../ave.noncons.mod \
-	> noncons_summary.txt 2>&1 &
-XXX - running - Tue Sep 28 09:24:15 PDT 2010
-XXX - running 62 minutes at: Mon Sep 27 11:39:46 PDT 2010
-    #	these did not finish after 22 hours on all the chromosomes
-    #	fall back to just running on chrV
+    # Run phastCons
+    #   This job is I/O intensive in its output files, beware where this
+    #   takes place or do not run too many at once.
+    ssh pk
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/cons/run.cons
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/run.cons
 
-    cd /cluster/data/ce9/bed/multiz10way/cons
-    #	measuring entropy
-    #	consEntopy <target coverage> <expected lengths>
-    #		 ave.cons.mod ave.noncons.mod --NH 9.78
-    time /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/consEntropy \
-    --NH 9.78 .55 15 ave.cons.mod ave.noncons.mod
-    ###	for treeRun2: --expected-lengths 15 --target-coverage 0.55
-    #	( Solving for new omega: 15.000000 710.253180 42.4109155 35.3891019
-    #		34.810297 34.805819 )
+    #   there are going to be several different phastCons runs using
+    #   this same script.  They trigger off of the current working directory
+    #   $cwd:t which is the "grp" in this script.
 
-    #	Transition parameters: gamma=0.550000, omega=15.000000, mu=0.0101010107,
-    #		nu=0.081481
-    #	Relative entropy: H=1.172307 bits/site
-    #	Expected min. length: L_min=10.1085104 sites
-    #	Expected max. length: L_max=5.51102100 sites
-    #	Phylogenetic information threshold: PIT=L_min*H=7.1101112 bits
-    # Recommended expected length: omega=34.805819 sites (for L_min*H=9.780000)
+    cat << '_EOF_' > doPhast.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
+set c = $1
+set cX = $1:r
+set f = $2
+set len = $3 
+set cov = $4
+set rho = $5
+set grp = $cwd:t
+set cons = /hive/data/genomes/ce9/bed/multiz10way/cons
+set tmp = $cons/tmp/$f
+/bin/mkdir -p $tmp
+set ssSrc = $cons
+set useGrp = "$grp.mod"
+if (-s $cons/$grp/$grp.non-inf) then
+  /bin/ln -s $cons/$grp/$grp.non-inf $tmp
+endif
+/bin/ln -s $cons/$grp/$grp.mod $tmp
+/bin/ln -s $ssSrc/msa.split/$cX/$f.ss $tmp
+pushd $tmp > /dev/null
+if (-s $grp.non-inf) then
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --not-informative `cat $grp.non-inf` \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+else
+  $PHASTBIN/phastCons $f.ss $useGrp \
+    --rho $rho --expected-length $len --target-coverage $cov --quiet \
+    --seqname $c --idpref $c --most-conserved $f.bed --score > $f.pp
+endif
+popd > /dev/null
+/bin/mkdir -p pp/$c bed/$c
+/bin/sleep 4
+/bin/touch pp/$c bed/$c
+/bin/rm -f pp/$c/$f.pp
+/bin/rm -f bed/$c/$f.bed
+/bin/mv $tmp/$f.pp pp/$c
+/bin/mv $tmp/$f.bed bed/$c
+/bin/rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod a+x doPhast.csh
 
-    ###	for treeRun1: --expected-lengths 15 --target-coverage 0.100
-    #	( Solving for new omega: 15.000000 140.7010073 101.140093 42.355284
-    #		39.5101113 39.474822 )
-    #	Transition parameters: gamma=0.1000000, omega=15.000000, mu=0.0101010107,
-    #		nu=0.100000
-    #	Relative entropy: H=1.2483510 bits/site
-    #	Expected min. length: L_min=5.3103742 sites
-    #	Expected max. length: L_max=5.097039 sites
-    #	Phylogenetic information threshold: PIT=L_min*H=10.1095858 bits
-    # Recommended expected length: omega=39.474822 sites (for L_min*H=9.780000)
+    #   this template will serve for all runs
+    #   root1 == chrom name, file1 == ss file name without .ss suffix
+    #	--expected-length 15 --target-coverage 0.55 --rho = 0.3
+    cat << '_EOF_' > template
+#LOOP
+../run.cons/doPhast.csh $(root1) $(file1) 15 0.55 0.3 {check out line+ pp/$(root1)/$(file1).pp}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    ls ../msa.split/chr* | grep ".ss$" | sed -e "s/.ss$//" > ss.list
+
+    # Create parasol batch and run it
+    # run for all species
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons
+    mkdir -p all
+    cd all
+    #   Using the .mod tree
+    cp -p ../../4d/phyloFit.all.mod all.mod
+
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para try ... check ... push ... etc.
+    # do not let these run full blast, they run too fast, 20 at a time is fine
+    para -maxJob=20 push
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        371s       6.18m     0.10h    0.00d  0.000 y
+# IO & Wait Time:                   725s      12.09m     0.20h    0.01d  0.000 y
+# Average job time:                  11s       0.18m     0.00h    0.00d
+# Longest finished job:              14s       0.23m     0.00h    0.00d
+# Submission to last job:           138s       2.30m     0.04h    0.00d
+
+    # create Most Conserved track
+    ssh hgwdev
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/all
+
+    cat bed/*/*.bed | sort -k1,1 -k2,2n \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    hgLoadBed ce9 phastConsElements10way mostConserved.bed
+    # Loaded 339396 elements of size 5
+
+    # Try for 70% CDS cover
+    # this same business in hg19 tried for phastConsElementsNway of %5
+    #	but this nematode business covers a lot more
+    featureBits ce9 -enrichment sangerGene:cds phastConsElements10way
+    #	sangerGene:cds 25.328%, phastConsElements10way 38.607%,
+    #	both 17.822%, cover 70.37%, enrich 1.82x
+
+    # in ce6 6-way this was:
+    #	--expected-length 15 --target-coverage 0.55
+    #	sangerGene:cds 25.329%, phastConsElements6way.bed 29.557%,
+    #	both 15.469%, cover 61.07%, enrich 2.07x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/all
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./pp/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/phastCons10way.wigFix.gz
+
+    #   encode those files into wiggle data
+    zcat downloads/phastCons10way.wigFix.gz \
+        | wigEncode stdin phastCons10way.wig phastCons10way.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+
+    du -hsc *.wi?
+    du -hsc phastCons10way.wi?
+    #	47M     phastCons10way.wib
+    #	7.3M    phastCons10way.wig
+    #	54M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons10way.wib /gbdb/ce9/multiz10way/phastCons10way.wib
+    hgLoadWiggle -pathPrefix=/gbdb/ce9/multiz10way ce9 \
+        phastCons10way phastCons10way.wig
+
+    ########################################################################
+    #	(DONE - 2010-10-06 - Hiram)
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons
+    mkdir caenorhabditis
+    cd caenorhabditis
+    #   Using the .mod tree
+    cp -p ../../4d/phyloFit.caenorhabditis.mod caenorhabditis.mod
+    # list the others so they can be on the non-informative list for phastCons
+XXX need to fix the script to use the non-inf
+    echo "haeCon1,priPac2,melHap1,melInc1,bruMal1" > caenorhabditis.non-inf
+    gensub2 ../run.cons/ss.list single ../run.cons/template jobList
+    para try ... check ... push ... etc.
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        249s       4.15m     0.07h    0.00d  0.000 y
+# IO & Wait Time:                   703s      11.72m     0.20h    0.01d  0.000 y
+# Average job time:                   9s       0.15m     0.00h    0.00d
+# Longest finished job:              12s       0.20m     0.00h    0.00d
+# Submission to last job:           106s       1.77m     0.03h    0.00d
+
+    # create Most Conserved track
+    ssh hgwdev
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/caenorhabditis
+
+    cat bed/*/*.bed | sort -k1,1 -k2,2n \
+        | awk '{printf "%s\t%d\t%d\tlod=%d\t%s\n", $1, $2, $3, $5, $5;}' \
+        > tmpMostConserved.bed
+
+    /cluster/bin/scripts/lodToBedScore tmpMostConserved.bed > mostConserved.bed
+
+    # load into database
+    hgLoadBed ce9 phastConsElements10wayCaenorhabditis mostConserved.bed
+    # Loaded 339396 elements of size 5
+
+    # see what this looks like compared to the all species above:
+    featureBits ce9 -enrichment sangerGene:cds \
+	phastConsElements10wayCaenorhabditis
+    #	sangerGene:cds 25.328%, phastConsElements10wayCaenorhabditis 37.524%,
+    #	both 17.349%, cover 68.50%, enrich 1.83x
+    # all species above was:
+    #	sangerGene:cds 25.328%, phastConsElements10way 38.607%,
+    #	both 17.822%, cover 70.37%, enrich 1.82x
+
+    # Create merged posterier probability file and wiggle track data
+    # files
+    cd /hive/data/genomes/ce9/bed/multiz10way/cons/caenorhabditis
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./pp/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/phastCons10way.caenorhabditis.wigFix.gz
+
+    #   encode those files into wiggle data
+    zcat downloads/phastCons10way.caenorhabditis.wigFix.gz \
+        | wigEncode stdin phastCons10wayCaenorhabditis.wig \
+	phastCons10wayCaenorhabditis.wib
+    # Converted stdin, upper limit 1.00, lower limit 0.00
+
+    du -hsc phastCons10wayCaenorhabditis.wi?
+    #	47M     phastCons10wayCaenorhabditis.wib
+    #	8.3M    phastCons10wayCaenorhabditis.wig
+    #	55M     total
+
+    # Load gbdb and database with wiggle.
+    ln -s `pwd`/phastCons10wayCaenorhabditis.wib \
+	/gbdb/ce9/multiz10way/phastCons10wayCaenorhabditis.wib
+    hgLoadWiggle -pathPrefix=/gbdb/ce9/multiz10way ce9 \
+        phastCons10wayCaenorhabditis phastCons10wayCaenorhabditis.wig
+
+############################################################################
+# phyloP conservation (DONE - 2010-10-06 - Hiram)
+    # run phyloP with score=LRT 
+    ssh swarm
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/consPhyloP
+    cd /hive/data/genomes/ce9/bed/multiz10way/consPhyloP
+    mkdir run.phyloP
+    cd run.phyloP
+
+    # Adjust model file base composition background and rate matrix to be
+    # representative of the chromosomes in play
+    grep BACKGROUND ../../cons/all/all.mod | awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.340
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/modFreqs \
+	../../cons/all/all.mod 0.542 > all.mod
+
+    grep BACKGROUND ../../cons/caenorhabditis/caenorhabditis.mod \
+	| awk '{printf "%0.3f\n", $3 + $4}'
+    #	0.342
+    /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin/modFreqs \
+	../../cons/caenorhabditis/caenorhabditis.mod 0.342 \
+	> all.caenorhabditis.mod
+
+    cat << '_EOF_' > doPhyloP.csh
+#!/bin/csh -fe
+set PHASTBIN = /cluster/bin/phast.build/cornellCVS/phast.2010-08-09/bin
+set f = $1
+set out = $2
+set cName = $f:r:r
+set chrDir = $f:r
+set n = $f:r:e
+set grp = $cwd:t
+set cons = /hive/data/genomes/ce9/bed/multiz10way/consPhyloP
+set tmp = $cons/tmp/$grp/$f
+/bin/rm -fr $tmp
+/bin/mkdir -p $tmp
+set ssSrc = /hive/data/genomes/ce9/bed/multiz10way/cons/msa.split/$cName/$f.ss
+set useGrp = "$grp.mod"
+/bin/ln -s $cons/run.phyloP/$grp.mod $tmp
+pushd $tmp > /dev/null
+$PHASTBIN/phyloP --method LRT --mode CONACC --wig-scores --chrom $cName \
+    -i SS $useGrp $ssSrc.ss > $f.wigFix
+popd > /dev/null
+/bin/mkdir -p $out:h
+sleep 4
+mv $tmp/$f.wigFix $out
+rm -fr $tmp
+'_EOF_'
+    # << happy emacs
+    chmod +x doPhyloP.csh
+
+    # Create list of chunks
+    find  ../../cons/msa.split -type f | grep ".ss$" \
+	| sed -e "s#../../cons/msa.split/##" | sed -e "s/.ss//" > ss.list
+
+    # Create template file
+    #	file1 == $chr/$chunk/file name without .ss suffix
+    cat << '_EOF_' > template
+#LOOP
+../run.phyloP/doPhyloP.csh $(file1) {check out line+ wigFix/$(dir1)/$(file1).wigFix}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/consPhyloP/all
+    cd /hive/data/genomes/ce9/bed/multiz10way/consPhyloP/all
+
+    gensub2 ../run.phyloP/ss.list single ../run.phyloP/template jobList
+    para create jobList
+    para try ... check ... push
+    para time
+# Completed: 104 of 104 jobs
+# CPU time in finished jobs:        669s      11.16m     0.19h    0.01d  0.000 y
+# IO & Wait Time:                   754s      12.56m     0.21h    0.01d  0.000 y
+# Average job time:                  14s       0.23m     0.00h    0.00d
+# Longest finished job:              21s       0.35m     0.01h    0.00d
+# Submission to last job:           143s       2.38m     0.04h    0.00d
+
+    mkdir downloads
+    for C in I II III IV V X M
+do
+    find ./wigFix/chr${C} -type f | sed -e "s#^./##" | sed -e "s/\./_/" \
+	| sort -t'_' -k1,1 -k2,2n | sed -e "s/_/./"
+done | xargs cat | gzip > downloads/phyloP10way.wigFix.gz
+
+    wigEncode downloads/phyloP10way.wigFix.gz phyloP10way.wig phyloP10way.wib
+    #	upper limit 3.71, lower limit -1.82
+
+    #	loading the wiggle table:
+    ln -s `pwd`/phyloP10way.wib /gbdb/ce9/multiz10way
+    time nice -n +19 hgLoadWiggle -pathPrefix=/gbdb/ce9/multiz10way ce9 \
+	phyloP10way phyloP10way.wig
+
 
 ############################################################################
 ## LASTZ priPac2 (DONE - 2010-09-29 - Hiram)

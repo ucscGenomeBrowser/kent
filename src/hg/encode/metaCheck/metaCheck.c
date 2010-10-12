@@ -79,8 +79,8 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
         warn("objType not found in object %s", mdbObj->obj);
         continue;
         }
-    if (differentString(mdbVar->val, "file"))
-        continue;
+    //if (differentString(mdbVar->val, "file"))
+        //continue;
 
     mdbObj->deleteThis = FALSE;
     mdbVar = hashFindVal(mdbObj->varHash, "composite");
@@ -106,6 +106,7 @@ for(; mdbObj != NULL; mdbObj=mdbObj->next)
 
     safef(buffer, sizeof buffer, "%s/%s/%s", downDir, composite, fileName);
 
+    verbose(2, "checking for fileExists %s\n", buffer);
     if (!fileExists(buffer))
         {
         mdbObj->deleteThis = TRUE;

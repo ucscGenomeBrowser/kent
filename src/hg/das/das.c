@@ -46,6 +46,9 @@ static void dasHead(int code)
 printf("X-DAS-Version: DAS/0.95\n");
 printf("X-DAS-Status: %d\n", code);
 printf("Content-Type:text/xml\n");
+// these allow access from javascript, see http://www.w3.org/TR/cors/
+printf("Access-Control-Allow-Origin: *\n");
+printf("Access-Control-Expose-Headers: X-DAS-Version X-DAS-Status X-DAS-Capabilities\n");
 printf("\n");
 }
 
@@ -127,10 +130,10 @@ dasHeader(errCode);
 }
 
 static char *currentUrl()
-/* Query environment to get current URL. */
+/* Query environment to get current URL.  WARNING: static return */
 {
-static char url[512];
-sprintf(url, "http://%s%s%s", getenv("SERVER_NAME"), getenv("SCRIPT_NAME"), getenv("PATH_INFO"));
+static char url[1024];
+safef(url, sizeof(url), "http://%s%s%s", getenv("SERVER_NAME"), getenv("SCRIPT_NAME"), getenv("PATH_INFO"));
 return url;
 }
 
@@ -149,12 +152,9 @@ struct tableDef
     };
 
 static boolean hasLogicalChromName(char *name)
-/* Return TRUE if name begins with "chr" or "target" (for Zoo) prefix */
+/* Return TRUE if name begins with "chr"*/
 {
-if (startsWith("chr", name) ||
-    startsWith("target", name))
-        return TRUE;
-return FALSE;
+return (startsWith("chr", name));
 }
 
 static boolean tableIsSplit(char *table)
@@ -244,10 +244,38 @@ return hash;
 static boolean dasableTrack(char *name)
 /* Return TRUE if track can be put into DAS format. */
 {
-static struct hash *hash = NULL;
-if (hash == NULL)
-    hash = mkTrackTypeHash();
-return hashLookup(hash, name) != NULL;
+static struct hash *types = NULL;
+if (types == NULL)
+    types = mkTrackTypeHash();
+return hashLookup(types, name) != NULL;
+}
+
+static struct hash *mkSkipTableHash()
+/* build hash of big tables that we don't actually want to serve. */
+
+{
+struct hash *skips = hashNew(0);
+hashAdd(skips, "all_est", NULL);
+hashAdd(skips, "all_mrna", NULL);
+hashAdd(skips, "refFlat", NULL);
+hashAdd(skips, "simpleRepeat", NULL);
+hashAdd(skips, "ctgPos", NULL);
+hashAdd(skips, "gold", NULL);
+hashAdd(skips, "clonePos", NULL);
+hashAdd(skips, "gap", NULL);
+hashAdd(skips, "rmsk", NULL);
+hashAdd(skips, "estPair", NULL);
+hashAdd(skips, "altGraphX", NULL);
+return skips;
+}
+
+static boolean skipTable(char *name)
+/* should big tables be skipped. */
+{
+static struct hash *skips = NULL;
+if (skips == NULL)
+    skips = mkSkipTableHash();
+return hashLookup(skips, name) != NULL;
 }
 
 static struct tableDef *getTables()
@@ -255,26 +283,12 @@ static struct tableDef *getTables()
 {
 struct sqlConnection *conn = hAllocConn(database);
 struct hash *hash = newHash(0);
-struct hash *skipHash = newHash(7);
 struct tableDef *tdList = NULL, *td;
 struct sqlResult *sr;
 char **row;
 char *table, *root;
 boolean isSplit, hasBin;
 char chromField[32], startField[32], endField[32];
-
-/* Set up some big tables that we don't actually want to serve. */
-hashAdd(skipHash, "all_est", NULL);
-hashAdd(skipHash, "all_mrna", NULL);
-hashAdd(skipHash, "refFlat", NULL);
-hashAdd(skipHash, "simpleRepeat", NULL);
-hashAdd(skipHash, "ctgPos", NULL);
-hashAdd(skipHash, "gold", NULL);
-hashAdd(skipHash, "clonePos", NULL);
-hashAdd(skipHash, "gap", NULL);
-hashAdd(skipHash, "rmsk", NULL);
-hashAdd(skipHash, "estPair", NULL);
-hashAdd(skipHash, "altGraphX", NULL);
 
 sr = sqlGetResult(conn, "show tables");
 while ((row = sqlNextRow(sr)) != NULL)
@@ -285,7 +299,7 @@ while ((row = sqlNextRow(sr)) != NULL)
 	isSplit = tableIsSplit(table);
 	if (isSplit)
 	    root = skipOverChrom(table);
-	if (hashLookup(skipHash, root) == NULL && dasableTrack(root))
+	if (!skipTable(root) && dasableTrack(root))
 	    {
 	    if ((td = hashFindVal(hash, root)) == NULL)
 		{
@@ -342,7 +356,6 @@ while ((row = sqlNextRow(sr)) != NULL)
 sqlFreeResult(&sr);
 hFreeConn(&conn);
 hashFree(&hash);
-hashFree(&skipHash);
 slReverse(&tdList);
 return tdList;
 }
@@ -628,7 +641,7 @@ else
 hFreeConn(&conn);
 return acc;
 }
-
+ 
 
 static void doTypes()
 /* Handle a types request. */
@@ -840,12 +853,19 @@ static void writeSegmentFeaturesTable(struct segment *segment,
 {
 int rowOffset;
 boolean hasBin;
-char table[64];
+char table[HDB_MAX_TABLE_STRING];
 
 verbose(2, "track %s\n", td->name);
 hFindSplitTable(database, segment->seq, td->name, table, &hasBin);
+// horrible hack because hFindSplitTable and hRangeQuery don't really seem to
+// handle est->all_est/mrna->all_mrna right, but markd fears modifying that
+// code
+if (sameString(td->name, "mrna"))
+    safecpy(table, sizeof(table), "all_mrna");
+else if (sameString(td->name, "est"))
+    safecpy(table, sizeof(table), "all_est");
 struct trackTable *tt = hashFindVal(trackHash, td->name);
-struct sqlResult *sr = hRangeQuery(conn, td->name, segment->seq, segment->start, segment->end, NULL, &rowOffset);
+struct sqlResult *sr = hRangeQuery(conn, table, segment->seq, segment->start, segment->end, NULL, &rowOffset);
 // FIXME: should use trackDb to determine type, as field names are
 // not always unique.
 if (sameString(td->startField, "tStart") && (sqlFieldColumn(sr, "qStart") >= 0))
