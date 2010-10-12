@@ -2321,7 +2321,7 @@ void linkToPal(char *track,  char *chrom, int start, int end, char *geneName)
 {
 printf("<A TITLE=\"%s\" HREF=\"%s?g=%s&i=%s&c=%s&l=%d&r=%d\">",
        geneName, hgPalName(), track, geneName, chrom, start, end);
-    printf("CDS FASTA alignment</A> from multiple alignment. ");
+    printf("CDS FASTA alignment</A> from multiple alignment");
 }
 
 void addPalLink(struct sqlConnection *conn, char *track,
@@ -2421,7 +2421,7 @@ hgcAnchorSomewhere(mrnaClick, geneName, geneTable, seqName);
 if (sameString(mrnaClick, "htcGeneMrna"))
     printf("%s</A> from genomic sequences\n", mrnaDescription);
 else
-    printf("%s</A> may be different from the genomic sequence.\n",
+    printf("%s</A> (may be different from the genomic sequence)\n",
            mrnaDescription);
 puts("</LI>\n");
 
