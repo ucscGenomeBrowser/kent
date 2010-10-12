@@ -18,7 +18,8 @@
  * Copyright (c) 2008 Matt Kruse (javascripttoolbox.com)
  * Dual licensed under the MIT and GPL licenses. 
  *
- * @version 1.0
+ * @version 1.1
+ * @history 1.1 2010-01-25 Fixed a problem with 1.4 which caused undesired show/hide animations
  * @history 1.0 2008-10-20 Initial Release
  * @todo slideUp doesn't work in IE - because of iframe?
  * @todo Hide all other menus when contextmenu is shown?
@@ -45,8 +46,8 @@
 				
 		showTransition:'show',
 		hideTransition:'hide',
-		showSpeed:'',
-		hideSpeed:'',
+		showSpeed:null,
+		hideSpeed:null,
 		showCallback:null,
 		hideCallback:null,
 		
