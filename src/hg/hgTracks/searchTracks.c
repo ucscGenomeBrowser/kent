@@ -837,6 +837,7 @@ else
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
+#ifdef OMIT
 if(!doSearch)
     {
     hPrintf("<p><b>Recently Done</b><ul>\n"
@@ -854,6 +855,7 @@ if(!doSearch)
         "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
         "</ul></p>\n");
     }
+#endif///def OMIT
 hPrintf("</div"); // This div allows the clear button to empty it
 hFreeConn(&conn);
 webEndSectionTables();
