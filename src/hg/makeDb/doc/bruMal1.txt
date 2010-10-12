@@ -5,6 +5,7 @@
 # "Draft genome of the filarial nematode parasite Brugia malayi.",
 # Science, 2007 Sep 21; 317(5845):1756-60
 # http://www.ncbi.nlm.nih.gov/pmc/articles/PMC2613796/
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAQA01
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
