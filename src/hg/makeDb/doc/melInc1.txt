@@ -4,6 +4,7 @@
 # Sanger and Genoscope
 # http://www.nematode.net/Species.Summaries/Meloidogyne.incognita/index.php
 #	Genbank: CABB00000000
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CABB01
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
