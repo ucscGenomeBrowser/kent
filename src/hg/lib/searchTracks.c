@@ -2,12 +2,14 @@
 
 #include "searchTracks.h"
 #include "hdb.h"
+#include "hgConfig.h"
 #include "trix.h"
 
 void getSearchTrixFile(char *database, char *buf, int len)
 // Fill-in the name of the track search trix file
 {
-safef(buf, len, "/gbdb/%s/trackDb.ix", database);
+char *fileName = cfgOptionDefault("browser.trixFile", "trackDb.ix");
+safef(buf, len, "/gbdb/%s/%s", database,fileName);
 }
 
 boolean isSearchTracksSupported(char *database)

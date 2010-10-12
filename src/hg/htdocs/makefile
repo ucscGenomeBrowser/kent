@@ -12,13 +12,16 @@ FIND=gitFiles
 
 user:
 	${MAKE} doInstall destDir=${HTDOCS_USER} extra=doSymLink
+	cd style && echo style && ${MAKE} user
 
 alpha:
 	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
+	cd style && echo style && ${MAKE} alpha
 
 beta:
 	${GITUP}
 	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
+	cd style && echo style && ${MAKE} beta
 
 alphaCancerPublic:
 	${MAKE} doInstallCancerPublic destDir=${HTDOCS} extra=doSymLink

@@ -14,6 +14,7 @@
 
 accession *
 aggregate bigWig wig bedGraph
+aliQualRange bam
 allButtonPair *
 altColor *
 articleTable bed
@@ -25,6 +26,7 @@ baseColorDefault *
 baseColorTickColor bed bigBed
 baseColorUseCds bed psl genePred
 baseColorUseSequence *
+baseQualRange bam
 bedFilter bed
 bedNameLabel bed
 bigDataUrl customTracks
@@ -235,6 +237,7 @@ pslSequence psl
 pslTable bed
 qValueFilter bed narrowPeak broadPeak
 qValueFilterLimits bed narrowPeak broadPeak
+refGenePredVersion genePred
 release *
 retroMrnaInfo psl
 sGroup_Chimp wigMaf

@@ -101,7 +101,20 @@ To build the source tree.
 	/destination/prefix/usr/local/apache/cgi-bin
 
         If your cgi-bin directory is something different than
-	/usr/local/apache/cgi-bin then use the CGI_BIN variable
+	/usr/local/apache/cgi-bin then use the CGI_BIN variable, e.g.:
+	    make install DESTDIR=/var/www CGI_BIN=/cgi-bin \
+		DOCUMENTROOT=/var/www/html
+
+	You can save yourself time and trouble if your Apache is somewhere
+	other than at /usr/local/apache by creating that directory and making
+	symlinks to your actual apache directories.  For example:
+	mkdir /usr/local/apache
+	ln -s /var/www/cgi-bin /usr/local/apache/cgi-bin
+	ln -s /var/www/html /usr/local/apache/htdocs
+	ln -s /var/www/cgi-bin-${LOGNAME} /usr/local/apache/cgi-bin
+
+	With those symlinks in place, a simple 'make cgi' can be used
+	instead of the 'make compile; make install DESTDIR=...' business.
 
         If your apache DocumentRoot is something different than
         /usr/local/apache/htdocs then use the DOCUMENTROOT variable.

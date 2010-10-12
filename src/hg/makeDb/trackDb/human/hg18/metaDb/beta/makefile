@@ -10,5 +10,11 @@ wgEncodeCaltechRnaSeq.ra\
 wgEncodeReg.ra\
 wgEncodeUwAffyExonArray.ra\
 wgEncodeSunyalbanyRnaGeneChip.ra\
+wgEncodeBuOrchid.ra\
+wgEncodeGisPet.ra\
+wgEncodeHudsonalphaMethyl27.ra\
+wgEncodeHudsonalphaRnaSeq.ra\
+wgEncodeRikenCage.ra\
+wgEncodeSangerGencode.ra\
 
 include ../../../../makefile.metaDb

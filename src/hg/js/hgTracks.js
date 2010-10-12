@@ -1536,7 +1536,9 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd);
+                    if(window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
+                        windowOpenFailedMsg();
+                    }
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
@@ -1608,8 +1610,9 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cache: false
                });
     } else if (cmd == 'openLink') {
-        // XXXX This is blocked by Safari's popup blocker (without any warning message).
-        window.open(selectedMenuItem.href);
+        if(window.open(selectedMenuItem.href) == null) {
+            windowOpenFailedMsg();
+        }
     } else if (cmd == 'followLink') {
         // XXXX This is blocked by Safari's popup blocker (without any warning message).
         location.assign(selectedMenuItem.href);
@@ -1693,7 +1696,7 @@ function loadContextMenu(img)
             var menu = [];
             var selectedImg = " <img src='../images/greenCheck.png' height='10' width='10' />";
             var done = false;
-            if(selectedMenuItem) {
+            if(selectedMenuItem && selectedMenuItem.id != undefined) {
                 var href = selectedMenuItem.href;
                 var isHgc, isGene;
                 if(href) {
@@ -1747,17 +1750,24 @@ function loadContextMenu(img)
                     var any = false;
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
-                        o["Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
-                        o["Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
-                        o["Open details page in new window"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
+                        o["<img src='../images/magnify.png' /> Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                        o["<img src='../images/dnaIcon.png' /> Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
+                        o["<img src='../images/bookOut.png' /> Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
                     && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
-                        if(selectedMenuItem.title.indexOf("Click to alter") != 0 || selectedMenuItem.title.indexOf("and similar subtracks") != -1) {
-                        o[selectedMenuItem.title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
-                        any = true;
-                    }
+                        var str = selectedMenuItem.title;
+                        if(str.indexOf("Click to alter ") == 0) {
+                            ; // suppress the "Click to alter..." items
+                        } else {
+                            if(str.indexOf("display density") != -1)
+                                str = "<img src='../images/toggle.png' /> " + str;
+                            else
+                                str = "<img src='../images/book.png' /> Show details for " + str + "...";
+                            o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                            any = true;
+                        }
                     }
                     if(any) {
                         menu.push($.contextMenu.separator);
@@ -1793,18 +1803,18 @@ function loadContextMenu(img)
             // Add cfg options at just shy of end...
             var o = new Object();
             if(tdbIsLeaf(rec)) {
-                o["configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                o["<img src='../images/wrench.png' /> Configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
                 if(rec.parentTrack != undefined)
-                    o["configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                    o["<img src='../images/folderWrench.png' /> Configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             } else
-                o["configure "+rec.shortLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                o["<img src='../images/folderWrench.png' /> Configure "+rec.shortLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             menu.push($.contextMenu.separator);
             menu.push(o);
                 menu.push($.contextMenu.separator);
             }
 
             // Add view image at end
-            menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
+            menu.push({"<img src='../images/view.png' /> View image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
 
             return menu;
         },
@@ -2092,7 +2102,9 @@ function handleViewImg(response, status)
     var reg = new RegExp(str);
     a = reg.exec(response);
     if(a && a[1]) {
-        window.open(a[1]);
+        if(window.open(a[1]) == null) {
+            windowOpenFailedMsg();
+        }
         return;
     }
     showWarning("Couldn't parse out img src");
@@ -2171,9 +2183,10 @@ function findTracksHandleNewMdbVals(response, status)
     var list = eval(response);
     var ele = $('select[name=' + this.cmd + ']');
     ele.empty();
-    ele.append("<option>Any</option>");
+    ele.append("<option VALUE='Any'>Any</option>");
     for (var i = 0; i < list.length; i++) {
-        ele.append("<option>" + list[i] + "</option>");
+        var pair = list[i];
+        ele.append("<option VALUE='" + pair[1] + "'>" + pair[0] + "</option>");
     }
     updateMetaDataHelpLinks(this.num);
 }
@@ -2374,6 +2387,16 @@ function findTracksSortNow(obj)
     return true;
 }
 
+function findTracksPage(pageVar,startAt)
+{// Called by radio button to sort tracks
+    if( $('pageIt').length == 0 )
+        $('form#searchTracks').append("<input TYPE=HIDDEN id='pageIt' name='"+pageVar+"' value="+startAt+">");
+    else
+        $('pageIt').val(startAt);
+    $('#searchSubmit').click();
+    return false;
+}
+
 /////////////////////////////////////////////////////
 
 function delSearchSelect(obj, rowNum)
@@ -2396,6 +2419,21 @@ function updateMetaDataHelpLinks(index)
 // If index == 0 we update all help items, otherwise we only update the one == index.
     var i;
     var db = getDb();
+    var disabled = {
+        'accession': 1,
+        'dataVersion': 1,
+        'dataType': 1,
+        'grant': 1,
+        'lab': 1,
+        'labExpId': 1,
+        'labVersion': 1,
+        'origAssembly': 1,
+        'replicate': 1,
+        'setType': 1,
+        'softwareVersion': 1,
+        'subId': 1,
+        'view': 1
+    }
     for(i=1;true;i++) {
         var span = $("#helpLink" + i);
         if(span.length > 0) {
@@ -2415,10 +2453,18 @@ function updateMetaDataHelpLinks(index)
                 } else {
                     str = "../ENCODE/otherTerms.html#" + val;
                 }
-                span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                if(typeof(disabled[val]) == 'undefined')
+                    span.html("<a target='_blank' title='detailed descriptions of terms' href='" + str + "'>" + text + "</a>");
+                else
+                    span.empty();
             }
         } else {
             return;
         }
     }
+}
+
+function windowOpenFailedMsg()
+{
+    alert("Your web browser prevented us from opening a new window.\n\nYou need to change your browser settings to allow popups from " + document.domain);
 }

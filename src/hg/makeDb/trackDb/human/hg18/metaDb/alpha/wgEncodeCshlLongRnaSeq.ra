@@ -2,7 +2,7 @@ metaObject wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -21,7 +21,7 @@ metaObject wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -40,7 +40,7 @@ metaObject wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
@@ -60,7 +60,7 @@ metaObject wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -79,7 +79,7 @@ metaObject wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -98,7 +98,7 @@ metaObject wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -117,7 +117,7 @@ metaObject wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -136,7 +136,7 @@ metaObject wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
@@ -156,7 +156,7 @@ metaObject wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -175,7 +175,7 @@ metaObject wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -194,7 +194,7 @@ metaObject wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -213,7 +213,7 @@ metaObject wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -232,7 +232,7 @@ metaObject wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
@@ -252,7 +252,7 @@ metaObject wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -271,7 +271,7 @@ metaObject wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -290,7 +290,7 @@ metaObject wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -309,7 +309,7 @@ metaObject wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -328,7 +328,7 @@ metaObject wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
@@ -348,7 +348,7 @@ metaObject wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
 objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -367,7 +367,7 @@ metaObject wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
 objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -386,7 +386,7 @@ metaObject wgEncodeCshlLongRnaSeqRawDataRep1Gm12878CellTotal
 objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -405,7 +405,7 @@ metaObject wgEncodeCshlLongRnaSeqRawDataRep1K562CellTotal
 objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -424,7 +424,7 @@ metaObject wgEncodeCshlLongRnaSeqRawDataRep1K562CytosolLongpolyaV2
 objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE July 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
@@ -443,7 +443,7 @@ metaObject wgEncodeCshlLongRnaSeqRawDataRep2Gm12878CellTotal
 objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -462,7 +462,7 @@ metaObject wgEncodeCshlLongRnaSeqRawDataRep2K562CellTotal
 objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
-dataType LongRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
@@ -477,4 +477,4 @@ rnaExtract total
 subId 752
 view RawData
 
-# MAGIC: -573201897
+# MAGIC: -1308751097

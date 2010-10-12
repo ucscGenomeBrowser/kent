@@ -7,6 +7,6 @@ CREATE TABLE rgdGeneRaw0  (
     score  varchar(40),		
     strand varchar(40),	
     frame varchar(40),
-    rgdId blob,
+    rgdId text,
     KEY(rgdId(20))
 );
