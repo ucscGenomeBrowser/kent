@@ -3,7 +3,7 @@ objType file
 cell AoSMC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -23,7 +23,7 @@ objType file
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -42,7 +42,7 @@ objType file
 cell Fibrobl
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -61,7 +61,7 @@ objType file
 cell FibroP
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
@@ -80,7 +80,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-08
 dateUnrestricted 2009-08-08
@@ -98,7 +98,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-03-20
 dateUnrestricted 2009-12-20
@@ -118,7 +118,7 @@ objType file
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
@@ -137,7 +137,7 @@ objType file
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -156,7 +156,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -175,7 +175,7 @@ objType file
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -194,7 +194,7 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -213,7 +213,7 @@ objType file
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -232,7 +232,7 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -251,7 +251,7 @@ objType file
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -270,7 +270,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -289,7 +289,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -309,7 +309,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -330,7 +330,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2010-01-15
@@ -349,7 +349,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -370,7 +370,7 @@ objType file
 cell HSMM
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -389,7 +389,7 @@ objType file
 cell HSMMtube
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -408,7 +408,7 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -427,7 +427,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
@@ -446,7 +446,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -467,7 +467,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -486,7 +486,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -506,7 +506,7 @@ objType file
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -525,7 +525,7 @@ objType file
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -544,7 +544,7 @@ objType file
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -563,7 +563,7 @@ objType file
 cell Myometr
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -582,7 +582,7 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -601,7 +601,7 @@ objType file
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -620,7 +620,7 @@ objType file
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -639,7 +639,7 @@ objType file
 cell AoSMC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -659,7 +659,7 @@ objType file
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -678,7 +678,7 @@ objType file
 cell Fibrobl
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -697,7 +697,7 @@ objType file
 cell FibroP
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
@@ -716,7 +716,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-08
 dateUnrestricted 2009-08-08
@@ -734,7 +734,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
@@ -755,7 +755,7 @@ objType file
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
@@ -774,7 +774,7 @@ objType file
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -793,7 +793,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -812,7 +812,7 @@ objType file
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -831,7 +831,7 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -850,7 +850,7 @@ objType file
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -869,7 +869,7 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -888,7 +888,7 @@ objType file
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -907,7 +907,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -926,7 +926,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -946,7 +946,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -967,7 +967,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -986,7 +986,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -1007,7 +1007,7 @@ objType file
 cell HSMM
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -1026,7 +1026,7 @@ objType file
 cell HSMMtube
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -1045,7 +1045,7 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -1064,7 +1064,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
@@ -1083,7 +1083,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -1104,7 +1104,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -1123,7 +1123,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -1143,7 +1143,7 @@ objType file
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -1162,7 +1162,7 @@ objType file
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1181,7 +1181,7 @@ objType file
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -1200,7 +1200,7 @@ objType file
 cell Myometr
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -1219,7 +1219,7 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -1238,7 +1238,7 @@ objType file
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -1257,7 +1257,7 @@ objType file
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -1276,7 +1276,7 @@ objType file
 cell FibroP
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
@@ -1295,7 +1295,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-08
 dateUnrestricted 2009-08-08
@@ -1313,7 +1313,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
@@ -1334,7 +1334,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -1353,7 +1353,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -1372,7 +1372,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -1393,7 +1393,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -1412,7 +1412,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -1433,7 +1433,7 @@ objType file
 cell HSMM
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -1452,7 +1452,7 @@ objType file
 cell HSMMtube
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -1471,7 +1471,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
@@ -1490,7 +1490,7 @@ objType file
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -1509,7 +1509,7 @@ objType table
 cell AoSMC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -1528,7 +1528,7 @@ objType table
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -1546,7 +1546,7 @@ objType table
 cell Fibrobl
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -1564,7 +1564,7 @@ objType table
 cell FibroP
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
@@ -1582,7 +1582,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-27
@@ -1602,7 +1602,7 @@ objType table
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-03
@@ -1621,7 +1621,7 @@ objType table
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
@@ -1640,7 +1640,7 @@ objType table
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -1658,7 +1658,7 @@ objType table
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
@@ -1677,7 +1677,7 @@ objType table
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
@@ -1696,7 +1696,7 @@ objType table
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-06
@@ -1715,7 +1715,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-30
@@ -1734,7 +1734,7 @@ objType table
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -1752,7 +1752,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -1771,7 +1771,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-07
 dateSubmitted 2009-03-21
@@ -1791,7 +1791,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-11
@@ -1811,7 +1811,7 @@ objType table
 cell HSMM
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -1829,7 +1829,7 @@ objType table
 cell HSMMtube
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -1847,7 +1847,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-24
@@ -1866,7 +1866,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2008-12-09
@@ -1886,7 +1886,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -1904,7 +1904,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -1923,7 +1923,7 @@ objType table
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -1941,7 +1941,7 @@ objType table
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -1959,7 +1959,7 @@ objType table
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -1977,7 +1977,7 @@ objType table
 cell Myometr
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -1995,7 +1995,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-29
@@ -2014,7 +2014,7 @@ objType table
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -2032,7 +2032,7 @@ objType table
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -2050,7 +2050,7 @@ objType table
 cell AoSMC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -2069,7 +2069,7 @@ objType table
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -2087,7 +2087,7 @@ objType table
 cell Fibrobl
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -2105,7 +2105,7 @@ objType table
 cell FibroP
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
@@ -2123,7 +2123,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
@@ -2143,7 +2143,7 @@ objType table
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-03
@@ -2163,7 +2163,7 @@ objType table
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -2183,7 +2183,7 @@ objType table
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -2201,7 +2201,7 @@ objType table
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -2221,7 +2221,7 @@ objType table
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -2241,7 +2241,7 @@ objType table
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -2261,7 +2261,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
@@ -2281,7 +2281,7 @@ objType table
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -2299,7 +2299,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -2318,7 +2318,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
@@ -2338,7 +2338,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
@@ -2358,7 +2358,7 @@ objType table
 cell HSMM
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -2376,7 +2376,7 @@ objType table
 cell HSMMtube
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -2394,7 +2394,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-24
@@ -2414,7 +2414,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
@@ -2434,7 +2434,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -2452,7 +2452,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -2471,7 +2471,7 @@ objType table
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -2489,7 +2489,7 @@ objType table
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -2507,7 +2507,7 @@ objType table
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -2525,7 +2525,7 @@ objType table
 cell Myometr
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -2543,7 +2543,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-29
@@ -2563,7 +2563,7 @@ objType table
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -2581,7 +2581,7 @@ objType table
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -2599,7 +2599,7 @@ objType file
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -2617,7 +2617,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
@@ -2636,7 +2636,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
@@ -2657,7 +2657,7 @@ objType file
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
@@ -2675,7 +2675,7 @@ objType file
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -2693,7 +2693,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -2711,7 +2711,7 @@ objType file
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -2729,7 +2729,7 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -2747,7 +2747,7 @@ objType file
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -2765,7 +2765,7 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -2783,7 +2783,7 @@ objType file
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -2801,7 +2801,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -2820,7 +2820,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -2839,7 +2839,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -2859,7 +2859,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -2878,7 +2878,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -2898,7 +2898,7 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -2916,7 +2916,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-10
 dateUnrestricted 2009-08-10
@@ -2935,7 +2935,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -2955,7 +2955,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -2973,7 +2973,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -2992,7 +2992,7 @@ objType file
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -3010,7 +3010,7 @@ objType file
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3028,7 +3028,7 @@ objType file
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3046,7 +3046,7 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -3064,7 +3064,7 @@ objType file
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -3082,7 +3082,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
@@ -3101,7 +3101,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
@@ -3122,7 +3122,7 @@ objType file
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
@@ -3140,7 +3140,7 @@ objType file
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3158,7 +3158,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -3176,7 +3176,7 @@ objType file
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3194,7 +3194,7 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3212,7 +3212,7 @@ objType file
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3230,7 +3230,7 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -3248,7 +3248,7 @@ objType file
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -3266,7 +3266,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -3285,7 +3285,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -3304,7 +3304,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -3324,7 +3324,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -3343,7 +3343,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -3363,7 +3363,7 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -3381,7 +3381,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-10
 dateUnrestricted 2009-08-10
@@ -3400,7 +3400,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -3420,7 +3420,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -3438,7 +3438,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -3457,7 +3457,7 @@ objType file
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -3475,7 +3475,7 @@ objType file
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -3493,7 +3493,7 @@ objType file
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -3511,7 +3511,7 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -3529,7 +3529,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-11
 dateUnrestricted 2009-08-11
@@ -3548,7 +3548,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-03-20
@@ -3568,7 +3568,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -3586,7 +3586,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -3605,7 +3605,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -3625,7 +3625,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -3644,7 +3644,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -3664,7 +3664,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-10
 dateUnrestricted 2009-08-10
@@ -3683,7 +3683,7 @@ objType table
 cell AoSMC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -3702,7 +3702,7 @@ objType table
 cell Chorion
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -3720,7 +3720,7 @@ objType table
 cell Fibrobl
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -3738,7 +3738,7 @@ objType table
 cell FibroP
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-09
@@ -3756,7 +3756,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-02
 dateSubmitted 2009-02-27
@@ -3776,7 +3776,7 @@ objType table
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-03
 dateUnrestricted 2010-07-03
@@ -3794,7 +3794,7 @@ objType table
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3812,7 +3812,7 @@ objType table
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -3830,7 +3830,7 @@ objType table
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3848,7 +3848,7 @@ objType table
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3866,7 +3866,7 @@ objType table
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -3884,7 +3884,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -3902,7 +3902,7 @@ objType table
 cell H9ES
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-24
 dateUnrestricted 2010-09-23
@@ -3920,7 +3920,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -3939,7 +3939,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -3959,7 +3959,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-11
@@ -3979,7 +3979,7 @@ objType table
 cell HSMM
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -3997,7 +3997,7 @@ objType table
 cell HSMMtube
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -4015,7 +4015,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -4033,7 +4033,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-26
@@ -4053,7 +4053,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -4071,7 +4071,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-19
 dateUnrestricted 2010-09-18
@@ -4090,7 +4090,7 @@ objType table
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -4108,7 +4108,7 @@ objType table
 cell Medullo
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-16
 dateUnrestricted 2010-09-16
@@ -4126,7 +4126,7 @@ objType table
 cell Melano
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -4144,7 +4144,7 @@ objType table
 cell Myometr
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-08
@@ -4162,7 +4162,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -4180,7 +4180,7 @@ objType table
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -4198,7 +4198,7 @@ objType table
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId modelled
-dataType DNaseSeq
+dataType DnaseSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-17
 dateUnrestricted 2010-09-17
@@ -6913,7 +6913,7 @@ antibody c-Myc
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -6933,7 +6933,7 @@ antibody CTCF
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
@@ -6953,7 +6953,7 @@ antibody Pol2
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -6973,7 +6973,7 @@ antibody c-Myc
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
@@ -6993,7 +6993,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
@@ -7014,7 +7014,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -7034,7 +7034,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
@@ -7057,7 +7057,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -7078,7 +7078,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7099,7 +7099,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -7120,7 +7120,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7141,7 +7141,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7162,7 +7162,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7183,7 +7183,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -7204,7 +7204,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
@@ -7227,7 +7227,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -7248,7 +7248,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -7270,7 +7270,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -7291,7 +7291,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
@@ -7312,7 +7312,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -7335,7 +7335,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -7356,7 +7356,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
@@ -7379,7 +7379,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -7400,7 +7400,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
@@ -7421,7 +7421,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -7442,7 +7442,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -7463,7 +7463,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -7486,7 +7486,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -7507,7 +7507,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -7530,7 +7530,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -7551,7 +7551,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -7572,7 +7572,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -7593,7 +7593,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -7614,7 +7614,7 @@ antibody CTCF
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
@@ -7635,7 +7635,7 @@ antibody Pol2
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -7656,7 +7656,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
@@ -7677,7 +7677,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -7697,7 +7697,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
@@ -7720,7 +7720,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -7741,7 +7741,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7762,7 +7762,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -7783,7 +7783,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7804,7 +7804,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7825,7 +7825,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -7846,7 +7846,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -7867,7 +7867,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
@@ -7890,7 +7890,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -7911,7 +7911,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -7933,7 +7933,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -7954,7 +7954,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
@@ -7975,7 +7975,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -7998,7 +7998,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -8019,7 +8019,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
@@ -8042,7 +8042,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -8063,7 +8063,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
@@ -8084,7 +8084,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -8105,7 +8105,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -8126,7 +8126,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -8149,7 +8149,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -8170,7 +8170,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -8193,7 +8193,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -8214,7 +8214,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -8235,7 +8235,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -8256,7 +8256,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -8277,7 +8277,7 @@ antibody CTCF
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
@@ -8298,7 +8298,7 @@ antibody Pol2
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -8319,7 +8319,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -8339,7 +8339,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
@@ -8362,7 +8362,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
@@ -8383,7 +8383,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -8406,7 +8406,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -8427,7 +8427,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -8448,7 +8448,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -8471,7 +8471,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -8492,7 +8492,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -8515,7 +8515,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-09-08
@@ -8536,7 +8536,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-24
@@ -8558,7 +8558,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -8578,7 +8578,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
@@ -8599,7 +8599,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-07
 dateSubmitted 2009-10-02
@@ -8620,7 +8620,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
@@ -8641,7 +8641,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
@@ -8662,7 +8662,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-06
@@ -8683,7 +8683,7 @@ antibody c-Myc
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -8703,7 +8703,7 @@ antibody CTCF
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-10-01
@@ -8724,7 +8724,7 @@ antibody Pol2
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-10-02
@@ -8745,7 +8745,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-21
@@ -8767,7 +8767,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-21
@@ -8789,7 +8789,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -8809,7 +8809,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-22
@@ -8831,7 +8831,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-03-21
@@ -8853,7 +8853,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-07
 dateSubmitted 2009-09-29
@@ -8874,7 +8874,7 @@ antibody c-Myc
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-10-01
@@ -8895,7 +8895,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-09-25
@@ -8916,7 +8916,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-09-28
@@ -8937,7 +8937,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-27
@@ -8959,7 +8959,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-02-27
@@ -8981,7 +8981,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-06
 dateSubmitted 2009-09-29
@@ -9002,7 +9002,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -9022,7 +9022,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -9042,7 +9042,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-03
 dateSubmitted 2009-09-30
@@ -9063,7 +9063,7 @@ antibody CTCF
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
@@ -9083,7 +9083,7 @@ antibody Pol2
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -9103,7 +9103,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-08
@@ -9125,7 +9125,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
@@ -9147,7 +9147,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -9167,7 +9167,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -9189,7 +9189,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-02
@@ -9211,7 +9211,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -9233,7 +9233,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -9255,7 +9255,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-06
@@ -9277,7 +9277,7 @@ antibody c-Myc
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -9297,7 +9297,7 @@ antibody CTCF
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-01
@@ -9319,7 +9319,7 @@ antibody Pol2
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-02
@@ -9341,7 +9341,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
@@ -9363,7 +9363,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
@@ -9385,7 +9385,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -9405,7 +9405,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-22
@@ -9427,7 +9427,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-21
@@ -9449,7 +9449,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-29
@@ -9471,7 +9471,7 @@ antibody c-Myc
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-10-01
@@ -9493,7 +9493,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-25
@@ -9515,7 +9515,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-28
@@ -9537,7 +9537,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
@@ -9559,7 +9559,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-20
@@ -9581,7 +9581,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-29
@@ -9603,7 +9603,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -9623,7 +9623,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -9643,7 +9643,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
@@ -9665,7 +9665,7 @@ antibody CTCF
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
@@ -9685,7 +9685,7 @@ antibody Pol2
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -9705,7 +9705,7 @@ antibody c-Myc
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -9724,7 +9724,7 @@ antibody CTCF
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
@@ -9743,7 +9743,7 @@ antibody Pol2
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -9762,7 +9762,7 @@ antibody c-Myc
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
@@ -9781,7 +9781,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
@@ -9801,7 +9801,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -9821,7 +9821,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
@@ -9843,7 +9843,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -9863,7 +9863,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -9883,7 +9883,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -9903,7 +9903,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -9923,7 +9923,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -9943,7 +9943,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -9963,7 +9963,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -9984,7 +9984,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
@@ -10006,7 +10006,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -10027,7 +10027,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -10049,7 +10049,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -10069,7 +10069,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
@@ -10090,7 +10090,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -10112,7 +10112,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -10133,7 +10133,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
@@ -10155,7 +10155,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -10175,7 +10175,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
@@ -10195,7 +10195,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -10215,7 +10215,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -10236,7 +10236,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -10258,7 +10258,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -10279,7 +10279,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -10301,7 +10301,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -10321,7 +10321,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -10341,7 +10341,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -10361,7 +10361,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -10381,7 +10381,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
@@ -10401,7 +10401,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -10421,7 +10421,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
@@ -10443,7 +10443,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -10463,7 +10463,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -10483,7 +10483,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -10503,7 +10503,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -10523,7 +10523,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -10543,7 +10543,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -10563,7 +10563,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -10584,7 +10584,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
@@ -10606,7 +10606,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -10627,7 +10627,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -10649,7 +10649,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -10669,7 +10669,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
@@ -10690,7 +10690,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -10712,7 +10712,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-21
 dateUnrestricted 2009-12-21
@@ -10733,7 +10733,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
@@ -10755,7 +10755,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -10775,7 +10775,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
@@ -10795,7 +10795,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -10815,7 +10815,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -10836,7 +10836,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -10858,7 +10858,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -10879,7 +10879,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -10901,7 +10901,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -10921,7 +10921,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -10941,7 +10941,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -10961,7 +10961,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -10981,7 +10981,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-24
 dateUnrestricted 2009-11-24
@@ -11001,7 +11001,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-03-20
@@ -11023,7 +11023,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
@@ -11044,7 +11044,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -11066,7 +11066,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -11086,7 +11086,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -11107,7 +11107,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -11129,7 +11129,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-27
 dateUnrestricted 2009-11-27
@@ -11150,7 +11150,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-03-20
@@ -11172,7 +11172,7 @@ antibody c-Myc
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-08
 dateUnrestricted 2010-06-08
@@ -11192,7 +11192,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-04
 dateSubmitted 2009-02-24
@@ -11214,7 +11214,7 @@ antibody Pol2
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -11234,7 +11234,7 @@ antibody CTCF
 cell GM12891
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -11254,7 +11254,7 @@ antibody CTCF
 cell GM12892
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -11274,7 +11274,7 @@ antibody CTCF
 cell GM19238
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -11294,7 +11294,7 @@ antibody CTCF
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -11314,7 +11314,7 @@ antibody CTCF
 cell GM19240
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-06
 dateUnrestricted 2010-07-06
@@ -11334,7 +11334,7 @@ antibody c-Myc
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-27
@@ -11354,7 +11354,7 @@ antibody CTCF
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
@@ -11374,7 +11374,7 @@ antibody Pol2
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-02
 dateUnrestricted 2010-07-02
@@ -11394,7 +11394,7 @@ antibody c-Myc
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-05
 dateSubmitted 2009-03-21
@@ -11416,7 +11416,7 @@ antibody CTCF
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-21
@@ -11438,7 +11438,7 @@ antibody Pol2
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -11458,7 +11458,7 @@ antibody c-Myc
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-29
 dateSubmitted 2009-03-22
@@ -11480,7 +11480,7 @@ antibody CTCF
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-03-21
@@ -11502,7 +11502,7 @@ antibody Pol2
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -11522,7 +11522,7 @@ antibody c-Myc
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-01
 dateUnrestricted 2010-07-01
@@ -11542,7 +11542,7 @@ antibody CTCF
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-25
 dateUnrestricted 2010-06-25
@@ -11562,7 +11562,7 @@ antibody Pol2
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-28
 dateUnrestricted 2010-06-28
@@ -11582,7 +11582,7 @@ antibody c-Myc
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-27
@@ -11604,7 +11604,7 @@ antibody CTCF
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-27
@@ -11626,7 +11626,7 @@ antibody Pol2
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-29
 dateUnrestricted 2010-06-29
@@ -11646,7 +11646,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -11666,7 +11666,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-28
 dateUnrestricted 2010-09-28
@@ -11686,7 +11686,7 @@ antibody CTCF
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -11706,7 +11706,7 @@ antibody CTCF
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-02
 dateUnrestricted 2010-10-02
@@ -11726,7 +11726,7 @@ antibody Pol2
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -11746,7 +11746,7 @@ antibody Input
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
@@ -11765,7 +11765,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
@@ -11785,7 +11785,7 @@ antibody Input
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
@@ -11805,13 +11805,13 @@ antibody Input
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeUtaustinChIPseqAlignmentsHuvecInput.tagAlign.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster.pl v 1
 parentTable wgEncodeUtaustinChIPseqRawSignalHuvecInput
 project wgEncode
@@ -11825,7 +11825,7 @@ antibody Input
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
@@ -11845,13 +11845,13 @@ antibody Input
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqAlignmentsMcf7.tagAlign.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster.pl v 1
 parentTable wgEncodeUtaustinChIPseqRawSignalMcf7
 project wgEncode
@@ -11865,13 +11865,13 @@ antibody Input
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqAlignmentsProgfib.tagAlign.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 labVersion align_on_cluster.pl v 1
 parentTable wgEncodeUtaustinChIPseqRawSignalProgfib
 project wgEncode
@@ -11885,7 +11885,7 @@ antibody Input
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
@@ -11904,7 +11904,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
@@ -11924,7 +11924,7 @@ antibody Input
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
@@ -11944,13 +11944,13 @@ antibody Input
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeUtaustinChIPseqRawDataHuvecInput.fastq.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 parentTable wgEncodeUtaustinChIPseqRawSignalHuvecInput
 project wgEncode
 setType input
@@ -11963,7 +11963,7 @@ antibody Input
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
@@ -11983,13 +11983,13 @@ antibody Input
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqRawDataMcf7.fastq.gz
 grant Crawford
-lab UT-Austin
+lab UT-A
 parentTable wgEncodeUtaustinChIPseqRawSignalMcf7
 project wgEncode
 setType input
@@ -12002,7 +12002,7 @@ antibody Input
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-11-07
 dateUnrestricted 2009-07-07
@@ -12022,7 +12022,7 @@ antibody Input
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-16
 dateUnrestricted 2009-12-16
@@ -12042,7 +12042,7 @@ antibody Input
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-13
 dateUnrestricted 2009-12-13
@@ -12062,7 +12062,7 @@ antibody Input
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -12082,7 +12082,7 @@ antibody Input
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2008-12-05
 dateUnrestricted 2009-08-05
@@ -12102,7 +12102,7 @@ antibody Input
 cell MCF-7
 composite wgEncodeChromatinMap
 controlId MCF-7/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-22
 dateUnrestricted 2010-09-22
@@ -12122,7 +12122,7 @@ antibody Input
 cell ProgFib
 composite wgEncodeChromatinMap
 controlId ProgFib/Input
-dataType ChIPseq
+dataType ChipSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-22
@@ -12136,4 +12136,4 @@ subId 871
 tableName wgEncodeUtaustinChIPseqSignalProgfib
 view Signal
 
-# MAGIC: -355332582
+# MAGIC: -359811030

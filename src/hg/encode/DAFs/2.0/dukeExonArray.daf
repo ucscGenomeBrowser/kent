@@ -8,7 +8,7 @@ dafVersion       2.0
 # Lab and general info
 grant            Crawford
 lab              Duke
-dataType         ExonArray
+dataType         AffyExonArray
 compositeSuffix  DukeExonArray
 group            expression
 variables        cell,treatment

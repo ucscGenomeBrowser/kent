@@ -45,9 +45,9 @@ char *onChangeDB = "onchange=\"document.orgForm.db.value = document.mainForm.db.
 char *onChangeOrg = "onchange=\"document.orgForm.org.value = document.mainForm.org.options[document.mainForm.org.selectedIndex].value; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainForm.clade.options[document.mainForm.clade.selectedIndex].value; document.orgForm.org.value = 0; document.orgForm.db.value = 0; document.orgForm.submit();\"";
 
-/* 
+/*
    If we are changing databases via explicit cgi request,
-   then remove custom track data which will 
+   then remove custom track data which will
    be irrelevant in this new database .
    If databases were changed then use the new default position too.
 */
@@ -55,7 +55,7 @@ char *onChangeClade = "onchange=\"document.orgForm.clade.value = document.mainFo
 if (sameString(position, "genome") || sameString(position, "hgBatch"))
     position = defaultPosition;
 
-hPrintf("<link href='../style/autocomplete.css' rel='stylesheet' type='text/css' />\n");
+webIncludeResourceFile("autocomplete.css");
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("jquery.autocomplete.js", NULL);
 jsIncludeFile("ajax.js", NULL);
@@ -81,7 +81,7 @@ puts(
 "<center>\n"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
-"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"  
+"<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
 "<tr><td>\n"
 "<table bgcolor=\"fffef3\" border=0>\n"
 "<tr>\n"
@@ -176,6 +176,15 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
+if(isSearchTracksSupported(db))
+    {
+    puts("<TD VALIGN=\"TOP\">");
+    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
+    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
+    cgiMakeButton(searchTracks, "find tracks");
+    puts("</FORM></TD>");
+    }
+
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
 puts("<TD VALIGN=\"TOP\">");
@@ -185,7 +194,7 @@ if (!hIsGsidServer() && !hIsCgbServer())
     {
     printf(
 	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        hgCustomName(), customTracksExist(cart, NULL) ? 
+        hgCustomName(), customTracksExist(cart, NULL) ?
                         CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
     cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
     puts("</FORM>");
@@ -198,15 +207,6 @@ puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n
 cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
 puts("</FORM></TD>");
-
-if(isSearchTracksSupported(db))
-    {
-    puts("<TD VALIGN=\"TOP\">");
-    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    cgiMakeButton(searchTracks, "find tracks");
-    puts("</FORM></TD>");
-    }
 
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
@@ -237,7 +237,7 @@ puts("<P>This is just our test site.  It usually works, but it is filled with tr
 if (hIsGsidServer())
     {
     webNewSection("%s", "Sequence View\n");
-    printf("%s", 
+    printf("%s",
 	   "Sequence View is a customized version of the UCSC Genome Browser, which is specifically tailored to provide functions needed for the GSID HIV Data Browser.\n");
     }
 

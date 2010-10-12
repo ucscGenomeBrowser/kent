@@ -50,6 +50,8 @@ int mismatches;
 int matchFirst=0;
 int mmCheckOneInN;
 int allowErrors = 0;
+double bamPercent = 0.0;
+boolean showBadAlign;
 
 void usage()
 /* Explain usage and exit. */
@@ -109,6 +111,8 @@ errAbort(
   "   -allowOther                  allow chromosomes that aren't native in BAM's\n"
   "   -allowBadLength              allow chromosomes that have the wrong length\n in BAM\n"
   "   -complementMinus             complement the query sequence on the minus strand (for testing BAM)\n"
+  "   -showBadAlign                show non-compliant alignments\n"
+  "   -bamPercent=N.N              percentage of BAM alignments that must be compliant\n"
   "   -allowErrors=N               number of errors allowed to still pass (default 0)\n"
   "   -maxErrors=N                 Maximum lines with errors to report in one file before \n"
   "                                  stopping (default %d)\n"
@@ -140,6 +144,8 @@ static struct optionSpec options[] = {
    {"allowBadLength", OPTION_BOOLEAN},
    {"allowErrors", OPTION_INT},
    {"complementMinus", OPTION_BOOLEAN},
+   {"bamPercent", OPTION_FLOAT},
+   {"showBadAlign", OPTION_BOOLEAN},
    {NULL, 0},
 };
 
@@ -301,12 +307,13 @@ warn("Error [file=%s, line=%d]: chrom column empty [%s]", file, line, row);
 return FALSE;
 }
 
-boolean checkSeq(char *file, int line, char *row, char *s, char *name)
+int checkSeq(char *file, int line, char *row, char *s, char *name)
 // Return TRUE if string has non-zero length and contains only chars [ACGTNacgtn0-3]
 // Othewise print warning that name column is empty and return FALSE
 {
 verbose(3,"[%s %3d] inputLine=%d %s seq(%s) [%s]\n", __func__, __LINE__, line, name, s, row);
 int i;
+int len = 0;
 for ( i = 0; s[i] ; ++i)
     {
     if (!dnaChars[(int)s[i]])
@@ -315,27 +322,28 @@ for ( i = 0; s[i] ; ++i)
 	    warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s)", file, line, name, s);
 	else
 	    warn("Error [file=%s, line=%d]: invalid DNA chars in %s(%s) [%s]", file, line, name, s, row);
-	return FALSE;
+	return 0;
 	}
+    len++;
     }
 if (i == 0)
     {
     if(privateData)  // PrivateData means sequence should be empty
-        return TRUE;
+        return 1;
     if (s==row)
 	warn("Error [file=%s, line=%d]: %s empty", file, line, name);
     else
 	warn("Error [file=%s, line=%d]: %s empty in line [%s]", file, line, name, row);
-    return FALSE;
+    return 0;
     }
 else if(privateData) { // PrivateData means sequence should be empty
     if (s==row)
         warn("Error [file=%s, line=%d]: %s is not empty but this should be private data", file, line, name);
     else
         warn("Error [file=%s, line=%d]: %s  is not empty but this should be private data in line [%s]", file, line, name, row);
-    return FALSE;
+    return 0;
     }
-return TRUE;
+return len;
 }
 
 boolean checkSeqName(char *file, int line, char *s, char firstChar, char *name)
@@ -430,7 +438,7 @@ else
     }
 }
 
-boolean checkQual(char *file, int line, char *s)
+boolean checkQual(char *file, int line, char *s, int len)
 // Return TRUE if string has non-zero length and contains only qualChars[] chars
 // Othewise print warning that quality is empty and return FALSE
 {
@@ -448,6 +456,13 @@ if (i == 0)
     warn("Error [file=%s, line=%d]: quality empty [%s]", file, line, s);
     return FALSE;
     }
+
+if (i != len)
+    {
+    warn("Error [file=%s, line=%d]: quality not as long as sequence (%d bases) [%s]", file, line, len, s);
+    return FALSE;
+    }
+
 return TRUE;
 }
 
@@ -959,13 +974,14 @@ while ( lineFileNext(lf, &seqName, NULL))
 	else
 	    startOfFile = FALSE;
 	}
+    int len = 0;
     if (checkSeqName(file, line, seqName, '@', "sequence name")
 	&& (wantNewLine(lf, file, ++line, &seq, "fastq sequence line"))
-	&& checkSeq(file, line, seq, seq, "sequence")
+	&& (len = checkSeq(file, line, seq, seq, "sequence"))
 	&& (wantNewLine(lf, file, ++line, &qName, "fastq sequence name (quality line)"))
 	&& checkSeqName(file, line, qName, '+', "quality name")
 	&& (wantNewLine(lf, file, ++line, &qual, "quality line"))
-	&& checkQual(file, line, qual) )
+	&& checkQual(file, line, qual, len) )
 	{
 	if (printOkLines)
 	    printf("%s\n%s\n%s\n%s\n", seqName, seq, qName, qual);
@@ -997,6 +1013,7 @@ char *seq = NULL;
 int line = 0;
 int errs = 0;
 boolean startOfFile = TRUE;
+printf("validating %s\n", file);
 verbose(2,"[%s %3d] file(%s)\n", __func__, __LINE__, file);
 while (lineFileNext(lf, &seqName, NULL))
     {
@@ -1136,6 +1153,7 @@ struct bamCallbackData
     int numAligns;
     int numNeg;
     int numPos;
+    struct hash *tagHash;
     };
 
 boolean checkCigarMismatches(char *file, int line, char *chrom, unsigned chromStart, char strand, char *seq, UBYTE* quals, unsigned int *cigarPacked, int nCigar)
@@ -1236,41 +1254,47 @@ for (i = start; (strand == '-') ? i >= 0 : i < strlen(seq); i += incr)
 
 if (mm > mismatches || ((quals != NULL) && (mmTotalQual > mismatchTotalQuality)))
     {
-    assert(checkLength < 10000);
-    char match[10000];
-
-    for(i = 0; i < strlen(seq); i++)
+    if (showBadAlign)
         {
-        if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
-            match[i] = ' ';
-        else
-            match[i] = 'x';
+        assert(checkLength < 10000);
+        char match[10000];
+
+        for(i = 0; i < strlen(seq); i++)
+            {
+            if ((dna[i] == '-') || (tolower(seq[i]) == dna[i]))
+                match[i] = ' ';
+            else
+                match[i] = 'x';
+            }
+        match[i] = 0;
+
+        if (mm > mismatches)
+            {
+            warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
+                file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
+            }
+
+        if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
+            {
+            char squal[10000];
+            for (i = 0; i < checkLength; i++)
+                squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
+
+            warn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
+                file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
+            }        
         }
-    match[i] = 0;
-
-    if (mm > mismatches)
-        {
-        warn("Error [file=%s, line=%d]: too many mismatches (found %d/%d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s )\n",
-            file, line, mm, checkLength, mismatches, chrom, chromStart, seq, match, dna);
-        }
-
-    if ((quals != NULL) && (mmTotalQual > mismatchTotalQuality))
-        {
-        char squal[10000];
-        for (i = 0; i < checkLength; i++)
-            squal[i] = '0' + min( round( quals[i] / 10 ), 3 );
-
-        warn("Error [file=%s, line=%d]: total quality at mismatches too high (found %d, maximum is %d) (%s: %d\nquery %s\nmatch %s\ndna   %s\nqual  %s )\n",
-            file, line, mmTotalQual, mismatchTotalQuality, chrom, chromStart, seq, match, dna, squal);
-        }        
     return FALSE;
     }
 return TRUE;
 }
 
+unsigned long long numQuals[256];
+unsigned long quals[256];
+unsigned int flagOr = 0;
+
 int parseBamRecord(const bam1_t *bam, void *data)
-/* bam_fetch() calls this on each bam alignment retrieved.  Translate each bam 
- * into a linkedFeatures item, and add it to tg->items. */
+/* bam_fetch() calls this on each bam alignment retrieved. */
 {
 struct bamCallbackData *bd = data;
 char *chrom = bd->chrom;
@@ -1281,32 +1305,70 @@ unsigned int *cigarPacked = bam1_cigar(bam);
 char *query = bamGetQuerySequence(bam, FALSE);
 char strand = bamIsRc(bam) ? '-' : '+';
 UBYTE *queryQuals = NULL;
+quals[core->qual]++;
 
 bd->numAligns++;
+
+unsigned char *s = bam1_aux(bam);
+char str[3];
+str[2] = 0;
+while(s < bam->data + bam->data_len)
+    {
+    str[0] = s[0];
+    str[1] = s[1];
+    hashStore(bd->tagHash, str);
+    uint8_t type;
+    s += 2; type = *s; ++s;
+    if (type == 'A') {  ++s; }
+    else if (type == 'C') {  ++s; }
+    else if (type == 'c') {  ++s; }
+    else if (type == 'S') {  s += 2; }
+    else if (type == 's') {  s += 2; }
+    else if (type == 'I') {  s += 4; }
+    else if (type == 'i') {  s += 4; }
+    else if (type == 'f') {  s += 4; }
+    else if (type == 'd') {  s += 8; }
+    else if (type == 'Z' || type == 'H')
+        {
+        while (*s) s++;
+        ++s;
+        }
+    }
+
+
 
 if (core->flag &  BAM_FUNMAP)
     // read is unmapped... ignore
     return 0;
 
+flagOr |= core->flag;
+
 if ( mismatchTotalQuality)
+    {
     queryQuals = bamGetQueryQuals(bam, FALSE);
+    int ii;
+    int len = strlen(query);
+    for(ii=0; ii < len; ii++)
+        numQuals[queryQuals[ii]]++;
+    }
 
 if (bam->core.l_qseq == 0)
     {
     warn("zero length sequence on line %d\n", bd->numAligns);
-    if (++(*errs) >= maxErrors)
-        errAbort("Aborting .. found %d errors\n", *errs);
+    ++(*errs);
     }
 else if (! checkCigarMismatches(file, bd->numAligns, chrom, bam->core.pos, 
             strand, query, queryQuals, cigarPacked, core->n_cigar))
     {
-    char *cigar = bamGetCigar(bam);
-    warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
+    //char *cigar = bamGetCigar(bam);
+    //warn("align: ciglen %d cigar %s qlen %d pos %d length %d strand %c\n",bam->core.n_cigar, cigar, bam->core.l_qname, bam->core.pos,  bam->core.l_qseq, bamIsRc(bam) ? '-' : '+');
 
-    if (++(*errs) >= maxErrors)
-        errAbort("Aborting .. found %d errors\n", *errs);
+    ++(*errs);
     }
     
+if ((bamPercent == 0.0) && (*errs) >= maxErrors)
+    errAbort("Aborting .. found %d errors\n", *errs);
+
 if (strand == '+')
     bd->numPos++;
 else
@@ -1371,8 +1433,12 @@ struct bamCallbackData *bd;
 AllocVar(bd);
 
 bd->file = file;
+if (bamPercent != 0.0)
+    errs = 0;  // if we're testing on percent compliant, don't count header errs
 bd->errs = &errs;
 bd->numPos = bd->numNeg = 0;
+struct hash *tagHash = newHash(5);
+bd->tagHash = tagHash;
 
 for(ii=0; ii < head->n_targets; ii++)
     {
@@ -1386,8 +1452,45 @@ for(ii=0; ii < head->n_targets; ii++)
     ret = bam_fetch(fh->x.bam, idx, chromId, start, end, bd, parseBamRecord);
 
     }
-verbose(2,"number of BAM alignments %d pos %d neg %d\n", 
-    bd->numAligns, bd->numPos, bd->numNeg );
+
+verbose(2,"number of BAM alignments %d pos %d neg %d errors %d\n",
+    bd->numAligns, bd->numPos, bd->numNeg, errs );
+if (verboseLevel() > 1)
+    {
+    struct hashCookie cook = hashFirst(tagHash);
+    struct hashEl *hel;
+    verbose(2,"tags: ");
+    while((hel = hashNext(&cook)) != NULL)
+        {
+        verbose(2,"%s ",hel->name);
+        }
+    verbose(2,"\n");
+
+    verbose(2, "flagOr: %x\n", flagOr);
+    }
+
+double percentCorrect = 100.0 * (bd->numAligns - errs)/(double)bd->numAligns;
+verbose(2, "BAM alignment compliancy rate: %g\n", percentCorrect);
+if (bamPercent != 0.0) 
+    {
+    if (percentCorrect < bamPercent)
+        errAbort("Aborting: too many non-compliant BAM alignments (%%%g compliancy rate)", percentCorrect);
+    errs = 0;
+    }
+
+printf("alignQuals ");
+for(ii=0; ii < 256; ii++)
+    {
+    printf("%ld ",quals[ii]);
+    }
+printf("\n");
+
+printf("seqQuals ");
+for(ii=0; ii < 256; ii++)
+    {
+    printf("%lld ",numQuals[ii]);
+    }
+printf("\n");
 
 return errs;
 }
@@ -1492,6 +1595,11 @@ colorSpace     = optionExists("colorSpace") || sameString(type, "csfasta");
 allowOther     = optionExists("allowOther");
 allowBadLength = optionExists("allowBadLength");
 complementMinus = optionExists("complementMinus");
+bamPercent     = optionFloat("bamPercent", bamPercent);
+showBadAlign   = optionExists("showBadAlign");
+
+if ((bamPercent != 0.0) && (mmCheckOneInN != 1 ))
+    errAbort("can't specify bamPercent and mmCheckOneInN");
 
 initArrays();
 dnaChars[(int)'.'] = 1;//optionExists("acceptDot");   // I don't think this is worth adding another option.  But it could be done.

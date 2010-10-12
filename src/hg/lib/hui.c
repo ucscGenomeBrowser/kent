@@ -47,6 +47,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 //#define SUBTRACK_CFG_POPUP
+//#define BAM_CFG_UI_CHANGES
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -61,38 +62,34 @@ if (!sameString(tdb->table, tdb->track))
 return trackDbTopLevelSelfOrParent(tdb);
 }
 
-static boolean makeFileDownloadsLink(char *database, struct trackDb *tdb,char *name,
-	struct hash *trackHash)
-// Make a downloads link (if appropriate and then returns TRUE)
+static char *htmlStringForDownloadsLink(char *database, struct trackDb *tdb,char *name,boolean nameIsFile,
+        struct hash *trackHash)
+// Returns an HTML string for a downloads link
 {
 // Downloads directory if this is ENCODE
 if(trackDbSetting(tdb, "wgEncode") != NULL)
     {
     struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
+    struct dyString *dyLink = dyStringCreate("<A HREF=\"http://%s/goldenPath/%s/%s/%s/%s\" title='Download file' TARGET=ucscDownloads>%s</A>",
             hDownloadsServer(),
             trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name, name);
-    return TRUE;
+            ENCODE_DCC_DOWNLOADS, dirKeeper->table, (nameIsFile?name:""), name);
+    return dyStringCannibalize(&dyLink);
     }
-return FALSE;
+return NULL;
 }
 
 static boolean makeNamedDownloadsLink(char *database, struct trackDb *tdb,char *name,
 	struct hash *trackHash)
 // Make a downloads link (if appropriate and then returns TRUE)
 {
-// Downloads directory if this is ENCODE
-if(trackDbSetting(tdb, "wgEncode") != NULL)
-    {
-    struct trackDb *dirKeeper = wgEncodeDownloadDirKeeper(database, tdb, trackHash);
-    printf("<A HREF=\"http://%s/goldenPath/%s/%s/%s/\" title='Open downloads directory in a new window' TARGET=ucscDownloads>%s</A>",
-            hDownloadsServer(),
-            trackDbSettingOrDefault(dirKeeper, "origAssembly",database),
-            ENCODE_DCC_DOWNLOADS, dirKeeper->table, name);
-    return TRUE;
-    }
-return FALSE;
+char *htmlString = htmlStringForDownloadsLink(database,tdb,name,FALSE,trackHash);
+if (htmlString == NULL)
+    return FALSE;
+
+printf("%s", htmlString);
+freeMem(htmlString);
+return TRUE;
 }
 
 boolean makeDownloadsLink(char *database, struct trackDb *tdb, struct hash *trackHash)
@@ -121,46 +118,47 @@ boolean makeSchemaLink(char *db,struct trackDb *tdb,char *label)
 #define SCHEMA_LINKED "<A HREF=\"../cgi-bin/hgTables?db=%s&hgta_group=%s&hgta_track=%s&hgta_table=%s&hgta_doSchema=describe+table+schema\" TARGET=ucscSchema%s>%s</A>"
 if (hTableOrSplitExists(db, tdb->table))
     {
-    char *tableName  = tdb->table;
+    char *tbOff = trackDbSetting(tdb, "tableBrowser");
+    if (isNotEmpty(tbOff) && sameString(nextWord(&tbOff), "off"))
+	return FALSE;
     char *hint = " title='Open table schema in new window'";
     if( label == NULL)
         label = " View table schema";
     struct trackDb *topLevel = trackDbTopLevelSelfOrParent(tdb);
-    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track,tableName,hint,label);
+    printf(SCHEMA_LINKED, db, topLevel->grp, topLevel->track, tdb->table, hint, label);
     return TRUE;
     }
 return FALSE;
 }
 
-boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
-        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash)
-/* If metadata from metaTbl if it exists, create a link that will allow toggling it's display */
+char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel, struct hash *trackHash)
+/* If metadata from metaDb exists, return string of html with table definition */
 {
 const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
-if(safeObj == NULL || safeObj->vars == NULL)
-return FALSE;
+if (safeObj == NULL || safeObj->vars == NULL)
+return NULL;
 
-printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\");' title='Show metadata details...'>%s</A>",
-        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, title);
-printf("<DIV id='div_%s_meta' style='display:none;'><!--<table>",tdb->table);
+//struct dyString *dyTable = dyStringCreate("<table id='mdb_%s'>",tdb->table);
+struct dyString *dyTable = dyStringCreate("<table>");
 if(showLongLabel)
-    printf("<tr onmouseover=\"this.style.cursor='text';\"><td colspan=2>%s</td></tr>",tdb->longLabel);
-printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+    dyStringPrintf(dyTable,"<tr><td colspan=2>%s</td></tr>",tdb->longLabel);
+if(showShortLabel)
+    dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
 mdbObjReorderVars(mdbObj,"grant lab dataType cell treatment antibody protocol replicate view setType inputType",FALSE); // Bring to front
 mdbObjReorderVars(mdbObj,"subId submittedDataVersion dateSubmitted dateResubmitted dateUnrestricted dataVersion tableName fileName fileIndex",TRUE); // Send to back
 struct mdbVar *mdbVar;
-for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
+for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
     {
     if ((sameString(mdbVar->var,"fileName") || sameString(mdbVar->var,"fileIndex") )
     && trackDbSettingClosestToHome(tdb,"wgEncode") != NULL)
         {
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
+        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>",mdbVar->var);
 
-        makeFileDownloadsLink(db, tdb, mdbVar->val, trackHash);
-        printf("</td></tr>");
+        dyStringAppend(dyTable,htmlStringForDownloadsLink(db, tdb, mdbVar->val, TRUE, trackHash));
+        dyStringAppend(dyTable,"</td></tr>");
         }
     else
         {
@@ -168,11 +166,31 @@ for(mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
 
-        printf("<tr onmouseover=\"this.style.cursor='text';\"><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
+        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
-printf("</table>--></div>");
+dyStringAppend(dyTable,"</table>");
 //mdbObjsFree(&mdbObj); // spill some memory
+return dyStringCannibalize(&dyTable);
+}
+
+boolean compositeMetadataToggle(char *db,struct trackDb *tdb,char *title,
+        boolean embeddedInText,boolean showLongLabel, struct hash *trackHash)
+/* If metadata from metaTbl exists, create a link that will allow toggling it's display */
+{
+const struct mdbObj *safeObj = metadataForTable(db,tdb,NULL);
+if(safeObj == NULL || safeObj->vars == NULL)
+return FALSE;
+
+printf("%s<A HREF='#a_meta_%s' onclick='return metadataShowHide(\"%s\",%s,true);' title='Show metadata details...'>%s</A>",
+        (embeddedInText?"&nbsp;":"<P>"),tdb->table,tdb->table, showLongLabel?"true":"false", title);
+if (!sameString(tdb->table, tdb->track) && trackHash != NULL) // If trackHash is needed, then can't fill this in with ajax
+    {
+    printf("<DIV id='div_%s_meta' style='display:none;'>%s</div>",tdb->table,
+        metadataAsHtmlTable(db,tdb,showLongLabel,TRUE,trackHash) );
+    }
+else
+    printf("<DIV id='div_%s_meta' style='display:none;'></div>",tdb->table);
 return TRUE;
 }
 
@@ -394,6 +412,7 @@ static char *hTvStrings[] =
     "pack",
     "squish"
     };
+#define hTvStringShowSameAsFull "show"
 
 enum trackVisibility hTvFromStringNoAbort(char *s)
 /* Given a string representation of track visibility, return as
@@ -401,7 +420,11 @@ enum trackVisibility hTvFromStringNoAbort(char *s)
 {
 int vis = stringArrayIx(s, hTvStrings, ArraySize(hTvStrings));
 if (vis < 0)
+    {
+    if (sameString(hTvStringShowSameAsFull,s))
+        return tvShow;  // Show is the same as full!
     vis = 0;  // don't generate bogus value on invalid input
+    }
 return vis;
 }
 
@@ -447,8 +470,8 @@ else
                             noPack[vis], class, TV_DROPDOWN_STYLE,javascript);
 }
 
-void hTvDropDownClassVisOnly(char *varName, enum trackVisibility vis,
-	boolean canPack, char *class, char *visOnly)
+void hTvDropDownClassVisOnlyAndExtra(char *varName, enum trackVisibility vis,
+	boolean canPack, char *class, char *visOnly,char *extra)
 /* Make track visibility drop down for varName with style class,
 	and potentially limited to visOnly */
 {
@@ -491,34 +514,34 @@ if (visOnly != NULL)
     {
     int visIx = (vis > 0) ? 1 : 0;
     if (sameWord(visOnly,"dense"))
-	cgiMakeDropListClassWithStyle(varName, denseOnly, ArraySize(denseOnly),
-		denseOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     else if (sameWord(visOnly,"squish"))
-	cgiMakeDropListClassWithStyle(varName, squishOnly,
+	cgiMakeDropListClassWithStyleAndJavascript(varName, squishOnly,
                 ArraySize(squishOnly), squishOnly[visIx],
-                class, TV_DROPDOWN_STYLE);
+                class, TV_DROPDOWN_STYLE,extra);
     else if (sameWord(visOnly,"pack"))
-	cgiMakeDropListClassWithStyle(varName, packOnly, ArraySize(packOnly),
-		packOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, packOnly, ArraySize(packOnly),
+		packOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     else if (sameWord(visOnly,"full"))
-	cgiMakeDropListClassWithStyle(varName, fullOnly, ArraySize(fullOnly),
-		fullOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, fullOnly, ArraySize(fullOnly),
+		fullOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     else			/* default when not recognized */
-	cgiMakeDropListClassWithStyle(varName, denseOnly, ArraySize(denseOnly),
-		denseOnly[visIx], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, denseOnly, ArraySize(denseOnly),
+		denseOnly[visIx], class, TV_DROPDOWN_STYLE,extra);
     }
     else
     {
     if (canPack)
-	cgiMakeDropListClassWithStyle(varName, pack, ArraySize(pack),
-                            pack[packIx[vis]], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, pack, ArraySize(pack),
+                            pack[packIx[vis]], class, TV_DROPDOWN_STYLE,extra);
     else
-	cgiMakeDropListClassWithStyle(varName, noPack, ArraySize(noPack),
-                            noPack[vis], class, TV_DROPDOWN_STYLE);
+	cgiMakeDropListClassWithStyleAndJavascript(varName, noPack, ArraySize(noPack),
+                            noPack[vis], class, TV_DROPDOWN_STYLE,extra);
     }
 }
 
-void hideShowDropDown(char *varName, boolean show, char *class)
+void hideShowDropDownWithClassAndExtra(char *varName, boolean show, char *class, char *extra)
 /* Make hide/show dropdown for varName */
 {
 static char *hideShow[] =
@@ -526,8 +549,8 @@ static char *hideShow[] =
     "hide",
     "show"
     };
-cgiMakeDropListClassWithStyle(varName, hideShow, ArraySize(hideShow),
-                    hideShow[show], class, TV_DROPDOWN_STYLE);
+cgiMakeDropListClassWithStyleAndJavascript(varName, hideShow, ArraySize(hideShow),
+                            hideShow[show], class, TV_DROPDOWN_STYLE,extra);
 }
 
 
@@ -933,16 +956,15 @@ if (isNotEmpty(setting))
 return gotIt;
 }
 
-void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
-/* Make appropriately labeled drop down of options if any are applicable.*/
+static void baseColorDropLists(struct cart *cart, struct trackDb *tdb)
+/* draw the baseColor drop list options */
 {
 enum baseColorDrawOpt curOpt = baseColorDrawOptEnabled(cart, tdb);
 char *curValue = baseColorDrawAllOptionValues[curOpt];
 char var[512];
+safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
 boolean gotCds = baseColorGotCds(tdb);
 boolean gotSeq = baseColorGotSequence(tdb);
-
-safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
 if (gotCds && gotSeq)
     {
     puts("<P><B>Color track by codons or bases:</B>");
@@ -950,7 +972,10 @@ if (gotCds && gotSeq)
 			baseColorDrawAllOptionValues,
 			ArraySize(baseColorDrawAllOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on mRNA coloring</A><BR>",
+#ifndef BAM_CFG_UI_CHANGES
+    printf("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+    printf("<A HREF=\"%s\">Help on mRNA coloring</A><BR>",
 	   CDS_MRNA_HELP_PAGE);
     }
 else if (gotCds)
@@ -960,7 +985,10 @@ else if (gotCds)
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on codon coloring</A><BR>",
+#ifndef BAM_CFG_UI_CHANGES
+    printf("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+    printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
     }
 else if (gotSeq)
@@ -970,9 +998,18 @@ else if (gotSeq)
 			baseColorDrawItemOptionValues,
 			ArraySize(baseColorDrawItemOptionLabels),
 			curValue, NULL);
-    printf("<BR><A HREF=\"%s\">Help on base coloring</A><BR>",
+#ifndef BAM_CFG_UI_CHANGES
+    printf("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+    printf("<A HREF=\"%s\">Help on base coloring</A><BR>",
 	   CDS_BASE_HELP_PAGE);
     }
+}
+
+void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
+/* Make appropriately labeled drop down of options if any are applicable.*/
+{
+baseColorDropLists(cart, tdb);
 }
 
 enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
@@ -984,7 +1021,7 @@ assert(cart);
 assert(tdb);
 
 /* trackDb can override default of OFF; cart can override trackDb. */
-stringVal = trackDbSettingOrDefault(tdb, BASE_COLOR_DEFAULT,
+stringVal = trackDbSettingClosestToHomeOrDefault(tdb, BASE_COLOR_DEFAULT,
 				    BASE_COLOR_DRAW_OFF);
 stringVal = cartUsualStringClosestToHome(cart, tdb, FALSE, BASE_COLOR_VAR_SUFFIX,stringVal);
 
@@ -1009,6 +1046,30 @@ if (indelAppropriate(tdb))
     boolean showDoubleInsert, showQueryInsert, showPolyA;
     char var[512];
     indelEnabled(cart, tdb, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
+#ifdef BAM_CFG_UI_CHANGES
+    printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
+    printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
+           INDEL_HELP_PAGE);
+    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
+    cgiMakeCheckBox(var, showDoubleInsert);
+    printf("</TD><TD>Draw double horizontal lines when both genome and query have "
+           "an insertion</TD></TR>\n<TR valign='top'><TD>");
+    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->track);
+    cgiMakeCheckBox(var, showQueryInsert);
+    printf("</TD><TD>Draw a vertical purple line for an insertion at the beginning or "
+           "end of the <BR>query, orange for insertion in the middle of the query</TD></TR>\n<TR valign='top'><TD>");
+    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->track);
+    /* We can highlight valid polyA's only if we have query sequence --
+     * so indelPolyA code piggiebacks on baseColor code: */
+    if (baseColorGotSequence(tdb))
+        {
+        cgiMakeCheckBox(var, showPolyA);
+        printf("</TD><TD>Draw a vertical green line where query has a polyA tail "
+               "insertion</TD></TR>\n");
+        }
+
+    printf("</TABLE>\n");
+#else///ifndef BAM_CFG_UI_CHANGES
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
     safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
     cgiMakeCheckBox(var, showDoubleInsert);
@@ -1034,6 +1095,7 @@ if (indelAppropriate(tdb))
     printf("<A HREF=\"%s\">Help on alignment gap/insertion display options</A>"
 	   "<BR>\n",
 	   INDEL_HELP_PAGE);
+#endif///ndef BAM_CFG_UI_CHANGES
     }
 }
 
@@ -1828,7 +1890,7 @@ struct hash *makeTrackHashWithComposites(char *database, char *chrom,
 /* Make hash of trackDb items for this chromosome, including composites,
    not just the subtracks. */
 {
-struct trackDb *tdbs = hTrackDb(database, chrom);
+struct trackDb *tdbs = hTrackDb(database);
 struct hash *trackHash = newHash(7);
 rAddTrackListToHash(trackHash, tdbs, chrom, !withComposites);
 return trackHash;
@@ -2129,6 +2191,22 @@ fourState = cartUsualInt(cart, objName, fourState);
 tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
 return fourState;
 }
+
+void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled)
+/* Sets the fourState Checked in the cart and updates cached state */
+{
+int fourState = ( checked ? FOUR_STATE_CHECKED : FOUR_STATE_UNCHECKED );
+if (!enabled)
+    FOUR_STATE_DISABLE(fourState);
+
+char objName[SMALLBUF];
+char objVal[5];
+safef(objName, sizeof(objName), "%s_sel", subtrack->track);
+safef(objVal, sizeof(objVal), "%d", fourState);
+cartSetString(cart, objName, objVal);
+tdbExtrasAddOrUpdate(subtrack,FOUR_STATE_KEY,(void *)(long)fourState);
+}
+
 
 typedef struct _dimensions {
     int count;
@@ -3314,7 +3392,7 @@ else
 filterBy_t *filterBy = NULL;
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
-printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 
 int ix=0;
 for(filterBy = filterBySet;filterBy != NULL; filterBy = filterBy->next)
@@ -3610,6 +3688,8 @@ switch(cType)
     case cfgBam:        bamCfgUi(cart, tdb, prefix, title, boxed);
 			break;
 #endif
+    case cfgPsl:	pslCfgUi(db,cart,tdb,prefix,title,boxed);
+                        break;
     default:            warn("Track type is not known to multi-view composites. type is: %d ", cType);
                         break;
     }
@@ -3653,11 +3733,15 @@ if (date != NULL)
 return date;
 }
 
-static void cfgLinkToDependentCfgs(struct trackDb *tdb,char *prefix)
+static void cfgLinkToDependentCfgs(struct cart *cart, struct trackDb *tdb,char *prefix)
 /* Link composite or view level controls to all associateled lower level controls */
 {
-if(tdbIsComposite(tdb)) // FIXME: Only when some subtracks are configurable
+if (!cartVarExists(cart, "ajax") && tdbIsComposite(tdb))
+#ifdef SUBTRACK_CFG_POPUP
+    printf("<script type='text/javascript'>registerViewOnchangeAction('%s')</script>\n",prefix);
+#else///ifndef SUBTRACK_CFG_POPUP
     printf("<script type='text/javascript'>compositeCfgRegisterOnchangeAction(\"%s\")</script>\n",prefix);
+#endif///ndef SUBTRACK_CFG_POPUP
 }
 
 static void compositeUiSubtracks(char *db, struct cart *cart, struct trackDb *parentTdb,
@@ -3673,7 +3757,9 @@ struct dyString *dyHtml = newDyString(SMALLBUF);
 char *colors[2]   = { COLOR_BG_DEFAULT,
                       COLOR_BG_ALTDEFAULT };
 int colorIx = COLOR_BG_DEFAULT_IX; // Start with non-default allows alternation
+#ifndef SUBTRACK_CFG_POPUP
 boolean dependentCfgsNeedBinding = FALSE;
+#endif///ndef SUBTRACK_CFG_POPUP
 
 // Get list of leaf subtracks to work with
 struct slRef *subtrackRef, *subtrackRefList = trackDbListGetRefsToDescendantLeaves(parentTdb->subtracks);
@@ -3849,10 +3935,14 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             char *id = checkBoxIdMakeForTrack(subtrack,membersForAll->members,membersForAll->dimMax,membership); // view is known tag
             printf("<TR valign='top' BGCOLOR=\"%s\"",colors[colorIx]);
             if(useDragAndDrop)
-                printf(" class='trDraggable' title='Drag to Reorder'");
+                printf(" class='trDraggable'");
 
             printf(" id=\"tr_%s\" nowrap%s>\n",id,(selectedOnly?" style='display:none'":""));
-            printf("<TD%s>",(enabledCB?"":" title='view is hidden' style='cursor: pointer;'"));
+            printf("<TD%s",(enabledCB?"":" title='view is hidden'"));
+            if (useDragAndDrop)
+                printf(" class='dragHandle' title='Drag to reorder'>");
+            else
+                printf(">");
             dyStringClear(dyHtml);
             dyStringAppend(dyHtml, "subCB");
             for(di=dimX;di<membersForAll->dimMax;di++)
@@ -3863,7 +3953,9 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
             // Save view for last
             if(membersForAll->members[dimV] && -1 != (ix = stringArrayIx(membersForAll->members[dimV]->groupTag, membership->subgroups, membership->count)))
                 dyStringPrintf(dyHtml, " %s",membership->membership[ix]);
-            cgiMakeCheckBoxFourWay(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' onmouseover=\"this.style.cursor='default';\"");
+            cgiMakeCheckBoxFourWay(htmlIdentifier,checkedCB,enabledCB,id,dyStringContents(dyHtml),"onclick='matSubCbClick(this);' style='cursor:pointer'");
+            if (useDragAndDrop)
+                printf("&nbsp;");
 
             if(sortOrder != NULL || useDragAndDrop)
                 {
@@ -3931,7 +4023,7 @@ for (subtrackRef = subtrackRefList; subtrackRef != NULL; subtrackRef = subtrackR
 #ifdef SUBTRACK_CFG_POPUP
             dyStringFree(&dyLabel);
 #endif///def SUBTRACK_CFG_POPUP
-            printf ("<TD nowrap='true' title='select to copy' onmouseover=\"this.style.cursor='text';\"><div>&nbsp;%s", subtrack->longLabel);
+            printf ("<TD nowrap='true' title='select to copy'><div>&nbsp;%s", subtrack->longLabel);
             if(trackDbSetting(parentTdb, "wgEncode") && trackDbSetting(subtrack, "accession"))
                 printf (" [GEO:%s]", trackDbSetting(subtrack, "accession"));
             compositeMetadataToggle(db,subtrack,"...",TRUE,FALSE, trackHash);
@@ -3973,8 +4065,10 @@ if(slCount(subtrackRefList) > 5)
 puts("<P>");
 if (!primarySubtrack)
     puts("<script type='text/javascript'>matInitializeMatrix();</script>");
+#ifndef SUBTRACK_CFG_POPUP
 if(dependentCfgsNeedBinding)
-    cfgLinkToDependentCfgs(parentTdb,parentTdb->track);
+    cfgLinkToDependentCfgs(cart,parentTdb,parentTdb->track);
+#endif//ndef SUBTRACK_CFG_POPUP
 membersForAllSubGroupsFree(parentTdb,&membersForAll);
 dyStringFree(&dyHtml)
 sortOrderFree(&sortOrder);
@@ -4028,7 +4122,7 @@ if (boxed)
     char *view = tdbGetViewName(tdb);
     if(view != NULL)
         printf(" %s",view);
-    printf("' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD align='RIGHT'>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
+    printf("' bgcolor=\"%s\" borderColor=\"%s\"><TR><TD>", COLOR_BG_ALTDEFAULT, COLOR_BG_ALTDEFAULT);
     if (title)
         printf("<CENTER><B>%s Configuration</B></CENTER>\n", title);
     }
@@ -4521,6 +4615,16 @@ if (scoreCtString != NULL)
     }
 cfgEndBox(boxed);
 }
+
+void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+/* Put up UI for psl tracks */
+{
+boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
+baseColorDropLists(cart, tdb);
+indelShowOptions(cart, tdb);
+cfgEndBox(boxed);
+}
+
 
 void netAlignCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
 /* Put up UI for net tracks */
@@ -5416,6 +5520,33 @@ void bamCfgUi(struct cart *cart, struct trackDb *tdb, char *name, char *title, b
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
 char cartVarName[1024];
+
+#ifdef BAM_CFG_UI_CHANGES
+printf("<TABLE%s><TR><TD>",boxed?" width='100%'":"");
+char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
+safef(cartVarName, sizeof(cartVarName), "%s.%s", name, BAM_SHOW_NAMES);
+cartMakeCheckBox(cart, cartVarName, !sameOk(tdbShowNames, "off"));
+printf("</TD><TD>Display read names</TD>");
+if (boxed && fileExists(hHelpFile("hgBamTrackHelp")))
+    printf("<TD style='text-align:right'><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
+           "configuration help</A></TD>");
+printf("</TR>\n");
+boolean canPair = (trackDbSetting(tdb, BAM_PAIR_ENDS_BY_NAME) != NULL);
+if (canPair)
+    {
+    printf("<TR><TD>");
+    safef(cartVarName, sizeof(cartVarName), "%s." BAM_PAIR_ENDS_BY_NAME, name);
+    cartMakeCheckBox(cart, cartVarName, TRUE);
+    printf("</TD><TD>Attempt to join paired end reads by name\n");
+    //puts("<BR>");
+    }
+printf("<TR><TD colspan=2>Minimum alignment quality:\n");
+safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
+cartMakeIntVar(cart, cartVarName,
+               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
+printf("</TD></TR></TABLE>");
+
+#else///nef BAM_CFG_UI_CHANGES
 puts("<BR>");
 printf("<B>Display read names:</B>\n");
 char *tdbShowNames = trackDbSetting(tdb, BAM_SHOW_NAMES);
@@ -5433,8 +5564,10 @@ if (canPair)
 printf("<B>Minimum alignment quality:</B>\n");
 safef(cartVarName, sizeof(cartVarName), "%s." BAM_MIN_ALI_QUAL, name);
 cartMakeIntVar(cart, cartVarName,
-	       atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
+               atoi(trackDbSettingOrDefault(tdb, BAM_MIN_ALI_QUAL, BAM_MIN_ALI_QUAL_DEFAULT)), 4);
 puts("<BR>");
+#endif///ndef BAM_CFG_UI_CHANGES
+
 if (isCustomTrack(name))
     {
     // Auto-magic baseColor defaults for BAM, same as in hgTracks.c newCustomTrack
@@ -5444,6 +5577,9 @@ if (isCustomTrack(name))
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
 baseColorDrawOptDropDown(cart, tdb);
+#ifdef BAM_CFG_UI_CHANGES
+puts("<BR>");
+#endif///def BAM_CFG_UI_CHANGES
 indelShowOptions(cart, tdb);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
@@ -5477,11 +5613,18 @@ if (trackDbSetting(tdb, "noColorTag") == NULL)
     printf("<BR>\n");
     }
 cgiMakeRadioButton(cartVarName, BAM_COLOR_MODE_OFF, sameString(selected, BAM_COLOR_MODE_OFF));
-printf("No additional coloring<BR>\n");
+printf("No additional coloring");
+#ifndef BAM_CFG_UI_CHANGES
+printf("<BR>\n");
+#endif///ndef BAM_CFG_UI_CHANGES
 
 //TODO: include / exclude flags
 
+#ifdef BAM_CFG_UI_CHANGES
+if (!boxed && fileExists(hHelpFile("hgBamTrackHelp")))
+#else///ifndef BAM_CFG_UI_CHANGES
 if (fileExists(hHelpFile("hgBamTrackHelp")))
+#endif///ndef BAM_CFG_UI_CHANGES
     printf("<P><A HREF=\"../goldenPath/help/hgBamTrackHelp.html\" TARGET=_BLANK>BAM "
 	   "configuration help</A></P>");
 
@@ -5650,7 +5793,7 @@ if(makeCfgRows)
                 {
                 cfgByCfgType(configurable[ix],db,cart,view->subtracks,varName,
                         membersOfView->titles[ix],TRUE);
-                cfgLinkToDependentCfgs(parentTdb,varName);
+                cfgLinkToDependentCfgs(cart,parentTdb,varName);
                 }
             }
         }
@@ -5996,7 +6139,7 @@ if(membersForAll == NULL || membersForAll->filters == FALSE) // Not Matrix or fi
     return FALSE;
 jsIncludeFile("ui.core.js",NULL);
 jsIncludeFile("ui.dropdownchecklist.js",NULL);
-printf("<link rel='stylesheet' type='text/css' href='../style/ui.dropdownchecklist.css' />\n");
+webIncludeResourceFile("ui.dropdownchecklist.css");
 
 // TODO:
 // 1) Make this work with matrix
@@ -6447,7 +6590,7 @@ boolean displayAll =
 boolean isMatrix = dimensionsExist(tdb);
 boolean viewsOnly = FALSE;
 
-if(cartOptionalString(cart, "ajax") == NULL)
+if (!cartVarExists(cart, "ajax"))
     {
     if(trackDbSetting(tdb, "dragAndDrop") != NULL)
         jsIncludeFile("jquery.tablednd.js", NULL);
@@ -6461,6 +6604,7 @@ jsIncludeFile("hui.js",NULL);
 #ifdef SUBTRACK_CFG_POPUP
 printf("<div id='popit' style='display: none'></div>");
 cgiMakeHiddenVar("db", db);
+printf("<input type=HIDDEN id='track' value='%s';</input>\n",tdb->track);
 #endif
 puts("<P>");
 if (trackDbCountDescendantLeaves(tdb) < MANY_SUBTRACKS && !hasSubgroups)
@@ -6494,6 +6638,11 @@ if(primarySubtrack == NULL)
             hCompositeUiByMatrix(db, cart, tdb, formName);
 	    }
         }
+#ifdef SUBTRACK_CFG_POPUP
+    if(primarySubtrack == NULL)
+        cfgLinkToDependentCfgs(cart,tdb,tdb->track);  // Must be after views are set up to get view vis
+    printf("<script type='text/javascript'>registerFormSubmit('mainForm');</script>\n");
+#endif
     }
 
 cartSaveSession(cart);
@@ -6518,8 +6667,8 @@ if (primarySubtrack == NULL)  // primarySubtrack is set for tableBrowser but not
     }
 }
 
-boolean superTrackDropDown(struct cart *cart, struct trackDb *tdb,
-                                int visibleChild)
+boolean superTrackDropDownWithExtra(struct cart *cart, struct trackDb *tdb,
+                                int visibleChild,char *extra)
 /* Displays hide/show dropdown for supertrack.
  * Set visibleChild to indicate whether 'show' should be grayed
  * out to indicate that no supertrack members are visible:
@@ -6554,8 +6703,8 @@ if (show && (visibleChild == -1))
             visibleChild = 1;
         }
     }
-hideShowDropDown(tdb->track, show, (show && visibleChild) ?
-                            "normalText" : "hiddenText");
+hideShowDropDownWithClassAndExtra(tdb->track, show, (show && visibleChild) ?
+                            "normalText visDD" : "hiddenText visDD",extra);
 return TRUE;
 }
 
@@ -6580,6 +6729,48 @@ if (tvCompare(a, b) >= 0)
     return a;
 else
     return b;
+}
+
+enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers)
+// returns visibility limited by ancestry (or subtrack vis override)
+{
+enum trackVisibility vis = tdb->visibility;
+if (tdbIsSuperTrack(tdb))
+    vis = (tdb->isShow ? tvFull : tvHide);
+if (cart != NULL)
+    {
+    char *cartVis = NULL;
+    if (tdbIsCompositeView(tdb))
+        {
+        char *view = trackDbLocalSetting(tdb,"view");
+        assert(view != NULL);
+        char setting[512];
+        safef(setting,sizeof(setting),"%s.%s.vis",tdb->parent->track,view);
+        cartVis = cartOptionalString(cart, setting);
+        }
+    else
+        cartVis = cartOptionalString(cart, tdb->track);
+    if (cartVis != NULL)
+        {
+        vis = hTvFromString(cartVis);
+        if (tdbIsContainerChild(tdb))
+            return vis; // subtrackVis override
+        }
+    }
+
+// subtracks without explicit (cart) vis but are selected, should get inherited vis
+if (vis == tvHide && tdbIsContainerChild(tdb))
+    {
+    if (fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+        vis = tvFull;
+    }
+
+if (vis == tvHide || tdb->parent == NULL)
+    return vis;
+
+if (noSupers && tdbIsSuperTrack(tdb->parent))
+    return vis;
+return tvMin(vis,tdbVisLimitedByAncestry(cart,tdb->parent,noSupers));
 }
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)

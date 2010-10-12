@@ -12,6 +12,8 @@
 #include "hui.h"
 #endif
 
+#include "imageV2.h"
+
 #ifndef CART_H
 #include "cart.h"
 #endif
@@ -50,6 +52,11 @@
 #else
 #define MAXPIXELS 14000
 #endif
+
+// imageV2 dragReorder supercedes 'priority' based reordering which used to be allowed
+// on the cfg controls page.  While the priority order is still supported as default,
+// you can re-allow setting those priorities by defining PRIORITY_CHANGES_IN_CONFIG_UI
+//#define PRIORITY_CHANGES_IN_CONFIG_UI
 
 struct track
 /* Structure that displays of tracks. The central data structure
@@ -200,6 +207,7 @@ struct track
                                 is used for "composite" tracks, such
                                 as "mafWiggle */
     struct track *parent;	/* Parent track if any */
+    struct track *prevTrack;    /* if not NULL, points to track immediately above in the image.  Needed by ConditionalCenterLabel logic */
 
     void (*nextPrevExon)(struct track *tg, struct hvGfx *hvg, void *item, int x, int y, int w, int h, boolean next);
     /* Function will draw the button on a track item and assign a map */
@@ -333,7 +341,7 @@ extern struct trackLayout tl;
 extern struct cart *cart; /* The cart where we keep persistent variables. */
 extern struct hash *oldVars;       /* List of vars from previous cart. */
 extern struct track *trackList;    /* List of all tracks. */
-struct hash *trackHash; /* Hash of the tracks by their name. */
+extern struct hash *trackHash; /* Hash of the tracks by their name. */
 extern char *chromName;	  /* Name of chromosome sequence . */
 extern char *database;	  /* Name of database we're using. */
 extern char *organism;	  /* Name of organism we're working on. */
@@ -370,11 +378,7 @@ extern struct slName *browserLines; /* Custom track "browser" lines. */
 extern int rulerMode;         /* on, off, full */
 extern boolean withLeftLabels;		/* Display left labels? */
 extern boolean withCenterLabels;	/* Display center labels? */
-//#define IMAGEv2_DRAG_REORDER_NOPRIORS
-#define IMAGEv2_DRAG_REORDER_NOPRIORITY
-#if !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORITY)
 extern boolean withPriorityOverride;    /* enable track reordering? */
-#endif// !defined(IMAGEv2_DRAG_REORDER_NOPRIORS) || !defined(IMAGEv2_DRAG_REORDER_NOPRIORS)
 extern boolean revCmplDisp;             /* reverse-complement display */
 extern boolean measureTiming;	/* Flip this on to display timing
                                  * stats on each track at bottom of page. */
@@ -1067,6 +1071,9 @@ void initTl();
 void setLayoutGlobals();
 /* Figure out basic dimensions of display.  */
 
+struct hash *makeGlobalTrackHash(struct track *trackList);
+/* Create a global track hash and returns a pointer to it. */
+
 void makeActiveImage(struct track *trackList, char *psOutput);
 /* Make image and image map. */
 
@@ -1107,6 +1114,15 @@ boolean isWithCenterLabels(struct track *track);
  * BUT if track->tdb has a centerLabelDense setting, let subtracks go with
  * the default and inhibit composite track center labels in all modes.
  * Otherwise use the global boolean withCenterLabels. */
+
+#define isCenterLabelConditional(track) ((limitVisibility(track) == tvDense) && tdbIsCompositeChild((track)->tdb))
+// dense subtracks have conditional centerLabels
+
+boolean isCenterLabelConditionallySeen(struct track *track);
+// returns FALSE if track and prevTrack have same parent, and are both dense subtracks
+
+#define isCenterLabelIncluded(track) (isWithCenterLabels(track) && (theImgBox || isCenterLabelConditionallySeen(track)))
+// Center labels may be conditionally included
 
 void affyTxnPhase2Methods(struct track *track);
 /* Methods for dealing with a composite transcriptome tracks. */
@@ -1218,6 +1234,18 @@ char *bbiNameFromTable(struct sqlConnection *conn, char *table);
 
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */
+
+void bedDetailCtMethods (struct track *tg, struct customTrack *ct);
+/* Load bedDetail track from custom tracks as bed or linked features */
+
+void pgSnpCtMethods (struct track *tg);
+/* Load pgSnp track from custom tracks */
+
+#ifdef SUBTRACKS_HAVE_VIS
+void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars);
+/* When composite/view settings changes, remove subtrack specific vis
+   When superTrackChild is found and selected, shape superTrack to match. */
+#endif//def SUBTRACKS_HAVE_VIS
 
 #endif /* HGTRACKS_H */
 

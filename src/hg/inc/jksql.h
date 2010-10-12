@@ -66,12 +66,14 @@ struct sqlConnection *sqlMayConnectRemote(char *host, char *user, char *password
 /* Connect to database somewhere as somebody. Database maybe NULL to
  * just connect to the server.  Return NULL can't connect */
 
-void sqlProfileConfig(char *profileName, char *host, char *user, char *password);
+void sqlProfileConfig(char *profileName, char *host, unsigned int port, char *socket,
+				char *user, char *password);
 /* Set configuration for the profile.  This overrides an existing profile in
  * hg.conf or defines a new one.  Results are unpredictable if a connect cache
  * has been established for this profile. */
 
-void sqlProfileConfigDefault(char *host, char *user, char *password);
+void sqlProfileConfigDefault(char *host, unsigned int port, char *socket, char *user,
+				char *password);
 /* Set configuration for the default profile.  This overrides an existing
  * profile in hg.conf or defines a new one.  Results are unpredictable if a
  * connect cache has been established for this profile. */
@@ -198,6 +200,15 @@ struct sqlResult *sqlGetResult(struct sqlConnection *sc, char *query);
 /* (Returns NULL if result was empty. :
  *     old info, only applies with mysql_store_result not mysql_use_result)
  * Otherwise returns a structure that you can do sqlRow() on. */
+
+char *sqlEscapeString(const char* from);
+/* Prepares string for inclusion in a SQL statement . Remember to free
+ * returned string.  Returned string contains strlen(length)*2+1 as many bytes
+ * as orig because in worst case every character has to be escaped.*/
+
+char *sqlEscapeString2(char *to, const char* from);
+/* Prepares a string for inclusion in a sql statement.  Output string
+ * must be 2*strlen(from)+1 */
 
 char *sqlEscapeTabFileString2(char *to, const char *from);
 /* Escape a string for including in a tab seperated file. Output string

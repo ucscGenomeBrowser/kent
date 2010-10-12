@@ -435,6 +435,14 @@ otherDb dm1
 track augustus override
 shortLabel Augustus Genes
 
+track bdtnpChipper override
+release beta
+html bdtnpChipperOld
+
+track bdtnpChipper override
+release public
+html bdtnpChipperOld
+
 track picTar
 compositeTrack on
 shortLabel PicTar miRNA

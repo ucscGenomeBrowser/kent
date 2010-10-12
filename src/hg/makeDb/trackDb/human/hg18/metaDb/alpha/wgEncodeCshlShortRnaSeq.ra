@@ -1,3 +1,8 @@
+metaObject wgEncodeCshlShortRnaSeq
+objType composite
+composite wgEncodeCshlShortRnaSeq
+geoSeriesAccession GSE24565
+
 metaObject wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
 objType table
 cell GM12878
@@ -7,11 +12,12 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort.tagAlign.gz
+geoSampleAccession GSM605625
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 tableName wgEncodeCshlShortRnaSeqAlignmentsGm12878CellShort
 view Alignments
@@ -20,16 +26,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort.tagAlign.gz
+geoSampleAccession GSM605627
 grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsGm12878CytosolShort
 view Alignments
@@ -38,16 +45,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort.tagAlign.gz
+geoSampleAccession GSM605633
 grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsGm12878NucleusShort
 view Alignments
@@ -61,11 +69,12 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562CellShort.tagAlign.gz
+geoSampleAccession GSM605630
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562CellShort
 view Alignments
@@ -74,16 +83,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort.tagAlign.gz
+geoSampleAccession GSM605632
 grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562ChromatinShort
 view Alignments
@@ -92,16 +102,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort.tagAlign.gz
+geoSampleAccession GSM605629
 grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562CytosolShort
 view Alignments
@@ -110,16 +121,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort.tagAlign.gz
+geoSampleAccession GSM605628
 grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562NucleolusShort
 view Alignments
@@ -128,16 +140,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort.tagAlign.gz
+geoSampleAccession GSM605634
 grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562NucleoplasmShort
 view Alignments
@@ -146,16 +159,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort.tagAlign.gz
+geoSampleAccession GSM605635
 grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562NucleusShort
 view Alignments
@@ -164,16 +178,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort.tagAlign.gz
+geoSampleAccession GSM605631
 grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsK562PolysomeShort
 view Alignments
@@ -182,16 +197,17 @@ metaObject wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort.tagAlign.gz
+geoSampleAccession GSM605626
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqAlignmentsProstateCellShort
 view Alignments
@@ -208,7 +224,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CellShort
 type wig
@@ -218,7 +234,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -226,7 +242,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalGm12878CytosolShort
 type wig
@@ -236,7 +252,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -244,7 +260,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalGm12878NucleusShort
 type wig
@@ -262,7 +278,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562CellShort
 type wig
@@ -272,7 +288,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -280,7 +296,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562ChromatinShort
 type wig
@@ -290,7 +306,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -298,7 +314,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562CytosolShort
 type wig
@@ -308,7 +324,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -316,7 +332,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleolusShort
 type wig
@@ -326,7 +342,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -334,7 +350,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleoplasmShort
 type wig
@@ -344,7 +360,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -352,7 +368,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562NucleusShort
 type wig
@@ -362,7 +378,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -370,7 +386,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalK562PolysomeShort
 type wig
@@ -380,7 +396,7 @@ metaObject wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -388,7 +404,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqMinusRawSignalProstateCellShort
 type wig
@@ -406,7 +422,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CellShort
 type wig
@@ -416,7 +432,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -424,7 +440,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalGm12878CytosolShort
 type wig
@@ -434,7 +450,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -442,7 +458,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalGm12878NucleusShort
 type wig
@@ -460,7 +476,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562CellShort
 type wig
@@ -470,7 +486,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -478,7 +494,7 @@ grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562ChromatinShort
 type wig
@@ -488,7 +504,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -496,7 +512,7 @@ grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562CytosolShort
 type wig
@@ -506,7 +522,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -514,7 +530,7 @@ grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleolusShort
 type wig
@@ -524,7 +540,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -532,7 +548,7 @@ grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleoplasmShort
 type wig
@@ -542,7 +558,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -550,7 +566,7 @@ grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562NucleusShort
 type wig
@@ -560,7 +576,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -568,7 +584,7 @@ grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalK562PolysomeShort
 type wig
@@ -578,7 +594,7 @@ metaObject wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -586,7 +602,7 @@ grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqPlusRawSignalProstateCellShort
 type wig
@@ -601,12 +617,12 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqRawDataGm12878CellShort.fastq.gz
+geoSampleAccession GSM605625
 grant Gingeras
 lab Cshl
 localization cell
-parentTable wgEncodeCshlShortRnaSeqRawSignalGm12878CellShort
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1017
 view RawData
 
@@ -614,16 +630,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataGm12878CytosolShort
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataGm12878CytosolShort.fastq.gz
+geoSampleAccession GSM605627
 grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -631,16 +648,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataGm12878NucleusShort
 objType file
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataGm12878NucleusShort.fastq.gz
+geoSampleAccession GSM605633
 grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -653,12 +671,12 @@ dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqRawDataK562CellShort.fastq.gz
+geoSampleAccession GSM605630
 grant Gingeras
 lab Cshl
 localization cell
-parentTable wgEncodeCshlShortRnaSeqRawSignalK562CellShort
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1000
 view RawData
 
@@ -666,16 +684,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataK562ChromatinShort
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataK562ChromatinShort.fastq.gz
+geoSampleAccession GSM605632
 grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -683,16 +702,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataK562CytosolShort
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataK562CytosolShort.fastq.gz
+geoSampleAccession GSM605629
 grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -700,16 +720,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataK562NucleolusShort
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataK562NucleolusShort.fastq.gz
+geoSampleAccession GSM605628
 grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -717,16 +738,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataK562NucleoplasmShort
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataK562NucleoplasmShort.fastq.gz
+geoSampleAccession GSM605634
 grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -734,16 +756,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataK562NucleusShort
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataK562NucleusShort.fastq.gz
+geoSampleAccession GSM605635
 grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -751,16 +774,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataK562PolysomeShort
 objType file
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataK562PolysomeShort.fastq.gz
+geoSampleAccession GSM605631
 grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -768,16 +792,17 @@ metaObject wgEncodeCshlShortRnaSeqRawDataProstateCellShort
 objType file
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Fall 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqRawDataProstateCellShort.fastq.gz
+geoSampleAccession GSM605626
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 view RawData
 
@@ -785,16 +810,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort.broadPeak.gz
+geoSampleAccession GSM605625
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1056
 tableName wgEncodeCshlShortRnaSeqTransfragsGm12878CellShort
 view Transfrags
@@ -803,16 +829,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort.broadPeak.gz
+geoSampleAccession GSM605627
 grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsGm12878CytosolShort
 view Transfrags
@@ -821,16 +848,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
 objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort.broadPeak.gz
+geoSampleAccession GSM605633
 grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsGm12878NucleusShort
 view Transfrags
@@ -839,16 +867,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562CellShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCshlShortRnaSeqTransfragsK562CellShort.broadPeak.gz
+geoSampleAccession GSM605630
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 1056
 tableName wgEncodeCshlShortRnaSeqTransfragsK562CellShort
 view Transfrags
@@ -857,16 +886,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort.broadPeak.gz
+geoSampleAccession GSM605632
 grant Gingeras
 lab Cshl
 localization chromatin
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562ChromatinShort
 view Transfrags
@@ -875,16 +905,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort.broadPeak.gz
+geoSampleAccession GSM605629
 grant Gingeras
 lab Cshl
 localization cytosol
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562CytosolShort
 view Transfrags
@@ -893,16 +924,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort.broadPeak.gz
+geoSampleAccession GSM605628
 grant Gingeras
 lab Cshl
 localization nucleolus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562NucleolusShort
 view Transfrags
@@ -911,16 +943,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort.broadPeak.gz
+geoSampleAccession GSM605634
 grant Gingeras
 lab Cshl
 localization nucleoplasm
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562NucleoplasmShort
 view Transfrags
@@ -929,16 +962,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort.broadPeak.gz
+geoSampleAccession GSM605635
 grant Gingeras
 lab Cshl
 localization nucleus
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562NucleusShort
 view Transfrags
@@ -947,16 +981,17 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
 objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort.broadPeak.gz
+geoSampleAccession GSM605631
 grant Gingeras
 lab Cshl
 localization polysome
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsK562PolysomeShort
 view Transfrags
@@ -965,18 +1000,19 @@ metaObject wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
 objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
-dataType ShortRnaSeq
+dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
 fileName wgEncodeCshlShortRnaSeqTransfragsProstateCellShort.broadPeak.gz
+geoSampleAccession GSM605626
 grant Gingeras
 lab Cshl
 localization cell
 project wgEncode
-rnaExtract short
+rnaExtract shortTotal
 subId 535
 tableName wgEncodeCshlShortRnaSeqTransfragsProstateCellShort
 view Transfrags
 
-# MAGIC: -1873112481
+# MAGIC: -564665704

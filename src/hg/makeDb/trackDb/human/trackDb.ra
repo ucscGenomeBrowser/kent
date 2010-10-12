@@ -1168,23 +1168,6 @@ visibility hide
 color 150,0,150
 type bed 4 +
 
-
-track dgv
-shortLabel DGV Struct Var
-longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
-group varRep
-priority 144.8
-visibility hide
-color 0,100,0
-itemRgb on
-type bed 9 +
-noScoreFilter .
-exonArrows off
-urlLabel DGV Browser and Report:
-url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
-dataVersion v8
-release beta,public
-
 track dgv
 shortLabel DGV Struct Var
 longLabel Database of Genomic Variants: Structural Variation (CNV, Inversion, In/del)
@@ -1199,7 +1182,136 @@ exonArrows off
 urlLabel DGV Browser and Report:
 url http://projects.tcag.ca/cgi-bin/variation/xview?source=$D&view=variation&id=Variation_$$
 dataVersion v9
-release alpha
+
+track covMask1kGPilotLowCov
+compositeTrack on
+shortLabel 1000Genomes Cov
+longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase
+group varRep
+priority 101.5
+visibility hide
+subGroup1 view Views Depth=Abnormal_Depth MapQ=Mapping_Quality_Failure Uncov=No_Coverage sum=Summary
+subGroup2 pop Population Ceu=CEU ChbJpt=CHB/JPT Yri=YRI all=All
+dimensions dimX=view dimY=pop
+sortOrder view=+ pop=+
+dragAndDrop subTracks
+type bed 3
+
+    track covMask1kGPilotLowCovDepth
+    view Depth
+    shortLabel Abnormal Depth
+    visibility hide
+    parent covMask1kGPilotLowCov
+    color 180,0,0
+
+	track covMask1kGPilotLowCovCeuDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, CEU
+	subGroups view=Depth pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, CHB/JPT
+	subGroups view=Depth pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriDepth
+	parent covMask1kGPilotLowCovDepth
+	shortLabel Depth YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Abnormal Depth, YRI
+	subGroups view=Depth pop=Yri
+
+    track covMask1kGPilotLowCovMapQ
+    view MapQ
+    shortLabel Map Qual Failure
+    visibility hide
+    parent covMask1kGPilotLowCov
+    color 224,108,108
+
+	track covMask1kGPilotLowCovCeuMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, CEU
+	subGroups view=MapQ pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, CHB/JPT
+	subGroups view=MapQ pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriMapQ
+	parent covMask1kGPilotLowCovMapQ
+	shortLabel Map Qual YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: Mapping Quality Failure, YRI
+	subGroups view=MapQ pop=Yri
+
+    track covMask1kGPilotLowCovUncov
+    view Uncov
+    shortLabel No Coverage
+    visibility hide
+    parent covMask1kGPilotLowCov
+    color 150,150,150
+
+	track covMask1kGPilotLowCovCeuUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov CEU
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, CEU
+	subGroups view=Uncov pop=Ceu
+
+	track covMask1kGPilotLowCovChbJptUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov CHB/JPT
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, CHB/JPT
+	subGroups view=Uncov pop=ChbJpt
+
+	track covMask1kGPilotLowCovYriUncov
+	parent covMask1kGPilotLowCovUncov
+	shortLabel No Cov YRI
+	longLabel Coverage Analysis from the 1000 Genomes Project Pilot Phase: No Coverage, YRI
+	subGroups view=Uncov pop=Yri
+
+    track covMask1kGPilotLowCovSumView
+    view sum
+    shortLabel Summary
+    visibility dense
+    parent covMask1kGPilotLowCov
+
+	track covMask1kGPilotLowCovUnionDepth
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Depth Union
+	longLabel Union of all populations' depth masks
+	subGroups view=sum pop=all
+	color 180,0,0
+
+	track covMask1kGPilotLowCovUnionMapQ
+	parent covMask1kGPilotLowCovSumView
+	shortLabel MapQ Union
+	longLabel Union of all populations' mapping quality masks
+	subGroups view=sum pop=all
+	color 224,108,108
+
+	track covMask1kGPilotLowCovUnionUncov
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Uncov Union
+	longLabel Union of all populations' uncovered regions
+	subGroups view=sum pop=all
+	color 150,150,150
+
+	track covMask1kGPilotLowCovIntersectionUncov
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Uncov Intsct
+	longLabel Intersection of all populations' uncovered regions
+	subGroups view=sum pop=all
+	color 150,150,150
+
+	track covMask1kGPilotLowCovUnion
+	parent covMask1kGPilotLowCovSumView
+	shortLabel Union
+	longLabel Union of all masks
+	subGroups view=sum pop=all
+
 
 track kiddEichlerDisc
 compositeTrack on
@@ -2190,19 +2302,6 @@ visibility hide
 color 20,0,50
 type bed 4 .
 
-track chainHg19
-#replaces record chainHg19 in parent dir missing/extra parent,subGroups
-shortLabel Hg19 Chain
-longLabel  Hg19 LiftOver Chain
-group map
-priority 152.4
-visibility hide
-color 100,50,0
-altColor 255,240,200
-spectrum on
-type chain hg19
-otherDb hg19
-
 track fosmidDiscordant
 shortLabel Fosmid Discordants
 longLabel Fosmid Discordants
@@ -2233,7 +2332,9 @@ type bed 8 +
 urlLabel Laboratoire de Biologie Mol&#233;culaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
-url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+#url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
+
 
 track wgRna
 shortLabel sno/miRNA
@@ -2243,10 +2344,12 @@ priority 63.6
 visibility hide
 color 200,80,0
 type bed 8 +
+noScoreFilter .
 urlLabel Laboratoire de Biologie Moleculaire Eucaryote:
 url http://www-snorna.biotoul.fr/plus.php?id=$$
 url2Label The miRNA Registry:
-url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+#url2 http://microrna.sanger.ac.uk/cgi-bin/sequences/mirna_entry.pl?id=$$
+url2 http://www.mirbase.org/cgi-bin/query.pl?terms=$$
 dataVersion miRBase Release 13.0 (March 2009) and snoRNABase Version 3
 
 track affyHuEx1
@@ -2295,7 +2398,83 @@ expStep 0.5
 expTable sestanBrainAtlasExps
 groupings sestanBrainAtlasGroups
 
-track agilentProbes
+track agilentCgh
+release alpha
+shortLabel Agilent CGH
+longLabel Agilent CGH Microarray probesets
+compositeTrack on
+group expression
+visibility hide
+noScoreFilter .
+html agilentCghAlpha
+type bed 4 .
+
+    track agilentCgh1x1m
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 1x1m
+    longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
+    color 0,128,0
+    priority 1
+
+    track agilentHrd1x1m
+    release alpha
+    parent agilentCgh
+    shortLabel Ag HRD 1x1m
+    longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
+    color 255,128,0
+    priority 2
+
+    track agilentCgh2x400k
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 2x400k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
+    color 0,128,0
+    priority 3
+
+    track agilentCgh4x180k
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 4x180k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
+    color 255,128,0
+    priority 4
+
+    track agilentCgh8x60k
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 8x60k
+    longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
+    color 0,128,0
+    priority 5
+
+    track agilentCgh244a
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 1x244k
+    longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
+    color 255,128,0
+    priority 6
+
+    track agilentCgh105a
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 2x105k
+    longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
+    color 0,128,0
+    priority 7
+
+    track agilentCgh44k
+    release alpha
+    parent agilentCgh
+    shortLabel Ag CGH 4x44k
+    longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
+    color 255,128,0
+    priority 8
+
+track agilentCgh
+release beta,public
 shortLabel Agilent Array
 longLabel Agilent Microarray Probesets
 compositeTrack on
@@ -2307,72 +2486,66 @@ noScoreFilter .
 type bed 6 .
 
     track agilentCgh1x1m
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 1x1m
-    longLabel Agilent CGH SurePrint G3 Microarray 1x1M AMADID 021529
+    longLabel Agilent SurePrint G3 Human CGH Microarray 1x1M AMADID 021529
     color 0,128,0
     priority 1
 
     track agilentHrd1x1m
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag HRD 1x1m
-    longLabel Agilent High-Resolution Discovery SurePrint G3 Microarray 1x1M AMADID 023642
+    longLabel Agilent SurePrint G3 Human High-Resolution Microarray 1x1M AMADID 023642
     color 255,128,0
     priority 2
 
     track agilentCgh2x400k
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 2x400k
-    longLabel Agilent CGH SurePrint G3 Microarray 2x400K AMADID 021850
+    longLabel Agilent SurePrint G3 Human CGH Microarray 2x400K AMADID 021850
     color 0,128,0
     priority 3
 
     track agilentCgh4x180k
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 4x180k
-    longLabel Agilent CGH SurePrint G3 Microarray 4x180K AMADID 022060
+    longLabel Agilent SurePrint G3 Human CGH Microarray 4x180K AMADID 022060
     color 255,128,0
     priority 4
 
     track agilentCgh8x60k
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 8x60k
-    longLabel Agilent CGH SurePrint G3 Microarray 8x60K AMADID 021924
+    longLabel Agilent SurePrint G3 Human CGH Microarray 8x60K AMADID 021924
     color 0,128,0
     priority 5
 
-    track agilentCnv2x400k
-    parent agilentProbes
-    shortLabel Ag CNV 2x400k
-    longLabel Agilent CNV SurePrint G3 Microarray 2x400K AMADID 021365
-    color 255,128,0
-    priority 6
-
     track agilentCgh244a
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 1x244k
-    longLabel Agilent CGH Microarray 1x244k AMADID 014693
-    color 0,128,0
+    longLabel Agilent SurePrint HD Human CGH Microarray 1x244K AMADID 014693
+    color 255,128,0
     priority 7
 
     track agilentCgh105a
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 2x105k
-    longLabel Agilent CGH Microarray 2x105k AMADID 014698
-    color 255,128,0
+    longLabel Agilent SurePrint HD Human CGH Microarray 2x105K AMADID 014698
+    color 0,128,0
     priority 8
 
-    track agilentCnv2x105k
-    parent agilentProbes
-    shortLabel Ag CNV 2x105k
-    longLabel Agilent CNV Microarray 2x105k AMADID 022837
-    color 0,128,0
-    priority 9
-
     track agilentCgh44k
-    parent agilentProbes
+    release beta,public
+    parent agilentCgh
     shortLabel Ag CGH 4x44k
-    longLabel Agilent CGH Microarray 4x44k AMADID 014950
+    longLabel Agilent SurePrint HD Human CGH Microarray 4x44K AMADID 014950
     color 255,128,0
     priority 10
 

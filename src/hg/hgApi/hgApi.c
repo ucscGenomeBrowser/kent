@@ -2,9 +2,11 @@
 
 #include "common.h"
 #include "hdb.h"
+#include "mdb.h"
 #include "cheapcgi.h"
 #include "hPrint.h"
 #include "dystring.h"
+#include "hui.h"
 
 static char const rcsid[] = "$Id: hgApi.c,v 1.3 2010/05/30 21:11:47 larrym Exp $";
 
@@ -49,6 +51,8 @@ makeIndent(tabs, sizeof(tabs), indent);
 dyStringPrintf(json, "\n%s}", tabs);
 }
 
+#define MDB_VAL_TRUNC_AT 64
+
 int main(int argc, char *argv[])
 {
 struct dyString *output = newDyString(10000);
@@ -73,7 +77,7 @@ if(!strcmp(cmd, "trackList"))
     // e.g. http://genome.ucsc.edu/hgApi?db=hg18&cmd=trackList
 
     struct trackDb *tdb, *tdbList = NULL;
-    tdbList = hTrackDb(database, NULL);
+    tdbList = hTrackDb(database);
     dyStringPrintf(output, "[\n");
     int count = 0;
     for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
@@ -92,33 +96,49 @@ else if(!strcmp(cmd, "metaDb"))
     boolean metaDbExists = sqlTableExists(conn, "metaDb");
     if(metaDbExists)
         {
-        char query[256];
-        struct sqlResult *sr = NULL;
-        char **row;
-        int i;
-        struct slName *el, *termList = NULL;
         char *var = cgiOptionalString("var");
         if(var)
             var = sqlEscapeString(var);
         else
             fail("Missing var parameter");
-        safef(query, sizeof(query), "select distinct val from metaDb where var = '%s'", var);
-        sr = sqlGetResult(conn, query);
-        while ((row = sqlNextRow(sr)) != NULL)
-            slNameAddHead(&termList, row[0]);
-        sqlFreeResult(&sr);
-        slSort(&termList, slNameCmpCase);
+        struct slPair *pairs = mdbValLabelSearch(conn, var, MDB_VAL_STD_TRUNCATION, TRUE, FALSE); // Tables not files
+        struct slPair *pair;
         dyStringPrintf(output, "[\n");
-        for (el = termList, i = 0; el != NULL; el = el->next, i++)
+        for (pair = pairs; pair != NULL; pair = pair->next)
             {
-            if(i)
+            if(pair != pairs)
                 dyStringPrintf(output, ",\n");
-            dyStringPrintf(output, "'%s'", javaScriptLiteralEncode(el->name));
+            dyStringPrintf(output, "['%s','%s']", javaScriptLiteralEncode(pair->name), javaScriptLiteralEncode(pair->val));
             }
         dyStringPrintf(output, "\n]\n");
         }
     else
         fail("Assembly does not support metaDb");
+    }
+else if(!strcmp(cmd, "tableMetadata"))
+    { // returns an html table with metadata for a given track
+    char *trackName = cgiOptionalString("track");
+    boolean showLonglabel = (NULL != cgiOptionalString("showLonglabel"));
+    boolean showShortLabel = (NULL != cgiOptionalString("showShortLabel"));
+    if (trackName != NULL)
+        {
+        struct trackDb *tdb = hTrackDbForTrack(database, trackName);
+        if (tdb != NULL)
+            {
+            char * html = metadataAsHtmlTable(database,tdb,showLonglabel,showShortLabel,NULL);
+            if (html)
+                {
+                dyStringAppend(output,html);
+                freeMem(html);
+                }
+            else
+                dyStringPrintf(output,"No metadata found for track %s.",trackName);
+            }
+        else
+            dyStringPrintf(output,"Track %s not found",trackName);
+        }
+        else
+            dyStringAppend(output,"No track variable found");
     }
 else
     fail("Unsupported 'cmd' parameter");
@@ -130,7 +150,7 @@ puts("Content-Type:text/javascript\n");
 //puts("\n");
 if(jsonp)
     printf("%s(%s)", jsonp, dyStringContents(output));
-else 
+else
     puts(dyStringContents(output));
 
 return 0;

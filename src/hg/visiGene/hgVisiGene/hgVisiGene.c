@@ -59,7 +59,7 @@ if (name == NULL)
     struct sqlResult *sr;
     int nameSize = strlen(binomial);
     name = cloneString(binomial);
-    safef(query, sizeof(query), 
+    safef(query, sizeof(query),
     	"select commonName.val from commonName,taxon "
 	"where taxon.binomial = '%s' and taxon.id = commonName.taxon"
 	, binomial);
@@ -175,7 +175,7 @@ if (lf != NULL)
 return matchList;
 }
 
-static struct visiMatch *onePerImageFile(struct sqlConnection *conn, 
+static struct visiMatch *onePerImageFile(struct sqlConnection *conn,
 	struct visiMatch *matchList)
 /* Return image list that filters out second occurence of
  * same imageFile. */
@@ -188,7 +188,7 @@ for (match = matchList; match != NULL; match = next)
     char hashName[16];
     int imageFile;
     next = match->next;
-    safef(query, sizeof(query), "select imageFile from image where id=%d", 
+    safef(query, sizeof(query), "select imageFile from image where id=%d",
     	match->imageId);
     imageFile = sqlQuickNum(conn, query);
     if (imageFile != 0)
@@ -249,18 +249,18 @@ if (imageCount > 0)
     printf("<TR><TD><B>");
     printf("%d images match<BR>\n", imageCount);
     printf("</B></TD></TR>\n");
-    for (match = slElementFromIx(matchList, startAt); 
+    for (match = slElementFromIx(matchList, startAt);
 	    match != NULL; match = match->next)
 	{
 	int id = match->imageId;
 	char *imageFile = visiGeneThumbSizePath(conn, id);
 	printf("<TR>");
 	printf("<TD>");
-	printf("<A HREF=\"%s?%s&%s=%d&%s=do\" target=\"image\" >", 
-	    hgVisiGeneCgiName(), 
+	printf("<A HREF=\"%s?%s&%s=%d&%s=do\" target=\"image\" >",
+	    hgVisiGeneCgiName(),
 	    sidUrl, hgpId, id, hgpDoImage);
 	printf("<IMG SRC=\"%s\"></A><BR>\n", imageFile);
-	
+
 	smallCaption(conn, id);
 	printf("<BR>\n");
 	printf("</TD>");
@@ -325,7 +325,7 @@ htmStart(stdout, "do image");
 
 if (!visiGeneImageSize(conn, imageId, &w, &h))
     imageId = 0;
-	
+
 if (imageId != 0)
     {
     printf("<B>");
@@ -339,10 +339,10 @@ if (imageId != 0)
 #ifdef DEBUG
     safef(buf,sizeof(buf),"../bigImageTest.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
-#else	    
+#else
     safef(buf,sizeof(buf),"../bigImage.html?url=%s%s/%s&w=%d&h=%d",
 	    dir,name,name,w,h);
-#endif	    
+#endif
     printf("<IFRAME name=\"bigImg\" width=\"100%%\" height=\"90%%\" SRC=\"%s\"></IFRAME><BR>\n", buf);
 
     fullCaption(conn, imageId);
@@ -350,24 +350,24 @@ if (imageId != 0)
     safef(buf,sizeof(buf),"%s%s%s", dir, name, extension);
     safef(url,sizeof(url),"%s?%s=go&%s&%s=%d",
     	hgVisiGeneCgiName(), hgpDoDownload, sidUrl, hgpId, imageId);
-   
+
     printf("<B>Full-size image:</B> %d x %d &nbsp; <A HREF='%s'> download </A> ", w, h, url);
 
-    /* Currently this is dangerous for users with less than 1 GB RAM to use 
+    /* Currently this is dangerous for users with less than 1 GB RAM to use
        on large images, because their machines can thrash themselves into a coma.
        X-windows (i.e. used by FireFox) will allocate 5 bytes per pixel.
        If the image size in pixels times 5 exceeds real ram size, then
-       Linux thrashes incessantly.  But you can hit ctrl-alt-F1 to 
+       Linux thrashes incessantly.  But you can hit ctrl-alt-F1 to
        get a text only screen, then kill the bad processes (FF) and then
        you can restore desktop with ctrl-alt-F7.  Hiram says that's a
        feature credited to SCO-Unix.  On my 1GB machines at work/home,
-       I never encountered any problem what-so-ever, even with the 
+       I never encountered any problem what-so-ever, even with the
        largest visiGene AllenBrain - about 19000x9000 pix.
-       
+
     printf(" &nbsp;&nbsp; <A HREF='%s'> view </A>\n", buf);
     */
     printf("\n");
-    
+
     }
 htmlEnd();
 }
@@ -386,7 +386,9 @@ void doControls(struct sqlConnection *conn)
 {
 char *listSpec = cartUsualString(cart, hgpListSpec, "");
 htmlSetBgColor(0xD0FFE0);
-htmlSetStyle("	<LINK REL=\"STYLESHEET\" HREF=\"../style/HGStyle.css\">" "\n");
+char * link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE); // resource file link wrapped in html
+if (link)
+    htmlSetStyle(link);
 htmStart(stdout, "do controls");
 printf("<FORM ACTION=\"%s\" NAME=\"mainForm\" target=\"_parent\" METHOD=GET>\n",
 	hgVisiGeneCgiName());
@@ -449,7 +451,7 @@ for (match = matchList; match != NULL; match = match->next)
 
     /* Fetch priority. */
     dyStringClear(dy);
-    dyStringPrintf(dy, 
+    dyStringPrintf(dy,
     	"select imageFile.priority from imageFile,image "
 	"where image.id = %d and image.imageFile = imageFile.id"
 	, match->imageId);
@@ -484,7 +486,7 @@ for (match = matchList; match != NULL; match = next)
 	"where image.id=%d and image.specimen=specimen.id "
 	"and specimen.genotype=genotype.id", match->imageId);
     genotype = sqlQuickString(conn, query);
-    if (genotype == NULL || genotype[0] == 0 || 
+    if (genotype == NULL || genotype[0] == 0 ||
     	startsWith("wild type", genotype))
 	{
 	slAddHead(&newList, match);
@@ -533,7 +535,7 @@ printf("<HTML>\n");
 printf("<HEAD>\n");
 printf("<TITLE>\n");
 printf("%s ", hgVisiGeneShortName());
-printf("%s",titleMessage);    
+printf("%s",titleMessage);
 printf("</TITLE>\n");
 printf("</HEAD>\n");
 
@@ -573,7 +575,7 @@ puts(
 "TARGET=_blank>Allen Institute for Brain Science</A> \n"
 "<LI>Mouse <em>in situ</em> images from the \n"
 "<A HREF=\"http://www.informatics.jax.org/expression.shtml\" \n"
-"TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI \n" 
+"TARGET=_blank>Jackson Lab Gene Expression Database</A> (GXD) at MGI \n"
 "<LI>Transcription factors in mouse embryos from the \n"
 "Mahoney Center for Neuro-Oncology</A> \n"
 "<LI>Mouse head and brain <em>in situ</em> images from NCBI's  \n"
@@ -782,12 +784,12 @@ int sd = -1;
 
 if (!visiGeneImageSize(conn, imageId, &w, &h))
     imageId = 0;
-	
+
 if (imageId == 0)
     {
     problemPage("invalid imageId","");
     }
-else    
+else
     {
     p=visiGeneFullSizePath(conn, imageId);
     splitPath(p, dir, name, extension);
@@ -802,7 +804,7 @@ else
 	char *newUrl = NULL;
 	int newSd = 0;
 	/* url needed for err msgs and redirect url*/
-	if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))  
+	if (netSkipHttpHeaderLinesHandlingRedirect(sd, url, &newSd, &newUrl))
 	    {
 	    char buf[32*1024];
 	    int readSize;
@@ -824,7 +826,7 @@ else
 	else
 	    {
 	    problemPage("Skip http header problem", url);
-    	    }	
+    	    }
 	freeMem(newUrl);
 	}
     }
@@ -851,7 +853,7 @@ else if (cartVarExists(cart, hgpDoConfig))
 #endif /* SOON */
 else if (cartVarExists(cart, hgpDoSearch))
     doDefault(conn, TRUE);
-else 
+else
     {
     char *oldListSpec = hashFindVal(oldCart, hgpListSpec);
     char *newListSpec = cartOptionalString(cart, hgpListSpec);

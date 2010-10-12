@@ -6,10 +6,9 @@ group varRep
 subGroup1 cellType Cell_Line GM12878=GM12878 K562=K562
 subGroup2 fragSize Frag_Size 0-1k=1k 1-5k=5k 2-10k=10k 3-f20k=20k
 dimensions dimensionX=cellType dimensionY=fragSize
-sortOrder cellType=+ fragSize=+ view=+
+sortOrder cellType=+ fragSize=+ 
 controlledVocabulary encode/cv.ra cellType=cell fragSize=fragSize
 dragAndDrop subTracks
-priority 0
 type bam
 pairEndsByName on
 showNames off
@@ -33,7 +32,6 @@ wgEncode 1
     subTrack wgEncodeGisDnaPet
 
         track wgEncodeGisDnaPetK562F10kAln
-        release alpha,beta
         parent wgEncodeGisDnaPetViewAlignments on
         shortLabel K562 10k
         longLabel ENCODE GIS DNA PET Alignments (10k frags in K562 cells)
@@ -42,7 +40,6 @@ wgEncode 1
         # subId=1853 dateSubmitted=2010-07-07
 
         track wgEncodeGisDnaPetK562F1kAln
-        release alpha,beta
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 1k
         longLabel ENCODE GIS DNA PET Alignments (1k frags in K562 cells)
@@ -51,7 +48,6 @@ wgEncode 1
         # subId=1854 dateSubmitted=2010-07-07
 
         track wgEncodeGisDnaPetGm12878F10kAln
-        release alpha,beta
         parent wgEncodeGisDnaPetViewAlignments on
         shortLabel GM12878 10k
         longLabel ENCODE GIS DNA PET Alignments (10k frags in GM12878 cells)
@@ -60,7 +56,6 @@ wgEncode 1
         # subId=1852 dateSubmitted=2010-07-07
 
         track wgEncodeGisDnaPetK562F20kAln
-        release alpha,beta
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel K562 20k
         longLabel ENCODE GIS DNA PET Alignments (20k frags in K562 cells)
@@ -69,7 +64,6 @@ wgEncode 1
         # subId=1524 dateSubmitted=2010-06-16
 
         track wgEncodeGisDnaPetGm12878F5kAln
-        release alpha,beta
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 5k
         longLabel ENCODE GIS DNA PET Alignments (5k frags in GM12878 cells)
@@ -78,7 +72,6 @@ wgEncode 1
         # subId=1521 dateSubmitted=2010-06-16
 
         track wgEncodeGisDnaPetGm12878F1kAln
-        release alpha,beta
         parent wgEncodeGisDnaPetViewAlignments off
         shortLabel GM12878 1k
         longLabel ENCODE GIS DNA PET Alignments (1k frags in GM12878 cells)

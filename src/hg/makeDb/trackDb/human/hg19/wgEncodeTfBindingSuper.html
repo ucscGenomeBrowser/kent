@@ -8,39 +8,54 @@
 <body>
 <h2>Description</h2>
 <p>
-These tracks display binding sites of specific transcription factors in
-the ENCODE cell types, as identified by chromatin
-immunoprecipitation followed by high-throughput sequencing.<br>
-</p>
+Transcription is regulated through the binding of transcription factor
+proteins to specific <em>cis</em>-level regulatory sites in the DNA.
+The nature of this regulation depends on the transcription factor.
+For example, some proteins activate transcription by recruiting RNA
+polymerase, some repress transcription by suppressing this
+recruitment, and others insulate proximal regions from the activity of
+nearby transcriptional activators or repressors.
+A key characteristic of each transcription factor protein is its DNA
+binding domain.  Each DNA binding domain recognizes and interacts with
+DNA that matches a specific nucleotide pattern, or motif.  These
+motifs tend to be short and degenerate, so even when the DNA binding
+motif is known, one cannot generally predict where a given
+transcription factor may bind.  In general, transcription factor
+binding is determined experimentally.
+<p>
+
+These tracks contain transcription factor binding sites determined by
+ChIP-seq.  This process involves fragmenting DNA, selecting the
+fragments of DNA that are bound by a certain transcription factor, and
+sequencing those DNA fragments.  This generally yields a large library
+of DNA sequences, including some that were bound by the transcription
+factor directly, some that were bound indirectly via interactions with
+other molecules, and some false positives (such as cases of
+nonspecific binding).  With the appropriate analysis methods, ChIP-seq can be 
+a valuable approach for elucidating transcription factor binding, and 
+<em>cis</em>-level regulation.
+
+<br>
+
 <h2>Display Conventions</h2>
 These tracks are multi-view composite tracks that contains multiple
-data types (views). For each view, there are multiple subtracks that
-display individually on the browser.&nbsp; Each view within each track
+data types (views). Each view within each track
 has separate display controls, as described <a
  href="http://hgwdev.cse.ucsc.edu/goldenPath/help/multiView.html">here</a>.
-The views associated with these tracks include: <br>
-<div style="margin-left: 40px;"><span style="font-style: italic;">Peaks</span>:
-<br>
-<div style="margin-left: 40px;">Sites with the greatest evidence of
-transcription factor binding.<br>
-</div>
-<span style="font-style: italic;">Raw Signal</span>: <br>
-<div style="margin-left: 40px;">A continuous signal which indicates
-density of aligned reads.<br>
-</div>
-</div>
+Most ENCODE tracks contain multiple subtracks, corresponding to
+multiple experimental conditions. If a track contains a large
+number of subtracks, only some subtracks will be displayed by default.
+The user can select which subtracks are displayed via the display controls
+on the track details pages.
 <h2>Credits<br>
 </h2>
 These data were generated and analyzed as part of the <a
  href="http://www.genome.gov/10005107">ENCODE</a> project, a
 genome-wide consortium project with the aim of cataloging all
-functional elements in the human genome.&nbsp; This effort includes
-collecting a variety of data over a specific set of <a
- href="http://genome.ucsc.edu/ENCODE/cellTypes.html">cell types</a>.&nbsp;
-Consequently,
-data related to these tracks be available under ENCODE
-tracks. &nbsp;&nbsp;
-<br>
+functional elements in the human genome. This effort includes
+collecting a variety of data across related experimental conditions, to
+facilitate integrative analysis. Consequently, additional ENCODE tracks may 
+contain data that is relevant to the data in these tracks. 
 <h2>References</h2>
 Euskirchen GM, Rozowsky JS, Wei C, Lee WH, Zhang ZD, Hartman S,
 Emanuelsson O, Stolc V, Weissman S, Gerstein MB et al. <a
@@ -53,7 +68,6 @@ Hudson ME, Snyder M. <a
  href="http://www.ncbi.nlm.nih.gov/pubmed/17191608">High-throughput
 methods of regulatory element discovery. </a>Biotechniques. 2006
 Dec;41(6):673, 675, 677 passim.
-
 <h2>Data Release Policy</h2>
 Data users may freely use ENCODE data, but may not, without prior
 consent, submit publications that use an unpublished ENCODE dataset
