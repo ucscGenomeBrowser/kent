@@ -1,0 +1,11 @@
+#strand	qName	qStart	qEnd	tName	tStart	tEnd	bitScore	eVal	qDef	tDef
++	Q13643	0	276	Q4RIQ2	0	277	167.695	2.8697e-42	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	66	277	Q4RIQ2	5	214	115.693	1.30498e-26	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	2	190	Q4RIQ2	124	313	88.3443	2.19421e-18	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	127	278	Q4RIQ2	5	156	84.1071	4.10371e-17	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	1	97	Q4RIQ2	182	281	58.6839	1.75619e-09	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	186	280	Q4RIQ2	5	109	53.6763	5.37362e-08	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	5	276	Q4SA34	874	1136	146.509	6.24584e-36	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	2	213	Q4SA34	929	1136	138.035	2.20299e-33	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	67	277	Q4SA34	875	1078	107.604	2.98262e-24	Q13643 Homo sapiens	Tetraodon nigroviridis
++	Q13643	2	95	Q4SA34	1047	1138	71.7807	2.00469e-13	Q13643 Homo sapiens	Tetraodon nigroviridis
