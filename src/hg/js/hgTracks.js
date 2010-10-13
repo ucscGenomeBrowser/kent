@@ -1696,7 +1696,7 @@ function loadContextMenu(img)
             var menu = [];
             var selectedImg = " <img src='../images/greenCheck.png' height='10' width='10' />";
             var done = false;
-            if(selectedMenuItem && selectedMenuItem.id != undefined) {
+            if(selectedMenuItem && selectedMenuItem.id != null) {
                 var href = selectedMenuItem.href;
                 var isHgc, isGene;
                 if(href) {
@@ -1760,6 +1760,8 @@ function loadContextMenu(img)
                         var str = selectedMenuItem.title;
                         if(str.indexOf("Click to alter ") == 0) {
                             ; // suppress the "Click to alter..." items
+                        } else if(selectedMenuItem.href.indexOf("cgi-bin/hgTracks") != -1) {
+                            ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
                             if(str.indexOf("display density") != -1)
                                 str = "<img src='../images/toggle.png' /> " + str;
@@ -1799,7 +1801,7 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
-            if(selectedMenuItem) {
+            if(selectedMenuItem && rec) {
             // Add cfg options at just shy of end...
             var o = new Object();
             if(tdbIsLeaf(rec)) {
