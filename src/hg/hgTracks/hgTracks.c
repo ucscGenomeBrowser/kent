@@ -1666,7 +1666,7 @@ for (i=1; i<=boxes; ++i)
         }
     if(!dragZooming)
         {
-        mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
+        mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,NULL,
                         chromName, ns, ne, message);
         }
     }
