@@ -1,44 +1,17 @@
 <H2>Description</H2>
 <P>
-This track shows multiple alignments of 30 vertebrate
+This track shows multiple alignments of 10 nematode
 species and measurements of evolutionary conservation using
 two methods (<em>phastCons</em> and <em>phyloP</em>) from the
 <A HREF="http://compgen.bscb.cornell.edu/phast/" target=_BLANK>
-PHAST package</A>, for
-all species (vertebrate) and two subsets (euarchontoglire and placental mammal).
-The multiple alignments were generated using multiz and
+PHAST package</A>, for 
+all species (nematode) and one subset (caenorhabditis).
+The multiple alignments were generated using multiz and 
 other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
 TARGET=_blank>Penn State Bioinformatics</A>
 comparative genomics alignment pipeline.
 Conserved elements identified by phastCons are also displayed in
 this track.
-</P>
-<P>
-The species are divided into three different groups.
-The euarchontoglires subset (10 species plus mouse),
-the placental mammal subset (19 species plus mouse),
-and all 30 vertebrate species together.
-These three measurements produce the same results in 
-regions where only euarchontoglires appear in the alignment. 
-For other regions, the non-euarchontoglires species can either 
-boost the scores (if conserved) or decrease them (if non-conserved).
-The placental mammal conservation helps to identify sequences that are under 
-different evolutionary pressures in mammals and non-mammal vertebrates.
-</P>
-<P>
-<UL>
-<LI> Euarchontoglire subset: mouse(mm9), rat(rn4), Guinea Pig(cavPor2),
-Rabbit(oryCun1), Human(hg18), Chimp(panTro2), Orangutan(ponAbe2),
-Rhesus(rheMac2), Marmoset(calJac1), Bushbaby(otoGar1), Tree Shrew(tupBel1)
-<LI> Placental mammal subset: the euarchontoglires above plus:
-Shrew(sorAra1), Hedgehog(eriEur1), Dog(canFam2), Cat(felCat3),
-Horse(equCab1), Cow(bosTau3), Armadillo(dasNov1), Elephant(loxAfr1),
-Tenrec(echTel1)
-<LI> Vertebrates: the placentals and euarchontoglires above plus:
-Opossum(monDom4), Platypus(ornAna1), Chicken(galGal3), Lizard(anoCar1),
-Frog(xenTro2), Tetraodon(tetNig1), Fugu(fr2), Stickleback(gasAcu1),
-Medaka(oryLat1), Zebrafish(danRer5)
-</UL>
 </P>
 <P>
 PhastCons (which has been used in previous Conservation tracks) is a hidden
@@ -69,161 +42,81 @@ and 1.
 <P>
 Both phastCons and phyloP treat alignment gaps and unaligned nucleotides as
 missing data, and both were run with the same parameters for each
-species set (vertebrates, placental mammals, and euarchontoglires).
-Thus, in regions in which only euarchontoglires appear in the alignment, all three
+species set (nematode and caenorhabditis).
+Thus, in regions in which only caenorhabditis appear in the alignment, the two
 sets of scores will be the same, but in regions in which additional species
-are available, the mammalian and/or vertebrate scores may differ from the
-euarchontoglire scores.  The alternative
+are available, the nematode scores may differ from the
+caenorhabditis scores.  The alternative
 plots help to identify sequences that are under different evolutionary
-pressures in, say, euarchontoglires and non-euarchontoglires, or mammals and non-mammals.
+pressures in caenorhabditis and non-caenorhabditis. 
 </P>
 
 <P>
-The multiple alignments were generated using multiz and 
-other tools in the UCSC/<A HREF="http://bio.cse.psu.edu/" 
-TARGET=_blank>Penn State Bioinformatics</A>
-comparative genomics alignment pipeline.
-The conservation measurements were created using the phastCons package from
-<A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" TARGET=_blank>
-Adam Siepel</A> at Cornell University. </P>
-<P>
-Details of the alignment parameters are noted in the genomewiki
-<A HREF="http://genomewiki.ucsc.edu/index.php/Mm9_multiple_alignment"
-TARGET=_blank>Mm9 multiple alignment</A> page.
+The species aligned for this track include 10 nematode genome sequences.
+Compared to the previous 6-nematode alignment (ce9),
+this track includes 4 new nematode genomes and 2 nematode genomes with updated
+sequence assemblies (<B>Table 1</B>). The four new species are the
+assemblies: H. contortus (haeCon1) at an unknown coverage,
+M. Hapla (melHap1) at 10.4X coverage, M. incognita (melInc1) at 5X coverage,
+and B. Malayi (bruMal1) at 9X coverage,
+The C. Japonica (22X, caeJap3) and P. pacificus (8.92X, priPac2) assemblies
+have been updated from those used in the previous 6-species nematode alignment.
 </P>
-<P>
-The species aligned for this track include the reptile, amphibian, 
-bird, and fish clades, as well as marsupial, monotreme (platypus), 
-and placental mammals. Compared to the previous 17-vertebrate alignment,
-this track includes 13 new species and 4 species with updated
-sequence assemblies (<B>Table 1</B>). The new species consist of seven 
-high-coverage (5-8.5X) assemblies (orangutan, marmoset, horse, platypus, 
-lizard, and two teleost fish: stickleback and medaka)
-and six low-coverage (2X) genome assemblies from mammalian species selected for 
-sampling by NHGRI (bushbaby, tree shrew, guinea pig, 
-hedgehog, common shrew, and cat).
-The cow, chicken, fugu, and zebrafish assemblies in this 
-track have been updated from those used in the previous 17-species alignment.
-</P>
-<P>
-UCSC has repeatmasked and aligned the low-coverage genome assemblies, and
-provides the sequence for download; however, we do not construct
-genome browsers for them. Missing sequence in the low-coverage assemblies is
-highlighted in the track display by regions of yellow when zoomed out
-and Ns displayed at base level (see <EM>Gap Annotation</EM>, below). </P>
 <P>
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
-<TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH></TR>
-<TR ALIGN=left><TD>Mouse</TD><TD>Mus musculus</TD><TD>
-    Jul 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=mm9"
-    TARGET=_blank>mm9</A></TD></TR>
-<TR ALIGN=left><TD>Armadillo</TD><TD>Dasypus novemcinctus</TD><TD>May 2005</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/dasNov1/"
-    TARGET=_blank>dasNov1</A>*</TD></TR>
-<TR ALIGN=left><TD>Bushbaby</TD><TD>Otolemur garnetti</TD><TD>Dec 2006</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/otoGar1/"
-    TARGET=_blank>otoGar1</A>*</TD></TR>
-<TR ALIGN=left><TD>Cat</TD><TD>Felis catus</TD><TD>
-    Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=felCat3"
-    TARGET=_blank>felCat3</A></TD></TR>
-<TR ALIGN=left><TD>Chicken</TD><TD>Gallus gallus</TD><TD>
-    May 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=galGal3"
-    TARGET=_blank>galGal3</A></TD></TR>
-<TR ALIGN=left><TD>Chimpanzee</TD><TD>Pan troglodytes</TD><TD>
-    Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=panTro2"
-    TARGET=_blank>panTro2</A></TD></TR>
-<TR ALIGN=left><TD>Cow</TD><TD>Bos taurus</TD><TD>
-    Aug 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=bosTau3"
-    TARGET=_blank>bosTau3</A></TD></TR>
-<TR ALIGN=left><TD>Dog</TD><TD>Canis familiaris</TD><TD>
-    May 2005</TD><TD> <A HREF="../cgi-bin/hgGateway?db=canFam2"
-    TARGET=_blank>canFam2</A></TD></TR>
-<TR ALIGN=left><TD>Elephant</TD><TD>Loxodonta africana</TD><TD>May 2005</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/loxAfr1/"
-    TARGET=_blank>loxAfr1</A>*</TD></TR>
-<TR ALIGN=left><TD>Frog</TD><TD>Xenopus tropicalis</TD><TD>
-    Aug 2005</TD><TD> <A HREF="../cgi-bin/hgGateway?db=xenTro2"
-    TARGET=_blank>xenTro2</A></TD></TR>
-<TR ALIGN=left><TD>Fugu</TD><TD>Takifugu rubripes</TD><TD>
-    Oct 2004</TD><TD> <A HREF="../cgi-bin/hgGateway?db=fr2"
-    TARGET=_blank>fr2</A></TD></TR>
-<TR ALIGN=left><TD>Guinea pig</TD><TD>Cavia porcellus</TD><TD>Oct 2005</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/cavPor2/"
-    TARGET=_blank>cavPor2</A>*</TD></TR>
-<TR ALIGN=left><TD>Hedgehog</TD><TD>Erinaceus europaeus</TD><TD>June 2006</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/eriEur1/"
-    TARGET=_blank>eriEur1</A>*</TD></TR>
-<TR ALIGN=left><TD>Horse</TD><TD>Equus caballus</TD><TD>
-    Jan 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=equCab1"
-    TARGET=_blank>equCab1</A></TD></TR>
-<TR ALIGN=left><TD>Human</TD><TD>Homo sapiens</TD><TD>
-    Mar 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=hg18"
-    TARGET=_blank>hg18</A></TD></TR>
-<TR ALIGN=left><TD>Lizard</TD><TD>Anolis carolinensis</TD><TD>
-    Feb 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=anoCar1"
-    TARGET=_blank>anoCar1</A></TD></TR>
-<TR ALIGN=left><TD>Marmoset</TD><TD>Callithrix jacchus</TD><TD>June 2007</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/calJac1/"
-    TARGET=_blank>calJac1</A>*</TD></TR>
-<TR ALIGN=left><TD>Medaka</TD><TD>Oryzias latipes</TD><TD>
-    Apr 2006</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/oryLat1/"
-    TARGET=_blank>oryLat1</A>*</TD></TR>
-<TR ALIGN=left><TD>Opossum</TD><TD>Monodelphis domestica</TD><TD>
-    Jan 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=monDom4"
-    TARGET=_blank>monDom4</A></TD></TR>
-<TR ALIGN=left><TD>Orangutan</TD><TD>Pongo pygmaeus abelii</TD><TD>
-    July 2007</TD><TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/ponAbe2/"
-    TARGET=_blank>ponAbe2</A>*</TD></TR>
-<TR ALIGN=left><TD>Platypus</TD><TD>Ornithorhychus anatinus</TD><TD>
-    Mar 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=ornAna1"
-    TARGET=_blank>ornAna1</A></TD></TR>
-<TR ALIGN=left><TD>Rabbit</TD><TD>Oryctolagus cuniculus</TD><TD>May 2005</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/oryCun1/"
-    TARGET=_blank>oryCun1</A>*</TD></TR>
-<TR ALIGN=left><TD>Rat</TD><TD>Rattus norvegicus</TD><TD>
-    Nov 2004</TD><TD> <A HREF="../cgi-bin/hgGateway?db=rn4"
-    TARGET=_blank>rn4</A></TD></TR>
-<TR ALIGN=left><TD>Rhesus</TD><TD>Macaca mulatta</TD><TD>
-    Jan 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=rheMac2"
-    TARGET=_blank>rheMac2</A></TD></TR>
-<TR ALIGN=left><TD>Shrew</TD><TD>Sorex araneus</TD><TD>June 2006</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/sorAra1/"
-    TARGET=_blank>sorAra1</A>*</TD></TR>
-<TR ALIGN=left><TD>Stickleback</TD><TD>Gasterosteus aculeatus</TD><TD>
-    Feb 2006</TD><TD> <A HREF="../cgi-bin/hgGateway?db=gasAcu1"
-    TARGET=_blank>gasAcu1</A></TD></TR>
-<TR ALIGN=left><TD>Tenrec</TD><TD>Echinops telfairi</TD><TD>July 2005</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/echTel1/"
-    TARGET=_blank>echTel1</A>*</TD></TR>
-<TR ALIGN=left><TD>Tetraodon</TD><TD>Tetraodon nigroviridis</TD><TD>
-    Feb 2004</TD><TD> <A HREF="../cgi-bin/hgGateway?db=tetNig1"
-    TARGET=_blank>tetNig1</A></TD></TR>
-<TR ALIGN=left><TD>Tree shrew</TD><TD>Tupaia belangeri</TD><TD>Dec 2006</TD>
-    <TD><A HREF="ftp://hgdownload.cse.ucsc.edu/gbdb/tupBel1/"
-    TARGET=_blank>tupBel1</A>*</TD></TR>
-<TR ALIGN=left><TD>Zebrafish</TD><TD>Danio rerio</TD><TD>
-    July 2007</TD><TD> <A HREF="../cgi-bin/hgGateway?db=danRer5"
-    TARGET=_blank>danRer5</A></TD></TR>
+<TR ALIGN=left><TH>Organism</TH><TH>Species</TH><TH>Release date</TH><TH>UCSC version</TH><TH>alignment type</TH></TR>
+<TR ALIGN=left><TD>C. elegans</TD><TD>Caenorhabditis elegans</TD><TD>
+    Jan. 2010</TD><TD> <A HREF="../cgi-bin/hgGateway?db=ce9"
+    TARGET=_blank>ce9/WS210</A></TD><TD>reference species</TD></TR>
+<TR ALIGN=left><TD>C. briggsae</TD><TD>Caenorhabditis briggsae</TD><TD>Jan. 2007</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=cb3/"TARGET=_blank>cb3</A></TD>
+    <TD>Syntenic Net</TD></TR>
+<TR ALIGN=left><TD>C. remanei</TD><TD>Caenorhabditis remanei</TD><TD>May  2007</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caeRem3"TARGET=_blank>caeRem3</A></TD>
+    <TD>Syntenic Net</TD></TR>
+<TR ALIGN=left><TD>C. brenneri</TD><TD>Caenorhabditis brenneri</TD><TD>Feb. 2008</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caePb2"TARGET=_blank>caePb2</A></TD>
+    <TD>Syntenic Net</TD></TR>
+<TR ALIGN=left><TD>C. japonica</TD><TD>Caenorhabditis japonica</TD><TD>Sep. 2010</TD>
+    <TD><A HREF="../cgi-bin/hgGateway?db=caeJap3"TARGET=_blank>caeJap3</A></TD>
+    <TD>Syntenic Net</TD></TR>
+<TR ALIGN=left><TD>H. contortus</TD><TD>Haemonchus contortus</TD><TD>
+    Dec. 2009</TD><TD><A HREF="../cgi-bin/hgGateway?db=haeCon1"
+    TARGET=_blank>haeCon1</A></TD><TD>Reciprocal Best</TD></TR>
+<TR ALIGN=left><TD>P. pacificus</TD><TD>Pristionchus pacificus</TD><TD>
+    Dec. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=priPac2"
+    TARGET=_blank>priPac2</A></TD><TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>M. hapla</TD><TD>Meloidogyne hapla</TD><TD>
+    Sep. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=melHap1"
+    TARGET=_blank>melHap1</A></TD><TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>M. incognita</TD><TD>Meloidogyne incognita</TD><TD>
+    Feb. 2008</TD><TD><A HREF="../cgi-bin/hgGateway?db=melInc1"
+    TARGET=_blank>melInc1</A></TD><TD>MAF Net</TD></TR>
+<TR ALIGN=left><TD>B. malayi</TD><TD>Brugia malayi</TD><TD>
+    Sep. 2007</TD><TD><A HREF="../cgi-bin/hgGateway?db=bruMal1"
+    TARGET=_blank>bruMal1</A></TD><TD>MAF Net</TD></TR>
 </TABLE><BR>
-<B>Table 1.</B> <EM>Genome assemblies included in the 30-way Conservation 
+<B>Table 1.</B> <EM>Genome assemblies included in the 10-way Conservation 
 track.</EM>
-<BR>* Data download only, browser not available.
 </BLOCKQUOTE></P>
 
 Downloads for data in this track are available:
 <UL>
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/multiz30way/">Multiz alignments</A> (MAF format), and phylogenetic trees
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce9/multiz10way/">Multiz alignments</A> (MAF format), and phylogenetic trees
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phyloP30way/">PhyloP conservation</A> (WIG format)
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce9/phyloP10way/">PhyloP conservation</A> (WIG format)
 <LI>
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/">PhastCons conservation</A> (WIG format)
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce9/phastCons10way/">PhastCons conservation</A> (WIG format)
 </UL>
 
 <H2>Display Conventions and Configuration</H2>
 <P>
-In full and pack display modes, conservation scores are displayed as
-<EM>wiggle tracks</EM> (histograms) in which the height reflects the 
+The track configuration options allow the user to display either
+the nematode or caenorhabditisconservation scores, or both
+simultaneously.
+In full and pack display modes, conservation scores are displayed as a
+<EM>wiggle track</EM> (histogram) in which the height reflects the 
 size of the score. 
 The conservation wiggles can be configured in a variety of ways to 
 highlight different aspects of the displayed information. 
@@ -243,8 +136,8 @@ species to include in the pairwise display.
 Configuration buttons are available to select all of the species (<EM>Set 
 all</EM>), deselect all of the species (<EM>Clear all</EM>), or 
 use the default settings (<EM>Set defaults</EM>).
-By default, the following 8 species are included in the pairwise display:
-rat, human, orangutan, dog, horse, opossum, chicken, and stickleback.
+By default, the following 4 species are included in the pairwise display:
+C. briggsae, C. remanei, C. brenneri, and C. japonica.
 Note that excluding species from the pairwise display does not alter the
 the conservation score display.</P>
 <P>
@@ -314,7 +207,7 @@ displayed without translation.
 <LI>
 <B>Use default species reading frames for translation:</B> the annotations from the genome
 displayed 
-in the <EM>Default species for translation</EM> pull-down menu are used to
+in the <EM>Default species for translation</EM>; pull-down menu are used to
 translate all the aligned species present in the alignment. 
 <LI>
 <B>Use reading frames for species if available, otherwise no translation:</B> codon
@@ -333,23 +226,24 @@ species-specific reading frames for gene translation.
 
 <BLOCKQUOTE><TABLE BORDER=1 CELLPADDING=4 BORDERCOLOR="#aaaaaa">
 <TR ALIGN=left><TD><B>Gene Track</B></TD><TD><B>Species</B></TD></TR>
-<TR ALIGN=left><TD>Known Genes</TD><TD>human, mouse</TD></TR>
-<TR ALIGN=left><TD>Ensembl Genes</TD><TD>rat, rhesus, chimp, dog, opossum, platypus,
-zebrafish, fugu, stickleback, medaka</TD></TR>
-<TR ALIGN=left><TD>RefSeq Genes</TD><TD>cow, frog</TD></TR>
-<TR ALIGN=left><TD>mRNAs</TD><TD>orangutan, elephant, rabbit, cat, horse,
-chicken, lizard, armadillo, tetraodon</TD></TR>
-<TR ALIGN=left><TD>None</TD><TD>marmoset, bushbaby, tree shrew, guinea pig,
-shrew, hedgehog, tenrec</TD></TR>
+<TR ALIGN=left><TD>Worm Base Genes (Sanger Genes)</TD><TD>C. elegans</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>C. remanei</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>C. briggsae</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>C. brenneri</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>C. japonica</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>H. contortus</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>P. pacificus</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>M. hapla</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>M. incognita</TD></TR>
+<TR ALIGN=left><TD>C. elegans mapped Genes</TD><TD>B. malayi</TD></TR>
 </TABLE>
 <B>Table 2.</B> <EM>Gene tracks used for codon translation.</EM>
 </BLOCKQUOTE></P>
 
 <H2>Methods</H2>
 <P> 
-Pairwise alignments with the mouse genome were generated for 
-each species using blastz from repeat-masked genomic sequence. 
-Lineage-specific repeats were removed prior to alignment, then reinserted.
+Pairwise alignments with the C. elegans genome were generated for 
+each species using lastz from repeat-masked genomic sequence. 
 Pairwise alignments were then linked into chains using a dynamic programming
 algorithm that finds maximally scoring chains of gapless subsections
 of the alignments organized in a kd-tree.
@@ -361,7 +255,7 @@ For more information about the chaining and netting process and
 parameters for each species, see the description pages for the Chain and Net 
 tracks.</P>
 <P>
-An additional filtering step was introduced in the generation of the 30-way
+An additional filtering step was introduced in the generation of the 10-way
 conservation track to reduce the number of paralogs and pseudogenes from the 
 high-quality assemblies and the suspect alignments from the low-quality 
 assemblies:
@@ -378,7 +272,7 @@ The multiple alignments were post-processed to
 add annotations indicating alignment gaps, genomic breaks,
 and base quality of the component sequences.
 The annotated multiple alignments, in MAF format, are available for
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/multiz30way"
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce9/multiz10way"
 TARGET=_blank>bulk download</A>.
 An alignment summary table containing an entry for each
 alignment block in each species was generated to improve
@@ -393,23 +287,17 @@ rely on a tree model containing the tree topology,
 branch lengths representing evolutionary distance at neutrally
 evolving sites, the background distribution of nucleotides, and a substitution
 rate matrix.  The 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/vertebrate.mod"
-TARGET=_blank>vertebrate tree model</A> for this track was
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce9/phastCons10way/nematode.mod"
+TARGET=_blank>nematode tree model</A> for this track was
 generated using the <em>phyloFit</em> program from the PHAST package  
 (REV model, EM algorithm, medium precision) using multiple alignments of 
-4-fold degenerate sites extracted from the 30-way alignment
-(msa_view).  The 4d sites were derived from the 
-<A HREF="http://www.sanger.ac.uk/PostGenomics/encode/" TARGET=_blank>Oct 2005 Gencode 
-Reference Gene set</A>,
-which was filtered to select single-coverage long transcripts.  A second, 
-<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/mm9/phastCons30way/placental.mod" 
-TARGET=_blank>mammalian tree model</A> including only placental mammals was
-used to generate
-the placental mammal conservation scoring. The phastCons parameters were
-tuned to produce 5% conserved elements in the genome for the vertebrate
-conservation measurement.  This parameter set (expected-length=45, 
-target-coverage=.3, rho=.31) was then used to generate the placental
-mammal conservation scoring.</P>
+4-fold degenerate sites extracted from the 10-way alignment
+(msa_view).  The 4d sites were derived from the WormBase/Sanger gene set
+of C. elegans, filtered to select single-coverage long transcripts.  The 
+<A HREF="http://hgdownload.cse.ucsc.edu/goldenPath/ce9/phastCons10way/caenorhabditis.mod" TARGET=_blank >caenorhabditis tree model</A>
+was simple extracted from the nematode model with tree_doctor (PHAST).
+</P>
+<h3> PhastCons Conservation </h3>
 <P>
 The phastCons program computes conservation scores based on a phylo-HMM, a
 type of probabilistic model that describes both the process of DNA
@@ -424,15 +312,16 @@ question, a continuous-time Markov model of the nucleotide substitution
 process, and a tendency for conservation levels to be autocorrelated along
 the genome (i.e., to be similar at adjacent sites).  The general reversible
 (REV) substitution model was used.  Unlike many conservation-scoring programs, 
-note that phastCons does not rely on a sliding window
+phastCons does not rely on a sliding window
 of fixed size; therefore, short highly-conserved regions and long moderately
-conserved regions can both obtain high scores.  More information about
+conserved regions can both obtain high scores.  
+More information about
 phastCons can be found in Siepel <EM>et al</EM>. 2005.</P> 
 <P> 
-PhastCons currently treats alignment gaps as missing data, which
-sometimes has the effect of producing undesirably high conservation scores
-in gappy regions of the alignment.  We are looking at several possible ways
-of improving the handling of alignment gaps.</P>
+The phastCons parameters were tuned to produce approximately 70% conserved
+elements in the C. elegans WormBase/Sanger gene coding regions.
+This parameter set (expected-length=15, target-coverage=0.55, rho=0.3) was
+then used to generate the nematode and caenorhabditis conservation scoring.</P>
 
 <h3> PhyloP Conservation </h3>
 <P>
@@ -444,12 +333,13 @@ all branches of the phylogeny rather than a particular subtree or lineage
 (i.e., the --subtree option was not used).  The scores were computed by
 performing a likelihood ratio test at each alignment column (--method LRT),
 and scores for both conservation and acceleration were produced (--mode
-CONACC).
+CONACC). 
 </P>
 <h3> Conserved Elements </h3>
 <P>
 The conserved elements were predicted by running phastCons with the
---viterbi option.  The predicted elements are segments of the alignment
+--most-conserved (aka --viterbi) option.  The predicted elements are
+segments of the alignment
 that are likely to have been "generated" by the conserved state of the
 phylo-HMM. Each element is assigned a log-odds score equal to its log
 probability under the conserved model minus its log probability under the
@@ -468,10 +358,10 @@ details page or in the browser when the track's display mode is set to
 Miller of the <A HREF="http://bio.cse.psu.edu/" 
 TARGET=_blank>Penn State Bioinformatics Group</A>
 <LI> Chaining and Netting:  axtChain, chainNet by Jim Kent at UCSC
-<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view
-and other programs in PHAST by 
+<LI> Conservation scoring: phastCons, phyloP, phyloFit, tree_doctor, msa_view and
+other programs in PHAST by 
 <A HREF="http://compgen.bscb.cornell.edu/~acs/software.html" 
-TARGET=_blank>Adam Siepel</A> at Cornell University (originaly development
+TARGET=_blank>Adam Siepel</A> at Cornell University (original development
 done at the Haussler lab at UCSC).
 <LI> MAF Annotation tools: mafAddIRows by Brian Raney, UCSC; mafAddQRows
 by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
@@ -480,27 +370,18 @@ by Richard Burhans, Penn State; genePredToMafFrames by Mark Diekhans, UCSC
 display), and Brian Raney (gap annotation and codon framing) at UCSC
 </UL>
 </P>
-<P>The phylogenetic tree is based on Murphy <EM>et al</EM>. (2001) and general 
-consensus in the vertebrate phylogeny community as of March 2007.
+<P>The phylogenetic tree is based on Kiontke <EM>et al</EM>. (2007).
 </P>
 
 <H2>References</H2>
 
 <H3>Phylo-HMMs, phastCons, and phyloP:</H3>
 <P>
-Felsenstein J, Churchill GA.
-<A HREF="http://mbe.oxfordjournals.org/cgi/content/abstract/13/1/93"
-TARGET=_blank>A Hidden Markov Model approach to
-variation among sites in rate of evolution</A>.
-<EM>Mol Biol Evol</EM>. 1996 Jan;13(1):93-104.
+Pollard KS, Hubisz MJ, Siepel A.
+<A HREF="http://genome.cshlp.org/content/early/2009/10/26/gr.097857.109.abstract"
+TARGET=_blank>Detection of non-neutral substitution rates on
+mammalian phylogenies.</A> <EM>Genome Res</EM>. 2009 Oct 26. [Epub ahead of print]
 </P>
-
-<P>
-Siepel A, Haussler D.
-<A HREF="http://compgen.bscb.cornell.edu/~acs/phylohmm.pdf"
-TARGET=_blank>Phylogenetic Hidden Markov Models</A>.
-In R. Nielsen, ed., <em>Statistical Methods in Molecular Evolution</em>,
-pp. 325-351, Springer, New York (2005). </P>
 
 <P>
 Siepel A, Bejerano G, Pedersen JS, Hinrichs AS, Hou M, Rosenbloom K,
@@ -509,14 +390,6 @@ Clawson H, Spieth J, Hillier LW, Richards S, <EM>et al.</EM>
 TARGET=_blank>Evolutionarily conserved elements in vertebrate, insect, worm,
 and yeast genomes</A>.
 <EM>Genome Res</EM>. 2005 Aug;15(8):1034-50.
-</P>
-
-<P>
-Yang Z.
-<A HREF="http://www.genetics.org/cgi/content/abstract/139/2/993"
-TARGET=_blank>A space-time process model for the evolution of DNA
-sequences</A>.
-<EM>Genetics</EM>. 1995 Feb;139(2):993-1005.
 </P>
 
 <H3>Chain/Net:</H3>
@@ -555,9 +428,10 @@ TARGET=_blank>Human-mouse alignments with BLASTZ</A>.
 
 <H3>Phylogenetic Tree:</H3>
 <P>
-Murphy WJ, Eizirik E, O'Brien SJ, Madsen O, Scally M, Douady CJ, Teeling E,
-Ryder OA, Stanhope MJ, de Jong WW, Springer MS.
-<A HREF="http://www.sciencemag.org/cgi/content/abstract/294/5550/2348"
-TARGET=_blank>Resolution of the early placental mammal radiation using Bayesian phylogenetics</A>.
-<EM>Science</EM>. 2001 Dec 14;294(5550):2348-51.
+Karin Kiontke, Antoine Barri~Ore, Irina Kolotuev, Benjamin Podbilewicz,
+Ralf Sommer, David H.A. Fitch and Marie-Anne F~Nlix
+<A HREF="http://www.cell.com/current-biology/retrieve/pii/S0960982207021938"
+TARGET=_blank>Trends, Stasis, and Drift in the Evolution of Nematode Vulva Development</A>.
+
+<EM>Current Biology</EM>. Volume 17, Issue 22, 1925-1937, 20 November 2007
 </P>

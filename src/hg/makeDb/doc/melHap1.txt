@@ -6,6 +6,7 @@
 #	A compact nematode genome for plant parasitism"
 #	http://www.pnas.org/content/105/39/14802.full
 #	PNAS  September 30, 2008   vol. 105  no. 39  14802-14807 
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABLG01
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)

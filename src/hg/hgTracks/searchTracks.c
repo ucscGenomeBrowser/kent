@@ -693,16 +693,7 @@ else
     hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
     cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
-    #ifdef FOUND_TRACKS_PAGING
     int startFrom = 0;
-    #else///ifndef FOUND_TRACKS_PAGING
-    if(tracksFound > MAX_FOUND_TRACKS)
-        {
-        hPrintf("<table class='redBox'><tr><td>Found %d tracks, but only the first %d are displayed.",tracksFound,MAX_FOUND_TRACKS);
-        hPrintf("<BR><B><I>Please narrow search criteria to find fewer tracks.</I></B></div></td></tr></table>\n");
-        }
-    #endif///ndef FOUND_TRACKS_PAGING
-
     hPrintf("<table id='foundTracks'>\n");
 
     // Opening view in browser button and foundTracks count
@@ -713,7 +704,6 @@ else
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
 
-    #ifdef FOUND_TRACKS_PAGING
         startFrom = cartUsualInt(cart,FOUND_TRACKS_PAGING,0);
         if (startFrom > 0 && startFrom < tracksFound)
             {
@@ -727,7 +717,6 @@ else
         hPrintf("</td><td align='right'>\n");
         findTracksPageLinks(tracksFound,startFrom);
         hPrintf("</td></tr>\n");
-    #endif///ndef FOUND_TRACKS_PAGING
         }
 
     // Begin foundTracks table
@@ -831,14 +820,12 @@ else
     hPrintf("<tr><td colspan=3>");
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
-    #ifdef FOUND_TRACKS_PAGING
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("</td><td align='right'>\n");
         findTracksPageLinks(tracksFound,startFrom);
         hPrintf("</td></tr>\n");
         }
-    #endif///ndef FOUND_TRACKS_PAGING
     hPrintf("</table>\n");
 
     if(containerTrackCount > 0)
@@ -850,6 +837,7 @@ else
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
     }
 
+#ifdef OMIT
 if(!doSearch)
     {
     hPrintf("<p><b>Recently Done</b><ul>\n"
@@ -867,6 +855,7 @@ if(!doSearch)
         "<li>Drop-down list of terms (cells, antibodies, etc.) should be multi-select with checkBoxes as seen in filterComposites. Perhaps saved for v2.0.</li>"
         "</ul></p>\n");
     }
+#endif///def OMIT
 hPrintf("</div"); // This div allows the clear button to empty it
 hFreeConn(&conn);
 webEndSectionTables();

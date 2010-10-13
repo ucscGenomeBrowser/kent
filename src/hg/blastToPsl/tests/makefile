@@ -140,7 +140,7 @@ psiBadFormatTest: mkdirs
 ###
 # blastXmlToPsl
 ###
-testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test
+testBlastXmlToPsl: mrna1Test prot1Test prot2Test prot1NucCoordTest sp1PsiBlastTest qtName1Test qtName2Test misclassedPsiBlastTest
 
 mrna1Test: mkdirs
 	${blastXmlToPsl} -scores=output/$@.bscores input/mrna1.blastn.xml output/$@.psl
@@ -171,14 +171,21 @@ sp1PsiBlastTest: mkdirs
 	diff -u expected/$@.psl output/$@.psl
 
 qtName1Test: mkdirs
-	${blastXmlToPsl} -qName=Iteration_query-ID -tName=Hit_id input/sp1.psiBlast.xml output/$@.psl
+	${blastXmlToPsl} -qName=query-ID -tName=Hit_id input/sp1.psiBlast.xml output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
 
 qtName2Test: mkdirs
-	${blastXmlToPsl} -qName=Iteration_query-def0 -tName=Hit_def0 input/sp1.psiBlast.xml output/$@.psl
+	${blastXmlToPsl} -qName=query-def0 -tName=Hit_def0 input/sp1.psiBlast.xml output/$@.psl
 	pslCheck -verbose=0 output/$@.psl
 	diff -u expected/$@.psl output/$@.psl
+
+# psiblast file that claimes to be blastp
+misclassedPsiBlastTest: mkdirs
+	${blastXmlToPsl} -forcePsiBlast -tName=Hit_accession -scores=output/$@.bscores input/misclassed.psiBlast.xml output/$@.psl
+	pslCheck -verbose=0 output/$@.psl
+	diff -u expected/$@.psl output/$@.psl
+	diff -u expected/$@.bscores output/$@.bscores
 
 clean::
 	rm -rf output

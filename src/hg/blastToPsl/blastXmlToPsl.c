@@ -28,9 +28,11 @@ errAbort(
   "   to nucleic coordinates\n"
   "  -qName=src - define element used to obtain the qName.  The following\n"
   "   values are support:\n"
-  "     o Iteration_query-ID - use contents of the <Iteration_query-ID> element.\n"
-  "     o Iteration_query-def0 - use the first white-space separated word of the\n"
-  "       <Iteration_query-def> element.\n"
+  "     o query-ID - use contents of the <Iteration_query-ID> element if it\n"
+  "       exists, otherwise use <BlastOutput_query-ID>\n"
+  "     o query-def0 - use the first white-space separated word of the\n"
+  "       <Iteration_query-def> element if it exists, otherwise the first word\n"
+  "       of <BlastOutput_query-def>.\n"
   "   Default is query-def0.\n"
   "  -tName=src - define element used to obtain the tName.  The following\n"
   "   values are support:\n"
@@ -39,6 +41,8 @@ errAbort(
   "       <Hit_def> element.\n"
   "     o Hit_accession - contents of the <Hit_accession> element.\n"
   "   Default is Hit-def0.\n"
+  "  -forcePsiBlast - treat as output of PSI-BLAST. blast-2.2.16 and maybe\n"
+  "   others indentify psiblast as blastp."
   "\n"
   "Output only results of last round from PSI BLAST\n");
 }
@@ -50,12 +54,13 @@ static struct optionSpec options[] = {
     {"convertToNucCoords", OPTION_BOOLEAN},
     {"qName", OPTION_STRING},
     {"tName", OPTION_STRING},
+    {"forcePsiBlast", OPTION_BOOLEAN},
     {NULL, 0},
 };
 
 enum qNameSrc {
-    qNameSrcIterationQueryId,
-    qNameSrcIterationQueryDef0
+    qNameSrcQueryId,
+    qNameSrcQueryDef0
 };
 
 enum tNameSrc {
@@ -69,7 +74,8 @@ static double eVal = -1; /* default Expect value signifying no filtering */
 static boolean pslxFmt = FALSE; /* output in pslx format */
 static int errCount = 0; /* count of  PSLs failing checks */
 static boolean convertToNucCoords = FALSE; /* adjust query coordinates */
-static enum qNameSrc qNameSrc = qNameSrcIterationQueryDef0;   /* source of qName */
+static boolean forcePsiBlast = FALSE; /* assume PSI-BLAST output  */
+static enum qNameSrc qNameSrc = qNameSrcQueryDef0;   /* source of qName */
 static enum tNameSrc tNameSrc = tNameSrcHitDef0;   /* source of tName */
 
 struct coords
@@ -101,6 +107,8 @@ static unsigned getFlags(struct ncbiBlastBlastOutput *outputRec)
 /* determine blast algorithm and other flags */
 {
 unsigned algo = pslBuildGetBlastAlgo(outputRec->ncbiBlastBlastOutputProgram->text);
+if (forcePsiBlast)
+    algo = psiblast;
 if (convertToNucCoords && (algo != tblastn))
     errAbort("-convertToNucCoords only support for TBLASTN");
 return algo | (convertToNucCoords ? cnvNucCoords : 0) | (pslxFmt ? bldPslx : 0);
@@ -113,10 +121,12 @@ pslTabOut(psl, pslFh);
 pslCheck("blastXmlToPsl", stderr, psl);
 }
 
-static void outputScore(struct psl *psl, struct ncbiBlastIteration *iterRec, struct ncbiBlastHit *hitRec, struct ncbiBlastHsp *hspRec, FILE* scoreFh)
+static void outputScore(struct psl *psl, struct ncbiBlastBlastOutput *outputRec, struct ncbiBlastIteration *iterRec, struct ncbiBlastHit *hitRec, struct ncbiBlastHsp *hspRec, FILE* scoreFh)
 /* output score record */
 {
-pslBuildScoresWriteWithDefs(scoreFh, psl, hspRec->ncbiBlastHspBitScore->text, hspRec->ncbiBlastHspEvalue->text, iterRec->ncbiBlastIterationQueryDef->text, hitRec->ncbiBlastHitDef->text);
+pslBuildScoresWriteWithDefs(scoreFh, psl, hspRec->ncbiBlastHspBitScore->text, hspRec->ncbiBlastHspEvalue->text, 
+                            (iterRec->ncbiBlastIterationQueryDef != NULL) ? iterRec->ncbiBlastIterationQueryDef->text : outputRec->ncbiBlastBlastOutputQueryDef->text,
+                            hitRec->ncbiBlastHitDef->text);
 }
 
 static void appendFirstWord(struct dyString *buf, char *str)
@@ -128,7 +138,7 @@ if (end == NULL)
 dyStringAppendN(buf, str, (end - str));
 }
 
-static char *getQName(struct ncbiBlastIteration *iterRec)
+static char *getQName(struct ncbiBlastBlastOutput *outputRec, struct ncbiBlastIteration *iterRec)
 /* obtain the qName give the requested source */
 {
 static struct dyString *buf = NULL;
@@ -137,11 +147,15 @@ if (buf == NULL)
 dyStringClear(buf);
 switch (qNameSrc)
     {
-    case qNameSrcIterationQueryId:
-        dyStringAppend(buf, iterRec->ncbiBlastIterationQueryID->text);
+    case qNameSrcQueryId:
+        dyStringAppend(buf, (iterRec->ncbiBlastIterationQueryID != NULL)
+                       ? iterRec->ncbiBlastIterationQueryID->text
+                       : outputRec->ncbiBlastBlastOutputQueryID->text);
         break;
-    case qNameSrcIterationQueryDef0:
-        appendFirstWord(buf, iterRec->ncbiBlastIterationQueryDef->text);
+    case qNameSrcQueryDef0:
+        appendFirstWord(buf, (iterRec->ncbiBlastIterationQueryDef != NULL)
+                        ? iterRec->ncbiBlastIterationQueryDef->text
+                        : outputRec->ncbiBlastBlastOutputQueryDef->text);
         break;        
     }
 return buf->string;
@@ -169,27 +183,30 @@ switch (tNameSrc)
 return buf->string;
 }
 
-static void processHspRec(struct ncbiBlastIteration *iterRec, struct ncbiBlastHit *hitRec,
+static void processHspRec(struct ncbiBlastBlastOutput *outputRec, struct ncbiBlastIteration *iterRec, struct ncbiBlastHit *hitRec,
                           struct ncbiBlastHsp *hspRec, unsigned flags, FILE *pslFh, FILE *scoreFh)
 /* process one HSP record, converting to a PSL */
 {
-struct coords qUcsc = blastToUcsc(hspRec->ncbiBlastHspQueryFrom->text, hspRec->ncbiBlastHspQueryTo->text, iterRec->ncbiBlastIterationQueryLen->text,
+int queryLen = (iterRec->ncbiBlastIterationQueryLen != NULL) 
+    ? iterRec->ncbiBlastIterationQueryLen->text
+    : outputRec->ncbiBlastBlastOutputQueryLen->text;
+struct coords qUcsc = blastToUcsc(hspRec->ncbiBlastHspQueryFrom->text, hspRec->ncbiBlastHspQueryTo->text, queryLen,
                                   ((hspRec->ncbiBlastHspQueryFrame == NULL) ? 0 : hspRec->ncbiBlastHspQueryFrame->text));
 struct coords tUcsc = blastToUcsc(hspRec->ncbiBlastHspHitFrom->text, hspRec->ncbiBlastHspHitTo->text, hitRec->ncbiBlastHitLen->text,
                                   ((hspRec->ncbiBlastHspHitFrame == NULL) ? 0 : hspRec->ncbiBlastHspHitFrame->text));
-struct psl *psl = pslBuildFromHsp(getQName(iterRec), qUcsc.size, qUcsc.start, qUcsc.end, qUcsc.strand, hspRec->ncbiBlastHspQseq->text,
+struct psl *psl = pslBuildFromHsp(getQName(outputRec, iterRec), qUcsc.size, qUcsc.start, qUcsc.end, qUcsc.strand, hspRec->ncbiBlastHspQseq->text,
                                   getTName(hitRec),  tUcsc.size, tUcsc.start, tUcsc.end, tUcsc.strand, hspRec->ncbiBlastHspHseq->text,
                                   flags);
 if  ((psl->blockCount > 0) && ((hspRec->ncbiBlastHspEvalue->text <= eVal) || (eVal == -1)))
     {
     outputPsl(psl, pslFh);
     if (scoreFh != NULL)
-        outputScore(psl, iterRec, hitRec, hspRec, scoreFh);
+        outputScore(psl, outputRec, iterRec, hitRec, hspRec, scoreFh);
     }
 pslFree(&psl);
 }
 
-static void processIterRec(struct ncbiBlastIteration *iterRec, unsigned flags, FILE *pslFh, FILE *scoreFh)
+static void processIterRec(struct ncbiBlastBlastOutput *outputRec, struct ncbiBlastIteration *iterRec, unsigned flags, FILE *pslFh, FILE *scoreFh)
 /* process one iteration record, converting all HSPs to PSLs */
 {
 struct ncbiBlastIterationHits *hitsRec;
@@ -204,7 +221,7 @@ for (hitsRec = iterRec->ncbiBlastIterationHits; hitsRec != NULL; hitsRec = hitsR
             struct ncbiBlastHsp *hspRec;
             for (hspRec = hspsRec->ncbiBlastHsp; hspRec != NULL; hspRec = hspRec->next)
                 {
-                processHspRec(iterRec, hitRec, hspRec, flags, pslFh, scoreFh);
+                processHspRec(outputRec, iterRec, hitRec, hspRec, flags, pslFh, scoreFh);
                 }
             }
         }
@@ -219,7 +236,7 @@ for (itersRec = outputRec->ncbiBlastBlastOutputIterations; itersRec != NULL; ite
     {
     struct ncbiBlastIteration *iterRec;
     for (iterRec = itersRec->ncbiBlastIteration; iterRec != NULL; iterRec = iterRec->next)
-        processIterRec(iterRec, flags, pslFh, scoreFh);
+        processIterRec(outputRec, iterRec, flags, pslFh, scoreFh);
     }
 }
 
@@ -229,7 +246,8 @@ static struct ncbiBlastIteration *findLastIterForQuery(struct ncbiBlastIteration
 struct ncbiBlastIteration *nextRec;
 for (nextRec = iterRec->next; nextRec != NULL ; iterRec = nextRec, nextRec = nextRec->next)
     {
-    if (!sameString(nextRec->ncbiBlastIterationQueryDef->text, iterRec->ncbiBlastIterationQueryDef->text))
+    if ((nextRec->ncbiBlastIterationQueryDef != NULL)
+        && !sameString(nextRec->ncbiBlastIterationQueryDef->text, iterRec->ncbiBlastIterationQueryDef->text))
         break;
     }
 return iterRec;
@@ -242,7 +260,7 @@ struct ncbiBlastBlastOutputIterations *itersRec;
 for (itersRec = outputRec->ncbiBlastBlastOutputIterations; itersRec != NULL; itersRec = itersRec->next)
     {
     struct ncbiBlastIteration *iterRec = findLastIterForQuery(itersRec->ncbiBlastIteration);
-    processIterRec(iterRec, flags, pslFh, scoreFh);
+    processIterRec(outputRec, iterRec, flags, pslFh, scoreFh);
     }
 }
 
@@ -284,14 +302,15 @@ if (argc != 3)
 eVal = optionDouble("eVal", eVal);
 pslxFmt = optionExists("pslx");
 convertToNucCoords = optionExists("convertToNucCoords");
+forcePsiBlast = optionExists("forcePsiBlast");
 
-char *qNameSrcStr = optionVal("qName", "Iteration_query-def0");
-if (sameString(qNameSrcStr, "Iteration_query-ID"))
-    qNameSrc = qNameSrcIterationQueryId;
-else if (sameString(qNameSrcStr, "Iteration_query-def0"))
-    qNameSrc = qNameSrcIterationQueryDef0;
+char *qNameSrcStr = optionVal("qName", "query-def0");
+if (sameString(qNameSrcStr, "query-ID"))
+    qNameSrc = qNameSrcQueryId;
+else if (sameString(qNameSrcStr, "query-def0"))
+    qNameSrc = qNameSrcQueryDef0;
 else
-    errAbort("invalid value for -qName, expect on of: \"Iteration_query-ID\", or \"Iteration_query-def0\", got \"%s\"", qNameSrcStr);
+    errAbort("invalid value for -qName, expect on of: \"query-ID\", or \"query-def0\", got \"%s\"", qNameSrcStr);
 
 char *tNameSrcStr = optionVal("tName", "Hit_def0");
 if (sameString(tNameSrcStr, "Hit_id"))
