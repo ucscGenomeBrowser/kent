@@ -1,5 +1,4 @@
-HTDOCS=/usr/local/apache/htdocs
-HTDOCS_USER=${HTDOCS}-${USER}
+include ../../inc/common.mk
 
 # NOTES:
 #  - much of this is current repeats in the hgdownload htdocs makefile
@@ -11,26 +10,26 @@ GITUP = ${GIT} pull
 FIND=gitFiles
 
 user:
-	${MAKE} doInstall destDir=${HTDOCS_USER} extra=doSymLink
+	${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink
 	cd style && echo style && ${MAKE} user
 
 alpha:
-	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
 	cd style && echo style && ${MAKE} alpha
 
 beta:
 	${GITUP}
-	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
 	cd style && echo style && ${MAKE} beta
 
 alphaCancerPublic:
-	${MAKE} doInstallCancerPublic destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstallCancerPublic destDir=${DOCUMENTROOT} extra=doSymLink
 
 alphaCancerSU2C:
-	${MAKE} doInstallCancerSU2C destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstallCancerSU2C destDir=${DOCUMENTROOT} extra=doSymLink
 
 alphaCancerTCGA:
-	${MAKE} doInstallCancerTCGA destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstallCancerTCGA destDir=${DOCUMENTROOT} extra=doSymLink
 
 # Recursive target to do install to destDir, with extra excludes excl and
 # specific includes in incl.  The variable extra are extra targets to depend
