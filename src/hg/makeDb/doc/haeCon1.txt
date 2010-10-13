@@ -4,6 +4,9 @@
 # Sanger Institute and WormBase
 #	http://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=6289
 #	Barber Pole worm
+#	http://www.sanger.ac.uk/Projects/H_contortus/
+#	ftp://ftp.sanger.ac.uk/pub/pathogens/Haemonchus/contortus/genome/README
+#	http://www.nematode.net/Species.Summaries/Haemonchus.contortus/index.php
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-22 - Hiram)

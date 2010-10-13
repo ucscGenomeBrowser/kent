@@ -1989,10 +1989,14 @@ function handleTrackUi(response, status)
         $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
         $('#hgTrackUiDialog').dialog("option", "width", myWidth);
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
+        $('#hgTrackUiDialog').dialog('open');
+        var buttOk = $('button.ui-state-default');
+        if($(buttOk).length == 1)
+            $(buttOk).focus();
     } else {
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
+        $('#hgTrackUiDialog').dialog('open');
     }
-    $('#hgTrackUiDialog').dialog('open');
 }
 
 function handleUpdateTrackMap(response, status)
@@ -2421,8 +2425,9 @@ function updateMetaDataHelpLinks(index)
     var db = getDb();
     var disabled = {
         'accession': 1,
-        'dataVersion': 1,
         'dataType': 1,
+        'dataVersion': 1,
+        'geoSample': 1,
         'grant': 1,
         'lab': 1,
         'labExpId': 1,

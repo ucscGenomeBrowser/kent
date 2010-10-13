@@ -3,7 +3,7 @@ include ../../../inc/common.mk
 L += ${MYSQLLIBS} -lm
 MYLIBDIR = ../../../lib/${MACHTYPE}
 MYLIBS =  ${MYLIBDIR}/jkhgap.a ${MYLIBDIR}/jkweb.a
-MYFILEROOT = trackDb
+MYFILEROOT=trackDb
 
 A = makeTrackIndex
 
@@ -25,7 +25,7 @@ clean:
 
 doBuild:
 	tmpFile=`mktemp`;\
-	makeTrackIndex $$DBS > $$tmpFile;\
-	rm -f /gbdb/$$DBS/$(MYFILEROOT).ix /gbdb/$$DBS/$(MYFILEROOT).ixx;\
-	ixIxx $$tmpFile /gbdb/$$DBS/$(MYFILEROOT).ix /gbdb/$$DBS/$(MYFILEROOT).ixx
+	makeTrackIndex $(DBS) metaDb /usr/local/apache/cgi-bin/encode/cv.ra > $$tmpFile;\
+	rm -f /gbdb/$(DBS)/$(MYFILEROOT).ix /gbdb/$(DBS)/$(MYFILEROOT).ixx;\
+	ixIxx $$tmpFile /gbdb/$(DBS)/$(MYFILEROOT).ix /gbdb/$(DBS)/$(MYFILEROOT).ixx;\
 	rm -f $$tmpFile	
