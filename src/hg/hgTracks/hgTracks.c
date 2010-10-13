@@ -4273,25 +4273,30 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
+    boolean cleanedUp = FALSE;
+
     if (tdbIsContainer(track->tdb))
-        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb))
+        {
+        cleanedUp = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
+        if(cleanedUp)
             track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
+        }
 
     if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
+        cleanedUp = TRUE; // 2 ways to clean up!
+
+    if (cleanedUp && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
-        if (tdbIsSuperTrackChild(track->tdb))
+        // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
+        // So now we need to find the supertrack and take changed cart values of its children
+        struct slRef *childRef;
+        for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
             {
-            // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
-            // So now we need to find the supertrack and take changed cart values of its children
-            struct slRef *childRef;
-            for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
-                {
-                struct trackDb * childTdb = childRef->val;
-                struct track *child = hashFindVal(trackHash, childTdb->track);
-                char *cartVis = cartOptionalString(cart,child->track);
-                if (cartVis)
-                    child->visibility = hTvFromString(cartVis);
-                }
+            struct trackDb * childTdb = childRef->val;
+            struct track *child = hashFindVal(trackHash, childTdb->track);
+            char *cartVis = cartOptionalString(cart,child->track);
+            if (cartVis)
+                child->visibility = hTvFromString(cartVis);
             }
         }
     }
