@@ -9865,9 +9865,10 @@ EOF
     perl -we 'open($IDS, "ncbiFuncInsertions.ctg.bed") || die "ids: $!"; \
               while (<$IDS>) { chomp; $ids{$_} = 1; } \
               close($IDS); \
+              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 44=>1, 45=>1); \
               while (<>) { \
                 chomp;  @w = split("\t"); # id, ctg, start, end, ... \
-                next unless $w[8]; \
+                next unless $coding{$w[5]}; \
                 $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
                 if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
                   $w[2]++; # 2-base insertions: increment start coord \
@@ -9880,17 +9881,18 @@ EOF
     | uniq \
       > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#928279 ncbiCodingAnnotations.txt
+#950616 ncbiCodingAnnotations.txt
 
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
-#     25 0   (empty fxn_class in ContigLocusId! reported to dbSNP)
 # 168639 3   (coding-synon)
-# 443295 8   (cds-reference -- ignored)
+# 443419 8   (cds-reference -- ignored)
+#      1 9   (coding-synonymy-unknown: rs80359842)
 #   9790 41  (nonsense)
-# 261906 42  (missense)
-#  44624 44  (frameshift)
+# 261982 42  (missense)
+#  65656 44  (frameshift)
+#   1129 45  (cds-indel)
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     perl -e  'while (<>) { chomp; \
                 my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
