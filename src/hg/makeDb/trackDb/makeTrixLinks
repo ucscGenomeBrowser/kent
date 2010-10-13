@@ -1,14 +1,12 @@
 #!/bin/bash -e
-usage='buildTrix trixName metaDbName path_to_cv.ra outputPath ${DBS}'
+usage='makeTrixLinks trixName outputPath ${DBS}'
 
-if [ $# -lt 5 ] ; then
+if [ $# -lt 3 ] ; then
     echo "wrong # args: $usage" >&2
     exit 1
 fi
 
 trixName="$1"; shift
-metaDbName="$1" ; shift
-cvRaPath="$1" ; shift
 outPath="$1" ; shift
 dbs="$@"
 
@@ -28,20 +26,17 @@ dbExists() {
     fi
 }
 
-buildDbTrix() {
+makeTrixLinks() {
     local db="$1"
     local trixName="$2"
-    local metaDbName="$3"
-    local cvRaPath="$4"
-    local outPath="$5"
-    local tmpFile=`mktemp`;
-    makeTrackIndex $db $metaDbName $cvRaPath > $$tmpFile;
-    ixIxx $$tmpFile $outPath/${db}_${trixName}.ix $outPath/${db}_${trixName}.ixx
-    rm -f $$tmpFile 
+    local outPath="$3"
+    rm -f /gbdb/$db/$trixName.ix /gbdb/$db/$trixName.ixx
+    ln -s $outPath/${db}_$trixName.ix /gbdb/$db/$trixName.ix
+    ln -s $outPath/${db}_$trixName.ixx /gbdb/$db/$trixName.ixx
 }
 
 for db in $dbs ; do
     if dbExists $db ; then
-        buildDbTrix $db $trixName $metaDbName $cvRaPath $outPath
+        makeTrixLinks $db $trixName $outPath
     fi
 done
