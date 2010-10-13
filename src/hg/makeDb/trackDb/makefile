@@ -116,7 +116,7 @@ ARCHIVED_DBS = \
 	danRer2
 
 HIVE_TRIX = /hive/data/inside/trix
-DATA_TRIX = /data/tmp/trix
+DATA_TRIX = /data/trix
 
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
@@ -134,13 +134,13 @@ beta: clean
 	${GIT} pull
 	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
-	./buildTrix trackDb_beta metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${DATA_TRIX} ${DBS}
+	./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 public: clean
 	${GIT} pull
 	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}
-	./buildTrix trackDb metaDb_public /usr/local/apache/cgi-bin-public/encode/cv.ra ${DATA_TRIX} ${DBS}
+	./buildTrix trackDb_public metaDb_public /usr/local/apache/cgi-bin-public/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
