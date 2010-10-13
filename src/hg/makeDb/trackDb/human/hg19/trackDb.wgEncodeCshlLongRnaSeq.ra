@@ -755,6 +755,28 @@ noInherit on
         origAssembly hg19
         # subId=2475 dateSubmitted=2010-10-01
 
+        track wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel K562 cell longPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Replicate 1 (longPolyA in K562 cell)
+        subGroups view=PlusRawSig cellType=K562 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 870831.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=2478 dateSubmitted=2010-10-05
+
+        track wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewPlusRawSig off
+        shortLabel GM12878 cytosol longPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq Plus Strand Raw Signal Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=PlusRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 1310264.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=1911 dateSubmitted=2010-10-05
+
 
 
 
@@ -1489,6 +1511,28 @@ noInherit on
         origAssembly hg19
         # subId=2475 dateSubmitted=2010-10-01
 
+        track wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel K562 cell longPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Replicate 1 (longPolyA in K562 cell)
+        subGroups view=MinusRawSig cellType=K562 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 828694.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=2478 dateSubmitted=2010-10-05
+
+        track wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewMinusRawSig off
+        shortLabel GM12878 cytosol longPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq Minus Strand Raw Signal Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=MinusRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 387464.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=1911 dateSubmitted=2010-10-05
+
     	track wgEncodeCshlLongRnaSeqViewAllRawSig
     	shortLabel All Raw Sig
     	view AllRawSig
@@ -2218,6 +2262,28 @@ noInherit on
         type bigWig 1.000000 1250970.000000
         origAssembly hg19
         # subId=2475 dateSubmitted=2010-10-01
+
+        track wgEncodeCshlLongRnaSeqK562CellPapAllRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        shortLabel K562 cell longPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Replicate 1 (longPolyA in K562 cell)
+        subGroups view=AllRawSig cellType=K562 localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 870884.000000
+        origAssembly hg19
+        color 46,0,184
+        # subId=2478 dateSubmitted=2010-10-05
+
+        track wgEncodeCshlLongRnaSeqGm12878CytosolPapAllRawSigRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAllRawSig off
+        shortLabel GM12878 cytosol longPolyA 1
+        longLabel ENCODE CSHL Long RNA-seq All Alignments Raw Signal Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=AllRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 1310395.000000
+        origAssembly hg19
+        color 153,38,0
+        # subId=1911 dateSubmitted=2010-10-05
    		
 
     	track wgEncodeCshlLongRnaSeqViewAlignments
@@ -2943,6 +3009,28 @@ noInherit on
         type bam
         origAssembly hg19
         # subId=2475 dateSubmitted=2010-10-01
+
+        track wgEncodeCshlLongRnaSeqK562CellPapAlnRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel K562 cell longPolyA Aln 1
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 1 (longPolyA in K562 cell)
+        subGroups view=Alignments cellType=K562 localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        origAssembly hg19
+        color 46,0,184
+        # subId=2478 dateSubmitted=2010-10-05
+
+        track wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1
+        release alpha
+        parent wgEncodeCshlLongRnaSeqViewAlignments off
+        shortLabel GM12878 cytosol longPolyA Aln 1
+        longLabel ENCODE CSHL Long RNA-seq Alignments Replicate 1 (longPolyA in GM12878 cytosol)
+        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        type bam
+        origAssembly hg19
+        color 153,38,0
+        # subId=1911 dateSubmitted=2010-10-05
 
 
  

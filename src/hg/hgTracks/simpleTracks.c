@@ -689,12 +689,12 @@ else
 mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
 }
 
-void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *toggleGroup,
 	char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 {
-mapBoxReinvoke(hvg, x, y, width, height, NULL, newChrom, newStart, newEnd,
+mapBoxReinvoke(hvg, x, y, width, height, toggleGroup, newChrom, newStart, newEnd,
 	       message, NULL);
 
 }
@@ -1767,7 +1767,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinEnd(exon->end, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
               (revCmplDisp ? "Prev" : "Next"), exonIx+1, numExons);
-	mapBoxJumpTo(hvg, x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
+	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     else if (!next && (exon->start < winStart))
@@ -1786,7 +1786,7 @@ for (ref = exonList; ref != NULL; ref = ref->next, exonIx++)
 	    linkedFeaturesMoveWinStart(exon->start, bufferToEdge, newWinSize, &newWinStart, &newWinEnd);
 	safef(mouseOverText, sizeof(mouseOverText), "%s Feature (%d/%d)",
               (revCmplDisp ? "Next" : "Prev"), numExons-exonIx, numExons);
-	mapBoxJumpTo(hvg, x, y, w, h, chromName, newWinStart, newWinEnd, mouseOverText);
+	mapBoxJumpTo(hvg, x, y, w, h, tg, chromName, newWinStart, newWinEnd, mouseOverText);
 	break;
 	}
     }

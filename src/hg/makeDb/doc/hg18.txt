@@ -22677,6 +22677,22 @@ CREATE TABLE ucscFunc (
 );
 EOF
     hgLoadSqlTab hg18snp130 ucscFunc{,.sql,.txt}
+    # 10/12/10: Those coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
+    # We need to leave the coords alone here so ucscFunc can be joined below.
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # the list to determine what type of coord fix to apply to each annotation
+    # when making snp130CodingDbSnp below.
+    hgsql hg18snp130 -NBe \
+      'select ci.contig_acc, cl.asn_from, cl.asn_to, uf.snp_id \
+       from ucscFunc as uf, ContigLoc as cl, ContigInfo as ci \
+       where uf.snp_id = cl.snp_id and \
+             uf.ctg_id = cl.ctg_id and uf.asn_from = cl.asn_from and uf.asn_to = cl.asn_to and \
+             cl.loc_type = 3 and \
+             cl.ctg_id = ci.ctg_id and \
+             ci.group_label in ("reference", "c5_H2", "c6_COX", "c6_QBL", "c22_H2")' \
+      > ncbiFuncInsertions.ctg.bed
+    wc -l ncbiFuncInsertions.ctg.bed
+#1089086 ncbiFuncInsertions.ctg.bed
 
     # Extract observed allele, molType and snp class from FASTA headers gnl
     zcat /hive/data/outside/dbSNP/130/human/rs_fasta/rs_ch*.fas.gz \
@@ -23015,13 +23031,38 @@ EOF
 
 
 #######################################################################
-# DBSNP CODING ANNOTATIONS (DONE 7/7/09 angie)
-# originally done 6/2/09 - redone w/snp130, using mapping locations of dbSNP's func. annos
+# DBSNP CODING ANNOTATIONS (DONE 10/12/10 angie)
+# Updated 10/12/10 - redone w/corrected genome coords (Redmine Track #1249)
+# Updated 7/7/09 - redone w/snp130, using mapping locations of dbSNP's func. annos
+# originally done 6/2/09
     cd /hive/data/outside/dbSNP/130/human
-    awk '$9 != NULL {print;}' ncbiFuncAnnotations.txt \
-    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n | uniq > ncbiCodingAnnotations.txt
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.  
+    # For anything except an insertion (0 bases between flanks), 
+    # we need to add 1 to the end coord.  For an insertion, we need
+    # to add 1 to the start coord.  Make a hash of the insertion IDs,
+    # then look up each ID in ncbiFuncAnnotations.txt to tell which
+    # transform to apply.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    perl -we 'open($IDS, "ncbiFuncInsertions.ctg.bed") || die "ids: $!"; \
+              while (<$IDS>) { chomp; $ids{$_} = 1; } \
+              close($IDS); \
+              while (<>) { \
+                chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+                next unless ($w[7] || $w[8] || $w[9]); \
+                $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+                if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                  $w[2]++; # 2-base insertions: increment start coord \
+                } else { \
+                  $w[3]++; # increment end coord to get half-open \
+                } \
+                print join("\t", @w) . "\n"; \
+              }' ncbiFuncAnnotations.txt \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
 #576726 ncbiCodingAnnotations.txt
+
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
