@@ -2082,78 +2082,6 @@ if(hierarchy && *hierarchy)
     }
 }
 
-#define TV_HIDE "hide"
-static boolean subtracksViewIsHidden(struct cart *cart,struct trackDb *subtrack)
-// Returns TRUE if the subtrack belongs to a view that is hidden
-{
-if(subgroupFind(subtrack,"view",NULL) == FALSE)
-    return FALSE; // No view
-
-if(subtrack->parent == NULL || subtrack->parent->parent == NULL)
-    return FALSE; // Not the subtrack
-
-char * view = trackDbLocalSetting(subtrack->parent, "view");
-assert(view != NULL);
-
-char objName[SMALLBUF];
-char *setting =trackDbLocalSetting(subtrack->parent, "visibility");
-if(setting == NULL)
-    setting = TV_HIDE;
-
-safef(objName, sizeof(objName), "%s.%s.vis", subtrack->parent->parent->track,view);
-
-setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
-return sameWord(setting,TV_HIDE);
-}
-
-char *tdbResolveVis(struct cart *cart,struct trackDb *tdb, boolean applyMax)
-// Determines the correct vis for a tdb as modified by parent
-{
-// Vis can be in trackDb and/or in cart
-// vis at subtrack overrides higher up
-// no subtrack vis then composite is max applied to view vis
-// FIXME: This should become the main API for determining a subtrack's vis.
-
-char objName[SMALLBUF];
-char *setting = NULL;
-struct trackDb *thisTdb;
-enum trackVisibility vis = tvFull;  // Successively limited
-
-for(thisTdb = tdb;thisTdb != NULL;thisTdb = thisTdb->parent)
-    {
-    setting = trackDbLocalSetting(thisTdb, "visibility");
-    if(setting == NULL && thisTdb->subtracks != NULL)
-        {
-        setting = TV_HIDE;// non-subtrack must default to hide.  subtracks default to NULL
-        // FIXME: If querying for subtrack, need to determine if subtrack checked.
-        //if(tdbIsCompositeChild(tdb))
-        //    {
-        //    char *subSetting = trackDbLocalSetting(tdb, "parent");
-        //    if (subSetting != NULL && findWordByDelimiter("off",' ',subSetting) == NULL)
-        //        setting = "full";// subtrack checked, so default to full and let applyMax do it's trick
-        //    }
-        }
-
-    safef(objName, sizeof(objName), "%s.vis", thisTdb->track);
-    if(thisTdb->parent != NULL && thisTdb->subtracks != NULL) // middle level so probably view
-        {
-        char * view = trackDbLocalSetting(thisTdb, "view");
-        if(view != NULL)
-            safef(objName, sizeof(objName), "%s.%s.vis", thisTdb->parent->track,view);
-        }
-    setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
-    if(setting != NULL && (thisTdb->subtracks == NULL || !applyMax))
-        return setting;  // defined at lowest level so accept it.
-
-    if(setting != NULL && applyMax) // applyMax is assertable if settings is not NULL !
-        vis = tvMin(vis,hTvFromStringNoAbort(setting)); // successively limits
-    }
-assert(setting != NULL);
-assert(applyMax);
-
-return hStringFromTv(vis);
-}
-
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
 #define FOUR_STATE_KEY               "fourState"
@@ -2179,12 +2107,17 @@ if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     if(findWordByDelimiter("off",' ',setting) == NULL)
         fourState = FOUR_STATE_CHECKED;
     }
-// Now check visibility
-setting = tdbResolveVis(cart,subtrack,FALSE);
 
-// If subtrack's view is hide then fourstate includes disabled
-if(sameWord(setting,TV_HIDE) && subtracksViewIsHidden(cart,subtrack))
-    FOUR_STATE_DISABLE(fourState);
+// Now check visibility
+enum trackVisibility vis = tdbLocalVisibility(cart, subtrack, NULL);
+if (vis == tvHide)
+    {
+    if(tdbIsCompositeView(subtrack->parent))
+        {
+        if(tdbLocalVisibility(cart, subtrack->parent, NULL) == tvHide)
+            FOUR_STATE_DISABLE(fourState);
+        }
+    }
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 fourState = cartUsualInt(cart, objName, fourState);
@@ -6731,18 +6664,24 @@ else
     return b;
 }
 
-enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers)
-// returns visibility limited by ancestry (or subtrack vis override)
+enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,boolean *subtrackOverride)
+// returns visibility NOT limited by ancestry.  Fills optional boolean if subtrack specific vis is found
+// If not NULL cart will be examined without ClosestToHome.  Folders/supertracks resolve to hide/full
 {
+if (subtrackOverride != NULL)
+*subtrackOverride = FALSE; // default
+
+// tdb->visibility should reflect local trackDb setting
 enum trackVisibility vis = tdb->visibility;
 if (tdbIsSuperTrack(tdb))
     vis = (tdb->isShow ? tvFull : tvHide);
-if (cart != NULL)
+
+if (cart != NULL) // cart is optional
     {
     char *cartVis = NULL;
     if (tdbIsCompositeView(tdb))
         {
-        char *view = trackDbLocalSetting(tdb,"view");
+        char *view = trackDbLocalSetting(tdb,"view"); // views have funky cart setting
         assert(view != NULL);
         char setting[512];
         safef(setting,sizeof(setting),"%s.%s.vis",tdb->parent->track,view);
@@ -6753,24 +6692,35 @@ if (cart != NULL)
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
-        if (tdbIsContainerChild(tdb))
-            return vis; // subtrackVis override
+        if (subtrackOverride != NULL && tdbIsContainerChild(tdb))
+            *subtrackOverride = TRUE;
         }
     }
+return vis;
+}
+
+enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb *tdb, boolean checkBoxToo, boolean foldersToo)
+// returns visibility limited by ancestry.  This includes subtrack vis override and parents limit maximum.
+// cart may be null, in which case, only trackDb settings (default state) are examined
+// checkBoxToo means ensure subtrack checkbox state is visible
+// foldersToo means limit by folders (aka superTracks) as well.
+{
+boolean subtrackOverride = FALSE;
+enum trackVisibility vis = tdbLocalVisibility(cart,tdb,&subtrackOverride);
+if (subtrackOverride)
+    return vis;
 
 // subtracks without explicit (cart) vis but are selected, should get inherited vis
 if (vis == tvHide && tdbIsContainerChild(tdb))
     {
-    if (fourStateVisible(subtrackFourStateChecked(tdb,cart)))
-        vis = tvFull;
+    if (checkBoxToo && fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+        vis = tvFull; // to be limited by ancestry
     }
 
-if (vis == tvHide || tdb->parent == NULL)
-    return vis;
+if (vis == tvHide || tdb->parent == NULL || (!foldersToo && tdbIsFolder(tdb->parent)))  // aka superTrack
+    return vis; // end of line
 
-if (noSupers && tdbIsSuperTrack(tdb->parent))
-    return vis;
-return tvMin(vis,tdbVisLimitedByAncestry(cart,tdb->parent,noSupers));
+return tvMin(vis,tdbVisLimitedByAncestors(cart,tdb->parent,checkBoxToo,foldersToo));
 }
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)
