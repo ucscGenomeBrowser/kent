@@ -24,4 +24,4 @@ install:
 
 doInstall:
 	@mkdir -p ${DEST}/
-	./cpAndLinkToResourceFiles.pl -exclude='makefile' -destDir=${DEST} ${CSS_FILES}
+	./cpAndLinkToResourceFiles.pl -exclude='makefile,cpAndLinkToResourceFiles.pl' -destDir=${DEST} ${CSS_FILES}
