@@ -121,7 +121,8 @@ DATA_TRIX = /data/trix
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
-	./buildTrix trackDb_${USER} metaDb_${USER} /usr/local/apache/cgi-bin-${USER}/encode/cv.ra ${HIVE_TRIX} ${DBS}
+#  if you want to test track search tool with your own trix file
+#	./buildTrix trackDb_${USER} metaDb_${USER} /usr/local/apache/cgi-bin-${USER}/encode/cv.ra ${HIVE_TRIX} ${DBS}
 
 alpha: clean
 	${GIT} pull
