@@ -4273,19 +4273,19 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
-    boolean cleanedUp = FALSE;
+    boolean shapedByubtrackOverride = FALSE;
+    boolean cleanedByContainerSettings = FALSE;
 
     if (tdbIsContainer(track->tdb))
         {
-        cleanedUp = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
-        if(cleanedUp)
-            track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
+        shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
+        if(shapedByubtrackOverride)
+            track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
 
-    if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
-        cleanedUp = TRUE; // 2 ways to clean up!
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
-    if (cleanedUp && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
+    if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
         // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
         // So now we need to find the supertrack and take changed cart values of its children

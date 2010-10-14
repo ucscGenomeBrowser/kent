@@ -391,6 +391,10 @@ webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FA
 hPrintf("<div style='max-width:1080px;'>");
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
+char buf[64];
+safef(buf, sizeof(buf), "%lu", clock1());
+cgiMakeHiddenVar("hgt_", buf);  // timestamps page to avoid browser cache
+
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
 hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
@@ -766,7 +770,7 @@ else
         hPrintf("<td align='center'>\n");
 
         // Determine visibility and checked state
-        track->visibility = tdbVisLimitedByAncestry(cart, track->tdb, FALSE);
+        track->visibility = tdbVisLimitedByAncestors(cart, track->tdb, TRUE, FALSE);
         boolean checked = ( track->visibility != tvHide );
         if(tdbIsContainerChild(track->tdb))
             {
