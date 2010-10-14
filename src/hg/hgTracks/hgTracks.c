@@ -1296,12 +1296,12 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1794,8 +1794,8 @@ if (zoomedToBaseLevel || rulerCds)
 		     rulerMode == tvFull ?
 			    rulerMenu[tvDense] :
 			    rulerMenu[tvFull]);
-	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight,
-	    NULL, NULL, 0, 0, "", newRulerVis);
+	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight, NULL,
+	    FALSE, NULL, 0, 0, "", newRulerVis);
 	}
     if (rulerCds)
 	{
