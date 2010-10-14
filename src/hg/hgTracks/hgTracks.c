@@ -1296,12 +1296,12 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1794,8 +1794,8 @@ if (zoomedToBaseLevel || rulerCds)
 		     rulerMode == tvFull ?
 			    rulerMenu[tvDense] :
 			    rulerMenu[tvFull]);
-	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight,
-	    NULL, NULL, 0, 0, "", newRulerVis);
+	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight, NULL,
+	    FALSE, NULL, 0, 0, "", newRulerVis);
 	}
     if (rulerCds)
 	{
@@ -4273,19 +4273,19 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
-    boolean cleanedUp = FALSE;
+    boolean shapedByubtrackOverride = FALSE;
+    boolean cleanedByContainerSettings = FALSE;
 
     if (tdbIsContainer(track->tdb))
         {
-        cleanedUp = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
-        if(cleanedUp)
-            track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
+        shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
+        if(shapedByubtrackOverride)
+            track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
 
-    if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
-        cleanedUp = TRUE; // 2 ways to clean up!
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
-    if (cleanedUp && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
+    if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
         // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
         // So now we need to find the supertrack and take changed cart values of its children
