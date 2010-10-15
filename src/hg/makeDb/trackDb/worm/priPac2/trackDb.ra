@@ -38,3 +38,6 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track ws210Gene override
+shortLabel WS210 Genes
+longLabel Genes predictions from WormBase priPac1/WS210 release lifted to priPac2

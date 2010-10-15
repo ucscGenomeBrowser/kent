@@ -38,3 +38,11 @@ indelDoubleInsert on
 indelQueryInsert on
 maxItems 300
 
+track ws210Gene
+shortLabel WS210 Genes
+longLabel Genes predictions from WormBase WS210 release
+group genes
+priority 32
+visibility pack
+color 0,0,200
+type genePred
