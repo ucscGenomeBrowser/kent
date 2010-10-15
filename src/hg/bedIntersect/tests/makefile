@@ -89,26 +89,26 @@ aHitAnyPlusBScorePlusMinCov: mkout
 	done
 
 allowStartEqEnd: mkout
-	${bedIntersect} input/bigBlock.bed input/subBlocks.bed output/$@.aBigBSub.bed \
+	${bedIntersect} input/bigBlock.bed input/subBlocksWInserts.bed output/$@.aBigBSub.bed \
 	  -allowStartEqualEnd
 	diff expected/$@.aBigBSub.bed output/$@.aBigBSub.bed
-	${bedIntersect} input/subBlocks.bed input/bigBlock.bed output/$@.aSubBBig.bed \
+	${bedIntersect} input/subBlocksWInserts.bed input/bigBlock.bed output/$@.aSubBBig.bed \
 	  -allowStartEqualEnd
 	diff expected/$@.aSubBBig.bed output/$@.aSubBBig.bed
 
 allowStartEqEndPlusAHitAny: mkout
-	${bedIntersect} input/bigBlock.bed input/subBlocks.bed output/$@.aBigBSub.bed \
+	${bedIntersect} input/bigBlock.bed input/subBlocksWInserts.bed output/$@.aBigBSub.bed \
 	  -allowStartEqualEnd -aHitAny
 	diff expected/$@.aBigBSub.bed output/$@.aBigBSub.bed
-	${bedIntersect} input/subBlocks.bed input/bigBlock.bed output/$@.aSubBBig.bed \
+	${bedIntersect} input/subBlocksWInserts.bed input/bigBlock.bed output/$@.aSubBBig.bed \
 	  -allowStartEqualEnd -aHitAny
 	diff expected/$@.aSubBBig.bed output/$@.aSubBBig.bed
 
 allowStartEqEndPlusAHitAnyPlusBScore: mkout
-	${bedIntersect} input/bigBlock.bed input/subBlocks.bed output/$@.aBigBSub.bed \
+	${bedIntersect} input/bigBlock.bed input/subBlocksWInserts.bed output/$@.aBigBSub.bed \
 	  -allowStartEqualEnd -aHitAny -bScore
 	diff expected/$@.aBigBSub.bed output/$@.aBigBSub.bed
-	${bedIntersect} input/subBlocks.bed input/bigBlock.bed output/$@.aSubBBig.bed \
+	${bedIntersect} input/subBlocksWInserts.bed input/bigBlock.bed output/$@.aSubBBig.bed \
 	  -allowStartEqualEnd -aHitAny -bScore
 	diff expected/$@.aSubBBig.bed output/$@.aSubBBig.bed
 
