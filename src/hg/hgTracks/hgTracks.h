@@ -457,10 +457,11 @@ void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, in
  * program. */
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
-		    struct track *toggleGroup, char *chrom,
+		    struct track *track, boolean toggle, char *chrom,
 		    int start, int end, char *message, char *extra);
 /* Print out image map rectangle that would invoke this program again.
- * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If track is non-NULL then put that track's id in the map item.
+ * if toggle is true, then toggle track between full and dense.
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 

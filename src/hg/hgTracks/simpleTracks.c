@@ -604,19 +604,18 @@ va_end(args);
 }
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
-		    struct track *toggleGroup, char *chrom,
+		    struct track *track, boolean toggle, char *chrom,
 		    int start, int end, char *message, char *extra)
 /* Print out image map rectangle that would invoke this program again.
- * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If track is non-NULL then put that track's id in the map item.
+ * if toggle is true, then toggle track between full and dense.
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 {
-struct dyString *ui = uiStateUrlPart(toggleGroup);
+struct dyString *ui = uiStateUrlPart(toggle ? track : NULL);
 struct dyString *id = dyStringNew(0);
-if(toggleGroup)
-    {
-    dyStringPrintf(id, " id='%s'", toggleGroup->track);
-    }
+if(track)
+    dyStringPrintf(id, " id='%s'", track->track);
 x = hvGfxAdjXW(hvg, x, width);
 
 if (extra != NULL)
@@ -657,7 +656,8 @@ if(theImgBox && curImgTrack)
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, toggleGroup != NULL ? toggleGroup->track : NULL);
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, 
+                       track ? track->track : NULL);
     }
 else
     {
@@ -686,15 +686,15 @@ else if(tdbIsComposite(curGroup->tdb))
 else
     safef(buf, sizeof(buf),"Click to alter the display density of %s", curGroup->shortLabel);
 
-mapBoxReinvoke(hvg, x, y, width, height, curGroup, NULL, 0, 0, buf, NULL);
+mapBoxReinvoke(hvg, x, y, width, height, curGroup, TRUE, NULL, 0, 0, buf, NULL);
 }
 
-void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *toggleGroup,
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *track,
 	char *newChrom, int newStart, int newEnd, char *message)
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
 {
-mapBoxReinvoke(hvg, x, y, width, height, toggleGroup, newChrom, newStart, newEnd,
+mapBoxReinvoke(hvg, x, y, width, height, track, FALSE, newChrom, newStart, newEnd,
 	       message, NULL);
 
 }

@@ -11904,4 +11904,300 @@ while (<>) {
 #Loaded 667349 elements of size 7
 
 
+###########################################################################
+# RECOMBINATION RATES (DONE 2010-08-26 - Chin)
+
+# The STS MArkers track must be completed prior to creating this track
+
+    ssh kkstore02
+    cd /hive/data/genomes/hg19/bed
+    mkdir -p recombRate
+    cd recombRate
+
+# Copy other necessary files here (in future, can take from previous
+# version)
+# NOTE: these are stable, and could be saved in a permanent spot
+
+    cp -p /projects/hg2/booch/psl/info/decode_all .
+    cp -p /projects/hg2/booch/psl/info/marshfield_all .
+    cp -p /projects/hg2/booch/psl/info/genethon_all .
+
+# Compared these 3 files with the 3 files of hg17, they are identical.
+
+# Determine maximum concordant set of markers for each of the maps
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /hive/data/outside/ncbi/sts.11/stsAlias.bed \
+        /hive/data/genomes/hg19/bed/sts/stsMarkers_pos.rdb \
+        decode_all > decode.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /hive/data/outside/ncbi/sts.11/stsAlias.bed \
+        /hive/data/genomes/hg19/bed/sts/stsMarkers_pos.rdb \
+        marshfield_all > marshfield.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /hive/data/outside/ncbi/sts.11/stsAlias.bed \
+        /hive/data/genomes/hg19/bed/sts/stsMarkers_pos.rdb \
+        genethon_all > genethon.marker.rdb
+
+# Determine the rates for each of the maps
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl decode.marker.rdb \
+            hive/data/genomes/hg19/chrom.sizes 1000000 1000000 \
+                > decode_1mb_slide_1mb
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl genethon.marker.rdb \
+            /hive/data/genomes/hg19/chrom.sizes 1000000 1000000 \
+                >  genethon_1mb_slide_1mb
+# got many "... out of genetic distance order. DISCARDING" messages.
+
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl marshfield.marker.rdb \
+            /hive/data/genomes/hg19/chrom.sizes 1000000 1000000 \
+              > marshfield_1mb_slide_1mb
+# Got many "... out of genetic distance order. DISCARDING" messages.
+
+# Convert files to proper format
+# which requires the "inserts" file
+    # get the size of true chrom:
+    cd  /hive/data/genomes/hg19/bed/recombRate  
+    cat /hive/data/genomes/hg19/chrom.sizes | awk '$1 !~/_/ && !/^chrM/ \
+    {print $1, $2}'  > chr.sizes
+
+    # order contigs on each chrom:
+    mkdir /hive/data/genomes/hg19/bed/recombRate/orderedCtg
+
+    cat << '_EOF_' > orderCtg.pl
+#!/usr/bin/perl
+# create ordered contig lists for each chrom
+my $db = hg19;
+my $ordDir = "/hive/data/genomes/hg19/bed/recombRate/orderedCtg";
+@chroms = (1..22, X, Y);
+
+foreach $chr (@chroms) 
+{
+my $chrName = "chr$chr";
+my $chrFile = "chr$chr.ol";
+my $ordFile = "$ordDir/$chrFile";
+my $sqlstmt="hgsql $db -s -e \'SELECT c.chromStart, c.contig, c.size, c.chrom, i.size FROM ctgPos c, chromInfo i where c.chrom = \"$chrName\" AND c.chrom=i.chrom order by chromStart ASC\' ";
+system(" $sqlstmt  > $ordFile");
+}
+'_EOF_'
+    # << happy emacs
+
+
+    chmod +x orderCtg.pl
+    ./orderCtg.pl
+
+    # create the inserts file 
+    cat << '_EOF_' > createInserts.pl
+#!/usr/local/bin/perl
+# FILE: createInserts
+# Author: Terry Furey
+# Date: 7/13/2004
+# Modified by Chin 2010-10-14
+# Description: Create inserts file used in creation of some tracks.
+# 	This used to be created when lift files being created
+
+$dir = "/hive/data/genomes/hg19";
+
+@chroms = (1..22, X, Y);
+
+print "#Chrom\tBefore_Contig\tAfter_Contig\tNum_bases\tType\n";
+$i = 0;
+# Look at certain gaps in chroms
+foreach $chr (@chroms) {
+    open(AGP, "$dir/$chr/chr$chr.agp");
+    while ($line = <AGP>) {
+	chomp($line);
+	@fields = split("\t", $line);
+	$lastctg = "";
+	$laststart = 1;
+	# Want centromeres, large heterochromatin, short_arms, and large gaps
+	if (($fields[6] eq "centromere") ||
+	    (($fields[6] eq "heterochromatin") && ($fields[2] - $fields[1] > 1000000)) ||
+	    ($fields[6] eq "short_arm") ||
+	    (($fields[2] - $fields[1]) > 1000000)) {
+	    # Record info about gap
+	    $chr[$i] = $fields[0];
+	    $start[$i] = $fields[1];
+	    $end[$i] = $fields[2];
+	    $size[$i] = $end[$i] - $start[$i] + 1;
+	    $type[$i] = $fields[6];
+	    # Find contigs surrounding gap
+            open(ORDCTG, "$dir/bed/recombRate/orderedCtg/chr$chr.ol") || die("Could not open $dir/bed/recombRate/orderedCtg/chr$chr.ol\n") ;
+	    # short_arm gaps have no previous contig
+	    if ($type[$i] eq "short_arm") {
+		$ctg1[$i] = "-";
+		$start[$i] = 1;
+		# Nest record has next contig
+		$line1 = <ORDCTG>;
+		@fields1 = split("\t",$line1);
+		$ctg2[$i] = $fields1[1];
+		# Reset end and recalculate size
+		$end[$i] = $fields1[0];
+		$size[$i] = $end[$i] - $start[$i] + 1;
+	    # non-short_arm gaps
+	    } else {
+		# Find gap immediately before gap
+		while ($line1 = <ORDCTG>) {
+		    chomp($line1);
+		    @fields1 = split("\t", $line1);
+		    # This contig ends where gap begins
+		    if (($fields1[0] + $fields1[2] + 1) == $start[$i]) {
+			$ctg1[$i] = $fields1[1]; 
+			# Succeeding contig is in next record
+			if ($line1 = <ORDCTG>) {
+			    @fields1 = split("\t", $line1);
+			    $ctg2[$i] = $fields1[1];
+			    # Reset end coordinate and re-calculate size
+			    $end[$i] = $fields1[0];
+			    $size[$i] = $end[$i] - $start[$i] + 1;
+			} else {
+			    $ctg2[$i] = "-";
+			}
+		    # Keep track of possible previous contigs and starts
+		    } elsif (($fields1[0] + $fields1[2] + 1) < $start[$i]) {
+			$lastctg = $fields1[1];
+			$laststart = $fields1[0] + $fields1[2] + 1;
+		    # Another gap separated this gap from previous contig,
+		    # so didn't find match and passed it up
+		    } elsif (($ctg1[$i] eq "") && ($laststart > 1)) {
+			# Set start coordinate to end of last contig
+			$ctg1[$i] = $lastctg;
+			$start[$i] = $laststart;
+			# Reset end coordinate and re-calculate size
+			@fields1 = split("\t", $line1);
+			$ctg2[$i] = $fields1[1];
+			$end[$i] = $fields1[0];
+			$size[$i] = $end[$i] - $start[$i] + 1;
+		    }
+		}
+	    }
+	    close(ORDCTG); 
+	    $i++;
+	}
+    }
+    close(AGP);	
+}
+$num = $i;
+
+# Print them out
+for ($i = 0; $i < $num; $i++) {
+    # Don't print out duplicate lines for same gap (i.e. centromere and heterochromatin
+    # in same gap
+    if (($chr[$i] ne $chr[$i-1]) || (($ctg1[$i] ne $ctg1[$i-1]) && ($start[$i] > $end[$i-1]))) {
+	# Large gaps must be heterochromatin
+	if ($size[$i] > 3100000) {
+	    $type[$i] = "heterochromatin";
+	}
+	# gaps at beginning must be short_arm
+	if ($start[$i] <= 1) {
+	    $type[$i] = "short_arm";
+	}
+	# Only want large heterochromatic regions, not telomeres
+	if (($type[$i] ne "heterochromatin") || ($size[$i] > 1000000)) { 
+	    print "$chr[$i]\t$ctg1[$i]\t$ctg2[$i]\t$size[$i]\t$type[$i]\n";
+	}
+    }
+}
+'_EOF_'
+    # << happy emacs
+ 
+    chmod +x createInserts.pl
+    ./createInserts.pl > inserts
+
+# Convert files to proper format
+    cat << '_EOF_' > convRecombRate.pl
+#!/usr/local/bin/perl
+# File: convRecombRate
+# Author: Terry Furey
+# Date: 9/2002
+# Modified by Chin 2010-10-14
+# Project: Human
+# Description: Changes recomb rates in large gaps to nan
+# Usage message
+if ($#ARGV != 3) {
+  print stderr "USAGE: createSetBands <recomb file> <insert file> <ctg dir> <window (kb)>\n";
+  exit(1);
+}
+
+# Read parameters
+$rrfile = shift(@ARGV);
+$insfile = shift(@ARGV);
+$ctgdir = shift(@ARGV);
+$basewind = shift(@ARGV);
+$window = $basewind * 1000;
+
+# Determine the golden path positions for each of the inserts
+open(INSERT, "<$insfile") || die("Could not open $insfile\n");
+$line = <INSERT>; #header
+while ($line = <INSERT>) {
+  next if (substr($line, 0, 1) eq "#"); 
+  chomp($line);
+  ($chr, $first, $second, $length, $type) = split(' ',$line);
+
+  $thischr = substr($chr,3);
+  open(ORDCTG, "<$ctgdir/orderedCtg/chr$thischr.ol") || die("Could not open $ctgdir/orderedCtg/chr$thischr.ol\n");
+
+  # Determine first window for the insert
+  if ($first eq "-") {
+    $begin = 0;
+    $end = int(($length)/$window)*$window;
+  } else {
+    $found = 0;
+    print stderr "Finding $chr $first\n";
+    while(!$found) {
+      $line = <ORDCTG>;
+      chomp($line);
+      ($ctgstart, $ctg, $ctglen, $ctgchr, $chrlen) = split(' ',$line);
+      if ($ctg eq $first) {
+	$begin = int(($ctgstart + $ctglen)/$window)*$window;
+	$end = int(($ctgstart + $ctglen + $length)/$window)*$window + $window;
+	$found = 1;
+      }
+    }
+  }
+  close(ORDCTG);
+  print stderr "$chr $begin - $end $type\n";
+  for ($i = $begin; $i < $end; $i=$i+$window) {
+    $gap{$chr}{$i} = 1;
+  }
+}
+close(INSERT);
+
+# Now, match up with PCT
+open(RR, "<$rrfile") || die("Could not open $rrfile\n");
+while ($line = <RR>) {
+  chomp($line);
+  ($chr, $start, $end, $ave, $female, $male) = split("\t", $line);
+  if ($gap{$chr}{$start}) {
+    print "$chr\t$start\t$end\tNaN\tNaN\tNaN\n";
+  } else {
+    print "$line\n";
+  }
+}
+close(RR);
+'_EOF_'
+    # << happy emacs
+    
+    chmod +x convRecombRate.pl
+
+
+./convRecombRate.pl  decode_1mb_slide_1mb inserts \
+        . 1000 > decode_1mb_slide_1mb_conv
+
+./convRecombRate.pl  marshfield_1mb_slide_1mb inserts \
+        . 1000 > marshfield_1mb_slide_1mb_conv
+
+./convRecombRate.pl  genethon_1mb_slide_1mb inserts \
+        . 1000 > genethon_1mb_slide_1mb_conv
+
+# Create bed file and load
+    /cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
+        marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv \
+                > recombRate.bed
+
+    ssh hgwdev
+    # reuse the recombRate.sql and recombRate.as from before
+    hgLoadBed -noBin -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/recombRate.sql \
+            hg19 recombRate recombRate.bed
+
+
 #############################################################################
