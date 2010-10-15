@@ -487,3 +487,19 @@ searchMethod prefix
 searchType psl
 xrefTable ce9.blastSGRef01
 xrefQuery select acc,geneId from %s where geneId like '%s%%'
+
+track ws210Gene
+shortLabel WS210 Genes
+longLabel Genes predictions from WormBase WS210 release
+group genes
+priority 32
+visibility pack
+color 0,0,200
+type genePred
+url http://www.wormbase.org/db/gene/gene?name=$$;class=Gene
+
+searchName ws210GenePrefix
+searchTable ws210Gene
+searchMethod fuzzy
+searchType genePred
+searchPriority 21

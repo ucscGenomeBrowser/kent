@@ -10,6 +10,7 @@
      o (in 34x7) Made it check and error out if the same name is reused in the target database.
      o (in 34x8) Truncate in output PCR primers that dangle off target chrom ends.
      o (in 34x9) If -fastMap is used, check that query sizes do not exceed MAXSINGLEPIECESIZE.
+     o (in 34x10) Added IP-logging option to gfServer.
      
 
 34:
