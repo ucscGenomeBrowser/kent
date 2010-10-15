@@ -12,7 +12,7 @@ D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
     Tables: 12
-    Files: 19
+    Files: 25
     Gbdbs: 16
 
 A) Untouched Tables (0):
@@ -37,7 +37,7 @@ wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2
 wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1
 wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2
 
-C') New files (16 downloadables, 16 gbdbs):
+C') New files (22 downloadables, 16 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/
     NOT on RR but must be placed in:
@@ -47,10 +47,13 @@ C') New files (16 downloadables, 16 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqGm12878CytosolPapMinusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqGm12878CytosolPapRawData2Rep1.csqual.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1.csfasta.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqH1hescCellPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqH1hescCellPapMinusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqH1hescCellPapRawData3Rep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapAlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapAlnRep2.bam
@@ -59,6 +62,9 @@ C') New files (16 downloadables, 16 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapPlusRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2.bigWig
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapRawData2Rep2.csqual.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1.fastq.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeGisRnaSeq/release1/wgEncodeGisRnaSeqK562CytosolPapRawDataRep2.csfasta.gz
 
 /gbdb/hg19/bbi/wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam
 /gbdb/hg19/bbi/wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1.bam.bai

@@ -713,8 +713,8 @@ sex F
 tier 3
 protocol UW_Stam:GM12875_Stam_protocol.pdf
 
-term GM12878-16XiMat
-tag GM1287816XiMat
+term GM12878-XiMat
+tag GM12878XiMat
 type Cell Line
 organism Human
 description lymphoblastoid
@@ -726,10 +726,11 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
+#protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
+#protocol HudsonAlpha:GM12878-56XiMat_Myers_protocol.pdf
 
-term GM12878-34XiPat
-tag GM1287834XiPat
+term GM12878-XiPat
+tag GM12878XiPat
 type Cell Line
 organism Human
 description lymphoblastoid
@@ -741,38 +742,8 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-protocol HudsonAlpha:GM12878-34XiPat_Myers_protocol.pdf
-
-term GM12878-40XiPat
-tag GM1287840XPat
-type Cell Line
-organism Human
-description lymphoblastoid
-tissue Blood
-vendorName Cloned for paternal X inactivation by Hunt Willard's at Duke University
-karyotype relatively normal
-lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for paternal X inactivation
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-sex F
-tier 3
-protocol HudsonAlpha:GM12878-40XiPat_Myers_protocol.pdf
-
-term GM12878-56XiMat
-tag GM1287856XiMat
-type Cell Line
-organism Human
-description lymphoblastoid
-tissue Blood
-vendorName Cloned for maternal X inactivation by Hunt Willard's at Duke University
-karyotype relatively normal
-lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus;Cloned for maternal X inactivation
-termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
-sex F
-tier 3
-protocol HudsonAlpha:GM12878-56XiMat_Myers_protocol.pdf
-
+#protocol HudsonAlpha:GM12878-34XiPat_Myers_protocol.pdf
+#protocol HudsonAlpha:GM12878-40XiPat_Myers_protocol.pdf
 
 term GM12891
 tag GM12891
