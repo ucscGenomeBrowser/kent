@@ -109,9 +109,9 @@ priority 103.29
         longLabel Caenorhabditis Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -1.08 1.88
+        type wig -1.03 1.95
         maxHeightPixels 100:50:11
-        viewLimits -1.08:1.88
+        viewLimits -1.03:1.95
         autoScale off
         spanList 1
         windowingFunction mean
@@ -126,9 +126,9 @@ priority 103.29
         longLabel Nematode Basewise Conservation by PhyloP
         noInherit on
         configurable on
-        type wig -1.82 3.71
+        type wig -1.7 4.36
         maxHeightPixels 100:50:11
-        viewLimits -1.82:3.715
+        viewLimits -1.7:4.36
         autoScale off
         spanList 1
         windowingFunction mean
