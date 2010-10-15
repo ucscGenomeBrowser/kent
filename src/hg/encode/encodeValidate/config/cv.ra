@@ -6282,7 +6282,7 @@ term E0
 tag E0
 type age
 stage Embryonic
-description Embyonic day 0 (stem cell)
+description Embryonic day 0 (stem cell)
 
 term E11.5
 tag E11half

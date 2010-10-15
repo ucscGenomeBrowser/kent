@@ -25,8 +25,7 @@ superTrack wgEncodeRnaSeqSuper
     type bam
     pairEndsByName on
     showNames on
-    noColorTag .
-    bamColorMode on 
+    bamColorMode tag
     bamGrayMode aliQual
     baseColorDefault diffBases
     baseColorUseSequence lfExtra
@@ -47,7 +46,7 @@ superTrack wgEncodeRnaSeqSuper
 
         track wgEncodeCshlShortRnaSeqProstateCellTotalAln
         parent wgEncodeCshlShortRnaSeqViewAlignments on
-        shortLabel Pros cell tl Al
+        shortLabel Pros cell sm A
         longLabel ENCODE CSHL Small RNA-seq Alignments in prostate cell
         subGroups view=4-Alignments cellType=prostate localization=cell rnaExtract=short
         type bam
@@ -276,7 +275,7 @@ superTrack wgEncodeRnaSeqSuper
 
         track wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
         parent wgEncodeCshlShortRnaSeqView2PlusRawSignal off
-        shortLabel Pros cell tl +
+        shortLabel Pros cell sm +
         longLabel ENCODE CSHL Small RNA-seq Plus Strand Raw Signal in prostate cell
         subGroups view=2-PlusRawSignal cellType=prostate localization=cell rnaExtract=short
         type bigWig 1.000000 2318106.000000
