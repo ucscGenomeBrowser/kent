@@ -3,17 +3,17 @@ compositeTrack on
 shortLabel GIS RNA PET
 longLabel ENCODE GIS Subcellular RNA Localization by Paired End diTag Sequencing 
 group expression
-subGroup1 view Views PlusRawSig=PlusRawSig Clusters=Clusters MinusRawSig=MinusRawSig Alignments=Alignments
-#subGroup1 view Views 0-PlusRawSignal=Plus_Raw_Signal 1-MinusRawSignal=Minus_Raw_Signal 2-Alignments=Alignments 3-Clusters=Clusters
-subGroup2 cellType Cell_Line GM12878=GM12878 H1-hESC=H1-hESC HeLaS3=HeLaS3 HepG2=HepG2 HUVEC=HUVEC K562=K562 NHEK=NHEK prostate=Prostate
-subGroup3 localization Localization cell=Cell polysome=Polysome cytosol=Cytosol nucleus=Nucleus nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
-subGroup4 rnaExtract RNA_Extract pAP=Long_PolyA+ total=Total
+subGroup1 view Views Clusters=Clusters PlusRawSig=Plus_Raw_Sig MinusRawSig=Minus_Raw_Sig Alignments=Alignments
+subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K652&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC MCF7=MCF7 NHEK=NHEK prostate=Prostate
+subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
+subGroup4 rnaExtract RNA_Extract pAP=PolyA+ total=Total_RNA
 subGroup5 rep Rep rep1=1 rep2=2
-dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
-sortOrder cellType=+ localization=+ rnaExtract=+ view=+
-controlledVocabulary encode/cv.ra cellType localization rnaExtract
+dimensions dimensionX=cellType dimensionC=rnaExtract dimensionY=localization dimensionB=rep
+dimensionCchecked pAP,longNonPolyA,total
+dimensionBchecked rep0,rep1,rep2,rep3,rep4
+sortOrder view=- cellType=+ localization=+ rnaExtract=+ rep=+
+controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
-visibilityViewDefaults  PlusRawSig=hide Clusters=hide MinusRawSig=hide Alignments=hide
 priority 0
 type bed 3
 noInherit on
@@ -30,67 +30,27 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel GM12878 nucl pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in GM12878 nucleus)
-        subGroups view=Clusters cellType=GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Clusters (PolyA+ in GM12878 nucleus)
+        subGroups view=Clusters cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bed 12
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleusPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 nucl pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 nucleus)
-        subGroups view=Clusters cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562PolysomePapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel K562 polysome pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 polysome)
-        subGroups view=Clusters cellType=K562 localization=polysome rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Clusters (PolyA+ in K562 polysome)
+        subGroups view=Clusters cellType=3-K562 localization=polysome rnaExtract=pAP rep=rep1
         type bed 12
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 chro pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 chromatin)
-        subGroups view=Clusters cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 nucleoplasm pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 nucleoplasm)
-        subGroups view=Clusters cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleolusPapClustersRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewClusters off
-        shortLabel K562 nucleolus pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in K562 nucleolus)
-        subGroups view=Clusters cellType=K562 localization=nucleolus rnaExtract=pAP rep=rep1
-        type bed 12
-        color 46,0,184
-        # subId=1988 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetProstateCellPapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel prostate cell pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in prostate cell)
+        longLabel ENCODE GIS RNA PET Clusters (PolyA+ in prostate cell)
         subGroups view=Clusters cellType=prostate localization=cell rnaExtract=pAP rep=rep1
         type bed 12
         # subId=1989 dateSubmitted=2010-07-22
@@ -98,8 +58,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHuvecCytosolPapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
-        shortLabel HUVEC cytosol pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in HUVEC cytosol)
+        shortLabel HUVEC cyto pA+
+        longLabel ENCODE GIS RNA PET Clusters (PolyA+ in HUVEC cytosol)
         subGroups view=Clusters cellType=HUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bed 12
         color 224,75,0
@@ -109,7 +69,7 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel HUVEC nucl pA+
-        longLabel ENCODE GIS RNA PET Clusters (longPolyA in HUVEC nucleus)
+        longLabel ENCODE GIS RNA PET Clusters (PolyA+ in HUVEC nucleus)
         subGroups view=Clusters cellType=HUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bed 12
         color 224,75,0
@@ -119,8 +79,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel GM12878 cyto pA+ 1
-        longLabel ENCODE GIS RNA PET Clusters Rep 1 (longPolyA in GM12878 cytosol)
-        subGroups view=Clusters cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in GM12878 cytosol)
+        subGroups view=Clusters cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bed 12
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -129,8 +89,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel GM12878 cyto pA+ 2
-        longLabel ENCODE GIS RNA PET Clusters Rep 2 (longPolyA in GM12878 cytosol)
-        subGroups view=Clusters cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        longLabel ENCODE GIS RNA PET Clusters Rep 2 (PolyA+ in GM12878 cytosol)
+        subGroups view=Clusters cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bed 12
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -139,8 +99,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel K562 nucleoplasm total 1
-        longLabel ENCODE GIS RNA PET Clusters Replicate 1 (total in K562 nucleoplasm)
-        subGroups view=Clusters cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (total in K562 nucleoplasm)
+        subGroups view=Clusters cellType=3-K562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bed 12
         color 46,0,184
         # subId=1987 dateSubmitted=2010-08-18
@@ -149,8 +109,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel K562 chromatin total 1
-        longLabel ENCODE GIS RNA PET Clusters Replicate 1 (total in K562 chromatin)
-        subGroups view=Clusters cellType=K562 localization=chromatin rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (total in K562 chromatin)
+        subGroups view=Clusters cellType=3-K562 localization=chromatin rnaExtract=total rep=rep1
         type bed 12
         color 46,0,184
         # subId=1986 dateSubmitted=2010-08-18
@@ -159,8 +119,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
         shortLabel K562 nucleolus total 1
-        longLabel ENCODE GIS RNA PET Clusters Replicate 1 (total in K562 nucleolus)
-        subGroups view=Clusters cellType=K562 localization=nucleolus rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (total in K562 nucleolus)
+        subGroups view=Clusters cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
         type bed 12
         color 46,0,184
         # subId=1988 dateSubmitted=2010-08-18
@@ -168,8 +128,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHelas3NucleusPapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
-        shortLabel HeLa-S3 nucleus longPolyA 1
-        longLabel ENCODE GIS RNA PET Clusters Replicate 1 (longPolyA in HeLa-S3 nucleus)
+        shortLabel HeLa-S3 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in HeLa-S3 nucleus)
         subGroups view=Clusters cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bed 12
         color 0,119,158
@@ -178,8 +138,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2CytosolPapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
-        shortLabel HepG2 cytosol longPolyA 1
-        longLabel ENCODE GIS RNA PET Clusters Replicate 1 (longPolyA in HepG2 cytosol)
+        shortLabel HepG2 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in HepG2 cytosol)
         subGroups view=Clusters cellType=HepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bed 12
         color 189,0,157
@@ -188,17 +148,87 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2NucleusPapClustersRep1
         release alpha
         parent wgEncodeGisRnaPetViewClusters off
-        shortLabel HepG2 nucleus longPolyA 1
-        longLabel ENCODE GIS RNA PET Clusters Replicate 1 (longPolyA in HepG2 nucleus)
+        shortLabel HepG2 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in HepG2 nucleus)
         subGroups view=Clusters cellType=HepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bed 12
         color 189,0,157
         # subId=2117 dateSubmitted=2010-08-18
 
+        track wgEncodeGisRnaPetHelas3CytosolPapClustersRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel HeLa-S3 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in HeLa-S3 cytosol)
+        subGroups view=Clusters cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        type bed 12
+        color 0,119,158
+        # subId=2123 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetH1hescCellPapClustersRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel H1-hESC cell pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in H1-hESC cell)
+        subGroups view=Clusters cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
+        type bed 12
+        color 0,107,27
+        # subId=2114 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetK562CytosolPapClustersRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel K562 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in K562 cytosol)
+        subGroups view=Clusters cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep1
+        type bed 12
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562CytosolPapClustersRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel K562 cyto pA+ 2
+        longLabel ENCODE GIS RNA PET Clusters Rep 2 (PolyA+ in K562 cytosol)
+        subGroups view=Clusters cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep2
+        type bed 12
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562NucleusPapClustersRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel K562 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in K562 nucleus)
+        subGroups view=Clusters cellType=3-K562 localization=nucleus rnaExtract=pAP rep=rep1
+        type bed 12
+        color 46,0,184
+        # subId=1984 dateSubmitted=2010-08-18
+
+        track wgEncodeGisRnaPetNhekNucleusPapClustersRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel NHEK nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in NHEK nucleus)
+        subGroups view=Clusters cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep1
+        type bed 12
+        color 179,0,134
+        # subId=2118 dateSubmitted=2010-10-09
+
+        track wgEncodeGisRnaPetNhekCytosolPapClustersRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewClusters off
+        shortLabel NHEK cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Clusters Rep 1 (PolyA+ in NHEK cytosol)
+        subGroups view=Clusters cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep1
+        type bed 12
+        color 179,0,134
+        # subId=2120 dateSubmitted=2010-10-09
+
     track wgEncodeGisRnaPetViewAlignments
     shortLabel Alignments
     view Alignments
-    visibility dense
+    visibility hide 
     subTrack wgEncodeGisRnaPet
     type bam
     pairEndsByName on
@@ -217,68 +247,28 @@ wgEncode 1
         track wgEncodeGisRnaPetGm12878NucleusPapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel GM12878 nucleus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in GM12878 nucleus)
-        subGroups view=Alignments cellType=GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        shortLabel GM12878 nucl pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments (PolyA+ in GM12878 nucleus)
+        subGroups view=Alignments cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetK562NucleusPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 nucleus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 nucleus)
-        subGroups view=Alignments cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
-
         track wgEncodeGisRnaPetK562PolysomePapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 polysome longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 polysome)
-        subGroups view=Alignments cellType=K562 localization=polysome rnaExtract=pAP rep=rep1
+        shortLabel K562 polysome pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments (PolyA+ in K562 polysome)
+        subGroups view=Alignments cellType=3-K562 localization=polysome rnaExtract=pAP rep=rep1
         type bam
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
 
-        track wgEncodeGisRnaPetK562ChromatinPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 chromatin longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 chromatin)
-        subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 nucleoplasm longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 nucleoplasm)
-        subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleolusPapAlnRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel K562 nucleolus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in K562 nucleolus)
-        subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=pAP rep=rep1
-        type bam
-        color 46,0,184
-        # subId=1988 dateSubmitted=2010-07-22
-
         track wgEncodeGisRnaPetProstateCellPapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel prostate cell longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in prostate cell)
+        shortLabel prostate cell pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments (PolyA+ in prostate cell)
         subGroups view=Alignments cellType=prostate localization=cell rnaExtract=pAP rep=rep1
         type bam
         # subId=1989 dateSubmitted=2010-07-22
@@ -287,7 +277,7 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel HUVEC cyto pA+ Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in HUVEC cytosol)
+        longLabel ENCODE GIS RNA PET Alignments (PolyA+ in HUVEC cytosol)
         subGroups view=Alignments cellType=HUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         color 224,75,0
@@ -296,8 +286,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHuvecNucleusPapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel HUVEC nucleus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments (longPolyA in HUVEC nucleus)
+        shortLabel HUVEC nucl pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments (PolyA+ in HUVEC nucleus)
         subGroups view=Alignments cellType=HUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         color 224,75,0
@@ -307,8 +297,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel GM12878 cyto pA+ Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Rep 1 (longPolyA in GM12878 cytosol)
-        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in GM12878 cytosol)
+        subGroups view=Alignments cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -317,8 +307,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel GM12878 cyto pA+ Aln 2
-        longLabel ENCODE GIS RNA PET Alignments Rep 2 (longPolyA in GM12878 cytosol)
-        subGroups view=Alignments cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        longLabel ENCODE GIS RNA PET Alignments Rep 2 (PolyA+ in GM12878 cytosol)
+        subGroups view=Alignments cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bam
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -327,8 +317,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel K562 nucleoplasm total Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Replicate 1 (total in K562 nucleoplasm)
-        subGroups view=Alignments cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (total in K562 nucleoplasm)
+        subGroups view=Alignments cellType=3-K562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bam
         color 46,0,184
         # subId=1987 dateSubmitted=2010-08-18
@@ -337,8 +327,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel K562 chromatin total Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Replicate 1 (total in K562 chromatin)
-        subGroups view=Alignments cellType=K562 localization=chromatin rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (total in K562 chromatin)
+        subGroups view=Alignments cellType=3-K562 localization=chromatin rnaExtract=total rep=rep1
         type bam
         color 46,0,184
         # subId=1986 dateSubmitted=2010-08-18
@@ -347,8 +337,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
         shortLabel K562 nucleolus total Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Replicate 1 (total in K562 nucleolus)
-        subGroups view=Alignments cellType=K562 localization=nucleolus rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (total in K562 nucleolus)
+        subGroups view=Alignments cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
         type bam
         color 46,0,184
         # subId=1988 dateSubmitted=2010-08-18
@@ -356,8 +346,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHelas3NucleusPapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel HeLa-S3 nucleus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Replicate 1 (longPolyA in HeLa-S3 nucleus)
+        shortLabel HeLa-S3 nucl pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in HeLa-S3 nucleus)
         subGroups view=Alignments cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         color 0,119,158
@@ -366,8 +356,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2CytosolPapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel HepG2 cytosol longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Replicate 1 (longPolyA in HepG2 cytosol)
+        shortLabel HepG2 cyto pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in HepG2 cytosol)
         subGroups view=Alignments cellType=HepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bam
         color 189,0,157
@@ -376,84 +366,122 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2NucleusPapAlnRep1
         release alpha
         parent wgEncodeGisRnaPetViewAlignments off
-        shortLabel HepG2 nucleus longPolyA Aln 1
-        longLabel ENCODE GIS RNA PET Alignments Replicate 1 (longPolyA in HepG2 nucleus)
+        shortLabel HepG2 nucl pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in HepG2 nucleus)
         subGroups view=Alignments cellType=HepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bam
         color 189,0,157
         # subId=2117 dateSubmitted=2010-08-18
 
+        track wgEncodeGisRnaPetHelas3CytosolPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel HeLa-S3 cyto pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in HeLa-S3 cytosol)
+        subGroups view=Alignments cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        type bam
+        color 0,119,158
+        # subId=2123 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetH1hescCellPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel H1-hESC cell pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in H1-hESC cell)
+        subGroups view=Alignments cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
+        type bam
+        color 0,107,27
+        # subId=2114 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetK562CytosolPapAlnRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel K562 cyto pA+ Aln 2
+        longLabel ENCODE GIS RNA PET Alignments Rep 2 (PolyA+ in K562 cytosol)
+        subGroups view=Alignments cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep2
+        type bam
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562CytosolPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel K562 cyto pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in K562 cytosol)
+        subGroups view=Alignments cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep1
+        type bam
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562NucleusPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel K562 nucl pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in K562 nucleus)
+        subGroups view=Alignments cellType=3-K562 localization=nucleus rnaExtract=pAP rep=rep1
+        type bam
+        color 46,0,184
+        # subId=1984 dateSubmitted=2010-08-18
+
+        track wgEncodeGisRnaPetNhekNucleusPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel NHEK nucl pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in NHEK nucleus)
+        subGroups view=Alignments cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep1
+        type bam
+        color 179,0,134
+        # subId=2118 dateSubmitted=2010-10-09
+
+        track wgEncodeGisRnaPetNhekCytosolPapAlnRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewAlignments off
+        shortLabel NHEK cyto pA+ Aln 1
+        longLabel ENCODE GIS RNA PET Alignments Rep 1 (PolyA+ in NHEK cytosol)
+        subGroups view=Alignments cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep1
+        type bam
+        color 179,0,134
+        # subId=2120 dateSubmitted=2010-10-09
+
+# These settings are all copied from Riken Cage I am not sure if they are right
     track wgEncodeGisRnaPetViewMinusRawSig
     shortLabel MinusRawSig
     view MinusRawSig
     visibility dense
     subTrack wgEncodeGisRnaPet
+    maxHeightPixels 100:24:16
+    minLimit .005
+    maxLimit 25183
+    viewLimits 0:30
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean
 
         track wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel GM12878 nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in GM12878 nucleus)
-        subGroups view=MinusRawSig cellType=GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal (PolyA+ in GM12878 nucleus)
+        subGroups view=MinusRawSig cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 618340.000000
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 nucleus)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 203666.000000
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel K562 polysome pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 polysome)
-        subGroups view=MinusRawSig cellType=K562 localization=polysome rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal (PolyA+ in K562 polysome)
+        subGroups view=MinusRawSig cellType=3-K562 localization=polysome rnaExtract=pAP rep=rep1
         type bigWig 1.000000 1469476.000000
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 chro pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 chromatin)
-        subGroups view=MinusRawSig cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 331367.000000
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 nucleoplasm pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 nucleoplasm)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 5294.000000
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleolusPapMinusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel K562 nucleolus pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in K562 nucleolus)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleolus rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 42871.000000
-        color 46,0,184
-        # subId=1988 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel prostate cell pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in prostate cell)
+        longLabel ENCODE GIS RNA PET Minus Raw Signal (PolyA+ in prostate cell)
         subGroups view=MinusRawSig cellType=prostate localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 47234.000000
         # subId=1989 dateSubmitted=2010-07-22
@@ -461,8 +489,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel HUVEC cytosol pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in HUVEC cytosol)
+        shortLabel HUVEC cyto pA+
+        longLabel ENCODE GIS RNA PET Minus Raw Signal (PolyA+ in HUVEC cytosol)
         subGroups view=MinusRawSig cellType=HUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 86181.000000
         color 224,75,0
@@ -472,7 +500,7 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel HUVEC nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) (longPolyA in HUVEC nucleus)
+        longLabel ENCODE GIS RNA PET Minus Raw Signal (PolyA+ in HUVEC nucleus)
         subGroups view=MinusRawSig cellType=HUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 31077.000000
         color 224,75,0
@@ -482,8 +510,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel GM12878 cyto pA+ 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Rep 1 (longPolyA in GM12878 cytosol)
-        subGroups view=MinusRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in GM12878 cytosol)
+        subGroups view=MinusRawSig cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 822224.000000
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -492,8 +520,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel GM12878 cyto pA+ 2
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Rep 2 (longPolyA in GM12878 cytosol)
-        subGroups view=MinusRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 2 (PolyA+ in GM12878 cytosol)
+        subGroups view=MinusRawSig cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 1.000000 13358.000000
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -502,8 +530,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel K562 nucleoplasm total 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (total in K562 nucleoplasm)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (total in K562 nucleoplasm)
+        subGroups view=MinusRawSig cellType=3-K562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bigWig 1.000000 5294.000000
         color 46,0,184
         # subId=1987 dateSubmitted=2010-08-18
@@ -512,8 +540,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel K562 chromatin total 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (total in K562 chromatin)
-        subGroups view=MinusRawSig cellType=K562 localization=chromatin rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (total in K562 chromatin)
+        subGroups view=MinusRawSig cellType=3-K562 localization=chromatin rnaExtract=total rep=rep1
         type bigWig 1.000000 331367.000000
         color 46,0,184
         # subId=1986 dateSubmitted=2010-08-18
@@ -522,8 +550,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
         shortLabel K562 nucleolus total 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (total in K562 nucleolus)
-        subGroups view=MinusRawSig cellType=K562 localization=nucleolus rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (total in K562 nucleolus)
+        subGroups view=MinusRawSig cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 1.000000 42871.000000
         color 46,0,184
         # subId=1988 dateSubmitted=2010-08-18
@@ -531,8 +559,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHelas3NucleusPapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel HeLa-S3 nucleus longPolyA 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (longPolyA in HeLa-S3 nucleus)
+        shortLabel HeLa-S3 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in HeLa-S3 nucleus)
         subGroups view=MinusRawSig cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 45930.000000
         color 0,119,158
@@ -541,8 +569,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel HepG2 cytosol longPolyA 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (longPolyA in HepG2 cytosol)
+        shortLabel HepG2 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in HepG2 cytosol)
         subGroups view=MinusRawSig cellType=HepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 235211.000000
         color 189,0,157
@@ -551,85 +579,124 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewMinusRawSig off
-        shortLabel HepG2 nucleus longPolyA 1
-        longLabel ENCODE GIS RNA PET Raw Signal (minus strand) Replicate 1 (longPolyA in HepG2 nucleus)
+        shortLabel HepG2 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in HepG2 nucleus)
         subGroups view=MinusRawSig cellType=HepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 105811.000000
         color 189,0,157
         # subId=2117 dateSubmitted=2010-08-18
 
+        track wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel HeLa-S3 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in HeLa-S3 cytosol)
+        subGroups view=MinusRawSig cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 115239.000000
+        color 0,119,158
+        # subId=2123 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel H1-hESC cell pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in H1-hESC cell)
+        subGroups view=MinusRawSig cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 106397.000000
+        color 0,107,27
+        # subId=2114 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel K562 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+        subGroups view=MinusRawSig cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 472561.000000
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel K562 cyto pA+ 2
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 2 (PolyA+ in K562 cytosol)
+        subGroups view=MinusRawSig cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 380350.000000
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel K562 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in K562 nucleus)
+        subGroups view=MinusRawSig cellType=3-K562 localization=nucleus rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 203666.000000
+        color 46,0,184
+        # subId=1984 dateSubmitted=2010-08-18
+
+        track wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel NHEK nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in NHEK nucleus)
+        subGroups view=MinusRawSig cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 687973.000000
+        color 179,0,134
+        # subId=2118 dateSubmitted=2010-10-09
+
+        track wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewMinusRawSig off
+        shortLabel NHEK cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Minus Raw Signal Rep 1 (PolyA+ in NHEK cytosol)
+        subGroups view=MinusRawSig cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 281517.000000
+        color 179,0,134
+        # subId=2120 dateSubmitted=2010-10-09
+
+
+#These settings are all copied from RikeCage, I am not sure if they are right
 
     track wgEncodeGisRnaPetViewPlusRawSig
     shortLabel PlusRawSig
     view PlusRawSig
     visibility dense
     subTrack wgEncodeGisRnaPet
+    maxHeightPixels 100:24:16
+    minLimit .005
+    maxLimit 25183
+    viewLimits 0:30
+    autoScale on
+    transformFunc NONE
+    windowingFunction mean
 
         track wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel GM12878 nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in GM12878 nucleus)
-        subGroups view=PlusRawSig cellType=GM12878 localization=nucleus rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal (PolyA+ in GM12878 nucleus)
+        subGroups view=PlusRawSig cellType=1-GM12878 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 190066.000000
         color 153,38,0
         # subId=1980 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 nucleus)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleus rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 83090.000000
-        color 46,0,184
-        # subId=1984 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel K562 polysome pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 polysome)
-        subGroups view=PlusRawSig cellType=K562 localization=polysome rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal (PolyA+ in K562 polysome)
+        subGroups view=PlusRawSig cellType=3-K562 localization=polysome rnaExtract=pAP rep=rep1
         type bigWig 1.000000 424954.000000
         color 46,0,184
         # subId=1985 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562ChromatinPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 chro pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 chromatin)
-        subGroups view=PlusRawSig cellType=K562 localization=chromatin rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 9878.000000
-        color 46,0,184
-        # subId=1986 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleoplasmPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 nucleoplasm pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 nucleoplasm)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleoplasm rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 202.000000
-        color 46,0,184
-        # subId=1987 dateSubmitted=2010-07-22
-
-        track wgEncodeGisRnaPetK562NucleolusPapPlusRawSigRep1
-        release alpha
-        parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel K562 nucleolus pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in K562 nucleolus)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleolus rnaExtract=pAP rep=rep1
-        type bigWig 1.000000 24616.000000
-        color 46,0,184
-        # subId=1988 dateSubmitted=2010-07-22
 
         track wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel prostate cell pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in prostate cell)
+        longLabel ENCODE GIS RNA PET Plus Raw Signal (PolyA+ in prostate cell)
         subGroups view=PlusRawSig cellType=prostate localization=cell rnaExtract=pAP rep=rep1
         type bigWig 1.000000 79623.000000
         # subId=1989 dateSubmitted=2010-07-22
@@ -637,8 +704,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel HUVEC cytosol pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in HUVEC cytosol)
+        shortLabel HUVEC cyto pA+
+        longLabel ENCODE GIS RNA PET Plus Raw Signal (PolyA+ in HUVEC cytosol)
         subGroups view=PlusRawSig cellType=HUVEC localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 107647.000000
         color 224,75,0
@@ -648,7 +715,7 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel HUVEC nucl pA+
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) (longPolyA in HUVEC nucleus)
+        longLabel ENCODE GIS RNA PET Plus Raw Signal (PolyA+ in HUVEC nucleus)
         subGroups view=PlusRawSig cellType=HUVEC localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 48232.000000
         color 224,75,0
@@ -658,8 +725,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel GM12878 cyto pA+ 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Rep 1 (longPolyA in GM12878 cytosol)
-        subGroups view=PlusRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in GM12878 cytosol)
+        subGroups view=PlusRawSig cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 341723.000000
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -668,8 +735,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel GM12878 cyto pA+ 2
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Rep 2 (longPolyA in GM12878 cytosol)
-        subGroups view=PlusRawSig cellType=GM12878 localization=cytosol rnaExtract=pAP rep=rep2
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 2 (PolyA+ in GM12878 cytosol)
+        subGroups view=PlusRawSig cellType=1-GM12878 localization=cytosol rnaExtract=pAP rep=rep2
         type bigWig 1.000000 81924.000000
         color 153,38,0
         # subId=1979 dateSubmitted=2010-07-22
@@ -678,8 +745,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel K562 nucleoplasm total 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (total in K562 nucleoplasm)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleoplasm rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (total in K562 nucleoplasm)
+        subGroups view=PlusRawSig cellType=3-K562 localization=nucleoplasm rnaExtract=total rep=rep1
         type bigWig 1.000000 202.000000
         color 46,0,184
         # subId=1987 dateSubmitted=2010-08-18
@@ -688,8 +755,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel K562 chromatin total 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (total in K562 chromatin)
-        subGroups view=PlusRawSig cellType=K562 localization=chromatin rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (total in K562 chromatin)
+        subGroups view=PlusRawSig cellType=3-K562 localization=chromatin rnaExtract=total rep=rep1
         type bigWig 1.000000 9878.000000
         color 46,0,184
         # subId=1986 dateSubmitted=2010-08-18
@@ -698,8 +765,8 @@ wgEncode 1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
         shortLabel K562 nucleolus total 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (total in K562 nucleolus)
-        subGroups view=PlusRawSig cellType=K562 localization=nucleolus rnaExtract=total rep=rep1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (total in K562 nucleolus)
+        subGroups view=PlusRawSig cellType=3-K562 localization=nucleolus rnaExtract=total rep=rep1
         type bigWig 1.000000 24616.000000
         color 46,0,184
         # subId=1988 dateSubmitted=2010-08-18
@@ -707,8 +774,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHelas3NucleusPapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel HeLa-S3 nucleus longPolyA 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (longPolyA in HeLa-S3 nucleus)
+        shortLabel HeLa-S3 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in HeLa-S3 nucleus)
         subGroups view=PlusRawSig cellType=HeLaS3 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 21143.000000
         color 0,119,158
@@ -717,8 +784,8 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel HepG2 cytosol longPolyA 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (longPolyA in HepG2 cytosol)
+        shortLabel HepG2 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in HepG2 cytosol)
         subGroups view=PlusRawSig cellType=HepG2 localization=cytosol rnaExtract=pAP rep=rep1
         type bigWig 1.000000 124707.000000
         color 189,0,157
@@ -727,10 +794,80 @@ wgEncode 1
         track wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1
         release alpha
         parent wgEncodeGisRnaPetViewPlusRawSig off
-        shortLabel HepG2 nucleus longPolyA 1
-        longLabel ENCODE GIS RNA PET Raw Signal (plus strand) Replicate 1 (longPolyA in HepG2 nucleus)
+        shortLabel HepG2 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in HepG2 nucleus)
         subGroups view=PlusRawSig cellType=HepG2 localization=nucleus rnaExtract=pAP rep=rep1
         type bigWig 1.000000 101038.000000
         color 189,0,157
         # subId=2117 dateSubmitted=2010-08-18
+
+        track wgEncodeGisRnaPetHelas3CytosolPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel HeLa-S3 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in HeLa-S3 cytosol)
+        subGroups view=PlusRawSig cellType=HeLaS3 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 295497.000000
+        color 0,119,158
+        # subId=2123 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel H1-hESC cell pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in H1-hESC cell)
+        subGroups view=PlusRawSig cellType=2-H1hESC localization=cell rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 149519.000000
+        color 0,107,27
+        # subId=2114 dateSubmitted=2010-10-08
+
+        track wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel K562 cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in K562 cytosol)
+        subGroups view=PlusRawSig cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 82622.000000
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel K562 cyto pA+ 2
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 2 (PolyA+ in K562 cytosol)
+        subGroups view=PlusRawSig cellType=3-K562 localization=cytosol rnaExtract=pAP rep=rep2
+        type bigWig 1.000000 21330.000000
+        color 46,0,184
+        # subId=2119 dateSubmitted=2010-09-16
+
+        track wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel K562 nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in K562 nucleus)
+        subGroups view=PlusRawSig cellType=3-K562 localization=nucleus rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 83090.000000
+        color 46,0,184
+        # subId=1984 dateSubmitted=2010-08-18
+
+        track wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel NHEK nucl pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in NHEK nucleus)
+        subGroups view=PlusRawSig cellType=NHEK localization=nucleus rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 235038.000000
+        color 179,0,134
+        # subId=2118 dateSubmitted=2010-10-09
+
+        track wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1
+        release alpha
+        parent wgEncodeGisRnaPetViewPlusRawSig off
+        shortLabel NHEK cyto pA+ 1
+        longLabel ENCODE GIS RNA PET Plus Raw Signal Rep 1 (PolyA+ in NHEK cytosol)
+        subGroups view=PlusRawSig cellType=NHEK localization=cytosol rnaExtract=pAP rep=rep1
+        type bigWig 1.000000 250705.000000
+        color 179,0,134
+        # subId=2120 dateSubmitted=2010-10-09
 

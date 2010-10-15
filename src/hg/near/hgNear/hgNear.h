@@ -240,7 +240,7 @@ extern struct hash *columnHash;		  /* Hash of active columns keyed by name. */
 #define confVarName "near.do.configure"	/* Configuration button */
 #define detailsVarName "near.do.details" /* Do details page. */
 #define orderInfoDoName "near.do.orderInfo" /* Put up order info page */
-#define countVarName "near.count"	/* How many items to display. */
+#define countVarName "near_count"	/* How many items to display. */
 #define colInfoVarName "near.do.colInfo"	/* Display column info. */
 #define searchVarName "near_search"	
 	/* Search term - underbar for Javascript.  Hardcoded in Javascript. 

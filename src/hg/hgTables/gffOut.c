@@ -14,93 +14,193 @@
 
 static char const rcsid[] = "$Id: gffOut.c,v 1.22 2010/04/15 04:57:53 markd Exp $";
 
-static void addGffLineFromBed(struct gffLine **pGffList, struct bed *bed,
-			      char *source, char *feature,
+static void addGffLineFromBed(struct bed *bed, char *source, char *feature,
 			      int start, int end, char frame, char *txName)
-/* Create a gffLine from a bed and line-specific parameters, add to list. */
+/* Create a gffLine from a bed and line-specific parameters and print it out. */
 {
-struct gffLine *gff;
+struct gffLine gff;
+ZeroVar(&gff);
 char strand;
-AllocVar(gff);
-gff->seq = cloneString(bed->chrom);
-gff->source = cloneString(source);
-gff->feature = cloneString(feature);
-gff->start = start;
-gff->end = end;
-gff->score = bed->score;
+gff.seq = bed->chrom;
+gff.source = source;
+gff.feature = feature;
+gff.start = start;
+gff.end = end;
+gff.score = bed->score;
 strand = bed->strand[0];
 if (strand != '+' && strand != '-')
     strand = '.';
-gff->strand = strand;
-gff->frame = frame;
-gff->group = cloneString(txName);
+gff.strand = strand;
+gff.frame = frame;
+gff.group = txName;
 if (bed->name != NULL)
-    gff->geneId = cloneString(bed->name);
+    gff.geneId = bed->name;
 else
     {
     static int namelessIx = 0;
     char buf[64];
     safef(buf, sizeof(buf), "gene%d", ++namelessIx);
-    gff->geneId = cloneString(buf);
+    gff.geneId = buf;
     }
-slAddHead(pGffList, gff);
+gffTabOut(&gff, stdout);
 }
 
 
-static void addCdsStartStop(struct gffLine **pGffList, struct bed *bed,
-			    char *source, int s, int e, char *frames,
-			    int i, int startIndx, int stopIndx,
-			    boolean gtf2StopCodons, char *txName)
+static char *computeFrames(struct bed *bed, int *retStartIndx, int *retStopIndx)
+/* Compute frames, in order dictated by strand.  bed must be BED12.  */
 {
-/* start_codon (goes first for + strand) overlaps with CDS */
-if ((i == startIndx) && (bed->strand[0] != '-'))
+char *frames = needMem(bed->blockCount);
+boolean gotFirstCds = FALSE;
+int nextPhase = 0, startIndx = 0, stopIndx = 0;
+if (bed->thickStart == 0 && bed->thickEnd == 0)
+    bed->thickStart = bed->thickEnd = bed->chromStart;
+int i;
+for (i=0;  i < bed->blockCount;  i++)
     {
-    addGffLineFromBed(pGffList, bed, source, "start_codon",
-		      s, s+3, '.', txName);
-    }
-/* stop codon does not overlap with CDS as of GTF2 */
-if ((i == stopIndx) && gtf2StopCodons)
-    {
-    if (bed->strand[0] == '-')
+    int j = (bed->strand[0] == '-') ? bed->blockCount-i-1 : i;
+    int exonStart = bed->chromStart + bed->chromStarts[j];
+    int exonEnd = exonStart + bed->blockSizes[j];
+    if ((exonStart < bed->thickEnd) && (exonEnd > bed->thickStart))
 	{
-	addGffLineFromBed(pGffList, bed, source, "stop_codon",
-			  s, s+3, '.', txName);
-	addGffLineFromBed(pGffList, bed, source, "CDS", s+3, e,
-			  frames[i], txName);
+	int cdsSize = exonEnd - exonStart;
+	if (exonEnd > bed->thickEnd)
+	    cdsSize = bed->thickEnd - exonStart;
+	else if (exonStart < bed->thickStart)
+	    cdsSize = exonEnd - bed->thickStart;
+	if (! gotFirstCds)
+	    {
+	    gotFirstCds = TRUE;
+	    startIndx = j;
+	    }
+	frames[j] = '0' + nextPhase;
+	nextPhase = (3 + ((nextPhase - cdsSize) % 3)) % 3;
+	stopIndx = j;
 	}
     else
 	{
-	addGffLineFromBed(pGffList, bed, source, "CDS", s, e-3,
-			  frames[i], txName);
-	addGffLineFromBed(pGffList, bed, source, "stop_codon",
-			  e-3, e, '.', txName);
+	frames[j] = '.';
+	}
+    }
+if (retStartIndx)
+    *retStartIndx = startIndx;
+if (retStopIndx)
+    *retStopIndx = stopIndx;
+return frames;
+}
+
+static int offsetToGenomic(struct bed *bed, int exonIndx, int anchor, int offset)
+/* Return the genomic coord which is offset transcribed bases away from anchor,
+ * which must fall in the exonIndx exon of bed. */
+{
+int simpleAnswer = anchor + offset;
+int exonStart = bed->chromStart + bed->chromStarts[exonIndx];
+int exonEnd = exonStart + bed->blockSizes[exonIndx];
+if ((offset >= 0 && (anchor >= exonEnd || anchor < exonStart)) ||
+    (offset < 0 && (anchor > exonEnd || anchor <= exonStart)))
+    errAbort("offsetToGenomic: anchor %d is not in exon %d [%d,%d]",
+	     anchor, exonIndx, exonStart, exonEnd);
+if (offset < 0 && simpleAnswer < exonStart)
+    {
+    if (exonIndx < 1)
+	errAbort("offsetToGenomic: need previous exon, but given index of %d", exonIndx);
+    int extra = exonStart - simpleAnswer;
+    int prevExonEnd = bed->chromStart + bed->chromStarts[exonIndx-1] + bed->blockSizes[exonIndx-1];
+    return prevExonEnd - extra;
+    }
+else if (offset > 0 && simpleAnswer > exonEnd)
+    {
+    if (exonIndx >= bed->blockCount - 1)
+	errAbort("offsetToGenomic: need next exon, but given index of %d (>= %d)",
+		 exonIndx, bed->blockCount - 1);
+    int extra = simpleAnswer - exonEnd;
+    return (bed->chromStart + bed->chromStarts[exonIndx+1] + extra);
+    }
+return simpleAnswer;
+}
+
+static void addCdsStartStop(struct bed *bed, char *source, int exonCdsStart, int exonCdsEnd,
+			    char *frames, int exonIndx, int cdsStartIndx, int cdsStopIndx,
+			    boolean gtf2StopCodons, char *txName)
+/* Output a CDS record for the trimmed CDS portion of exonIndx, and a start_codon or
+ * stop_codon if applicable. Return the number of bases in the next exon (exonIndx+1)
+ * that are covered by the stop_codon, in case we need to exclude those from next CDS. */
+{
+boolean isRc = (bed->strand[0] == '-');
+/* start_codon (goes first for + strand) overlaps with CDS */
+if ((exonIndx == cdsStartIndx) && !isRc)
+    {
+    int startCodonEnd = offsetToGenomic(bed, exonIndx, exonCdsStart, 3);
+    addGffLineFromBed(bed, source, "start_codon", exonCdsStart, startCodonEnd, '.', txName);
+    }
+/* stop codon does not overlap with CDS in GTF2 -- watch out for 
+ * gtf2StopCodons, especially in conjunction with strand. */
+if (exonIndx == cdsStopIndx)
+    {
+    if (isRc)
+	{
+	int stopCodonEnd = offsetToGenomic(bed, exonIndx, exonCdsStart, 3);
+	addGffLineFromBed(bed, source, "stop_codon", exonCdsStart, stopCodonEnd, '.', txName);
+	int cdsPortionStart = gtf2StopCodons ? stopCodonEnd : exonCdsStart;
+	if (cdsPortionStart < exonCdsEnd)
+	    addGffLineFromBed(bed, source, "CDS", cdsPortionStart, exonCdsEnd,
+			      frames[exonIndx], txName);
+	}
+    else
+	{
+	int stopCodonStart = offsetToGenomic(bed, exonIndx, exonCdsEnd, -3);
+	int cdsPortionEnd = gtf2StopCodons ? stopCodonStart : exonCdsEnd;
+	if (cdsPortionEnd > exonCdsStart)
+	    addGffLineFromBed(bed, source, "CDS", exonCdsStart, cdsPortionEnd,
+			      frames[exonIndx], txName);
+	addGffLineFromBed(bed, source, "stop_codon", stopCodonStart, exonCdsEnd, '.', txName);
 	}
     }
 else
     {
-    addGffLineFromBed(pGffList, bed, source, "CDS", s, e,
-		      frames[i], txName);
+    int cdsPortionStart = exonCdsStart;
+    int cdsPortionEnd = exonCdsEnd;
+    if (gtf2StopCodons)
+	{
+	if (isRc && exonIndx - 1 == cdsStopIndx)
+	    {
+	    int lastExonEnd = (bed->chromStart + bed->chromStarts[exonIndx-1] +
+			       bed->blockSizes[exonIndx-1]);
+	    int basesWereStolen = 3 - (lastExonEnd - bed->thickStart);
+	    if (basesWereStolen > 0)
+		cdsPortionStart += basesWereStolen;
+	    }
+	if (!isRc && exonIndx + 1 == cdsStopIndx)
+	    {
+	    int nextExonStart = bed->chromStart + bed->chromStarts[exonIndx+1];
+	    int basesWillBeStolen = 3 - (bed->thickEnd - nextExonStart);
+	    if (basesWillBeStolen > 0)
+		cdsPortionEnd -= basesWillBeStolen;
+	    }
+	}
+    if (cdsPortionEnd > cdsPortionStart)
+	addGffLineFromBed(bed, source, "CDS", cdsPortionStart, cdsPortionEnd,
+			  frames[exonIndx], txName);
     }
 /* start_codon (goes last for - strand) overlaps with CDS */
-if ((i == startIndx) && (bed->strand[0] == '-'))
+if ((exonIndx == cdsStartIndx) && isRc)
     {
-    addGffLineFromBed(pGffList, bed, source, "start_codon",
-		      e-3, e, '.', txName);
+    int startCodonStart = offsetToGenomic(bed, exonIndx, exonCdsEnd, -3);
+    addGffLineFromBed(bed, source, "start_codon", startCodonStart, exonCdsEnd, '.', txName);
     }
 }
 
 
-struct gffLine *bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
-			      int fieldCount, char *source, boolean gtf2StopCodons)
-/* Translate a (list of) bed into list of gffLine elements. 
+static int bedToGffLines(struct bed *bedList, struct hTableInfo *hti,
+			 int fieldCount, char *source, boolean gtf2StopCodons)
+/* Translate a (list of) bed into gff and print out.
  * Note that field count (perhaps reduced by bitwise intersection)
  * can in effect override hti. */
 {
 struct hash *nameHash = newHash(20);
-struct gffLine *gffList = NULL;
 struct bed *bed;
-int i, j, s, e;
+int i, exonStart, exonEnd;
 char txName[256];
+int itemCount = 0;
 static int namelessIx = 0;
 
 for (bed = bedList;  bed != NULL;  bed = bed->next)
@@ -125,75 +225,23 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	safef(txName, sizeof(txName), "tx%d", ++namelessIx);
     if (hti->hasBlocks && hti->hasCDS && fieldCount > 4)
 	{
-	char *frames = needMem(bed->blockCount);
-	boolean gotFirstCds = FALSE;
-	int nextPhase = 0;
-	int startIndx = 0;
-	int stopIndx = 0;
-	if (bed->thickStart == 0 && bed->thickEnd == 0)
-	    bed->thickStart = bed->thickEnd = bed->chromStart;
 	/* first pass: compute frames, in order dictated by strand. */
-	for (i=0;  i < bed->blockCount;  i++)
-	    {
-	    if (bed->strand[0] == '-')
-		j = bed->blockCount-i-1;
-	    else
-		j = i;
-	    s = bed->chromStart + bed->chromStarts[j];
-	    e = s + bed->blockSizes[j];
-	    if ((s < bed->thickEnd) && (e > bed->thickStart))
-		{
-		int cdsSize = e - s;
-		if (e > bed->thickEnd)
-		    cdsSize = bed->thickEnd - s;
-		else if (s < bed->thickStart)
-		    cdsSize = e - bed->thickStart;
-		if (! gotFirstCds)
-		    {
-		    gotFirstCds = TRUE;
-		    startIndx = j;
-		    }
-		frames[j] = '0' + nextPhase;
-		nextPhase = (3 + ((nextPhase - cdsSize) % 3)) % 3;
-		stopIndx = j;
-		}
-	    else
-		{
-		frames[j] = '.';
-		}
-	    }
+	int startIndx = 0, stopIndx = 0;
+	char *frames = computeFrames(bed, &startIndx, &stopIndx);
+
 	/* second pass: one exon (possibly CDS, start/stop_codon) per block. */
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
-	    s = bed->chromStart + bed->chromStarts[i];
-	    e = s + bed->blockSizes[i];
-	    if ((s >= bed->thickStart) && (e <= bed->thickEnd))
+	    exonStart = bed->chromStart + bed->chromStarts[i];
+	    exonEnd = exonStart + bed->blockSizes[i];
+	    if ((exonStart < bed->thickEnd) && (exonEnd > bed->thickStart))
 		{
-		addCdsStartStop(&gffList, bed, source, s, e, frames,
-				i, startIndx, stopIndx, gtf2StopCodons,
-				txName);
+		int exonCdsStart = max(exonStart, bed->thickStart);
+		int exonCdsEnd = min(exonEnd, bed->thickEnd);
+		addCdsStartStop(bed, source, exonCdsStart, exonCdsEnd,
+				frames, i, startIndx, stopIndx, gtf2StopCodons, txName);
 		}
-	    else if ((s < bed->thickStart) && (e > bed->thickEnd))
-		{
-		addCdsStartStop(&gffList, bed, source,
-				bed->thickStart, bed->thickEnd,
-				frames, i, startIndx, stopIndx,
-				gtf2StopCodons, txName);
-		}
-	    else if ((s < bed->thickStart) && (e > bed->thickStart))
-		{
-		addCdsStartStop(&gffList, bed, source, bed->thickStart, e,
-				frames, i, startIndx, stopIndx,
-				gtf2StopCodons, txName);
-		}
-	    else if ((s < bed->thickEnd) && (e > bed->thickEnd))
-		{
-		addCdsStartStop(&gffList, bed, source, s, bed->thickEnd,
-				frames, i, startIndx, stopIndx,
-				gtf2StopCodons, txName);
-		}
-	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.',
-			      txName);
+	    addGffLineFromBed(bed, source, "exon", exonStart, exonEnd, '.', txName);
 	    }
 	freeMem(frames);
 	}
@@ -201,10 +249,9 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	{
 	for (i=0;  i < bed->blockCount;  i++)
 	    {
-	    s = bed->chromStart + bed->chromStarts[i];
-	    e = s + bed->blockSizes[i];
-	    addGffLineFromBed(&gffList, bed, source, "exon", s, e, '.',
-			      txName);
+	    exonStart = bed->chromStart + bed->chromStarts[i];
+	    exonEnd = exonStart + bed->blockSizes[i];
+	    addGffLineFromBed(bed, source, "exon", exonStart, exonEnd, '.', txName);
 	    }
 	}
     else if (hti->hasCDS && fieldCount > 4)
@@ -213,27 +260,23 @@ for (bed = bedList;  bed != NULL;  bed = bed->next)
 	    bed->thickStart = bed->thickEnd = bed->chromStart;
 	if (bed->thickStart > bed->chromStart)
 	    {
-	    addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
-			      bed->thickStart, '.', txName);
+	    addGffLineFromBed(bed, source, "exon", bed->chromStart, bed->thickStart, '.', txName);
 	    }
 	if (bed->thickEnd > bed->thickStart)
-	    addGffLineFromBed(&gffList, bed, source, "CDS", bed->thickStart,
-			      bed->thickEnd, '0', txName);
+	    addGffLineFromBed(bed, source, "CDS", bed->thickStart, bed->thickEnd, '0', txName);
 	if (bed->thickEnd < bed->chromEnd)
 	    {
-	    addGffLineFromBed(&gffList, bed, source, "exon", bed->thickEnd,
-			      bed->chromEnd, '.', txName);
+	    addGffLineFromBed(bed, source, "exon", bed->thickEnd, bed->chromEnd, '.', txName);
 	    }
 	}
     else
 	{
-	addGffLineFromBed(&gffList, bed, source, "exon", bed->chromStart,
-			  bed->chromEnd, '.', txName);
+	addGffLineFromBed(bed, source, "exon", bed->chromStart, bed->chromEnd, '.', txName);
 	}
+    itemCount++;
     }
-slReverse(&gffList);
 hashFree(&nameHash);
-return(gffList);
+return itemCount;
 }
 
 void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
@@ -241,7 +284,6 @@ void doOutGff(char *table, struct sqlConnection *conn, boolean outputGtf)
 {
 struct hTableInfo *hti = getHti(database, table, conn);
 struct bed *bedList;
-struct gffLine *gffList, *gffPtr;
 char source[HDB_MAX_TABLE_STRING];
 int itemCount;
 struct region *region, *regionList = getRegions();
@@ -255,15 +297,8 @@ for (region = regionList; region != NULL; region = region->next)
     struct lm *lm = lmInit(64*1024);
     int fieldCount;
     bedList = cookedBedList(conn, table, region, lm, &fieldCount);
-    gffList = bedToGffLines(bedList, hti, fieldCount, source, outputGtf);
-    bedList = NULL;
+    itemCount += bedToGffLines(bedList, hti, fieldCount, source, outputGtf);
     lmCleanup(&lm);
-    for (gffPtr = gffList;  gffPtr != NULL;  gffPtr = gffPtr->next)
-	{
-	gffTabOut(gffPtr, stdout);
-	itemCount++;
-	}
-    slFreeList(&gffList);
     }
 if (itemCount == 0)
     hPrintf(NO_RESULTS);

@@ -1296,12 +1296,12 @@ labelColor = blackIndex();
 hvGfxNextItemButton(hvg, rightButtonX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, TRUE);
 hvGfxNextItemButton(hvg, portX + NEXT_ITEM_ARROW_BUFFER, y, arrowWidth, arrowWidth, labelColor, fillColor, FALSE);
 safef(buttonText, ArraySize(buttonText), "hgt.prevItem=%s", track->track);
-mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Next item" : "Prev item"), buttonText);
 mapBoxToggleVis(hvg, portX + arrowButtonWidth, y + 1, portWidth - (2 * arrowButtonWidth),
                 insideHeight, (theImgBox ? track : parentTrack));
 safef(buttonText, ArraySize(buttonText), "hgt.nextItem=%s", track->track);
-mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL,
+mapBoxReinvoke(hvg, portX + portWidth - arrowButtonWidth, y + 1, arrowButtonWidth, insideHeight, NULL, FALSE,
            NULL, 0, 0, (revCmplDisp ? "Prev item" : "Next item"), buttonText);
 }
 
@@ -1666,7 +1666,7 @@ for (i=1; i<=boxes; ++i)
         }
     if(!dragZooming)
         {
-        mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,
+        mapBoxJumpTo(hvg, ps+insideX,rulerClickY,pe-ps,rulerClickHeight,NULL,
                         chromName, ns, ne, message);
         }
     }
@@ -1794,8 +1794,8 @@ if (zoomedToBaseLevel || rulerCds)
 		     rulerMode == tvFull ?
 			    rulerMenu[tvDense] :
 			    rulerMenu[tvFull]);
-	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight,
-	    NULL, NULL, 0, 0, "", newRulerVis);
+	mapBoxReinvoke(hvg, insideX, y+rulerHeight, insideWidth,baseHeight, NULL,
+	    FALSE, NULL, 0, 0, "", newRulerVis);
 	}
     if (rulerCds)
 	{
@@ -4273,25 +4273,30 @@ void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct 
 struct track *track = trackList;
 for (;track != NULL; track = track->next)
     {
-    if (tdbIsContainer(track->tdb))
-        if(cartTdbTreeMatchSubtrackVis(cart,track->tdb))
-            track->visibility = tdbVisLimitedByAncestry(cart,track->tdb,FALSE);
+    boolean shapedByubtrackOverride = FALSE;
+    boolean cleanedByContainerSettings = FALSE;
 
-    if (cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars))
+    if (tdbIsContainer(track->tdb))
+        {
+        shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
+        if(shapedByubtrackOverride)
+            track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
+        }
+
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+
+    if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
-        if (tdbIsSuperTrackChild(track->tdb))
+        // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
+        // So now we need to find the supertrack and take changed cart values of its children
+        struct slRef *childRef;
+        for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
             {
-            // Unfortunately, since supertracks are not in trackList, this occurs on superChildren,
-            // So now we need to find the supertrack and take changed cart values of its children
-            struct slRef *childRef;
-            for(childRef = track->tdb->parent->children;childRef != NULL;childRef = childRef->next)
-                {
-                struct trackDb * childTdb = childRef->val;
-                struct track *child = hashFindVal(trackHash, childTdb->track);
-                char *cartVis = cartOptionalString(cart,child->track);
-                if (cartVis)
-                    child->visibility = hTvFromString(cartVis);
-                }
+            struct trackDb * childTdb = childRef->val;
+            struct track *child = hashFindVal(trackHash, childTdb->track);
+            char *cartVis = cartOptionalString(cart,child->track);
+            if (cartVis)
+                child->visibility = hTvFromString(cartVis);
             }
         }
     }

@@ -2044,9 +2044,9 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
 else
-    dyStringPrintf(dyQuery,"select distinct distinct val");
+    dyStringPrintf(dyQuery,"select distinct val");
 
 dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
 
@@ -2060,7 +2060,7 @@ slNameSortCase(&retVal);
 return retVal;
 }
 
-// TODO: decide to make this public or hide it away inside the one finction so far that uses it.
+// TODO: decide to make this public or hide it away inside the one function so far that uses it.
 static struct hash *cvHash = NULL;
 static char *cv_file()
 // return default location of cv.ra
@@ -2074,8 +2074,8 @@ return filePath;
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
 // Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
-// Can impose (non-zero) limit on returned string size of name.  Search is via mysql, so it's case-insensitive.
-// Return is sorted on name (label or else val).
+// Can impose (non-zero) limit on returned string size of name.
+// Return is case insensitive sorted on name (label or else val).
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
     errAbort("mdbValSearch requests values for neither table nor file objects.\n");
@@ -2084,9 +2084,9 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
 else
-    dyStringPrintf(dyQuery,"select distinct distinct val");
+    dyStringPrintf(dyQuery,"select distinct val");
 
 dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
 
@@ -2095,10 +2095,10 @@ if (!tables || !files)
                    tableName,tables?"table":"file");
 dyStringAppend(dyQuery," order by val");
 
+// Establish cv hash
 if (cvHash == NULL)
-    {
     cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
-    }
+
 struct slPair *pairs = NULL, *pair;
 struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&dyQuery));
 char **row;
@@ -2108,13 +2108,20 @@ while ((row = sqlNextRow(sr)) != NULL)
     AllocVar(pair);
     pair = slPairNew(row[0],cloneString(row[0]));  // defaults the label to the val
     ra = hashFindVal(cvHash,row[0]);
+    if (ra == NULL && sameString(var,"lab"))  // ugly special case
+        {
+        char *val = cloneString(row[0]);
+        ra = hashFindVal(cvHash,strUpper(val));
+        if (ra == NULL)
+            ra = hashFindVal(cvHash,strLower(val));
+        }
     if (ra != NULL)
         {
         char *label = hashFindVal(ra,"label");
         if (label != NULL)
             {
             freeMem(pair->name);
-            pair->name = strSwapChar(cloneString(label),'_',' ');
+            pair->name = strSwapChar(cloneString(label),'_',' ');  // vestigial _ meaning space
             if (limit > 0 && strlen(pair->name) > limit)
                 pair->name[limit] = '\0';
             }

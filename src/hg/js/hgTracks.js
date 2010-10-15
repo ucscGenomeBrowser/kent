@@ -1536,7 +1536,9 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
             } else {
                 if(cmd == 'getDna')
                 {
-                    window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd);
+                    if(window.open("../cgi-bin/hgc?hgsid=" + getHgsid() + "&g=getDna&i=mixed&c=" + chrom + "&l=" + (chromStart - 1) + "&r=" + chromEnd) == null) {
+                        windowOpenFailedMsg();
+                    }
                 } else {
                     var newPosition = setPositionByCoordinates(chrom, chromStart, chromEnd);
                     if(browser == "safari" || imageV2) {
@@ -1608,8 +1610,9 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cache: false
                });
     } else if (cmd == 'openLink') {
-        // XXXX This is blocked by Safari's popup blocker (without any warning message).
-        window.open(selectedMenuItem.href);
+        if(window.open(selectedMenuItem.href) == null) {
+            windowOpenFailedMsg();
+        }
     } else if (cmd == 'followLink') {
         // XXXX This is blocked by Safari's popup blocker (without any warning message).
         location.assign(selectedMenuItem.href);
@@ -1693,7 +1696,7 @@ function loadContextMenu(img)
             var menu = [];
             var selectedImg = " <img src='../images/greenCheck.png' height='10' width='10' />";
             var done = false;
-            if(selectedMenuItem) {
+            if(selectedMenuItem && selectedMenuItem.id != null) {
                 var href = selectedMenuItem.href;
                 var isHgc, isGene;
                 if(href) {
@@ -1755,18 +1758,18 @@ function loadContextMenu(img)
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
                     && selectedMenuItem.href  != undefined && selectedMenuItem.href.length  > 0) {
                         var str = selectedMenuItem.title;
-                        var set = false;
-                        if(str.indexOf("Click to alter ") == 0)
-                            str = "Alter " + str.substring("Click to alter ".length);
-                        if(str.indexOf(" and similar subtracks") != -1)
-                            set = true;
-                            //str = str.substring(0,str.length - " and similar subtracks".length);
-                        if(str.indexOf("display density") != -1)
-                            str = "<img src='../images/toggle.png' /> " + str;
-                        else
-                            str = "<img src='../images/book.png' /> Show details for " + str + "...";
-                        o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
-                        any = true;
+                        if(str.indexOf("Click to alter ") == 0) {
+                            ; // suppress the "Click to alter..." items
+                        } else if(selectedMenuItem.href.indexOf("cgi-bin/hgTracks") != -1) {
+                            ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
+                        } else {
+                            if(str.indexOf("display density") != -1)
+                                str = "<img src='../images/toggle.png' /> " + str;
+                            else
+                                str = "<img src='../images/book.png' /> Show details for " + str + "...";
+                            o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
+                            any = true;
+                        }
                     }
                     if(any) {
                         menu.push($.contextMenu.separator);
@@ -1798,7 +1801,7 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
-            if(selectedMenuItem) {
+            if(selectedMenuItem && rec) {
             // Add cfg options at just shy of end...
             var o = new Object();
             if(tdbIsLeaf(rec)) {
@@ -1988,10 +1991,14 @@ function handleTrackUi(response, status)
         $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
         $('#hgTrackUiDialog').dialog("option", "width", myWidth);
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
+        $('#hgTrackUiDialog').dialog('open');
+        var buttOk = $('button.ui-state-default');
+        if($(buttOk).length == 1)
+            $(buttOk).focus();
     } else {
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
+        $('#hgTrackUiDialog').dialog('open');
     }
-    $('#hgTrackUiDialog').dialog('open');
 }
 
 function handleUpdateTrackMap(response, status)
@@ -2101,7 +2108,9 @@ function handleViewImg(response, status)
     var reg = new RegExp(str);
     a = reg.exec(response);
     if(a && a[1]) {
-        window.open(a[1]);
+        if(window.open(a[1]) == null) {
+            windowOpenFailedMsg();
+        }
         return;
     }
     showWarning("Couldn't parse out img src");
@@ -2418,10 +2427,14 @@ function updateMetaDataHelpLinks(index)
     var db = getDb();
     var disabled = {
         'accession': 1,
+        'dataType': 1,
         'dataVersion': 1,
+        'geoSample': 1,
         'grant': 1,
         'lab': 1,
+        'labExpId': 1,
         'labVersion': 1,
+        'origAssembly': 1,
         'replicate': 1,
         'setType': 1,
         'softwareVersion': 1,
@@ -2456,4 +2469,9 @@ function updateMetaDataHelpLinks(index)
             return;
         }
     }
+}
+
+function windowOpenFailedMsg()
+{
+    alert("Your web browser prevented us from opening a new window.\n\nYou need to change your browser settings to allow popups from " + document.domain);
 }

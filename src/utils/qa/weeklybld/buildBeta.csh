@@ -44,22 +44,6 @@ if ( "$wc" != "0" ) then
  exit 1
 endif
 #
-echo "Make htdocs alpha. [${0}: `date`]"
-cd htdocs
-make alpha >& make.alpha.log
-# These flags and programs will trip the error detection
-sed -i -e "s/-DJK_WARN//g" make.alpha.log
-sed -i -e "s/-Werror//g" make.alpha.log
-#-- report any compiler warnings, fix any errors (shouldn't be any)
-#-- to check for errors: 
-set res = `/bin/egrep -i "error|warn" make.alpha.log`
-set wc = `echo "$res" | wc -w` 
-if ( "$wc" != "0" ) then
- echo "htdocs alpha errs found:"
- echo "$res"
- exit 1
-endif
-#
 # RUN vgGetText
 echo "making vgGetText [${0}: `date`]"
 cd $BUILDDIR/$dir/kent/src/hg/visiGene/vgGetText

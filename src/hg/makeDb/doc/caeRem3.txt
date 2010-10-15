@@ -3,6 +3,7 @@
 #	Caenorhabditis remanei
 #	From Wash U GSC
 #	http://genome.wustl.edu/genome.cgi?GENOME=Caenorhabditis+remanei
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=AAGD02
 
 #  $Id: caeRem3.txt,v 1.6 2008/08/15 21:53:32 hiram Exp $
 
@@ -679,3 +680,186 @@ chainOne $(path1)
     rm -rf /cluster/bluearc/worms/caeRem3/bed/tblastn.ce6SG
 
 ###########################################################################
+# ELEGANS (ce9) PROTEINS TRACK (DONE - 2010-10-07 - Hiram)
+    cd /hive/data/genomes/caeRem3
+    mv blastDb blastDb.2008-06-17
+    mv blastDb.lft blastDb.lft.2008-06-17
+    mkdir blastDb
+    twoBitToFa caeRem3.unmasked.2bit temp.fa
+    faSplit gap temp.fa 1000000 blastDb/x -lift=blastDb.lft
+    #	177 pieces of 177 written
+    rm temp.fa
+    cd blastDb
+    for i in *.fa
+    do
+	/scratch/data/blast-2.2.11/bin/formatdb -i $i -p F
+    done
+    rm *.fa
+
+    ## create the query protein set
+    mkdir -p /hive/data/genomes/caeRem3/bed/tblastn.ce9SG
+    cd /hive/data/genomes/caeRem3/bed/tblastn.ce9SG
+    echo  /hive/data/genomes/caeRem3/blastDb/*.nsq | xargs ls -S \
+	| sed "s/\.nsq//"  > query.lst
+    wc -l query.lst
+    # 9538 query.lst
+
+   # we want around 50000 jobs
+    calc `wc -l /hive/data/genomes/ce9/bed/blat.ce9SG/ce9SG.psl  | cut -d" " -f1`/\(50000/`wc -l query.lst | cut -d" " -f1`\)
+    #	28103/(50000/177) = 99.484620
+
+   mkdir sgfa
+   split -l 90 /hive/data/genomes/ce9/bed/blat.ce9SG/ce9SG.psl sgfa/sg
+   cd sgfa
+   for i in *; do 
+     nice pslxToFa $i $i.fa; 
+     rm $i; 
+   done
+   cd ..
+   ls -1S sgfa/*.fa > sg.lst
+   mkdir blastOut
+   for i in `cat sg.lst`; do  mkdir blastOut/`basename $i .fa`; done
+   
+   cat << '_EOF_' > template
+#LOOP
+blastSome $(path1) {check in line $(path2)} {check out exists blastOut/$(root2)/q.$(root1).psl }
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+   cat << '_EOF_' > blastSome
+#!/bin/sh
+DB=caeRem3
+BLASTMAT=/scratch/data/blast-2.2.11/data
+SCR="/scratch/tmp/${DB}"
+g=`basename $2`
+D=`basename $1`
+export BLASTMAT DB SCR g D
+mkdir -p ${SCR}
+cp -p $1.* ${SCR}
+f=${SCR}/`basename $3`.$g
+for eVal in 0.01 0.001 0.0001 0.00001 0.000001 1E-09 1E-11
+do
+if /scratch/data/blast-2.2.11/bin/blastall -M BLOSUM80 -m 0 -F no \
+	-e $eVal -p tblastn -d ${SCR}/$D -i $2 -o $f.8
+then
+        mv $f.8 $f.1
+        break;
+fi
+done
+if test -f  $f.1
+then
+    if /cluster/bin/x86_64/blastToPsl $f.1 $f.2
+    then
+        liftUp -nosort -type=".psl" -nohead $f.3 \
+	    /hive/data/genomes/${DB}/blastDb.lft carry $f.2 > /dev/null
+        liftUp -nosort -type=".psl" -pslQ -nohead $3.tmp \
+	    /hive/data/genomes/ce9/bed/blat.ce9SG/protein.lft warn $f.3 > /dev/null
+        if pslCheck -prot $3.tmp
+        then
+            mv $3.tmp $3
+            rm -f $f.1 $f.2 $f.3 $f.4 ${SCR}/$D.*
+            rmdir --ignore-fail-on-non-empty ${SCR}
+        fi
+        exit 0
+    fi
+fi
+rm -f $f.1 $f.2 $3.tmp $f.8 $f.3 $f.4 ${SCR}/$D.*
+rmdir --ignore-fail-on-non-empty ${SCR}
+exit 1
+'_EOF_'
+    # << happy emacs
+    chmod +x blastSome
+
+    ssh swarm
+    cd /hive/data/genomes/caeRem3/bed/tblastn.ce9SG
+    gensub2 query.lst sg.lst template jobList
+    para create jobList
+    para try, check, push, check etc.
+# Completed: 55401 of 55401 jobs
+# CPU time in finished jobs:     449440s    7490.67m   124.84h    5.20d  0.014 y
+# IO & Wait Time:                171423s    2857.05m    47.62h    1.98d  0.005 y
+# Average job time:                  11s       0.19m     0.00h    0.00d
+# Longest finished job:              28s       0.47m     0.01h    0.00d
+# Submission to last job:          1997s      33.28m     0.55h    0.02d
+
+    # do the cluster run for chaining
+    ssh swarm
+    mkdir /hive/data/genomes/caeRem3/bed/tblastn.ce9SG/chainRun
+    cd /hive/data/genomes/caeRem3/bed/tblastn.ce9SG/chainRun
+    cat << '_EOF_' > template
+#LOOP
+chainOne $(path1) {check out exists+ ../blastOut/c.$(file1).psl}
+#ENDLOOP
+'_EOF_'
+    # << happy emacs
+
+    cat << '_EOF_' > chainOne
+#!/bin/csh -fe
+cd $1
+set b = $1:t
+cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
+/hive/data/genomes/caeRem3/bed/tblastn.ce9SG/blastOut/c.$b.psl
+'_EOF_'
+    # << happy emacs
+    chmod +x chainOne
+
+    ls -1dS /hive/data/genomes/caeRem3/bed/tblastn.ce9SG/blastOut/sg?? \
+	> chain.lst
+    gensub2 chain.lst single template jobList
+    cd /hive/data/genomes/caeRem3/bed/tblastn.ce9SG/chainRun
+    para create jobList
+    para -maxJob=30 push
+    para try, check, push, check etc.
+# Completed: 313 of 313 jobs
+# CPU time in finished jobs:       3546s      59.10m     0.99h    0.04d  0.000 y
+# IO & Wait Time:                 10163s     169.38m     2.82h    0.12d  0.000 y
+# Average job time:                  44s       0.73m     0.01h    0.00d
+# Longest finished job:             394s       6.57m     0.11h    0.00d
+# Submission to last job:           461s       7.68m     0.13h    0.01d
+
+XXX - ready
+    cd /hive/data/genomes/caeRem3/bed/tblastn.ce9SG/blastOut
+    for i in sg??
+    do
+       cat c.$i.psl | awk "(\$13 - \$12)/\$11 > 0.6 {print}" > c60.$i.psl
+       sort -rn c60.$i.psl | pslUniq stdin u.$i.psl
+       awk "((\$1 / \$11) ) > 0.60 { print   }" c60.$i.psl > m60.$i.psl
+       echo $i
+    done
+    sort -T /scratch/tmp -k 14,14 -k 16,16n -k 17,17n u.*.psl m60* | uniq \
+	> ../blastCe9SG.psl
+    cd ..
+    pslCheck blastCe9SG.psl
+    #	checked: 33684 failed: 0 errors: 0
+
+    # load table 
+    ssh hgwdev
+    cd /hive/data/genomes/caeRem3/bed/tblastn.ce9SG
+    hgLoadPsl caeRem3 blastCe9SG.psl
+
+    # check coverage
+    featureBits caeRem3 blastCe9SG
+    #	20302540 bases of 138406388 (14.669%) in intersection
+    featureBits cb3 blastCe9SG
+    #	18490367 bases of 108433446 (17.052%) in intersection
+    featureBits caePb2 blastCe9SG
+    #	23730009 bases of 170473138 (13.920%) in intersection
+    featureBits caeJap3 blastCe9SG
+    #	12894398 bases of 154057934 (8.370%) in intersection
+    featureBits melHap1 blastCe9SG
+    #	4376245 bases of 53017507 (8.254%) in intersection
+    featureBits melInc1 blastCe9SG
+    #	3882043 bases of 82095019 (4.729%) in intersection
+    featureBits bruMal1 blastCe9SG 
+    #	4424694 bases of 89235536 (4.958%) in intersection
+    featureBits priPac2 blastCe9SG
+    #	5436779 bases of 133634773 (4.068%) in intersection
+    featureBits haeCon1 blastCe9SG
+    #	4990746 bases of 278844984 (1.790%) in intersection
+    featureBits ce9 sangerGene
+    #	28689552 bases of 100286004 (28.608%) in intersection
+
+    rm -rf blastOut
+
+#########################################################################
