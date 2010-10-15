@@ -3570,8 +3570,9 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-24
-dateUnrestricted 2011-06-24
+dateSubmitted 2008-12-09
+dateResubmitted 2010-09-24
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData.csfasta.gz
 grant Gingeras
 lab RIKEN
@@ -3589,8 +3590,9 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-24
-dateUnrestricted 2011-06-24
+dateSubmitted 2008-12-09
+dateResubmitted 2010-09-24
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562CytosolLongnonpolyaRawData2.csqual.gz
 grant Gingeras
 lab RIKEN
@@ -4102,8 +4104,9 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-24
-dateUnrestricted 2011-06-24
+dateSubmitted 2008-12-09
+dateResubmitted 2010-09-24
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData.csfasta.gz
 grant Gingeras
 lab RIKEN
@@ -4121,8 +4124,9 @@ cell K562
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-24
-dateUnrestricted 2011-06-24
+dateSubmitted 2008-12-09
+dateResubmitted 2010-09-24
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageK562NucleusLongnonpolyaRawData2.csqual.gz
 grant Gingeras
 lab RIKEN
@@ -5097,8 +5101,9 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-24
-dateUnrestricted 2011-06-24
+dateSubmitted 2008-12-09
+dateResubmitted 2010-09-24
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData.csfasta.gz
 grant Gingeras
 lab RIKEN
@@ -5116,8 +5121,9 @@ cell prostate
 composite wgEncodeRikenCage
 dataType Cage
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-24
-dateUnrestricted 2011-06-24
+dateSubmitted 2008-12-09
+dateResubmitted 2010-09-24
+dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageProstateCellLongnonpolyaRawData2.csqual.gz
 grant Gingeras
 lab RIKEN
