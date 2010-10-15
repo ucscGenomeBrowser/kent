@@ -529,6 +529,7 @@ socketHandle = netAcceptingSocket(port, 100);
 
 logInfo("Server ready for queries!");
 printf("Server ready for queries!\n");
+int connectFailCount = 0;
 for (;;)
     {
     ZeroVar(&fromAddr);
@@ -538,7 +539,14 @@ for (;;)
         {
 	warn("Error accepting the connection");
 	++warnCount;
+        ++connectFailCount;
+        if (connectFailCount >= 100)
+	    errAbort("100 continuous connection failures, no point in filling up the log in an infinite loop.");
 	continue;
+	}
+    else
+	{
+	connectFailCount = 0;
 	}
     if (ipLog)
 	{
