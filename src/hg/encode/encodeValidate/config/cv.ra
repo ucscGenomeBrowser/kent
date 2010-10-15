@@ -2419,7 +2419,7 @@ sex U
 protocol LICR(Ren):BoneMarrow_Ren_protocol.pdf
 
 term Cerebellum
-tag Cerebellum
+tag Cbellum
 type Cell Line
 organism Mouse
 tissue Cerebellum
