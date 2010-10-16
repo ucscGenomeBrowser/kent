@@ -18,7 +18,7 @@ errAbort(
 }
 
 /* for checking label lengths */
-#define MAX_SHORT_LABEL 16
+#define MAX_SHORT_LABEL 17
 #define MAX_LONG_LABEL 80
 
 static struct optionSpec options[] = {

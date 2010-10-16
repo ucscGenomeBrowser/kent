@@ -73,8 +73,8 @@ if (outCount == 0)
 void addOurButtons()
 /* callback from options dialog to add navigation buttons */
 {
-printf("For information about output data format see the"
-  "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">User's Guide</A><BR>");
+printf("For information about output data format see the "
+  "<A HREF=\"../goldenPath/help/hgTablesHelp.html#FASTA\">User's Guide</A>.<BR>");
 cgiMakeButton(hgtaDoPalOut, "get output");
 hPrintf(" ");
 cgiMakeButton(hgtaDoMainPage, "cancel");
