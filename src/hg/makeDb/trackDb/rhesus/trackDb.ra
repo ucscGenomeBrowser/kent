@@ -12,15 +12,15 @@ spectrum on
 type netAlign canFam2 chainCanFam2
 otherDb canFam2
 
-track refGenePred
-shortLabel RefSeq Predictions
-longLabel RefSeq Predictions Genes
+track refSeqAnnon
+shortLabel RefSeq Annontations
+longLabel RefSeq Gene Annontations
 group genes
 priority 35.001
 visibility dense
 color 120,12,120
-type genePred refPredPep refPredMrna
+type genePred
 baseColorUseCds given
 url http://www.ncbi.nlm.nih.gov/entrez/query.fcgi?cmd=Search&db=Nucleotide&term=$$&doptcmdl=GenBank&tool=genome.ucsc.edu
-refGenePredVersion OVERRIDE
+refSeqAnnonVersion OVERRIDE
 
