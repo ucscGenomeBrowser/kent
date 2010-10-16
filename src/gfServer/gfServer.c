@@ -526,6 +526,8 @@ logInfo("indexing complete");
 
 /* Set up socket.  Get ready to listen to it. */
 socketHandle = netAcceptingSocket(port, 100);
+if (socketHandle < 0)
+    errAbort("Fatal Error: Unable to open listening socket on port %d.", port);
 
 logInfo("Server ready for queries!");
 printf("Server ready for queries!\n");
