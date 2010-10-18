@@ -1740,7 +1740,7 @@ TMPDIR=/scratch/tmp
     #	8860569 bases of 278844984 (3.178%) in intersection
 
 ############################################################################
-## 10-Way Multiz (DONE - 2009-06-09,2009-11-10 - Hiram)
+## 10-Way Multiz (DONE - 2010-10-15 - Hiram)
     mkdir /hive/data/genomes/ce9/bed/multiz10way
     cd /hive/data/genomes/ce9/bed/multiz10way
 
@@ -3076,3 +3076,125 @@ mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
     nice -n +19 hgLoadMafFrames ce9 multiz10wayFrames multiz10way.mafFrames.gz
 
 #######################################################################
+# verify all.joiner has everything (DONE - 2010-10-18 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=ce9 ./all.joiner
+    joinerCheck -keys -database=ce9 ./all.joiner
+    joinerCheck -times -database=ce9 ./all.joiner
+    joinerCheck -all -database=ce9 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#######################################################################
+## Creating downloads (DONE - 2010-10-18 - Hiram)
+    #	There is only one chrom, make its trfMaskChrom file exist
+    ssh hgwdev
+    cd  /hive/data/genomes/ce9
+    nice -n +19 /cluster/bin/scripts/makeDownloads.pl ce9  > downloads.log 2>&1
+    ## *!* EDIT THE README.txt FILES *!* ##
+
+##########################################################################
+# hgPal downloads (DONE - Hiram - 2010-10-18)
+    ssh hgwdev
+    screen
+    bash
+    mkdir /hive/data/genomes/ce9/bed/multiz10way/pal
+    cd /hive/data/genomes/ce9/bed/multiz10way/pal
+    mz=multiz10way
+    gp=refGene
+    db=ce9
+    echo $db > order.lst
+    hgsql $db -e "select settings from trackDb where tableName='$mz'" \
+	| sed 's/\\n/\n/g' | grep sGroup_ | sed -e "s#sGroup_[a-zA-Z]* ##" \
+	| tr ' ' '\n' >> order.lst
+
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | cut -f1`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > refGene.jobs
+
+    time sh -x refGene.jobs > refGene.job.log 2>&1 & 
+    sleep 1
+    tail -f refGene.job.log
+
+    # real    11m36.350s
+
+    zcat exonAA/*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    mz=multiz10way
+    gp=sangerGene
+    db=ce9
+    mkdir exonAA exonNuc ppredAA ppredNuc
+    for j in `sort -nk 2 /hive/data/genomes/$db/chrom.sizes | awk '{print $1}'`
+    do
+	echo "date"
+	echo "mafGene -chrom=$j  $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredAA/$j.ppredAA.fa.gz"
+	echo "mafGene -chrom=$j -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > ppredNuc/$j.ppredNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons -noTrans $db $mz $gp order.lst stdout | \
+	    gzip -c > exonNuc/$j.exonNuc.fa.gz"
+	echo "mafGene -chrom=$j -exons $db $mz $gp order.lst stdout | \
+	    gzip -c > exonAA/$j.exonAA.fa.gz"
+    done > $gp.$mz.jobs
+
+    time sh -x $gp.$mz.jobs > $gp.$mz.job.log 2>&1 & 
+    sleep 1
+    tail -f $gp.$mz.job.log
+
+    # real    19m29.826s
+
+    zcat exonAA/c*.gz | gzip -c > $gp.$mz.exonAA.fa.gz
+    zcat exonNuc/c*.gz | gzip -c > $gp.$mz.exonNuc.fa.gz
+    zcat ppredAA/c*.gz | gzip -c > $gp.$mz.ppredAA.fa.gz
+    zcat ppredNuc/c*.gz | gzip -c > $gp.$mz.ppredNuc.fa.gz
+
+    rm -rf exonAA exonNuc ppredAA ppredNuc
+
+    # we're only distributing exons at the moment
+    pd=/hive/data/genomes/ce9/goldenPath/multiz10way/alignments
+    mkdir $pd
+    ln -s `pwd`/*.exonAA.fa.gz $pd/
+    ln -s `pwd`/*.exonNuc.fa.gz $pd/
+
+#########################################################################
+# verify all.joiner has everything (DONE - 2010-10-18 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=ce9 ./all.joiner
+    joinerCheck -keys -database=ce9 ./all.joiner
+    joinerCheck -times -database=ce9 ./all.joiner
+    joinerCheck -all -database=ce9 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#######################################################################
+## Creating pushQ (DONE - 2010-10-18 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/ce9/pushQ
+    cd /hive/data/genomes/ce9/pushQ
+    makePushQSql.pl ce9 > ce9.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy ce9.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    hgsql qapushq < ce9.sql
+
+##########################################################################
