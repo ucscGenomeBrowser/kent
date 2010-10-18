@@ -1763,4 +1763,24 @@ rm -f $c.gp $c.maf $c.ss
     featureBits -countGaps -or felCat4 gold gap
     #  3160303948 bases of 3160303948 (100.000%) in intersection
 
+    # Load the gaps that are not in the felCat4.agp file
+    cd /hive/data/genomes/felCat4/bed/allGaps
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+        -noLoad felCat4 otherGap other.gap
+    #   Reading other.gap
+    #   Loaded 1294 elements of size 8
+    #   Sorted
+    #   Saving bed.tab
+    #   No load option selected, see file: bed.tab
+    wc -l bed.tab
+    #   1294 bed.tab
+    #   starting with this many
+    hgsql -e "select count(*) from gap;" felCat4
+    #   500507
+    hgsql felCat4 -e 'load data local infile "bed.tab" into table gap;'
+    #   result count:
+    hgsql -e "select count(*) from gap;" felCat4
+    #   501801
+    # == 500507 + 1294
+
 #############################################################################

@@ -7231,40 +7231,45 @@ CREATE TABLE chainHg19Link (
     #	1279572660 bases of 2663369733 (48.043%) in intersection
 
 ##############################################################################
-# DBSNP CODING ANNOTATIONS (DONE 9/1/09 angie)
+# DBSNP CODING ANNOTATIONS (DONE 10/12/10 angie)
+# Updated 10/12/10 using rebuilt hg18 snp130CodingDbSnp.bed w/corrected coords.
+# Originally done 9/1/09
 
     # Repeat the coord-remapping performed for snp130 on the hg18 coding anno table.
     cd /hive/data/outside/dbSNP/130/human/hg19
     sed -re 's/\trs([0-9]+)\t/\t\1\t/' ../snp130CodingDbSnp.bed \
     | sort -k4n,4n -k1,1 -k2n,2n > /data/tmp/hg18.snp130Coding.idSorted.bed
-    # reuse /data/tmp/Remap_36_3_37_1.txt mapping file created for snp130 above:
+    # reuse /data/tmp/Remap_36_3_37_1.txt mapping file created for snp130 above,
+    # but first translate its coords (1-based fully-closed with 2-base-long insertions)
+    # into ours (0-based half-open with 0-base-long insertions) and discard incompletes.
+    perl -we \
+      'while (my ($rsId, undef, $oChr, $oStart, $oEnd, $oLocType, undef,undef,undef, \
+                                $nChr, $nStart, $nEnd, $nLocType) = split("\t", <>)) { \
+         next if ($oStart eq "" || $nStart eq ""); \
+         $oChr = "chr$oChr";  $nChr = "chr$nChr"; \
+         # 2-base-long insertion (loc_type==3) -> 0-base-long: \
+         if ($oLocType == 3) { $oEnd--; } else { $oStart--; } \
+         if ($nLocType == 3) { $nEnd--; } else { $nStart--; } \
+         print join("\t", $rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) . "\n"; \
+       }' /data/tmp/Remap_36_3_37_1.txt \
+      > /data/tmp/Remap_36_3_37_1_ucscCoords.txt
+    # Apply the cleaned-up mapping to id-sorted hg18 snp130CodingDbSnp:
     perl -we \
       'use strict; \
-       sub nextMap { \
-         my ($rsId, undef, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd); \
-         do { \
-           ($rsId, undef, $oChr, $oStart, $oEnd, undef,undef,undef,undef, \
-               $nChr, $nStart, $nEnd) = split("\t", <>); \
-           if (defined $nEnd) { \
-             $oChr = "chr$oChr";  $nChr = "chr$nChr"; \
-           } \
-           $oStart--;  $oEnd--;  $nStart--;  $nEnd--;  # Yep. 0-based closed vs 1-based closed \
-         } while (defined $rsId && ($oEnd < 0 || $nChr eq "chrUn")); \
-         return ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd); \
-       } # nextMap \
-       my ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = &nextMap(); \
+       my ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = split("\t", <>); \
        my ($rCount, $oCount, $tCount) = 0; \
        open(my $oldF, "/data/tmp/hg18.snp130Coding.idSorted.bed") || die; \
        while (my ($chr, $s, $e, $id, $tx, $frm, $alCount, $funcs, $als, $codons, $peps) = \
               split("\t", <$oldF>)) { \
          my $thisRCount = 0; \
          while (defined $rsId && $rsId < $id) { \
-           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = &nextMap(); \
+           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = split("\t", <>); \
          } \
          while (defined $oChr && $chr eq $oChr && $s == $oStart && $e == $oEnd && $id == $rsId) { \
+           chomp $nEnd; \
            print join("\t", $nChr, $nStart, $nEnd, "rs$id", $tx, $frm, \
-                            $alCount, $funcs, $als, $codons, $peps); \
-           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = &nextMap(); \
+                            $alCount, $funcs, $als, $codons, $peps) unless $nEnd < $nStart; \
+           ($rsId, $oChr, $oStart, $oEnd, $nChr, $nStart, $nEnd) = split("\t", <>); \
            $thisRCount++; \
          } \
          $tCount += $thisRCount; \
@@ -7272,15 +7277,17 @@ CREATE TABLE chainHg19Link (
          $oCount++; \
        } \
        close($oldF);  print STDERR "Replaced $rCount of $oCount inputs ($tCount outputs).\n";' \
-      /data/tmp/Remap_36_3_37_1.txt \
+      /data/tmp/Remap_36_3_37_1_ucscCoords.txt \
     | sort -k1,1 -k2n,2n -k4,4 \
     > /data/tmp/hg19.snp130Coding.bed
 #Replaced 197921 of 279815 inputs (198493 outputs).
-#160.824u 1.949s 2:43.01 99.8%   0+0k 0+0io 0pf+0w
-    hgLoadBed hg19 snp130CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
+#35.486u 1.515s 0:36.70 100.7%   0+0k 0+0io 0pf+0w
+   hgLoadBed hg19 snp130CodingDbSnp -sqlTable=$HOME/kent/src/hg/lib/snp125Coding.sql \
       -renameSqlTable -tab -notItemRgb -allowStartEqualEnd \
       /data/tmp/hg19.snp130Coding.bed
-#Loaded 198493 elements of size 11
+#Loaded 198459 elements of size 11
+    # A bit fewer than reported 198493 above, but we ditched a few with $nEnd < $nStart
+    # (corresponding SNPs ended up in snp130Errors.bed not snp130.bed anyway).
     mv /data/tmp/hg19.snp130Coding.bed hg19.snp130CodingDbSnp.bed
 
 ############################################################################
@@ -9444,6 +9451,21 @@ CREATE TABLE ucscFunc (
 );
 EOF
     hgLoadSqlTab hg19snp131 ucscFunc{,.sql,.txt}
+    # 10/12/10: Those coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
+    # We need to leave the coords alone here so ucscFunc can be joined below.
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # the list to determine what type of coord fix to apply to each annotation
+    # when making snp130CodingDbSnp below.
+    hgsql hg19snp131 -NBe \
+      'select ci.contig_acc, cl.asn_from, cl.asn_to, uf.snp_id \
+       from ucscFunc as uf, ContigLoc as cl, ContigInfo as ci \
+       where uf.snp_id = cl.snp_id and \
+             uf.ctg_id = cl.ctg_id and uf.asn_from = cl.asn_from and uf.asn_to = cl.asn_to and \
+             cl.loc_type = 3 and \
+             cl.ctg_id = ci.ctg_id' \
+      > ncbiFuncInsertions.ctg.bed
+    wc -l ncbiFuncInsertions.ctg.bed
+#1165272 ncbiFuncInsertions.ctg.bed
 
     # Extract observed allele, molType and snp class from FASTA headers gnl
     # 4/13: found some inconsistent headers in rs_chPAR.fas.gz vs. other rs_ch*,
@@ -9826,24 +9848,51 @@ EOF
 
 
 ############################################################################
-# DBSNP CODING ANNOTATIONS (DONE 5/25/10 angie)
-# also done 4/16, but found some strange function codes and notified dbSNP;
-# then updated 5/25/10 with corrected function codes (b131_SNPContigLocusId_37_1.bcp.gz).
-# originally done 6/2/09 - redone w/snp131, using mapping locations of dbSNP's func. annos
+# DBSNP CODING ANNOTATIONS (DONE 10/12/10 angie)
+# Updated 10/12/10 - redone w/corrected genome coords (Redmine Track #1249)
+# Updated 5/25/10 with corrected function codes (b131_SNPContigLocusId_37_1.bcp.gz).
+# Updated 4/16 - redone w/snp131, using mapping locations of dbSNP's func. annos.
+#                found some strange function codes and notified dbSNP.
+# originally done 6/2/09
     cd /hive/data/outside/dbSNP/131/human
-    awk -F"\t" '$9 != NULL {print;}' ncbiFuncAnnotations.txt \
-    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n | uniq > ncbiCodingAnnotations.txt
+    # ncbiFuncAnnotations.txt has NCBI coords: 0-based, fully closed.  
+    # For anything except an insertion (0 bases between flanks), 
+    # we need to add 1 to the end coord.  For an insertion, we need
+    # to add 1 to the start coord.  Make a hash of the insertion IDs,
+    # then look up each ID in ncbiFuncAnnotations.txt to tell which
+    # transform to apply.
+    # Note: sort -u with the keys below is too restrictive -- we need full line uniq.
+    perl -we 'open($IDS, "ncbiFuncInsertions.ctg.bed") || die "ids: $!"; \
+              while (<$IDS>) { chomp; $ids{$_} = 1; } \
+              close($IDS); \
+              %coding = (2=>1, 3=>1, 4=>1, 8=>1, 9=>1, 41=>1, 42=>1, 44=>1, 45=>1); \
+              while (<>) { \
+                chomp;  @w = split("\t"); # id, ctg, start, end, ... \
+                next unless $coding{$w[5]}; \
+                $bed4 = join("\t", $w[1], $w[2], $w[3], $w[0]); \
+                if (exists $ids{$bed4} && $w[3] == $w[2]+1) { \
+                  $w[2]++; # 2-base insertions: increment start coord \
+                } else { \
+                  $w[3]++; # increment end coord to get half-open \
+                } \
+                print join("\t", @w) . "\n"; \
+              }' ncbiFuncAnnotations.txt \
+    | sort -k1n,1n -k2,2 -k3n,3n -k5,5 -k6n,6n \
+    | uniq \
+      > ncbiCodingAnnotations.txt
     wc -l ncbiCodingAnnotations.txt
-#928279 ncbiCodingAnnotations.txt
+#950616 ncbiCodingAnnotations.txt
+
     # How many & what kinds of function types?
     cut -f 6 ncbiCodingAnnotations.txt \
     | sort -n | uniq -c
-#     25 0   (empty fxn_class in ContigLocusId! reported to dbSNP)
 # 168639 3   (coding-synon)
-# 443295 8   (cds-reference -- ignored)
+# 443419 8   (cds-reference -- ignored)
+#      1 9   (coding-synonymy-unknown: rs80359842)
 #   9790 41  (nonsense)
-# 261906 42  (missense)
-#  44624 44  (frameshift)
+# 261982 42  (missense)
+#  65656 44  (frameshift)
+#   1129 45  (cds-indel)
     # Gather up multiple annotation lines into one line per {snp, gene, frame}:
     perl -e  'while (<>) { chomp; \
                 my ($rsId, $ctg, $s, $e, $txId, $fxn, $frm, $nt, $aa, $codon) = split("\t"); \
@@ -11853,6 +11902,302 @@ while (<>) {
     hgLoadBed hg19 hgdpGeo hgdpGeo.tab \
       -sqlTable=$HOME/kent/src/hg/lib/hgdpGeo.sql
 #Loaded 667349 elements of size 7
+
+
+###########################################################################
+# RECOMBINATION RATES (DONE 2010-08-26 - Chin)
+
+# The STS MArkers track must be completed prior to creating this track
+
+    ssh kkstore02
+    cd /hive/data/genomes/hg19/bed
+    mkdir -p recombRate
+    cd recombRate
+
+# Copy other necessary files here (in future, can take from previous
+# version)
+# NOTE: these are stable, and could be saved in a permanent spot
+
+    cp -p /projects/hg2/booch/psl/info/decode_all .
+    cp -p /projects/hg2/booch/psl/info/marshfield_all .
+    cp -p /projects/hg2/booch/psl/info/genethon_all .
+
+# Compared these 3 files with the 3 files of hg17, they are identical.
+
+# Determine maximum concordant set of markers for each of the maps
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /hive/data/outside/ncbi/sts.11/stsAlias.bed \
+        /hive/data/genomes/hg19/bed/sts/stsMarkers_pos.rdb \
+        decode_all > decode.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /hive/data/outside/ncbi/sts.11/stsAlias.bed \
+        /hive/data/genomes/hg19/bed/sts/stsMarkers_pos.rdb \
+        marshfield_all > marshfield.marker.rdb
+    /cluster/bin/scripts/assignGPsts -full -maxcon \
+        /hive/data/outside/ncbi/sts.11/stsAlias.bed \
+        /hive/data/genomes/hg19/bed/sts/stsMarkers_pos.rdb \
+        genethon_all > genethon.marker.rdb
+
+# Determine the rates for each of the maps
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl decode.marker.rdb \
+            hive/data/genomes/hg19/chrom.sizes 1000000 1000000 \
+                > decode_1mb_slide_1mb
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl genethon.marker.rdb \
+            /hive/data/genomes/hg19/chrom.sizes 1000000 1000000 \
+                >  genethon_1mb_slide_1mb
+# got many "... out of genetic distance order. DISCARDING" messages.
+
+    /cluster/bin/scripts/markers_to_recomb_rate.terry.pl marshfield.marker.rdb \
+            /hive/data/genomes/hg19/chrom.sizes 1000000 1000000 \
+              > marshfield_1mb_slide_1mb
+# Got many "... out of genetic distance order. DISCARDING" messages.
+
+# Convert files to proper format
+# which requires the "inserts" file
+    # get the size of true chrom:
+    cd  /hive/data/genomes/hg19/bed/recombRate  
+    cat /hive/data/genomes/hg19/chrom.sizes | awk '$1 !~/_/ && !/^chrM/ \
+    {print $1, $2}'  > chr.sizes
+
+    # order contigs on each chrom:
+    mkdir /hive/data/genomes/hg19/bed/recombRate/orderedCtg
+
+    cat << '_EOF_' > orderCtg.pl
+#!/usr/bin/perl
+# create ordered contig lists for each chrom
+my $db = hg19;
+my $ordDir = "/hive/data/genomes/hg19/bed/recombRate/orderedCtg";
+@chroms = (1..22, X, Y);
+
+foreach $chr (@chroms) 
+{
+my $chrName = "chr$chr";
+my $chrFile = "chr$chr.ol";
+my $ordFile = "$ordDir/$chrFile";
+my $sqlstmt="hgsql $db -s -e \'SELECT c.chromStart, c.contig, c.size, c.chrom, i.size FROM ctgPos c, chromInfo i where c.chrom = \"$chrName\" AND c.chrom=i.chrom order by chromStart ASC\' ";
+system(" $sqlstmt  > $ordFile");
+}
+'_EOF_'
+    # << happy emacs
+
+
+    chmod +x orderCtg.pl
+    ./orderCtg.pl
+
+    # create the inserts file 
+    cat << '_EOF_' > createInserts.pl
+#!/usr/local/bin/perl
+# FILE: createInserts
+# Author: Terry Furey
+# Date: 7/13/2004
+# Modified by Chin 2010-10-14
+# Description: Create inserts file used in creation of some tracks.
+# 	This used to be created when lift files being created
+
+$dir = "/hive/data/genomes/hg19";
+
+@chroms = (1..22, X, Y);
+
+print "#Chrom\tBefore_Contig\tAfter_Contig\tNum_bases\tType\n";
+$i = 0;
+# Look at certain gaps in chroms
+foreach $chr (@chroms) {
+    open(AGP, "$dir/$chr/chr$chr.agp");
+    while ($line = <AGP>) {
+	chomp($line);
+	@fields = split("\t", $line);
+	$lastctg = "";
+	$laststart = 1;
+	# Want centromeres, large heterochromatin, short_arms, and large gaps
+	if (($fields[6] eq "centromere") ||
+	    (($fields[6] eq "heterochromatin") && ($fields[2] - $fields[1] > 1000000)) ||
+	    ($fields[6] eq "short_arm") ||
+	    (($fields[2] - $fields[1]) > 1000000)) {
+	    # Record info about gap
+	    $chr[$i] = $fields[0];
+	    $start[$i] = $fields[1];
+	    $end[$i] = $fields[2];
+	    $size[$i] = $end[$i] - $start[$i] + 1;
+	    $type[$i] = $fields[6];
+	    # Find contigs surrounding gap
+            open(ORDCTG, "$dir/bed/recombRate/orderedCtg/chr$chr.ol") || die("Could not open $dir/bed/recombRate/orderedCtg/chr$chr.ol\n") ;
+	    # short_arm gaps have no previous contig
+	    if ($type[$i] eq "short_arm") {
+		$ctg1[$i] = "-";
+		$start[$i] = 1;
+		# Nest record has next contig
+		$line1 = <ORDCTG>;
+		@fields1 = split("\t",$line1);
+		$ctg2[$i] = $fields1[1];
+		# Reset end and recalculate size
+		$end[$i] = $fields1[0];
+		$size[$i] = $end[$i] - $start[$i] + 1;
+	    # non-short_arm gaps
+	    } else {
+		# Find gap immediately before gap
+		while ($line1 = <ORDCTG>) {
+		    chomp($line1);
+		    @fields1 = split("\t", $line1);
+		    # This contig ends where gap begins
+		    if (($fields1[0] + $fields1[2] + 1) == $start[$i]) {
+			$ctg1[$i] = $fields1[1]; 
+			# Succeeding contig is in next record
+			if ($line1 = <ORDCTG>) {
+			    @fields1 = split("\t", $line1);
+			    $ctg2[$i] = $fields1[1];
+			    # Reset end coordinate and re-calculate size
+			    $end[$i] = $fields1[0];
+			    $size[$i] = $end[$i] - $start[$i] + 1;
+			} else {
+			    $ctg2[$i] = "-";
+			}
+		    # Keep track of possible previous contigs and starts
+		    } elsif (($fields1[0] + $fields1[2] + 1) < $start[$i]) {
+			$lastctg = $fields1[1];
+			$laststart = $fields1[0] + $fields1[2] + 1;
+		    # Another gap separated this gap from previous contig,
+		    # so didn't find match and passed it up
+		    } elsif (($ctg1[$i] eq "") && ($laststart > 1)) {
+			# Set start coordinate to end of last contig
+			$ctg1[$i] = $lastctg;
+			$start[$i] = $laststart;
+			# Reset end coordinate and re-calculate size
+			@fields1 = split("\t", $line1);
+			$ctg2[$i] = $fields1[1];
+			$end[$i] = $fields1[0];
+			$size[$i] = $end[$i] - $start[$i] + 1;
+		    }
+		}
+	    }
+	    close(ORDCTG); 
+	    $i++;
+	}
+    }
+    close(AGP);	
+}
+$num = $i;
+
+# Print them out
+for ($i = 0; $i < $num; $i++) {
+    # Don't print out duplicate lines for same gap (i.e. centromere and heterochromatin
+    # in same gap
+    if (($chr[$i] ne $chr[$i-1]) || (($ctg1[$i] ne $ctg1[$i-1]) && ($start[$i] > $end[$i-1]))) {
+	# Large gaps must be heterochromatin
+	if ($size[$i] > 3100000) {
+	    $type[$i] = "heterochromatin";
+	}
+	# gaps at beginning must be short_arm
+	if ($start[$i] <= 1) {
+	    $type[$i] = "short_arm";
+	}
+	# Only want large heterochromatic regions, not telomeres
+	if (($type[$i] ne "heterochromatin") || ($size[$i] > 1000000)) { 
+	    print "$chr[$i]\t$ctg1[$i]\t$ctg2[$i]\t$size[$i]\t$type[$i]\n";
+	}
+    }
+}
+'_EOF_'
+    # << happy emacs
+ 
+    chmod +x createInserts.pl
+    ./createInserts.pl > inserts
+
+# Convert files to proper format
+    cat << '_EOF_' > convRecombRate.pl
+#!/usr/local/bin/perl
+# File: convRecombRate
+# Author: Terry Furey
+# Date: 9/2002
+# Modified by Chin 2010-10-14
+# Project: Human
+# Description: Changes recomb rates in large gaps to nan
+# Usage message
+if ($#ARGV != 3) {
+  print stderr "USAGE: createSetBands <recomb file> <insert file> <ctg dir> <window (kb)>\n";
+  exit(1);
+}
+
+# Read parameters
+$rrfile = shift(@ARGV);
+$insfile = shift(@ARGV);
+$ctgdir = shift(@ARGV);
+$basewind = shift(@ARGV);
+$window = $basewind * 1000;
+
+# Determine the golden path positions for each of the inserts
+open(INSERT, "<$insfile") || die("Could not open $insfile\n");
+$line = <INSERT>; #header
+while ($line = <INSERT>) {
+  next if (substr($line, 0, 1) eq "#"); 
+  chomp($line);
+  ($chr, $first, $second, $length, $type) = split(' ',$line);
+
+  $thischr = substr($chr,3);
+  open(ORDCTG, "<$ctgdir/orderedCtg/chr$thischr.ol") || die("Could not open $ctgdir/orderedCtg/chr$thischr.ol\n");
+
+  # Determine first window for the insert
+  if ($first eq "-") {
+    $begin = 0;
+    $end = int(($length)/$window)*$window;
+  } else {
+    $found = 0;
+    print stderr "Finding $chr $first\n";
+    while(!$found) {
+      $line = <ORDCTG>;
+      chomp($line);
+      ($ctgstart, $ctg, $ctglen, $ctgchr, $chrlen) = split(' ',$line);
+      if ($ctg eq $first) {
+	$begin = int(($ctgstart + $ctglen)/$window)*$window;
+	$end = int(($ctgstart + $ctglen + $length)/$window)*$window + $window;
+	$found = 1;
+      }
+    }
+  }
+  close(ORDCTG);
+  print stderr "$chr $begin - $end $type\n";
+  for ($i = $begin; $i < $end; $i=$i+$window) {
+    $gap{$chr}{$i} = 1;
+  }
+}
+close(INSERT);
+
+# Now, match up with PCT
+open(RR, "<$rrfile") || die("Could not open $rrfile\n");
+while ($line = <RR>) {
+  chomp($line);
+  ($chr, $start, $end, $ave, $female, $male) = split("\t", $line);
+  if ($gap{$chr}{$start}) {
+    print "$chr\t$start\t$end\tNaN\tNaN\tNaN\n";
+  } else {
+    print "$line\n";
+  }
+}
+close(RR);
+'_EOF_'
+    # << happy emacs
+    
+    chmod +x convRecombRate.pl
+
+
+./convRecombRate.pl  decode_1mb_slide_1mb inserts \
+        . 1000 > decode_1mb_slide_1mb_conv
+
+./convRecombRate.pl  marshfield_1mb_slide_1mb inserts \
+        . 1000 > marshfield_1mb_slide_1mb_conv
+
+./convRecombRate.pl  genethon_1mb_slide_1mb inserts \
+        . 1000 > genethon_1mb_slide_1mb_conv
+
+# Create bed file and load
+    /cluster/bin/scripts/createRRbed decode_1mb_slide_1mb_conv \
+        marshfield_1mb_slide_1mb_conv genethon_1mb_slide_1mb_conv \
+                > recombRate.bed
+
+    ssh hgwdev
+    # reuse the recombRate.sql and recombRate.as from before
+    hgLoadBed -noBin -tab \
+        -sqlTable=$HOME/kent/src/hg/lib/recombRate.sql \
+            hg19 recombRate recombRate.bed
 
 
 #############################################################################

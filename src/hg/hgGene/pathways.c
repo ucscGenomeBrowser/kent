@@ -158,6 +158,27 @@ if (spID != NULL)
     }
 }
 
+static void rgdPathwayLink(struct pathwayLink *pl, struct sqlConnection *conn, 
+	char *geneId)
+/* Print out bioCarta database link. */
+{
+char query[512], **row;
+struct sqlResult *sr;
+char *rgdId = geneId;
+safef(query, sizeof(query),
+    	"select x.pathwayId, description from rgdPathway p, rgdGenePathway x "
+	" where p.pathwayId = x.pathwayId "
+	" and x.geneId = '%s'"
+	, rgdId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    hPrintf("<A HREF=\"http://rgd.mcw.edu/tools/ontology/ont_annot.cgi?ontology=wo&ont_id=%s\" TARGET=_blank>", row[0]);
+    hPrintf("%s</A> - %s<BR>\n", row[0], row[1]);
+    }
+sqlFreeResult(&sr);
+}
+
 static void bioCartaLink(struct pathwayLink *pl, struct sqlConnection *conn, 
 	char *geneId)
 /* Print out bioCarta database link. */
@@ -207,6 +228,16 @@ if (cgapId != NULL)
 return ret;
 }
 
+static int rgdPathwayCount(struct pathwayLink *pl, struct sqlConnection *conn,
+char *geneId)
+/* Count up number of hits. */
+{
+char query[256];
+safef(query, sizeof(query),
+      "select count(*) from rgdGenePathway where geneId ='%s'", geneId);
+return sqlQuickNum(conn, query);
+}
+
 static int reactomeCount(struct pathwayLink *pl, struct sqlConnection *conn, 
 	char *geneId)
 /* Count up number of hits. */
@@ -252,6 +283,9 @@ struct pathwayLink pathwayLinks[] =
    { "reactome", "Reactome", "Reactome (by CSHL, EBI, and GO)",
    	"proteome.spReactomeEvent",
 	reactomeCount, reactomeLink},
+   { "rgdPathway", "RGDPathway", "RGD Pathway",
+   	"rgdPathway rgdGenePathway",
+	rgdPathwayCount, rgdPathwayLink},
 };
 
 static boolean pathwayExists(struct pathwayLink *pl,
