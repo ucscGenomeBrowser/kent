@@ -10,7 +10,7 @@ longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
 group regulation
 #subGroup1 view Views Footprints=Footprints Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=RawSignal
 subGroup1 view Views Hotspots=Hotspots Peaks=Peaks Signal=Signal zRaw=Raw_Signal
-subGroup2 cellType Cell_Line GM06990=GM06990 HepG2=HepG2 K562=K562 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad NHDF-Ad=NHDF-Ad SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup2 cellType Cell_Line K562=K562&nbsp;(Tier_1) HepG2=HepG2&nbsp;(Tier_2) GM06990=GM06990 H7es=H7-hESC HAE=HAEpiC HCPE=HCPEpiC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad NHDF-Ad=NHDF-Ad SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 dimensions dimensionX=cellType
 sortOrder cellType=+ view=+
 noInherit on
@@ -54,7 +54,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHepg2Hotspots
         release alpha
-        parent wgEncodeUwDgfViewHotspots off
+        parent wgEncodeUwDgfViewHotspots 
         shortLabel HepG2
         longLabel ENCODE UW Digital Genomic Footprinting - Hotspots (in HepG2 cells)
         subGroups view=Hotspots cellType=HepG2
@@ -188,7 +188,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHepg2Pk
         release alpha
-        parent wgEncodeUwDgfViewPeaks off
+        parent wgEncodeUwDgfViewPeaks 
         shortLabel HepG2 Pk
         longLabel ENCODE UW Digital Genomic Footprinting - Peaks (FDR 1%) (in HepG2 cells)
         subGroups view=Peaks cellType=HepG2
@@ -323,7 +323,7 @@ wgEncode 1
 
         track wgEncodeUwDgfHepg2Sig
         release alpha
-        parent wgEncodeUwDgfViewSignal off
+        parent wgEncodeUwDgfViewSignal 
         shortLabel HepG2 Sig
         longLabel ENCODE UW Digital Genomic Footprinting - Per-base Signal (in HepG2 cells)
         subGroups view=Signal cellType=HepG2

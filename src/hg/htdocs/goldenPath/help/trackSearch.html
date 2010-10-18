@@ -1,0 +1,137 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<HTML>
+<HEAD>
+	<META HTTP-EQUIV="Content-Type" CONTENT="text/html;CHARSET=iso-8859-1">
+	<TITLE>UCSC Genome Browser: User's Guide</TITLE>
+	<LINK REL="STYLESHEET" HREF="../../style/HGStyle.css">
+</HEAD>
+
+<BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
+<A NAME="TOP"></A>
+
+<TABLE BORDER=0 CELLPADDING=0 CELLSPACING=0 WIDTH="100%">
+    <TR><TH COLSPAN=2 ALIGN="left"><IMG SRC="../../images/title.jpg"></TH></TR>
+
+<TR><TD COLSPAN=2 HEIGHT=40><!--#include virtual="../../inc/topbar.html"--></TD></TR>
+<!-----------Track Search Help Page------------------------------>
+<TR><TD ROWSPAN=2 VALIGN="top"></TD></TR>
+<TR><TD>
+	<!--outer table is for border purposes-->
+	<TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
+	    <TR><TD>	
+    		<TABLE BGCOLOR="fffee8" WIDTH="100%"  BORDER="0" CELLSPACING="0" CELLPADDING="0">
+		    <TR><TD>	
+			<TABLE BGCOLOR="D9E4F8" BACKGROUND="../../images/hr.gif" WIDTH=100%>
+			    <TR><TD><FONT SIZE="4"><B>&nbsp;Track Search</B></FONT>
+			    </TD></TR>
+			</TABLE>
+			<TABLE BGCOLOR="fffee8" WIDTH="100%" CELLPADDING=0>
+			    <TR><TH HEIGHT=10></TH></TR>
+			    <TR><TD WIDTH=10>&nbsp;</TD><TD>
+				<p>
+				The Genome Browser's Track Search feature allows users to find and
+				display tracks of interest quickly and easily.</p>
+				<p><br>
+				<font size="4"><b>Searching</b></font></p>
+				The track search feature provides users with two search options,
+				"Search" and "Advanced."</p>
+				<p>
+				<b>Search tab</b>: 
+				"Search" is the default tab of the track search feature.
+				To search for a track, enter search terms into the box and
+				click search. If multiple terms are entered, only tracks with all
+				terms will be part of the results. This search looks for the user's
+				terms in the track descriptions, groups, names, and ENCODE metadata.
+				Metadata is information, such as cell line, experiment type, and
+				treatment, about the ENCODE data.</p>
+				<p>
+				<b>Advanced tab</b>: 
+				The "Advanced" tab allows users to search for terms in a specific
+				aspect of the track (e.g. the track name, the description, and the
+				track group) and can be especially helpful for finding ENCODE tracks
+				by setting specific criteria in the "ENCODE terms" section of this
+				tab. The results will contain tracks that fit all of the search
+				criteria.
+				<ul>
+				<b>ENCODE terms</b>: This section of the Advanced tab allows users
+				to further refine their search for ENCODE tracks using the ENCODE
+				metadata. By default, there are two rows of ENCODE metadata
+				search criteria, but more can be added by clicking the "+" button.
+				To remove an added metadata search row, click the "-" button. Each
+				row is comprised of two drop-down menus, the first contains the
+				metadata categories available, and the second contains the possible
+				metadata terms in that category. Because these metadata drop-downs
+				are assembly dependent, the options may vary from assembly to
+				assembly. Some categories have a link on the far right of the row if
+				there is more information available about the terms.</p></ul>
+				<p><br>
+                                <font size="4"><b>Results</b></font></p>
+				<p>
+				After clicking the "Search" button, the first 100 tracks that meet
+				the search criteria are displayed.</p>
+				<p>
+				<b>Check-box/Visibility</b>: Tracks that are currently being
+				displayed in the browser will have their check-box selected. To
+				turn tracks on or off, select or deselect the associated check-box.
+				To turn all tracks listed on the current results page on or off,
+				click the "+" or "-" button at the top of the column. By default,
+				selecting the check-box of a track turns the track to pack as long
+				as pack is a valid view mode of the track. If it isn't, the track is
+				set to full or show. Once the check-box of a track is selected, the
+				visibility can be changed using the drop-down menu in the visibility
+				column.</p>
+				<p>
+				<img src='../../images/folderWrench.png'>&nbsp;&nbsp;&nbsp;
+				This icon designates "container tracks" that can be configured by
+				clicking the icon. Container tracks don't have data themselves;
+				instead, they contain other tracks that do have data.
+				Examples of container tracks are composite tracks, which have a
+				light orange background in the search results, and super-tracks,
+				which have a tan background in the serach results; tracks that
+				contain data have a yellow background in the search results. While
+				tracks within a container track may show up in the search results
+				and can be configured from the search results page, this isn't
+				always the case. Clicking the
+				<img src='../../images/folderWrench.png'> opens the container track
+				configuration page, allowing the all the tracks within the container
+				track to be viewed and configured.
+				Please note, since container tracks don't have data of their own,
+				turning one on via track search may result in no additional tracks
+				in the browser. If this occurs, it is because none of the tracks
+				within the container were turned on.
+				</p>
+				<p>
+				<b>Track information</b>: To find out more information about a
+				track, click on the Track Name. The description of the track or the
+				container track will pop-up. Click "x" at the top of the pop-up or
+				the "OK" at the bottom of the pop-up to close it.
+				For tracks that have metadata, mainly ENCODE tracks at this time,
+				there is a "..." link on the right-hand side of the track result
+				row. Clicking this link expands the row to show the track's
+				metadata.
+				</p>
+				<p>
+				<b>Sorting</b>: By default, resulting tracks are listed in order
+				of relevance. However, in the blue header of the results list, 
+				the sort order can be changed by selecting one of the other radio
+				buttons, "Alphabetically" or "by Hierarchy" (super-tracks listed
+				first, then composite tracks, and then data tracks).</p>
+				<p>
+				<b>Return to Browser/View in Browser</b>: The "Return to
+				Browser" button indicates that no tracks have been turned on or off.
+				Clicking on the button returns the user to the browser. Once any
+				track is turned on or off using the check-boxes, the button label
+				changes to "View in Browser" (indicating changes have been made),
+				and clicking on the button takes the user to the browser with the
+				new track selections displayed.</p>
+			        </TD>
+			        <TD WIDTH=15></TD>
+			    </TR>
+			</TABLE>
+		    <BR></TD></TR>
+		</TABLE>
+	    </TD></TR>
+	</TABLE>
+     </TD></TR>
+    </TABLE>
+</BODY></HTML>

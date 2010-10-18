@@ -931,6 +931,37 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
+#ifdef NOT
+static void phoneHome()
+{
+static boolean beenHere = FALSE;
+if (beenHere)  /* one at a time please */
+    return;
+beenHere = TRUE;
+char *scriptName = cgiScriptName();
+char *ip = getenv("SERVER_ADDR");
+if (scriptName && ip)
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    if (conn)
+	{
+#define REGO_DB "UCSCRegistration"
+	if (sqlTableExists(conn, REGO_DB))
+	    return;
+	char query[256];
+	safef(query, sizeof(query), "create table %s", REGO_DB);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	sqlFreeResult(&sr);
+	hDisconnectCentral(&conn);
+	fprintf(stderr, "phoneHome: scriptName: %s, ip: %s\n", scriptName, ip);
+	}
+    else
+	fprintf(stderr, "phoneHome: scriptName: %s, ip: %s can not connect\n", scriptName, ip);
+    }
+else
+    fprintf(stderr, "phoneHome: scriptName: %s or ip %s are null\n", scriptName, ip);
+}
+#endif
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars)
@@ -953,6 +984,9 @@ boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
+#ifdef NOT
+phoneHome();
+#endif
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
@@ -1310,7 +1344,7 @@ if(hashLookup(includedResourceFiles, fileName))
 
 char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
 if (link)
-    hashAdd(includedResourceFiles, fileName, link);
+    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because memory will be freed by caller!!!
 return link;
 }
 

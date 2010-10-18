@@ -1610,7 +1610,14 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cache: false
                });
     } else if (cmd == 'openLink') {
-        if(window.open(selectedMenuItem.href) == null) {
+        // Remove hgsid to force a new session (see redmine ticket 1333).
+        var href = selectedMenuItem.href;
+        if(href.indexOf("?hgsid=") == -1) {
+            href = href.replace(/\&hgsid=\d+/, "");
+        } else {
+            href = href.replace(/\?hgsid=\d+\&/, "?");
+        }
+        if(window.open(href) == null) {
             windowOpenFailedMsg();
         }
     } else if (cmd == 'followLink') {
@@ -1696,7 +1703,7 @@ function loadContextMenu(img)
             var menu = [];
             var selectedImg = " <img src='../images/greenCheck.png' height='10' width='10' />";
             var done = false;
-            if(selectedMenuItem && selectedMenuItem.id != undefined) {
+            if(selectedMenuItem && selectedMenuItem.id != null) {
                 var href = selectedMenuItem.href;
                 var isHgc, isGene;
                 if(href) {
@@ -1760,6 +1767,8 @@ function loadContextMenu(img)
                         var str = selectedMenuItem.title;
                         if(str.indexOf("Click to alter ") == 0) {
                             ; // suppress the "Click to alter..." items
+                        } else if(selectedMenuItem.href.indexOf("cgi-bin/hgTracks") != -1) {
+                            ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
                             if(str.indexOf("display density") != -1)
                                 str = "<img src='../images/toggle.png' /> " + str;
@@ -1799,7 +1808,7 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
-            if(selectedMenuItem) {
+            if(selectedMenuItem && rec) {
             // Add cfg options at just shy of end...
             var o = new Object();
             if(tdbIsLeaf(rec)) {
@@ -1989,10 +1998,14 @@ function handleTrackUi(response, status)
         $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
         $('#hgTrackUiDialog').dialog("option", "width", myWidth);
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
+        $('#hgTrackUiDialog').dialog('open');
+        var buttOk = $('button.ui-state-default');
+        if($(buttOk).length == 1)
+            $(buttOk).focus();
     } else {
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Settings");
+        $('#hgTrackUiDialog').dialog('open');
     }
-    $('#hgTrackUiDialog').dialog('open');
 }
 
 function handleUpdateTrackMap(response, status)
@@ -2421,8 +2434,9 @@ function updateMetaDataHelpLinks(index)
     var db = getDb();
     var disabled = {
         'accession': 1,
-        'dataVersion': 1,
         'dataType': 1,
+        'dataVersion': 1,
+        'geoSample': 1,
         'grant': 1,
         'lab': 1,
         'labExpId': 1,

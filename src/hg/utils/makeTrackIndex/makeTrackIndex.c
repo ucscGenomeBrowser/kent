@@ -138,7 +138,7 @@ grps = hLoadGrps(database);
 for (grp = grps; grp != NULL; grp = grp->next)
     hashAdd(grpHash, grp->name, grp->label);
 
-safef(filePath, sizeof(filePath), cvRaPath );
+safecpy(filePath, sizeof(filePath), cvRaPath );
 if(!fileExists(filePath))
     errAbort("Error: can't locate cv.ra; %s doesn't exist\n", filePath);
 cvHash = raReadAll(filePath, "term");

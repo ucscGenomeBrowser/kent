@@ -1,9 +1,3 @@
-# Marching insertions -- should appear if & only if -allowStartEqualEnd
-chr1	90	90	i	666
-chr1	100	100	i	0
-chr1	150	150	i	0
-chr1	200	200	i	0
-chr1	210	210	i	666
 # Marching 10-base blocks
 chr1	80	90	s	666
 chr1	90	100	s	666

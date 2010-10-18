@@ -6436,8 +6436,8 @@ wholeFfAli = pslToFfAliAndSequence(wholePsl, rnaSeq, &isRc, &dnaSeq,
 
 if (restrictToWindow)
     {
-    partTStart = winStart;
-    partTEnd = winEnd;
+    partTStart = max(wholePsl->tStart, winStart);
+    partTEnd = min(wholePsl->tEnd, winEnd);
     }
 
 /* Write body heading info. */
