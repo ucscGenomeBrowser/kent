@@ -348,6 +348,7 @@ char **descWords = NULL;
 int descWordCount = 0;
 boolean searchTermsExist = FALSE;
 int cols;
+char buf[64];
 
 if(sameString(currentTab, "simpleTab"))
     {
@@ -386,12 +387,13 @@ for (group = groupList; group != NULL; group = group->next)
             internalErr();
         }
     }
-webStartWrapperDetailedNoArgs(cart, database, "", "Search for Tracks", FALSE, FALSE, FALSE, FALSE);
+
+safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly", organism, hFreezeFromDb(database));
+webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");
 hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
-char buf[64];
 safef(buf, sizeof(buf), "%lu", clock1());
 cgiMakeHiddenVar("hgt_", buf);  // timestamps page to avoid browser cache
 
@@ -415,12 +417,7 @@ hPrintf("</td></tr><tr><td>");
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
-hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
-//hPrintf("</td><td align='right'><a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr></table>\n");
-hPrintf("</div>\n"
+hPrintf("</table></div>\n"
         "<div id='advancedTab' style='width:inherit;'>\n"
         "<table cellSpacing=0 style='width:inherit;'>\n");
 
@@ -563,13 +560,13 @@ if(metaDbExists)
         }
     }
 
-hPrintf("<tr><td colspan='%d'>\n", cols);
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'>\n");
-hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a></td></tr>\n");
 hPrintf("</table>\n");
 hPrintf("</div>\n</div>\n");
+
+hPrintf("<p><input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'></p>\n");
+
 hPrintf("</form>\n");
 hPrintf("</div"); // Restricts to max-width:1000px;
 
@@ -704,7 +701,7 @@ else
     #define ENOUGH_FOUND_TRACKS 10
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
-        hPrintf("<tr><td colspan=3>\n");
+        hPrintf("<tr><td nowrap colspan=3>\n");
         hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
 
@@ -821,7 +818,7 @@ else
     //hPrintf("</table>\n");
 
     // Closing view in browser button and foundTracks count
-    hPrintf("<tr><td colspan=3>");
+    hPrintf("<tr><td nowrap colspan=3>");
     hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
@@ -862,5 +859,16 @@ if(!doSearch)
 #endif///def OMIT
 hPrintf("</div"); // This div allows the clear button to empty it
 hFreeConn(&conn);
+webNewSection("About Track Search");
+if(metaDbExists)
+    hPrintf("<p>Search for terms in track descriptions, groups, names, and ENCODE "
+            "metadata.  If multiple terms are entered, only tracks with all terms "
+            "will be part of the results.</p>");
+else
+    hPrintf("<p>Search for terms in track descriptions, groups, and names. "
+            "If multiple terms are entered, only tracks with all terms "
+            "will be part of the results.</p>");
+hPrintf("<p><a target='_blank' href='../goldenPath/help/trackSearch.html'>more help</a></p>\n");
+
 webEndSectionTables();
 }
