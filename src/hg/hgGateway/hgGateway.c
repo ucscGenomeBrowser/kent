@@ -181,7 +181,7 @@ if(isSearchTracksSupported(db))
     puts("<TD VALIGN=\"TOP\">");
     puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
     cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    cgiMakeButton(searchTracks, "find tracks");
+    cgiMakeButton(searchTracks, "track search");
     puts("</FORM></TD>");
     }
 
