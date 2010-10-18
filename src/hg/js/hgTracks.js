@@ -1610,7 +1610,14 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                    cache: false
                });
     } else if (cmd == 'openLink') {
-        if(window.open(selectedMenuItem.href) == null) {
+        // Remove hgsid to force a new session (see redmine ticket 1333).
+        var href = selectedMenuItem.href;
+        if(href.indexOf("?hgsid=") == -1) {
+            href = href.replace(/\&hgsid=\d+/, "");
+        } else {
+            href = href.replace(/\?hgsid=\d+\&/, "?");
+        }
+        if(window.open(href) == null) {
             windowOpenFailedMsg();
         }
     } else if (cmd == 'followLink') {
