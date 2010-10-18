@@ -1709,8 +1709,6 @@ TMPDIR=/scratch/tmp
     # 635 drop due to not having chrUn
 
     genePredCheck -db=rheMac2 refSeqAnnon.gp 
-
-
     hgLoadGenePred -genePredExt rheMac2 refSeqAnnon refSeqAnnon.gp 
 
     # add to 
@@ -1718,6 +1716,3 @@ TMPDIR=/scratch/tmp
       trackDb/rhesus/rheMac2/trackDb.ra 
     # create
       trackDb/rhesus/refSeqAnnon.html
-
-
-- Do you exclude NG records? They are a mix of
