@@ -3359,6 +3359,20 @@ targetId GeneCard:GC02P028527
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
 
+term FOXA1_(C-20)
+tag FOXA1C20
+type Antibody
+target FOXA1
+targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq). 
+antibodyDescription 	 Goat polyclonal IgG, epitope mapping at the C-terminus of FOXA1 of human origin. 
+vendorName Santa Cruz Biotech
+vendorId sc-6553
+orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
+lab Myers
+targetId GeneCard:GC14M038059
+targetUrlhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
+validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
+
 term FOXP2
 tag FOXP2
 type Antibody
@@ -3808,6 +3822,20 @@ lab Snyder
 targetId GeneCard:GC20P042984
 targetUrl http://www.genecards.org//index.php?path=/Search/keyword/HNF4A
 validation missing
+
+term HNF4A_(H-171)
+tag HNF4AH171
+type Antibody
+target HNF4A
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin. 
+targetDescription The protein encoded by this gene is a nuclear transcription factor which binds DNA as a homodimer. The encoded protein controls the expression of several genes, including hepatocyte nuclear factor 1 alpha, a transcription factor which regulates the expression of several hepatic genes (RefSeq). 
+orderUrl http://www.scbt.com/datasheet-8987-hnf-4alpha-h-171-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-8987
+lab Myers
+targetId GeneCard:GC20P042984
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
+validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf 
 
 term HSF1
 tag HSF1
