@@ -804,7 +804,7 @@ else
             {
             containerTrackCount++;
             //hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
-            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track);
+            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&%s=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track,searchTracks);
             }
         hPrintf("</td>\n");
 

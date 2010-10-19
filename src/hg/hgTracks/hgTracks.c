@@ -5636,7 +5636,7 @@ else if (cartVarExists(cart, configShowEncodeGroups))
     configPageSetTrackVis(-2);
     }
 #ifdef TRACK_SEARCH
-else if (cartVarExists(cart, searchTracks))
+else if (differentString(cartUsualString(cart, searchTracks,"0"),"0"))
     {
     doSearchTracks(groupList);
     }
