@@ -13,6 +13,7 @@
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
+#include "searchTracks.h"
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "wikiLink.h"
@@ -308,8 +309,8 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSet%s\" class=\"topbar\">\n",
-	       uiState);
+	printf("       <A HREF=\"../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0\" class=\"topbar\">\n",
+	       uiState,searchTracks);
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (!endsWith(scriptName, "hgBlat"))

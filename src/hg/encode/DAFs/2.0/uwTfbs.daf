@@ -33,25 +33,25 @@ validationSettings validateFiles.bam:mmCheckOneInN=100,mismatches=2
 
 # Track/view definition
 view             Hotspots
-longLabelPrefix  UW Histone Mods Hotspots
+longLabelPrefix  UW TFBS Hotspots
 type             broadPeak
 required         no
 hasReplicates    yes
 
 view             Peaks
-longLabelPrefix  UW Histone Mods Peaks
+longLabelPrefix  UW TFBS Peaks
 type             narrowPeak
 required         no
 hasReplicates    yes
 
 view             RawSignal
-longLabelPrefix  UW Histone Mods Raw Signal
+longLabelPrefix  UW TFBS Raw Signal
 type             bigWig
 required         yes
 hasReplicates    yes
 
 view             Alignments
-longLabelPrefix  UW Histone Mods Tags
+longLabelPrefix  UW TFBS Tags
 type             bam
 required         yes
 hasReplicates    yes
