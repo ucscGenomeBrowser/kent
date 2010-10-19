@@ -49,7 +49,7 @@ required         yes
 view             RepPeaks
 longLabelPrefix  PSU TFBS Peaks
 type             broadPeak
-hasReplicates    no
+hasReplicates    yes
 required         no
 downloadOnly     yes
 
