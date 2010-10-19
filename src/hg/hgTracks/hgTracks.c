@@ -4689,7 +4689,7 @@ if (!hideControls)
 #ifdef TRACK_SEARCH
     if(isSearchTracksSupported(database))
         {
-        hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
+        hPrintf("<input type='submit' name='%s' value='track search'>", searchTracks);
         hPrintf(" ");
         }
 #endif

@@ -2505,6 +2505,12 @@ identifier blastCe6SG01
      ce6.blastSGPep01.name
      ce6.blastSGRef01.acc
 
+identifier blastCe9SG01
+"ce9 proteins 01"
+     $gbd.blastCe9SG.qName dupeOk
+     ce9.blastSGPep01.name
+     ce9.blastSGRef01.acc
+
 identifier tfbsCons
 "transcription factor binding sites"
     $hg.tfbsConsSites.name dupeOk

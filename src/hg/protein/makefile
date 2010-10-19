@@ -31,6 +31,7 @@ DIRS = \
 	pfamXref \
 	rmKGPepMrna \
 	scopCollapse \
+	spDbAddVarSplice \
 	spOrganism \
 	spTest \
 	spToDb \

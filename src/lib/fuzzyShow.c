@@ -242,7 +242,7 @@ if (hayPartS > (hayNumOffset + (leftAli->hStart - haystack)) ||
     if (rcHaystack)
 	hayExtremity = hayNumOffset + haySize - hayPaddedOffStart;
     else
-	hayExtremity = hayNumOffset + hayPaddedOffEnd;
+	hayExtremity = hayNumOffset + hayPaddedOffStart;
     }
 
 if (showJumpTable)
