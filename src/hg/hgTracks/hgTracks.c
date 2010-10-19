@@ -4689,7 +4689,7 @@ if (!hideControls)
 #ifdef TRACK_SEARCH
     if(isSearchTracksSupported(database))
         {
-        hPrintf("<input type='submit' name='%s' value='find tracks'>", searchTracks);
+        hPrintf("<input type='submit' name='%s' value='track search'>", searchTracks);
         hPrintf(" ");
         }
 #endif
@@ -5636,7 +5636,7 @@ else if (cartVarExists(cart, configShowEncodeGroups))
     configPageSetTrackVis(-2);
     }
 #ifdef TRACK_SEARCH
-else if (cartVarExists(cart, searchTracks))
+else if (differentString(cartUsualString(cart, searchTracks,"0"),"0"))
     {
     doSearchTracks(groupList);
     }

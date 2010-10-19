@@ -155,10 +155,10 @@ else
 puts(
 "</td>\n"
 "</tr></table>\n"
-"</FORM></td></tr>\n");
+"</td></tr>\n");
 
 puts(
-"<tr><td><center>\n"
+"<tr><td><center><BR>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.");
 
 #define SURVEY 1
@@ -179,10 +179,8 @@ puts("<TR>");
 if(isSearchTracksSupported(db))
     {
     puts("<TD VALIGN=\"TOP\">");
-    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    cgiMakeButton(searchTracks, "find tracks");
-    puts("</FORM></TD>");
+    cgiMakeButton(searchTracks, "track search");
+    puts("</TD>");
     }
 
 // custom track button. disable hgCustom button on GSID server, until
@@ -192,34 +190,26 @@ puts("<TD VALIGN=\"TOP\">");
 /* disable CT for CGB servers for the time being */
 if (!hIsGsidServer() && !hIsCgbServer())
     {
-    printf(
-	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        hgCustomName(), customTracksExist(cart, NULL) ?
-                        CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    puts("</FORM>");
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s'>\n",
+        hgCustomName(),customTracksExist(cart, NULL) ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL);
     }
 puts("</TD>");
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
-puts("</FORM></TD>");
+puts("</TD>");
 
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 if(supportsSuggest)
     cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('suggest').value='';", "clear position");
 else
     cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
-puts("</FORM></TD>");
+puts("</TD>");
 
-puts("</TR>");
-puts("</TABLE>");
+puts("</TR></TABLE>");
+puts("</FORM>");
 
 puts("</center>\n"
 "</td></tr></table>\n"

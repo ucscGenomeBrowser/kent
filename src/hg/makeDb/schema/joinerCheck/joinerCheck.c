@@ -42,6 +42,8 @@ errAbort(
   "                    Note only applies to keys and fields checks.\n"
   "   -database=name - Just validate given database.\n"
   "                    Note only applies to keys and times checks.\n"
+  "   -verbose=N - use verbose to diagnose difficulties. N = 2, 3 or 4 to\n"
+  "              - show increasing level of detail for some functions."
   );
 }
 
@@ -216,7 +218,7 @@ for (db = jf->dbList; db != NULL && !gotIt; db = db->next)
 return gotIt;
 }
 
-void joinerValidateFields(struct joiner *joiner, struct hash *fieldHash,
+static void joinerValidateFields(struct joiner *joiner, struct hash *fieldHash,
 	char *oneIdentifier)
 /* Make sure that joiner refers to fields that exist at
  * least somewhere. */
@@ -669,7 +671,11 @@ static struct hash *joinerAllFields(struct joiner *joiner)
 struct hash *fullHash = hashNew(18);
 struct hashEl *db, *dbList = hashElListHash(joiner->databasesChecked);
 for (db = dbList; db != NULL; db = db->next)
+    {
+    verbose(3, "joinerAllFields: extracting fields from database: '%s'\n",
+	db->name);
     sqlAddDatabaseFields(db->name, fullHash);
+    }
 slFreeList(&dbList);
 return fullHash;
 }
