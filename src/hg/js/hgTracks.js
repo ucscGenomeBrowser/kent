@@ -1894,7 +1894,7 @@ function _hgTrackUiPopUp(trackName,descriptionOnly)
         myLink += "&descriptionOnly=1";
 
     var rec = trackDbJson[trackName];
-    if(rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
+    if(!descriptionOnly && rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
         window.location = myLink;
     } else {
         myLink += "&ajax=1";
@@ -1958,6 +1958,10 @@ function hgTrackUiPopCfgOk(popObj, trackName)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
+    if(popUpTrackDescriptionOnly) {
+        // make sure all links open up in a new window
+        response = response.replace(/<a /ig, "<a target='_blank' ");
+    }
     $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
