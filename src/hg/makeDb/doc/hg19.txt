@@ -12200,4 +12200,36 @@ close(RR);
             hg19 recombRate recombRate.bed
 
 
+############################################################################
+# GENE BOUNDS (RNACLUSTER) (DONE 2010-10-20 - Chin)
+# Create rnaCluster table (depends on {est,mrna}OrientInfo)
+
+cd /hive/data/genomes/hg19/bed
+mkdir rnaCluster
+cd rnaCluster/
+mkdir chrom
+
+# Create a list of accessions that come from RAGE libraries and need to
+# be excluded.
+~/kent/src/hg/geneBounds/clusterRna/generateRageAccList.csh hg19 rage.libs
+
+    cat << '_EOF_' > runClusterRna
+#!/bin/csh -fe
+foreach f (/hive/data/genomes/hg19/nib/chr*.nib) 
+    set c = $f:t:r 
+    set out = chrom/$c.bed 
+    # Exclude accesions in the RAGE file 
+    echo clusterRna -mrnaExclude=hg19.rage.libs hg19 /dev/null $out  -chrom=$c 
+    clusterRna -mrnaExclude=hg19.rage.libs -verbose=2 \
+    -rna=all_mrna -est=intronEst \ 
+    hg19 /dev/null $out -chrom=$c 
+ end
+'_EOF_'
+    # << happy emacs
+    chmod +x ./runClusterRna
+
+    ./runClusterRna
+
+hgLoadBed hg19 rnaCluster chrom/*.bed
+
 #############################################################################
