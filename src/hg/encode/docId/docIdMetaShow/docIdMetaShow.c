@@ -50,7 +50,7 @@ while ((row = sqlNextRow(sr)) != NULL)
     fclose(f);
     boolean validated;
     struct mdbObj *mdbObj = mdbObjsLoadFromFormattedFile(tempFile, &validated);
-    printf("<BR>%s %s %s %s %s\n", docIdDecorate(docIdSub->ix),  mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
+    printf("<BR>%s %s %s %s %s %s\n", docIdDecorate(docIdSub->ix),  mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
     }
 
 sqlFreeResult(&sr);
