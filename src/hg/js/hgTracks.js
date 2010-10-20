@@ -1611,12 +1611,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                });
     } else if (cmd == 'openLink') {
         // Remove hgsid to force a new session (see redmine ticket 1333).
-        var href = selectedMenuItem.href;
-        if(href.indexOf("?hgsid=") == -1) {
-            href = href.replace(/\&hgsid=\d+/, "");
-        } else {
-            href = href.replace(/\?hgsid=\d+\&/, "?");
-        }
+        var href = removeHgsid(selectedMenuItem.href);
         if(window.open(href) == null) {
             windowOpenFailedMsg();
         }
