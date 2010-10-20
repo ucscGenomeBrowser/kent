@@ -1312,10 +1312,18 @@ $(document).ready(function()
         $("#tabs").tabs({
                             show: function(event, ui) {
                                 $('#currentSearchTab').val(ui.panel.id);
+                            },
+                            select: function(event, ui) {
+                                if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
+                                    setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+                                }
                             }
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
+        if(val =='simpleTab' && $('div#found').length < 1) {
+            $('input#simpleSearch').focus();
+        }
         $("#tabs").css('font-family', jQuery('body').css('font-family'));
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
@@ -1990,6 +1998,8 @@ function handleTrackUi(response, status)
                            });
     if(popUpTrackDescriptionOnly) {
         var myWidth =  $(window).width() - 300;
+        if(myWidth > 900)
+            myWidth = 900;
         $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
         $('#hgTrackUiDialog').dialog("option", "width", myWidth);
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
