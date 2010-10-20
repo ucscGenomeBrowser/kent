@@ -7,8 +7,9 @@
 #include "dystring.h"
 #include "jksql.h"
 #include "docId.h"
+#include "portable.h"
 
-static char const rcsid[] = "$Id:$";
+char *docIdTable = "docIdSub";
 
 void docIdSubStaticLoad(char **row, struct docIdSub *ret)
 /* Load a row from docIdSub table into ret.  The contents of ret will
@@ -168,3 +169,100 @@ return cloneString(buffer);
 }
 
 
+boolean fileIsCompressed(char *fileName)
+// this is returning the suffix, but we should really get this from type 
+// and .gz if appropriate.  Is there a way to see if a file is compressed
+// using a library routine?
+{
+char *dot = strrchr(fileName, '.');
+
+if (dot == NULL)
+    errAbort("can't find file suffix for %s\n", fileName);
+
+dot++;
+
+if (sameString(dot, "bam") ||
+    sameString(dot, "bigWig") ||
+    sameString(dot, "gz"))
+    return TRUE;
+
+errAbort("file %s is not compressed ", fileName);
+return FALSE;
+}
+
+static char *decorateType(char *type)
+// add .gz for types that should be compressed
+{
+if (sameString(type, "bam") ||
+    sameString(type, "bigWig"))
+        return type;
+
+char buffer[10 * 1024];
+
+safef(buffer, sizeof buffer, "%s.gz", type);
+
+return cloneString(buffer);
+}
+
+char *docIdGetPath(char *docId, char *docIdDir, char *type)
+// this should be passed the type, not the suffix
+// and I guess we need to add .gz if the type isn't compressed natively
+{
+char *ptr = docId + strlen(docId) - 1;
+struct dyString *dy = newDyString(20);
+char *suffix = decorateType(type);
+
+dyStringPrintf(dy, "%s/", docIdDir);
+for (; ptr != docId; ptr--)
+    {
+    dyStringPrintf(dy, "%c/", *ptr);   
+    }
+
+dyStringPrintf(dy, "%s.%s", docId, suffix);
+
+return dyStringCannibalize(&dy);
+}
+
+void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
+    char *docIdDir, char *suffix)
+{
+
+verbose(2, "Submitting------\n");
+verbose(2, "submitDate %s\n", docIdSub->submitDate);
+verbose(2, "md5sum %s\n", docIdSub->md5sum);
+verbose(2, "valReport %s\n", docIdSub->valReport);
+verbose(2, "metaData %s\n", docIdSub->metaData);
+verbose(2, "submitPath %s\n", docIdSub->submitPath);
+verbose(2, "submitter %s\n", docIdSub->submitter);
+
+char query[10 * 1024];
+
+safef(query, sizeof query, "insert into %s (submitDate, md5sum, valReport, metaData, submitPath, submitter) values (\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
+    docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
+    //docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, "null", docIdSub->submitPath, docIdSub->submitter);
+//printf("query is %s\n", query);
+char *response = sqlQuickString(conn, query);
+
+printf("submitted got response %s\n", response);
+
+safef(query, sizeof query, "select last_insert_id()");
+char *docId = sqlQuickString(conn, query);
+
+printf("submitted got docId %s\n", docId);
+
+
+if (!fileExists(docIdSub->submitPath))
+    errAbort("cannot open %s\n", docIdSub->submitPath);
+char *linkToFile = docIdGetPath(docId, docIdDir, suffix);
+
+printf("linking %s to file %s\n", docIdSub->submitPath, linkToFile);
+char *slash = strrchr(linkToFile, '/');
+if (slash == NULL)
+    errAbort("can't find slash in path %s\n", linkToFile);
+
+*slash = 0;
+makeDirsOnPath(linkToFile);
+*slash = '/';
+if (link(docIdSub->submitPath, linkToFile) < 0)
+    errnoAbort("can't link %s to file %s\n", docIdSub->submitPath, linkToFile);
+}

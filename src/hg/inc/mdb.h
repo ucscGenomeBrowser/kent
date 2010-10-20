@@ -280,6 +280,9 @@ void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,ch
 struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj);
 // Clones a single mdbObj, including hash and maintining order
 
+int mdbVarCmp(const void *va, const void *vb);
+/* Compare to sort on label. */
+
 
 // --------------- Free at last ----------------
 void mdbObjsFree(struct mdbObj **mdbObjsPtr);
