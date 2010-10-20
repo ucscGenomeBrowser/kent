@@ -218,7 +218,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 tier 3
-protocol HudsonAlpha:A549_protocol.pdf UW:A549_Stam_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
 tag AG04449
