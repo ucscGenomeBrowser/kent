@@ -18,18 +18,28 @@ static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp
 struct cart *cart;             /* CGI and other variables */
 struct hash *oldVars = NULL;
 char *database = "encpipeline_prod";
-char *docIdTable = "docIdSub";
+extern char *docIdTable;
+//char *docIdDir = "/hive/groups/encode/dcc/pipeline/downloads/docId";
+char *docIdDir = "http://hgdownload-test.cse.ucsc.edu/goldenPath/docId";
 
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 cart = theCart;
-cartWebStart(cart, database, "cgi to show metadata from docId table");
+cartWebStart(cart, database, "ENCODE DCC Submissions");
 struct sqlConnection *conn = sqlConnect(database);
 struct docIdSub *docIdSub;
 char query[10 * 1024];
 struct sqlResult *sr;
 char **row;
+printf("<table>");
+printf("<tr><th>File</th>");
+printf("<th>dataType</th>");
+printf("<th>view</th>");
+printf("<th>fileType</th>");
+printf("<th>cell type</th>");
+printf("<th>lab</th>");
+printf("</tr>\n");
 safef(query, sizeof query, "select * from %s", docIdTable);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -50,9 +60,15 @@ while ((row = sqlNextRow(sr)) != NULL)
     fclose(f);
     boolean validated;
     struct mdbObj *mdbObj = mdbObjsLoadFromFormattedFile(tempFile, &validated);
-    printf("<BR>%s %s %s %s %s %s\n", docIdDecorate(docIdSub->ix),  mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
+    char *docIdType = mdbObjFindValue(mdbObj, "type");
+    char buffer[10 * 1024];
+    safef(buffer, sizeof buffer, "%d", docIdSub->ix);
+        printf("<tr><td><a href=%s> %s</a></td>", docIdGetPath(buffer, docIdDir, docIdType) , docIdDecorate(docIdSub->ix));
+    printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>\n",   mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
+    printf("</tr>\n");
     }
 
+printf("</table>");
 sqlFreeResult(&sr);
 sqlDisconnect(&conn);
 cartWebEnd();
