@@ -2073,8 +2073,8 @@ return filePath;
 }
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
-// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
-// Can impose (non-zero) limit on returned string size of name.
+// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
+// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
@@ -2100,27 +2100,30 @@ if (cvHash == NULL)
     cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
 
 struct slPair *pairs = NULL, *pair;
-struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&dyQuery));
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
+dyStringFree(&dyQuery);
 char **row;
 struct hash *ra = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(pair);
-    pair = slPairNew(row[0],cloneString(row[0]));  // defaults the label to the val
-    ra = hashFindVal(cvHash,row[0]);
-    if (ra == NULL && sameString(var,"lab"))  // ugly special case
+    char *name = cloneString(row[0]);
+    pair = slPairNew(name,name);  // defaults the label to the metaDb.val
+    ra = hashFindVal(cvHash,name);
+    if (ra == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
         {
-        char *val = cloneString(row[0]);
+        char *val = cloneString(name);
         ra = hashFindVal(cvHash,strUpper(val));
         if (ra == NULL)
             ra = hashFindVal(cvHash,strLower(val));
+        freeMem(val);
         }
     if (ra != NULL)
         {
         char *label = hashFindVal(ra,"label");
         if (label != NULL)
             {
-            freeMem(pair->name);
+            freeMem(pair->name); // Allocated when pair was created
             pair->name = strSwapChar(cloneString(label),'_',' ');  // vestigial _ meaning space
             if (limit > 0 && strlen(pair->name) > limit)
                 pair->name[limit] = '\0';
