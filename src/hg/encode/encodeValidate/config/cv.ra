@@ -6056,12 +6056,15 @@ tag hudsonAlphaGrowProt
 description Cells grown using the HudsonAlpha growth protocol.
 type protocol
 
-
 term Yale_TFBS
 tag YaleGrowProt
 description Cells grown using the Yale TFBS growth protocol.
 type protocol
 
+term Yale_TFBS(Struhl)
+tag YaleStruhlGrowProt
+description Cells grown using the Yale TFBS(Struhl) growth protocol.
+type protocol
 
 ### phase
 term G1
