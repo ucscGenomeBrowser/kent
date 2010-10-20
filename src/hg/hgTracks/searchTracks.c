@@ -348,7 +348,7 @@ char **descWords = NULL;
 int descWordCount = 0;
 boolean searchTermsExist = FALSE;
 int cols;
-char buf[64];
+char buf[512];
 
 if(sameString(currentTab, "simpleTab"))
     {
