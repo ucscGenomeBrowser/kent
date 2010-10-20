@@ -3,6 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 #	WUSTL version 7.0.1 Sep 2010
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABLE03
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
@@ -434,5 +435,27 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     #	28689552 bases of 100286004 (28.608%) in intersection
 
     rm -rf blastOut
+
+#########################################################################
+# set this as the defaultDb (DONE - 2010-10-20 - Hiram)
+    hgsql -e 'update defaultDb set name="caeJap3" where name="caeJap1";' \
+	hgcentraltest
+
+#########################################################################
+# liftOver sangerGene WS210 to this caeJap3 (DONE - 2010-10-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap3/bed/ws210Gene
+    cd /hive/data/genomes/caeJap3/bed/ws210Gene
+    ln -s /hive/data/genomes/caeJap2a/bed/ws210Gene/caeJap2a.ws210Gene.gp .
+    ln -s \
+/hive/data/genomes/caeJap2a/bed/liftOver/caeJap2aToCaeJap3.over.chain.gz .
+
+    export DB=caeJap3
+    liftOver -genePred caeJap2a.ws210Gene.gp caeJap2aToCaeJap3.over.chain.gz \
+	${DB}.ws210Gene.gp ws210gene.unmapped.gp
+
+    genePredCheck -db=${DB} ${DB}.ws210Gene.gp
+    #	checked: 16233 failed: 0
+
+    hgLoadGenePred ${DB} ws210Gene ${DB}.ws210Gene.gp
 
 #########################################################################

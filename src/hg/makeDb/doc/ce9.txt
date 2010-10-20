@@ -175,6 +175,13 @@ taxId 6239
 	VALUES ("ce9", "blat9", "17779", "0", "1");' \
 	    hgcentraltest
     #	test it with some sequence
+    hgsql -e 'DELETE FROM blatServers where db="ce9";' hgcentraltest
+    # new blat server 19 October
+    hgsql -e 'INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce9", "blatx", "17818", "1", "0"); \
+	INSERT INTO blatServers (db, host, port, isTrans, canPcr) \
+	VALUES ("ce9", "blatx", "17819", "0", "1");' \
+	    hgcentraltest
 
 ############################################################################
 # reset default position, same as ce4 on the ZC101 / unc-52 locus
@@ -3197,4 +3204,8 @@ mv /scratch/tmp/$qDB.tmp.gz genes/$qDB.gp.gz
     ## then on hgwbeta:
     hgsql qapushq < ce9.sql
 
+##########################################################################
+# set this as the defaultDb (DONE - 2010-10-19 - Hiram)
+    hgsql -e 'update defaultDb set name="ce9" where name="ce6";' \
+	hgcentraltest
 ##########################################################################

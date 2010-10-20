@@ -520,6 +520,10 @@ function getAllVars(obj,subtrackName)
         if($(this).attr('type') == 'checkbox') {
             name = cgiBooleanShadowPrefix() + name;
             val = $(this).attr('checked') ? 1 : 0;
+        } else if($(this).attr('type') == 'radio') {
+            if(!$(this).attr('checked')) {
+                name = undefined;
+            }
         }
         if(name != undefined && name != "Submit" && val != undefined) {
             urlData[name] = val;
