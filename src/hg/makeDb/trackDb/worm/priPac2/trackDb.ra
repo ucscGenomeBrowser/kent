@@ -1,10 +1,21 @@
 # Local declaration so that local gold.html is picked up.
 track gold override
 html gold
+visibility pack
+
+track windowmaskerSdust override
+visibility dense
+
+track rmsk override
+visibility hide
+
+track gc5BaseBw override
+visibility full
 
 # Local declaration so that local gap.html is picked up.
 track gap override
 html gap
+visibility hide
 
 # Unsplit mRNA track for scaffold-based assembly.
 track all_mrna
@@ -41,3 +52,11 @@ maxItems 300
 track ws210Gene override
 shortLabel WS210 Genes
 longLabel Genes predictions from WormBase priPac1/WS210 release lifted to priPac2
+
+track chainNetCe9 override
+otherDb ce9
+visibility dense
+
+track chainNetCb3 override
+otherDb cb3
+visibility dense
