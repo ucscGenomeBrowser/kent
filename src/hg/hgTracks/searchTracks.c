@@ -767,7 +767,7 @@ else
         hPrintf("<td align='center'>\n");
 
         // Determine visibility and checked state
-        track->visibility = tdbVisLimitedByAncestors(cart, track->tdb, TRUE, FALSE);
+        track->visibility = tdbVisLimitedByAncestors(cart, track->tdb, TRUE, TRUE);
         boolean checked = ( track->visibility != tvHide );
         if(tdbIsContainerChild(track->tdb))
             {
@@ -792,7 +792,6 @@ else
             {
             safef(extra,sizeof(extra),"id='%s_id' onchange='findTracksChangeVis(this)'",track->track);
             hideShowDropDownWithClassAndExtra(track->track, (track->visibility != tvHide), "normalText visDD",extra);
-
             }
         else
             {
@@ -805,7 +804,7 @@ else
             {
             containerTrackCount++;
             //hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
-            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track);
+            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&%s=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track,searchTracks);
             }
         hPrintf("</td>\n");
 

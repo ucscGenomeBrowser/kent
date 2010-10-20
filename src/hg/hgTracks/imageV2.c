@@ -1838,6 +1838,6 @@ hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 if (!trackImgOnly && jsonTdbVars != NULL)
-    hPrintf(jsonTdbSettingsUse(&jsonTdbVars));
+    hWrites(jsonTdbSettingsUse(&jsonTdbVars));
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }

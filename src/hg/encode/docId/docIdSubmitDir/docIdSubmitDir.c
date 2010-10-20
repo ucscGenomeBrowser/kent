@@ -8,6 +8,7 @@
 #include "ra.h"
 #include "docId.h"
 #include "cheapcgi.h"
+#include "portable.h"
 
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
@@ -18,7 +19,7 @@ void usage()
 errAbort(
   "docIdSubmitDir - put ENCODE submission dir into docIdSub table\n"
   "usage:\n"
-  "   docIdSubmitDir database submitDir\n"
+  "   docIdSubmitDir database submitDir docIdDir\n"
   "options:\n"
   "   -table=docIdSub  specify table to use (default docIdSub)\n"
   );
@@ -88,6 +89,7 @@ while((hel = hashNext(&cook)) != NULL)
         errAbort("don't support multiple files in block %s\n", hel->name);
 
     addVar(mdbObj, blockHash, "assembly", "assembly");
+    addVar(mdbObj, blockHash, "type", "type");
 
     slSort(&(mdbObj->vars),&mdbVarCmp); // Should be in determined order
     }
@@ -124,15 +126,68 @@ char *blob = needMem(size + 1);
 blob[size] = 0;
 
 mustRead(f, blob, size);
-verbose(2, "should be reading blob from %s\n", file);
 fclose(f);
 char *outBlob = cgiEncode(blob);
 freez(&blob);
 return outBlob;
 }
 
-void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub)
+
+char * fileIsCompressed(char *fileName)
+// this is returning the suffix, but we should really get this from type 
+// and .gz if appropriate.  Is there a way to see if a file is compressed
+// using a library routine?
 {
+char *dot = strrchr(fileName, '.');
+
+if (dot == NULL)
+    errAbort("can't find file suffix for %s\n", fileName);
+
+dot++;
+
+if (sameString(dot, "bam") ||
+    sameString(dot, "bigWig"))
+    return dot;
+
+if (sameString(dot, "gz"))
+    {
+    dot--;
+    char save = *dot;
+    *dot = 0;
+    char *dot2 = strrchr(fileName, '.');
+    if (dot2 == NULL)
+        errAbort("can't find file suffix for %s\n", fileName);
+    *dot = save;
+    dot2++;
+    return dot2;
+    }
+
+errAbort("file %s is not compressed ", fileName);
+return NULL;
+}
+
+char *docIdGetPath(char *docId, char *docIdDir, char *suffix)
+// this should be passed the type, not the suffix
+// and I guess we need to add .gz if the type isn't compressed natively
+{
+char *ptr = docId + strlen(docId) - 1;
+struct dyString *dy = newDyString(20);
+
+dyStringPrintf(dy, "%s/", docIdDir);
+for (; ptr != docId; ptr--)
+    {
+    dyStringPrintf(dy, "%c/", *ptr);   
+    }
+
+dyStringPrintf(dy, "%s.%s", docId, suffix);
+
+return dyStringCannibalize(&dy);
+}
+
+void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
+    char *docIdDir, char *suffix)
+{
+
 verbose(2, "Submitting------\n");
 verbose(2, "submitDate %s\n", docIdSub->submitDate);
 verbose(2, "md5sum %s\n", docIdSub->md5sum);
@@ -146,7 +201,7 @@ char query[10 * 1024];
 safef(query, sizeof query, "insert into %s (submitDate, md5sum, valReport, metaData, submitPath, submitter) values (\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
     docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
     //docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, "null", docIdSub->submitPath, docIdSub->submitter);
-printf("query is %s\n", query);
+//printf("query is %s\n", query);
 char *response = sqlQuickString(conn, query);
 
 printf("submitted got response %s\n", response);
@@ -155,9 +210,26 @@ safef(query, sizeof query, "select last_insert_id()");
 char *docId = sqlQuickString(conn, query);
 
 printf("submitted got docId %s\n", docId);
+
+
+if (!fileExists(docIdSub->submitPath))
+    errAbort("cannot open %s\n", docIdSub->submitPath);
+char *linkToFile = docIdGetPath(docId, docIdDir, suffix);
+
+printf("linking %s to file %s\n", docIdSub->submitPath, linkToFile);
+char *slash = strrchr(linkToFile, '/');
+if (slash == NULL)
+    errAbort("can't find slash in path %s\n", linkToFile);
+
+*slash = 0;
+makeDirsOnPath(linkToFile);
+*slash = '/';
+if (link(docIdSub->submitPath, linkToFile) < 0)
+    errnoAbort("can't link %s to file %s\n", docIdSub->submitPath, linkToFile);
 }
 
-void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs, char *submitDir)
+void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs, 
+    char *submitDir, char *docIdDir)
 {
 struct mdbObj *mdbObj = mdbObjs, *nextObj;
 struct docIdSub docIdSub;
@@ -169,21 +241,27 @@ for(; mdbObj; mdbObj = nextObj)
     nextObj = mdbObj->next;
     mdbObj->next = NULL;
 
-    docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
+    char *suffix;
+
+    if ((suffix = fileIsCompressed(mdbObjFindValue(mdbObj, "fileName") )) == NULL)
+        return;
+
     docIdSub.submitPath = mdbObjFindValue(mdbObj, "submitPath") ;
+    docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
     docIdSub.submitter = mdbObjFindValue(mdbObj, "lab") ;
     safef(file, sizeof file, "%s/%s", submitDir, docIdSub.submitPath);
+    docIdSub.submitPath = cloneString(file);
     docIdSub.md5sum = calcMd5Sum(file);
     safef(file, sizeof file, "%s/out/%s", submitDir, "validateReport");
     docIdSub.valReport = readBlob(file);	
     mdbObjPrintToFile(mdbObj, TRUE, tempFile);
     docIdSub.metaData = readBlob(tempFile);	
 
-    docIdSubmit(conn, &docIdSub);
+    docIdSubmit(conn, &docIdSub, docIdDir, suffix);
     }
 }
 
-void docIdSubmitDir(char *database, char *submitDir)
+void docIdSubmitDir(char *database, char *submitDir, char *docIdDir)
 /* docIdSubmitDir - put ENCODE submission dir into docIdSub table. */
 {
 struct mdbObj *mdbObjs = getMdb(submitDir);
@@ -192,7 +270,7 @@ addFiles(mdbObjs, submitDir);
 
 struct sqlConnection *conn = sqlConnect(database);
 
-submitToDocId(conn, mdbObjs, submitDir);
+submitToDocId(conn, mdbObjs, submitDir, docIdDir);
 sqlDisconnect(&conn);
 }
 
@@ -200,8 +278,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-docIdSubmitDir(argv[1], argv[2]);
+docIdSubmitDir(argv[1], argv[2], argv[3]);
 return 0;
 }
