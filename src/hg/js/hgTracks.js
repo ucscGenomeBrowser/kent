@@ -1312,10 +1312,18 @@ $(document).ready(function()
         $("#tabs").tabs({
                             show: function(event, ui) {
                                 $('#currentSearchTab').val(ui.panel.id);
+                            },
+                            select: function(event, ui) {
+                                if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
+                                    setTimeout("$('input#simpleSearch').focus();",20); // delay necessary, since select event not afterSelect event
+                                }
                             }
                         });
         $('#tabs').show();
         $("#tabs").tabs('option', 'selected', '#' + val);
+        if(val =='simpleTab' && $('div#found').length < 1) {
+            $('input#simpleSearch').focus();
+        }
         $("#tabs").css('font-family', jQuery('body').css('font-family'));
         $('#simpleSearch').keydown(searchKeydown);
         $('#descSearch').keydown(searchKeydown);
@@ -1894,7 +1902,7 @@ function _hgTrackUiPopUp(trackName,descriptionOnly)
         myLink += "&descriptionOnly=1";
 
     var rec = trackDbJson[trackName];
-    if(rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
+    if(!descriptionOnly && rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
         window.location = myLink;
     } else {
         myLink += "&ajax=1";
@@ -1958,6 +1966,10 @@ function hgTrackUiPopCfgOk(popObj, trackName)
 function handleTrackUi(response, status)
 {
 // Take html from hgTrackUi and put it up as a modal dialog.
+    if(popUpTrackDescriptionOnly) {
+        // make sure all links open up in a new window
+        response = response.replace(/<a /ig, "<a target='_blank' ");
+    }
     $('#hgTrackUiDialog').html("<div id='pop'>" + response + "</div>");
     $('#hgTrackUiDialog').dialog({
                                ajaxOptions: {
@@ -1990,6 +2002,8 @@ function handleTrackUi(response, status)
                            });
     if(popUpTrackDescriptionOnly) {
         var myWidth =  $(window).width() - 300;
+        if(myWidth > 900)
+            myWidth = 900;
         $('#hgTrackUiDialog').dialog("option", "maxWidth", myWidth);
         $('#hgTrackUiDialog').dialog("option", "width", myWidth);
         $('#hgTrackUiDialog').dialog('option' , 'title' , trackDbJson[popUpTrackName].shortLabel + " Track Description");
