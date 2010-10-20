@@ -726,8 +726,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-#protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
-#protocol HudsonAlpha:GM12878-56XiMat_Myers_protocol.pdf
+protocol HudsonAlpha:GM12878-XiMat_Myers_protocol.pdf
 
 term GM12878-XiPat
 tag GM12878XiPat
@@ -742,8 +741,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-#protocol HudsonAlpha:GM12878-34XiPat_Myers_protocol.pdf
-#protocol HudsonAlpha:GM12878-40XiPat_Myers_protocol.pdf
+protocol HudsonAlpha:GM12878-XiPat_Myers_protocol.pdf
 
 term GM12891
 tag GM12891
