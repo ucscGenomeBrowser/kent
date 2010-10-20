@@ -6,6 +6,8 @@
         <META name="keywords" content="genome, genome browser, genome assembly, UCSC, bioinformatics, sequence, gene prediction, SNP, EST, mRNA">
 	<TITLE>UCSC Genome Bioinformatics: FAQ</TITLE>
 	<LINK REL="STYLESHEET" HREF="../style/HGStyle.css">
+	<script type="text/javascript" src="/js/jquery.js"></script>
+	<script type="text/javascript" src="/js/staticDoc.js"></script>
 </HEAD>
 <BODY BGCOLOR="FFF9D2" LINK="0000CC" VLINK="#330066" ALINK="#330066">
 <A NAME="TOP"></A>
@@ -46,9 +48,7 @@
                 		<LI><A HREF="#format7">.2bit format</A>
                 		<LI><A HREF="#format8">.nib format</A>
                 		<LI><A HREF="#format9">GenePred table format</A>
-<!--
 				<LI><A HREF="#format10">Personal Genome SNP format</A>
--->
 				</UL>
 				<P>
 				<A HREF="index.html">Return to FAQ Table of Contents</A>
@@ -241,19 +241,23 @@ on the bigBed format.</P>
                             <TR><TD WIDTH=10>&nbsp;</TD>
                             <TD>
                             <P>
-This is an extension to the BED custom tracks.
-BED detail format, is a BED 4 format with 2 additional fields that are used
-in the detail page display.  The first additional field is an ID, which can be
-used in place of the name for creating links from the detail page.  The second
-is a description of the item.  This can be a long description including html
-tables or lists to customize the display on the detail page.
-<P>Requirements for this type of custom track are it most be uploaded from a
-tab-separated file.  It must have "type=bedDetail" in the track line.  Also
-the name and position fields should uniquely describe an item so that the
-correct id and description will be displayed on the details page.
+This is an extension of BED format. BED detail uses the first 4 to
+12 columns of BED format, plus 2 additional fields that are used to enhance
+the track details pages.  The first additional field is an ID, which can be
+used in place of the name field for creating links from the details pages.  The
+second additional field is a description of the item, which can be a long
+description and can consist of html, including tables and lists.
+<P><b>Requirements</b> for BED detail custom tracks are: fields must be
+tab-separated, &quot;type=bedDetail&quot; must be included in the track line,
+and the name and position fields should uniquely describe items so that the
+correct ID and description will be displayed on the details pages.
 <P>Example:<BR>
+This example uses the first 4 columns of BED format, but up to 12 may be used.
 Note that line breaks have been inserted into the track line in this example
 for documentation display purposes.
+
+Click <a class="insideLink" href="../../cgi-bin/hgTracks?org=human&db=hg19&amp;position=chr11:5244000-5260000&amp;hgt.customText=http://genome.ucsc.edu/goldenPath/help/examples/bedDetailExample.txt" 
+TARGET=_blank>here</a> to view this track in the Genome Browser.</P>
 <PRE>
 track name=HbVar type=bedDetail description="HbVar custom track"
 url="http://globin.bx.psu.edu/cgi-bin/hbvar/query_vars3?display_format=page&mode=output&id=$$"
@@ -1300,11 +1304,8 @@ this table.
      	     </TD></TR>
     	</TABLE>
 	<BR>
-    </TD><TD WIDTH=15></TD></TR>
-</TABLE>
 
 <!--Content Table-->
-<!--commented out til ready
 <A NAME="format10"></A>
     <TABLE WIDTH="100%" BGCOLOR="#888888" BORDER="0" CELLSPACING="0" CELLPADDING="1">
         <TR><TD>
@@ -1343,21 +1344,22 @@ table pgSnp
 </PRE>
 <P>
 The alleles must be an A, C, T, or G, optionally followed by a '/' then another
-A, C, T, or G.  There can be more than 2 alleles (for example in the population variants).  The count should reflect the number of alleles listed and the
-frequency and scores should be listed in the same order as the alleles.  If
-either the frequency or scores is not known a 0(zero) or comma separated list
+A, C, T, or G.  There can be more than 2 alleles (as in the population variants
+tracks, for example).  The count should reflect the number of alleles listed, and the
+frequencies and scores should be listed in the same order as the alleles.  If
+the frequencies or scores are not known, a 0 (zero) or a comma separated list
 (matching the alleleCount) of zeroes should be used.  The alleles are expected
 to be for the plus strand.
-In the genome browser, when viewing the forward strand of the
+In the Genome Browser, when viewing the forward strand of the
 reference genome (the normal case), the displayed alleles are relative
 to the forward strand.  When viewing the reverse strand of the
 reference genome (&quot;reverse&quot; button), the displayed alleles
 are reverse-complemented to match the reverse strand.
-If the frequency of the alleles are given the coloring of the box will
+If the allele frequencies are given, the coloring of the box will
 reflect the frequency for each allele.
 <P>
-The detail page for this track will automatically compute amino acid changes
-for coding SNPs as well as give a chart of the amino acid properties.
+The details pages for this track type will automatically compute amino acid changes
+for coding SNPs as well as give a chart of amino acid properties.
 The Sift and PolyPhen predictions that are in some of the Genome Variants
 subtracks are not available.
                             </TD><TD WIDTH=15></TD></TR>
@@ -1369,6 +1371,5 @@ subtracks are not available.
         <BR>
     </TD><TD WIDTH=15></TD></TR>
 </TABLE>
--->
 
 </BODY></HTML>
