@@ -854,7 +854,10 @@ if (!simpleSearch && groupSearch)
     searchTermsExist = TRUE;
 
 // Metadata selects require careful accounting
-numMetadataSelects = printMdbSelects(conn,cart,metaDbExists,simpleSearch,&mdbVar,&mdbVal,&numMetadataNonEmpty,cols);
+if(metaDbExists)
+    numMetadataSelects = printMdbSelects(conn,cart,metaDbExists,simpleSearch,&mdbVar,&mdbVal,&numMetadataNonEmpty,cols);
+else
+    numMetadataSelects = 0;
 
 hPrintf("</table>\n");
 hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", searchTracks);
