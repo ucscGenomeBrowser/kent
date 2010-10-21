@@ -5558,12 +5558,15 @@ jsIncludeFile("hgTracks.js", NULL);
 jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
+if(advancedJavascriptFeaturesEnabled(cart))
+    {
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-webIncludeResourceFile("jquery.contextmenu.css");
-webIncludeResourceFile("jquery-ui.css");
+    webIncludeResourceFile("jquery.contextmenu.css");
+    webIncludeResourceFile("jquery-ui.css");
 #ifdef CONTEXT_MENU
-jsIncludeFile("jquery.contextmenu.js", NULL);
+    jsIncludeFile("jquery.contextmenu.js", NULL);
 #endif/// def CONTEXT_MENU
+    }
 jsIncludeFile("jquery-ui.js", NULL);
 
 //if (!trackImgOnly)
