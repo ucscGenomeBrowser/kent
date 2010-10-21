@@ -274,9 +274,9 @@ int addSearchSelect = cartUsualInt(cart, "hgt.addRow", 0);   // 1-based row to i
 int numMetadataSelects = 0;
 char **mdbVar = NULL;
 char **mdbVal = NULL;
-int i, count;
 char **mdbVars = NULL;
 char **mdbVarLabels = NULL;
+int i, count = metaDbVars(conn, &mdbVars, &mdbVarLabels);
 
 for(;;)
     {
@@ -313,13 +313,26 @@ if(numMetadataSelects)
             offset = 1;
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
         mdbVar[i] = cloneString(cartOptionalString(cart, buf));
-        // XXXX we need to make sure mdbVar[i] is valid in this assembly
         if(!simpleSearch)
             {
-            safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
-            mdbVal[i] = cloneString(cartOptionalString(cart, buf));
-            if(sameString(mdbVal[i], ANYLABEL))
+            int j;
+            boolean found = FALSE;
+            // We need to make sure mdbVar[i] is valid in this assembly; if it isn't, reset it to "cell".
+            for(j = 0; j < count && !found; j++)
+                if(sameString(mdbVars[j], mdbVar[i]))
+                    found = TRUE;
+            if(found)
+                {
+                safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
+                mdbVal[i] = cloneString(cartOptionalString(cart, buf));
+                if(sameString(mdbVal[i], ANYLABEL))
+                    mdbVal[i] = NULL;
+                }
+            else
+                {
+                mdbVar[i] = cloneString("cell");
                 mdbVal[i] = NULL;
+                }
             if(!isEmpty(mdbVal[i]))
                 (*numMetadataNonEmpty)++;
             }
@@ -344,8 +357,6 @@ else
     mdbVal[0] = ANYLABEL;
     mdbVal[1] = ANYLABEL;
     }
-
-count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
 
 hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
 for(i = 0; i < numMetadataSelects; i++)
