@@ -471,6 +471,21 @@ priPac2.perChromTables = no
     make etc-update
 
 #########################################################################
+# WS210 WormBase genes loading (DONE - 2010-10-14 - Hiram)
+    mkdir /hive/data/genomes/priPac2/bed/ws210Gene
+    cd /hive/data/genomes/priPac2/bed/ws210Gene
+    ln -s  /hive/data/genomes/priPac1/bed/blat.priPac2.2010-10-14/priPac1ToPriPac2.over.chain.gz .
+    ln -s /hive/data/genomes/priPac1/bed/ws210Gene/priPac1.ws210Gene.gp .
+    export DB=priPac2
+    liftOver -genePred priPac1.ws210Gene.gp priPac1ToPriPac2.over.chain.gz \
+        ${DB}.ws210Gene.gp ws210gene.unmapped.gp
+
+    genePredCheck -db=${DB} ${DB}.ws210Gene.gp
+    #	checked: 24319 failed: 0
+
+    hgLoadGenePred ${DB} ws210Gene ${DB}.ws210Gene.gp
+
+#########################################################################
 # set this as the defaultDb (DONE - 2010-10-20 - Hiram)
     hgsql -e 'update defaultDb set name="priPac2" where name="priPac1";' \
 	hgcentraltest
