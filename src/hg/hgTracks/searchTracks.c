@@ -265,61 +265,6 @@ return count;
 #endif///ndef WHITE_LIST_COUNT
 }
 
-#define MAX_FOUND_TRACKS 100
-#define FOUND_TRACKS_PAGING "hgt_startFrom"
-void findTracksPageLinks(int tracksFound, int startFrom)
-{
-if (tracksFound <= MAX_FOUND_TRACKS)
-    return;
-
-// Opener
-int curPage  = (startFrom/MAX_FOUND_TRACKS) + 1;
-int endAt = startFrom+MAX_FOUND_TRACKS;
-if (endAt > tracksFound)
-    endAt = tracksFound;
-hPrintf("<em>Listing %d - %d of %d tracks</em>&nbsp;&nbsp;&nbsp;",startFrom+1,endAt,tracksFound);
-
-// << and <
-hPrintf("<a href='' title='First page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,0);
-if (startFrom >= MAX_FOUND_TRACKS)
-    hPrintf("&nbsp;<a href='' title='Previous page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,startFrom - MAX_FOUND_TRACKS);
-else
-    hPrintf("&nbsp;<em>&lt;</em>&nbsp;");
-
-// page number links
-int lastPage = (tracksFound/MAX_FOUND_TRACKS);
-if ((tracksFound % MAX_FOUND_TRACKS) > 0)
-    lastPage++;
-
-int thisPage = curPage - 3; // Window of 3 pages above and below
-if (thisPage < 1)
-    thisPage = 1;
-for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
-    {
-    if (thisPage != curPage)
-        {
-        int willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
-        endAt = willStartAt+ MAX_FOUND_TRACKS;
-        if (endAt > tracksFound)
-            endAt = tracksFound;
-        hPrintf("&nbsp;<a href='' title='Page %d (%d - %d) tracks' onclick='return findTracksPage(\"%s\",%d);'>%d</a>&nbsp;",
-                thisPage,willStartAt+1,endAt,FOUND_TRACKS_PAGING,((thisPage - 1) * MAX_FOUND_TRACKS),thisPage);
-        }
-    else
-        hPrintf("&nbsp;<em>%d</em>&nbsp;",thisPage);
-    }
-
-// > and >>
-if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
-    hPrintf("&nbsp;<a href='' title='Next page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;</a>&nbsp;",FOUND_TRACKS_PAGING,(startFrom + MAX_FOUND_TRACKS));
-else
-    hPrintf("&nbsp;<em>&gt;</em>&nbsp;");
-thisPage =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
-if (thisPage == tracksFound)
-    thisPage -= MAX_FOUND_TRACKS;
-hPrintf("&nbsp;<a href='' title='Last page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;&gt;</a>\n",FOUND_TRACKS_PAGING,thisPage);
-}
-
 static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean metaDbExists,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
 // Prints a table of mdb selects if appropriate and returns number of them
 {
@@ -410,29 +355,32 @@ if(metaDbExists)
         char buf[256];
         int len;
 
+    #define PRINT_BUTTON(name,value,msg,js) printf("<input type='submit' name='%s' value='%s' style='font-size:.7em;' title='%s' onclick='%s'>", (name), (value), (msg), (js));
         hPrintf("<tr><td>\n");
         if(numMetadataSelects > 2 || i >= 2)
             {
             safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
-            hButtonWithOnClick(searchTracks, "-", "delete this row", buf);
+            PRINT_BUTTON(searchTracks, "-", "delete this row", buf);
             }
         else
             hPrintf("&nbsp;");
         hPrintf("</td><td>\n");
         safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
-        hButtonWithOnClick(searchTracks, "+", "add another row after this row", buf);
+        PRINT_BUTTON(searchTracks, "+", "add another row after this row", buf);
 
         hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange='findTracksMdbVarChanged(this);'");
         hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
         len = getTermArray(conn, &labels, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
+        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true);'");
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
         hPrintf("</tr>\n");
         }
     }
+    hPrintf("<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
+    //hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'>&nbsp;</td></tr>", cols);
 
 return numMetadataSelects;
 }
@@ -535,6 +483,61 @@ struct slRef *tracks = NULL;
 return tracks;
 }
 
+#define MAX_FOUND_TRACKS 100
+#define FOUND_TRACKS_PAGING "hgt_startFrom"
+static void findTracksPageLinks(int tracksFound, int startFrom)
+{
+if (tracksFound <= MAX_FOUND_TRACKS)
+    return;
+
+// Opener
+int curPage  = (startFrom/MAX_FOUND_TRACKS) + 1;
+int endAt = startFrom+MAX_FOUND_TRACKS;
+if (endAt > tracksFound)
+    endAt = tracksFound;
+hPrintf("<span style='font-size:.9em;'><em>Listing %d - %d of %d tracks</em>&nbsp;&nbsp;&nbsp;",startFrom+1,endAt,tracksFound);
+
+// << and <
+hPrintf("<a href='' title='First page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,0);
+if (startFrom >= MAX_FOUND_TRACKS)
+    hPrintf("&nbsp;<a href='' title='Previous page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,startFrom - MAX_FOUND_TRACKS);
+else
+    hPrintf("&nbsp;<em>&lt;</em>&nbsp;");
+
+// page number links
+int lastPage = (tracksFound/MAX_FOUND_TRACKS);
+if ((tracksFound % MAX_FOUND_TRACKS) > 0)
+    lastPage++;
+
+int thisPage = curPage - 3; // Window of 3 pages above and below
+if (thisPage < 1)
+    thisPage = 1;
+for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
+    {
+    if (thisPage != curPage)
+        {
+        int willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
+        endAt = willStartAt+ MAX_FOUND_TRACKS;
+        if (endAt > tracksFound)
+            endAt = tracksFound;
+        hPrintf("&nbsp;<a href='' title='Page %d (%d - %d) tracks' onclick='return findTracksPage(\"%s\",%d);'>%d</a>&nbsp;",
+                thisPage,willStartAt+1,endAt,FOUND_TRACKS_PAGING,((thisPage - 1) * MAX_FOUND_TRACKS),thisPage);
+        }
+    else
+        hPrintf("&nbsp;<em>%d</em>&nbsp;",thisPage);
+    }
+
+// > and >>
+if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
+    hPrintf("&nbsp;<a href='' title='Next page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;</a>&nbsp;",FOUND_TRACKS_PAGING,(startFrom + MAX_FOUND_TRACKS));
+else
+    hPrintf("&nbsp;<em>&gt;</em>&nbsp;");
+thisPage =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
+if (thisPage == tracksFound)
+    thisPage -= MAX_FOUND_TRACKS;
+hPrintf("&nbsp;<a href='' title='Last page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;&gt;</a></span>\n",FOUND_TRACKS_PAGING,thisPage);
+}
+
 static void displayFoundTracks(struct cart *cart, struct slRef *tracks, int tracksFound,enum sortBy sortBy)
 // Routine for displaying found tracks
 {
@@ -557,7 +560,7 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<tr><td nowrap colspan=3>\n");
-        hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
+        hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn' style='font-size:.9em;'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
 
         startFrom = cartUsualInt(cart,FOUND_TRACKS_PAGING,0);
@@ -570,7 +573,7 @@ else
                     break;
                 }
             }
-        hPrintf("</td><td align='right'>\n");
+        hPrintf("</td><td align='right' valign='bottom'>\n");
         findTracksPageLinks(tracksFound,startFrom);
         hPrintf("</td></tr>\n");
         }
@@ -673,11 +676,11 @@ else
 
     // Closing view in browser button and foundTracks count
     hPrintf("<tr><td nowrap colspan=3>");
-    hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
+    hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn' style='font-size:.9em;'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
-        hPrintf("</td><td align='right'>\n");
+        hPrintf("</td><td align='right' valign='top'>\n");
         findTracksPageLinks(tracksFound,startFrom);
         hPrintf("</td></tr>\n");
         }
@@ -800,21 +803,26 @@ hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
 
 hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
-        "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced</span></a></li>\n"
+        "<li><a href='#simpleTab'><B style='font-size:.8em;'>Search</B></a></li>\n"
+        "<li><a href='#advancedTab'><B style='font-size:.8em;'>Advanced</B></a></li>\n"
         "</ul>\n"
         "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
-hPrintf("<table style='width:100%%;'><tr><td colspan='2'>");
-hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='max-width:1000px; width:100%%' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
-hPrintf("</td></tr><tr><td>");
+hPrintf("<table style='width:100%%; font-size:.8em;'><tr><td colspan='2'>");
+hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
-hPrintf("</table></div>\n"
-        "<div id='advancedTab' style='width:inherit;'>\n"
-        "<table cellSpacing=0 style='width:inherit;'>\n");
+hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
+//hPrintf("</td></tr></table>");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:.7em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:.7em;'>\n");
+hPrintf("</div>\n");
 
+// Advanced tab
+hPrintf("<div id='advancedTab' style='width:inherit;'>\n"
+        "<table cellSpacing=0 style='width:inherit; font-size:.8em;'>\n");
 cols = 7;
 
 // Track Name contains
@@ -824,7 +832,6 @@ hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
 hPrintf("<input type='text' name='hgt.nameSearch' id='nameSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px;'>", nameSearch == NULL ? "" : nameSearch);
 hPrintf("</td></tr>\n");
-
 
 // Description contains
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
@@ -850,11 +857,11 @@ if (!simpleSearch && groupSearch)
 numMetadataSelects = printMdbSelects(conn,cart,metaDbExists,simpleSearch,&mdbVar,&mdbVal,&numMetadataNonEmpty,cols);
 
 hPrintf("</table>\n");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", searchTracks);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:.7em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:.7em;'>\n");
+//hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n</div>\n");
-
-hPrintf("<p><input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'></p>\n");
 
 hPrintf("</form>\n");
 hPrintf("</div>"); // Restricts to max-width:1000px;
