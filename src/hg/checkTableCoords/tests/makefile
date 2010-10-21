@@ -11,7 +11,7 @@ test: run
 clean:
 	rm -fr output
 	rm -f *.tab
-	hgsql test -e 'drop table chromInfo;' 2>>1 > /dev/null; /bin/true
+	hgsql test -e 'drop table chromInfo;' > /dev/null 2>&1; /bin/true
 
 load: clean
 	hgsql test < input/fakeChromInfo.sql
@@ -37,4 +37,3 @@ ${TESTS}:
 	${CTC} test ${@}Good
 	-${CTC} test ${@}Bad -verbose=2 > output/${@}Bad.out
 	diff expected/${@}Bad.out output/${@}Bad.out
-

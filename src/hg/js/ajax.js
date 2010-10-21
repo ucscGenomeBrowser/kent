@@ -291,3 +291,13 @@ function loadMetadataTable(response, status)
     $(div).show();
 }
 
+function removeHgsid(href)
+{
+// remove session id from url parameters
+    if(href.indexOf("?hgsid=") == -1) {
+        href = href.replace(/\&hgsid=\d+/, "");
+    } else {
+        href = href.replace(/\?hgsid=\d+\&/, "?");
+    }
+    return href;
+}

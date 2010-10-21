@@ -18,13 +18,12 @@ void usage()
 errAbort(
   "docIdSubmitDir - put ENCODE submission dir into docIdSub table\n"
   "usage:\n"
-  "   docIdSubmitDir database submitDir\n"
+  "   docIdSubmitDir database submitDir docIdDir\n"
   "options:\n"
   "   -table=docIdSub  specify table to use (default docIdSub)\n"
   );
 }
 
-char *docIdTable = "docIdSub";
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
@@ -88,6 +87,7 @@ while((hel = hashNext(&cook)) != NULL)
         errAbort("don't support multiple files in block %s\n", hel->name);
 
     addVar(mdbObj, blockHash, "assembly", "assembly");
+    addVar(mdbObj, blockHash, "type", "type");
 
     slSort(&(mdbObj->vars),&mdbVarCmp); // Should be in determined order
     }
@@ -124,40 +124,14 @@ char *blob = needMem(size + 1);
 blob[size] = 0;
 
 mustRead(f, blob, size);
-verbose(2, "should be reading blob from %s\n", file);
 fclose(f);
 char *outBlob = cgiEncode(blob);
 freez(&blob);
 return outBlob;
 }
 
-void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub)
-{
-verbose(2, "Submitting------\n");
-verbose(2, "submitDate %s\n", docIdSub->submitDate);
-verbose(2, "md5sum %s\n", docIdSub->md5sum);
-verbose(2, "valReport %s\n", docIdSub->valReport);
-verbose(2, "metaData %s\n", docIdSub->metaData);
-verbose(2, "submitPath %s\n", docIdSub->submitPath);
-verbose(2, "submitter %s\n", docIdSub->submitter);
-
-char query[10 * 1024];
-
-safef(query, sizeof query, "insert into %s (submitDate, md5sum, valReport, metaData, submitPath, submitter) values (\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
-    docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
-    //docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, "null", docIdSub->submitPath, docIdSub->submitter);
-printf("query is %s\n", query);
-char *response = sqlQuickString(conn, query);
-
-printf("submitted got response %s\n", response);
-
-safef(query, sizeof query, "select last_insert_id()");
-char *docId = sqlQuickString(conn, query);
-
-printf("submitted got docId %s\n", docId);
-}
-
-void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs, char *submitDir)
+void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs, 
+    char *submitDir, char *docIdDir)
 {
 struct mdbObj *mdbObj = mdbObjs, *nextObj;
 struct docIdSub docIdSub;
@@ -169,21 +143,28 @@ for(; mdbObj; mdbObj = nextObj)
     nextObj = mdbObj->next;
     mdbObj->next = NULL;
 
-    docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
     docIdSub.submitPath = mdbObjFindValue(mdbObj, "submitPath") ;
+    if (strchr(docIdSub.submitPath, ' ') != NULL)
+        errAbort("multiple files in load.ra %s\n", docIdSub.submitPath);
+
+    if (!fileIsCompressed( docIdSub.submitPath))
+        return;
+
+    docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
     docIdSub.submitter = mdbObjFindValue(mdbObj, "lab") ;
     safef(file, sizeof file, "%s/%s", submitDir, docIdSub.submitPath);
+    docIdSub.submitPath = cloneString(file);
     docIdSub.md5sum = calcMd5Sum(file);
     safef(file, sizeof file, "%s/out/%s", submitDir, "validateReport");
     docIdSub.valReport = readBlob(file);	
     mdbObjPrintToFile(mdbObj, TRUE, tempFile);
     docIdSub.metaData = readBlob(tempFile);	
 
-    docIdSubmit(conn, &docIdSub);
+    docIdSubmit(conn, &docIdSub, docIdDir, mdbObjFindValue(mdbObj, "type")) ;
     }
 }
 
-void docIdSubmitDir(char *database, char *submitDir)
+void docIdSubmitDir(char *database, char *submitDir, char *docIdDir)
 /* docIdSubmitDir - put ENCODE submission dir into docIdSub table. */
 {
 struct mdbObj *mdbObjs = getMdb(submitDir);
@@ -192,7 +173,7 @@ addFiles(mdbObjs, submitDir);
 
 struct sqlConnection *conn = sqlConnect(database);
 
-submitToDocId(conn, mdbObjs, submitDir);
+submitToDocId(conn, mdbObjs, submitDir, docIdDir);
 sqlDisconnect(&conn);
 }
 
@@ -200,8 +181,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-docIdSubmitDir(argv[1], argv[2]);
+docIdSubmitDir(argv[1], argv[2], argv[3]);
 return 0;
 }

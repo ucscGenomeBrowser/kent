@@ -1240,6 +1240,7 @@ finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
 // Returns full path of timestamped link to the requested resource file (js, or css).
 // If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// NOTE: png, jpg and gif should also be supported but are untested.
 {
 char baseName[PATH_LEN];
 char extension[FILEEXT_LEN];
@@ -1247,16 +1248,16 @@ splitPath(fileName, NULL, baseName, extension);
 boolean js = sameString(".js",extension);
 boolean style = !js && sameString(".css",extension);
 boolean image = !js && !style && (sameString(".png",extension) || sameString(".jpg",extension) || sameString(".gif",extension));
-if(!js && !style && !image)
+if(!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
     errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
 
 // Build and verify directory
-char *dirName = NULL;
+char *dirName = "";
 if (js)
     dirName = cfgOptionDefault("browser.javaScriptDir", "js");
 else if (style)
     dirName = "style";
-else
+else if (image)
     dirName = "style/images";
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
@@ -1284,7 +1285,7 @@ if(!fileExists(dyStringContents(linkWithTimestamp)))
     // versioned softlinks won't match the real file; in that case, we try to create
     // the versioned links on the fly (which requires write access to the javascript or style directory!).
 
-        // Remove older links
+    // Remove older links
     struct dyString *pattern = dyStringCreate("%s-[0-9]+\\%s", baseName, extension);
     struct slName *file, *files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
     struct dyString *oldLink = dyStringNew(256);
@@ -1322,8 +1323,8 @@ if (wrapInHtml) // wrapped for christmas
         dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
     else if (style)
         dyStringPrintf(wrapped,"<LINK rel='STYLESHEET' href='../%s' TYPE='text/css' />\n", link);
-    else // assume image!
-        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link); // NOTE: perhaps it is better to errAbort!
+    else // Will be image, since these are the only three choices allowed
+        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
     freeMem(link);
     link = dyStringCannibalize(&wrapped);
     }
@@ -1335,6 +1336,7 @@ char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml
 // If this is the first call, will
 //   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
+// NOTE: png, jpg and gif should also be supported but are untested.
 {
 static struct hash *includedResourceFiles = NULL;
 if(!includedResourceFiles)
@@ -1349,17 +1351,22 @@ if (link)
 return link;
 }
 
-boolean webIncludeResourceFile(char *fileName)
-// Converts fileName to web Resource link and hPrintfs the html reference
+boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName)
+// Converts fileName to web Resource link and prints the html reference
 // This only prints and returns TRUE on first call for this resource.
+// Passing in NULL as the file pointer results in hPrintf call
 // The reference will be to a link with timestamp.
 {
 char *link = webTimeStampedLinkToResourceOnFirstCall(fileName,TRUE);
 if (link)
     {
-    hPrintf("%s",link);
+    if (toFile == NULL)
+        hPrintf("%s",link);
+    else
+        fprintf(toFile,"%s",link);
     freeMem(link);
     return TRUE;
     }
 return FALSE;
 }
+
