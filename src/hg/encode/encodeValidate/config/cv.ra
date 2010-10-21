@@ -5956,6 +5956,11 @@ description 45min, 100nM Estradiol (Crawford)
 type treatment
 label Estradiol_100nM
 
+term EtOH_0.01pct
+tag ETOH01
+description 36h,0.01% EtOH (Snyder)
+type treatment
+
 term EtOH_0.02pct
 tag ETOH02
 description 1h,0.02% EtOH (Myers)
