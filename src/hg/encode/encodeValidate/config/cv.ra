@@ -3088,6 +3088,20 @@ targetId GeneCard:GC01M058958
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
 validation missing
 
+term c-Myb_(H-141)
+tag cMYBH141
+type Antibody
+target c-Myb
+antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin
+targetDescription Transcriptional activator; DNA-binding protein that specifically recognize the sequence 5'-YAAC[GT]G-3'. Plays an important role in the control of proliferation and differentiation of hematopoietic progenitor cells. 
+vendorName Santa Cruz Biotech
+vendorId sc-7874
+orderUrl http://www.scbt.com/datasheet-7874-c-myb-h-141-antibody.html
+lab Snyder
+targetId GeneCard:GC06P135544
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYB
+validation missing
+
 term c-Myc
 tag cMYC
 type Antibody
@@ -5064,6 +5078,23 @@ lots I0607(Nov2008)
 targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation
+
+
+term Mxi1_(bHLH)
+tag Mxi1BHLH
+type Antibody
+target Mxi1
+targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX 
+antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1
+vendorName R&D Systems
+vendorId AF4185
+orderUrl http://www.rndsystems.com/
+lab Snyder
+lots ZIJ01
+targetId GeneCard:GC10P11195
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
+validation missing
+
 
 ##This does not appear in metaDb
 term NONO
