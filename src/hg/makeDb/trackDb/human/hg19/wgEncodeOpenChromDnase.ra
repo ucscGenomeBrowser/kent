@@ -352,7 +352,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel pHTE Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in pHTE cells)
-        subGroups view=Peaks cellType=pHTE
+        subGroups view=Peaks cellType=pHTE treatment=AANONE
         type narrowPeak
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -361,7 +361,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Osteobl Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Osteobl cells)
-        subGroups view=Peaks cellType=Osteobl
+        subGroups view=Peaks cellType=Osteobl treatment=AANONE
         type narrowPeak
         # subId=2506 dateSubmitted=2010-10-16
 
@@ -380,7 +380,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel LNCaP Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in LNCaP cells)
-        subGroups view=Peaks cellType=LNCaP
+        subGroups view=Peaks cellType=LNCaP treatment=AANONE
         type narrowPeak
         color 0,119,158
         # subId=2482 dateSubmitted=2010-10-15
@@ -390,7 +390,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel A549 Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in A549 cells)
-        subGroups view=Peaks cellType=A549
+        subGroups view=Peaks cellType=A549 treatment=AANONE
         type narrowPeak
         # subId=2493 dateSubmitted=2010-10-15
 
@@ -710,7 +710,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel pHTE Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in pHTE cells)
-        subGroups view=SIG cellType=pHTE
+        subGroups view=SIG cellType=pHTE treatment=AANONE
         type bigWig 0.000000 2.165800
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -719,7 +719,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Osteobl Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Osteobl cells)
-        subGroups view=SIG cellType=Osteobl
+        subGroups view=SIG cellType=Osteobl treatment=AANONE
         type bigWig 0.000000 3.150400
         # subId=2506 dateSubmitted=2010-10-16
 
@@ -738,7 +738,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel LNCaP Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in LNCaP cells)
-        subGroups view=SIG cellType=LNCaP
+        subGroups view=SIG cellType=LNCaP treatment=AANONE
         type bigWig 0.000000 2.732500
         color 0,119,158
         # subId=2482 dateSubmitted=2010-10-15
@@ -748,7 +748,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel A549 Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in A549 cells)
-        subGroups view=SIG cellType=A549
+        subGroups view=SIG cellType=A549 treatment=AANONE
         type bigWig 0.000000 0.892200
         # subId=2493 dateSubmitted=2010-10-15
 
@@ -1068,7 +1068,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel pHTE
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in pHTE cells)
-        subGroups view=SIGBO cellType=pHTE
+        subGroups view=SIGBO cellType=pHTE treatment=AANONE
         type bigWig 0.000000 317.000000
         # subId=2513 dateSubmitted=2010-10-18
 
@@ -1077,7 +1077,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Osteobl
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Osteobl cells)
-        subGroups view=SIGBO cellType=Osteobl
+        subGroups view=SIGBO cellType=Osteobl treatment=AANONE
         type bigWig 0.000000 604.000000
         # subId=2506 dateSubmitted=2010-10-16
 
@@ -1096,7 +1096,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel LNCaP
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in LNCaP cells)
-        subGroups view=SIGBO cellType=LNCaP
+        subGroups view=SIGBO cellType=LNCaP treatment=AANONE
         type bigWig 0.000000 517.000000
         color 0,119,158
         # subId=2482 dateSubmitted=2010-10-15
@@ -1106,7 +1106,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel A549
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in A549 cells)
-        subGroups view=SIGBO cellType=A549
+        subGroups view=SIGBO cellType=A549 treatment=AANONE
         type bigWig 0.000000 204.000000
         # subId=2493 dateSubmitted=2010-10-15
 

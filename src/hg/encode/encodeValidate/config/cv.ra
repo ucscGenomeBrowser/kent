@@ -218,7 +218,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 tier 3
-protocol HudsonAlpha:A549_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
 tag AG04449
@@ -726,8 +726,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-#protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
-#protocol HudsonAlpha:GM12878-56XiMat_Myers_protocol.pdf
+protocol HudsonAlpha:GM12878-XiMat_Myers_protocol.pdf
 
 term GM12878-XiPat
 tag GM12878XiPat
@@ -742,8 +741,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-#protocol HudsonAlpha:GM12878-34XiPat_Myers_protocol.pdf
-#protocol HudsonAlpha:GM12878-40XiPat_Myers_protocol.pdf
+protocol HudsonAlpha:GM12878-XiPat_Myers_protocol.pdf
 
 term GM12891
 tag GM12891
@@ -3090,6 +3088,20 @@ targetId GeneCard:GC01M058958
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
 validation missing
 
+term c-Myb_(H-141)
+tag cMYBH141
+type Antibody
+target c-Myb
+antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin
+targetDescription Transcriptional activator; DNA-binding protein that specifically recognize the sequence 5'-YAAC[GT]G-3'. Plays an important role in the control of proliferation and differentiation of hematopoietic progenitor cells. 
+vendorName Santa Cruz Biotech
+vendorId sc-7874
+orderUrl http://www.scbt.com/datasheet-7874-c-myb-h-141-antibody.html
+lab Snyder
+targetId GeneCard:GC06P135544
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYB
+validation missing
+
 term c-Myc
 tag cMYC
 type Antibody
@@ -5067,6 +5079,23 @@ targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation
 
+
+term Mxi1_(bHLH)
+tag Mxi1BHLH
+type Antibody
+target Mxi1
+targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX 
+antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1
+vendorName R&D Systems
+vendorId AF4185
+orderUrl http://www.rndsystems.com/
+lab Snyder
+lots ZIJ01
+targetId GeneCard:GC10P11195
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
+validation missing
+
+
 ##This does not appear in metaDb
 term NONO
 tag NONO
@@ -5927,6 +5956,11 @@ description 45min, 100nM Estradiol (Crawford)
 type treatment
 label Estradiol_100nM
 
+term EtOH_0.01pct
+tag ETOH01
+description 36h,0.01% EtOH (Snyder)
+type treatment
+
 term EtOH_0.02pct
 tag ETOH02
 description 1h,0.02% EtOH (Myers)
@@ -6058,12 +6092,15 @@ tag hudsonAlphaGrowProt
 description Cells grown using the HudsonAlpha growth protocol.
 type protocol
 
-
 term Yale_TFBS
 tag YaleGrowProt
 description Cells grown using the Yale TFBS growth protocol.
 type protocol
 
+term Yale_TFBS(Struhl)
+tag YaleStruhlGrowProt
+description Cells grown using the Yale TFBS(Struhl) growth protocol.
+type protocol
 
 ### phase
 term G1

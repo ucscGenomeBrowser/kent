@@ -213,7 +213,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Medullo Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in Medullo cells)
-        subGroups view=Peaks cellType=MEDULLO
+        subGroups view=Peaks cellType=MEDULLO treatment=AANONE
         type narrowPeak
         # subId=2501 dateSubmitted=2010-10-16
 
@@ -222,7 +222,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM12892 Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12892 cells)
-        subGroups view=Peaks cellType=GM12892
+        subGroups view=Peaks cellType=GM12892 treatment=AANONE
         type narrowPeak
         # subId=2488 dateSubmitted=2010-10-15
 
@@ -231,7 +231,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel GM12891 Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in GM12891 cells)
-        subGroups view=Peaks cellType=GM12891
+        subGroups view=Peaks cellType=GM12891 treatment=AANONE
         type narrowPeak
         # subId=2494 dateSubmitted=2010-10-15
 
@@ -240,7 +240,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Astrocy Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in Astrocy cells)
-        subGroups view=Peaks cellType=Astrocy
+        subGroups view=Peaks cellType=Astrocy treatment=AANONE
         type narrowPeak
         # subId=2481 dateSubmitted=2010-10-15
 
@@ -421,7 +421,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Medullo Sig
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in Medullo cells)
-        subGroups view=SIG cellType=MEDULLO
+        subGroups view=SIG cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 0.433400
         # subId=2501 dateSubmitted=2010-10-16
 
@@ -430,7 +430,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel GM12892 Sig
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12892 cells)
-        subGroups view=SIG cellType=GM12892
+        subGroups view=SIG cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 0.395000
         # subId=2488 dateSubmitted=2010-10-15
 
@@ -439,7 +439,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel GM12891 Sig
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in GM12891 cells)
-        subGroups view=SIG cellType=GM12891
+        subGroups view=SIG cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 0.636800
         # subId=2494 dateSubmitted=2010-10-15
 
@@ -448,7 +448,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Astrocy Sig
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in Astrocy cells)
-        subGroups view=SIG cellType=Astrocy
+        subGroups view=SIG cellType=Astrocy treatment=AANONE
         type bigWig 0.000000 0.459700
         # subId=2481 dateSubmitted=2010-10-15
 
@@ -629,7 +629,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Medullo
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in Medullo cells)
-        subGroups view=SIGBO cellType=MEDULLO
+        subGroups view=SIGBO cellType=MEDULLO treatment=AANONE
         type bigWig 0.000000 3221.000000
         # subId=2501 dateSubmitted=2010-10-16
 
@@ -638,7 +638,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel GM12892
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12892 cells)
-        subGroups view=SIGBO cellType=GM12892
+        subGroups view=SIGBO cellType=GM12892 treatment=AANONE
         type bigWig 0.000000 1267.000000
         # subId=2488 dateSubmitted=2010-10-15
 
@@ -647,7 +647,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel GM12891
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in GM12891 cells)
-        subGroups view=SIGBO cellType=GM12891
+        subGroups view=SIGBO cellType=GM12891 treatment=AANONE
         type bigWig 0.000000 1602.000000
         # subId=2494 dateSubmitted=2010-10-15
 
@@ -656,7 +656,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Astrocy
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in Astrocy cells)
-        subGroups view=SIGBO cellType=Astrocy
+        subGroups view=SIGBO cellType=Astrocy treatment=AANONE
         type bigWig 0.000000 1226.000000
         # subId=2481 dateSubmitted=2010-10-15
 
