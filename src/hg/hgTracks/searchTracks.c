@@ -265,7 +265,7 @@ return count;
 #endif///ndef WHITE_LIST_COUNT
 }
 
-static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean metaDbExists,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
+static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
 // Prints a table of mdb selects if appropriate and returns number of them
 {
 // figure out how many metadata selects are visible.
@@ -274,6 +274,9 @@ int addSearchSelect = cartUsualInt(cart, "hgt.addRow", 0);   // 1-based row to i
 int numMetadataSelects = 0;
 char **mdbVar = NULL;
 char **mdbVal = NULL;
+int i, count;
+char **mdbVars = NULL;
+char **mdbVarLabels = NULL;
 
 for(;;)
     {
@@ -310,6 +313,7 @@ if(numMetadataSelects)
             offset = 1;
         safef(buf, sizeof(buf), "%s%d", METADATA_NAME_PREFIX, i + offset);
         mdbVar[i] = cloneString(cartOptionalString(cart, buf));
+        // XXXX we need to make sure mdbVar[i] is valid in this assembly
         if(!simpleSearch)
             {
             safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
@@ -341,46 +345,41 @@ else
     mdbVal[1] = ANYLABEL;
     }
 
-if(metaDbExists)
+count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
+
+hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
+for(i = 0; i < numMetadataSelects; i++)
     {
-    int i;
-    char **mdbVars = NULL;
-    char **mdbVarLabels = NULL;
-    int count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
+    char **terms = NULL, **labels = NULL;
+    char buf[256];
+    int len;
 
-    hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
-    for(i = 0; i < numMetadataSelects; i++)
+#define PRINT_BUTTON(name,value,msg,js) printf("<input type='submit' name='%s' value='%s' style='font-size:.7em;' title='%s' onclick='%s'>", (name), (value), (msg), (js));
+    hPrintf("<tr><td>\n");
+    if(numMetadataSelects > 2 || i >= 2)
         {
-        char **terms = NULL, **labels = NULL;
-        char buf[256];
-        int len;
-
-    #define PRINT_BUTTON(name,value,msg,js) printf("<input type='submit' name='%s' value='%s' style='font-size:.7em;' title='%s' onclick='%s'>", (name), (value), (msg), (js));
-        hPrintf("<tr><td>\n");
-        if(numMetadataSelects > 2 || i >= 2)
-            {
-            safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
-            PRINT_BUTTON(searchTracks, "-", "delete this row", buf);
-            }
-        else
-            hPrintf("&nbsp;");
-        hPrintf("</td><td>\n");
-        safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
-        PRINT_BUTTON(searchTracks, "+", "add another row after this row", buf);
-
-        hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
-        safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange='findTracksMdbVarChanged(this);'");
-        hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
-        len = getTermArray(conn, &labels, &terms, mdbVar[i]);
-        safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true);'");
-        hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
-        hPrintf("</tr>\n");
+        safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
+        PRINT_BUTTON(searchTracks, "-", "delete this row", buf);
         }
+    else
+        hPrintf("&nbsp;");
+    hPrintf("</td><td>\n");
+    safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
+    PRINT_BUTTON(searchTracks, "+", "add another row after this row", buf);
+
+    hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
+    safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
+    cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange='findTracksMdbVarChanged(this);'");
+    hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
+    len = getTermArray(conn, &labels, &terms, mdbVar[i]);
+    safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
+    cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true);'");
+    hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
+    hPrintf("</tr>\n");
     }
-    hPrintf("<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
-    //hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'>&nbsp;</td></tr>", cols);
+
+hPrintf("<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
+//hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'>&nbsp;</td></tr>", cols);
 
 return numMetadataSelects;
 }
@@ -855,7 +854,7 @@ if (!simpleSearch && groupSearch)
 
 // Metadata selects require careful accounting
 if(metaDbExists)
-    numMetadataSelects = printMdbSelects(conn,cart,metaDbExists,simpleSearch,&mdbVar,&mdbVal,&numMetadataNonEmpty,cols);
+    numMetadataSelects = printMdbSelects(conn, cart, simpleSearch, &mdbVar, &mdbVal, &numMetadataNonEmpty, cols);
 else
     numMetadataSelects = 0;
 
