@@ -4,12 +4,14 @@
 #include "hdb.h"
 #include "hgConfig.h"
 #include "trix.h"
+#include "subText.h"
 
 void getSearchTrixFile(char *database, char *buf, int len)
 // Fill-in the name of the track search trix file
 {
-char *fileName = cfgOptionDefault("browser.trixFile", "trackDb.ix");
-safef(buf, len, "/gbdb/%s/%s", database,fileName);
+char *trixPath = cfgOptionDefault("browser.trixPath", "/gbdb/$db/trackDb.ix");
+struct subText *subList = subTextNew("$db", database);
+subTextStatic(subList, trixPath, buf, len);
 }
 
 boolean isSearchTracksSupported(char *database)
