@@ -4360,7 +4360,7 @@ struct sqlConnection *conn = hConnectCentral();
 boolean gotIx;
 char query[256];
 
-safef(query, sizeof(query), "select name from dbDb where name = '%s'", db);
+safef(query, sizeof(query), "select db from blatServers where db = '%s'", db);
 gotIx = sqlExists(conn, query);
 hDisconnectCentral(&conn);
 return gotIx;
