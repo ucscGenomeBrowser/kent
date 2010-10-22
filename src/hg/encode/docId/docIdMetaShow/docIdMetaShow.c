@@ -71,7 +71,9 @@ while ((row = sqlNextRow(sr)) != NULL)
     char *docIdType = mdbObjFindValue(mdbObj, "type");
     char buffer[10 * 1024];
     safef(buffer, sizeof buffer, "%d", docIdSub->ix);
-    printf("<tr><td><a href=%s> %s</a></td>", docIdGetPath(buffer, docIdDir, docIdType) , docIdDecorate(docIdSub->ix));
+    printf("<tr><td><a href=%s> %s</a></td>", 
+        docIdGetPath(buffer, docIdDir, docIdType, NULL) , 
+        docIdDecorate(docIdSub->ix));
     printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>",   mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
     printf("<td><a href=docIdMetaShow?docId=%s> metadata</a></td>", buffer);
     printf("</tr>\n");

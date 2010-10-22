@@ -193,8 +193,7 @@ if (sameString(type, "bam") ||
     sameString(type, "bigWig"))
         return type;
 
-printf("checking to see if %s ends with .gz\n",submitPath);
-if (!endsWith(submitPath, ".gz"))
+if ((submitPath != NULL) && !endsWith(submitPath, ".gz"))
     return type;
 
 char buffer[10 * 1024];
