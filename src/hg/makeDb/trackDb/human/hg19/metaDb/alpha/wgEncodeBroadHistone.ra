@@ -8469,7 +8469,7 @@ setType exp
 subId 1897
 view Alignments
 
-metaObject wgEncodeBroadHistoneHuvecH3k27me3StdRawDataRep1
+metaObject wgEncodeBroadHistoneHuvecH3k27me3StdRawDataRep2
 objType file
 antibody H3K27me3
 cell HUVEC
@@ -8480,13 +8480,13 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-fileName wgEncodeBroadHistoneHuvecH3k27me3StdRawDataRep1.fastq.gz
+fileName wgEncodeBroadHistoneHuvecH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27me3StdRawSignalRep1
+parentTable wgEncodeBroadHistoneHuvecH3k27me3StdRawSignalRep2
 project wgEncode
-replicate 1
+replicate 2
 setType exp
 subId 165
 view RawData
@@ -8749,7 +8749,7 @@ setType exp
 subId 1897
 view Alignments
 
-metaObject wgEncodeBroadHistoneHuvecH3k4me2StdRawDataRep1
+metaObject wgEncodeBroadHistoneHuvecH3k4me2StdRawDataRep2
 objType file
 antibody H3K4me2
 cell HUVEC
@@ -8760,13 +8760,13 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-05
 dateUnrestricted 2009-10-05
-fileName wgEncodeBroadHistoneHuvecH3k4me2StdRawDataRep1.fastq.gz
+fileName wgEncodeBroadHistoneHuvecH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me2StdRawSignalRep1
+parentTable wgEncodeBroadHistoneHuvecH3k4me2StdRawSignalRep2
 project wgEncode
-replicate 1
+replicate 2
 setType exp
 subId 163
 view RawData
@@ -10967,7 +10967,7 @@ setType exp
 subId 1903
 view Alignments
 
-metaObject wgEncodeBroadHistoneNhekControlStdRawDataRep1
+metaObject wgEncodeBroadHistoneNhekControlStdRawDataRep2
 objType file
 antibody Input
 cell NHEK
@@ -10978,13 +10978,13 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-fileName wgEncodeBroadHistoneNhekControlStdRawDataRep1.fastq.gz
+fileName wgEncodeBroadHistoneNhekControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekControlStdRawSignalRep1
+parentTable wgEncodeBroadHistoneNhekControlStdRawSignalRep2
 project wgEncode
-replicate 1
+replicate 2
 setType input
 subId 185
 view RawData
@@ -11998,7 +11998,7 @@ setType exp
 subId 1903
 view Alignments
 
-metaObject wgEncodeBroadHistoneNhekPol2bStdRawDataRep1
+metaObject wgEncodeBroadHistoneNhekPol2bStdRawDataRep2
 objType file
 antibody Pol2(b)
 cell NHEK
@@ -12009,13 +12009,13 @@ dataType ChipSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-01-07
 dateUnrestricted 2009-10-07
-fileName wgEncodeBroadHistoneNhekPol2bStdRawDataRep1.fastq.gz
+fileName wgEncodeBroadHistoneNhekPol2bStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekPol2bStdRawSignalRep1
+parentTable wgEncodeBroadHistoneNhekPol2bStdRawSignalRep2
 project wgEncode
-replicate 1
+replicate 2
 setType exp
 subId 184
 view RawData
@@ -13181,4 +13181,4 @@ subId 1699
 tableName wgEncodeBroadHistoneNhlfH4k20me1StdSig
 view Signal
 
-# MAGIC: -654282164
+# MAGIC: -653233560
