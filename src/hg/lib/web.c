@@ -309,8 +309,13 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0\" class=\"topbar\">\n",
-	       uiState,searchTracks);
+#ifdef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
+	       uiState,TRACK_SEARCH);
+#else///ifndef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet' class='topbar'>\n",
+               uiState);
+#endif///ndef TRACK_SEARCH
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (!endsWith(scriptName, "hgBlat"))
