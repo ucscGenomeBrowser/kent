@@ -1543,8 +1543,8 @@ return count;
 
 // ----------------- Utilities -----------------
 
-char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
-// Finds the val associated with the var or retruns NULL
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var)
+// Finds the mdbVar associated with the var or returns NULL
 {
 if (mdbObj == NULL)
     return NULL;
@@ -1560,6 +1560,17 @@ else
             break;
         }
     }
+if(mdbVar == NULL)
+    return NULL;
+
+return mdbVar;
+}
+
+char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
+// Finds the val associated with the var or retruns NULL
+{
+struct mdbVar *mdbVar = mdbObjFind(mdbObj, var);
+
 if(mdbVar == NULL)
     return NULL;
 

@@ -170,14 +170,11 @@ return cloneString(buffer);
 
 
 boolean fileIsCompressed(char *fileName)
-// this is returning the suffix, but we should really get this from type 
-// and .gz if appropriate.  Is there a way to see if a file is compressed
-// using a library routine?
 {
 char *dot = strrchr(fileName, '.');
 
 if (dot == NULL)
-    errAbort("can't find file suffix for %s\n", fileName);
+    return FALSE;
 
 dot++;
 
@@ -186,16 +183,18 @@ if (sameString(dot, "bam") ||
     sameString(dot, "gz"))
     return TRUE;
 
-errAbort("file %s is not compressed ", fileName);
 return FALSE;
 }
 
-static char *decorateType(char *type)
+static char *decorateType(char *type, char *submitPath)
 // add .gz for types that should be compressed
 {
 if (sameString(type, "bam") ||
     sameString(type, "bigWig"))
         return type;
+
+if ((submitPath != NULL) && !endsWith(submitPath, ".gz"))
+    return type;
 
 char buffer[10 * 1024];
 
@@ -204,13 +203,11 @@ safef(buffer, sizeof buffer, "%s.gz", type);
 return cloneString(buffer);
 }
 
-char *docIdGetPath(char *docId, char *docIdDir, char *type)
-// this should be passed the type, not the suffix
-// and I guess we need to add .gz if the type isn't compressed natively
+char *docIdGetPath(char *docId, char *docIdDir, char *type, char *submitPath)
 {
 char *ptr = docId + strlen(docId) - 1;
 struct dyString *dy = newDyString(20);
-char *suffix = decorateType(type);
+char *suffix = decorateType(type, submitPath);
 
 dyStringPrintf(dy, "%s/", docIdDir);
 for (; ptr != docId; ptr--)
@@ -224,7 +221,7 @@ return dyStringCannibalize(&dy);
 }
 
 void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
-    char *docIdDir, char *suffix)
+    char *docIdDir, char *type)
 {
 
 verbose(2, "Submitting------\n");
@@ -253,7 +250,7 @@ printf("submitted got docId %s\n", docId);
 
 if (!fileExists(docIdSub->submitPath))
     errAbort("cannot open %s\n", docIdSub->submitPath);
-char *linkToFile = docIdGetPath(docId, docIdDir, suffix);
+char *linkToFile = docIdGetPath(docId, docIdDir, type, docIdSub->submitPath);
 
 printf("linking %s to file %s\n", docIdSub->submitPath, linkToFile);
 char *slash = strrchr(linkToFile, '/');
