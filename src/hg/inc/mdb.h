@@ -252,6 +252,9 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
 // ----------------- Utilities -----------------
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var);
+// Finds the val associated with the var or retruns NULL
+
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
