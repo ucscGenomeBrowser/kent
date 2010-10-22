@@ -176,12 +176,14 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
+#ifdef TRACK_SEARCH
 if(isSearchTracksSupported(db))
     {
     puts("<TD VALIGN=\"TOP\">");
-    cgiMakeButton(searchTracks, "track search");
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     puts("</TD>");
     }
+#endif///def TRACK_SEARCH
 
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
@@ -190,14 +192,16 @@ puts("<TD VALIGN=\"TOP\">");
 /* disable CT for CGB servers for the time being */
 if (!hIsGsidServer() && !hIsCgbServer())
     {
-    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s'>\n",
-        hgCustomName(),customTracksExist(cart, NULL) ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL);
+    boolean hasCustomTracks = customTracksExist(cart, NULL);
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
+        hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
+        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
     }
 puts("</TD>");
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
-cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
+cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display","Configure track selections and browser display");
 puts("</TD>");
 
 // clear possition button
