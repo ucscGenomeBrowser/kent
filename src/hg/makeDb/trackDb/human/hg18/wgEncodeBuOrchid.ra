@@ -1,5 +1,3 @@
-
-
 # Orchid tracks (wrangler: braney)
 track wgEncodeBuOrchid
 compositeTrack on
@@ -38,7 +36,6 @@ noInherit on
 	type bigWig -1 2
 	configurable on
 	color 153,38,0
-	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=1 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep1Gm12878 fileName=wgEncodeBuOrchidSignalRep1Gm12878.bw
 
 	track wgEncodeBuOrchidSignalRep2Gm12878
 	subTrack wgEncodeBuOrchidSignalView
@@ -48,6 +45,3 @@ noInherit on
 	type bigWig -1 2
 	configurable on
 	color 153,38,0
-	metadata project=wgEncode grant=Tullius lab=BU dataType=orchid cell=GM12878 view=Signal replicate=2 dataVersion="ENCODE Jan 2010 Freeze" subId=1095 dateSubmitted=2010-01-24 dateUnrestricted=2010-10-24 composite=wgEncodeMarguliesOrchid tableName=wgEncodeBuOrchidSignalRep2Gm12878 fileName=wgEncodeBuOrchidSignalRep2Gm12878.bw
-
-

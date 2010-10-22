@@ -20,11 +20,24 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-static char const rcsid[] = "$Id: searchTracks.c,v 1.11 2010/06/11 18:21:40 larrym Exp $";
+#ifndef TRACK_SEARCH
+void doSearchTracks(struct group *groupList)
+{
+    return;
+}
+#else///ifdef TRACK_SEARCH
 
-#define ANYLABEL "Any"
-#define METADATA_NAME_PREFIX "hgt.metadataName"
-#define METADATA_VALUE_PREFIX "hgt.metadataValue"
+#define ANYLABEL                 "Any"
+#define TRACK_SEARCH_FORM        "trackSearch"
+#define SEARCH_RESULTS_FORM      "searchResults"
+#define METADATA_NAME_PREFIX     "hgt_mdbVar"
+#define METADATA_VALUE_PREFIX    "hgt_mdbVal"
+#define TRACK_SEARCH_CURRENT_TAB "tsCurTab"
+#define TRACK_SEARCH_SIMPLE      "tsSimple"
+#define TRACK_SEARCH_ON_NAME     "tsName"
+#define TRACK_SEARCH_ON_GROUP    "tsGroup"
+#define TRACK_SEARCH_ON_DESCR    "tsDescr"
+#define TRACK_SEARCH_SORT        "tsSort"
 
 static int gCmpGroup(const void *va, const void *vb)
 /* Compare groups based on label. */
@@ -35,7 +48,6 @@ return strcmp(a->label, b->label);
 }
 
 // Would like to do a radio button choice ofsorts
-#define SORT_BY_VAR           "hgt_sortFound"
 enum sortBy
     {
     sbRelevance=0,
@@ -265,70 +277,18 @@ return count;
 #endif///ndef WHITE_LIST_COUNT
 }
 
-#define MAX_FOUND_TRACKS 100
-#define FOUND_TRACKS_PAGING "hgt_startFrom"
-void findTracksPageLinks(int tracksFound, int startFrom)
-{
-if (tracksFound <= MAX_FOUND_TRACKS)
-    return;
-
-// Opener
-int curPage  = (startFrom/MAX_FOUND_TRACKS) + 1;
-int endAt = startFrom+MAX_FOUND_TRACKS;
-if (endAt > tracksFound)
-    endAt = tracksFound;
-hPrintf("<em>Listing %d - %d of %d tracks</em>&nbsp;&nbsp;&nbsp;",startFrom+1,endAt,tracksFound);
-
-// << and <
-hPrintf("<a href='' title='First page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,0);
-if (startFrom >= MAX_FOUND_TRACKS)
-    hPrintf("&nbsp;<a href='' title='Previous page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&lt;</a>&nbsp;",FOUND_TRACKS_PAGING,startFrom - MAX_FOUND_TRACKS);
-else
-    hPrintf("&nbsp;<em>&lt;</em>&nbsp;");
-
-// page number links
-int lastPage = (tracksFound/MAX_FOUND_TRACKS);
-if ((tracksFound % MAX_FOUND_TRACKS) > 0)
-    lastPage++;
-
-int thisPage = curPage - 3; // Window of 3 pages above and below
-if (thisPage < 1)
-    thisPage = 1;
-for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
-    {
-    if (thisPage != curPage)
-        {
-        int willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
-        endAt = willStartAt+ MAX_FOUND_TRACKS;
-        if (endAt > tracksFound)
-            endAt = tracksFound;
-        hPrintf("&nbsp;<a href='' title='Page %d (%d - %d) tracks' onclick='return findTracksPage(\"%s\",%d);'>%d</a>&nbsp;",
-                thisPage,willStartAt+1,endAt,FOUND_TRACKS_PAGING,((thisPage - 1) * MAX_FOUND_TRACKS),thisPage);
-        }
-    else
-        hPrintf("&nbsp;<em>%d</em>&nbsp;",thisPage);
-    }
-
-// > and >>
-if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
-    hPrintf("&nbsp;<a href='' title='Next page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;</a>&nbsp;",FOUND_TRACKS_PAGING,(startFrom + MAX_FOUND_TRACKS));
-else
-    hPrintf("&nbsp;<em>&gt;</em>&nbsp;");
-thisPage =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
-if (thisPage == tracksFound)
-    thisPage -= MAX_FOUND_TRACKS;
-hPrintf("&nbsp;<a href='' title='Last page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&gt;&gt;</a>\n",FOUND_TRACKS_PAGING,thisPage);
-}
-
-static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean metaDbExists,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
+static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)
 // Prints a table of mdb selects if appropriate and returns number of them
 {
 // figure out how many metadata selects are visible.
-int delSearchSelect = cartUsualInt(cart, "hgt.delRow", 0);   // 1-based row to delete
-int addSearchSelect = cartUsualInt(cart, "hgt.addRow", 0);   // 1-based row to insert after
+int delSearchSelect = cartUsualInt(cart, TRACK_SEARCH_DEL_ROW, 0);   // 1-based row to delete
+int addSearchSelect = cartUsualInt(cart, TRACK_SEARCH_ADD_ROW, 0);   // 1-based row to insert after
 int numMetadataSelects = 0;
 char **mdbVar = NULL;
 char **mdbVal = NULL;
+char **mdbVars = NULL;
+char **mdbVarLabels = NULL;
+int i, count = metaDbVars(conn, &mdbVars, &mdbVarLabels);
 
 for(;;)
     {
@@ -367,10 +327,24 @@ if(numMetadataSelects)
         mdbVar[i] = cloneString(cartOptionalString(cart, buf));
         if(!simpleSearch)
             {
+            int j;
+            boolean found = FALSE;
+            // We need to make sure mdbVar[i] is valid in this assembly; if it isn't, reset it to "cell".
+            for(j = 0; j < count && !found; j++)
+                if(sameString(mdbVars[j], mdbVar[i]))
+                    found = TRUE;
+            if(found)
+                {
             safef(buf, sizeof(buf), "%s%d", METADATA_VALUE_PREFIX, i + offset);
             mdbVal[i] = cloneString(cartOptionalString(cart, buf));
             if(sameString(mdbVal[i], ANYLABEL))
                 mdbVal[i] = NULL;
+                }
+            else
+                {
+                mdbVar[i] = cloneString("cell");
+                mdbVal[i] = NULL;
+                }
             if(!isEmpty(mdbVal[i]))
                 (*numMetadataNonEmpty)++;
             }
@@ -396,13 +370,6 @@ else
     mdbVal[1] = ANYLABEL;
     }
 
-if(metaDbExists)
-    {
-    int i;
-    char **mdbVars = NULL;
-    char **mdbVarLabels = NULL;
-    int count = metaDbVars(conn, &mdbVars,&mdbVarLabels);
-
     hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'><em style='color:%s; width:200px;'>ENCODE terms</em></td></tr>", cols,COLOR_DARKGREY);
     for(i = 0; i < numMetadataSelects; i++)
         {
@@ -410,29 +377,32 @@ if(metaDbExists)
         char buf[256];
         int len;
 
+    #define PRINT_BUTTON(name,value,msg,js) printf("<input type='submit' name='%s' value='%s' style='font-size:.7em;' title='%s' onclick='%s'>", (name), (value), (msg), (js));
         hPrintf("<tr><td>\n");
         if(numMetadataSelects > 2 || i >= 2)
             {
             safef(buf, sizeof(buf), "return delSearchSelect(this, %d);", i + 1);
-            hButtonWithOnClick(searchTracks, "-", "delete this row", buf);
+            PRINT_BUTTON(TRACK_SEARCH, "-", "delete this row", buf);
             }
         else
             hPrintf("&nbsp;");
         hPrintf("</td><td>\n");
         safef(buf, sizeof(buf), "return addSearchSelect(this, %d);", i + 1);
-        hButtonWithOnClick(searchTracks, "+", "add another row after this row", buf);
+        PRINT_BUTTON(TRACK_SEARCH, "+", "add another row after this row", buf);
 
         hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange=findTracksMdbVarChanged(this)");
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange='findTracksMdbVarChanged(this);'");
         hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
         len = getTermArray(conn, &labels, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true)'");
+        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true);'");
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
         hPrintf("</tr>\n");
         }
-    }
+
+    hPrintf("<tr><td colspan='%d' align='right' style='height:10px; max-height:10px;'>&nbsp;</td></tr>", cols);
+    //hPrintf("<tr><td colspan='%d' align='right' class='lineOnTop' style='height:20px; max-height:20px;'>&nbsp;</td></tr>", cols);
 
 return numMetadataSelects;
 }
@@ -535,6 +505,67 @@ struct slRef *tracks = NULL;
 return tracks;
 }
 
+#define MAX_FOUND_TRACKS 100
+static void findTracksPageLinks(int tracksFound, int startFrom)
+{
+if (tracksFound <= MAX_FOUND_TRACKS)
+    return;
+
+// Opener
+int willStartAt = 0;
+int curPage  = (startFrom/MAX_FOUND_TRACKS) + 1;
+int endAt = startFrom+MAX_FOUND_TRACKS;
+if (endAt > tracksFound)
+    endAt = tracksFound;
+hPrintf("<span><em style='font-size:.9em;'>Listing %d - %d of %d tracks</em>&nbsp;&nbsp;&nbsp;",startFrom+1,endAt,tracksFound);
+
+// << and <
+if (startFrom >= MAX_FOUND_TRACKS)
+    {
+    hPrintf("<a href='../cgi-bin/hgTracks?%s=Search&%s=0' title='First page of found tracks' onclick='return findTracksPage(\"%s\",0);'>&#171;</a>&nbsp;",
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,TRACK_SEARCH_PAGER);
+    willStartAt = startFrom - MAX_FOUND_TRACKS;
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' title='Previous page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&#139;</a>&nbsp;",
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,TRACK_SEARCH_PAGER,willStartAt);
+    }
+
+// page number links
+int lastPage = (tracksFound/MAX_FOUND_TRACKS);
+if ((tracksFound % MAX_FOUND_TRACKS) > 0)
+    lastPage++;
+
+int thisPage = curPage - 3; // Window of 3 pages above and below
+if (thisPage < 1)
+    thisPage = 1;
+for (;thisPage <= lastPage && thisPage <= curPage + 3; thisPage++)
+    {
+    if (thisPage != curPage)
+        {
+        willStartAt = ((thisPage - 1) * MAX_FOUND_TRACKS);
+        endAt = willStartAt+ MAX_FOUND_TRACKS;
+        if (endAt > tracksFound)
+            endAt = tracksFound;
+        hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' title='Page %d (%d - %d) tracks' onclick='return findTracksPage(\"%s\",%d);'>%d</a>&nbsp;",
+                TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,thisPage,willStartAt+1,endAt,TRACK_SEARCH_PAGER,willStartAt,thisPage);
+        }
+    else
+        hPrintf("&nbsp;<em style='color:%s;'>%d</em>&nbsp;",COLOR_DARKGREY,thisPage);
+    }
+
+// > and >>
+if ((startFrom + MAX_FOUND_TRACKS) < tracksFound)
+    {
+    willStartAt = startFrom + MAX_FOUND_TRACKS;
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' title='Next page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&#155;</a>&nbsp;",
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,TRACK_SEARCH_PAGER,willStartAt);
+    willStartAt =  tracksFound - (tracksFound % MAX_FOUND_TRACKS);
+    if (willStartAt == tracksFound)
+        willStartAt -= MAX_FOUND_TRACKS;
+    hPrintf("&nbsp;<a href='../cgi-bin/hgTracks?%s=Search&%s=%d' title='Last page of found tracks' onclick='return findTracksPage(\"%s\",%d);'>&#187;</a></span>\n",
+            TRACK_SEARCH,TRACK_SEARCH_PAGER,willStartAt,TRACK_SEARCH_PAGER,willStartAt);
+    }
+}
+
 static void displayFoundTracks(struct cart *cart, struct slRef *tracks, int tracksFound,enum sortBy sortBy)
 // Routine for displaying found tracks
 {
@@ -546,7 +577,7 @@ if(tracksFound < 1)
 else
     {
     struct hash *tdbHash = makeTrackHash(database, chromName);
-    hPrintf("<form action='%s' name='SearchTracks' id='searchResultsForm' method='post'>\n\n", hgTracksName());
+    hPrintf("<form action='%s' name='%s' id='%s' method='post'>\n\n", hgTracksName(),SEARCH_RESULTS_FORM,SEARCH_RESULTS_FORM);
     cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 
     int startFrom = 0;
@@ -557,10 +588,10 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<tr><td nowrap colspan=3>\n");
-        hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
+        hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn' style='font-size:.8em;'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
 
-        startFrom = cartUsualInt(cart,FOUND_TRACKS_PAGING,0);
+        startFrom = cartUsualInt(cart,TRACK_SEARCH_PAGER,0);
         if (startFrom > 0 && startFrom < tracksFound)
             {
             int countUp = 0;
@@ -570,7 +601,7 @@ else
                     break;
                 }
             }
-        hPrintf("</td><td align='right'>\n");
+        hPrintf("</td><td align='right' valign='bottom'>\n");
         findTracksPageLinks(tracksFound,startFrom);
         hPrintf("</td></tr>\n");
         }
@@ -589,11 +620,11 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<span style='float:right;'>Sort:");
-        cgiMakeOnClickRadioButton(SORT_BY_VAR, "0", (sortBy == sbRelevance),"onchange=\"findTracksSortNow(this);\"");
+        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "0", (sortBy == sbRelevance),"onchange=\"findTracksSortNow(this);\"");
         hPrintf("by Relevance");
-        cgiMakeOnClickRadioButton(SORT_BY_VAR, "1", (sortBy == sbAbc),      "onchange=\"findTracksSortNow(this);\"");
+        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "1", (sortBy == sbAbc),      "onchange=\"findTracksSortNow(this);\"");
         hPrintf("Alphabetically");
-        cgiMakeOnClickRadioButton(SORT_BY_VAR, "2",(sortBy == sbHierarchy), "onchange=\"findTracksSortNow(this);\"");
+        cgiMakeOnClickRadioButton(TRACK_SEARCH_SORT, "2",(sortBy == sbHierarchy), "onchange=\"findTracksSortNow(this);\"");
         hPrintf("by Hierarchy&nbsp;&nbsp;</span>\n");
         }
     hPrintf("</td></tr>\n");
@@ -658,8 +689,7 @@ else
         if (tdbIsContainer(track->tdb) || tdbIsFolder(track->tdb))
             {
             containerTrackCount++;
-            //hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&hgt_searchTracks=1&hgt_searchTracks=Search' title='Configure this container track...'>*</a>&nbsp;",database,track->track);
-            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&%s=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track,searchTracks);
+            hPrintf("&nbsp;<a href='hgTrackUi?db=%s&g=%s&%s=Search' title='Configure this container track...'><IMG SRC='../images/folderWrench.png'></a>&nbsp;",database,track->track,TRACK_SEARCH);
             }
         hPrintf("</td>\n");
 
@@ -673,11 +703,11 @@ else
 
     // Closing view in browser button and foundTracks count
     hPrintf("<tr><td nowrap colspan=3>");
-    hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn'>");
+    hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn' style='font-size:.8em;'>");
     hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>");
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
-        hPrintf("</td><td align='right'>\n");
+        hPrintf("</td><td align='right' valign='top'>\n");
         findTracksPageLinks(tracksFound,startFrom);
         hPrintf("</td></tr>\n");
         }
@@ -721,11 +751,11 @@ char *labels[128];
 int numGroups = 1;
 groups[0] = ANYLABEL;
 labels[0] = ANYLABEL;
-char *currentTab = cartUsualString(cart, "hgt.currentSearchTab", "simpleTab");
-char *nameSearch = cartOptionalString(cart, "hgt.nameSearch");
+char *currentTab = cartUsualString(cart, TRACK_SEARCH_CURRENT_TAB, "simpleTab");
+char *nameSearch = cartOptionalString(cart, TRACK_SEARCH_ON_NAME);
 char *descSearch;
-char *groupSearch = cartOptionalString(cart, "hgt.groupSearch");
-boolean doSearch = sameString(cartOptionalString(cart, searchTracks), "Search") || cartUsualInt(cart, "hgt.forceSearch", 0) == 1;
+char *groupSearch = cartOptionalString(cart, TRACK_SEARCH_ON_GROUP);
+boolean doSearch = sameString(cartOptionalString(cart, TRACK_SEARCH), "Search") || cartUsualInt(cart, TRACK_SEARCH_PAGER, -1) >= 0;
 struct sqlConnection *conn = hAllocConn(database);
 boolean metaDbExists = sqlTableExists(conn, "metaDb");
 int numMetadataSelects, tracksFound = 0;
@@ -746,14 +776,14 @@ char buf[512];
 
 if(sameString(currentTab, "simpleTab"))
     {
-    descSearch = cartOptionalString(cart, "hgt.simpleSearch");
+    descSearch = cartOptionalString(cart, TRACK_SEARCH_SIMPLE);
     simpleSearch = TRUE;
     freez(&nameSearch);
     freez(&groupSearch);
     }
 else
     {
-    descSearch = cartOptionalString(cart, "hgt.descSearch");
+    descSearch = cartOptionalString(cart, TRACK_SEARCH_ON_DESCR);
     simpleSearch = FALSE;
     }
 
@@ -786,35 +816,41 @@ safef(buf, sizeof(buf),"Search for Tracks in the %s %s Assembly", organism, hFre
 webStartWrapperDetailedNoArgs(cart, database, "", buf, FALSE, FALSE, FALSE, FALSE);
 
 hPrintf("<div style='max-width:1080px;'>");
-hPrintf("<form action='%s' name='SearchTracks' id='searchTracks' method='get'>\n\n", hgTracksName());
+hPrintf("<form action='%s' name='%s' id='%s' method='get'>\n\n", hgTracksName(),TRACK_SEARCH_FORM,TRACK_SEARCH_FORM);
 cartSaveSession(cart);  // Creates hidden var of hgsid to avoid bad voodoo
 safef(buf, sizeof(buf), "%lu", clock1());
 cgiMakeHiddenVar("hgt_", buf);  // timestamps page to avoid browser cache
 
 
 hPrintf("<input type='hidden' name='db' value='%s'>\n", database);
-hPrintf("<input type='hidden' name='hgt.currentSearchTab' id='currentSearchTab' value='%s'>\n", currentTab);
-hPrintf("<input type='hidden' name='hgt.delRow' value=''>\n");
-hPrintf("<input type='hidden' name='hgt.addRow' value=''>\n");
-hPrintf("<input type='hidden' name='hgt.forceSearch' value=''>\n");
+hPrintf("<input type='hidden' name='%s' id='currentTab' value='%s'>\n", TRACK_SEARCH_CURRENT_TAB, currentTab);
+hPrintf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_DEL_ROW);
+hPrintf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_ADD_ROW);
+hPrintf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_PAGER);
 
 hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
-        "<li><a href='#simpleTab'><span>Search</span></a></li>\n"
-        "<li><a href='#advancedTab'><span>Advanced</span></a></li>\n"
+        "<li><a href='#simpleTab'><B style='font-size:.8em;'>Search</B></a></li>\n"
+        "<li><a href='#advancedTab'><B style='font-size:.8em;'>Advanced</B></a></li>\n"
         "</ul>\n"
         "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
-hPrintf("<table style='width:100%%;'><tr><td colspan='2'>");
-hPrintf("<input type='text' name='hgt.simpleSearch' id='simpleSearch' value='%s' style='max-width:1000px; width:100%%' onkeyup='findTracksSearchButtonsEnable(true);'>\n", descSearch == NULL ? "" : descSearch);
-hPrintf("</td></tr><tr><td>");
+hPrintf("<table style='width:100%%; font-size:.8em;'><tr><td colspan='2'>");
+hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n",
+        TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
 if (simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
-hPrintf("</table></div>\n"
-        "<div id='advancedTab' style='width:inherit;'>\n"
-        "<table cellSpacing=0 style='width:inherit;'>\n");
+hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
+//hPrintf("</td></tr></table>");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", TRACK_SEARCH);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:.7em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:.7em;'>\n");
+hPrintf("</div>\n");
 
+// Advanced tab
+hPrintf("<div id='advancedTab' style='width:inherit;'>\n"
+        "<table cellSpacing=0 style='width:inherit; font-size:.8em;'>\n");
 cols = 7;
 
 // Track Name contains
@@ -822,17 +858,17 @@ hPrintf("<tr><td colspan=3></td>");
 hPrintf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
-hPrintf("<input type='text' name='hgt.nameSearch' id='nameSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px;'>", nameSearch == NULL ? "" : nameSearch);
+hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px;'>",
+        TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
 hPrintf("</td></tr>\n");
-
 
 // Description contains
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
 hPrintf("<td><b style='max-width:100px;'>Description:</b></td>");
 hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
-hPrintf("<input type='text' name='hgt.descSearch' id='descSearch' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px;'>",
-        descSearch == NULL ? "" : descSearch);
+hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px;'>",
+        TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr>\n");
 if (!simpleSearch && descSearch)
     searchTermsExist = TRUE;
@@ -841,20 +877,23 @@ hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
 hPrintf("<td><b style='max-width:100px;'>Group</b></td>");
 hPrintf("<td align='right'>is</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
-cgiMakeDropListFull("hgt.groupSearch", labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%%;'");
+cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%;'");
 hPrintf("</td></tr>\n");
 if (!simpleSearch && groupSearch)
     searchTermsExist = TRUE;
 
 // Metadata selects require careful accounting
-numMetadataSelects = printMdbSelects(conn,cart,metaDbExists,simpleSearch,&mdbVar,&mdbVal,&numMetadataNonEmpty,cols);
+if(metaDbExists)
+    numMetadataSelects = printMdbSelects(conn, cart, simpleSearch, &mdbVar, &mdbVal, &numMetadataNonEmpty, cols);
+else
+    numMetadataSelects = 0;
 
 hPrintf("</table>\n");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", TRACK_SEARCH);
+hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:.7em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:.7em;'>\n");
+//hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n</div>\n");
-
-hPrintf("<p><input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:14px;'>\n", searchTracks);
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:14px;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:14px;'></p>\n");
 
 hPrintf("</form>\n");
 hPrintf("</div>"); // Restricts to max-width:1000px;
@@ -893,7 +932,7 @@ if(doSearch)
         tracks = advancedSearchForTracks(conn,groupList,descWords,descWordCount,nameSearch,descSearch,groupSearch,numMetadataNonEmpty,numMetadataSelects,mdbVar,mdbVal);
 
     // Sort and Print results
-    enum sortBy sortBy = cartUsualInt(cart,SORT_BY_VAR,sbRelevance);
+    enum sortBy sortBy = cartUsualInt(cart,TRACK_SEARCH_SORT,sbRelevance);
     tracksFound = slCount(tracks);
     if(tracksFound > 1)
         findTracksSort(&tracks,simpleSearch,sortBy);
@@ -915,3 +954,4 @@ hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more 
 
 webEndSectionTables();
 }
+#endif///def TRACK_SEARCH

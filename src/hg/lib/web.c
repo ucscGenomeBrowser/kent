@@ -314,8 +314,13 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0\" class=\"topbar\">\n",
-	       uiState,searchTracks);
+#ifdef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
+	       uiState,TRACK_SEARCH);
+#else///ifndef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet' class='topbar'>\n",
+               uiState);
+#endif///ndef TRACK_SEARCH
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
     if (haveBlat && !endsWith(scriptName, "hgBlat"))
@@ -1261,9 +1266,9 @@ char *dirName = "";
 if (js)
     dirName = cfgOptionDefault("browser.javaScriptDir", "js");
 else if (style)
-    dirName = "style";
+    dirName = cfgOptionDefault("browser.styleDir","style");
 else if (image)
-    dirName = "style/images";
+    dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
 if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
