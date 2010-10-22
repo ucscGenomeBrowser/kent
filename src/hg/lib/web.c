@@ -1261,9 +1261,9 @@ char *dirName = "";
 if (js)
     dirName = cfgOptionDefault("browser.javaScriptDir", "js");
 else if (style)
-    dirName = "style";
+    dirName = cfgOptionDefault("browser.styleDir","style");
 else if (image)
-    dirName = "style/images";
+    dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
 if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
