@@ -5,8 +5,8 @@ composite wgEncodeYaleRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-23
-dateUnrestricted 2010-06-24
 dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqGm12878PolyaAln.bam
 grant Snyder
 lab Yale
@@ -49,7 +49,6 @@ fileName wgEncodeYaleRnaSeqK562Ama50PolyaRawData.fastq.gz
 grant Snyder
 lab Yale
 origAssembly hg19
-parentTable wgEncodeYaleRnaSeqK562Ama50PolyaRawSignal
 project wgEncode
 rnaExtract polyA
 subId 2084
@@ -82,8 +81,8 @@ composite wgEncodeYaleRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-23
-dateUnrestricted 2010-06-24
 dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqK562Ifna30PolyaAln.bam
 grant Snyder
 lab Yale
@@ -102,8 +101,8 @@ composite wgEncodeYaleRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-23
-dateUnrestricted 2010-06-24
 dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqK562Ifna6hPolyaAln.bam
 grant Snyder
 lab Yale
@@ -122,8 +121,8 @@ composite wgEncodeYaleRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-23
-dateUnrestricted 2010-06-24
 dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqK562Ifng30PolyaAln.bam
 grant Snyder
 lab Yale
@@ -142,8 +141,8 @@ composite wgEncodeYaleRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-23
-dateUnrestricted 2010-06-24
 dateSubmitted 2010-09-24
+dateUnrestricted 2010-06-24
 fileName wgEncodeYaleRnaSeqK562Ifng6hPolyaAln.bam
 grant Snyder
 lab Yale
@@ -162,8 +161,8 @@ composite wgEncodeYaleRnaSeq
 dataType RnaSeq
 dataVersion post ENCODE June 2010 Freeze
 dateResubmitted 2010-07-23
-dateUnrestricted 2009-12-17
 dateSubmitted 2009-03-17
+dateUnrestricted 2009-12-17
 fileName wgEncodeYaleRnaSeqK562NonpolyaAln.bam
 grant Snyder
 lab Yale
@@ -206,7 +205,6 @@ fileName wgEncodeYaleRnaSeqK562PolyaRawData.fastq.gz
 grant Snyder
 lab Yale
 origAssembly hg19
-parentTable wgEncodeYaleRnaSeqK562PolyaRawSignal
 project wgEncode
 rnaExtract polyA
 subId 2085
@@ -232,4 +230,4 @@ tableName wgEncodeYaleRnaSeqK562PolyaSig
 treatment None
 view Signal
 
-# MAGIC: -409522524
+# MAGIC: 1741994189
