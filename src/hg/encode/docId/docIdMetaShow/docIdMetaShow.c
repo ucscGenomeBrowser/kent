@@ -11,6 +11,8 @@
 #include "hui.h"
 #include "docId.h"
 #include "mdb.h"
+#include "portable.h"
+#include "trashDir.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -31,6 +33,10 @@ struct docIdSub *docIdSub;
 char query[10 * 1024];
 struct sqlResult *sr;
 char **row;
+struct tempName tn;
+trashDirFile(&tn, "docId", "meta", ".txt");
+char *tempFile = tn.forCgi;
+//printf("tempFile is %s\n<BR>", tempFile);
 
 printf("<table border=1>");
 printf("<tr><th>File</th>");
@@ -55,12 +61,13 @@ while ((row = sqlNextRow(sr)) != NULL)
     verbose(2, "submitter %s\n", docIdSub->submitter);
 
     cgiDecode(docIdSub->metaData, docIdSub->metaData, strlen(docIdSub->metaData));
-    char *tempFile = "../trash/temp";
     FILE *f = mustOpen(tempFile, "w");
     fwrite(docIdSub->metaData, strlen(docIdSub->metaData), 1, f);
     fclose(f);
     boolean validated;
     struct mdbObj *mdbObj = mdbObjsLoadFromFormattedFile(tempFile, &validated);
+    unlink(tempFile);
+
     char *docIdType = mdbObjFindValue(mdbObj, "type");
     char buffer[10 * 1024];
     safef(buffer, sizeof buffer, "%d", docIdSub->ix);
@@ -78,27 +85,40 @@ cartWebEnd();
 
 void doDocId(struct cart *theCart)
 {
-struct docIdSub *docIdSub;
 char *docId = cartString(theCart, "docId");
 cartWebStart(cart, database, "ENCODE DCC:  Metadata for submission %s",docId);
 struct sqlConnection *conn = sqlConnect(database);
 char query[10 * 1024];
 struct sqlResult *sr;
 char **row;
+struct tempName tn;
+trashDirFile(&tn, "docId", "meta", ".txt");
+char *tempFile = tn.forCgi;
+boolean beenHere = FALSE;
 
 printf("<a href=docIdMetaShow> Return </a><BR>");
 safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
     {
-    docIdSub = docIdSubLoad(row);
+    if (beenHere)
+        errAbort("found more than one record with ix value %s in table %s", 
+            docId, docIdTable);
+    beenHere = TRUE;
+
+    struct docIdSub *docIdSub = docIdSubLoad(row);
     cgiDecode(docIdSub->metaData, docIdSub->metaData, strlen(docIdSub->metaData));
-    char *tempFile = "../trash/temp";
+    //printf("tempFile is %s\n<BR>", tempFile);
     FILE *f = mustOpen(tempFile, "w");
     fwrite(docIdSub->metaData, strlen(docIdSub->metaData), 1, f);
     fclose(f);
     boolean validated;
     struct mdbObj *mdbObj = mdbObjsLoadFromFormattedFile(tempFile, &validated);
+    unlink(tempFile);
+
+    if (mdbObj->next)
+        errAbort("got more than one metaObj from metaData");
+
     for(; mdbObj; mdbObj = mdbObj->next)
         {
         printf("<BR>object: %s\n", mdbObj->obj);
@@ -107,7 +127,6 @@ while ((row = sqlNextRow(sr)) != NULL)
             {
             printf("<BR>%s %s\n", vars->var, vars->val);
             }
-
         }
     }
 
