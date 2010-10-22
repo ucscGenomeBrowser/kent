@@ -3,6 +3,7 @@
 # Caenorhabditis japonica
 #	Washington University School of Medicine GSC and Sanger Institute
 #	WUSTL version 7.0.1 Sep 2010
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=ABLE03
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
@@ -254,6 +255,10 @@ caeJap3.perChromTables = no
     ssh hgwdev
     hgsql -e 'update dbDb set defaultPos="ABLE03026714:2543-32231"
 	where name="caeJap3";' hgcentraltest
+    # there isn't much there on this small contig, better to use a larger
+    #	contig with many gene definitions:
+    hgsql -e 'update dbDb set defaultPos="ABLE03030821:1-151,170"
+	where name="caeJap3";' hgcentraltest
 
 ############################################################################
 # ELEGANS (ce9) PROTEINS TRACK (DONE - 2010-10-07 - Hiram)
@@ -436,3 +441,55 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     rm -rf blastOut
 
 #########################################################################
+# set this as the defaultDb (DONE - 2010-10-20 - Hiram)
+    hgsql -e 'update defaultDb set name="caeJap3" where name="caeJap1";' \
+	hgcentraltest
+
+#########################################################################
+# liftOver sangerGene WS210 to this caeJap3 (DONE - 2010-10-15 - Hiram)
+    mkdir /hive/data/genomes/caeJap3/bed/ws210Gene
+    cd /hive/data/genomes/caeJap3/bed/ws210Gene
+    ln -s /hive/data/genomes/caeJap2a/bed/ws210Gene/caeJap2a.ws210Gene.gp .
+    ln -s \
+/hive/data/genomes/caeJap2a/bed/liftOver/caeJap2aToCaeJap3.over.chain.gz .
+
+    export DB=caeJap3
+    liftOver -genePred caeJap2a.ws210Gene.gp caeJap2aToCaeJap3.over.chain.gz \
+	${DB}.ws210Gene.gp ws210gene.unmapped.gp
+
+    genePredCheck -db=${DB} ${DB}.ws210Gene.gp
+    #	checked: 16233 failed: 0
+
+    hgLoadGenePred ${DB} ws210Gene ${DB}.ws210Gene.gp
+
+#########################################################################
+# verify all.joiner has everything (DONE - 2010-10-21 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=caeJap3 ./all.joiner
+    joinerCheck -keys -database=caeJap3 ./all.joiner
+    joinerCheck -times -database=caeJap3 ./all.joiner
+    joinerCheck -all -database=caeJap3 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#########################################################################
+# construct downloads files (DONE - 2010-10-21 - Hiram)
+    cd /hive/data/genomes/caeJap3
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 caeJap3 \
+	 > downloads.log 2>&1
+
+#########################################################################
+## Creating pushQ (DONE - 2010-10-21 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/caeJap3/pushQ
+    cd /hive/data/genomes/caeJap3/pushQ
+    makePushQSql.pl caeJap3 > caeJap3.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy caeJap3.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    hgsql qapushq < caeJap3.sql
+
+#######################################################################

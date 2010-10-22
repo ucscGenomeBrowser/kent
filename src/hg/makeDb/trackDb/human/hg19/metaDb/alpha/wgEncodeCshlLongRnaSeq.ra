@@ -6248,7 +6248,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -6269,7 +6269,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAllRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -6290,7 +6290,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam.bai
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep1.bam
 grant Gingeras
@@ -6312,7 +6312,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileIndex wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam.bai
 fileName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2.bam
 grant Gingeras
@@ -6334,7 +6334,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -6355,7 +6355,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -6376,7 +6376,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -6397,7 +6397,7 @@ dataType RnaSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-17
 dateSubmitted 2009-10-22
-dateUnrestricted 2010-07-2010
+dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalPlusRawSigRep2.bigWig
 grant Gingeras
 lab CSHL
@@ -6416,8 +6416,8 @@ cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
+dateSubmitted 2009-07-06
+dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapAllRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -6460,8 +6460,8 @@ cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
+dateSubmitted 2009-07-06
+dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1.bam
 grant Gingeras
 lab CSHL
@@ -6592,8 +6592,8 @@ cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
+dateSubmitted 2009-07-06
+dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -6636,8 +6636,8 @@ cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
 dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-30
-dateUnrestricted 2011-06-30
+dateSubmitted 2009-07-06
+dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab CSHL
@@ -8918,4 +8918,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: 1430618573
+# MAGIC: -647144583

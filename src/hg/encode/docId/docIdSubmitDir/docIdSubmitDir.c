@@ -8,7 +8,7 @@
 #include "ra.h"
 #include "docId.h"
 #include "cheapcgi.h"
-
+#include "portable.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -18,13 +18,12 @@ void usage()
 errAbort(
   "docIdSubmitDir - put ENCODE submission dir into docIdSub table\n"
   "usage:\n"
-  "   docIdSubmitDir database submitDir\n"
+  "   docIdSubmitDir database submitDir docIdDir\n"
   "options:\n"
   "   -table=docIdSub  specify table to use (default docIdSub)\n"
   );
 }
 
-char *docIdTable = "docIdSub";
 
 static struct optionSpec options[] = {
    {"table", OPTION_STRING},
@@ -54,8 +53,8 @@ if ((hel2 = hashLookup(blockHash, stringInBlock)) == NULL)
     errAbort("cannot find '%s' tag in load block %s\n", 
         stringInBlock, mdbObj->obj);
 
-struct mdbVar * mdbVar;
 char *value = hel2->val;
+struct mdbVar * mdbVar;
 AllocVar(mdbVar);
 mdbVar->var     = cloneString(stringInMdb);
 mdbVar->varType = vtTxt;
@@ -88,6 +87,7 @@ while((hel = hashNext(&cook)) != NULL)
         errAbort("don't support multiple files in block %s\n", hel->name);
 
     addVar(mdbObj, blockHash, "assembly", "assembly");
+    addVar(mdbObj, blockHash, "type", "type");
 
     slSort(&(mdbObj->vars),&mdbVarCmp); // Should be in determined order
     }
@@ -104,11 +104,13 @@ safef(metaDb, sizeof metaDb, "%s/out/mdb.txt", submitDir);
 return mdbObjsLoadFromFormattedFile(metaDb, &validated);
 }
 
+#ifdef NOTNOW
 char *calcMd5Sum(char *file)
 {
 verbose(2, "should calculate md5sum for %s\n", file);
 return "ffafasfafaf";
 }
+#endif
 
 char *readBlob(char *file)
 {
@@ -124,66 +126,88 @@ char *blob = needMem(size + 1);
 blob[size] = 0;
 
 mustRead(f, blob, size);
-verbose(2, "should be reading blob from %s\n", file);
 fclose(f);
 char *outBlob = cgiEncode(blob);
 freez(&blob);
 return outBlob;
 }
 
-void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub)
-{
-verbose(2, "Submitting------\n");
-verbose(2, "submitDate %s\n", docIdSub->submitDate);
-verbose(2, "md5sum %s\n", docIdSub->md5sum);
-verbose(2, "valReport %s\n", docIdSub->valReport);
-verbose(2, "metaData %s\n", docIdSub->metaData);
-verbose(2, "submitPath %s\n", docIdSub->submitPath);
-verbose(2, "submitter %s\n", docIdSub->submitter);
-
-char query[10 * 1024];
-
-safef(query, sizeof query, "insert into %s (submitDate, md5sum, valReport, metaData, submitPath, submitter) values (\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
-    docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
-    //docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, "null", docIdSub->submitPath, docIdSub->submitter);
-printf("query is %s\n", query);
-char *response = sqlQuickString(conn, query);
-
-printf("submitted got response %s\n", response);
-
-safef(query, sizeof query, "select last_insert_id()");
-char *docId = sqlQuickString(conn, query);
-
-printf("submitted got docId %s\n", docId);
-}
-
-void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs, char *submitDir)
+void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs, 
+    char *submitDir, char *docIdDir)
 {
 struct mdbObj *mdbObj = mdbObjs, *nextObj;
 struct docIdSub docIdSub;
 char file[10 * 1024];
-char *tempFile = "temp";
+struct tempName tn;
+makeTempName(&tn, "metadata", ".txt");
+char *tempFile = tn.forHtml;
+//printf("tempFile is %s\n", tempFile);
 
 for(; mdbObj; mdbObj = nextObj)
     {
     nextObj = mdbObj->next;
     mdbObj->next = NULL;
 
+    docIdSub.md5sum = NULL;
+    docIdSub.valReport = NULL;
     docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
-    docIdSub.submitPath = mdbObjFindValue(mdbObj, "submitPath") ;
     docIdSub.submitter = mdbObjFindValue(mdbObj, "lab") ;
-    safef(file, sizeof file, "%s/%s", submitDir, docIdSub.submitPath);
-    docIdSub.md5sum = calcMd5Sum(file);
-    safef(file, sizeof file, "%s/out/%s", submitDir, "validateReport");
-    docIdSub.valReport = readBlob(file);	
-    mdbObjPrintToFile(mdbObj, TRUE, tempFile);
-    docIdSub.metaData = readBlob(tempFile);	
 
-    docIdSubmit(conn, &docIdSub);
+    char *type = mdbObjFindValue(mdbObj, "type") ;
+    struct mdbVar *submitPathVar = mdbObjFind(mdbObj, "submitPath") ;
+    char *submitPath = cloneString(submitPathVar->val);
+    char *space = strchr(submitPath, ' ');
+    struct mdbVar * subPartVar = NULL;
+    int subPart = 0;
+
+    // unfortunately, submitPath might be a space separated list of files
+    if (space)
+        {
+        // we have a space, so add a new metadata item, subPart, that
+        // has the number of the file in the list
+        AllocVar(subPartVar);
+        subPartVar->var     = "subPart";
+        subPartVar->varType = vtTxt;
+
+        hashAdd(mdbObj->varHash, subPartVar->var, subPartVar);
+        slAddHead(&(mdbObj->vars),subPartVar);
+        }
+
+    // step through the path and submit each file
+    while(submitPath != NULL)
+        {
+        char *space = strchr(submitPath, ' ');
+        if (space)
+            {
+            *space = 0;
+            space++;
+            }
+        
+        if (subPartVar)
+            {
+            char buffer[10 * 1024];
+
+            safef(buffer, sizeof buffer, "%d", subPart);
+            subPartVar->val = cloneString(buffer);
+            }
+
+        submitPathVar->val = cloneString(submitPath);
+        mdbObjPrintToFile(mdbObj, TRUE, tempFile);
+        docIdSub.metaData = readBlob(tempFile);	
+        unlink(tempFile);
+
+        safef(file, sizeof file, "%s/%s", submitDir, submitPath);
+        docIdSub.submitPath = cloneString(file);
+        printf("submitPath %s\n", docIdSub.submitPath);
+        docIdSubmit(conn, &docIdSub, docIdDir, type);
+
+        submitPath = space;
+        subPart++;
+        } 
     }
 }
 
-void docIdSubmitDir(char *database, char *submitDir)
+void docIdSubmitDir(char *database, char *submitDir, char *docIdDir)
 /* docIdSubmitDir - put ENCODE submission dir into docIdSub table. */
 {
 struct mdbObj *mdbObjs = getMdb(submitDir);
@@ -192,7 +216,7 @@ addFiles(mdbObjs, submitDir);
 
 struct sqlConnection *conn = sqlConnect(database);
 
-submitToDocId(conn, mdbObjs, submitDir);
+submitToDocId(conn, mdbObjs, submitDir, docIdDir);
 sqlDisconnect(&conn);
 }
 
@@ -200,8 +224,8 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 optionInit(&argc, argv, options);
-if (argc != 3)
+if (argc != 4)
     usage();
-docIdSubmitDir(argv[1], argv[2]);
+docIdSubmitDir(argv[1], argv[2], argv[3]);
 return 0;
 }

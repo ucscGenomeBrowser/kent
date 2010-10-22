@@ -143,8 +143,8 @@ sub getInfrastructureEntry {
   # Look for the usual set of files on $dbHost:
   my $SameSpecies = ucfirst($db);  $SameSpecies =~ s/\d+$//;
   my @gbdbFiles = map {"$HgAutomate::gbdb/$db/$_"}
-    ("$db.2bit", 'html/description.html', "wib/gc5Base.wib",
-     "liftOver/${db}To$SameSpecies*");
+    ("$db.2bit", 'html/description.html', "wib/gc5Base.wib", "wib/quality.wib",
+     "bbi/gc5Base.bw", "bbi/quality.bw", "liftOver/${db}To$SameSpecies*");
   my @goldenPathFiles = map {"$HgAutomate::goldenPath/$db/$_"}
     (qw( bigZips/* database/* chromosomes/* ),
      "liftOver/${db}To$SameSpecies*");
@@ -560,7 +560,9 @@ sub printSwaps($) {
     $entry{'files'} = "";
     my $over = "${oDb}To$Db.over.chain.gz";
     foreach my $downloads
-      ("$HgAutomate::goldenPath/$oDb/vs$Db/*",
+      ("$HgAutomate::goldenPath/$oDb/vs$Db/*.txt",
+       "$HgAutomate::goldenPath/$oDb/vs$Db/*.gz",
+       "$HgAutomate::goldenPath/$oDb/vs$Db/axtNet/*",
        "$HgAutomate::goldenPath/$oDb/liftOver/$over",
        "$HgAutomate::gbdb/$oDb/liftOver/$over") {
 	  if (&HgAutomate::machineHasFile($dbHost, $downloads)) {

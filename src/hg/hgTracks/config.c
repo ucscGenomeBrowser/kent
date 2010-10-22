@@ -104,23 +104,23 @@ for (group = groupList; group != NULL; group = group->next)
     hPrintf("\n<A NAME='%sGroup'></A>",group->name);
     hPrintf("<input type=hidden name='%s' id='%s' value=%d>",
         collapseGroupVar(group->name),collapseGroupVar(group->name), (isOpen?0:1));
-    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue'></A>&nbsp;&nbsp;",
+    hPrintf("<A HREF='%s?%s&%s=%s#%sGroup' class='bigBlue'><IMG height=22 width=22 onclick=\"return toggleTrackGroupVisibility(this,'%s');\" id='%s_button' src='%s' alt='%s' class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
         hgTracksName(), cartSidUrlString(cart),collapseGroupVar(group->name),
-         otherState, group->name, group->name, group->name, indicatorImg, indicator);
+         otherState, group->name, group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
     hPrintf("<B>&nbsp;%s</B> ", wrapWhiteFont(group->label));
     hPrintf("&nbsp;&nbsp;&nbsp;");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Hide all tracks in this groups'>",
 	    configHideAll, "hide all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Show all tracks in this groups'>",
 	    configShowAll, "show all", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
     hPrintf("<INPUT TYPE=SUBMIT NAME=\"%s\" VALUE=\"%s\" "
-	   "onClick=\"document.mainForm.%s.value='%s'; %s\">",
+	   "onClick=\"document.mainForm.%s.value='%s'; %s\" title='Show default tracks in this group'>",
 	    configDefaultAll, "default", configGroupTarget, group->name,
 	    jsSetVerticalPosition("mainForm"));
     hPrintf(" ");
@@ -129,7 +129,7 @@ for (group = groupList; group != NULL; group = group->next)
      */
     char submitName[256];
     safef(submitName, sizeof(submitName), "%sSubmit", group->name);
-    cgiMakeButton(submitName, "submit");
+    cgiMakeButtonWithMsg(submitName, "submit","Submit your selections and view them in the browser");
 #ifdef PRIORITY_CHANGES_IN_CONFIG_UI
     if (withPriorityOverride)
         {
@@ -447,20 +447,22 @@ else
 	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
+#ifdef TRACK_SEARCH
 if(isSearchTracksSupported(database))
     {
-    cgiMakeButton(searchTracks, "find");
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
     }
-cgiMakeButton(configHideAll, "hide all");
+#endif///def TRACK_SEARCH
+cgiMakeButtonWithMsg(configHideAll, "hide all","Hide all tracks in this genome assembly");
 hPrintf(" ");
-cgiMakeButton(configShowAll, "show all");
+cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome assembly");
 hPrintf(" ");
-cgiMakeButton(configDefaultAll, "default");
+cgiMakeButtonWithMsg(configDefaultAll, "default","Display only default tracks");
 hPrintf("&nbsp;&nbsp;&nbsp;Groups:  ");
-hButtonWithOnClick("hgt.collapseGroups", "collapse all", "collapse all track groups", "return setAllTrackGroupVisibility(false)");
+hButtonWithOnClick("hgt.collapseGroups", "collapse all", "Collapse all track groups", "return setAllTrackGroupVisibility(false)");
 hPrintf(" ");
-hButtonWithOnClick("hgt.expandGroups", "expand all", "expand all track groups", "return setAllTrackGroupVisibility(true)");
+hButtonWithOnClick("hgt.expandGroups", "expand all", "Expand all track groups", "return setAllTrackGroupVisibility(true)");
 hPrintf("<P STYLE=\"margin-top:5;\">Control track and group visibility more selectively below.<P>");
 trackConfig(trackList, groupList, groupTarget, vis);
 

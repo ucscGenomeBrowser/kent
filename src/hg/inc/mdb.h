@@ -252,6 +252,9 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
 // ----------------- Utilities -----------------
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var);
+// Finds the val associated with the var or retruns NULL
+
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
@@ -283,6 +286,7 @@ struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj);
 int mdbVarCmp(const void *va, const void *vb);
 /* Compare to sort on label. */
 
+
 // --------------- Free at last ----------------
 void mdbObjsFree(struct mdbObj **mdbObjsPtr);
 // Frees one or more metadata objects and any contained mdbVars.  Will free any hashes as well.
@@ -310,8 +314,8 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
-// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
-// Can impose (non-zero) limit on returned string size of name.
+// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
+// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 
 #endif /* MDB_H */

@@ -155,10 +155,10 @@ else
 puts(
 "</td>\n"
 "</tr></table>\n"
-"</FORM></td></tr>\n");
+"</td></tr>\n");
 
 puts(
-"<tr><td><center>\n"
+"<tr><td><center><BR>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.");
 
 #define SURVEY 1
@@ -176,14 +176,14 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
+#ifdef TRACK_SEARCH
 if(isSearchTracksSupported(db))
     {
     puts("<TD VALIGN=\"TOP\">");
-    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    cgiMakeButton(searchTracks, "track search");
-    puts("</FORM></TD>");
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
+    puts("</TD>");
     }
+#endif///def TRACK_SEARCH
 
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
@@ -192,34 +192,28 @@ puts("<TD VALIGN=\"TOP\">");
 /* disable CT for CGB servers for the time being */
 if (!hIsGsidServer() && !hIsCgbServer())
     {
-    printf(
-	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        hgCustomName(), customTracksExist(cart, NULL) ?
-                        CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    puts("</FORM>");
+    boolean hasCustomTracks = customTracksExist(cart, NULL);
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
+        hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
+        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
     }
 puts("</TD>");
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
-puts("</FORM></TD>");
+cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display","Configure track selections and browser display");
+puts("</TD>");
 
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 if(supportsSuggest)
     cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('suggest').value='';", "clear position");
 else
     cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
-puts("</FORM></TD>");
+puts("</TD>");
 
-puts("</TR>");
-puts("</TABLE>");
+puts("</TR></TABLE>");
+puts("</FORM>");
 
 puts("</center>\n"
 "</td></tr></table>\n"
