@@ -307,7 +307,7 @@ class PipelineController < ApplicationController
       return
     end
 
-    # create submissions  ## TODO share this with def create
+    # create submissions
     @ftpList.each do |file|
       #take project name from archive filename
       project_name = file
@@ -349,6 +349,96 @@ class PipelineController < ApplicationController
         upload_one
       else
         msg = ("Error creating submission for "+file+" as "+project_name+"<br>")
+        if flash[:error]
+          flash[:error] += msg
+        else
+          flash[:error] = msg
+       end
+      end
+
+    end
+
+    redirect_to :action => 'show_user'
+
+  end
+
+
+  def mass_url
+    @user = current_user
+
+    return unless request.post?
+    if params[:commit] == "Cancel"
+      redirect_to :action => 'show_user'
+      return
+    end
+
+    uplist = params[:url_list].split("\n")
+
+    
+    @extensions = ["zip", "ZIP", "tar.gz", "TAR.GZ", "tar.bz2", "TAR.BZ2", "tgz", "TGZ"]
+    # check urls have correct extension
+    uplist.each do |url|
+      # get trim lead/trail whitespace
+      url.strip!
+      if url.blank? 
+        next
+      end
+      @filename = sanitize_filename(url)
+      # todo may need to move this up earlier?
+      unless @extensions.any? {|ext| @filename.ends_with?("." + ext) }
+        flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
+          "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
+        return
+      end
+    end
+
+    # create submissions
+    uplist.each do |url|
+      # get trim lead/trail whitespace
+      url.strip!
+      if url.blank? 
+        next
+      end
+      #take project name from archive filename
+      project_name = url
+      #chop off archive file extension
+      @extensions.each do |ext|
+        if project_name.ends_with?("." + ext)
+          project_name = project_name[0..(project_name.length - 1 - (ext.length + 1))]
+        end    
+      end
+      #if a submission with that name exists already, tweak the name with (number) until unique.
+      base_name = project_name
+      suffix = ""
+      retryCount = 0
+      unique = false
+      while not unique
+        project_name = base_name + suffix
+        @existing = Project.find(:first, :conditions => {:name => project_name})
+        if @existing
+          retryCount += 1
+          suffix = " (" + retryCount.to_s + ")"
+        else
+          unique = true
+        end
+      end
+
+      @project = Project.new()
+      @project.name = project_name
+      @project.project_type_id = 5
+      @project.user_id = @current_user.id
+      @project.status = 'new'
+      @project.archives_active = ""
+
+      if @project.save
+        # queue it up to be uploaded etc.
+        @upurl = url
+        @upload = ""
+        @upftp = ""
+        @filename = sanitize_filename(@upurl)
+        upload_one
+      else
+        msg = ("Error creating submission for "+url+" as "+project_name+"<br>")
         if flash[:error]
           flash[:error] += msg
         else

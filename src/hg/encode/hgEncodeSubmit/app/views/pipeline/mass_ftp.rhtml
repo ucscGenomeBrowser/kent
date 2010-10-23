@@ -1,7 +1,7 @@
 <p>
 <b>Create a new submission for each archive in your FTP space</b>
 </p>
-<%= start_form_tag({:action => 'mass_ftp'}, :multipart => true) %>
+<%= start_form_tag({:action => 'mass_ftp'}) %>
 
   <% if @ftpList.length > 0 %>
 
@@ -45,6 +45,6 @@
 Use 'Submit' to create one new submission for each of these archives. <br/>
 </p>
 <p>
-The archive file must have one of these extensions: <br/>
+The compressed archive file must have one of these extensions: <br/>
 .zip, .tar.gz, .tgz, .tar.bz2 <br/>
 </p>
