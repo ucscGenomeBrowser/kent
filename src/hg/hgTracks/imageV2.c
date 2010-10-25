@@ -174,7 +174,7 @@ if (kindOfChild != kocOrphan)
     struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
 
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',\n\t\tparentLabel: '%s',",
-                    parentTdb->track, parentTdb->shortLabel);
+                    parentTdb->track, javaScriptLiteralEncode(parentTdb->shortLabel));
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
         dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
