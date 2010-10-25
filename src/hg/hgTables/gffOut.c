@@ -62,11 +62,9 @@ for (i=0;  i < bed->blockCount;  i++)
     int exonEnd = exonStart + bed->blockSizes[j];
     if ((exonStart < bed->thickEnd) && (exonEnd > bed->thickStart))
 	{
-	int cdsSize = exonEnd - exonStart;
-	if (exonEnd > bed->thickEnd)
-	    cdsSize = bed->thickEnd - exonStart;
-	else if (exonStart < bed->thickStart)
-	    cdsSize = exonEnd - bed->thickStart;
+	int cdsS = max(exonStart, bed->thickStart);
+	int cdsE = min(exonEnd, bed->thickEnd);
+	int cdsSize = cdsE - cdsS;
 	if (! gotFirstCds)
 	    {
 	    gotFirstCds = TRUE;
