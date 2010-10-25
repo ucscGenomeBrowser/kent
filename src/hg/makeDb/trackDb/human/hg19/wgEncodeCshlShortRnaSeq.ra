@@ -25,7 +25,7 @@ superTrack wgEncodeRnaSeqSuper
     type bam
     pairEndsByName on
     showNames on
-    bamColorMode tag
+    bamColorMode off
     bamGrayMode aliQual
     baseColorDefault diffBases
     baseColorUseSequence lfExtra
