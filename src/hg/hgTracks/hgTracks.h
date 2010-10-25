@@ -12,6 +12,7 @@
 #include "hui.h"
 #endif
 
+#include "jsHelper.h"
 #include "imageV2.h"
 
 #ifndef CART_H
