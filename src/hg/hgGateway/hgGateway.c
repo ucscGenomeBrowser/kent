@@ -65,7 +65,7 @@ jsIncludeFile("utils.js", NULL);
 
 puts(
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
+"<TABLE BGCOLOR=\"#FFFEE8\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD>\n"
 "<CENTER><FONT SIZE=\"2\">\n"
 "The UCSC Genome Browser was created by the \n"
@@ -78,7 +78,8 @@ puts(
 );
 
 puts(
-"<center>\n"
+"<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
+"<center>"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
 "<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
@@ -87,10 +88,6 @@ puts(
 "<tr>\n"
 "<td>\n");
 
-puts(
-"<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("<table><tr>");
 if (gotClade)
     puts("<td align=center valign=baseline>clade</td>");
@@ -152,6 +149,9 @@ if(supportsSuggest)
     hButtonWithOnClick("Submit", "submit", NULL, "submitButtonOnClick()");
 else
     cgiMakeButton("Submit", "submit");
+/* This is a clear submit button that browsers will use by default when enter is pressed in position box. FIXME: This should be done with js onchange event! */
+printf("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>");
+cartSaveSession(cart);  /* Put up hgsid= as hidden variable. */
 puts(
 "</td>\n"
 "</tr></table>\n"
@@ -213,7 +213,6 @@ else
 puts("</TD>");
 
 puts("</TR></TABLE>");
-puts("</FORM>");
 
 puts("</center>\n"
 "</td></tr></table>\n"
@@ -221,6 +220,7 @@ puts("</center>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
+puts("</FORM>");
 if (isPrivateHost)
 puts("<P>This is just our test site.  It usually works, but it is filled with tracks in various "
 "stages of construction, and others of little interest to people outside of our local group. "
