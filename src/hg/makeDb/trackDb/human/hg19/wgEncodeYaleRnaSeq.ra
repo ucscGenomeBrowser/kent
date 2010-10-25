@@ -35,8 +35,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ama50PolyaSig
         release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
-        shortLabel K562 Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Signal (in K562 cells)
+        shortLabel K562 AMA 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Signal (Amantin in K562 cells)
         subGroups view=Signal cellType=K562 rnaExtract=polyA treatment=AMA50
         type bigWig 1.000000 1941183.000000
         origAssembly hg19
@@ -46,8 +46,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562PolyaSig
         release alpha
         parent wgEncodeYaleRnaSeqViewSignal on
-        shortLabel K562 Sig
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Signal (in K562 cells)
+        shortLabel K562 pA+ 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Signal (PolyA+ in K562 cells)
         subGroups view=Signal cellType=K562 rnaExtract=polyA treatment=None
         type bigWig 1.000000 1655291.000000
         origAssembly hg19
@@ -78,8 +78,8 @@ noInherit on
         track wgEncodeYaleRnaSeqGm12878PolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel GM12878 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in GM12878 cells)
+        shortLabel GM12878 pA+ 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (PolyA+ in GM12878 cells)
         subGroups view=Alignments cellType=GM12878 rnaExtract=polyA treatment=None
         type bam
         origAssembly hg18
@@ -89,8 +89,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562NonpolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 pA- 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (PolyA- in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=nonPolyA treatment=None
         type bam
         origAssembly hg18
@@ -100,8 +100,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifna30PolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 Na30 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNa30 in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNa30
         type bam
         origAssembly hg18
@@ -111,8 +111,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifna6hPolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 Na6h 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNa6h in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNa6h
         type bam
         origAssembly hg18
@@ -122,8 +122,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifng30PolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 Ng30 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNg30 in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNg30
         type bam
         origAssembly hg18
@@ -133,8 +133,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ifng6hPolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 Ng6h 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (IFNg6h in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=IFNg6h
         type bam
         origAssembly hg18
@@ -144,8 +144,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562Ama50PolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 AMA
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (Amantin in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=AMA50
         type bam
         origAssembly hg19
@@ -155,8 +155,8 @@ noInherit on
         track wgEncodeYaleRnaSeqK562PolyaAln
         release alpha
         parent wgEncodeYaleRnaSeqViewAlignments off
-        shortLabel K562 Aln
-        longLabel ENCODE TFBS, Yale/UCD/Harvard RNA-seq Alignments (in K562 cells)
+        shortLabel K562 pA+ 
+        longLabel ENCODE Yale/UCD/Harvard RNA-seq Alignments (PolyA+ in K562 cells)
         subGroups view=Alignments cellType=K562 rnaExtract=polyA treatment=None
         type bam
         origAssembly hg19
