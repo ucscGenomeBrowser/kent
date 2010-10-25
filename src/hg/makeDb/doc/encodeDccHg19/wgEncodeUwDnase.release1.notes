@@ -11,8 +11,8 @@ C) New - are only currently on test but will need to be pushed to the RR.
 D) Additional items of note
 
 Summary total counts for release1 (new+untouched):
-    Tables: 332
-    Files: 600
+    Tables: 336
+    Files: 604
     Gbdbs: 112
 
 A) Untouched Tables (0):
@@ -23,7 +23,7 @@ B) Deprecated tables (0):
 
 B') Deprecated files (0 downloadables, 0 gbdbs):
 
-C) New tables (332):
+C) New tables (336):
 wgEncodeUwDnaseAg04449HotspotsRep1
 wgEncodeUwDnaseAg04449HotspotsRep2
 wgEncodeUwDnaseAg04449PkRep1
@@ -144,7 +144,9 @@ wgEncodeUwDnaseHcpePkRep1
 wgEncodeUwDnaseHcpePkRep2
 wgEncodeUwDnaseHcpeRawRep1
 wgEncodeUwDnaseHcpeRawRep2
+wgEncodeUwDnaseHct116HotspotsRep1
 wgEncodeUwDnaseHct116HotspotsRep2
+wgEncodeUwDnaseHct116PkRep1
 wgEncodeUwDnaseHct116PkRep2
 wgEncodeUwDnaseHct116RawRep1
 wgEncodeUwDnaseHct116RawRep2
@@ -179,7 +181,9 @@ wgEncodeUwDnaseHl60PkRep2
 wgEncodeUwDnaseHl60RawRep1
 wgEncodeUwDnaseHl60RawRep2
 wgEncodeUwDnaseHmecHotspotsRep1
+wgEncodeUwDnaseHmecHotspotsRep2
 wgEncodeUwDnaseHmecPkRep1
+wgEncodeUwDnaseHmecPkRep2
 wgEncodeUwDnaseHmecRawRep1
 wgEncodeUwDnaseHmecRawRep2
 wgEncodeUwDnaseHmfHotspotsRep1
@@ -357,7 +361,7 @@ wgEncodeUwDnaseTh2HotspotsRep1
 wgEncodeUwDnaseTh2PkRep1
 wgEncodeUwDnaseTh2RawRep1
 
-C') New files (597 downloadables, 112 gbdbs):
+C') New files (601 downloadables, 112 gbdbs):
     current location on alpha:
       /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/
     NOT on RR but must be placed in:
@@ -577,7 +581,9 @@ C') New files (597 downloadables, 112 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116AlnRep1.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116AlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116AlnRep2.bam.bai
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116HotspotsRep1.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116HotspotsRep2.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116PkRep1.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116PkRep2.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116RawDataRep1.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHct116RawDataRep2.fastq.gz
@@ -638,7 +644,9 @@ C') New files (597 downloadables, 112 gbdbs):
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecAlnRep2.bam
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecAlnRep2.bam.bai
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecHotspotsRep1.broadPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecHotspotsRep2.broadPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecPkRep1.narrowPeak.gz
+/usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecPkRep2.narrowPeak.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecRawDataRep2.fastq.gz
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecRawRep1.bigWig
 /usr/local/apache/htdocs-hgdownload/goldenPath/hg19/encodeDCC/wgEncodeUwDnase/release1/wgEncodeUwDnaseHmecRawRep2.bigWig
