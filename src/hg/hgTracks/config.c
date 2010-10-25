@@ -448,7 +448,7 @@ else
 webNewSection(buf);
 hPrintf("Tracks: ");
 #ifdef TRACK_SEARCH
-if(isSearchTracksSupported(database))
+if(isSearchTracksSupported(database,cart))
     {
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
