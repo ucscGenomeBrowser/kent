@@ -6,9 +6,8 @@ shortLabel UW Affy Exon
 longLabel ENCODE UW Affy All-Exon Arrays
 release alpha
 group expression
-subGroup1 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K652&nbsp;(Tier_1) 4-HeLaS3=HeLa-S3&nbsp;(Tier_2) 5-HepG2=HepG2&nbsp;(Tier_2) 6-HUVEC=HUVEC&nbsp;(Tier_2) AOAF=AOAF AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPE HCONF=HCONF HCT116=HCT116 HGF=HGF HEE=HEE HEK293=HEK293 HIPE=HIPE HL60=HL60 HMF=HMF  HMVECdBlNeo=HMVEC-dBl-Neo HMVECLbl=HMVEC-Lbl HMVECLLy=HMVEC-LLy HMVECdLyNeo=HMVEC-dLy-Neo  HMVECdLyAd=HMVEC-dLy-Ad HMVECdBlAd=HMVEC-dBl-Ad HMVECdNeo=HMVEC-dNeo HMEC=HMEC HNPCE=HNPCE HPAF=HPAF HPF=HPF  HPdLF=HPdLF HRCE=HRCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE HVMF=HVMF Jurkat=Jurkat MCF7=MCF-7 NHA=NHA NB4=NB4 NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHEK=NHEK NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
+subGroup1 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K652&nbsp;(Tier_1) 4-HeLaS3=HeLa-S3&nbsp;(Tier_2) 5-HepG2=HepG2&nbsp;(Tier_2) 6-HUVEC=HUVEC&nbsp;(Tier_2)  AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AOAF BJ=BJ Caco2=Caco-2 CMK=CMK GM06990=GM06990 H7es=H7es HAE=HAE HBMEC=HBMEC HCF=HCF HCFaa=HCFaa HCM=HCM HCPE=HCPE HCONF=HCONF HCT116=HCT116 HEE=HEE HEK293=HEK293 HGF=HGF HIPE=HIPE HL60=HL60 HMEC=HMEC HMF=HMF HMVECdBlAd=HMVEC-dBl-Ad HMVECdBlNeo=HMVEC-dBl-Neo HMVECdLyAd=HMVEC-dLy-Ad HMVECdLyNeo=HMVEC-dLy-Neo HMVECdNeo=HMVEC-dNeo HMVECLbl=HMVEC-Lbl HMVECLLy=HMVEC-LLy HNPCE=HNPCE HPAF=HPAF HPdLF=HPdLF HPF=HPF HRCE=HRCE HRCEpiC=HRCEpiC HRE=HRE HRPE=HRPE HVMF=HVMF Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHA=NHA NHEK=NHEK NHDF-Ad=NHDF-Ad NHDF-neo=NHDF-neo NHLF=NHLF PANC1=PANC-1 SAEC=SAEC SKMC=SKMC SKNSHRA=SK-N-SH_RA Th1=Th1
 subGroup2 rep Rep rep1=1 rep2=2 
-subGroup3 view View SimpleSignal=Simple_Signal
 dimensions dimensionX=rep dimensionY=cellType 
 boxedCfg on
 sortOrder cellType=+ rep=+
@@ -39,7 +38,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Caco-2 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in Caco-2 cells)
-        subGroups view=SimpleSignal cellType=Caco2 rep=rep1
+        subGroups  cellType=Caco2 rep=rep1
         type broadPeak
         accession GSM472900
         origAssembly hg18
@@ -50,7 +49,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel GM06990 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in GM06990 cells)
-        subGroups view=SimpleSignal cellType=GM06990 rep=rep1
+        subGroups  cellType=GM06990 rep=rep1
         type broadPeak
         accession GSM472903
         origAssembly hg18
@@ -61,7 +60,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel GM06990 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in GM06990 cells)
-        subGroups view=SimpleSignal cellType=GM06990 rep=rep2
+        subGroups  cellType=GM06990 rep=rep2
         type broadPeak
         accession GSM472904
         origAssembly hg18
@@ -72,7 +71,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HepG2 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HepG2 cells)
-        subGroups view=SimpleSignal cellType=5-HepG2 rep=rep1
+        subGroups  cellType=5-HepG2 rep=rep1
         type broadPeak
         accession GSM472906
         origAssembly hg18
@@ -84,7 +83,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HepG2 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HepG2 cells)
-        subGroups view=SimpleSignal cellType=5-HepG2 rep=rep2
+        subGroups  cellType=5-HepG2 rep=rep2
         type broadPeak
         accession GSM472907
         origAssembly hg18
@@ -96,7 +95,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HL-60 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HL-60 cells)
-        subGroups view=SimpleSignal cellType=HL60 rep=rep1
+        subGroups  cellType=HL60 rep=rep1
         type broadPeak
         accession GSM472908
         origAssembly hg18
@@ -107,7 +106,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SKMC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in SKMC cells)
-        subGroups view=SimpleSignal cellType=SKMC rep=rep2
+        subGroups  cellType=SKMC rep=rep2
         type broadPeak
         accession GSM472911
         origAssembly hg18
@@ -118,7 +117,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SK-N-SH_RA 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in SK-N-SH_RA cells)
-        subGroups view=SimpleSignal cellType=SKNSHRA rep=rep2
+        subGroups  cellType=SKNSHRA rep=rep2
         type broadPeak
         accession GSM472912
         origAssembly hg18
@@ -129,7 +128,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SK-N-SH_RA 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in SK-N-SH_RA cells)
-        subGroups view=SimpleSignal cellType=SKNSHRA rep=rep1
+        subGroups  cellType=SKNSHRA rep=rep1
         type broadPeak
         accession GSM472913
         origAssembly hg18
@@ -140,7 +139,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Th1 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in Th1 cells)
-        subGroups view=SimpleSignal cellType=Th1 rep=rep1
+        subGroups  cellType=Th1 rep=rep1
         type broadPeak
         accession GSM472914
         origAssembly hg18
@@ -151,7 +150,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HeLa-S3 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HeLa-S3 cells)
-        subGroups view=SimpleSignal cellType=4-HeLaS3 rep=rep1
+        subGroups  cellType=4-HeLaS3 rep=rep1
         type broadPeak
         accession GSM472916
         origAssembly hg18
@@ -163,7 +162,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRE 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HRE cells)
-        subGroups view=SimpleSignal cellType=HRE rep=rep2
+        subGroups  cellType=HRE rep=rep2
         type broadPeak
         accession GSM472918
         origAssembly hg18
@@ -174,7 +173,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRE 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HRE cells)
-        subGroups view=SimpleSignal cellType=HRE rep=rep1
+        subGroups  cellType=HRE rep=rep1
         type broadPeak
         accession GSM472919
         origAssembly hg18
@@ -185,7 +184,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRCEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HRCEpiC cells)
-        subGroups view=SimpleSignal cellType=HRCE rep=rep1
+        subGroups  cellType=HRCE rep=rep1
         type broadPeak
         accession GSM472920
         origAssembly hg18
@@ -196,7 +195,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRCEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HRCEpiC cells)
-        subGroups view=SimpleSignal cellType=HRCE rep=rep2
+        subGroups  cellType=HRCE rep=rep2
         type broadPeak
         accession GSM472921
         origAssembly hg18
@@ -207,7 +206,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SAEC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in SAEC cells)
-        subGroups view=SimpleSignal cellType=SAEC rep=rep2
+        subGroups  cellType=SAEC rep=rep2
         type broadPeak
         accession GSM472922
         origAssembly hg18
@@ -218,7 +217,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SAEC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in SAEC cells)
-        subGroups view=SimpleSignal cellType=SAEC rep=rep1
+        subGroups  cellType=SAEC rep=rep1
         type broadPeak
         accession GSM472923
         origAssembly hg18
@@ -229,7 +228,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel BJ 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in BJ cells)
-        subGroups view=SimpleSignal cellType=BJ rep=rep1
+        subGroups  cellType=BJ rep=rep1
         type broadPeak
         accession GSM472924
         origAssembly hg18
@@ -240,7 +239,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel BJ 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in BJ cells)
-        subGroups view=SimpleSignal cellType=BJ rep=rep2
+        subGroups  cellType=BJ rep=rep2
         type broadPeak
         accession GSM472925
         origAssembly hg18
@@ -251,7 +250,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel K562 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in K562 cells)
-        subGroups view=SimpleSignal cellType=3-K562 rep=rep1
+        subGroups  cellType=3-K562 rep=rep1
         type broadPeak
         accession GSM472926
         origAssembly hg18
@@ -263,7 +262,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel K562 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in K562 cells)
-        subGroups view=SimpleSignal cellType=3-K562 rep=rep2
+        subGroups  cellType=3-K562 rep=rep2
         type broadPeak
         accession GSM472927
         origAssembly hg18
@@ -275,7 +274,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Jurkat 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in Jurkat cells)
-        subGroups view=SimpleSignal cellType=Jurkat rep=rep1
+        subGroups  cellType=Jurkat rep=rep1
         type broadPeak
         accession GSM472928
         origAssembly hg18
@@ -286,7 +285,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal
         shortLabel GM12878 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in GM12878 cells)
-        subGroups view=SimpleSignal cellType=1-GM12878 rep=rep1
+        subGroups  cellType=1-GM12878 rep=rep1
         type broadPeak
         accession GSM472931
         origAssembly hg18
@@ -298,7 +297,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HeLa-S3 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HeLa-S3 cells)
-        subGroups view=SimpleSignal cellType=4-HeLaS3 rep=rep2
+        subGroups  cellType=4-HeLaS3 rep=rep2
         type broadPeak
         accession GSM472932
         origAssembly hg18
@@ -310,7 +309,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Caco-2 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in Caco-2 cells)
-        subGroups view=SimpleSignal cellType=Caco2 rep=rep2
+        subGroups  cellType=Caco2 rep=rep2
         type broadPeak
         accession GSM472933
         origAssembly hg18
@@ -321,7 +320,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMEC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMEC cells)
-        subGroups view=SimpleSignal cellType=HMEC rep=rep1
+        subGroups  cellType=HMEC rep=rep1
         type broadPeak
         accession GSM472934
         origAssembly hg18
@@ -332,7 +331,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HUVEC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HUVEC cells)
-        subGroups view=SimpleSignal cellType=6-HUVEC rep=rep1
+        subGroups  cellType=6-HUVEC rep=rep1
         type broadPeak
         accession GSM472935
         origAssembly hg18
@@ -344,7 +343,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel MCF-7 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in MCF-7 cells)
-        subGroups view=SimpleSignal cellType=MCF7 rep=rep1
+        subGroups  cellType=MCF7 rep=rep1
         type broadPeak
         accession GSM472936
         origAssembly hg18
@@ -355,7 +354,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHEK 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in NHEK cells)
-        subGroups view=SimpleSignal cellType=NHEK rep=rep1
+        subGroups  cellType=NHEK rep=rep1
         type broadPeak
         accession GSM472937
         origAssembly hg18
@@ -367,7 +366,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel PANC-1 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in PANC-1 cells)
-        subGroups view=SimpleSignal cellType=PANC1 rep=rep2
+        subGroups  cellType=PANC1 rep=rep2
         type broadPeak
         accession GSM472938
         origAssembly hg18
@@ -378,7 +377,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel PANC-1 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in PANC-1 cells)
-        subGroups view=SimpleSignal cellType=PANC1 rep=rep1
+        subGroups  cellType=PANC1 rep=rep1
         type broadPeak
         accession GSM472939
         origAssembly hg18
@@ -389,7 +388,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HGF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HGF cells)
-        subGroups view=SimpleSignal cellType=HGF rep=rep1
+        subGroups  cellType=HGF rep=rep1
         type broadPeak
         accession GSM472940
         origAssembly hg18
@@ -400,7 +399,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HGF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HGF cells)
-        subGroups view=SimpleSignal cellType=HGF rep=rep2
+        subGroups  cellType=HGF rep=rep2
         type broadPeak
         accession GSM472941
         origAssembly hg18
@@ -411,7 +410,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HL-60 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HL-60 cells)
-        subGroups view=SimpleSignal cellType=HL60 rep=rep2
+        subGroups  cellType=HL60 rep=rep2
         type broadPeak
         accession GSM472942
         origAssembly hg18
@@ -422,7 +421,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel SKMC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in SKMC cells)
-        subGroups view=SimpleSignal cellType=SKMC rep=rep1
+        subGroups  cellType=SKMC rep=rep1
         type broadPeak
         accession GSM510509
         origAssembly hg18
@@ -433,7 +432,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel MCF-7 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in MCF-7 cells)
-        subGroups view=SimpleSignal cellType=MCF7 rep=rep2
+        subGroups  cellType=MCF7 rep=rep2
         type broadPeak
         accession GSM510510
         origAssembly hg18
@@ -444,7 +443,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel Jurkat 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in Jurkat cells)
-        subGroups view=SimpleSignal cellType=Jurkat rep=rep2
+        subGroups  cellType=Jurkat rep=rep2
         type broadPeak
         accession GSM510511
         origAssembly hg18
@@ -455,7 +454,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NB4 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in NB4 cells)
-        subGroups view=SimpleSignal cellType=NB4 rep=rep1
+        subGroups  cellType=NB4 rep=rep1
         type broadPeak
         accession GSM510512
         origAssembly hg18
@@ -466,7 +465,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NB4 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in NB4 cells)
-        subGroups view=SimpleSignal cellType=NB4 rep=rep2
+        subGroups  cellType=NB4 rep=rep2
         type broadPeak
         accession GSM510513
         origAssembly hg18
@@ -477,7 +476,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRPEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HRPEpiC cells)
-        subGroups view=SimpleSignal cellType=HRPE rep=rep1
+        subGroups  cellType=HRPE rep=rep1
         type broadPeak
         accession GSM510514
         origAssembly hg18
@@ -488,7 +487,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HRPEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HRPEpiC cells)
-        subGroups view=SimpleSignal cellType=HRPE rep=rep2
+        subGroups  cellType=HRPE rep=rep2
         type broadPeak
         accession GSM510515
         origAssembly hg18
@@ -499,7 +498,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HAEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HAEpiC cells)
-        subGroups view=SimpleSignal cellType=HAE rep=rep1
+        subGroups  cellType=HAE rep=rep1
         type broadPeak
         accession GSM510516
         origAssembly hg18
@@ -510,7 +509,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HAEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HAEpiC cells)
-        subGroups view=SimpleSignal cellType=HAE rep=rep2
+        subGroups  cellType=HAE rep=rep2
         type broadPeak
         accession GSM510517
         origAssembly hg18
@@ -521,7 +520,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HIPEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HIPEpiC cells)
-        subGroups view=SimpleSignal cellType=HIPE rep=rep1
+        subGroups  cellType=HIPE rep=rep1
         type broadPeak
         accession GSM510518
         origAssembly hg18
@@ -532,7 +531,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HIPEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HIPEpiC cells)
-        subGroups view=SimpleSignal cellType=HIPE rep=rep2
+        subGroups  cellType=HIPE rep=rep2
         type broadPeak
         accession GSM510519
         origAssembly hg18
@@ -543,7 +542,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG10803 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in AG10803 cells)
-        subGroups view=SimpleSignal cellType=AG10803 rep=rep1
+        subGroups  cellType=AG10803 rep=rep1
         type broadPeak
         accession GSM510520
         origAssembly hg18
@@ -554,7 +553,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG10803 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in AG10803 cells)
-        subGroups view=SimpleSignal cellType=AG10803 rep=rep2
+        subGroups  cellType=AG10803 rep=rep2
         type broadPeak
         accession GSM510521
         origAssembly hg18
@@ -565,18 +564,18 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09309 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in AG09309 cells)
-        subGroups view=SimpleSignal cellType=AG09309 rep=rep1
+        subGroups  cellType=AG09309 rep=rep1
         type broadPeak
         accession GSM510522
         origAssembly hg18
         # subId=2110 dateSubmitted=2010-08-19
 
-        track wgEncodeUwAffyExonArrayAg09309SimpleSignalRep3
+        track wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2
         release alpha
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09309 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in AG09309 cells)
-        subGroups view=SimpleSignal cellType=AG09309 rep=rep2
+        subGroups  cellType=AG09309 rep=rep2
         type broadPeak
         accession GSM510525
         origAssembly hg18
@@ -587,7 +586,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04449 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in AG04449 cells)
-        subGroups view=SimpleSignal cellType=AG04449 rep=rep1
+        subGroups  cellType=AG04449 rep=rep1
         type broadPeak
         accession GSM510528
         origAssembly hg18
@@ -598,7 +597,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04449 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in AG04449 cells)
-        subGroups view=SimpleSignal cellType=AG04449 rep=rep2
+        subGroups  cellType=AG04449 rep=rep2
         type broadPeak
         accession GSM510530
         origAssembly hg18
@@ -609,7 +608,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04450 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in AG04450 cells)
-        subGroups view=SimpleSignal cellType=AG04450 rep=rep1
+        subGroups  cellType=AG04450 rep=rep1
         type broadPeak
         accession GSM510532
         origAssembly hg18
@@ -620,7 +619,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG04450 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in AG04450 cells)
-        subGroups view=SimpleSignal cellType=AG04450 rep=rep2
+        subGroups  cellType=AG04450 rep=rep2
         type broadPeak
         accession GSM510534
         origAssembly hg18
@@ -631,7 +630,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09319 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in AG09319 cells)
-        subGroups view=SimpleSignal cellType=AG09319 rep=rep1
+        subGroups  cellType=AG09319 rep=rep1
         type broadPeak
         accession GSM510536
         origAssembly hg18
@@ -642,7 +641,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AG09319 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in AG09319 cells)
-        subGroups view=SimpleSignal cellType=AG09319 rep=rep2
+        subGroups  cellType=AG09319 rep=rep2
         type broadPeak
         accession GSM510538
         origAssembly hg18
@@ -653,7 +652,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HCF cells)
-        subGroups view=SimpleSignal cellType=HCF rep=rep1
+        subGroups  cellType=HCF rep=rep1
         type broadPeak
         accession GSM510542
         origAssembly hg18
@@ -664,7 +663,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HCF cells)
-        subGroups view=SimpleSignal cellType=HCF rep=rep2
+        subGroups  cellType=HCF rep=rep2
         type broadPeak
         accession GSM510545
         origAssembly hg18
@@ -675,7 +674,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCPEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HCPEpiC cells)
-        subGroups view=SimpleSignal cellType=HCPE rep=rep1
+        subGroups  cellType=HCPE rep=rep1
         type broadPeak
         accession GSM510547
         origAssembly hg18
@@ -686,7 +685,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCPEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HCPEpiC cells)
-        subGroups view=SimpleSignal cellType=HCPE rep=rep2
+        subGroups  cellType=HCPE rep=rep2
         type broadPeak
         accession GSM510551
         origAssembly hg18
@@ -697,7 +696,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-neo 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in NHDF-neo cells)
-        subGroups view=SimpleSignal cellType=NHDF-neo rep=rep1
+        subGroups  cellType=NHDF-neo rep=rep1
         type broadPeak
         accession GSM510554
         origAssembly hg18
@@ -708,7 +707,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-neo 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in NHDF-neo cells)
-        subGroups view=SimpleSignal cellType=NHDF-neo rep=rep2
+        subGroups  cellType=NHDF-neo rep=rep2
         type broadPeak
         accession GSM510557
         origAssembly hg18
@@ -719,7 +718,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HNPCEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HNPCEpiC cells)
-        subGroups view=SimpleSignal cellType=HNPCE rep=rep1
+        subGroups  cellType=HNPCE rep=rep1
         type broadPeak
         accession GSM510560
         origAssembly hg18
@@ -730,7 +729,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HNPCEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HNPCEpiC cells)
-        subGroups view=SimpleSignal cellType=HNPCE rep=rep2
+        subGroups  cellType=HNPCE rep=rep2
         type broadPeak
         accession GSM510564
         origAssembly hg18
@@ -741,7 +740,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCM 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HCM cells)
-        subGroups view=SimpleSignal cellType=HCM rep=rep1
+        subGroups  cellType=HCM rep=rep1
         type broadPeak
         accession GSM510566
         origAssembly hg18
@@ -752,7 +751,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCM 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HCM cells)
-        subGroups view=SimpleSignal cellType=HCM rep=rep2
+        subGroups  cellType=HCM rep=rep2
         type broadPeak
         accession GSM510569
         origAssembly hg18
@@ -763,7 +762,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEEpiC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HEEpiC cells)
-        subGroups view=SimpleSignal cellType=HEE rep=rep1
+        subGroups  cellType=HEE rep=rep1
         type broadPeak
         accession GSM510571
         origAssembly hg18
@@ -774,7 +773,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEEpiC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HEEpiC cells)
-        subGroups view=SimpleSignal cellType=HEE rep=rep2
+        subGroups  cellType=HEE rep=rep2
         type broadPeak
         accession GSM510574
         origAssembly hg18
@@ -785,7 +784,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHLF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in NHLF cells)
-        subGroups view=SimpleSignal cellType=NHLF rep=rep1
+        subGroups  cellType=NHLF rep=rep1
         type broadPeak
         accession GSM510577
         origAssembly hg18
@@ -796,7 +795,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHLF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in NHLF cells)
-        subGroups view=SimpleSignal cellType=NHLF rep=rep2
+        subGroups  cellType=NHLF rep=rep2
         type broadPeak
         accession GSM510579
         origAssembly hg18
@@ -807,7 +806,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel H7-hESC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in H7-hESC cells)
-        subGroups view=SimpleSignal cellType=H7es rep=rep1
+        subGroups  cellType=H7es rep=rep1
         type broadPeak
         accession GSM510581
         origAssembly hg18
@@ -818,7 +817,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel CMK 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in CMK cells)
-        subGroups view=SimpleSignal cellType=CMK rep=rep1
+        subGroups  cellType=CMK rep=rep1
         type broadPeak
         accession GSM510583
         origAssembly hg18
@@ -829,7 +828,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel H7-hESC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in H7-hESC cells)
-        subGroups view=SimpleSignal cellType=H7es rep=rep2
+        subGroups  cellType=H7es rep=rep2
         type broadPeak
         accession GSM580005
         origAssembly hg19
@@ -840,7 +839,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMEC 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMEC cells)
-        subGroups view=SimpleSignal cellType=HMEC rep=rep2
+        subGroups  cellType=HMEC rep=rep2
         type broadPeak
         accession GSM580006
         origAssembly hg19
@@ -851,7 +850,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HConF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HConF cells)
-        subGroups view=SimpleSignal cellType=HCONF rep=rep1
+        subGroups  cellType=HCONF rep=rep1
         type broadPeak
         accession GSM580007
         origAssembly hg19
@@ -862,7 +861,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HConF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HConF cells)
-        subGroups view=SimpleSignal cellType=HCONF rep=rep2
+        subGroups  cellType=HCONF rep=rep2
         type broadPeak
         accession GSM580008
         origAssembly hg19
@@ -873,7 +872,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LLy 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-LLy cells)
-        subGroups view=SimpleSignal cellType=HMVECLLy rep=rep1
+        subGroups  cellType=HMVECLLy rep=rep1
         type broadPeak
         accession GSM580009
         origAssembly hg19
@@ -884,7 +883,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LLy 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-LLy cells)
-        subGroups view=SimpleSignal cellType=HMVECLLy rep=rep2
+        subGroups  cellType=HMVECLLy rep=rep2
         type broadPeak
         accession GSM580010
         origAssembly hg19
@@ -895,7 +894,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Neo 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-dLy-Neo cells)
-        subGroups view=SimpleSignal cellType=HMVECdLyNeo rep=rep1
+        subGroups  cellType=HMVECdLyNeo rep=rep1
         type broadPeak
         accession GSM580011
         origAssembly hg19
@@ -906,7 +905,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Neo 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-dLy-Neo cells)
-        subGroups view=SimpleSignal cellType=HMVECdLyNeo rep=rep2
+        subGroups  cellType=HMVECdLyNeo rep=rep2
         type broadPeak
         accession GSM580012
         origAssembly hg19
@@ -917,7 +916,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Ad 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-dLy-Ad cells)
-        subGroups view=SimpleSignal cellType=HMVECdLyAd rep=rep2
+        subGroups  cellType=HMVECdLyAd rep=rep2
         type broadPeak
         accession GSM580013
         origAssembly hg19
@@ -928,7 +927,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dLy-Ad 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-dLy-Ad cells)
-        subGroups view=SimpleSignal cellType=HMVECdLyAd rep=rep1
+        subGroups  cellType=HMVECdLyAd rep=rep1
         type broadPeak
         accession GSM580014
         origAssembly hg19
@@ -939,7 +938,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dNeo 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-dNeo cells)
-        subGroups view=SimpleSignal cellType=HMVECdNeo rep=rep1
+        subGroups  cellType=HMVECdNeo rep=rep1
         type broadPeak
         accession GSM580015
         origAssembly hg19
@@ -950,7 +949,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dNeo 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-dNeo cells)
-        subGroups view=SimpleSignal cellType=HMVECdNeo rep=rep2
+        subGroups  cellType=HMVECdNeo rep=rep2
         type broadPeak
         accession GSM580016
         origAssembly hg19
@@ -961,7 +960,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-Ad 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in NHDF-Ad cells)
-        subGroups view=SimpleSignal cellType=NHDF-Ad rep=rep1
+        subGroups  cellType=NHDF-Ad rep=rep1
         type broadPeak
         accession GSM580017
         origAssembly hg19
@@ -972,7 +971,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NHDF-Ad 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in NHDF-Ad cells)
-        subGroups view=SimpleSignal cellType=NHDF-Ad rep=rep2
+        subGroups  cellType=NHDF-Ad rep=rep2
         type broadPeak
         accession GSM580018
         origAssembly hg19
@@ -983,7 +982,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LBl 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-LBl cells)
-        subGroups view=SimpleSignal cellType=HMVECLbl rep=rep1
+        subGroups  cellType=HMVECLbl rep=rep1
         type broadPeak
         accession GSM580019
         origAssembly hg19
@@ -994,7 +993,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-LBl 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-LBl cells)
-        subGroups view=SimpleSignal cellType=HMVECLbl rep=rep2
+        subGroups  cellType=HMVECLbl rep=rep2
         type broadPeak
         accession GSM580020
         origAssembly hg19
@@ -1005,7 +1004,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Ad 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-dBl-Ad cells)
-        subGroups view=SimpleSignal cellType=HMVECdBlAd rep=rep1
+        subGroups  cellType=HMVECdBlAd rep=rep1
         type broadPeak
         accession GSM580021
         origAssembly hg19
@@ -1016,7 +1015,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Ad 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-dBl-Ad cells)
-        subGroups view=SimpleSignal cellType=HMVECdBlAd rep=rep2
+        subGroups  cellType=HMVECdBlAd rep=rep2
         type broadPeak
         accession GSM580022
         origAssembly hg19
@@ -1027,7 +1026,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Neo 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMVEC-dBl-Neo cells)
-        subGroups view=SimpleSignal cellType=HMVECdBlNeo rep=rep1
+        subGroups  cellType=HMVECdBlNeo rep=rep1
         type broadPeak
         accession GSM580023
         origAssembly hg19
@@ -1038,7 +1037,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMVEC-dBl-Neo 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMVEC-dBl-Neo cells)
-        subGroups view=SimpleSignal cellType=HMVECdBlNeo rep=rep2
+        subGroups  cellType=HMVECdBlNeo rep=rep2
         type broadPeak
         accession GSM580024
         origAssembly hg19
@@ -1049,7 +1048,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPdLF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HPdLF cells)
-        subGroups view=SimpleSignal cellType=HPdLF rep=rep1
+        subGroups  cellType=HPdLF rep=rep1
         type broadPeak
         accession GSM580025
         origAssembly hg19
@@ -1060,7 +1059,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPdLF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HPdLF cells)
-        subGroups view=SimpleSignal cellType=HPdLF rep=rep2
+        subGroups  cellType=HPdLF rep=rep2
         type broadPeak
         accession GSM580026
         origAssembly hg19
@@ -1071,7 +1070,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEK293 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HEK293 cells)
-        subGroups view=SimpleSignal cellType=HEK293 rep=rep1
+        subGroups  cellType=HEK293 rep=rep1
         type broadPeak
         accession GSM580027
         origAssembly hg19
@@ -1082,7 +1081,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HEK293 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HEK293 cells)
-        subGroups view=SimpleSignal cellType=HEK293 rep=rep2
+        subGroups  cellType=HEK293 rep=rep2
         type broadPeak
         accession GSM580028
         origAssembly hg19
@@ -1093,7 +1092,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AoAF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in AoAF cells)
-        subGroups view=SimpleSignal cellType=AOAF rep=rep1
+        subGroups  cellType=AOAF rep=rep1
         type broadPeak
         accession GSM580029
         origAssembly hg19
@@ -1104,7 +1103,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel AoAF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in AoAF cells)
-        subGroups view=SimpleSignal cellType=AOAF rep=rep2
+        subGroups  cellType=AOAF rep=rep2
         type broadPeak
         accession GSM580030
         origAssembly hg19
@@ -1115,7 +1114,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCFaa 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HCFaa cells)
-        subGroups view=SimpleSignal cellType=HCFaa rep=rep1
+        subGroups  cellType=HCFaa rep=rep1
         type broadPeak
         accession GSM580031
         origAssembly hg19
@@ -1126,7 +1125,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCFaa 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HCFaa cells)
-        subGroups view=SimpleSignal cellType=HCFaa rep=rep2
+        subGroups  cellType=HCFaa rep=rep2
         type broadPeak
         accession GSM580032
         origAssembly hg19
@@ -1137,7 +1136,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPAF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HPAF cells)
-        subGroups view=SimpleSignal cellType=HPAF rep=rep1
+        subGroups  cellType=HPAF rep=rep1
         type broadPeak
         accession GSM580033
         origAssembly hg19
@@ -1148,7 +1147,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPAF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HPAF cells)
-        subGroups view=SimpleSignal cellType=HPAF rep=rep2
+        subGroups  cellType=HPAF rep=rep2
         type broadPeak
         accession GSM580034
         origAssembly hg19
@@ -1159,7 +1158,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HPF cells)
-        subGroups view=SimpleSignal cellType=HPF rep=rep1
+        subGroups  cellType=HPF rep=rep1
         type broadPeak
         accession GSM580035
         origAssembly hg19
@@ -1170,7 +1169,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HPF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HPF cells)
-        subGroups view=SimpleSignal cellType=HPF rep=rep2
+        subGroups  cellType=HPF rep=rep2
         type broadPeak
         accession GSM580036
         origAssembly hg19
@@ -1181,7 +1180,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HVMF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HVMF cells)
-        subGroups view=SimpleSignal cellType=HVMF rep=rep1
+        subGroups  cellType=HVMF rep=rep1
         type broadPeak
         accession GSM580037
         origAssembly hg19
@@ -1192,7 +1191,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HVMF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HVMF cells)
-        subGroups view=SimpleSignal cellType=HVMF rep=rep2
+        subGroups  cellType=HVMF rep=rep2
         type broadPeak
         accession GSM580038
         origAssembly hg19
@@ -1203,7 +1202,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCT-116 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HCT-116 cells)
-        subGroups view=SimpleSignal cellType=HCT116 rep=rep1
+        subGroups  cellType=HCT116 rep=rep1
         type broadPeak
         accession GSM580039
         origAssembly hg19
@@ -1214,7 +1213,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HCT-116 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HCT-116 cells)
-        subGroups view=SimpleSignal cellType=HCT116 rep=rep2
+        subGroups  cellType=HCT116 rep=rep2
         type broadPeak
         accession GSM580040
         origAssembly hg19
@@ -1225,7 +1224,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMF 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HMF cells)
-        subGroups view=SimpleSignal cellType=HMF rep=rep1
+        subGroups  cellType=HMF rep=rep1
         type broadPeak
         accession GSM580041
         origAssembly hg19
@@ -1236,7 +1235,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HMF 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in HMF cells)
-        subGroups view=SimpleSignal cellType=HMF rep=rep2
+        subGroups  cellType=HMF rep=rep2
         type broadPeak
         accession GSM580042
         origAssembly hg19
@@ -1247,7 +1246,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NH-A 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in NH-A cells)
-        subGroups view=SimpleSignal cellType=NHA rep=rep1
+        subGroups  cellType=NHA rep=rep1
         type broadPeak
         accession GSM580043
         origAssembly hg19
@@ -1258,7 +1257,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel NH-A 2
         longLabel ENCODE UW Affy All Exon Array Signal Rep 2 (in NH-A cells)
-        subGroups view=SimpleSignal cellType=NHA rep=rep2
+        subGroups  cellType=NHA rep=rep2
         type broadPeak
         accession GSM580044
         origAssembly hg19
@@ -1269,7 +1268,7 @@ wgEncode 1
         parent wgEncodeUwAffyExonArrayViewSimpleSignal off
         shortLabel HBMEC 1
         longLabel ENCODE UW Affy All Exon Array Signal Rep 1 (in HBMEC cells)
-        subGroups view=SimpleSignal cellType=HBMEC rep=rep1
+        subGroups  cellType=HBMEC rep=rep1
         type broadPeak
         accession GSM580045
         origAssembly hg19
