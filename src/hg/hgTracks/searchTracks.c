@@ -745,6 +745,11 @@ hPrintf("</div>"); // This div allows the clear button to empty it
 
 void doSearchTracks(struct group *groupList)
 {
+if (!advancedJavascriptFeaturesEnabled(cart))
+    {
+    warn("Requires advanced javascript features.");
+    return;
+    }
 struct group *group;
 char *groups[128];
 char *labels[128];

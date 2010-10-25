@@ -6,6 +6,7 @@
 #define SEARCHTRACKS_H
 
 #include "common.h"
+#include "cart.h"
 
 // UNCOMMENT TRACK_SEARCH to turn on 'Track Search' functionality
 #define TRACK_SEARCH             "hgt_tSearch"
@@ -18,7 +19,7 @@
 void getSearchTrixFile(char *database, char *buf, int len);
 // Fill-in the name of the track search trix file
 
-boolean isSearchTracksSupported(char *database);
-// Return TRUE if searchTracks is supported for this database
+boolean isSearchTracksSupported(char *database, struct cart *cart);
+// Return TRUE if searchTracks is supported for this database and javascript is supported too
 
 #endif /* SEARCHTRACKS_H */
