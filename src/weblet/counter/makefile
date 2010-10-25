@@ -2,7 +2,7 @@ include ../../inc/common.mk
 
 
 O = counter.o 
-L += -lz
+L += -lpng -lz
 
 counter: $(O)
 	${CC} ${COPT} ${CFLAGS} $O ../../lib/$(MACHTYPE)/jkweb.a ${L}
