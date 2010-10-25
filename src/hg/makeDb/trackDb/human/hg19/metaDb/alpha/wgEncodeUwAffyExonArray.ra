@@ -98,7 +98,7 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep1
 view SimpleSignal
 
-metaObject wgEncodeUwAffyExonArrayAg09309SimpleSignalRep3
+metaObject wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2
 objType table
 accession GSM510525
 cell AG09309
@@ -107,14 +107,14 @@ dataType AffyExonArray
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
-fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep3.broadPeak.gz
+fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2.broadPeak.gz
 grant Stam
 lab Uw
 origAssembly hg18
 project wgEncode
-replicate 3
+replicate 2
 subId 2110
-tableName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep3
+tableName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2
 view SimpleSignal
 
 metaObject wgEncodeUwAffyExonArrayAg09319SimpleSignalRep1
@@ -2192,4 +2192,4 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
 view SimpleSignal
 
-# MAGIC: -641056035
+# MAGIC: -708164906
