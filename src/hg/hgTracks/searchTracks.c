@@ -392,11 +392,11 @@ else
 
         hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
-        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' onchange='findTracksMdbVarChanged(this);'");
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
         hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
         len = getTermArray(conn, &labels, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
-        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px;' onchange='findTracksSearchButtonsEnable(true);'");
+        cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
         hPrintf("</tr>\n");
         }
@@ -588,7 +588,7 @@ else
     if(tracksFound >= ENOUGH_FOUND_TRACKS)
         {
         hPrintf("<tr><td nowrap colspan=3>\n");
-        hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='Return to Browser' class='viewBtn' style='font-size:.8em;'>");
+        hPrintf("<INPUT TYPE=SUBMIT NAME='submit' VALUE='return to browser' class='viewBtn' style='font-size:.8em;'>");
         hPrintf("&nbsp;&nbsp;&nbsp;&nbsp;<FONT class='selCbCount'></font>\n");
 
         startFrom = cartUsualInt(cart,TRACK_SEARCH_PAGER,0);
@@ -835,12 +835,12 @@ hPrintf("<input type='hidden' name='%s' value=''>\n",TRACK_SEARCH_PAGER);
 
 hPrintf("<div id='tabs' style='display:none; %s'>\n"
         "<ul>\n"
-        "<li><a href='#simpleTab'><B style='font-size:.8em;'>Search</B></a></li>\n"
-        "<li><a href='#advancedTab'><B style='font-size:.8em;'>Advanced</B></a></li>\n"
+        "<li><a href='#simpleTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Search</B></a></li>\n"
+        "<li><a href='#advancedTab'><B style='font-size:.9em;font-family: arial, Geneva, Helvetica, san-serif;'>Advanced</B></a></li>\n"
         "</ul>\n"
         "<div id='simpleTab' style='max-width:inherit;'>\n",cgiBrowser()==btIE?"width:1060px;":"max-width:inherit;");
 
-hPrintf("<table style='width:100%%; font-size:.8em;'><tr><td colspan='2'>");
+hPrintf("<table style='width:100%%; font-size:.9em;'><tr><td colspan='2'>");
 hPrintf("<input type='text' name='%s' id='simpleSearch' class='submitOnEnter' value='%s' style='max-width:1000px; width:100%%;' onkeyup='findTracksSearchButtonsEnable(true);'>\n",
         TRACK_SEARCH_SIMPLE,descSearch == NULL ? "" : descSearch);
 if (simpleSearch && descSearch)
@@ -848,14 +848,14 @@ if (simpleSearch && descSearch)
 
 hPrintf("</td></tr><td style='max-height:4px;'></td></tr></table>");
 //hPrintf("</td></tr></table>");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:.7em;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:.7em;'>\n");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", TRACK_SEARCH);
+hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 hPrintf("</div>\n");
 
 // Advanced tab
 hPrintf("<div id='advancedTab' style='width:inherit;'>\n"
-        "<table cellSpacing=0 style='width:inherit; font-size:.8em;'>\n");
+        "<table cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
 cols = 7;
 
 // Track Name contains
@@ -863,7 +863,7 @@ hPrintf("<tr><td colspan=3></td>");
 hPrintf("<td nowrap><b style='max-width:100px;'>Track&nbsp;Name:</b></td>");
 hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
-hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px;'>",
+hPrintf("<input type='text' name='%s' id='nameSearch' class='submitOnEnter' value='%s' onkeyup='findTracksSearchButtonsEnable(true);' style='min-width:326px; font-size:.9em;'>",
         TRACK_SEARCH_ON_NAME, nameSearch == NULL ? "" : nameSearch);
 hPrintf("</td></tr>\n");
 
@@ -872,17 +872,17 @@ hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>");
 hPrintf("<td><b style='max-width:100px;'>Description:</b></td>");
 hPrintf("<td align='right'>contains</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
-hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px;'>",
+hPrintf("<input type='text' name='%s' id='descSearch' value='%s' class='submitOnEnter' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:536px; width:536px; font-size:.9em;'>",
         TRACK_SEARCH_ON_DESCR, descSearch == NULL ? "" : descSearch);
 hPrintf("</td></tr>\n");
 if (!simpleSearch && descSearch)
     searchTermsExist = TRUE;
 
 hPrintf("<tr><td colspan=2></td><td align='right'>and&nbsp;</td>\n");
-hPrintf("<td><b style='max-width:100px;'>Group</b></td>");
+hPrintf("<td><b style='max-width:100px;'>Group:</b></td>");
 hPrintf("<td align='right'>is</td>\n");
 hPrintf("<td colspan='%d'>", cols - 4);
-cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%;'");
+cgiMakeDropListFull(TRACK_SEARCH_ON_GROUP, labels, groups, numGroups, groupSearch, "class='groupSearch' style='min-width:40%; font-size:.9em;'");
 hPrintf("</td></tr>\n");
 if (!simpleSearch && groupSearch)
     searchTermsExist = TRUE;
@@ -894,9 +894,9 @@ else
     numMetadataSelects = 0;
 
 hPrintf("</table>\n");
-hPrintf("<input type='submit' name='%s' id='searchSubmit' value='Search' style='font-size:.7em;'>\n", TRACK_SEARCH);
-hPrintf("<input type='button' name='clear' value='Clear' class='clear' style='font-size:.7em;' onclick='findTracksClear();'>\n");
-hPrintf("<input type='submit' name='submit' value='Cancel' class='cancel' style='font-size:.7em;'>\n");
+hPrintf("<input type='submit' name='%s' id='searchSubmit' value='search' style='font-size:.8em;'>\n", TRACK_SEARCH);
+hPrintf("<input type='button' name='clear' value='clear' class='clear' style='font-size:.8em;' onclick='findTracksClear();'>\n");
+hPrintf("<input type='submit' name='submit' value='cancel' class='cancel' style='font-size:.8em;'>\n");
 //hPrintf("<a target='_blank' href='../goldenPath/help/trackSearch.html'>help</a>\n");
 hPrintf("</div>\n</div>\n");
 
@@ -948,7 +948,7 @@ if(doSearch)
 hFreeConn(&conn);
 webNewSection("About Track Search");
 if(metaDbExists)
-    hPrintf("<p>Search for terms in track descriptions, groups, names, and ENCODE "
+    hPrintf("<p>Search for terms in track names, descriptions, groups, and ENCODE "
             "metadata.  If multiple terms are entered, only tracks with all terms "
             "will be part of the results.");
 else
