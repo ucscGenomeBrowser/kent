@@ -1327,6 +1327,7 @@ $(document).ready(function()
             $('input#simpleSearch').focus();
         }
         $("#tabs").css('font-family', jQuery('body').css('font-family'));
+        $("#tabs").css('font-size', jQuery('body').css('font-size'));
         $('.submitOnEnter').keydown(searchKeydown);
         findTracksNormalize();
         updateMetaDataHelpLinks(0);
@@ -2371,9 +2372,9 @@ function findTracksViewButtoneText()
 { // Update View in Browser buttn text
     var inputs = $('table#foundTracks').find('input:hidden:enabled');  // Doesn't work!!!
     if( $(inputs).length == 0)
-        $('input.viewBtn').val('Return to Browser');
+        $('input.viewBtn').val('return to browser');
     else
-        $('input.viewBtn').val('View in Browser');
+        $('input.viewBtn').val('view in browser');
 }
 
 function findTracksCounts()
