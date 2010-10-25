@@ -8,7 +8,7 @@
 #include "ra.h"
 #include "docId.h"
 #include "cheapcgi.h"
-
+#include "portable.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -53,8 +53,8 @@ if ((hel2 = hashLookup(blockHash, stringInBlock)) == NULL)
     errAbort("cannot find '%s' tag in load block %s\n", 
         stringInBlock, mdbObj->obj);
 
-struct mdbVar * mdbVar;
 char *value = hel2->val;
+struct mdbVar * mdbVar;
 AllocVar(mdbVar);
 mdbVar->var     = cloneString(stringInMdb);
 mdbVar->varType = vtTxt;
@@ -104,11 +104,13 @@ safef(metaDb, sizeof metaDb, "%s/out/mdb.txt", submitDir);
 return mdbObjsLoadFromFormattedFile(metaDb, &validated);
 }
 
+#ifdef NOTNOW
 char *calcMd5Sum(char *file)
 {
 verbose(2, "should calculate md5sum for %s\n", file);
 return "ffafasfafaf";
 }
+#endif
 
 char *readBlob(char *file)
 {
@@ -136,31 +138,72 @@ void submitToDocId(struct sqlConnection *conn, struct mdbObj *mdbObjs,
 struct mdbObj *mdbObj = mdbObjs, *nextObj;
 struct docIdSub docIdSub;
 char file[10 * 1024];
-char *tempFile = "temp";
+struct tempName tn;
+makeTempName(&tn, "metadata", ".txt");
+char *tempFile = tn.forHtml;
+//printf("tempFile is %s\n", tempFile);
 
 for(; mdbObj; mdbObj = nextObj)
     {
     nextObj = mdbObj->next;
     mdbObj->next = NULL;
 
-    docIdSub.submitPath = mdbObjFindValue(mdbObj, "submitPath") ;
-    if (strchr(docIdSub.submitPath, ' ') != NULL)
-        errAbort("multiple files in load.ra %s\n", docIdSub.submitPath);
-
-    if (!fileIsCompressed( docIdSub.submitPath))
-        return;
-
+    docIdSub.md5sum = NULL;
+    docIdSub.valReport = NULL;
     docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
     docIdSub.submitter = mdbObjFindValue(mdbObj, "lab") ;
-    safef(file, sizeof file, "%s/%s", submitDir, docIdSub.submitPath);
-    docIdSub.submitPath = cloneString(file);
-    docIdSub.md5sum = calcMd5Sum(file);
-    safef(file, sizeof file, "%s/out/%s", submitDir, "validateReport");
-    docIdSub.valReport = readBlob(file);	
-    mdbObjPrintToFile(mdbObj, TRUE, tempFile);
-    docIdSub.metaData = readBlob(tempFile);	
 
-    docIdSubmit(conn, &docIdSub, docIdDir, mdbObjFindValue(mdbObj, "type")) ;
+    char *type = mdbObjFindValue(mdbObj, "type") ;
+    struct mdbVar *submitPathVar = mdbObjFind(mdbObj, "submitPath") ;
+    char *submitPath = cloneString(submitPathVar->val);
+    char *space = strchr(submitPath, ' ');
+    struct mdbVar * subPartVar = NULL;
+    int subPart = 0;
+
+    // unfortunately, submitPath might be a space separated list of files
+    if (space)
+        {
+        // we have a space, so add a new metadata item, subPart, that
+        // has the number of the file in the list
+        AllocVar(subPartVar);
+        subPartVar->var     = "subPart";
+        subPartVar->varType = vtTxt;
+
+        hashAdd(mdbObj->varHash, subPartVar->var, subPartVar);
+        slAddHead(&(mdbObj->vars),subPartVar);
+        }
+
+    // step through the path and submit each file
+    while(submitPath != NULL)
+        {
+        char *space = strchr(submitPath, ' ');
+        if (space)
+            {
+            *space = 0;
+            space++;
+            }
+        
+        if (subPartVar)
+            {
+            char buffer[10 * 1024];
+
+            safef(buffer, sizeof buffer, "%d", subPart);
+            subPartVar->val = cloneString(buffer);
+            }
+
+        submitPathVar->val = cloneString(submitPath);
+        mdbObjPrintToFile(mdbObj, TRUE, tempFile);
+        docIdSub.metaData = readBlob(tempFile);	
+        unlink(tempFile);
+
+        safef(file, sizeof file, "%s/%s", submitDir, submitPath);
+        docIdSub.submitPath = cloneString(file);
+        printf("submitPath %s\n", docIdSub.submitPath);
+        docIdSubmit(conn, &docIdSub, docIdDir, type);
+
+        submitPath = space;
+        subPart++;
+        } 
     }
 }
 

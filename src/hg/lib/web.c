@@ -99,9 +99,30 @@ char *scriptName = cgiScriptName();
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
 boolean isGisaid = hIsGisaidServer();
+if (theCart)
+    {
+    char *theGenome = NULL;
+    char *genomeEnc = NULL;
+
+    getDbAndGenome(theCart, &db, &theGenome, NULL);
+    genomeEnc = cgiEncode(theGenome);
+
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
+	     orgCgiName, genomeEnc,
+	     dbCgiName, db,
+	     cartSessionVarName(), cartSessionId(theCart));
+    }
+else
+    {
+    uiState[0] = 0;
+    uiState[1] = 0;
+    }
 if (db == NULL)
     db = hDefaultDb();
 boolean dbIsFound = hDbExists(db);
+boolean haveBlat = FALSE;
+if (dbIsFound)
+    haveBlat = hIsBlatIndexedDatabase(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -182,24 +203,6 @@ if (withLogo)
     puts("</TH></TR>" "\n"
     	 "" "\n" );
     }
-if (theCart)
-    {
-    char *theGenome = NULL;
-    char *genomeEnc = NULL;
-
-    getDbAndGenome(theCart, &db, &theGenome, NULL);
-    genomeEnc = cgiEncode(theGenome);
-
-    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
-	     orgCgiName, genomeEnc,
-	     dbCgiName, db,
-	     cartSessionVarName(), cartSessionId(theCart));
-    }
-else
-    {
-    uiState[0] = 0;
-    uiState[1] = 0;
-    }
 
 /* Put up the hot links bar. */
 if (isGisaid)
@@ -211,7 +214,8 @@ if (isGisaid)
     printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+    if (haveBlat)
+	printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
@@ -247,7 +251,8 @@ else if (isGsid)
     printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+    if (haveBlat)
+	printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
@@ -309,11 +314,16 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0\" class=\"topbar\">\n",
-	       uiState,searchTracks);
+#ifdef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
+	       uiState,TRACK_SEARCH);
+#else///ifndef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet' class='topbar'>\n",
+               uiState);
+#endif///ndef TRACK_SEARCH
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
-    if (!endsWith(scriptName, "hgBlat"))
+    if (haveBlat && !endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">",
 		theCart ? "&" : "", uiState+1 );
@@ -1256,9 +1266,9 @@ char *dirName = "";
 if (js)
     dirName = cfgOptionDefault("browser.javaScriptDir", "js");
 else if (style)
-    dirName = "style";
+    dirName = cfgOptionDefault("browser.styleDir","style");
 else if (image)
-    dirName = "style/images";
+    dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
 if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
