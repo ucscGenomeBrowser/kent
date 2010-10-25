@@ -101,17 +101,18 @@ if (offset < 0 && simpleAnswer < exonStart)
     {
     if (exonIndx < 1)
 	errAbort("offsetToGenomic: need previous exon, but given index of %d", exonIndx);
-    int extra = exonStart - simpleAnswer;
+    int stillNeeded = simpleAnswer - exonStart;
     int prevExonEnd = bed->chromStart + bed->chromStarts[exonIndx-1] + bed->blockSizes[exonIndx-1];
-    return prevExonEnd - extra;
+    return offsetToGenomic(bed, exonIndx-1, prevExonEnd, stillNeeded);
     }
 else if (offset > 0 && simpleAnswer > exonEnd)
     {
     if (exonIndx >= bed->blockCount - 1)
 	errAbort("offsetToGenomic: need next exon, but given index of %d (>= %d)",
 		 exonIndx, bed->blockCount - 1);
-    int extra = simpleAnswer - exonEnd;
-    return (bed->chromStart + bed->chromStarts[exonIndx+1] + extra);
+    int stillNeeded = simpleAnswer - exonEnd;
+    int nextExonStart = bed->chromStart + bed->chromStarts[exonIndx+1];
+    return offsetToGenomic(bed, exonIndx+1, nextExonStart, stillNeeded);
     }
 return simpleAnswer;
 }
