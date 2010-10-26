@@ -203,6 +203,23 @@ tier 1
 protocol H1_ES_protocol.pdf
 
 ###### type 3 cells once they have been submitted.
+term 8988T
+tag 8988T
+type Cell Line
+organism Human
+description human pancreas adenocarcinoma (PA-TU-8988T)
+tier 3
+lineage pancreatic adenocarcinoma
+karyotype cancer
+sex F
+tissue liver
+vendorName DSMZ
+vendorId 162
+orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
+termId BTO:0001521 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521&termName=pancreatic%20adenocarcinoma%20cell%20line
+protocol 8988T_Crawford_protocol.pdf
+
 term A549
 tag A549
 type Cell Line
@@ -218,7 +235,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 tier 3
-protocol HudsonAlpha:A549_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
 tag AG04449
@@ -445,6 +462,23 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex M
 tier 3
 protocol Yale_TFBS(Struhl):BJ-5ta_Struhl_protocol.pdf
+
+term CLL
+tag CLL
+type Cell Line
+organism Human
+description chronic lymphocytic leukemia cell
+tier 3
+lineage T-cell lymphocyte
+karyotype cancer
+sex U
+tissue lymphocyte
+vendorName Dr. Jennifer Brown, Department of Medicine, Harvard Medical School.
+vendorId
+orderUrl
+termId BTO:0001546
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546&termName=chronic%20lymphocytic%20leukemia%20cell
+protocol CLL_Crawford_protocol.pdf
 
 term Caco-2
 tag Caco2
@@ -1947,6 +1981,21 @@ sex M
 tier 3
 protocol HudsonAlpha:PANC-1_Myers_protocol.pdf UW_Stam:PANC-1_Stam_protocol.pdf
 
+term PanIsletD
+tag PanIsD
+type Cell Line
+organism Human
+description Dedifferentiated human pancreatic islets
+tissue Pancreas
+vendorName National Disease Research Interchange (NDRI).
+vendorId
+orderUrlhttp://www.ndriresource.org/NDRI_Initiatives/Pancreatic_Islets/31/
+termId BTO:0000991 (non-specific)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
+sex U
+tier 3
+protocol Open_Chromatin:PanIsletD_Crawford_protocol.pdf
+
 term PanIslets
 tag PanIslets
 type Cell Line
@@ -2150,7 +2199,7 @@ term SK-SY5Y
 tag SKSY5Y
 type Cell Line
 organism Human
-description neuroblastoma 
+description neuroblastoma
 tissue bone marrow
 vendorName ATCC
 vendorId bone marrow
@@ -2247,6 +2296,23 @@ sex U
 tier 3
 protocol UW_Stam:Th2_Stam_protocol.pdf
 
+term Trophobl
+tag Trophobl
+type Cell Line
+organism Human
+description Trophoblast (HTR-8/SVneo) cell line.  A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
+tier 3
+lineage blastula
+karyotype normal
+sex U
+tissue ectoderm
+vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen’s University at Kingston, Kingston, Ontario, Canada
+vendorId
+orderUrl
+termId BTBTO:0001079
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001079&termName=trophoblast
+protocol Trophobl_Crawford_protocol.pdf
+
 term T-47D
 tag T47D
 type Cell Line
@@ -2263,6 +2329,21 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex F
 tier 3
 protocol HudsonAlpha:T47D_Myers_protocol.pdf
+
+term Urothelia
+term UROtsa
+type Cell Line
+organism Human
+description A primary culture of urothelial cells derived from a 12 year-old girl and immortalized by transfection with a temperature-sensitive SV-40 large T antigen gene.
+tier 3
+lineage normal human ureter cells
+karyotype normal
+sex F
+tissue urothelium
+vendorName lab of Dr. D Sens (University of N. Dakota)
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001267&termName=urothelial%20cell%20line
+termId BTO:0001267
+protocol Urothelia_Crawford_protocol.pdf
 
 term U87
 tag U87
@@ -3009,7 +3090,7 @@ tag BRCA1C
 type Antibody
 target BRCA1
 antibodyDescription Rabbit polyclonal recognizing a region between residue 1800 and the C-terminus (residue 1863) of human Breast Cancer Gene 1
-targetDescription Nuclear phosphoprotein that plays a role in maintaining genomic stability, and acts as a tumor suppressor. Associates with RNA polymerase II, and through the C-terminal domain, also interacts with histone deacetylase complexes. Plays a role in transcription, DNA repair of double-stranded breaks, and recombination. Mutations in this gene are responsible for approximately 40% of inherited breast cancers and more than 80% of inherited breast and ovarian cancers. 
+targetDescription Nuclear phosphoprotein that plays a role in maintaining genomic stability, and acts as a tumor suppressor. Associates with RNA polymerase II, and through the C-terminal domain, also interacts with histone deacetylase complexes. Plays a role in transcription, DNA repair of double-stranded breaks, and recombination. Mutations in this gene are responsible for approximately 40% of inherited breast cancers and more than 80% of inherited breast and ovarian cancers.
 vendorName Bethyl Labratories
 vendorId A300-000A
 orderUrl http://www.bethyl.com/product/A300-000A/BRCA1_Antibody/
@@ -3093,7 +3174,7 @@ tag cMYBH141
 type Antibody
 target c-Myb
 antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin
-targetDescription Transcriptional activator; DNA-binding protein that specifically recognize the sequence 5'-YAAC[GT]G-3'. Plays an important role in the control of proliferation and differentiation of hematopoietic progenitor cells. 
+targetDescription Transcriptional activator; DNA-binding protein that specifically recognize the sequence 5'-YAAC[GT]G-3'. Plays an important role in the control of proliferation and differentiation of hematopoietic progenitor cells.
 vendorName Santa Cruz Biotech
 vendorId sc-7874
 orderUrl http://www.scbt.com/datasheet-7874-c-myb-h-141-antibody.html
@@ -3149,9 +3230,9 @@ tag CHD21250
 type Antibody
 target CHD2
 antibodyDescription Rabbit polyclonal to CHD2 Synthetic peptide derived from within residues 1250 - 1350 of Human CHD2.
-targetDescription CHD family of proteins are characterized by presence of chromo (chromatin organization modifier) domains and SNF2-related helicase/ATPase domains. CHD genes alter gene expression possibly by modification of chromatin structure thus altering access of the transcriptional apparatus to its chromosomal DNA template. 
+targetDescription CHD family of proteins are characterized by presence of chromo (chromatin organization modifier) domains and SNF2-related helicase/ATPase domains. CHD genes alter gene expression possibly by modification of chromatin structure thus altering access of the transcriptional apparatus to its chromosomal DNA template.
 orderUrl http://www.abcam.com/CHD2-antibody-ab68301.html
-vendorName Abcam 
+vendorName Abcam
 vendorId ab68301
 lab Snyder
 targetId GeneCard:GC15P093443
@@ -3375,8 +3456,8 @@ term FOXA1_(C-20)
 tag FOXA1C20
 type Antibody
 target FOXA1
-targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq). 
-antibodyDescription 	 Goat polyclonal IgG, epitope mapping at the C-terminus of FOXA1 of human origin. 
+targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq).
+antibodyDescription 	 Goat polyclonal IgG, epitope mapping at the C-terminus of FOXA1 of human origin.
 vendorName Santa Cruz Biotech
 vendorId sc-6553
 orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
@@ -3525,7 +3606,7 @@ vendorId ab28179
 lab Snyder
 targetId GeneCard:GC19M006330
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC19M006330
-validation GTF2F1(Western_blot,Immunoprecipitation):human_GTF2F1_RAP-74_validation_Snyder.pdf 
+validation GTF2F1(Western_blot,Immunoprecipitation):human_GTF2F1_RAP-74_validation_Snyder.pdf
 
 
 ##This does not appear in metaDb
@@ -3839,15 +3920,15 @@ term HNF4A_(H-171)
 tag HNF4AH171
 type Antibody
 target HNF4A
-antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin. 
-targetDescription The protein encoded by this gene is a nuclear transcription factor which binds DNA as a homodimer. The encoded protein controls the expression of several genes, including hepatocyte nuclear factor 1 alpha, a transcription factor which regulates the expression of several hepatic genes (RefSeq). 
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin.
+targetDescription The protein encoded by this gene is a nuclear transcription factor which binds DNA as a homodimer. The encoded protein controls the expression of several genes, including hepatocyte nuclear factor 1 alpha, a transcription factor which regulates the expression of several hepatic genes (RefSeq).
 orderUrl http://www.scbt.com/datasheet-8987-hnf-4alpha-h-171-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-8987
 lab Myers
 targetId GeneCard:GC20P042984
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
-validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf 
+validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf
 
 term HSF1
 tag HSF1
@@ -4338,7 +4419,7 @@ tag PRDM1V
 type Antibody
 target PRDM1
 antibodyDescription Rabbit Monoclonal antibody against a synthetic peptide corresponding to residues surrounding Val90 of human PRDI-BF1.
-targetDescription Transcriptional repressor that binds specifically to the PRDI element in the promoter of the beta-interferon gene. Drives the maturation of B-lymphocytes into Ig secreting cells. 
+targetDescription Transcriptional repressor that binds specifically to the PRDI element in the promoter of the beta-interferon gene. Drives the maturation of B-lymphocytes into Ig secreting cells.
 vendorName Cell Signaling Technology
 vendorId 9115
 orderUrl http://www.cellsignal.com/products/9115.html#references
@@ -4393,7 +4474,7 @@ term RFX5_(N-494)
 tag RFX5N494
 type Antibody
 target RFX5
-targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters 
+targetDescription Activates transcription from class II MHC promoters. Recognizes X-boxes. Mediates cooperative binding betweenRFX and NF-Y. RFX binds the X1 box of MHC-II promoters
 antibodyDescription Rabbit polyclonal against RFX5 peptide corresponding to a region at amino acids 320 to 494 of the human protein conjugated to Keyhole Limpet Hemocyanin
 orderUrl http://www.rockland-inc.com//store/200-401-194-14562-O4L_9248.aspx
 vendorName Rockland Immunochemicals
@@ -5084,7 +5165,7 @@ term Mxi1_(bHLH)
 tag Mxi1BHLH
 type Antibody
 target Mxi1
-targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX 
+targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX
 antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1
 vendorName R&D Systems
 vendorId AF4185
@@ -5879,6 +5960,7 @@ description Input library was prepared at UC Davis.
 
 
 ### Treatments
+
 term androgen
 tag ANDRO
 description 12hrs, 1nM Methyltrienolone (R1881) (Crawford)
@@ -6022,6 +6104,18 @@ description Fragmented using micrococcal nuclease digestion
 type treatment
 label MNase
 
+term NaBut
+tag NaBut
+label Sodium Butyrate
+description 0.5 mM Sodium Butyrate for 72 hours
+type treatment
+
+term OHUrea
+tag OHUrea
+label Hydroxyurea
+description 100 uM Hydroxyurea for 72 hours
+type treatment
+
 term pravastatin
 tag PRAVAST
 description For sterol deprivation, cells were cultured with pravastatin (2 µM; Sigma) in DMEM with 0.5% BSA for 16 h. (Snyder)
@@ -6062,6 +6156,12 @@ term PCR2x
 tag PCR2x
 description 2-cycles of PCR (Myers)
 type protocol
+
+term  UT189
+tag UT189
+label UT189 E.Coli
+description UT189 E.Coli treatment 1 hour, followed by 24 hour incubation
+type treatment
 
 term v041610.1
 tag V0416101
