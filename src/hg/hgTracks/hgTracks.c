@@ -2335,39 +2335,47 @@ else
 /* Draw guidelines. */
 if (withGuidelines)
     {
-    //if(theImgBox)
-        // TODO: We should be making transparent data images and a separate background img for guidelines.
-        // This will allow the guidelines to dragscroll while the center labels are static.
-        // NOTE: The background image could easily be a reusable file, based upon zoom level and width.  Height could propbaby easily be stretched.
-        // struct image *bgImg = imgBoxImageAdd(theImgBox,gifBg.forHtml,
-        //    (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
-        //    pixWidth, pixHeight,FALSE);
     struct hvGfx *bgImg = hvg; // Default to the one image
+    boolean exists = FALSE;
     if(theImgBox)
         {
         struct tempName gifBg;
+        char base[64];
+        safef(base,sizeof(base),"blueLines%d-%d-%d",pixWidth,insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
         #ifdef USE_PNG
-        trashDirFile(&gifBg, "hgt", "bg", ".png");  // TODO: We could have a few static files by (pixHeight*pixWidth)  And I doubt pixHeight is needed!
-        bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-        #else //ifndef
-        trashDirFile(&gifBg, "hgt", "bg", ".gif");
-        bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-        #endif //ndef USE_PNG
-        bgImg->rc = revCmplDisp;
+            exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
+        #else///ifndef
+            exists = trashDirReusableFile(&gifBg, "hgt", base, ".gif");
+        #endif///ndef USE_PNG
+        if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
+            exists = TRUE;                       // However, for the time being, rebuild when user presses "default tracks"
+
+        if (!exists)
+            {
+            #ifdef USE_PNG
+                bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+            #else///ifndef
+                bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+            #endif///ndef USE_PNG
+            bgImg->rc = revCmplDisp;
+            }
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
         }
-    int height = pixHeight - 2*gfxBorder;
-    int x;
-    Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
 
-    hvGfxSetClip(bgImg, insideX, gfxBorder, insideWidth, height);
-    y = gfxBorder;
+    if (!exists)
+        {
+        int x;
+        Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
 
-    for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
-        hvGfxBox(bgImg, x, y, 1, height, lightBlue);
-    hvGfxUnclip(bgImg);
-    if(bgImg != hvg)
-        hvGfxClose(&bgImg);
+        hvGfxSetClip(bgImg, insideX, 0, insideWidth, pixHeight);
+        y = gfxBorder;
+
+        for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
+            hvGfxBox(bgImg, x, 0, 1, pixHeight, lightBlue);
+        hvGfxUnclip(bgImg);
+        if(bgImg != hvg)
+            hvGfxClose(&bgImg);
+        }
     }
 
 /* Show ruler at top. */
@@ -4687,37 +4695,38 @@ if (!hideControls)
     /* Display bottom control panel. */
 
 #ifdef TRACK_SEARCH
-    if(isSearchTracksSupported(database))
+    if(isSearchTracksSupported(database,cart))
         {
-        hPrintf("<input type='submit' name='%s' value='track search'>", searchTracks);
+        cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
         hPrintf(" ");
         }
-#endif
-    hButton("hgt.reset", "default tracks");
+#endif///def TRACK_SEARCH
+    hButtonWithMsg("hgt.reset", "default tracks","Display only default tracks");
 	hPrintf("&nbsp;");
-    hButton("hgt.defaultImgOrder", "default order");
+    hButtonWithMsg("hgt.defaultImgOrder", "default order","Display current tracks in their default order");
     // if (showTrackControls)  - always show "hide all", Hiram 2008-06-26
 	{
 	hPrintf("&nbsp;");
-	hButton("hgt.hideAll", "hide all");
+	hButtonWithMsg("hgt.hideAll", "hide all","Hide all currently visibile tracks");
 	}
 
     hPrintf(" ");
-    hOnClickButton("document.customTrackForm.submit();return false;",
-                        hasCustomTracks ?
-                            CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
+    hPrintf("<INPUT TYPE='button' VALUE='%s' onClick='document.customTrackForm.submit();return false;' title='%s'>",
+        hasCustomTracks ? CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL,
+        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks");
 
     hPrintf(" ");
-    hButton("hgTracksConfigPage", "configure");
+    hButtonWithMsg("hgTracksConfigPage", "configure","Configure image and track selection");
     hPrintf(" ");
 
     if (!hIsGsidServer())
 	{
-        hButton("hgt.toggleRevCmplDisp", "reverse");
+        hButtonWithMsg("hgt.toggleRevCmplDisp", "reverse",
+            revCmplDisp?"Show forward strand at this location":"Show reverse strand at this location");
         hPrintf(" ");
 	}
 
-    hButton("hgt.refresh", "refresh");
+    hButtonWithMsg("hgt.refresh", "refresh","Refresh image");
 
     hPrintf("<BR>\n");
 
@@ -4786,15 +4795,15 @@ if (!hideControls)
 		}
 	    hPrintf("<table width='100%%'><tr><td align='left'>");
 	    hPrintf("\n<A NAME=\"%sGroup\"></A>",group->name);
-	    hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue'></A>&nbsp;&nbsp;",
+	    hPrintf("<A HREF=\"%s?%s&%s=%s#%sGroup\" class='bigBlue'><IMG height='18' width='18' onclick=\"return toggleTrackGroupVisibility(this, '%s');\" id=\"%s_button\" src=\"%s\" alt=\"%s\" class='bigBlue' title='%s this group'></A>&nbsp;&nbsp;",
 		    hgTracksName(), cartSidUrlString(cart),
 		    collapseGroupVar(group->name),
 		    otherState, group->name,
-		    group->name, group->name, indicatorImg, indicator);
+		    group->name, group->name, indicatorImg, indicator,isOpen?"Collapse":"Expand");
 	    hPrintf("</td><td align='center' width='100%%'>\n");
 	    hPrintf("<B>%s</B>", wrapWhiteFont(group->label));
 	    hPrintf("</td><td align='right'>\n");
-	    hPrintf("<input type='submit' name='hgt.refresh' value='refresh'>\n");
+	    hPrintf("<input type='submit' name='hgt.refresh' value='refresh' title='Update image with your changes'>\n");
 	    hPrintf("</td></tr></table></th>\n");
 	    controlGridEndRow(cg);
 
@@ -5558,12 +5567,15 @@ jsIncludeFile("hgTracks.js", NULL);
 jsIncludeFile("lowetooltip.js", NULL);
 #endif
 
+if(advancedJavascriptFeaturesEnabled(cart))
+    {
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 webIncludeResourceFile("jquery.contextmenu.css");
 webIncludeResourceFile("jquery-ui.css");
 #ifdef CONTEXT_MENU
 jsIncludeFile("jquery.contextmenu.js", NULL);
 #endif/// def CONTEXT_MENU
+    }
 jsIncludeFile("jquery-ui.js", NULL);
 
 //if (!trackImgOnly)
@@ -5636,11 +5648,11 @@ else if (cartVarExists(cart, configShowEncodeGroups))
     configPageSetTrackVis(-2);
     }
 #ifdef TRACK_SEARCH
-else if (cartVarExists(cart, searchTracks))
+else if (differentString(cartUsualString(cart, TRACK_SEARCH,"0"),"0"))
     {
     doSearchTracks(groupList);
     }
-#endif
+#endif///def TRACK_SEARCH
 else
     {
     tracksDisplay();

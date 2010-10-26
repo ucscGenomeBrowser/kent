@@ -36,6 +36,7 @@ char *grpLabel, *tmp;
 boolean metaDbExists = sqlTableExists(conn, metaDbName);
 
 printf("%s ", tdb->track);
+printf("%s ", tdb->shortLabel);
 if(metaDbExists)
     {
     safef(query, sizeof(query), "select val from %s where obj = '%s'",

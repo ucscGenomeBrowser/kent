@@ -10,6 +10,7 @@
 #include "imageV2.h"
 #include "hgTracks.h"
 #include "hgConfig.h"
+#include "hgFindSpec.h"
 
 static char const rcsid[] = "$Id: imageV2.c,v 1.32 2010/05/24 19:53:42 hiram Exp $";
 
@@ -173,7 +174,7 @@ if (kindOfChild != kocOrphan)
     struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
 
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',\n\t\tparentLabel: '%s',",
-                    parentTdb->track, parentTdb->shortLabel);
+                    parentTdb->track, javaScriptLiteralEncode(parentTdb->shortLabel));
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
         dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
@@ -183,7 +184,8 @@ if (kindOfChild != kocOrphan)
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
 
 // Now some miscellaneous tidbids
-if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup", "on"), "off"))
+if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
+    matchRegex(track->track, "^snp[0-9]+$") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));

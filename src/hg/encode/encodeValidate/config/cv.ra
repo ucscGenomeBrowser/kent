@@ -218,7 +218,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 tier 3
-protocol HudsonAlpha:A549_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
 tag AG04449
@@ -726,8 +726,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-#protocol HudsonAlpha:GM12878-16XiMat_Myers_protocol.pdf
-#protocol HudsonAlpha:GM12878-56XiMat_Myers_protocol.pdf
+protocol HudsonAlpha:GM12878-XiMat_Myers_protocol.pdf
 
 term GM12878-XiPat
 tag GM12878XiPat
@@ -742,8 +741,7 @@ termId BTO:0002026 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
 sex F
 tier 3
-#protocol HudsonAlpha:GM12878-34XiPat_Myers_protocol.pdf
-#protocol HudsonAlpha:GM12878-40XiPat_Myers_protocol.pdf
+protocol HudsonAlpha:GM12878-XiPat_Myers_protocol.pdf
 
 term GM12891
 tag GM12891
@@ -3090,6 +3088,20 @@ targetId GeneCard:GC01M058958
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M058958
 validation missing
 
+term c-Myb_(H-141)
+tag cMYBH141
+type Antibody
+target c-Myb
+antibodyDescription Rabbit polyclonal IgG, Epitope corresponding to amino acids 500-640 mapping at the C-terminus of c-Myb of human origin
+targetDescription Transcriptional activator; DNA-binding protein that specifically recognize the sequence 5'-YAAC[GT]G-3'. Plays an important role in the control of proliferation and differentiation of hematopoietic progenitor cells. 
+vendorName Santa Cruz Biotech
+vendorId sc-7874
+orderUrl http://www.scbt.com/datasheet-7874-c-myb-h-141-antibody.html
+lab Snyder
+targetId GeneCard:GC06P135544
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MYB
+validation missing
+
 term c-Myc
 tag cMYC
 type Antibody
@@ -3358,6 +3370,20 @@ lab Myers
 targetId GeneCard:GC02P028527
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOSL2
 validation FOSL2(Immunoblot):human_FOSL2_Q-20_validation_Myers.pdf
+
+term FOXA1_(C-20)
+tag FOXA1C20
+type Antibody
+target FOXA1
+targetDescription This gene encodes a member of the forehead class of DNA-binding proteins. These hepatocyte nuclear factors are transcriptional activators for liver-specific transcripts such as albumin and transthyretin, and they also interact with chromatin. Similar family members in mice have roles in the regulation of metabolism and in the differentiation of the pancreas and liver (RefSeq). 
+antibodyDescription 	 Goat polyclonal IgG, epitope mapping at the C-terminus of FOXA1 of human origin. 
+vendorName Santa Cruz Biotech
+vendorId sc-6553
+orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
+lab Myers
+targetId GeneCard:GC14M038059
+targetUrlhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
+validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
 
 term FOXP2
 tag FOXP2
@@ -3808,6 +3834,20 @@ lab Snyder
 targetId GeneCard:GC20P042984
 targetUrl http://www.genecards.org//index.php?path=/Search/keyword/HNF4A
 validation missing
+
+term HNF4A_(H-171)
+tag HNF4AH171
+type Antibody
+target HNF4A
+antibodyDescription Rabbit polyclonal IgG, epitope corresponding to a.a. 295-465 mapping at the C-terminus of HNF4A of human origin. 
+targetDescription The protein encoded by this gene is a nuclear transcription factor which binds DNA as a homodimer. The encoded protein controls the expression of several genes, including hepatocyte nuclear factor 1 alpha, a transcription factor which regulates the expression of several hepatic genes (RefSeq). 
+orderUrl http://www.scbt.com/datasheet-8987-hnf-4alpha-h-171-antibody.html
+vendorName Santa Cruz Biotech
+vendorId sc-8987
+lab Myers
+targetId GeneCard:GC20P042984
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=HNF4A
+validation HNF4a(Immunoblot):human_HNF4a_H-171_validation_Myers.pdf 
 
 term HSF1
 tag HSF1
@@ -5039,6 +5079,23 @@ targetId
 targetUrl http://view.ncbi.nlm.nih.gov/gene/10642
 validation
 
+
+term Mxi1_(bHLH)
+tag Mxi1BHLH
+type Antibody
+target Mxi1
+targetDescription  Transcriptional repressor. Binds with MAX to form recognize the core sequence 5'-CAC[GA]TG-3', antagonizes MYC transcriptional activity by competing for MAX 
+antibodyDescription Goat IgG. Raised against E. coli-derived rhMxi1
+vendorName R&D Systems
+vendorId AF4185
+orderUrl http://www.rndsystems.com/
+lab Snyder
+lots ZIJ01
+targetId GeneCard:GC10P11195
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
+validation missing
+
+
 ##This does not appear in metaDb
 term NONO
 tag NONO
@@ -5899,6 +5956,11 @@ description 45min, 100nM Estradiol (Crawford)
 type treatment
 label Estradiol_100nM
 
+term EtOH_0.01pct
+tag ETOH01
+description 36h,0.01% EtOH (Snyder)
+type treatment
+
 term EtOH_0.02pct
 tag ETOH02
 description 1h,0.02% EtOH (Myers)
@@ -6030,12 +6092,15 @@ tag hudsonAlphaGrowProt
 description Cells grown using the HudsonAlpha growth protocol.
 type protocol
 
-
 term Yale_TFBS
 tag YaleGrowProt
 description Cells grown using the Yale TFBS growth protocol.
 type protocol
 
+term Yale_TFBS(Struhl)
+tag YaleStruhlGrowProt
+description Cells grown using the Yale TFBS(Struhl) growth protocol.
+type protocol
 
 ### phase
 term G1

@@ -3539,7 +3539,6 @@ wgEncode 1
     itemRgb on
     cell HepG2
 #    color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r1.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3552,7 +3551,6 @@ wgEncode 1
     itemRgb on
     cell HepG2
 #    color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r2.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3565,7 +3563,6 @@ wgEncode 1
     itemRgb on
     cell GM12878
 #    color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r1.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3578,7 +3575,6 @@ wgEncode 1
     itemRgb on
     cell GM12878
 #    color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r2.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27K562r1
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3591,7 +3587,6 @@ wgEncode 1
     itemRgb on
     cell K562
 #    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r1.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27K562r2
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3604,7 +3599,6 @@ wgEncode 1
     itemRgb on
     cell K562
 #    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r2.bed.gz subId=685
 
 # HudsonAlpha CNV (wrangler: braney)
 
@@ -5188,7 +5182,6 @@ noInherit on
         maxLimit 580871
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
@@ -5201,7 +5194,6 @@ noInherit on
         maxLimit 898990
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=PlusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
@@ -5214,7 +5206,6 @@ noInherit on
         maxLimit 384266
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
@@ -5227,7 +5218,6 @@ noInherit on
         maxLimit 421850
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=PlusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
@@ -5240,7 +5230,6 @@ noInherit on
         maxLimit 118018
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
 
     track wgEncodeCshlLongRnaSeqView2-MinusRawSignal
     shortLabel Minus Raw Signal
@@ -5265,7 +5254,6 @@ noInherit on
         maxLimit 2199965
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
@@ -5278,7 +5266,6 @@ noInherit on
         maxLimit 3756424
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=MinusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
@@ -5291,7 +5278,6 @@ noInherit on
         maxLimit 2180073
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
@@ -5304,7 +5290,6 @@ noInherit on
         maxLimit 1769868
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=MinusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
@@ -5317,7 +5302,6 @@ noInherit on
         maxLimit 318978
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752  submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
 
     track wgEncodeCshlLongRnaSeqView3-AllRawSignal
     shortLabel All Raw Signal
@@ -5342,7 +5326,6 @@ noInherit on
         maxLimit 2689207
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5355,7 +5338,6 @@ noInherit on
         maxLimit 4860029
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=AllRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5368,7 +5350,6 @@ noInherit on
         maxLimit 3032883
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5381,7 +5362,6 @@ noInherit on
         maxLimit 2411797
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=AllRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5394,7 +5374,6 @@ noInherit on
         maxLimit 318978
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
 
     track wgEncodeCshlLongRnaSeqView4-Alignments
     shortLabel Alignments
@@ -5409,7 +5388,6 @@ noInherit on
         subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
@@ -5418,7 +5396,6 @@ noInherit on
         subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
@@ -5427,7 +5404,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
@@ -5436,7 +5412,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
@@ -5445,7 +5420,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze"  subId=752 submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2 fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2.bb
 
 # UMass Weng Lab TFBS Validation (wrangler: kate)
 
