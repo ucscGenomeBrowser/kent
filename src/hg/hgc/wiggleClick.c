@@ -240,7 +240,7 @@ if (bbList != NULL)
     {
     bbiIntervalStatsReport(bbList, tdb->table, chrom, winStart, winEnd);
     }
-else if (maxWTQ <= winEnd-winStart)
+else if ((bbi == NULL) && (maxWTQ <= winEnd-winStart))
     {
     sprintLongWithCommas(num1Buf, maxWTQ);
     printf("<P>Zoom in to a view less than %s bases to see data summary.</P>",num1Buf);
