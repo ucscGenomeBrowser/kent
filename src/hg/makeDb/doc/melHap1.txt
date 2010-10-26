@@ -2,6 +2,7 @@
 
 # Meloidogyne hapla
 # The Center for the Biology of Nematode Parasitism, N.C. State
+#	http://www.pngg.org/cbnp/index.php
 # "Sequence and genetic map of Meloidogyne hapla:
 #	A compact nematode genome for plant parasitism"
 #	http://www.pnas.org/content/105/39/14802.full

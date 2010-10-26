@@ -9,7 +9,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireAstrocyAlnRep1
 project wgEncode
 replicate 1
@@ -27,7 +27,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireAstrocyAlnRep2
 project wgEncode
 replicate 2
@@ -117,6 +117,162 @@ labVersion fseq v 1.84, iff_generic_male
 project wgEncode
 subId 2481
 tableName wgEncodeOpenChromFaireAstrocySig
+view Signal
+
+metaObject wgEncodeOpenChromFaireGlioblaAlnRep1
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireGlioblaAlnRep1
+project wgEncode
+replicate 1
+subId 2515
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGlioblaAlnRep2
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireGlioblaAlnRep2
+project wgEncode
+replicate 2
+subId 2515
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGlioblaAlnRep3
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
+grant Crawford
+lab UNC(Lieb)
+labVersion  align_on_cluster_bwa.pl v 1
+parentTable wgEncodeOpenChromFaireGlioblaAlnRep3
+project wgEncode
+replicate 3
+subId 2515
+view Alignments
+
+metaObject wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
+objType table
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2515
+tableName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromFaireGlioblaPk
+objType table
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaPk.narrowPeak.gz
+grant Crawford
+lab UNC(Lieb)
+labVersion p-value cutoff: 0.1
+project wgEncode
+subId 2515
+tableName wgEncodeOpenChromFaireGlioblaPk
+view Peaks
+
+metaObject wgEncodeOpenChromFaireGlioblaRawDataRep1
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaRawDataRep1.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireGlioblaRawSignalRep1
+project wgEncode
+replicate 1
+subId 2515
+view RawData
+
+metaObject wgEncodeOpenChromFaireGlioblaRawDataRep2
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaRawDataRep2.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireGlioblaRawSignalRep2
+project wgEncode
+replicate 2
+subId 2515
+view RawData
+
+metaObject wgEncodeOpenChromFaireGlioblaRawDataRep3
+objType file
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaRawDataRep3.fastq.gz
+grant Crawford
+lab UNC(Lieb)
+parentTable wgEncodeOpenChromFaireGlioblaRawSignalRep3
+project wgEncode
+replicate 3
+subId 2515
+view RawData
+
+metaObject wgEncodeOpenChromFaireGlioblaSig
+objType table
+cell Gliobla
+composite wgEncodeOpenChromFaire
+dataType FAIRE-seq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-10-20
+dateUnrestricted 2011-07-19
+fileName wgEncodeOpenChromFaireGlioblaSig.bigWig
+grant Crawford
+lab UNC(Lieb)
+labVersion fseq v 1.84, iff_H54
+project wgEncode
+subId 2515
+tableName wgEncodeOpenChromFaireGlioblaSig
 view Signal
 
 metaObject wgEncodeOpenChromFaireGm12878AlnRep1
@@ -250,7 +406,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireGm12891AlnRep1
 project wgEncode
 replicate 1
@@ -268,7 +424,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireGm12891AlnRep2
 project wgEncode
 replicate 2
@@ -371,7 +527,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireGm12892AlnRep1
 project wgEncode
 replicate 1
@@ -389,7 +545,7 @@ dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireGm12892AlnRep2
 project wgEncode
 replicate 2
@@ -1617,7 +1773,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireMedulloAlnRep1
 project wgEncode
 replicate 1
@@ -1635,7 +1791,7 @@ dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
 grant Crawford
 lab UNC(Lieb)
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 parentTable wgEncodeOpenChromFaireMedulloAlnRep2
 project wgEncode
 replicate 2
@@ -2003,4 +2159,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: 848638047
+# MAGIC: -921151794
