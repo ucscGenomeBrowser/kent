@@ -1575,7 +1575,7 @@ if (tdbIsCompositeChild(subtrack->tdb))
             else
                 {
                 if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
-                    subtrack->loadItems(subtrack);
+                        subtrack->loadItems(subtrack);
 
                 limitVisibility(subtrack);
                 }
@@ -2341,7 +2341,7 @@ if (withGuidelines)
         {
         struct tempName gifBg;
         char base[64];
-        safef(base,sizeof(base),"blueLines%d-%d-%d",pixWidth,insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
+        safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
         #ifdef USE_PNG
             exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
         #else///ifndef
