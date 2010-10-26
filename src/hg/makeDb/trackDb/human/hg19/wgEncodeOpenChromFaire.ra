@@ -249,7 +249,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewPeaks off
         shortLabel Gliobla Pk
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Peaks (in Gliobla cells)
-        subGroups view=Peaks cellType=Gliobla
+        subGroups view=Peaks cellType=Gliobla treatment=AANONE
         type narrowPeak
         # subId=2515 dateSubmitted=2010-10-20
 
@@ -466,7 +466,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSignal off
         shortLabel Gliobla Sig
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq F-Seq Density Signal (in Gliobla cells)
-        subGroups view=SIG cellType=Gliobla
+        subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 0.367200
         # subId=2515 dateSubmitted=2010-10-20
 
@@ -683,7 +683,7 @@ wgEncode 1
         parent wgEncodeOpenChromFaireViewSigBo off
         shortLabel Gliobla
         longLabel ENCODE Open Chromatin, UNC FAIRE-seq Base Overlap Signal (in Gliobla cells)
-        subGroups view=SIGBO cellType=Gliobla
+        subGroups view=SIGBO cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 2386.000000
         # subId=2515 dateSubmitted=2010-10-20
 
