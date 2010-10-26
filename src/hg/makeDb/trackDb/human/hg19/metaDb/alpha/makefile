@@ -12,6 +12,7 @@ wgEncodeSunyAlbanyTiling.ra \
 wgEncodeSunyGeneST.ra \
 wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
+wgEncodeUwAffyExonArray.ra \
 wgEncodeUwHistone.ra \
 wgEncodeUwDnase.ra \
 wgEncodeCaltechRnaSeq.ra \
@@ -22,6 +23,8 @@ wgEncodeHaibMethylSeq.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeGisDnaPet.ra \
 wgEncodeUwTfbs.ra \
+wgEncodeGisRnaPet.ra \
+wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
 wgEncodeUwDgf.ra 
 

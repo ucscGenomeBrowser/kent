@@ -62,11 +62,9 @@ for (i=0;  i < bed->blockCount;  i++)
     int exonEnd = exonStart + bed->blockSizes[j];
     if ((exonStart < bed->thickEnd) && (exonEnd > bed->thickStart))
 	{
-	int cdsSize = exonEnd - exonStart;
-	if (exonEnd > bed->thickEnd)
-	    cdsSize = bed->thickEnd - exonStart;
-	else if (exonStart < bed->thickStart)
-	    cdsSize = exonEnd - bed->thickStart;
+	int cdsS = max(exonStart, bed->thickStart);
+	int cdsE = min(exonEnd, bed->thickEnd);
+	int cdsSize = cdsE - cdsS;
 	if (! gotFirstCds)
 	    {
 	    gotFirstCds = TRUE;
@@ -103,17 +101,18 @@ if (offset < 0 && simpleAnswer < exonStart)
     {
     if (exonIndx < 1)
 	errAbort("offsetToGenomic: need previous exon, but given index of %d", exonIndx);
-    int extra = exonStart - simpleAnswer;
+    int stillNeeded = simpleAnswer - exonStart;
     int prevExonEnd = bed->chromStart + bed->chromStarts[exonIndx-1] + bed->blockSizes[exonIndx-1];
-    return prevExonEnd - extra;
+    return offsetToGenomic(bed, exonIndx-1, prevExonEnd, stillNeeded);
     }
 else if (offset > 0 && simpleAnswer > exonEnd)
     {
     if (exonIndx >= bed->blockCount - 1)
 	errAbort("offsetToGenomic: need next exon, but given index of %d (>= %d)",
 		 exonIndx, bed->blockCount - 1);
-    int extra = simpleAnswer - exonEnd;
-    return (bed->chromStart + bed->chromStarts[exonIndx+1] + extra);
+    int stillNeeded = simpleAnswer - exonEnd;
+    int nextExonStart = bed->chromStart + bed->chromStarts[exonIndx+1];
+    return offsetToGenomic(bed, exonIndx+1, nextExonStart, stillNeeded);
     }
 return simpleAnswer;
 }

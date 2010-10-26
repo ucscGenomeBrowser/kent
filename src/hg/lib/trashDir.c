@@ -38,6 +38,27 @@ else
 makeTempName(tn, prefix, suffix);
 }
 
+boolean trashDirReusableFile(struct tempName *tn, char *dirName, char *base, char *suffix)
+/*      obtain a resusable trash file name as trash/dirName/base.suffix
+ *      returns TRUE if already exists. */
+{
+trashDirFile(tn,dirName,base,suffix);
+// Don't really want the randomized name.
+char *cgiName  = rStringIn("/",tn->forCgi );
+char *htmlName = rStringIn("/",tn->forHtml);
+if (cgiName == NULL)
+    cgiName = rStringIn("\\",tn->forCgi);
+assert(cgiName != NULL && htmlName != NULL);
+
+cgiName += 1;
+htmlName += 1;
+safef(cgiName, strlen(cgiName), "%s%s", base, suffix);  // There is room, since tempName is base_*.suffix
+safef(htmlName,strlen(htmlName),"%s%s", base, suffix);
+
+// exists?
+return fileExists(tn->forCgi);
+}
+
 void copyFileToTrash(char **pFileName, char *dirName, char *base, char *suffix)
 /* If *pFileName is not NULL and exists, then create a new file in the
  * given dirName of trash/ with the given base and suffix, copy *pFileName's

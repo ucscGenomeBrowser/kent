@@ -26,6 +26,7 @@ include wgEncodeAffyRnaChip.ra
 include wgEncodeUwTfbs.ra
 include wgEncodeCshlLongRnaSeq.ra
 include wgEncodeCaltechRnaSeq.ra
+include wgEncodeYaleRnaSeq.ra
 
 track wgEncodeMapability
 compositeTrack on

@@ -367,9 +367,11 @@ function toggleTrackGroupVisibility(button, prefix)
         var newSrc;
         if(newVal == 1) {
             newSrc = oldSrc.replace("/remove", "/add");
+            $(button).attr('title','Expand this group');
             $("tr[id^='"+prefix+"-']").hide();
         } else {
             newSrc = oldSrc.replace("/add", "/remove");
+            $(button).attr('title','Collapse this group');
             $("tr[id^='"+prefix+"-']").show();
         }
         $(button).attr("src",newSrc);
@@ -1244,7 +1246,7 @@ $(document).ready(function()
     }
 
     // Convert map AREA gets to post the form, ensuring that cart variables are kept up to date (but turn this off for search form).
-    if($("FORM").length > 0 && $('#searchTracks').length == 0) {
+    if($("FORM").length > 0 && $('#trackSearch').length == 0) {
         var allLinks = $('a');
         $( allLinks ).unbind('click');
         $( allLinks ).click( postToSaveSettings );
@@ -1308,10 +1310,10 @@ $(document).ready(function()
     if($("#tabs").length > 0) {
         // Search page specific code
 
-        var val = $('#currentSearchTab').val();
+        var val = $('#currentTab').val();
         $("#tabs").tabs({
                             show: function(event, ui) {
-                                $('#currentSearchTab').val(ui.panel.id);
+                                $('#currentTab').val(ui.panel.id);
                             },
                             select: function(event, ui) {
                                 if( ui.panel.id == 'simpleTab' && $('div#found').length < 1) {
@@ -1325,9 +1327,8 @@ $(document).ready(function()
             $('input#simpleSearch').focus();
         }
         $("#tabs").css('font-family', jQuery('body').css('font-family'));
-        $('#simpleSearch').keydown(searchKeydown);
-        $('#descSearch').keydown(searchKeydown);
-        $('#nameSearch').keydown(searchKeydown);
+        $("#tabs").css('font-size', jQuery('body').css('font-size'));
+        $('.submitOnEnter').keydown(searchKeydown);
         findTracksNormalize();
         updateMetaDataHelpLinks(0);
     }
@@ -2181,7 +2182,7 @@ function remoteTrackCallback(rec)
 function findTracksMdbVarChanged(obj)
 { // Ajax call to repopulate a metadata vals select when mdb var changes
     var newVar = $(obj).val();
-    var a = /metadataName(\d+)/.exec(obj.name)
+    var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
     if(newVar != undefined && a && a[1]) {
         var num = a[1];
         $.ajax({
@@ -2192,7 +2193,7 @@ function findTracksMdbVarChanged(obj)
                    success: catchErrorOrDispatch,
                    error: errorHandler,
                    cache: true,
-                   cmd: "hgt.metadataValue" + num,
+                   cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
                    num: num
                });
     }
@@ -2216,9 +2217,9 @@ function findTracksHandleNewMdbVals(response, status)
 function searchKeydown(event)
 {
     if (event.which == 13) {
-        // hgt.forceSearch is required to fix problem on IE and Safari where value of hgt_searchTracks is "-" (i.e. not "Search").
-        $("input[name=hgt.forceSearch]").val(1);
-        $('#searchTracks').submit();
+        // Required to fix problem on IE and Safari where value of hgt_tSearch is "-" (i.e. not "Search").
+        $("input[name=hgt_tsPage]").val(0);  // NOTE: must match TRACK_SEARCH_PAGER in hg/inc/searchTracks.h
+        $('#trackSearch').submit();
         // This doesn't work with IE or Safari.
         // $('#searchSubmit').click();
     }
@@ -2356,7 +2357,7 @@ function findTracksCheckAllWithWait(check)
 
 function findTracksSearchButtonsEnable(enable)
 { // Displays visible and checked track count
-    var searchButton = $('input[name="hgt_searchTracks"]');
+    var searchButton = $('input[name="hgt_tSearch"]'); // NOTE: must match TRACK_SEARCH in hg/inc/searchTracks.h
     var clearButton  = $('input.clear');
     if(enable) {
         $(searchButton).attr('disabled',false);
@@ -2371,9 +2372,9 @@ function findTracksViewButtoneText()
 { // Update View in Browser buttn text
     var inputs = $('table#foundTracks').find('input:hidden:enabled');  // Doesn't work!!!
     if( $(inputs).length == 0)
-        $('input.viewBtn').val('Return to Browser');
+        $('input.viewBtn').val('return to browser');
     else
-        $('input.viewBtn').val('View in Browser');
+        $('input.viewBtn').val('view in browser');
 }
 
 function findTracksCounts()
@@ -2402,7 +2403,7 @@ function findTracksClear()
 function findTracksSortNow(obj)
 {// Called by radio button to sort tracks
     if( $('#sortIt').length == 0 )
-        $('form#searchTracks').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
+        $('form#trackSearch').append("<input TYPE=HIDDEN id='sortIt' name='"+$(obj).attr('name')+"' value='"+$(obj).val()+"'>");
     else
         $('#sortIt').val($(obj).val());
     $('#searchSubmit').click();
@@ -2411,10 +2412,20 @@ function findTracksSortNow(obj)
 
 function findTracksPage(pageVar,startAt)
 {// Called by radio button to sort tracks
-    if( $('pageIt').length == 0 )
-        $('form#searchTracks').append("<input TYPE=HIDDEN id='pageIt' name='"+pageVar+"' value="+startAt+">");
-    else
-        $('pageIt').val(startAt);
+    var pager = $("input[name='"+pageVar+"']");
+    if( $(pager).length == 1)
+        $(pager).val(startAt);
+
+    // FIXME: Remove this code if sving settings on paging is not wanted
+    // How to hold onto selected tracks?
+    // There are 2 separate forms.  Scrape named inputs from searchResults form and dup them on trackSearch?
+    var inp = $('form#searchResults').find('input:hidden').not(':disabled').not("[name='hgsid']");
+    if($(inp).length > 0) {
+        $(inp).appendTo('form#trackSearch');
+        $('form#trackSearch').attr('method','POST'); // Must be post to avoid url too long  NOTE: probably needs to be post anyway
+    }
+    // FIXME: Remove this code if sving settings on paging is not wanted
+
     $('#searchSubmit').click();
     return false;
 }
@@ -2424,14 +2435,14 @@ function findTracksPage(pageVar,startAt)
 function delSearchSelect(obj, rowNum)
 {
     obj = $(obj);
-    $("input[name=hgt.delRow]").val(rowNum);
+    $("input[name=hgt_tsDelRow]").val(rowNum);  // NOTE: Must match TRACK_SEARCH_DEL_ROW in hg/inc/searchTracks.h
     return true;
 }
 
 function addSearchSelect(obj, rowNum)
 {
     obj = $(obj);
-    $("input[name=hgt.addRow]").val(rowNum);
+    $("input[name=hgt_tsAddRow]").val(rowNum);  // NOTE: Must match TRACK_SEARCH_ADD_ROW in hg/inc/searchTracks.h
     return true;
 }
 
@@ -2461,8 +2472,8 @@ function updateMetaDataHelpLinks(index)
         var span = $("#helpLink" + i);
         if(span.length > 0) {
             if(index == 0 || i == index) {
-                var val = $("select[name='hgt.metadataName" + i + "']").val();
-                var text = $("select[name='hgt.metadataName" + i + "'] option:selected").text();
+                var val = $("select[name='hgt_mdbVar" + i + "']").val();  // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+                var text = $("select[name='hgt_mdbVar" + i + "'] option:selected").text();
                 var str;
                 span.empty();
                 if(val == 'cell') {

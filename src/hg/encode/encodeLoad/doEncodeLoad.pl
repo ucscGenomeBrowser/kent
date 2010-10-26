@@ -208,7 +208,7 @@ sub loadBam
 #        if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
 #            die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
 #        }
-        if ((() = split(" ", $fileList)) != 1) { 
+        if ((() = split(" ", $fileList)) != 1) {
 	    die "Bam must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
         my $baiFile = ${fileList} . ".bai";
@@ -253,7 +253,7 @@ sub loadBigWig
 #        if(!(-e "$Encode::sqlCreate/${sqlTable}.as")) {
 #            die "AutoSql schema '$Encode::sqlCreate/${sqlTable}.as' does not exist\n";
 #        }
-        if ((() = split(" ", $fileList)) != 1) { 
+        if ((() = split(" ", $fileList)) != 1) {
 	    die "BigWig must be loaded with a single file but a list of files was supplied ($fileList)\n";
 	}
 	# link bigWig binary file to gbdbDir
@@ -454,15 +454,17 @@ for my $key (keys %ra) {
             $target = "$downloadDir/$tablename.$type.gz";
         }
         $target =~ s/ //g;  # removes space in ".bed 5.gz" for example
-        if(-e $target) {
-            die "Cannot load $target on top of existing copy";
-        } else {
+        #if(-e $target) {     # The validator is supposed to protect us from overwrites and allow them if -allowReloads
+        #    die "Cannot load $target on top of existing copy";
+        #} else
+        {
             unlink($target);
             if ($type eq "bam") {
                 my $baiFile = $target . ".bai";
-                if(-e $baiFile) {
-                    die "Cannot load $baiFile on top of existing copy";
-                } else {
+                #if(-e $baiFile) {
+                #    die "Cannot load $baiFile on top of existing copy";
+                #} else
+                {
                     unlink($baiFile);
                 }
             }
