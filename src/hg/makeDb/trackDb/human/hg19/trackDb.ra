@@ -295,8 +295,7 @@ group map
 priority 10
 visibility hide
 type ctgPos
-urlLabel Genome Reference Consortium
-url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/human/index.shtml
+url none
 
 track multiz4way
 shortLabel 4-way Multiz
