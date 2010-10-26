@@ -461,9 +461,10 @@ for my $key (keys %ra) {
             unlink($target);
             if ($type eq "bam") {
                 my $baiFile = $target . ".bai";
-                if(-e $baiFile) {
-                    die "Cannot load $baiFile on top of existing copy";
-                } else {
+                #if(-e $baiFile) {
+                #    die "Cannot load $baiFile on top of existing copy";
+                #} else
+                {
                     unlink($baiFile);
                 }
             }
