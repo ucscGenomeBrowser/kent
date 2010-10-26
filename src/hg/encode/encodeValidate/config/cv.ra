@@ -218,7 +218,7 @@ vendorId 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
 termId BTO:0001521 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521&termName=pancreatic%20adenocarcinoma%20cell%20line
-protocol 8988T_Crawford_protocol.pdf
+protocol Open_Chromatin:8988T_Crawford_protocol.pdf
 
 term A549
 tag A549
@@ -478,7 +478,7 @@ vendorId
 orderUrl
 termId BTO:0001546
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546&termName=chronic%20lymphocytic%20leukemia%20cell
-protocol CLL_Crawford_protocol.pdf
+protocol Open_Chromatin:CLL_Crawford_protocol.pdf
 
 term Caco-2
 tag Caco2
@@ -1352,7 +1352,7 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 sex U
 tier 3
-protocol Broad_Histone:HMEC_Bernstein_protocol.pdf <Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
+protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
 term HMF
 tag HMF
@@ -2311,7 +2311,7 @@ vendorId
 orderUrl
 termId BTBTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001079&termName=trophoblast
-protocol Trophobl_Crawford_protocol.pdf
+protocol Open_Chromatin:Trophobl_Crawford_protocol.pdf
 
 term T-47D
 tag T47D
@@ -2331,7 +2331,7 @@ tier 3
 protocol HudsonAlpha:T47D_Myers_protocol.pdf
 
 term Urothelia
-term UROtsa
+tag UROtsa
 type Cell Line
 organism Human
 description A primary culture of urothelial cells derived from a 12 year-old girl and immortalized by transfection with a temperature-sensitive SV-40 large T antigen gene.
@@ -2343,7 +2343,7 @@ tissue urothelium
 vendorName lab of Dr. D Sens (University of N. Dakota)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001267&termName=urothelial%20cell%20line
 termId BTO:0001267
-protocol Urothelia_Crawford_protocol.pdf
+protocol Open_Chromatin:Urothelia_Crawford_protocol.pdf
 
 term U87
 tag U87
@@ -6141,10 +6141,18 @@ tag TNFa
 description human recombinant TNF-alpha from eBioscience [product# 14-8329-62] (Snyder)
 type treatment
 
+term  UT189
+tag UT189
+label UT189 E.Coli
+description UT189 E.Coli treatment 1 hour, followed by 24 hour incubation
+type treatment
+
 term vehicle
 tag VEH
 description Charcoal stripped hormone-free FBS for 72 hours (Crawford)
 type treatment
+
+
 
 ### Protocols
 term PCR1x
@@ -6156,12 +6164,6 @@ term PCR2x
 tag PCR2x
 description 2-cycles of PCR (Myers)
 type protocol
-
-term  UT189
-tag UT189
-label UT189 E.Coli
-description UT189 E.Coli treatment 1 hour, followed by 24 hour incubation
-type treatment
 
 term v041610.1
 tag V0416101
