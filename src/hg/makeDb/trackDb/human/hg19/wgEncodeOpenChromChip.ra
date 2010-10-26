@@ -11,7 +11,7 @@ group regulation
 subGroup1 view Views Peaks=Peaks SIG=F-Seq_Density_Signal SIGBO=Raw_Base_Overlap_Signal
 subGroup2 cellType Cell_Line AOSMCs=AoSMC_<i>Serum_Free</i> CHORN=Chorion FIBRO=Fibrobl FIBROP=FibroP GM12878=GM12878_<i>Tier1</i> Gliobla=Gliobla GM12891=GM12891 GM12892=GM12892 GM18507=GM18507 GM19238=GM19238 GM19239=GM19239 GM19240=GM19240 H1=H1-hESC_<i>Tier1</i> H9=H9-hESC HELA=HeLa-S3_<i>Tier2</i> HELAifa=HeLa-S3_<i>IFN&alpha;</i> HELAifg=HeLa-S3_<i>IFN&gamma;</i> HEPG2=HepG2_<i>Tier2</i> HSMM=HSMM HSMMt=HSMMtube HUVEC=HUVEC_<i>Tier2</i> K562=K562_<i>Tier1</i> LHSR=LHSR LHSRa=LHSR_<i>androgen</i> LHSRe=LHSR_<i>estrogen</i> MCF7=MCF-7 MEDULLO=Medullo MELANO=Melano MYOMETR=Myometr NHBE=NHBE NHEK=NHEK PANI=PanIslets PROG=ProgFib
 subGroup3 factor Factor CTCF=CTCF CMYC=c-Myc POL2=Pol2 zCTRL=Input_Control
-subGroup4 treatment Treatment NONE=None VEH=vehicle ESTRO=estrogen
+subGroup4 treatment Treatment NONE=None VEH=vehicle ESTRO=Estradiol;(estrogen)
 sortOrder cellType=+ factor=+ treatment=+ view=+
 dimensions dimensionY=cellType dimensionX=factor 
 dragAndDrop subTracks
