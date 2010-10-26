@@ -186,19 +186,20 @@ sub getGenbankEntry {
   # to the user will help diagnose.  Mark has been maintaining a list of
   # regexes in kent/src/hg/makeDb/genbank/etc/genbank.tbls .
   my @genbankTrackTables = qw(
-    refGene xenoRefGene mgcGenes all_mrna chr*_mrna chr*_intronEst
-    intronEst chr*_est all_est xenoMrna
-    mgcFullMrna mgcFullStatus orfeomeGenes
-    refFlat refLink refSeqAli refSeqStatus refSeqSummary
-    xenoRefFlat xenoRefSeqAli
+    all_est all_mrna ccdsGene ccdsInfo ccdsKgMap ccdsNotes
+    chr*_est chr*_intronEst chr*_mrna intronEst mgcFailedEst mgcFullMrna
+    mgcFullStatus mgcGenes mgcIncompleteMrna mgcPickedEst mgcStatus
+    mgcUnpickedEst orfeomeGenes orfeomeMrna
+    refFlat refGene refLink refSeqAli refSeqStatus refSeqSummary
+    xenoEst xenoMrna xenoRefFlat xenoRefGene xenoRefSeqAli
     );
   my @genbankRequiredTables = qw(
     author cds cell description development gbCdnaInfo
     gbExtFile gbLoaded gbSeq gbStatus geneName imageClone keyword
-    library mrnaClone mrnaOrientInfo organism productName sex source tissue
+    library mrnaClone organism productName sex source tissue
     );
   my @genbankHelpfulTables = qw(
-    estOrientInfo gbMiscDiff gbWarn
+    estOrientInfo gbMiscDiff gbWarn mrnaOrientInfo
     );
   my @genbankTablesInDb = ();
   foreach my $t (@genbankTrackTables) {

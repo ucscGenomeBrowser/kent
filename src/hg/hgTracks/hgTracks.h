@@ -12,6 +12,7 @@
 #include "hui.h"
 #endif
 
+#include "jsHelper.h"
 #include "imageV2.h"
 
 #ifndef CART_H
@@ -1224,9 +1225,6 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
-
-boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
-// Returns TRUE if drag-and-zoom is currently on
 
 #define SMALLBUF 128
 

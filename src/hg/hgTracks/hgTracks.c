@@ -1575,7 +1575,7 @@ if (tdbIsCompositeChild(subtrack->tdb))
             else
                 {
                 if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
-                    subtrack->loadItems(subtrack);
+                        subtrack->loadItems(subtrack);
 
                 limitVisibility(subtrack);
                 }
@@ -2335,39 +2335,47 @@ else
 /* Draw guidelines. */
 if (withGuidelines)
     {
-    //if(theImgBox)
-        // TODO: We should be making transparent data images and a separate background img for guidelines.
-        // This will allow the guidelines to dragscroll while the center labels are static.
-        // NOTE: The background image could easily be a reusable file, based upon zoom level and width.  Height could propbaby easily be stretched.
-        // struct image *bgImg = imgBoxImageAdd(theImgBox,gifBg.forHtml,
-        //    (char *)(dragZooming?"click or drag mouse in base position track to zoom in" : NULL),
-        //    pixWidth, pixHeight,FALSE);
     struct hvGfx *bgImg = hvg; // Default to the one image
+    boolean exists = FALSE;
     if(theImgBox)
         {
         struct tempName gifBg;
+        char base[64];
+        safef(base,sizeof(base),"blueLines%d-%s%d-%d",pixWidth,(revCmplDisp?"r":""),insideX,guidelineSpacing);  // reusable file needs width, leftLabel start and guidelines
         #ifdef USE_PNG
-        trashDirFile(&gifBg, "hgt", "bg", ".png");  // TODO: We could have a few static files by (pixHeight*pixWidth)  And I doubt pixHeight is needed!
-        bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-        #else //ifndef
-        trashDirFile(&gifBg, "hgt", "bg", ".gif");
-        bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
-        #endif //ndef USE_PNG
-        bgImg->rc = revCmplDisp;
+            exists = trashDirReusableFile(&gifBg, "hgt", base, ".png");
+        #else///ifndef
+            exists = trashDirReusableFile(&gifBg, "hgt", base, ".gif");
+        #endif///ndef USE_PNG
+        if (exists && cgiVarExists("hgt.reset")) // exists means don't remake bg image.
+            exists = TRUE;                       // However, for the time being, rebuild when user presses "default tracks"
+
+        if (!exists)
+            {
+            #ifdef USE_PNG
+                bgImg = hvGfxOpenPng(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+            #else///ifndef
+                bgImg = hvGfxOpenGif(pixWidth, pixHeight, gifBg.forCgi, TRUE);
+            #endif///ndef USE_PNG
+            bgImg->rc = revCmplDisp;
+            }
         imgBoxImageAdd(theImgBox,gifBg.forHtml,NULL,pixWidth, pixHeight,TRUE); // Adds BG image
         }
-    int height = pixHeight - 2*gfxBorder;
-    int x;
-    Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
 
-    hvGfxSetClip(bgImg, insideX, gfxBorder, insideWidth, height);
-    y = gfxBorder;
+    if (!exists)
+        {
+        int x;
+        Color lightBlue = hvGfxFindRgb(bgImg, &guidelineColor);
 
-    for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
-        hvGfxBox(bgImg, x, y, 1, height, lightBlue);
-    hvGfxUnclip(bgImg);
-    if(bgImg != hvg)
-        hvGfxClose(&bgImg);
+        hvGfxSetClip(bgImg, insideX, 0, insideWidth, pixHeight);
+        y = gfxBorder;
+
+        for (x = insideX+guidelineSpacing-1; x<pixWidth; x += guidelineSpacing)
+            hvGfxBox(bgImg, x, 0, 1, pixHeight, lightBlue);
+        hvGfxUnclip(bgImg);
+        if(bgImg != hvg)
+            hvGfxClose(&bgImg);
+        }
     }
 
 /* Show ruler at top. */
@@ -4687,7 +4695,7 @@ if (!hideControls)
     /* Display bottom control panel. */
 
 #ifdef TRACK_SEARCH
-    if(isSearchTracksSupported(database))
+    if(isSearchTracksSupported(database,cart))
         {
         cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
         hPrintf(" ");

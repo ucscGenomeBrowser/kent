@@ -177,7 +177,7 @@ puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
 #ifdef TRACK_SEARCH
-if(isSearchTracksSupported(db))
+if(isSearchTracksSupported(db,cart))
     {
     puts("<TD VALIGN=\"TOP\">");
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
