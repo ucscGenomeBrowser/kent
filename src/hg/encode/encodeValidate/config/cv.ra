@@ -3402,7 +3402,7 @@ validation missing
 term Egr-1
 tag EGR1
 type Antibody
-target Egr-1
+target EGR1
 antibodyDescription Rabbit polyclonal, EGR-1 (588).
 targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III. Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its on gene promoter in a dose dependent manner.
 vendorName Santa Cruz Biotech
@@ -3498,7 +3498,7 @@ validation GABP(Immunoblot):human_GABPa_G-1_validation_Myers.pdf
 term GATA-1
 tag GATA1
 type Antibody
-target GATA-1
+target GATA1
 targetDescription GATA binding protein 1 (globin transcription factor 1)
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
@@ -3526,7 +3526,7 @@ validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 term GATA-2
 tag GATA2
 type Antibody
-target GATA-2
+target GATA2
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
@@ -3540,7 +3540,7 @@ validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 term GATA2_(CG2-96)
 tag GATA2CG2
 type Antibody
-target GATA-2
+target GATA2
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
 antibodyDescription Mouse monoclonal IgG.
 vendorName Santa Cruz Biotech
@@ -3677,7 +3677,7 @@ validation H3K4me3(Dot_plot):human_H3K4me3_validation_Bernstein.pdf
 term H3K4me3B
 tag H3K4me3B
 type Antibody
-target H3K4me3B
+target H3K4me3
 displayName H3K4me3
 antibodyDescription Rabbit monoclonal antibody
 targetDescription Histone H3 (tri-methyl K4) marks promoters in chromatin regions
@@ -3710,7 +3710,7 @@ term H3K9acB
 tag H3K9acB
 displayName H3K9ac
 type Antibody
-target H3K9acB
+target H3K9ac
 antibodyDescription Rabbit polyclonal
 targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
 orderUrl http://www.millipore.com/catalogue/item/07-352
@@ -3785,7 +3785,7 @@ validation H3K27me3(Dot_plot):human_H3K27me3_validation_Bernstein.pdf
 term H3K27me3B
 tag H3K27me3B
 type Antibody
-target H3K27me3B
+target H3K27me3
 displayName H3K27me3
 antibodyDescription rabbit monoclonal
 targetDescription Histone H3 (tri-methyl K27) marks repressed chromatin regions
@@ -3817,7 +3817,7 @@ term H3K36me3B
 tag H3K36me3B
 displayName H3K36me3
 type Antibody
-target H3K36me3B
+target H3K36me3
 antibodyDescription rabbit polyclonal
 targetDescription Histone H3 (tri-methyl K36) marks actively transcribed chromatin regions
 orderUrl http://www.cellsignal.com/products/9763.html
@@ -4161,7 +4161,7 @@ validation missing
 term Nrf1
 tag NRF1
 type Antibody
-target Nrf1
+target NRF1
 antibodyDescription Mouse monoclonal, Immunogen corresponding to amino acids 201-286 of Human NRF1
 targetDescription NRF1 is the mammalian homolog to the erect wing (ewg) Drosophila protein that is required for proper development of the central nervous system and indirect flight muscles. In mammals NRF1 functions as a transcription factor that activates the expression of the EIF2S1 (EIF-alpha) gene. This protein links the transcriptional modulation of key metabolic genes to cellular growth and development, and has been implicated in the control of nuclear genes required for respiration, heme biosynthesis and mitochondrialDNA transcription and replication. NRF1 forms a homodimer and binds DNA as a dimer. NRF1 shows a nuclear localization and is expressed widely in embryonic, fetal and adult tissues. Phosphorylation of NRF1 enhances DNA binding.
 vendorName Abcam
@@ -4259,7 +4259,7 @@ validation missing
 term PAX5-C20
 tag PAX5C20
 type Antibody
-target PAX5-C20
+target PAX5
 antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
@@ -4273,7 +4273,7 @@ validation PAX5-C20(Immunoblot):human_PAX5_C-20_validation_Myers.pdf
 term PAX5-N19
 tag PAX5N19
 type Antibody
-target PAX5N19
+target PAX5
 antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
@@ -4825,7 +4825,7 @@ validation missing
 term USF-1
 tag USF1
 type Antibody
-target USF-1
+target USF1
 antibodyDescription Rabbit polyclonal, USF-1 (C-20).
 targetDescription The ubiquitously expressed cellular upstream stimulatory factor (USF) consists of USF-1 and USF-2 polypeptides which independently exhibit site-specific DNA binding and are members of the c-Myc-related family of regulatory factors containing helix-loop-helix domains. USF also contains a leucine repeat that is required for efficient DNA binding. USF was originally identified as an up- stream stimulatory factor that binds the core sequence CACGTG in the adeno- virus late promoter. These findings, together with the demonstration of coop- erative interaction between USF and the initiator-binding protein, TFII-I, raises the possibility of a more general involvement of USF in transcriptional regula- tion. While expression of both USF-1 and USF-2 species is ubiquitous, different ratios of USF homo- and heterodimers are found in different cell types.
 vendorName Santa Cruz Biotech
