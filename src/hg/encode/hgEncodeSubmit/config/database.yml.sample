@@ -30,6 +30,10 @@ development:
   ftpLocal: /some/localftp/path
   ftpUserId: someUid
   ftpGroupId: someGid
+  maxExpanders: 4
+  maxValidators: 3
+  maxLoaders: 2
+  maxServerLoad: 20.0
 
 
 # Warning: The database defined as 'test' will be erased and

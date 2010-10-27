@@ -186,7 +186,7 @@ module PipelineBackground
         if project.project_archives.length == 0
           new_status project, "new"
         else
-          new_status project, "uploaded"
+          new_status project, "expanded"
         end
       else
         yell "Project unload failed."
@@ -334,6 +334,25 @@ module PipelineBackground
       end
     end
 
+    unless new_status project, "uploaded"
+      return
+    end
+
+    #old way: 
+    #expand_background(project_id, filename, allowReloads)
+    # do not chain through immediatly, instead request the next step.
+    new_status project, "expand requested"
+    unless queue_job project.id, "expand_background(#{project.id}, \"#{filename}\", \"#{allowReloads}\")"
+      print "System error - queued_jobs save failed.\n"
+      return
+    end
+
+  end
+
+  def expand_background(project_id, filename, allowReloads)
+  
+    project = Project.find(project_id)
+
     unless new_status project, "expanding"
       return
     end
@@ -341,19 +360,19 @@ module PipelineBackground
     nextArchiveNo = project.archive_count+1
     if prep_one_archive(project, filename, nextArchiveNo)
       if process_uploaded_archive(project, filename)
-        project.status = "uploaded"
+        project.status = "expanded"
       else
-        project.status = "upload failed"
+        project.status = "expand failed"
       end
     else
-        project.status = "upload failed"
+        project.status = "expand failed"
     end
 
     unless new_status project, project.status
       return
     end
 
-    if project.status == "uploaded"
+    if project.status == "expanded"
       #old way: 
       #validate_background(project_id, allowReloads)
       # do not chain through immediatly, instead request the next step.
@@ -363,6 +382,7 @@ module PipelineBackground
         return
       end
     end
+
 
   end
 
@@ -424,7 +444,7 @@ module PipelineBackground
     if project.project_archives.length == 0
       project.status = "new"
     else
-      project.status = "uploaded"
+      project.status = "expanded"
     end
 
     new_status project, project.status
@@ -567,7 +587,7 @@ module PipelineBackground
       if project.project_archives.length == 0
         project.status = "new"
       else
-        project.status = "uploaded"
+        project.status = "expandeded"
       end
       new_status project, project.status
     end

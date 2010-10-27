@@ -78,7 +78,15 @@ print "--- Pipeline Main Background Runner Starting -----------\n"
 print "#{Time.now.strftime("%a %b %e %H:%M:%S %Y")}\n"
 
 # We are currently only throttling the background instances
-# for validating and loading:
+# for expanding, validating, and loading:
+maxExpanders = ActiveRecord::Base.configurations[RAILS_ENV]['maxExpanders']
+if maxExpanders
+  maxExpanders = maxExpanders.to_i
+else  
+  maxExpanders = 4 # default
+end
+print "maxExpanders = #{maxExpanders}\n"
+
 maxValidators = ActiveRecord::Base.configurations[RAILS_ENV]['maxValidators']
 if maxValidators
   maxValidators = maxValidators.to_i
@@ -107,6 +115,7 @@ MAXPROCESSES = 50
 print "MAXPROCESSES = #{MAXPROCESSES}\n"
 
 alljobs = {}
+expanders = {}
 validators = {}
 loaders = {}
 
@@ -146,6 +155,7 @@ while true
       job.save!
       # presumably the counts have gotten out of whack
       alljobs = {}
+      expanders = {}
       validators = {}
       loaders = {}
       print "all lists reset!\n"
@@ -156,11 +166,12 @@ while true
       job.destroy
       job.save!
       # presumably the counts have gotten out of whack
-      print "alljobs(#{alljobs.length}) validators(#{validators.length}) loaders(#{loaders.length})\n"
+      print "alljobs(#{alljobs.length}) expanders(#{expanders.length}) validators(#{validators.length}) loaders(#{loaders.length})\n"
       next 
     end
     if source == "done"
       # remove the project id from running lists
+      expanders.delete(project_id)
       validators.delete(project_id)
       loaders.delete(project_id)
       alljobs.delete(project_id)
@@ -181,7 +192,11 @@ while true
     else  
       doRun = true
       # check to remove the project id from running lists
-      if source.starts_with? "validate_background("
+      if source.starts_with? "expand_background("
+        if expanders.length >= maxExpanders
+          doRun = false
+        end
+      elsif source.starts_with? "validate_background("
         if validators.length >= maxValidators
           doRun = false
         end
@@ -253,7 +268,9 @@ while true
 
       if doRun
         # add the project id to running lists
-        if source.starts_with? "validate_background("
+        if source.starts_with? "expand_background("
+          expanders[project_id] = true
+        elsif source.starts_with? "validate_background("
           validators[project_id] = true
         elsif source.starts_with? "load_background("
           loaders[project_id] = true
