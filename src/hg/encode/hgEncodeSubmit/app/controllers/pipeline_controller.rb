@@ -166,9 +166,21 @@ class PipelineController < ApplicationController
     @dafText = getDafText(@project)
   end
 
+  def download_daf
+    @project = Project.find(params[:id])
+    @dafText = getDafText(@project)
+    render :text => @dafText, :content_type => 'text/plain' 
+  end
+
   def show_ddf
     @project = Project.find(params[:id])
     @ddfText = getDdfText(@project)
+  end
+
+  def download_ddf
+    @project = Project.find(params[:id])
+    @ddfText = getDdfText(@project)
+    render :text => @ddfText, :content_type => 'text/plain' 
   end
 
   def db_load
