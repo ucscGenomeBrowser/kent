@@ -269,7 +269,7 @@ for(; subSpecies; subSpecies = subSpecies->next)
 	    continue;
 	    }
 	if (mc->leftStatus == 0) 
-	    errAbort("zero left status\n");
+	    errAbort("zero left status %s:%d\n",mc->src, mc->start);
 #ifdef NOTNOW
 	if (pushState && (mc->leftStatus == MAF_INSERT_STATUS))
 	    {

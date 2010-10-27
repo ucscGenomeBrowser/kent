@@ -506,7 +506,7 @@ class PipelineController < ApplicationController
       end
     end
 
-    unless extensions.any? {|ext| @filename.ends_with?("." + ext) }
+    unless @extensions.any? {|ext| @filename.ends_with?("." + ext) }
       flash[:error] = "File name <strong>#{@filename}</strong> is invalid. " +
         "Only a compressed archive file (tar.gz, tar.bz2, zip) is allowed."
       return
