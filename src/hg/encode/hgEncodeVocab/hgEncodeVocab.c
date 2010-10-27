@@ -17,19 +17,39 @@
  *    type=TypeName  : Type to display
  *    tier=N         : If type="Cell Line" then this is the tier to display
  *    bgcolor=RRGGBB : Change background color (hex digits)
- *    term=a         : Display row for a single term
- *    TODO: terms=a,b,c    : Display rows for listed terms.  Must use with 'type'.
- *    tag=a          : Display row for a single term, using tag as identifier
- *    TODO:  tags=a,b,c    : Display rows for listed terms, using tags as identifiers.  Must use with 'type'.
+ *    term=a[,b,c]   : Display row for a single term [or comma delimited set of terms]
+ *    tag=a[,b,c]    : Display row for a single term, using tag as identifier [or comma delimited set of tags]
+ *    target=a[,b,c] : Display all antibodies for a single target.  If 'a'[,b,c] is a term, corresponding targets will be looked up and used
+ *    label=a[,b,c]  : Display row for a single term with the specific label.  Must use with 'type' or terms must have same type.
  */
 
-static char const rcsid[] = "$Id: hgEncodeVocab.c,v 1.34 2010/05/28 23:28:06 tdreszer Exp $";
-
 //options that apply to all vocab types
+
+#define TERM_FIELD         "term"
+#define TAG_FIELD          "tag"
+#define TYPE_FIELD         "type"
+#define TARGET_FIELD       "target"
+#define LABEL_FIELD        "label"
+#define TITLE_FIELD        "title"
+
+#define CELL_TYPE          "Cell Line"
+#define ANTIBODY_TYPE      "Antibody"
+#define LOCALIZATION_TYPE  "localization"
+#define LAB_TYPE           "lab"
+#define CONTROL_TYPE       "control"
+#define DATA_TYPE          "dataType"
+
+#define ORGANISM           "organism"
+#define ORG_HUMAN          "human"
+#define ORG_MOUSE          "mouse"
+
+#define DESCRIPTION_FIELD  "description"
 
 static char *termOpt = NULL;
 static char *tagOpt = NULL;
 static char *typeOpt = NULL;
+static char *targetOpt = NULL;
+static char *labelOpt = NULL;
 static char *organismOpt = NULL; // we default to human if nothing else is set
 static char *organismOptLower = NULL; //  version of above used for path names
 static char *cv_file()
@@ -94,58 +114,72 @@ int termCmp(const void *va, const void *vb)
 {
 const struct hash *a = *((struct hash **)va);
 const struct hash *b = *((struct hash **)vb);
-char *typeA = hashMustFindVal((struct hash *)a, "type");
-char *typeB = hashMustFindVal((struct hash *)b, "type");
-char *termA = hashMustFindVal((struct hash *)a, "term");
-char *termB = hashMustFindVal((struct hash *)b, "term");
+char *typeA = hashMustFindVal((struct hash *)a, TYPE_FIELD);
+char *typeB = hashMustFindVal((struct hash *)b, TYPE_FIELD);
 int ret = strcasecmp(typeA, typeB);
 if(ret != 0)
     return ret;
+
+char *targA = hashFindVal((struct hash *)a, TARGET_FIELD);
+char *targB = hashFindVal((struct hash *)b, TARGET_FIELD);
+if (targA != NULL && targB != NULL)
+    {
+    ret = strcasecmp(targA, targB);
+    if(ret != 0)
+        return ret;
+    }
+
+char *termA = hashMustFindVal((struct hash *)a, TERM_FIELD);
+char *termB = hashMustFindVal((struct hash *)b, TERM_FIELD);
 return (strcasecmp(termA, termB));
 }
 
 void doTypeHeader(char *type, char *cellOrg)
 {
-if ((organismOptLower != NULL) && !sameString(cellOrg, organismOptLower))
+if ((organismOptLower != NULL) && !sameWord(cellOrg, organismOptLower))
     errAbort("specified organism %s not consistent with cell type which is org %s\n",
         organismOpt, cellOrg);
 
-if (sameString(type,"Cell Line"))
+// NOTE:  All tables must have the same number of columns in order to allow 'control' to be swapped in  Use colSapn= on description column
+
+if (sameWord(type,CELL_TYPE))
    {
+    printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
+
     /* Venkat: To differentiate between the print statments of Mouse and Human Cell Lines */
-    if(sameString(cellOrg,"human"))
+    if(sameWord(cellOrg,ORG_HUMAN))
          {
-   	 printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH>",type);
+   	 printf("  <TH>%s</TH><TH>Tier</TH><TH>Description</TH><TH>Lineage</TH><TH>Karyotype</TH><TH>Sex</TH><TH>Documents</TH><TH>Vendor ID</TH><TH>Term ID</TH><TH><I>Label</I></TH>",type);
    	 }
-      else 
+      else
 	 {
-    	  printf("  <TH>Source</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source Lab </TH><TH>Term ID</TH>");
+    	  printf("  <TH>Source</TH><TH colspan=3>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source Lab </TH><TH>Term ID</TH><TH><I>Label</I>");
          // printf("  <TH>%s</TH><TH>Description</TH><TH>Category</TH><TH>Sex</TH><TH>Documents</TH><TH>Source</TH><TH>Term ID</TH>",type)
 	 }
     }
-else if (sameString(type,"Antibody"))
+else if (sameWord(type,ANTIBODY_TYPE))
     {
-    printf("  <TH>%s</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH>",type);
+    printf("  <TH>Target</TH><TH>%s</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH><TH><I>Label</I></TH>",type);
     }
-else if (sameString(type,"ripAntibody"))
+else if(sameWord(type,LAB_TYPE))
     {
-    printf("  <TH>%s</TH><TH>Antibody Description</TH><TH>Target Description</TH><TH>Vendor ID</TH>",type);
+    printf("  <TH>%s</TH><TH colspan=5>Institution</TH><TH>Lab PI</TH><TH>Grant PI</TH><TH>Organism</TH><TH><I>Label</I></TH>",type);
     }
-else if (sameString(type,"ripTgtProtein"))
+else if(sameWord(type,DATA_TYPE))
     {
-    printf("  <TH>%s</TH><TH>Alternative Symbols</TH><TH>Description</TH>",type);
+    printf("  <TH>Data Type</TH><TH colspan=8>Description</TH><TH><I>Label</I></TH>");
     }
 else
     {
     char *caplitalized = cloneString(type);
     toUpperN(caplitalized,1);
 
-    if (sameString(type,"localization"))
+    if (sameWord(type,LOCALIZATION_TYPE))
         {
-        printf("  <TH>%s</TH><TH>Description</TH><TH>GO ID</TH>",caplitalized);
+        printf("  <TH>%s</TH><TH colspan=7>Description</TH><TH>GO ID</TH><TH><I>Label</I></TH>",caplitalized);
         }
     else
-        printf("  <TH>%s</TH><TH>Description</TH>",caplitalized);
+        printf("  <TH>%s</TH><TH colspan=8>Description</TH><TH><I>Label</I></TH>",caplitalized); //  colspan=8: Control term might be mixed in with other (e.g. Antibody)
 
     freeMem(caplitalized);
     }
@@ -153,159 +187,13 @@ else
 
 boolean doTypeRow(struct hash *ra, char *org)
 {
-char *term = (char *)hashMustFindVal(ra, "term");
-char *type = (char *)hashMustFindVal(ra, "type");
+char *term = (char *)hashMustFindVal(ra, TERM_FIELD);
+char *type = (char *)hashMustFindVal(ra, TYPE_FIELD);
 char *s, *t, *u;
 
-if (sameString(type,"Antibody"))
+if (sameWord(type,CELL_TYPE))
     {
-    /* if the type is Antibody then
-     * print "term targetDescription antibodyDescription" */
-
-    puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
-    s = hashFindVal(ra, "targetDescription");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-    s = hashFindVal(ra, "antibodyDescription");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
- 
-    /* In the antibody cv, there may be multiple sources of the antibody.  In this text we allow the vendorName, 
-     * vendorId, and vendorUrls to be a semi-colon separated list to account for this in the display */
- 
-    struct slName *sList;
-    struct slName *tList;
-    struct slName *uList;
-    struct slName *currentS;
-    struct slName *currentT;
-    struct slName *currentU;
-
-
-    /* For vendorName, vendorId, and orderUrl, grab the string and separate it into a list based on ';' */  
-    s = hashFindVal(ra, "vendorName");
-    sList =  slNameListFromString (s, ';') ;
-
-    t = hashFindVal(ra, "vendorId");
-    tList =  slNameListFromString (t, ';') ;
-
-    u = hashFindVal(ra, "orderUrl");
-    uList =  slNameListFromString (u, ';') ;
-    
-    /* if the number of vendorNames and vendorId's do not match, error */
-    if (slCount( sList) != slCount( tList))
-	errAbort("The number of antibody vendors must equal number of antibody vender ID's");
-    printf("  <TD>");
-
-    /* while there are items in the list of vendorNames, print the vendorName and vendorID together with the url if present */
-    for (currentS=sList, currentT=tList, currentU=uList; (currentS != NULL) ; currentS = currentS->next, currentT = currentT->next) {
-        /* if there is a url, add it as a link */
-	if (currentU != NULL)
-	    printf("<A TARGET=_BLANK HREF=%s>", currentU->name);
-        /* print the current vendorName - vendorId pair */
-	printf("%s %s", currentS->name , currentT->name );
-        /* if there is a url, finish the link statement and increment the currentU counter */
-	if (currentU)
-	    {
-	    printf("</A>");
-            currentU=currentU->next;
-	    }
-	puts("<BR>");
-        
-	}
-    puts("</TD>");
-
-    /* Free the memory */
-    slFreeList (&sList);
-    slFreeList (&tList);
-    slFreeList (&uList);
-    
-
-    s = hashFindVal(ra, "lab");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-
-    // add links to validation doc if it exists
-    printf("  <TD>");
-    documentLink(ra,term,"validation","/ENCODE/validation/antibodies/",NULL,FALSE);
-    printf("  &nbsp;</TD>\n");
-
-    s = hashFindVal(ra, "lots");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-
-    t = hashFindVal(ra, "targetId");
-    u = hashFindVal(ra, "targetUrl");
-    printf("  <TD>");
-    if (u)
-        printf("<A TARGET=_BLANK HREF=%s>", u);
-    printf("%s", t ? t : "&nbsp;");
-    if (u)
-        printf("</A>");
-    puts("</TD>");
-
-    puts("</TR>");
-    }
-
-    /* Ideally, Cricket will be removing all of the ripAntibody and ripTgtProtien
-     * code after this is tested a bit */
-
-else if (sameString(type,"ripAntibody"))
-    {
-    puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
-    s = hashFindVal(ra, "antibodyDescription");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-    s = hashFindVal(ra, "targetDescription");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-    s = hashFindVal(ra, "vendorName");
-    t = hashFindVal(ra, "vendorId");
-    u = hashFindVal(ra, "orderUrl");
-    printf("  <TD>");
-    if (u)
-        printf("<A TARGET=_BLANK HREF=%s>", u);
-    printf("%s %s", s ? s : "&nbsp;", t ? t : "&nbsp;");
-    if (u)
-        printf("</A>");
-    puts("</TD>");
-
-    puts("</TR>");
-    }
-
-else if (sameString(type,"ripTgtProtein"))
-    {
-    puts("<TR>");
-    s = hashFindVal(ra, "url");
-    if (s)
-	printf("  <TD><A TARGET=_BLANK HREF=\"%s\">%s</A></TD>\n", s, term);
-    else
-	printf("  <TD>%s</TD>\n", term);
-    s = hashFindVal(ra, "alternativeSymbols");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-    s = hashFindVal(ra, "description");
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
-    puts("</TR>");
-    } 
-
-else if (sameString(type,"localization"))
-    {
-    puts("<TR>");
-    printf("  <TD>%s</TD>\n", term);
-    s = hashMustFindVal(ra, "description");
-    printf("  <TD>%s</TD>\n", s);
-    s = hashFindVal(ra, "termId");
-    u = hashFindVal(ra, "termUrl");
-    printf("  <TD>");
-    if (u)
-        printf("<A TARGET=_BLANK HREF=%s>", u);
-    printf("%s", s ? s : "&nbsp;");
-    if (u)
-        printf("</A>");
-    puts("</TD>");
-
-    puts("</TR>");
-    }
-else if (sameString(type,"Cell Line"))
-    {
-    printf("<!-- Cell Line table: contains links to protocol file and vendor description page -->");
-
-    s = hashFindVal(ra, "organism");
+    s = hashFindVal(ra, ORGANISM);
     if (s != NULL)
         {
         char *cellOrg = cloneString(s);
@@ -314,11 +202,11 @@ else if (sameString(type,"Cell Line"))
             return FALSE;
         }
 
-    // pathBuffer for new protocols not in human    
+    // pathBuffer for new protocols not in human
     char pathBuffer[PATH_LEN];
     safef(pathBuffer, sizeof(pathBuffer), "/ENCODE/protocols/cell/%s/",org);
 
-    if (sameString(org, "human"))
+    if (sameWord(org, ORG_HUMAN))
 	{
 	if (cgiOptionalInt("tier",0))
 	    {
@@ -352,7 +240,7 @@ else if (sameString(type,"Cell Line"))
 
 	s = hashFindVal(ra, "tier");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
-	s = hashFindVal(ra, "description");
+	s = hashFindVal(ra, DESCRIPTION_FIELD);
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "lineage");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
@@ -386,6 +274,11 @@ else if (sameString(type,"Cell Line"))
 	if (u)
 	    printf("</A>");
 	puts("</TD>");
+        s = hashFindVal(ra, LABEL_FIELD);
+        if (s != NULL)
+            printf("  <TD><I>%s</I></TD>\n", s );
+        else
+            printf("  <TD>%s</TD>\n", term );
 	puts("</TR>");
 	}
     else	// non-human cell type
@@ -394,8 +287,8 @@ else if (sameString(type,"Cell Line"))
 
 	printf("  <TD>%s</TD>\n", term);
 
-	s = hashFindVal(ra, "description");
-	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
+	s = hashFindVal(ra, DESCRIPTION_FIELD);
+	printf("  <TD colspan=3>%s</TD>\n", s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "category");
 	printf("  <TD>%s</TD>\n", s ? s : "&nbsp;" );
 	s = hashFindVal(ra, "sex");
@@ -430,27 +323,198 @@ else if (sameString(type,"Cell Line"))
 	if (u)
 	    printf("</A>");
 	puts("</TD>");
+        s = hashFindVal(ra, LABEL_FIELD);
+        if (s != NULL)
+            printf("  <TD><I>%s</I></TD>\n", s );
+        else
+            printf("  <TD>%s</TD>\n", term );
 	puts("</TR>");
 
 	}
     }
+else if (sameWord(type,ANTIBODY_TYPE))
+    {
+    /* if the type is Antibody then
+     * print "term target targetDescription antibodyDescription" */
+
+    puts("<TR>");
+    s = hashFindVal(ra, "target");                  // target is first
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "targetDescription");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+    s = hashFindVal(ra, "antibodyDescription");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
+    /* In the antibody cv, there may be multiple sources of the antibody.  In this text we allow the vendorName,
+     * vendorId, and vendorUrls to be a semi-colon separated list to account for this in the display */
+
+    struct slName *sList;
+    struct slName *tList;
+    struct slName *uList;
+    struct slName *currentS;
+    struct slName *currentT;
+    struct slName *currentU;
+
+
+    /* For vendorName, vendorId, and orderUrl, grab the string and separate it into a list based on ';' */
+    s = hashFindVal(ra, "vendorName");
+    sList =  slNameListFromString (s, ';') ;
+
+    t = hashFindVal(ra, "vendorId");
+    tList =  slNameListFromString (t, ';') ;
+
+    u = hashFindVal(ra, "orderUrl");
+    uList =  slNameListFromString (u, ';') ;
+
+    /* if the number of vendorNames and vendorId's do not match, error */
+    if (slCount( sList) != slCount( tList))
+        errAbort("The number of antibody vendors must equal number of antibody vender ID's");
+    printf("  <TD>");
+
+    /* while there are items in the list of vendorNames, print the vendorName and vendorID together with the url if present */
+    for (currentS=sList, currentT=tList, currentU=uList; (currentS != NULL) ; currentS = currentS->next, currentT = currentT->next) {
+        /* if there is a url, add it as a link */
+        if (currentU != NULL)
+            printf("<A TARGET=_BLANK HREF=%s>", currentU->name);
+        /* print the current vendorName - vendorId pair */
+        printf("%s %s", currentS->name , currentT->name );
+        /* if there is a url, finish the link statement and increment the currentU counter */
+        if (currentU)
+            {
+            printf("</A>");
+            currentU=currentU->next;
+            }
+        puts("<BR>");
+
+        }
+    puts("</TD>");
+
+    /* Free the memory */
+    slFreeList (&sList);
+    slFreeList (&tList);
+    slFreeList (&uList);
+
+
+    s = hashFindVal(ra, "lab");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
+    // add links to validation doc if it exists
+    printf("  <TD>");
+    documentLink(ra,term,"validation","/ENCODE/validation/antibodies/",NULL,FALSE);
+    printf("  &nbsp;</TD>\n");
+
+    s = hashFindVal(ra, "lots");
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
+
+    t = hashFindVal(ra, "targetId");
+    u = hashFindVal(ra, "targetUrl");
+    printf("  <TD>");
+    if (u)
+        printf("<A TARGET=_BLANK HREF=%s>", u);
+    printf("%s", t ? t : "&nbsp;");
+    if (u)
+        printf("</A>");
+    puts("</TD>");
+
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
+    else
+        printf("  <TD>%s</TD>\n", term );
+    puts("</TR>");
+    }
+else if(sameWord(type,LAB_TYPE))
+    {
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "labInst");
+    printf("  <TD colspan=5>%s</TD>\n", s?s:"&nbsp;");
+    s = hashFindVal(ra, "labPiFull");
+    printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
+    s = hashFindVal(ra, "grantPi");
+    printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
+    s = hashFindVal(ra, "organism");
+    printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
+    else
+        printf("  <TD>%s</TD>\n", term );
+    }
+else if (sameWord(type,LOCALIZATION_TYPE))
+    {
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashMustFindVal(ra, DESCRIPTION_FIELD);
+    printf("  <TD>%s</TD>\n", s);
+    s = hashFindVal(ra, "termId");
+    u = hashFindVal(ra, "termUrl");
+    printf("  <TD>");
+    if (u)
+        printf("<A TARGET=_BLANK HREF=%s>", u);
+    printf("%s", s ? s : "&nbsp;");
+    if (u)
+        printf("</A>");
+    puts("</TD>");
+
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
+    else
+        printf("  <TD>%s</TD>\n", term );
+    puts("</TR>");
+    }
 else
     {
-    s = hashFindVal(ra, "description");
-    if(s != NULL)
-        {
-        puts("<TR>");
-        printf("  <TD>%s</TD>\n", term);
-        printf("  <TD colspan=40>%s</TD>\n", s); // Control term might be printed with other (e.g. Antibody)
-        puts("</TR>");
-        }
+    s = hashFindVal(ra, DESCRIPTION_FIELD);
+    if(s == NULL)
+        s = hashFindVal(ra, TITLE_FIELD);
+    if(s == NULL)
+        s = hashFindVal(ra, LABEL_FIELD);
+
+    //printf("  <TH>%s</TH><TH>Description</TH>",type);
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    printf("  <TD colspan=8>%s</TD>\n", s?s:"&nbsp;"); //  colspan=8: Control term might be mixed in with other (e.g. Antibody)
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
     else
-        {
-        printf("<TR>\n  <TD>%s</TD>\n  <TD>Unrecognised term</TD>\n</TR>\n", term);
-        errAbort("Error: Unrecognised type (%s)\n", type);
-        }
+        printf("  <TD>%s</TD>\n", term );
     }
 return TRUE;
+}
+
+static char **convertAntibodiesToTargets(struct hash *cvHash,char **requested,int requestCount)
+/* Convers requested terms from antibodies to their corresponding targets */
+{
+struct hashCookie hc = hashFirst(cvHash);
+struct hashEl *hEl;
+struct hash *ra;
+char **targets = needMem(sizeof(char *)*requestCount);
+int ix = 0;
+
+assert(requested != NULL);
+
+while ((hEl = hashNext(&hc)) != NULL)
+    {
+    ra = (struct hash *)hEl->val;
+    ix = stringArrayIx(hashMustFindVal(ra, TERM_FIELD),requested,requestCount);
+    if (ix != -1 && targets[ix] == NULL) // but not yet converted to antibody
+        {
+        targets[ix] = cloneString(hashMustFindVal(ra, TARGET_FIELD)); // Must have a target
+        }
+    }
+
+// At this point every term should have been found
+for(ix=0;ix<requestCount;ix++)
+    {
+    if (targets[ix] == NULL)
+        errAbort("Failed to find antibody %s=%s\n",TERM_FIELD,requested[ix]);
+    }
+
+return targets;
 }
 
 static char *normalizeType(char *type)
@@ -460,15 +524,16 @@ static char *normalizeType(char *type)
 if ((sameWord(type,"Cell Line"))
 ||  (sameWord(type,"cellLine" ))
 ||  (sameWord(type,"Cell Type"))
-||  (sameWord(type,"cellType" )))
-    return cloneString("Cell Line");
+||  (sameWord(type,"cellType"))
+||  (sameWord(type,"Cell" )))  // sameWord is case insensitive
+    return cloneString(CELL_TYPE);
 else if (sameWord(type,"Factor"))
-    return cloneString("Antibody");
+    return cloneString(ANTIBODY_TYPE);
 
 return type;
 }
 
-static char *findType(struct hash *cvHash,char **requested,int requestCount,char *termOrTag, char **org)
+static char *findType(struct hash *cvHash,char **requested,int requestCount,char **queryBy, char **org,boolean silent)
 /* returns the type that was requested or else the type associated with the term requested */
 {
 struct hashCookie hc = hashFirst(cvHash);
@@ -476,56 +541,81 @@ struct hashEl *hEl;
 struct hash *ra;
 char *type = typeOpt;
 
-if (requested != NULL) // if no type, finds it from requested terms.  Will validate that terms match type
-    {
+if (requested != NULL) // if no type, find it from requested terms.  Will validate that terms match type
+{                  // NOTE: Enter here even if there is a type, to confirm the type
     while ((hEl = hashNext(&hc)) != NULL)
         {
         ra = (struct hash *)hEl->val;
-        int ix = stringArrayIx(hashMustFindVal(ra, termOrTag),requested,requestCount);
-        if(ix != -1) // found
+        char *val = hashFindVal(ra, *queryBy);
+        if (val != NULL)
             {
-            char *thisType = hashMustFindVal(ra, "type");
-            char *thisOrg = hashFindVal(ra, "organism");
-            if(type == NULL)
+            int ix = stringArrayIx(val,requested,requestCount);
+            if(ix != -1) // found
                 {
-                if (thisOrg != NULL)
+                char *thisType = hashMustFindVal(ra, TYPE_FIELD);
+                char *thisOrg = hashFindVal(ra, ORGANISM);
+                if(type == NULL)
                     {
-                    char *retOrg = cloneString(thisOrg);
-                    *org = strLower(retOrg);
+                    if (thisOrg != NULL)
+                        {
+                        *org = strLower(cloneString(thisOrg));
+                        }
+                    type = thisType;
                     }
-                type = thisType;
+                else if(differentWord(type,thisType))
+                    {
+                    if(sameWord(CONTROL_TYPE,type))
+                        type = thisType;
+                    else if (differentWord(CONTROL_TYPE,thisType))
+                        errAbort("Error: Requested %s of type '%s'.  But '%s' has type '%s'\n",
+                                *queryBy,type,requested[ix],thisType);
+                    }
                 }
-
-            else if(differentWord(type,thisType) && differentWord("control",thisType))  // ignores terms not in hash, but catches this:
-                errAbort("Error: Requested %ss of type '%s'.  But '%s' has type '%s'\n",
-                         termOrTag,type,requested[ix],thisType);
             }
         }
     }
-if (type == NULL)    // Still not type? abort
-    errAbort("Error: Required 'type', 'tag', or 'term' argument not found\n");
+if (type == NULL && sameWord(*queryBy,TERM_FIELD))    // Special case of term becoming target
+    {
+    char *queryByTarget = TARGET_FIELD;
+    type = findType(cvHash,requested,requestCount,&queryByTarget,org,TRUE); // silent here
+    if (type != NULL)
+        *queryBy = queryByTarget;
+    }
+if (type == NULL && !silent)    // Still not type? abort
+    errAbort("Error: Required %s=%s ['%s', '%s', '%s', '%s' or '%s'] argument not found\n",
+             *queryBy,requested != NULL?*requested:"?", TYPE_FIELD, TERM_FIELD, TAG_FIELD, TARGET_FIELD, LABEL_FIELD);
+
 return normalizeType(type);
 }
 
 void doMiddle()
 {
-struct hash *cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
+struct hash *cvHash = raReadAll(cgiUsualString("ra", cv_file()), TERM_FIELD);
 struct hashCookie hc = hashFirst(cvHash);
 struct hashEl *hEl;
 struct slList *termList = NULL;
 struct hash *ra;
-char *type;
 int totalPrinted = 0;
 
 // Prepare an array of selected terms (if any)
 int requestCount = 0;
 char **requested = NULL;
 char *requestVal = termOpt;
-char *termOrTag = "term";
+char *queryBy = TERM_FIELD;
 if (tagOpt)
     {
     requestVal = tagOpt;
-    termOrTag = "tag";
+    queryBy = TAG_FIELD;
+    }
+else if (targetOpt)
+    {
+    requestVal = targetOpt;
+    queryBy = TERM_FIELD;  // request target is special case: look up term, convert to target, display target
+    }
+else if (labelOpt)
+    {
+    requestVal = labelOpt;
+    queryBy = LABEL_FIELD;
     }
 if (requestVal)
     {
@@ -535,34 +625,59 @@ if (requestVal)
     chopByChar(requestVal,',',requested,requestCount);
     }
 
-puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
-puts("<TR style=\"background:#D9E4F8\">");
 char *org = NULL;
 // if the org is specified in the type (eg. cell line)
 // then use that for the org, otherwise use the command line option,
 // otherwise use human.
-type = findType(cvHash,requested,requestCount,termOrTag, &org);
+char *type = findType(cvHash,requested,requestCount,&queryBy, &org, FALSE);
 if (org == NULL)
     org = organismOptLower;
 if (org == NULL)
-    org = "human";
+    org = ORG_HUMAN;
 
-doTypeHeader(type, org);
-puts("</TR>");
+// Special logic for requesting antibody by target
+if (targetOpt && requestCount > 0 && sameWord(queryBy,TERM_FIELD) && sameWord(type,ANTIBODY_TYPE))
+    {
+    // Several antibodies may have same target.
+    // requested target={antibody} and found antibody
+    // Must now convert each of the requested terms to is target before displaying all targets with this term
+    char **targets = convertAntibodiesToTargets(cvHash,requested,requestCount);
+    if (targets != NULL)
+        {
+        freeMem(requested);
+        requested = targets;
+        queryBy = TARGET_FIELD;
+        }
+    }
 
 // Get just the terms that match type and requested, then sort them
 while ((hEl = hashNext(&hc)) != NULL)
     {
     ra = (struct hash *)hEl->val;
-    char *thisType = hashMustFindVal(ra,"type");
-    if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,"control")))
+    char *thisType = hashMustFindVal(ra,TYPE_FIELD);
+    if(differentWord(thisType,type) && (requested == NULL || differentWord(thisType,CONTROL_TYPE)))
         continue;
-    // Skip all rows that do not match term or tag if specified
-    if(requested && -1 == stringArrayIx(hashMustFindVal(ra, termOrTag),requested,requestCount))
-        continue;
+    // Skip all rows that do not match queryBy param if specified
+    if(requested)
+        {
+        char *val = hashFindVal(ra, queryBy);
+        if (val == NULL)
+            continue;
+        if (-1 == stringArrayIx(val,requested,requestCount))
+            continue;
+        }
     slAddTail(&termList, ra);
     }
+if (slCount(termList) == 0)
+    {
+    errAbort("Error: Unrecognised type (%s)\n", type);
+    }
 slSort(&termList, termCmp);
+
+puts("<TABLE BORDER=1 BGCOLOR=#FFFEE8 CELLSPACING=0 CELLPADDING=2>");
+puts("<TR style=\"background:#D9E4F8\">");
+doTypeHeader(type, org);
+puts("</TR>");
 
 // Print out the terms
 while((ra = slPopHead(&termList)) != NULL)
@@ -579,10 +694,12 @@ int main(int argc, char *argv[])
 /* Process command line */
 {
 cgiSpoof(&argc, argv);
-termOpt = cgiOptionalString("term");
-tagOpt = cgiOptionalString("tag");
-typeOpt = cgiOptionalString("type");
-organismOpt = cgiUsualString("organism", organismOpt);
+termOpt = cgiOptionalString(TERM_FIELD);
+tagOpt = cgiOptionalString(TAG_FIELD);
+typeOpt = cgiOptionalString(TYPE_FIELD);
+targetOpt = cgiOptionalString(TARGET_FIELD);
+labelOpt = cgiOptionalString(LABEL_FIELD);
+organismOpt = cgiUsualString(ORGANISM, organismOpt);
 if (organismOpt != NULL)
     {
     organismOptLower=cloneString(organismOpt);
