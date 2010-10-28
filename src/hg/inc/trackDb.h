@@ -296,6 +296,9 @@ void trackDbOverridePriority(struct hash *tdHash, char *priorityRa);
 struct trackDb *trackDbFromRa(char *raFile);
 /* Load track info from ra file into list. */
 
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf);
+/* Load track info from ra file already opened as a lineFile into list. */
+
 void trackDbPolish(struct trackDb *bt);
 /* Fill in missing values with defaults. */
 

@@ -259,10 +259,10 @@ else
     return NULL;
 }
 
-struct trackDb *trackDbFromRa(char *raFile)
-/* Load track info from ra file into list. */
+struct trackDb *trackDbFromOpenRa(struct lineFile *lf)
+/* Load track info from ra file already opened as a lineFile into list. */
 {
-struct lineFile *lf = netLineFileOpen(raFile);
+char *raFile = lf->fileName;
 char *line, *word;
 struct trackDb *btList = NULL, *bt;
 boolean done = FALSE;
@@ -318,10 +318,17 @@ for (;;)
 	trackDbAddInfo(bt, word, line, lf);
 	}
     }
-lineFileClose(&lf);
-
 slReverse(&btList);
 return btList;
+}
+
+struct trackDb *trackDbFromRa(char *raFile)
+/* Load track info from ra file into list. */
+{
+struct lineFile *lf = netLineFileOpen(raFile);
+struct trackDb *tdbList = trackDbFromOpenRa(lf);
+lineFileClose(&lf);
+return tdbList;
 }
 
 struct hash *trackDbHashSettings(struct trackDb *tdb)
