@@ -10,8 +10,10 @@ GITUP = ${GIT} pull
 FIND=gitFiles
 
 user:
-	${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink
-	cd style && echo style && ${MAKE} user
+	if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink && \
+	    cd style && echo style && ${MAKE} user; \
+	fi
 
 alpha:
 	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
@@ -74,3 +76,10 @@ doSymLink: doRsync
 	ln -sfn /gbdb/hg19/RNA-img ${destDir}/RNA-img/hg19
 	ln -sfn /gbdb/mm9/RNA-img  ${destDir}/RNA-img/mm9
 	ln -sfn /gbdb/rn4/RNA-img  ${destDir}/RNA-img/rn4
+
+# Other targets that may be invoked by ../makefile:
+compile:
+
+install: alpha
+
+clean:

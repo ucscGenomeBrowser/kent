@@ -76,7 +76,7 @@ char *getCurrentDir()
 static char dir[PATH_LEN];
 
 if (getcwd( dir, sizeof(dir) ) == NULL )
-    errnoAbort("can't get current directory");
+    errnoAbort("getCurrentDir: can't get current directory");
 return dir;
 }
 
@@ -84,7 +84,7 @@ void setCurrentDir(char *newDir)
 /* Set current directory.  Abort if it fails. */
 {
 if (chdir(newDir) != 0)
-    errnoAbort("can't to set current directory: %s", newDir);
+    errnoAbort("setCurrentDir: can't to set current directory: %s", newDir);
 }
 
 boolean maybeSetCurrentDir(char *newDir)
@@ -496,7 +496,7 @@ char *getUser()
 uid_t uid = geteuid();
 struct passwd *pw = getpwuid(uid);
 if (pw == NULL)
-    errnoAbort("can't get user name for uid %d", (int)uid);
+    errnoAbort("getUser: can't get user name for uid %d", (int)uid);
 return pw->pw_name;
 }
 
@@ -505,7 +505,7 @@ int mustFork()
 {
 int childId = fork();
 if (childId == -1)
-    errnoAbort("Unable to fork");
+    errnoAbort("mustFork: Unable to fork");
 return childId;
 }
 
@@ -527,7 +527,7 @@ if (tcsetattr(STDIN_FILENO, TCSANOW, &attr) == -1)
 
 /* Read one byte */
 if (read(STDIN_FILENO,&c,1) != 1)
-   errnoAbort("I/O error");
+   errnoAbort("rawKeyIn: I/O error");
 
 /* Put back terminal to how it was. */
 attr.c_lflag = old;
@@ -541,7 +541,7 @@ boolean isPipe(int fd)
 {
 struct stat buf;
 if (fstat(fd, &buf) < 0)
-    errnoAbort("fstat failed");
+    errnoAbort("isPipe: fstat failed");
 return S_ISFIFO(buf.st_mode);
 }
 

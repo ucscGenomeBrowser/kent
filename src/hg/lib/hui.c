@@ -5758,12 +5758,12 @@ char *rootLabel = labelRoot(label,&suffix);
 
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
-        int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
+        int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 10;
         char *link=needMem(sz);
-        safef(link,sz,VOCAB_LINK,words[0],words[ix],rootLabel,rootLabel);
+        safef(link,sz,VOCAB_LINK,words[0],"term",words[ix],rootLabel,rootLabel);
         if(suffix)
             safecat(link,sz,suffix);
         freeMem(words[0]);
@@ -5779,9 +5779,9 @@ for(ix=1;ix<count && !found;ix++)
             if(cvTerm != NULL)
                 {
                 char *encodedTerm = cgiEncode((char *)cvTerm);
-                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 2;
+                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 10;
                 char *link=needMem(sz);
-                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,cvTerm,rootLabel);
+                safef(link,sz,VOCAB_LINK,words[0],(sameWord(cvSetting,"antibody")?"target":"term"),encodedTerm,cvTerm,rootLabel);
                 if(suffix)
                     safecat(link,sz,suffix);
                 freeMem(words[0]);
@@ -6015,9 +6015,6 @@ boolean found=FALSE;
 if((count = chopByWhite(vocab, words,15)) <= 1) // vocab now contains just the file name
     return cloneString(members->groupTitle);
 
-#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=%s&term=\""
-#define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
-struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab);
 char *mdbVar = NULL;
 
 // Find mdb var to look up based upon the groupTag and cv setting
@@ -6036,10 +6033,13 @@ for(ix=1;ix<count && !found;ix++)
     }
 if(mdbVar == NULL)
     {
-    dyStringFree(&dyLink);
     freeMem(vocab);
     return cloneString(members->groupTitle);
     }
+
+#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=%s&%s=\""
+#define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
+struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab,(sameWord(mdbVar,"antibody")?"target":"term"));
 
 // Now build the comma delimited string of mdb vals (all have same mdb var)
 boolean first = TRUE;

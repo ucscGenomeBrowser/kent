@@ -52,6 +52,7 @@ static char *computeFrames(struct bed *bed, int *retStartIndx, int *retStopIndx)
 char *frames = needMem(bed->blockCount);
 boolean gotFirstCds = FALSE;
 int nextPhase = 0, startIndx = 0, stopIndx = 0;
+// If lack of thick region has been represented this way, fix:
 if (bed->thickStart == 0 && bed->thickEnd == 0)
     bed->thickStart = bed->thickEnd = bed->chromStart;
 int i;
@@ -62,11 +63,9 @@ for (i=0;  i < bed->blockCount;  i++)
     int exonEnd = exonStart + bed->blockSizes[j];
     if ((exonStart < bed->thickEnd) && (exonEnd > bed->thickStart))
 	{
-	int cdsSize = exonEnd - exonStart;
-	if (exonEnd > bed->thickEnd)
-	    cdsSize = bed->thickEnd - exonStart;
-	else if (exonStart < bed->thickStart)
-	    cdsSize = exonEnd - bed->thickStart;
+	int cdsS = max(exonStart, bed->thickStart);
+	int cdsE = min(exonEnd, bed->thickEnd);
+	int cdsSize = cdsE - cdsS;
 	if (! gotFirstCds)
 	    {
 	    gotFirstCds = TRUE;
@@ -103,17 +102,18 @@ if (offset < 0 && simpleAnswer < exonStart)
     {
     if (exonIndx < 1)
 	errAbort("offsetToGenomic: need previous exon, but given index of %d", exonIndx);
-    int extra = exonStart - simpleAnswer;
+    int stillNeeded = simpleAnswer - exonStart;
     int prevExonEnd = bed->chromStart + bed->chromStarts[exonIndx-1] + bed->blockSizes[exonIndx-1];
-    return prevExonEnd - extra;
+    return offsetToGenomic(bed, exonIndx-1, prevExonEnd, stillNeeded);
     }
 else if (offset > 0 && simpleAnswer > exonEnd)
     {
     if (exonIndx >= bed->blockCount - 1)
 	errAbort("offsetToGenomic: need next exon, but given index of %d (>= %d)",
 		 exonIndx, bed->blockCount - 1);
-    int extra = simpleAnswer - exonEnd;
-    return (bed->chromStart + bed->chromStarts[exonIndx+1] + extra);
+    int stillNeeded = simpleAnswer - exonEnd;
+    int nextExonStart = bed->chromStart + bed->chromStarts[exonIndx+1];
+    return offsetToGenomic(bed, exonIndx+1, nextExonStart, stillNeeded);
     }
 return simpleAnswer;
 }
@@ -122,8 +122,7 @@ static void addCdsStartStop(struct bed *bed, char *source, int exonCdsStart, int
 			    char *frames, int exonIndx, int cdsStartIndx, int cdsStopIndx,
 			    boolean gtf2StopCodons, char *txName)
 /* Output a CDS record for the trimmed CDS portion of exonIndx, and a start_codon or
- * stop_codon if applicable. Return the number of bases in the next exon (exonIndx+1)
- * that are covered by the stop_codon, in case we need to exclude those from next CDS. */
+ * stop_codon if applicable. */
 {
 boolean isRc = (bed->strand[0] == '-');
 /* start_codon (goes first for + strand) overlaps with CDS */
@@ -132,8 +131,15 @@ if ((exonIndx == cdsStartIndx) && !isRc)
     int startCodonEnd = offsetToGenomic(bed, exonIndx, exonCdsStart, 3);
     addGffLineFromBed(bed, source, "start_codon", exonCdsStart, startCodonEnd, '.', txName);
     }
-/* stop codon does not overlap with CDS in GTF2 -- watch out for 
- * gtf2StopCodons, especially in conjunction with strand. */
+/* If gtf2StopCodons is set, then we follow the GTF2 convention of excluding
+ * the stop codon from the CDS region.  In other GFF flavors, stop_codon is
+ * part of the CDS, which is the case in our table coords too.
+ * This function would already be complicated enough without gtf2StopCodons,
+ * due to strand and the possibility of a start or stop codon being split
+ * across exons.  Excluding the stop codon from CDS complicates it further
+ * because cdsEnd on the current exon may affect the CDS line of the previous
+ * or next exon.  The cdsPortion* variables below are the CDS extremities that
+ * may have the stop codon excised. */
 if (exonIndx == cdsStopIndx)
     {
     if (isRc)
