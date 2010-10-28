@@ -4043,7 +4043,6 @@ targetId GeneCard:GC04M108968
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=LEF1
 validation LEF1(Immunoblot):human_LEF1_C-19_validation_Myers.pdf
 
-
 term Max
 tag MAX
 type Antibody

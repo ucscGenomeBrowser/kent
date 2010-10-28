@@ -2,6 +2,9 @@
 
 # UW Histone (wrangler: Venkat, assisted by Tim)
 # Notes:
+#	TFBS Data:
+#		- Removed CTCF and placed in TFBS track.
+#		- Duplicated references to input as well 
 #	- Short Labels: 5 charactesr for cell type, 7 characters for antibody, 3 characters (Include 2 for View and 1 for Replicate)
 #	- Views: For consistency sake view will be two letters
 #		- Peaks = Pk
@@ -21,6 +24,8 @@
 #		- HotSpots - ??
 #		- Raw Signal - ??
 
+
+
 track wgEncodeUwHistone
 compositeTrack on
 superTrack wgEncodeHistoneSuper dense
@@ -30,7 +35,7 @@ group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
 #subGroup2 cellType Cell_Line BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 GM12878=GM12878 HEK293=HEK293 HELA=HeLa-S3 HEPG2=HepG2 HL60=HL-60 HMEC=HMEC HRE=HRE HUVEC=HUVEC K562=K562 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) BJ=BJ Caco2=Caco-2 H7es=H7-HESC  HEK293=HEK293 HL60=HL-60 HMEC=HMEC HRE=HRE GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
-subGroup3 factor Factor CTCF=CTCF  H3K04me3=H3K4me3  H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
+subGroup3 factor Factor H3K04me3=H3K4me3  H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
 subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
 dimensionZchecked 1,2
@@ -51,98 +56,6 @@ noInherit on
     pValueFilter 0.0
     pValueFilterLimits 0:324
 
-        track wgEncodeUwHistoneBjCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ    CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in BJ cells)
-        subGroups view=Hot factor=CTCF cellType=BJ rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1255 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneGm12878CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot
-        shortLabel GM878 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12878 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12878 rep=1
-        type broadPeak
-        origAssembly hg18
-        color 153,38,0
-        # subId=1263 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneK562CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot
-        shortLabel K562  CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in K562 cells)
-        subGroups view=Hot factor=CTCF cellType=K562 rep=1
-        type broadPeak
-        origAssembly hg18
-        color 46,0,184
-        # subId=1266 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm06990CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM990 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM06990 cells)
-        subGroups view=Hot factor=CTCF cellType=GM06990 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1268 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneCaco2CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in Caco-2 cells)
-        subGroups view=Hot factor=CTCF cellType=Caco2 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1269 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12864CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM864 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12864 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12864 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1272 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12865CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM865 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12865 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12865 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1275 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12872CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM872 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12872 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12872 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1277 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12874CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM874 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12874 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12874 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1281 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
@@ -152,120 +65,6 @@ noInherit on
         type broadPeak
         origAssembly hg18
         # subId=1284 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHek293CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HEK29 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HEK293 cells)
-        subGroups view=Hot factor=CTCF cellType=HEK293 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1294 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHelas3CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLaS CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HeLa-S3 cells)
-        subGroups view=Hot factor=CTCF cellType=HELA rep=1
-        type broadPeak
-        origAssembly hg18
-        color 0,119,158
-        # subId=1297 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHepg2CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HepG2 cells)
-        subGroups view=Hot factor=CTCF cellType=HEPG2 rep=1
-        type broadPeak
-        origAssembly hg18
-        color 189,0,157
-        # subId=1298 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHl60CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HL-60 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HL-60 cells)
-        subGroups view=Hot factor=CTCF cellType=HL60 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1300 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHmecCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HMEC  CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HMEC cells)
-        subGroups view=Hot factor=CTCF cellType=HMEC rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1301 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHreCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE   CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HRE cells)
-        subGroups view=Hot factor=CTCF cellType=HRE rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1304 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHuvecCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in HUVEC cells)
-        subGroups view=Hot factor=CTCF cellType=HUVEC rep=1
-        type broadPeak
-        origAssembly hg18
-        color 224,75,0
-        # subId=1307 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneNhekCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK  CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in NHEK cells)
-        subGroups view=Hot factor=CTCF cellType=NHEK rep=1
-        type broadPeak
-        origAssembly hg18
-        color 179,0,134
-        # subId=1310 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSaecCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC  CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in SAEC cells)
-        subGroups view=Hot factor=CTCF cellType=SAEC rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1312 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSknshraCtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel SKNSH CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in SK-N-SH_RA cells)
-        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1313 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneWerirb1CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel WERIR CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in WERI-Rb-1 cells)
-        subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep1
         release alpha
@@ -327,88 +126,6 @@ noInherit on
         origAssembly hg18
         # subId=1338 dateSubmitted=2010-06-11
 
-        track wgEncodeUwHistoneBjCtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel BJ    CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in BJ cells)
-        subGroups view=Hot factor=CTCF cellType=BJ rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1262 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneK562CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot 
-        shortLabel K562  CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in K562 cells)
-        subGroups view=Hot factor=CTCF cellType=K562 rep=2
-        type broadPeak
-        origAssembly hg18
-        color 46,0,184
-        # subId=1264 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneGm12878CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot 
-        shortLabel GM878 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12878 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12878 rep=2
-        type broadPeak
-        origAssembly hg18
-        color 153,38,0
-        # subId=1265 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneCaco2CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel Caco2 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in Caco-2 cells)
-        subGroups view=Hot factor=CTCF cellType=Caco2 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1267 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm06990CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM990 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM06990 cells)
-        subGroups view=Hot factor=CTCF cellType=GM06990 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1271 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12865CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM865 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12865 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12865 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1274 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12872CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM872 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12872 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12872 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1278 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12874CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM874 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12874 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12874 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1280 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneBjH3k27me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
@@ -428,80 +145,6 @@ noInherit on
         type broadPeak
         origAssembly hg18
         # subId=1286 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHelas3CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HeLaS CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in HeLa-S3 cells)
-        subGroups view=Hot factor=CTCF cellType=HELA rep=2
-        type broadPeak
-        origAssembly hg18
-        color 0,119,158
-        # subId=1296 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHepg2CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HepG2 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in HepG2 cells)
-        subGroups view=Hot factor=CTCF cellType=HEPG2 rep=2
-        type broadPeak
-        origAssembly hg18
-        color 189,0,157
-        # subId=1299 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHreCtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HRE   CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in HRE cells)
-        subGroups view=Hot factor=CTCF cellType=HRE rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1305 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHuvecCtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HUVEC CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in HUVEC cells)
-        subGroups view=Hot factor=CTCF cellType=HUVEC rep=2
-        type broadPeak
-        origAssembly hg18
-        color 224,75,0
-        # subId=1306 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneNhekCtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel NHEK  CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in NHEK cells)
-        subGroups view=Hot factor=CTCF cellType=NHEK rep=2
-        type broadPeak
-        origAssembly hg18
-        color 179,0,134
-        # subId=1309 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSaecCtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel SAEC  CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in SAEC cells)
-        subGroups view=Hot factor=CTCF cellType=SAEC rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1311 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSknshraCtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel SKNSH CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in SK-N-SH_RA cells)
-        subGroups view=Hot factor=CTCF cellType=SKNSHRA rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdHotspotsRep2
         release alpha
@@ -871,16 +514,6 @@ noInherit on
         origAssembly hg18
         # subId=1477 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12864CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM864 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12864 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12864 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1273 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneCaco2H3k4me3StdHotspotsRep2
         release alpha
         parent wgEncodeUwHistoneViewHot off
@@ -1177,26 +810,6 @@ noInherit on
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12873CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM873 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12873 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12873 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1276 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneGm12875CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM875 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12875 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12875 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1482 dateSubmitted=2010-06-15
-
         track wgEncodeUwHistoneHreH3k4me3StdHotspotsRep1
         release alpha
         parent wgEncodeUwHistoneViewHot off
@@ -1206,46 +819,6 @@ noInherit on
         type broadPeak
         origAssembly hg18
         # subId=1441 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12801CtcfStdHotspotsRep1
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM801 CTCF    Hs1
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (CTCF in GM12801 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12801 rep=1
-        type broadPeak
-        origAssembly hg18
-        # subId=1270 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12873CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM873 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12873 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12873 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1279 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneHek293CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel HEK29 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in HEK293 cells)
-        subGroups view=Hot factor=CTCF cellType=HEK293 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1486 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12875CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel GM875 CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in GM12875 cells)
-        subGroups view=Hot factor=CTCF cellType=GM12875 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1484 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneNhekH3k27me3StdHotspotsRep2
         release alpha
@@ -1257,16 +830,6 @@ noInherit on
         origAssembly hg18
         color 179,0,134
         # subId=1463 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneWerirb1CtcfStdHotspotsRep2
-        release alpha
-        parent wgEncodeUwHistoneViewHot off
-        shortLabel WERIR CTCF    Hs2
-        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (CTCF in WERI-Rb-1 cells)
-        subGroups view=Hot factor=CTCF cellType=WERIRb1 rep=2
-        type broadPeak
-        origAssembly hg18
-        # subId=1492 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneH7esH3k4me3StdHotspotsRep1
         release alpha
@@ -1348,98 +911,6 @@ noInherit on
     pValueFilter 0.0
     pValueFilterLimits 0:324
 
-        track wgEncodeUwHistoneBjCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ    CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in BJ cells)
-        subGroups view=Peaks factor=CTCF cellType=BJ rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1255 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneGm12878CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM878 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12878 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12878 rep=1
-        type narrowPeak
-        origAssembly hg18
-        color 153,38,0
-        # subId=1263 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneK562CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks
-        shortLabel K562  CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in K562 cells)
-        subGroups view=Peaks factor=CTCF cellType=K562 rep=1
-        type narrowPeak
-        origAssembly hg18
-        color 46,0,184
-        # subId=1266 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm06990CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM990 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM06990 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM06990 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1268 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneCaco2CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in Caco-2 cells)
-        subGroups view=Peaks factor=CTCF cellType=Caco2 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1269 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12864CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM864 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12864 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1272 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12865CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM865 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12865 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1275 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12872CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM872 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12872 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1277 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12874CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM874 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12874 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12874 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1281 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneBjH3k27me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
@@ -1449,120 +920,6 @@ noInherit on
         type narrowPeak
         origAssembly hg18
         # subId=1284 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHek293CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HEK29 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HEK293 cells)
-        subGroups view=Peaks factor=CTCF cellType=HEK293 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1294 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHelas3CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLaS CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HeLa-S3 cells)
-        subGroups view=Peaks factor=CTCF cellType=HELA rep=1
-        type narrowPeak
-        origAssembly hg18
-        color 0,119,158
-        # subId=1297 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHepg2CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HepG2 cells)
-        subGroups view=Peaks factor=CTCF cellType=HEPG2 rep=1
-        type narrowPeak
-        origAssembly hg18
-        color 189,0,157
-        # subId=1298 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHl60CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HL-60 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HL-60 cells)
-        subGroups view=Peaks factor=CTCF cellType=HL60 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1300 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHmecCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HMEC  CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HMEC cells)
-        subGroups view=Peaks factor=CTCF cellType=HMEC rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1301 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHreCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE   CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HRE cells)
-        subGroups view=Peaks factor=CTCF cellType=HRE rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1304 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHuvecCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in HUVEC cells)
-        subGroups view=Peaks factor=CTCF cellType=HUVEC rep=1
-        type narrowPeak
-        origAssembly hg18
-        color 224,75,0
-        # subId=1307 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneNhekCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK  CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in NHEK cells)
-        subGroups view=Peaks factor=CTCF cellType=NHEK rep=1
-        type narrowPeak
-        origAssembly hg18
-        color 179,0,134
-        # subId=1310 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSaecCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC  CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in SAEC cells)
-        subGroups view=Peaks factor=CTCF cellType=SAEC rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1312 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSknshraCtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SKNSH CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in SK-N-SH_RA cells)
-        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1313 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneWerirb1CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel WERIR CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in WERI-Rb-1 cells)
-        subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdPkRep1
         release alpha
@@ -1624,88 +981,6 @@ noInherit on
         origAssembly hg18
         # subId=1338 dateSubmitted=2010-06-11
 
-        track wgEncodeUwHistoneBjCtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel BJ    CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in BJ cells)
-        subGroups view=Peaks factor=CTCF cellType=BJ rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1262 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneK562CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks 
-        shortLabel K562  CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in K562 cells)
-        subGroups view=Peaks factor=CTCF cellType=K562 rep=2
-        type narrowPeak
-        origAssembly hg18
-        color 46,0,184
-        # subId=1264 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneGm12878CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks
-        shortLabel GM878 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12878 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12878 rep=2
-        type narrowPeak
-        origAssembly hg18
-        color 153,38,0
-        # subId=1265 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneCaco2CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel Caco2 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in Caco-2 cells)
-        subGroups view=Peaks factor=CTCF cellType=Caco2 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1267 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm06990CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM990 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM06990 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM06990 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1271 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12865CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM865 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12865 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12865 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1274 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12872CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM872 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12872 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12872 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1278 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12874CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM874 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12874 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12874 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1280 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneBjH3k27me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
@@ -1725,80 +1000,6 @@ noInherit on
         type narrowPeak
         origAssembly hg18
         # subId=1286 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHelas3CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HeLaS CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in HeLa-S3 cells)
-        subGroups view=Peaks factor=CTCF cellType=HELA rep=2
-        type narrowPeak
-        origAssembly hg18
-        color 0,119,158
-        # subId=1296 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHepg2CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HepG2 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in HepG2 cells)
-        subGroups view=Peaks factor=CTCF cellType=HEPG2 rep=2
-        type narrowPeak
-        origAssembly hg18
-        color 189,0,157
-        # subId=1299 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHreCtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HRE   CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in HRE cells)
-        subGroups view=Peaks factor=CTCF cellType=HRE rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1305 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHuvecCtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HUVEC CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in HUVEC cells)
-        subGroups view=Peaks factor=CTCF cellType=HUVEC rep=2
-        type narrowPeak
-        origAssembly hg18
-        color 224,75,0
-        # subId=1306 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneNhekCtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel NHEK  CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in NHEK cells)
-        subGroups view=Peaks factor=CTCF cellType=NHEK rep=2
-        type narrowPeak
-        origAssembly hg18
-        color 179,0,134
-        # subId=1309 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSaecCtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SAEC  CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in SAEC cells)
-        subGroups view=Peaks factor=CTCF cellType=SAEC rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1311 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSknshraCtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel SKNSH CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in SK-N-SH_RA cells)
-        subGroups view=Peaks factor=CTCF cellType=SKNSHRA rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdPkRep2
         release alpha
@@ -2168,16 +1369,6 @@ noInherit on
         origAssembly hg18
         # subId=1477 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12864CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM864 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12864 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12864 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1273 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneCaco2H3k4me3StdPkRep2
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
@@ -2474,26 +1665,6 @@ noInherit on
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12873CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM873 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12873 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1276 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneGm12875CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM875 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12875 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12875 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1482 dateSubmitted=2010-06-15
-
         track wgEncodeUwHistoneHreH3k4me3StdPkRep1
         release alpha
         parent wgEncodeUwHistoneViewPeaks off
@@ -2503,46 +1674,6 @@ noInherit on
         type narrowPeak
         origAssembly hg18
         # subId=1441 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12801CtcfStdPkRep1
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM801 CTCF    Pk1
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 1 (CTCF in GM12801 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12801 rep=1
-        type narrowPeak
-        origAssembly hg18
-        # subId=1270 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12873CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM873 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12873 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12873 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1279 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneHek293CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel HEK29 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in HEK293 cells)
-        subGroups view=Peaks factor=CTCF cellType=HEK293 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1486 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12875CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel GM875 CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in GM12875 cells)
-        subGroups view=Peaks factor=CTCF cellType=GM12875 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1484 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneNhekH3k27me3StdPkRep2
         release alpha
@@ -2554,16 +1685,6 @@ noInherit on
         origAssembly hg18
         color 179,0,134
         # subId=1463 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneWerirb1CtcfStdPkRep2
-        release alpha
-        parent wgEncodeUwHistoneViewPeaks off
-        shortLabel WERIR CTCF    Pk2
-        longLabel ENCODE UW Histone Mods Peaks (FDR 1%) Replicate 2 (CTCF in WERI-Rb-1 cells)
-        subGroups view=Peaks factor=CTCF cellType=WERIRb1 rep=2
-        type narrowPeak
-        origAssembly hg18
-        # subId=1492 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneH7esH3k4me3StdPkRep1
         release alpha
@@ -2649,98 +1770,6 @@ noInherit on
     maxHeightPixels 100:32:16
     windowingFunction mean
 
-        track wgEncodeUwHistoneBjCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ    CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in BJ cells)
-        subGroups view=zRSig factor=CTCF cellType=BJ rep=1
-        type bigWig 1.000000 8153.000000
-        origAssembly hg18
-        # subId=1255 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneGm12878CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig
-        shortLabel GM878 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12878 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12878 rep=1
-        type bigWig 1.000000 2723.000000
-        origAssembly hg18
-        color 153,38,0
-        # subId=1263 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneK562CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig
-        shortLabel K562  CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in K562 cells)
-        subGroups view=zRSig factor=CTCF cellType=K562 rep=1
-        type bigWig 1.000000 8445.000000
-        origAssembly hg18
-        color 46,0,184
-        # subId=1266 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm06990CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM990 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM06990 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM06990 rep=1
-        type bigWig 1.000000 6903.000000
-        origAssembly hg18
-        # subId=1268 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneCaco2CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in Caco-2 cells)
-        subGroups view=zRSig factor=CTCF cellType=Caco2 rep=1
-        type bigWig 1.000000 8162.000000
-        origAssembly hg18
-        # subId=1269 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12864CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM864 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12864 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=1
-        type bigWig 1.000000 4037.000000
-        origAssembly hg18
-        # subId=1272 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12865CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM865 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12865 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=1
-        type bigWig 1.000000 4888.000000
-        origAssembly hg18
-        # subId=1275 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12872CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM872 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12872 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=1
-        type bigWig 1.000000 4091.000000
-        origAssembly hg18
-        # subId=1277 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12874CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM874 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12874 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12874 rep=1
-        type bigWig 1.000000 3615.000000
-        origAssembly hg18
-        # subId=1281 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneBjInputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
@@ -2781,45 +1810,49 @@ noInherit on
         origAssembly hg18
         # subId=1288 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12801InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM801 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12801 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12801 rep=1
-        type bigWig 1.000000 10337.000000
-        origAssembly hg18
-        # subId=1289 dateSubmitted=2010-06-10
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12801InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM801 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12801 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12801 rep=1
+#        type bigWig 1.000000 10337.000000
+#        origAssembly hg18
+#        # subId=1289 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12864InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM864 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12864 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12864 rep=1
-        type bigWig 1.000000 8541.000000
-        origAssembly hg18
-        # subId=1290 dateSubmitted=2010-06-10
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12864InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM864 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12864 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12864 rep=1
+#        type bigWig 1.000000 8541.000000
+#        origAssembly hg18
+#        # subId=1290 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12865InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM865 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12865 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12865 rep=1
-        type bigWig 1.000000 9831.000000
-        origAssembly hg18
-        # subId=1291 dateSubmitted=2010-06-10
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12865InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM865 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12865 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12865 rep=1
+#        type bigWig 1.000000 9831.000000
+#        origAssembly hg18
+#        # subId=1291 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12872InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM872 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12872 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12872 rep=1
-        type bigWig 1.000000 7087.000000
-        origAssembly hg18
-        # subId=1292 dateSubmitted=2010-06-10
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12872InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM872 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12872 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12872 rep=1
+#        type bigWig 1.000000 7087.000000
+#        origAssembly hg18
+#        # subId=1292 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneGm12878InputStdRawRep1
         release alpha
@@ -2832,67 +1865,16 @@ noInherit on
         color 153,38,0
         # subId=1293 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHek293CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK29 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HEK293 cells)
-        subGroups view=zRSig factor=CTCF cellType=HEK293 rep=1
-        type bigWig 1.000000 5462.000000
-        origAssembly hg18
-        # subId=1294 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHek293InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK29 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HEK293 cells)
-        subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
-        type bigWig 1.000000 8215.000000
-        origAssembly hg18
-        # subId=1295 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHelas3CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLaS CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HeLa-S3 cells)
-        subGroups view=zRSig factor=CTCF cellType=HELA rep=1
-        type bigWig 1.000000 4129.000000
-        origAssembly hg18
-        color 0,119,158
-        # subId=1297 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHepg2CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HepG2 cells)
-        subGroups view=zRSig factor=CTCF cellType=HEPG2 rep=1
-        type bigWig 1.000000 2546.000000
-        origAssembly hg18
-        color 189,0,157
-        # subId=1298 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHl60CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HL-60 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HL-60 cells)
-        subGroups view=zRSig factor=CTCF cellType=HL60 rep=1
-        type bigWig 1.000000 2968.000000
-        origAssembly hg18
-        # subId=1300 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHmecCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HMEC  CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HMEC cells)
-        subGroups view=zRSig factor=CTCF cellType=HMEC rep=1
-        type bigWig 1.000000 4919.000000
-        origAssembly hg18
-        # subId=1301 dateSubmitted=2010-06-10
+# Commenting out track as it has not equivalent Histone experiment tracks
+#        track wgEncodeUwHistoneHek293InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel HEK29 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HEK293 cells)
+#        subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
+#        type bigWig 1.000000 8215.000000
+#        origAssembly hg18
+#        # subId=1295 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHmecInputStdRawRep1
         release alpha
@@ -2914,27 +1896,6 @@ noInherit on
         origAssembly hg18
         # subId=1303 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE   CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HRE cells)
-        subGroups view=zRSig factor=CTCF cellType=HRE rep=1
-        type bigWig 1.000000 2395.000000
-        origAssembly hg18
-        # subId=1304 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHuvecCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in HUVEC cells)
-        subGroups view=zRSig factor=CTCF cellType=HUVEC rep=1
-        type bigWig 1.000000 2691.000000
-        origAssembly hg18
-        color 224,75,0
-        # subId=1307 dateSubmitted=2010-06-10
-
         track wgEncodeUwHistoneK562InputStdRawRep1
         release alpha
         parent wgEncodeUwHistoneViewRawSig
@@ -2945,47 +1906,6 @@ noInherit on
         origAssembly hg18
         color 46,0,184
         # subId=1308 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneNhekCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK  CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in NHEK cells)
-        subGroups view=zRSig factor=CTCF cellType=NHEK rep=1
-        type bigWig 1.000000 2291.000000
-        origAssembly hg18
-        color 179,0,134
-        # subId=1310 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSaecCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC  CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in SAEC cells)
-        subGroups view=zRSig factor=CTCF cellType=SAEC rep=1
-        type bigWig 1.000000 1813.000000
-        origAssembly hg18
-        # subId=1312 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSknshraCtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SKNSH CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in SK-N-SH_RA cells)
-        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=1
-        type bigWig 1.000000 3210.000000
-        origAssembly hg18
-        # subId=1313 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneWerirb1CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WERIR CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in WERI-Rb-1 cells)
-        subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=1
-        type bigWig 1.000000 2991.000000
-        origAssembly hg18
-        # subId=1315 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHuvecInputStdRawRep1
         release alpha
@@ -3029,15 +1949,16 @@ noInherit on
         origAssembly hg18
         # subId=1319 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneWerirb1InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WERIR Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in WERI-Rb-1 cells)
-        subGroups view=zRSig factor=zInput cellType=WERIRb1 rep=1
-        type bigWig 1.000000 9496.000000
-        origAssembly hg18
-        # subId=1320 dateSubmitted=2010-06-10
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneWerirb1InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel WERIR Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in WERI-Rb-1 cells)
+#        subGroups view=zRSig factor=zInput cellType=WERIRb1 rep=1
+#        type bigWig 1.000000 9496.000000
+#        origAssembly hg18
+#        # subId=1320 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdRawRep1
         release alpha
@@ -3099,88 +2020,6 @@ noInherit on
         origAssembly hg18
         # subId=1338 dateSubmitted=2010-06-11
 
-        track wgEncodeUwHistoneBjCtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel BJ    CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in BJ cells)
-        subGroups view=zRSig factor=CTCF cellType=BJ rep=2
-        type bigWig 1.000000 5047.000000
-        origAssembly hg18
-        # subId=1262 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneK562CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig 
-        shortLabel K562  CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in K562 cells)
-        subGroups view=zRSig factor=CTCF cellType=K562 rep=2
-        type bigWig 1.000000 8080.000000
-        origAssembly hg18
-        color 46,0,184
-        # subId=1264 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneGm12878CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig 
-        shortLabel GM878 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12878 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12878 rep=2
-        type bigWig 1.000000 7099.000000
-        origAssembly hg18
-        color 153,38,0
-        # subId=1265 dateSubmitted=2010-06-07
-
-        track wgEncodeUwHistoneCaco2CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel Caco2 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in Caco-2 cells)
-        subGroups view=zRSig factor=CTCF cellType=Caco2 rep=2
-        type bigWig 1.000000 10289.000000
-        origAssembly hg18
-        # subId=1267 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm06990CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM990 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM06990 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM06990 rep=2
-        type bigWig 1.000000 8819.000000
-        origAssembly hg18
-        # subId=1271 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12865CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM865 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12865 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12865 rep=2
-        type bigWig 1.000000 3768.000000
-        origAssembly hg18
-        # subId=1274 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12872CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM872 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12872 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12872 rep=2
-        type bigWig 1.000000 6815.000000
-        origAssembly hg18
-        # subId=1278 dateSubmitted=2010-06-08
-
-        track wgEncodeUwHistoneGm12874CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM874 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12874 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12874 rep=2
-        type bigWig 1.000000 4160.000000
-        origAssembly hg18
-        # subId=1280 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneBjH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
@@ -3200,80 +2039,6 @@ noInherit on
         type bigWig 1.000000 6994.000000
         origAssembly hg18
         # subId=1286 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHelas3CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HeLaS CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in HeLa-S3 cells)
-        subGroups view=zRSig factor=CTCF cellType=HELA rep=2
-        type bigWig 1.000000 3763.000000
-        origAssembly hg18
-        color 0,119,158
-        # subId=1296 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHepg2CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HepG2 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in HepG2 cells)
-        subGroups view=zRSig factor=CTCF cellType=HEPG2 rep=2
-        type bigWig 1.000000 5725.000000
-        origAssembly hg18
-        color 189,0,157
-        # subId=1299 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHreCtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HRE   CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in HRE cells)
-        subGroups view=zRSig factor=CTCF cellType=HRE rep=2
-        type bigWig 1.000000 4640.000000
-        origAssembly hg18
-        # subId=1305 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneHuvecCtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HUVEC CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in HUVEC cells)
-        subGroups view=zRSig factor=CTCF cellType=HUVEC rep=2
-        type bigWig 1.000000 1952.000000
-        origAssembly hg18
-        color 224,75,0
-        # subId=1306 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneNhekCtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel NHEK  CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in NHEK cells)
-        subGroups view=zRSig factor=CTCF cellType=NHEK rep=2
-        type bigWig 1.000000 4245.000000
-        origAssembly hg18
-        color 179,0,134
-        # subId=1309 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSaecCtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SAEC  CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in SAEC cells)
-        subGroups view=zRSig factor=CTCF cellType=SAEC rep=2
-        type bigWig 1.000000 2175.000000
-        origAssembly hg18
-        # subId=1311 dateSubmitted=2010-06-10
-
-        track wgEncodeUwHistoneSknshraCtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel SKNSH CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in SK-N-SH_RA cells)
-        subGroups view=zRSig factor=CTCF cellType=SKNSHRA rep=2
-        type bigWig 1.000000 3470.000000
-        origAssembly hg18
-        # subId=1314 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdRawRep2
         release alpha
@@ -3345,15 +2110,16 @@ noInherit on
         origAssembly hg18
         # subId=1415 dateSubmitted=2010-06-14
 
-        track wgEncodeUwHistoneGm12874InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM874 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12874 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12874 rep=1
-        type bigWig 1.000000 8370.000000
-        origAssembly hg18
-        # subId=1416 dateSubmitted=2010-06-14
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12874InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM874 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12874 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12874 rep=1
+#        type bigWig 1.000000 8370.000000
+#        origAssembly hg18
+#        # subId=1416 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep1
         release alpha
@@ -3685,16 +2451,6 @@ noInherit on
         origAssembly hg18
         # subId=1477 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12864CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM864 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12864 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12864 rep=2
-        type bigWig 1.000000 6440.000000
-        origAssembly hg18
-        # subId=1273 dateSubmitted=2010-06-08
-
         track wgEncodeUwHistoneCaco2H3k4me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
@@ -3991,45 +2747,27 @@ noInherit on
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12873CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM873 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12873 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=1
-        type bigWig 1.000000 3714.000000
-        origAssembly hg18
-        # subId=1276 dateSubmitted=2010-06-15
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12873InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM873 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12873 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12873 rep=1
+#        type bigWig 1.000000 8562.000000
+#        origAssembly hg18
+#        # subId=1481 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12873InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM873 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12873 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12873 rep=1
-        type bigWig 1.000000 8562.000000
-        origAssembly hg18
-        # subId=1481 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneGm12875CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM875 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12875 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12875 rep=1
-        type bigWig 1.000000 4128.000000
-        origAssembly hg18
-        # subId=1482 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneGm12875InputStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM875 Input   Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12875 cells)
-        subGroups view=zRSig factor=zInput cellType=GM12875 rep=1
-        type bigWig 1.000000 7544.000000
-        origAssembly hg18
-        # subId=1485 dateSubmitted=2010-06-16
+# Commenting out track as it has no equivalent Histone experiment
+#        track wgEncodeUwHistoneGm12875InputStdRawRep1
+#        release alpha
+#        parent wgEncodeUwHistoneViewRawSig off
+#        shortLabel GM875 Input   Ra1
+#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12875 cells)
+#        subGroups view=zRSig factor=zInput cellType=GM12875 rep=1
+#        type bigWig 1.000000 7544.000000
+#        origAssembly hg18
+#        # subId=1485 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneHreH3k4me3StdRawRep1
         release alpha
@@ -4041,46 +2779,6 @@ noInherit on
         origAssembly hg18
         # subId=1441 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12801CtcfStdRawRep1
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM801 CTCF    Ra1
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (CTCF in GM12801 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12801 rep=1
-        type bigWig 1.000000 1190.000000
-        origAssembly hg18
-        # subId=1270 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12873CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM873 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12873 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12873 rep=2
-        type bigWig 1.000000 4813.000000
-        origAssembly hg18
-        # subId=1279 dateSubmitted=2010-06-15
-
-        track wgEncodeUwHistoneHek293CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel HEK29 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in HEK293 cells)
-        subGroups view=zRSig factor=CTCF cellType=HEK293 rep=2
-        type bigWig 1.000000 1536.000000
-        origAssembly hg18
-        # subId=1486 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneGm12875CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel GM875 CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in GM12875 cells)
-        subGroups view=zRSig factor=CTCF cellType=GM12875 rep=2
-        type bigWig 1.000000 3639.000000
-        origAssembly hg18
-        # subId=1484 dateSubmitted=2010-06-16
-
         track wgEncodeUwHistoneNhekH3k27me3StdRawRep2
         release alpha
         parent wgEncodeUwHistoneViewRawSig off
@@ -4091,16 +2789,6 @@ noInherit on
         origAssembly hg18
         color 179,0,134
         # subId=1463 dateSubmitted=2010-06-16
-
-        track wgEncodeUwHistoneWerirb1CtcfStdRawRep2
-        release alpha
-        parent wgEncodeUwHistoneViewRawSig off
-        shortLabel WERIR CTCF    Ra2
-        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (CTCF in WERI-Rb-1 cells)
-        subGroups view=zRSig factor=CTCF cellType=WERIRb1 rep=2
-        type bigWig 1.000000 3015.000000
-        origAssembly hg18
-        # subId=1492 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneH7esH3k4me3StdRawRep1
         release alpha
