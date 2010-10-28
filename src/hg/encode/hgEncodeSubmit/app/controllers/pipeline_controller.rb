@@ -498,8 +498,8 @@ class PipelineController < ApplicationController
           "application/gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"],
           "application/x-gzip" => ["tar.gz", "TAR.GZ", "tgz", "TGZ"]
         }
-        extensions = extensionsByMIME[@upload.content_type.chomp]
-        unless extensions
+        @extensions = extensionsByMIME[@upload.content_type.chomp]
+        unless @extensions
           flash[:error] = "Invalid content_type=#{@upload.content_type.chomp}."
           return
         end

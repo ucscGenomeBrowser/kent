@@ -894,7 +894,8 @@ identifier affyU95
 
 identifier affyU133
 "Affymetrix Human U133 chip identifiers"
-    $hg.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
+    hg19.affyU133.qName dupeOk 
+    $hg,!hg19.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
     $hg.knownToU133.value
 
 identifier affyU133Plus2

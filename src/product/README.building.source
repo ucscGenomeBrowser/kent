@@ -213,6 +213,19 @@ make: *** [aliType.o] Error 1
     src/inc/common.mk file.  We will fix this error as soon as we
     get our hands on a newer version of the gcc compiler.
 
+7.  Build fails at the point of building a CGI binary with the error:
+    Undefined symbols:
+	"_png_write_png", referenced from:
+	    _mgSaveToPng in jkweb.a(pngwrite.o)
+	... other png symbols ...
+
+    You need to find out where your libpng.a is located.  For example
+    it may be in /opt/local/lib/libpng.a  When found, use the PNGLIB
+    variable to specify it, for example:
+    export PNGLIB=/opt/local/lib/libpng.a
+    or equivalent:
+    export PNGLIB='-L/opt/local/lib -lpng'
+
 ====================================================================
-This file last updated: 2010/10/27 10:51:59
+This file last updated: 2010/10/27 12:28:59
 ====================================================================
