@@ -1410,6 +1410,44 @@ subId 1502
 tableName wgEncodeCshlLongRnaSeqGm12878CellTotalAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep1
+objType file
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep1.fastq.gz
+grant Gingeras
+lab Cshl
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 752
+view RawData
+
+metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep2
+objType file
+cell GM12878
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep2.fastq.gz
+grant Gingeras
+lab Cshl
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract total
+subId 752
+view RawData
+
 metaObject wgEncodeCshlLongRnaSeqGm12878CellTotalMinusRawSigRep1
 objType table
 cell GM12878
@@ -6878,6 +6916,44 @@ subId 1503
 tableName wgEncodeCshlLongRnaSeqK562CellTotalAlnRep2
 view Alignments
 
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalFastqRep1
+objType file
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqK562CellTotalFastqRep1.fastq.gz
+grant Gingeras
+lab Cshl
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract total
+subId 752
+view RawData
+
+metaObject wgEncodeCshlLongRnaSeqK562CellTotalFastqRep2
+objType file
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-22
+dateUnrestricted 2010-07-22
+fileName wgEncodeCshlLongRnaSeqK562CellTotalFastqRep2.fastq.gz
+grant Gingeras
+lab Cshl
+localization cell
+origAssembly hg19
+project wgEncode
+replicate 2
+rnaExtract total
+subId 752
+view RawData
+
 metaObject wgEncodeCshlLongRnaSeqK562CellTotalMinusRawSigRep1
 objType table
 cell K562
@@ -7237,6 +7313,25 @@ rnaExtract total
 subId 2713
 tableName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4
 view PlusRawSig
+
+metaObject wgEncodeCshlLongRnaSeqK562CytosolLongpolyaFastqRep1V2
+objType file
+cell K562
+composite wgEncodeCshlLongRnaSeq
+dataType RnaSeq
+dataVersion ENCODE July 2009 Freeze
+dateSubmitted 2009-07-06
+dateUnrestricted 2010-04-06
+fileName wgEncodeCshlLongRnaSeqK562CytosolLongpolyaFastqRep1V2.fastq.gz
+grant Gingeras
+lab Cshl
+localization cytosol
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 414
+view RawData
 
 metaObject wgEncodeCshlLongRnaSeqK562CytosolPapAllRawSigRep1
 objType table
@@ -10988,4 +11083,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: 820847356
+# MAGIC: 1304422782
