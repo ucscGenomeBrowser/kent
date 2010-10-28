@@ -189,6 +189,19 @@ if (val == NULL)
 return val;
 }
 
+static void expandBigDataUrl(struct trackHub *hub, struct trackHubGenome *genome,
+	struct trackDb *tdb)
+/* Expand bigDataUrls so that no longer relative to genome->trackDbFile */
+{
+struct hashEl *hel = hashLookup(tdb->settingsHash, "bigDataUrl");
+if (hel != NULL)
+    {
+    char *oldVal = hel->val;
+    hel->val = trackHubRelativeUrl(genome->trackDbFile, oldVal);
+    freeMem(oldVal);
+    }
+}
+
 static void checkTagsLegal(struct trackHub *hub, struct trackHubGenome *genome,
 	struct trackDb *tdb)
 /* Make sure that tdb has all the required tags and is of a supported type. */
@@ -246,12 +259,16 @@ struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 16*1024*10
 struct trackDb *tdbList = trackDbFromOpenRa(lf);
 lineFileClose(&lf);
 
+/* Make bigDataUrls more absolute rather than relative to genome.ra dir */
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    expandBigDataUrl(hub, genome, tdb);
+
 /* Connect up subtracks and parents.  Note this loop does not actually move tracks
  * from list to parent subtracks, it just uses the field as a marker. Just do this
  * so when doing error checking can distinguish between container tracks and others.
  * This does have the pleasant side effect of making good error messages for
  * non-existant parents. */
-struct trackDb *tdb;
 struct hash *hash = hashNew(0);
 for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     hashAdd(hash, tdb->track, tdb);
@@ -277,5 +294,43 @@ for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
     tdb->parent = tdb->subtracks = NULL;
     }
 return tdbList;
+}
+
+static void reprefixString(char **pString, char *prefix)
+/* Replace *pString with prefix + *pString, freeing
+ * whatever was in *pString before. */
+{
+char *oldName = *pString;
+*pString = catTwoStrings(prefix, oldName);
+freeMem(oldName);
+}
+
+static void addPrefixToSetting(struct hash *settings, char *key, char *prefix)
+/* Given a settings hash, which is string valued.  Old values will be freed. */
+{
+struct hashEl *hel = hashLookup(settings, key);
+if (hel != NULL)
+    reprefixString((char **)&hel->val, prefix);
+}
+
+static void trackDbListAddNamePrefix(struct trackDb *tdbList, char *prefix)
+/* Surgically alter tdbList so that it works as if every track was
+ * renamed so as to add a prefix to it's name. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    addPrefixToSetting(tdb->settingsHash, "track", prefix);
+    addPrefixToSetting(tdb->settingsHash, "parent", prefix);
+    reprefixString(&tdb->track, prefix);
+    }
+}
+
+void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList)
+/* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. */
+{
+char namePrefix[PATH_LEN];
+safef(namePrefix, sizeof(namePrefix), "hub_%s_", hubName);
+trackDbListAddNamePrefix(tdbList, namePrefix);
 }
 

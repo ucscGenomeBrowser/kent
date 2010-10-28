@@ -56,6 +56,11 @@ struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGen
 /* Get list of tracks associated with genome.  Check that it only is composed of legal
  * types.  Do a few other quick checks to catch errors early. */
 
+void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList);
+/* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. 
+ * This is useful to the genome browser which directly puts tracks into it's
+ * user settings name space.... */
+
 char *trackHubSetting(struct trackHub *hub, char *name);
 /* Return setting if it exists, otherwise NULL. */
 
@@ -72,5 +77,6 @@ void trackHubGenomeFree(struct trackHubGenome **pGenome);
 
 void trackHubGenomeFreeList(struct trackHubGenome **pList);
 /* Free a list of dynamically allocated trackHubGenome's */
+
 #endif /* TRACKHUB_H */
 
