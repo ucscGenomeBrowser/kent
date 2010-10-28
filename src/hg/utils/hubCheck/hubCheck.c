@@ -7,6 +7,7 @@
 #include "ra.h"
 #include "filePath.h"
 #include "htmlPage.h"
+#include "trackDb.h"
 
 static char const rcsid[] = "$Id: newProg.c,v 1.30 2010/03/24 21:18:33 hiram Exp $";
 
@@ -179,12 +180,34 @@ if (hub != NULL)
     }
 }
 
+struct trackDb *trackHubTracksForGenome(struct trackHub *hub, struct trackHubGenome *genome)
+/* Get list of tracks associated with genome. */
+{
+struct lineFile *lf = udcWrapShortLineFile(genome->trackDbFile, NULL, 16*1024*1024);
+struct trackDb *tdbList = trackDbFromOpenRa(lf);
+lineFileClose(&lf);
+return tdbList;
+}
+
+
+void hubCheckGenome(struct trackHub *hub, struct trackHubGenome *genome)
+/* Check out genome within hub. */
+{
+struct trackDb *tdbList = trackHubTracksForGenome(hub, genome);
+uglyf("%d tracks in %s\n", slCount(tdbList), genome->genome);
+}
+
 void hubCheck(char *hubUrl)
 /* hubCheck - Check a track data hub for integrity. */
 {
 struct trackHub *hub = trackHubOpen(hubUrl);
 uglyf("hub %s\nshortLabel %s\n", hubUrl, hub->shortLabel);
 uglyf("%s has %d elements\n", hub->genomesFile, slCount(hub->genomeList));
+struct trackHubGenome *genome;
+for (genome = hub->genomeList; genome != NULL; genome = genome->next)
+    {
+    hubCheckGenome(hub, genome);
+    }
 trackHubClose(&hub);
 }
 
