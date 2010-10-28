@@ -3,7 +3,8 @@
 #include "linefile.h"
 #include "hash.h"
 #include "options.h"
-#include "hdb.h"
+#include "obscure.h"
+#include "jsHelper.h"
 
 void usage()
 {
@@ -11,21 +12,14 @@ errAbort("freen - test some hairbrained thing.\n"
          "usage:  freen input\n");
 }
 
-void rPrintTdb(struct trackDb *tdbList)
-{
-struct trackDb *tdb;
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-    {
-    printf("%s\t%s\n", tdb->track, tdb->shortLabel);
-    rPrintTdb(tdb->subtracks);
-    }
-}
-
 void freen(char *input)
 /* Test some hair-brained thing. */
 {
-struct trackDb *tdbList = hTrackDb(input, NULL);
-rPrintTdb(tdbList);
+size_t size;
+char *buf;
+readInGulp(input, &buf, &size);
+char *untagged = stripRegEx(buf, "<[^>]*>", REG_ICASE);
+puts(untagged);
 }
 
 int main(int argc, char *argv[])
