@@ -1229,8 +1229,8 @@ boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
 
 #define SMALLBUF 128
 
-char *bbiNameFromTable(struct sqlConnection *conn, char *table);
-/* Return file name from little track table. */
+char *bbiNameFromSettingOrTable(struct trackDb *tdb, struct sqlConnection *conn, char *table);
+/* Return file name from little table. */
 
 char *trackUrl(char *mapName, char *chromName);
 /* Return hgTrackUi url; chromName is optional. */

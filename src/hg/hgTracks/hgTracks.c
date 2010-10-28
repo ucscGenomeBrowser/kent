@@ -39,6 +39,7 @@
 #include "bigWig.h"
 #include "bedCart.h"
 #include "customTrack.h"
+#include "trackHub.h"
 #include "cytoBand.h"
 #include "ensFace.h"
 #include "liftOver.h"
@@ -3323,7 +3324,7 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void addTracksFromDataHub(char *hubUrl, struct track **pTrackList)
+void addTracksFromTrackHub(char *hubName, char *hubUrl, struct track **pTrackList)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 {
@@ -3332,38 +3333,50 @@ char hubDir[PATH_LEN];
 splitPath(hubUrl, hubDir, NULL, NULL);
 
 /* Load trackDb.ra file and make it into proper trackDb tree */
-struct trackDb *tdb, *tdbList = trackDbFromRa(hubUrl);
-uglyf("Got %d tracks from %s<BR>\n", slCount(tdbList), hubUrl);
-for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-     {
-     trackDbFieldsFromSettings(tdb);
-     trackDbPolish(tdb);
-     }
-trackDbAddTableField(tdbList);
-trackDbLinkUpGenerations(tdbList);
-uglyf("About to addTdbListToTrackList<BR>\n");
-uglyOne = TRUE;
-addTdbListToTrackList(tdbList, NULL, pTrackList);
-uglyf("Used to crash by here<BR>\n");
+struct trackHub *hub = trackHubOpen(hubUrl);
+struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+if (hubGenome != NULL)
+    {
+    struct trackDb *tdb, *tdbList = trackHubTracksForGenome(hub, hubGenome);
+    uglyf("Got %d tracks from %s@%s<BR>\n", slCount(tdbList), hubName, hubUrl);
+
+    trackDbAddTableField(tdbList);
+    trackHubAddNamePrefix(hubName, tdbList);
+    uglyf("added hub_%s_ prefix to track list<BR>\n", hubName);
+
+    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+        {
+	trackDbFieldsFromSettings(tdb);
+	trackDbPolish(tdb);
+	}
+    uglyf("polished tracks<BR>\n");
+
+    trackDbLinkUpGenerations(tdbList);
+    uglyf("About to addTdbListToTrackList<BR>\n");
+    uglyOne = TRUE;
+    addTdbListToTrackList(tdbList, NULL, pTrackList);
+    uglyf("Used to crash by here<BR>\n");
+#ifdef SOON
+#endif /* SOON */
+    }
+
 }
 
-void loadDataHubs(struct track **pTrackList)
+void loadTrackHubs(struct track **pTrackList)
 /* Load up stuff from data hubs and append to list. */
 {
-char *dataHubs = cloneString(cartUsualString(cart, "dataHubs", NULL));
-uglyf("<BR>dataHubs=%s\n<BR>\n", dataHubs);
-if (dataHubs == NULL)
+char *trackHubs = cloneString(cartUsualString(cart, "trackHubs", NULL));
+uglyf("trackHubs=%s\n<BR>\n", trackHubs);
+if (trackHubs == NULL)
     return;
-int hubCount = chopByWhite(dataHubs, NULL, 10);
-char *hubArrays[hubCount];
-chopByWhite(dataHubs, hubArrays, hubCount);
-uglyf("hubCount=%d, hubArrays[0]=%s\n<BR>\n", hubCount, hubArrays[0]);
-int i;
-for (i = 0; i<hubCount; ++i)
+struct slPair *hubList = slPairFromString(trackHubs);
+uglyf("Got %d hubs<BR>\n", slCount(hubList));
+struct slPair *hub;
+for (hub = hubList; hub != NULL; hub = hub->next)
     {
-    addTracksFromDataHub(hubArrays[i], pTrackList);
+    addTracksFromTrackHub(hub->name, hub->val, pTrackList);
     }
-uglyf("addTracksFromDataHub loop done<BR>\n");
+slPairFreeValsAndList(&hubList);
 }
 
 boolean restrictionEnzymesOk()
@@ -4043,7 +4056,7 @@ if (restrictionEnzymesOk())
     }
 if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
-loadDataHubs(&trackList);
+loadTrackHubs(&trackList);
 #ifdef SOON
 #endif /* SOON */
 loadCustomTracks(&trackList);
