@@ -289,12 +289,13 @@ otherDb hg19
 chainNormScoreAvailable yes
 
 track ctgPos2
-shortLabel Supercontig
-longLabel Assembly Supercontigs
+shortLabel GRC Map Contigs
+longLabel Genome Reference Consortium Map Contigs
 group map
 priority 10
 visibility hide
 type ctgPos
+url none
 
 track multiz4way
 shortLabel 4-way Multiz
