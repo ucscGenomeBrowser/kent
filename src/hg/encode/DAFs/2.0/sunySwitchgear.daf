@@ -3,7 +3,7 @@
 # the DCC.  It should not be changed unilaterally.
 
 # The header for the associated .ddf file should look like this:
-# files   view    cell   antibody   labVersion 
+# files   view    cell  labVersion 
 
 dafVersion        2.0
 
@@ -11,7 +11,7 @@ dafVersion        2.0
 grant             Tenenbaum
 lab               SunyAlbany
 dataType          RipChip
-compositeSuffix   SunyAlbanyTiling
+compositeSuffix   SunyAlbanySwitchgear
 group             regulation
 variables         cell, antibody
 assembly          hg19
@@ -20,7 +20,7 @@ validationSettings validateFiles.broadPeak:mmCheckOneInN=1000
 
 # Track/view definition
 view             RbpAssocRna
-longLabelPrefix  SUNY Albany RBP Associated RNA by Tiling Array
+longLabelPrefix  SUNY Albany RBP Associated RNA by Switchgear
 type             broadPeak
 required         no
 hasReplicates    no
