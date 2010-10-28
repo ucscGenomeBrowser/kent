@@ -113,6 +113,7 @@ struct hgPositions *hgp = NULL;
 
 
 /* Other global variables. */
+struct trackHub *hubList = NULL;	/* List of all relevant hubs. */
 struct group *groupList = NULL;    /* List of all tracks. */
 char *browserName;              /* Test or public browser */
 char *organization;             /* UCSC */
@@ -3324,46 +3325,47 @@ for (ct = ctList; ct != NULL; ct = ct->next)
     }
 }
 
-void addTracksFromTrackHub(char *hubName, char *hubUrl, struct track **pTrackList)
+void addTracksFromTrackHub(char *hubName, char *hubUrl, struct track **pTrackList,
+	struct trackHub **pHubList)
 /* Load up stuff from data hub and append to list. The hubUrl points to
  * a trackDb.ra format file.  */
 {
-/* Squirrel away hub directory for later. */
-char hubDir[PATH_LEN];
-splitPath(hubUrl, hubDir, NULL, NULL);
-
 /* Load trackDb.ra file and make it into proper trackDb tree */
 struct trackHub *hub = trackHubOpen(hubUrl);
-struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
-if (hubGenome != NULL)
+if (hub != NULL)
     {
-    struct trackDb *tdb, *tdbList = trackHubTracksForGenome(hub, hubGenome);
-    uglyf("Got %d tracks from %s@%s<BR>\n", slCount(tdbList), hubName, hubUrl);
+    struct trackHubGenome *hubGenome = trackHubFindGenome(hub, database);
+    hub->name = catTwoStrings("hub_", hubName);
+    if (hubGenome != NULL)
+	{
+	struct trackDb *tdb, *tdbList = trackHubTracksForGenome(hub, hubGenome);
+	uglyf("Got %d tracks from %s@%s<BR>\n", slCount(tdbList), hubName, hubUrl);
 
-    trackDbAddTableField(tdbList);
-    trackHubAddNamePrefix(hubName, tdbList);
-    uglyf("added hub_%s_ prefix to track list<BR>\n", hubName);
+	trackDbAddTableField(tdbList);
+	trackHubAddNamePrefix(hubName, tdbList);
+	trackHubAddGroupName(hub->name, tdbList);
+	uglyf("added hub_%s_ prefix to track list<BR>\n", hubName);
 
-    for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
-        {
-	trackDbFieldsFromSettings(tdb);
-	trackDbPolish(tdb);
+	for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+	    {
+	    trackDbFieldsFromSettings(tdb);
+	    trackDbPolish(tdb);
+	    }
+	uglyf("polished tracks<BR>\n");
+
+	trackDbLinkUpGenerations(tdbList);
+	uglyf("About to addTdbListToTrackList<BR>\n");
+	uglyOne = TRUE;
+	addTdbListToTrackList(tdbList, NULL, pTrackList);
+	if (tdbList != NULL)
+	    slAddHead(pHubList, hub);
 	}
-    uglyf("polished tracks<BR>\n");
 
-    trackDbLinkUpGenerations(tdbList);
-    uglyf("About to addTdbListToTrackList<BR>\n");
-    uglyOne = TRUE;
-    addTdbListToTrackList(tdbList, NULL, pTrackList);
-    uglyf("Used to crash by here<BR>\n");
-#ifdef SOON
-#endif /* SOON */
     }
-
 }
 
-void loadTrackHubs(struct track **pTrackList)
-/* Load up stuff from data hubs and append to list. */
+void loadTrackHubs(struct track **pTrackList, struct trackHub **pHubList)
+/* Load up stuff from data hubs and append to lists. */
 {
 char *trackHubs = cloneString(cartUsualString(cart, "trackHubs", NULL));
 uglyf("trackHubs=%s\n<BR>\n", trackHubs);
@@ -3374,7 +3376,7 @@ uglyf("Got %d hubs<BR>\n", slCount(hubList));
 struct slPair *hub;
 for (hub = hubList; hub != NULL; hub = hub->next)
     {
-    addTracksFromTrackHub(hub->name, hub->val, pTrackList);
+    addTracksFromTrackHub(hub->name, hub->val, pTrackList, pHubList);
     }
 slPairFreeValsAndList(&hubList);
 }
@@ -3771,8 +3773,8 @@ if (!tdbIsSuper(tdb))
 return (tdb->visibility != tvHide);
 }
 
-static void groupTracks(struct track **pTrackList, struct group **pGroupList,
-                                int vis)
+static void groupTracks(struct trackHub *hubList, struct track **pTrackList, 
+	struct group **pGroupList, int vis)
 /* Make up groups and assign tracks to groups.
  * If vis is -1, restore default groups to tracks. */
 {
@@ -3783,12 +3785,14 @@ struct track *track;
 struct trackRef *tr;
 struct grp* grps = hLoadGrps(database);
 struct grp *grp;
+float maxPriority = 0;
 
 /* build group objects from database. */
 for (grp = grps; grp != NULL; grp = grp->next)
     {
     /* deal with group reordering */
     float priority = grp->priority;
+    if (priority > maxPriority) maxPriority = priority;
     if (withPriorityOverride)
         {
         char cartVar[512];
@@ -3809,6 +3813,23 @@ for (grp = grps; grp != NULL; grp = grp->next)
     hashAdd(hash, grp->name, group);
     }
 grpFreeList(&grps);
+
+/* build group objects from hub */
+    {
+    uglyf("Got %d hubs, making groups from them<BR>\n", slCount(hubList));
+    struct trackHub *hub;
+    for (hub = hubList; hub != NULL; hub = hub->next)
+        {
+	AllocVar(group);
+	group->name = cloneString(hub->name);
+	group->label = cloneString(hub->shortLabel);
+	group->defaultPriority = group->priority = maxPriority;
+	maxPriority += 1;
+	slAddHead(&list, group);
+	hashAdd(hash, group->name, group);
+	uglyf("group name %s, label %s, priority %f<BR>\n", group->name, group->label, group->priority);
+	}
+    }
 
 /* Loop through tracks and fill in their groups.
  * If necessary make up an unknown group. */
@@ -3872,6 +3893,7 @@ for (track = *pTrackList; track != NULL; track = track->next)
 	group = hashFindVal(hash, track->groupName);
     if (group == NULL)
         {
+	uglyf("missing group for %s %s<BR>\n", track->track, track->tdb->grp);
 	if (unknown == NULL)
 	    {
 	    AllocVar(unknown);
@@ -4056,11 +4078,10 @@ if (restrictionEnzymesOk())
     }
 if (wikiTrackEnabled(database, NULL))
     addWikiTrack(&trackList);
-loadTrackHubs(&trackList);
-#ifdef SOON
-#endif /* SOON */
+loadTrackHubs(&trackList, &hubList);
+slReverse(&hubList);
 loadCustomTracks(&trackList);
-groupTracks(&trackList, pGroupList, vis);
+groupTracks(hubList, &trackList, pGroupList, vis);
 setSearchedTrackToPackOrFull(trackList);
 if (cgiOptionalString( "hideTracks"))
     changeTrackVis(groupList, NULL, tvHide);

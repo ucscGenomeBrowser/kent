@@ -334,3 +334,13 @@ safef(namePrefix, sizeof(namePrefix), "hub_%s_", hubName);
 trackDbListAddNamePrefix(tdbList, namePrefix);
 }
 
+void trackHubAddGroupName(char *hubName, struct trackDb *tdbList)
+/* Add group tag that references the hubs symbolic name. */
+{
+struct trackDb *tdb;
+for (tdb = tdbList; tdb != NULL; tdb = tdb->next)
+    {
+    tdb->grp = cloneString(hubName);
+    hashReplace(tdb->settingsHash, "group", tdb->grp);
+    }
+}

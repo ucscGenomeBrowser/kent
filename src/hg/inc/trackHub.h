@@ -32,6 +32,10 @@ struct trackHub
     char *shortLabel;	/* Hub short label. Not allocated here. */
     char *longLabel;	/* Hub long label. Not allocated here. */
     char *genomesFile;	/* URL to genome.ra file. Not allocated here. */
+
+    /* The name field below is set by client! It is used by genome browser for the symbolic
+     * name of hub in cart. */
+    char *name;
     };
 
 struct trackHubGenome
@@ -60,6 +64,9 @@ void trackHubAddNamePrefix(char *hubName, struct trackDb *tdbList);
 /* For a hub named "xyz" add the prefix "hub_xyz_" to each track and parent field. 
  * This is useful to the genome browser which directly puts tracks into it's
  * user settings name space.... */
+
+void trackHubAddGroupName(char *hubName, struct trackDb *tdbList);
+/* Add group tag that references the hubs symbolic name. */
 
 char *trackHubSetting(struct trackHub *hub, char *name);
 /* Return setting if it exists, otherwise NULL. */
