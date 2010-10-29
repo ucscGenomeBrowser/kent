@@ -3402,7 +3402,7 @@ validation missing
 term Egr-1
 tag EGR1
 type Antibody
-target Egr-1
+target EGR1
 antibodyDescription Rabbit polyclonal, EGR-1 (588).
 targetDescription Egr-1, Egr-2, Egr-3 and Egr-4 are nuclear transcription factors belonging to the Egr C2H2-type zinc-finger protein family and containing three C2H2-type zinc fingers. As immediate early proteins, Egr transcription factors are rapidly induced by diverse extracellular stimuli. Egr proteins are subject to tight differential control through diverse mechanisms at several levels of regulation including transcriptional, translational and post-translational (including glyco- sylation, phosphorylation and redox) mechanisms and protein-protein inter- action. Egr-1 binds to the DNA sequence 5'-CGCCCCCGC-3' (EGR-site), there- by activating transcription of target genes whose products are required for mitogenisis and differentiation. Egr-2 binds specific DNA sites located in the promoter region of HoxA4. Egr-2 defects cause congenital hypomyelination neuropathy (also designated Charcot-Marie-tooth disease) and Dejerine- Sottas neuropathology (also designated hereditary motor and sensory neuro- pathy III. Egr-3 is involved in muscle spindle development and is expressed in T cells 20 minutes following activation. EGR-4 binds to the EGR consensus motif GCGTGGGCG, functions as a transcriptional repressor, and displays autoregulatory activities, downregulating its on gene promoter in a dose dependent manner.
 vendorName Santa Cruz Biotech
@@ -3498,7 +3498,7 @@ validation GABP(Immunoblot):human_GABPa_G-1_validation_Myers.pdf
 term GATA-1
 tag GATA1
 type Antibody
-target GATA-1
+target GATA1
 targetDescription GATA binding protein 1 (globin transcription factor 1)
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
@@ -3526,7 +3526,7 @@ validation GATA1(Western_blot):mouse_GATA1_validation_Hardison.pdf
 term GATA-2
 tag GATA2
 type Antibody
-target GATA-2
+target GATA2
 targetDescription GATA binding protein 2
 antibodyDescription Rabbit polyclonal
 vendorName Donated by Dr. E.H. Bresnick, UW Madison
@@ -3540,7 +3540,7 @@ validation GATA-2(Western_blot,siRNA):human_GATA-2_validation_Farnham.pdf
 term GATA2_(CG2-96)
 tag GATA2CG2
 type Antibody
-target GATA-2
+target GATA2
 targetDescription This gene encodes a member of the GATA family of zinc-finger transcription factors that are named for the consensus nucleotide sequence they bind in the promoter regions of target genes. The encoded program plays an essential role in regulation transcription of genes involved in the development and proliferation of hematopoietic and endocrine cell lineages (RefSeq).
 antibodyDescription Mouse monoclonal IgG.
 vendorName Santa Cruz Biotech
@@ -3677,7 +3677,7 @@ validation H3K4me3(Dot_plot):human_H3K4me3_validation_Bernstein.pdf
 term H3K4me3B
 tag H3K4me3B
 type Antibody
-target H3K4me3B
+target H3K4me3
 displayName H3K4me3
 antibodyDescription Rabbit monoclonal antibody
 targetDescription Histone H3 (tri-methyl K4) marks promoters in chromatin regions
@@ -3710,7 +3710,7 @@ term H3K9acB
 tag H3K9acB
 displayName H3K9ac
 type Antibody
-target H3K9acB
+target H3K9ac
 antibodyDescription Rabbit polyclonal
 targetDescription Histone H3 (acetyl K9) marks promoters in chromatin regions
 orderUrl http://www.millipore.com/catalogue/item/07-352
@@ -3785,7 +3785,7 @@ validation H3K27me3(Dot_plot):human_H3K27me3_validation_Bernstein.pdf
 term H3K27me3B
 tag H3K27me3B
 type Antibody
-target H3K27me3B
+target H3K27me3
 displayName H3K27me3
 antibodyDescription rabbit monoclonal
 targetDescription Histone H3 (tri-methyl K27) marks repressed chromatin regions
@@ -3817,7 +3817,7 @@ term H3K36me3B
 tag H3K36me3B
 displayName H3K36me3
 type Antibody
-target H3K36me3B
+target H3K36me3
 antibodyDescription rabbit polyclonal
 targetDescription Histone H3 (tri-methyl K36) marks actively transcribed chromatin regions
 orderUrl http://www.cellsignal.com/products/9763.html
@@ -3871,6 +3871,24 @@ lab Farnham
 targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
+
+term HA-sp
+tag HA-sp
+type Cell Line
+organism human
+description Human astrocytes spinal cord
+tissue Spinal cord
+vendorName Sciencell
+vendorId 1820
+orderUrl http://www.sciencellonline.com/site/products/1820.php
+karyotype Normal
+lineage Astrocytic
+termId BTO:0000099
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
+sex U
+tier 3
+protocol UW_Stam:HA-sp_Stam_protocol.pdf
+
 
 term HEY1
 tag HEY1
@@ -4161,7 +4179,7 @@ validation missing
 term Nrf1
 tag NRF1
 type Antibody
-target Nrf1
+target NRF1
 antibodyDescription Mouse monoclonal, Immunogen corresponding to amino acids 201-286 of Human NRF1
 targetDescription NRF1 is the mammalian homolog to the erect wing (ewg) Drosophila protein that is required for proper development of the central nervous system and indirect flight muscles. In mammals NRF1 functions as a transcription factor that activates the expression of the EIF2S1 (EIF-alpha) gene. This protein links the transcriptional modulation of key metabolic genes to cellular growth and development, and has been implicated in the control of nuclear genes required for respiration, heme biosynthesis and mitochondrialDNA transcription and replication. NRF1 forms a homodimer and binds DNA as a dimer. NRF1 shows a nuclear localization and is expressed widely in embryonic, fetal and adult tissues. Phosphorylation of NRF1 enhances DNA binding.
 vendorName Abcam
@@ -4259,7 +4277,7 @@ validation missing
 term PAX5-C20
 tag PAX5C20
 type Antibody
-target PAX5-C20
+target PAX5
 antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the C-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of m, r and h origin by WB, IP, IF, IHC(P) and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
@@ -4273,7 +4291,7 @@ validation PAX5-C20(Immunoblot):human_PAX5_C-20_validation_Myers.pdf
 term PAX5-N19
 tag PAX5N19
 type Antibody
-target PAX5N19
+target PAX5
 antibodyDescription Goat polyclonal IgG, 200 ?g/ml. Epitope mapping at the N-terminus of Pax-5 of human origin. Recommended for detection of Pax-5 of human origin by WB, IP, IF and ELISA
 targetDescription This gene encodes a member of the paired box (PAX) family of transcription factors. The central feature of this gene family is a novel, highly conserved DNA-binding motif, known as the paired box. PAX proteins are important regulators in early development, and alterations in the expression of their genes are thought to contribute to neoplastic transformation.
 vendorName Santa Cruz Biotech
@@ -4825,7 +4843,7 @@ validation missing
 term USF-1
 tag USF1
 type Antibody
-target USF-1
+target USF1
 antibodyDescription Rabbit polyclonal, USF-1 (C-20).
 targetDescription The ubiquitously expressed cellular upstream stimulatory factor (USF) consists of USF-1 and USF-2 polypeptides which independently exhibit site-specific DNA binding and are members of the c-Myc-related family of regulatory factors containing helix-loop-helix domains. USF also contains a leucine repeat that is required for efficient DNA binding. USF was originally identified as an up- stream stimulatory factor that binds the core sequence CACGTG in the adeno- virus late promoter. These findings, together with the demonstration of coop- erative interaction between USF and the initiator-binding protein, TFII-I, raises the possibility of a more general involvement of USF in transcriptional regula- tion. While expression of both USF-1 and USF-2 species is ubiquitous, different ratios of USF homo- and heterodimers are found in different cell types.
 vendorName Santa Cruz Biotech
@@ -6683,7 +6701,6 @@ organism human
 term Caltech(Wold)
 tag Caltech
 type lab
-type grant
 label Wold - California Institute of Technology
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
@@ -6941,7 +6958,7 @@ labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism mouse
 
 term Yale-m
 tag  Yale
@@ -6951,7 +6968,7 @@ labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
 grantPi Snyder
-organism human
+organism mouse
 
 
 
@@ -7069,3 +7086,442 @@ tag giddings
 type grant
 grantInst University of North Carolina
 projectName UNC-Giddings
+
+
+#################################################################################################################
+#############   Definition of all term types in cv.ra and most other terms that are in the metaDb   #############
+#################################################################################################################
+# This is a very important table of definitions which may be used by CGIs, but will not get into the MDB
+#
+# Definition of specialized settings:
+#   searchable [no/select/date/numeric]  DEFAULT: NO
+#       select: drop-down selection of values discovered in mdb
+#         date: by less than or greater than date range (not yet implemented)
+#      numeric: numeric by range (not yet implemented)
+#
+#    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
+#
+#       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
+
+
+term typeOfTerm
+type typeOfTerm
+label Term types defined
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here.
+searchable no
+cvDefined no
+hidden yes
+
+term accession
+type typeOfTerm
+label Lab provided accession
+description Some labs provide an accession with their data.  When not self explanatory, the lab may provide further description.
+searchable no
+cvDefined no
+# Superceded by geoSample?
+
+term age
+type typeOfTerm
+label Age of experimental organism
+description Some experiments take the age of the animal or tissue sample as a variable.
+searchable select
+cvDefined yes
+
+term annotation
+type typeOfTerm
+label Gencode annotation
+description GENCODE provides a version of it's annotation.
+searchable no
+cvDefined no
+
+term antibody
+type typeOfTerm
+label Antibody or target protein
+description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
+searchable select
+cvDefined yes
+
+term bioRep
+type typeOfTerm
+label UNKNOWN
+description WHAT IS THIS???
+searchable no
+cvDefined no
+# WHAT IS THIS???
+
+term cellType
+type typeOfTerm
+label Cell, tissue or DNA sample
+description Cell line or tissue used as the source of experimental material.
+searchable select
+cvDefined yes
+### Warning should be term cell but this is already in localization!
+
+term composite
+type typeOfTerm
+label UCSC Composite Track
+description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.  This allows convenient selection and configuration.  Also provided will be a detailed description of the set of related experiments.
+searchable no
+cvDefined no
+# Could be cvDefined
+
+term control
+type typeOfTerm
+label Control or Input for ChIPseq
+description Control or 'input' datasets are often used in ChIP-seq experiments, in order to remove background noise before peak calling.  Different types of control sets are sometimes appropriate.
+searchable select
+cvDefined yes
+
+term controlId
+type typeOfTerm
+label ControlId - explicit relationship
+description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling.
+searchable no
+cvDefined no
+
+term dataType
+type typeOfTerm
+label Experiment type
+description Different types of experiments such as ChIP-seq, DNase-seq and RNA-seq result in different file and table formats that should be interpreted appropriately.
+searchable select
+cvDefined yes
+
+term dataVersion
+type typeOfTerm
+label ENCODE release
+description The ENCODE project declares specific data freezes and all submissions are tagged as coming on or before a specified freeze.  This is not a release date but allows identification of which experiments were available for particular rounds of ENCODE analysis.
+searchable select
+cvDefined no
+
+term dateResubmitted
+type typeOfTerm
+label Date resubmitted to UCSC
+description Submitted data that is found to have errors or otherwise needed to be updated will not only have the originally submitted date but this date of resubmission.
+searchable date
+cvDefined no
+
+term dateSubmitted
+type typeOfTerm
+label Date submitted to UCSC
+description Date that a particular dataset was originally submitted to the UCSC Genome Browser.
+searchable date
+cvDefined no
+
+term dateUnrestricted
+type typeOfTerm
+label Date restrictions are lifted
+description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted.
+searchable date
+cvDefined no
+
+# term expVars
+# type typeOfTerm
+# label Experimental variables
+# description Experiment defining variables for a given ENCODE composite set of tracks.
+# searchable no
+# cvDefined no
+# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite
+
+term fileIndex
+type typeOfTerm
+label BAM Index file
+description The name of the index file in the downloads directory associated with a particular track or raw data file.
+searchable no
+cvDefined no
+
+term fileName
+type typeOfTerm
+label File Name for downloading
+description The name of a downloadable file associated with a particular track in the browser.
+searchable no
+cvDefined no
+
+term fragLength
+type typeOfTerm
+label Mean Length of DNA fragments
+description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size.
+searchable no
+cvDefined no
+# Collapse with fragSize?
+
+term fragSize
+type typeOfTerm
+label Length of GIS PET fragments
+description WHAT IS THIS???
+searchable no
+cvDefined no
+# WHAT IS THIS?
+
+term freezeDate
+type typeOfTerm
+label Gencode freeze date
+description Date when GENCODE froze data in order to submit to UCSC.
+searchable no
+cvDefined no
+
+term geoSample
+type typeOfTerm
+label GEO accession
+description GEO sample accession number applied to a single data set in a series of related data sets.
+searchable select
+cvDefined no
+
+# term geoSampleAccession
+# type typeOfTerm
+# label GEO sample accession
+# description GEO sample accession number applied to a single data set in a series of related data sets.
+# searchable select
+# cvDefined no
+# Should be replaced by geoSample
+
+term geoSeries
+type typeOfTerm
+label GEO series accession
+description GEO series accession number applied to all data sets in a related series.
+searchable select
+cvDefined no
+
+# term geoSeriesAccession
+# type typeOfTerm
+# label GEO series
+# searchable select
+# description GEO Sample accession number applied to a single data set in a series of related data sets.
+# cvDefined no
+# Should be replaced by geoSeries
+
+term grant
+type typeOfTerm
+label Principal Investigator
+description Principle investigator holding the grant by which a set of experiments are financed.  The data sets associated with a single PI often investigate broad questions in a harmonious way.  Some grant PIs coordinate the work of several labs.
+searchable select
+cvDefined yes
+
+term insertLength
+type typeOfTerm
+label Insertion length
+description WHAT IS THIS???
+searchable no
+cvDefined no
+# WHAT IS THIS?
+
+term lab
+type typeOfTerm
+label Lab producing data
+description Lab details for a particular lab often producing a large number of experiments that investigate broad questions in a harmonious way.  Some labs work in concert with other labs under a single grant and coordinated by a single PI.
+searchable select
+cvDefined yes
+
+term labExpId
+type typeOfTerm
+label Lab specific identifier
+description An ID provided by a lab during data submission that uniquely identifies an experiment to that lab.
+searchable select
+cvDefined no
+
+term labProtocolId
+type typeOfTerm
+label Lab specific protocol ID
+description Some labs produce experiments under multiple defined protocols which may or may not be experiment altering, but which should be recorded all the same.
+searchable no
+cvDefined no
+
+term labVersion
+type typeOfTerm
+label Lab specific details
+description Free text field for labs to record miscellaneous details of their experiments and submitted data sets.
+searchable select
+cvDefined no
+
+term level
+type typeOfTerm
+label Gencode level
+description GENCODE level of annotation.  Level 1: validated.  Level 2: manually annotated.  Level 3: automated annotation.
+searchable no
+cvDefined no
+
+term localization
+type typeOfTerm
+label Cell compartment
+description Localization within a cell compartment.
+searchable select
+cvDefined yes
+
+term mapAlgorithm
+type typeOfTerm
+label Mapping algorithm
+description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
+searchable select
+cvDefined yes
+
+term origAssembly
+type typeOfTerm
+label Assembly originally mapped to
+description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
+searchable select
+cvDefined no
+# Could be cv.ra term
+
+term parentTable
+type typeOfTerm
+label Closest related table
+description A data file available for downloads may not be directly associated with a track in the UCSC Genome Browser.  If this is the case, this term will identify the closest track or table related to this file.
+searchable no
+cvDefined no
+hidden yes
+# On its way out
+
+term phase
+type typeOfTerm
+label Cell phase
+description The phase in a cell cycle.  Some experiments attempt to isolate results at a single phase.
+searchable no
+cvDefined no
+# Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
+
+# term project
+# type typeOfTerm
+# label Project funded by
+# description Project that funded this and a related set of experiments.
+# searchable no
+# cvDefined no
+# Only one: all encode is under single project='wgEncode'
+
+term protocol
+type typeOfTerm
+label Library Protocol
+description Lab specific protocol that may cover a number of steps in an experiment.  Most typically this identifies methods for building a DNA or RNA library.
+searchable select
+cvDefined yes
+
+term rank
+type typeOfTerm
+label Rank of replicate
+description Experiments with multiple replicates may declare a preferred replicate for visualization.
+searchable no
+cvDefined no
+# UW used rank in hg18 only
+
+term readType
+type typeOfTerm
+label Paired/Single reads lengths
+description Length of single or paired-end reads in a high-throughput sequencing experiment.
+searchable select
+cvDefined yes
+
+term replicate
+type typeOfTerm
+label Replicate number
+description Many experiments are replicated from distinct sample cultures for obvious reasons.  These separate experiments may be submitted to UCSC as numbered replicates.
+searchable select
+cvDefined no
+
+term restrictionEnzyme
+type typeOfTerm
+label Restriction Enzyme used
+description The restriction enzyme used in an experiment, typically for DNA library preparation for a high-throughput sequencing experiment.
+searchable no
+cvDefined yes
+
+term rnaExtract
+type typeOfTerm
+label RNA Extract
+description Fraction of total cellular RNA selected for by an experiment.
+searchable select
+cvDefined yes
+
+term seqPlatform
+type typeOfTerm
+label Sequencing Platform
+description Sequencing platform used in high-throughput sequencing experiment.
+searchable select
+cvDefined yes
+
+term setType
+type typeOfTerm
+label Experiment or Input
+description ChIP-seq experiments often require 'input' or control (such as whole cell extract) results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
+searchable select
+cvDefined no
+
+term sex
+type typeOfTerm
+label Sex of organism
+description The sex of a cell line or tissue sample affects the genome target of an experiment.
+searchable select
+cvDefined yes
+
+term size
+type typeOfTerm
+label Mapability windowing size
+description The windowing size used, typically in a whole genome computational analysis and characterization dataset.
+searchable no
+cvDefined no
+# Used in hg19 mapability only
+
+term softwareVersion
+type typeOfTerm
+label Lab specific informatics
+description A free-text field for a lab to declare the software and computational methods used in an experiment.
+searchable select
+cvDefined no
+
+term strain
+type typeOfTerm
+label Strain of organism
+description The strain of an organism or tissue sample used in an experiment.
+searchable select
+cvDefined yes
+
+term subId
+type typeOfTerm
+label Submission Id
+description The submission ID assigned by the UCSC Genome Browser at time of actual submission of data.
+searchable select
+cvDefined no
+
+term submittedDataVersion
+type typeOfTerm
+label Version of data if resubmitted
+description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
+searchable no
+cvDefined no
+
+term tableName
+type typeOfTerm
+label Name of SQL table at UCSC
+description Downloadable files containing data displayed in tracks in the UCSC Genome Browser are often stored in SQL tables.  The particular table can be located by this name.
+searchable no
+cvDefined no
+# This should be metaDb variable only for file objects. A table object will have an object name that is the table name.  In fact, the object name of the file shouuld also be the table name, so this field could be obsoleted.
+# Only one case has been found where tableName != objName:
+#  select * from hg18.metaDb where var = "tableName" and obj != val; # wgEncodeGisPetPlusRawSignalRep1Helas3NucleusLongpolya  wgEncodeGisPetPlusRawSignalHelas3NucleusLongpolya
+
+term treatment
+type typeOfTerm
+label Treatment
+description Treatment used as an experimental variable in a series of experiments.
+searchable select
+cvDefined yes
+
+# term type
+# type typeOfTerm
+# label Data Format type
+# searchable no
+# description Data format of a particular file or table.
+# cvDefined no
+# Used rarely in hg18 to distinguish wig and bedGraph
+
+term uniqueness
+type typeOfTerm
+label Number of mismatches tolerated
+description Mapping sequence tags to a reference genome will typically tolerate a number of mismatches which may be due to natural variability. This variable is used in generating mapability tracks.
+searchable no
+cvDefined no
+# Used in hg19 mapability only
+
+term view
+type typeOfTerm
+label View - Peaks or Signals
+description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
+searchable select
+cvDefined no
