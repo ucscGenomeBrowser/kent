@@ -3500,3 +3500,7 @@ tablesIgnored oryLat2
 
 tablesIgnored susScr2
     bosTau4ChainPileUp
+
+tablesIgnored calJac3
+    bacEnds
+    bacEndCalJac3Singles
