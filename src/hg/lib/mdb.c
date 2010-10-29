@@ -2221,8 +2221,7 @@ struct cvTerms whiteList[] = {
   //{"uniqueness"          ,"Number of mismatches tolerated"   ,FALSE,FALSE}, // Used in hg19 mapability only
     {"view"                ,"View - Peaks or Signals"          ,TRUE ,FALSE},
 };
-
-int ix,size = sizeof(whiteList);
+int ix,size = sizeof(whiteList)/sizeof(struct cvTerms);
 struct slPair *whitePairs = NULL;
 for(ix=0;ix<size;ix++)
     {
