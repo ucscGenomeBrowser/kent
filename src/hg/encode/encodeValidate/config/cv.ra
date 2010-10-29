@@ -3872,6 +3872,24 @@ targetId GeneCard:GC20M031727
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=E2F1&search=E2F1_id=GC20M031727
 validation HA-E2F1(Immunoprecipitation-Western_blot,ChIP):human_E2F1_HA-E2F1_validation_Farnham.pdf
 
+term HA-sp
+tag HA-sp
+type Cell Line
+organism human
+description Human astrocytes spinal cord 
+tissue Spinal cord
+vendorName Sciencell
+vendorId 1820
+orderUrl http://www.sciencellonline.com/site/products/1820.php
+karyotype Normal
+lineage Astrocytic
+termId BTO:0000099
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0000099
+sex U
+tier 3
+protocol UW_Stam:HA-sp_Stam_protocol.pdf
+
+
 term HEY1
 tag HEY1
 type Antibody
