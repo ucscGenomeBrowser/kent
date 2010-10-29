@@ -318,5 +318,8 @@ struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limi
 // (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
 // Return is case insensitive sorted on name (label or else val).
 
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
+// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
+
 #endif /* MDB_H */
 
