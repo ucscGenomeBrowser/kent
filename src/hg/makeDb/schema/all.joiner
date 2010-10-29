@@ -3140,6 +3140,7 @@ tablesIgnored $gbd
     history
     intronEst
     knownAlt
+    metaDb%
     miRNA
     nestedRepeats
     nestedRepeatsRM327
