@@ -892,11 +892,15 @@ identifier affyU95
     $hg.affyRatio.name
     $hg.knownToU95.value
 
+identifier affyU133hg18
+"Affymetrix Human U133 chip identifiers"
+     hg18,hg17,hg16.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
+     $hg.knownToU133.value
+
 identifier affyU133
 "Affymetrix Human U133 chip identifiers"
-    hg19.affyU133.qName dupeOk 
-    $hg,!hg19.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
-    $hg.knownToU133.value
+     $hg,!hg18,!hg17,!hg16.affyU133.qName dupeOk
+     $hg.knownToU133.value
 
 identifier affyU133Plus2
 "Affymetrix Human U133 chip identifiers"
@@ -3500,3 +3504,7 @@ tablesIgnored oryLat2
 
 tablesIgnored susScr2
     bosTau4ChainPileUp
+
+tablesIgnored calJac3
+    bacEnds
+    bacEndCalJac3Singles
