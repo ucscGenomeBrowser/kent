@@ -214,17 +214,23 @@ fetchUrlTest:  mkdirs fetchUrlTest.o ${MYLIBS}
 # gff3 tests
 ##
 gff3Tester=${BIN_DIR}/gff3Tester
-gff3Test: gff3SacCerTest gff3ErrorCasesTest
+gff3Test: gff3SacCerTest gff3ErrorCasesTest gff3DiscontiousTest
 
 # FIXME: doesn't work yet
 # gff3SpecialCasesTest
 
 gff3SacCerTest: ${gff3Tester} mkdirs
 	${gff3Tester} input/sacCerTest.gff3 output/$@.out
+	diff expected/$@.out output/$@.out
 gff3SpecialCasesTest: ${gff3Tester} mkdirs
 	${gff3Tester} input/specialCasesTest.gff3 output/$@.out
+	diff expected/$@.out output/$@.out
 gff3ErrorCasesTest: ${gff3Tester} mkdirs
 	if ${gff3Tester} input/errorCasesTest.gff3 /dev/null >output/$@.err 2>&1 ; then exit 0 else exit 1; fi
+	diff expected/$@.err output/$@.err
+gff3DiscontiousTest: ${gff3Tester} mkdirs
+	${gff3Tester} input/discontinuous.gff3 output/$@.out
+	diff expected/$@.out output/$@.out
 
 ${BIN_DIR}/gff3Tester: gff3Tester.o ${MYLIBS}
 	${MKDIR} ${BIN_DIR}

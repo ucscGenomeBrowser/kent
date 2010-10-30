@@ -12,9 +12,13 @@ struct gff3Ann
  * object. User defined attributes (starting with lower-case characters) are
  * stored as in a list, along with a copy of the string versions of the spec
  * attributes. All strings stored in the object have been un-escaped.
- * All storage for the object is allocated by the gff3File object. */
+ * All storage for the object is allocated by the gff3File object.
+ * For discontinuous features, there are multiple gff3Ann objects.
+ * These objects are stored in a double-linked list, and all references
+ * point to the first one in ascending start order.*/
 {
-    struct gff3Ann *next; /* links all gff3Ann objects */
+    struct gff3Ann *prevPart; /* Discontinuous features have linked annotation */
+    struct gff3Ann *nextPart; /* field name next not used to avoid confusion */
     char *seqid;   /* The ID of the landmark used to establish the coordinate
                     * system for the current feature. IDs may contain any
                     * characters. */
@@ -146,7 +150,7 @@ struct gff3Attr
 {
     struct gff3Attr *next;     /* next attribute in the list */
     char *tag;                 /* name of attribute */
-    struct slName *vals;       /* values for the attribute */
+   struct slName *vals;       /* values for the attribute */
 };
 
 struct gff3SeqRegion
@@ -162,9 +166,9 @@ struct gff3File
 /* Object representing a GFF file. Manages all memory for related objects. */
 {
     char *fileName;       /* path of file that was parsed */
-    struct hash *byId;    /* index of gff3Ann object by id */
-    struct gff3Ann *anns; /* all records in the file */
-    struct gff3AnnRef *roots;  /* all records without parents */
+    struct hash *byId;    /* index of gff3Ann object by id.  Links to first object of link discontinuous features */
+    struct gff3AnnRef *anns;   /* all records in the file. Includes all parts of discontinuous features */
+    struct gff3AnnRef *roots;  /* all records without parents. */
     struct hash *pool;         /* used to allocate string values that tend to
                                 * be repeated in the files.  localMem is also 
                                 * to allocated memory for all other objects. */
