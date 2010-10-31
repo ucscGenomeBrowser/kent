@@ -33,7 +33,7 @@ noInherit on
     pValueFilter 0.0
     pValueFilterLimits 0:324
 
-        track wgEncodeUwHistoneBjCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsBjCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel BJ    CTCF    Hs1
@@ -43,7 +43,7 @@ noInherit on
         origAssembly hg18
         # subId=1255 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneGm12878CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot      
         shortLabel GM878 CTCF    Hs1
@@ -54,7 +54,7 @@ noInherit on
         color 153,38,0
         # subId=1263 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneK562CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsK562CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot      
         shortLabel K562  CTCF    Hs1
@@ -65,7 +65,7 @@ noInherit on
         color 46,0,184
         # subId=1266 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm06990CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel GM990 CTCF    Hs1
@@ -75,7 +75,7 @@ noInherit on
         origAssembly hg18
         # subId=1268 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneCaco2CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel Caco2 CTCF    Hs1
@@ -85,7 +85,7 @@ noInherit on
         origAssembly hg18
         # subId=1269 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12864CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel GM864 CTCF    Hs1
@@ -95,7 +95,7 @@ noInherit on
         origAssembly hg18
         # subId=1272 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12865CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel GM865 CTCF    Hs1
@@ -105,7 +105,7 @@ noInherit on
         origAssembly hg18
         # subId=1275 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12872CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel GM872 CTCF    Hs1
@@ -115,7 +115,7 @@ noInherit on
         origAssembly hg18
         # subId=1277 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12874CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel GM874 CTCF    Hs1
@@ -125,7 +125,7 @@ noInherit on
         origAssembly hg18
         # subId=1281 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneHek293CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHek293CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HEK29 CTCF    Hs1
@@ -135,7 +135,7 @@ noInherit on
         origAssembly hg18
         # subId=1294 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHelas3CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HeLaS CTCF    Hs1
@@ -146,7 +146,7 @@ noInherit on
         color 0,119,158
         # subId=1297 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHepg2CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HepG2 CTCF    Hs1
@@ -157,7 +157,7 @@ noInherit on
         color 189,0,157
         # subId=1298 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHl60CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHl60CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HL-60 CTCF    Hs1
@@ -167,7 +167,7 @@ noInherit on
         origAssembly hg18
         # subId=1300 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHmecCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHmecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HMEC  CTCF    Hs1
@@ -177,7 +177,7 @@ noInherit on
         origAssembly hg18
         # subId=1301 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHreCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HRE   CTCF    Hs1
@@ -187,7 +187,7 @@ noInherit on
         origAssembly hg18
         # subId=1304 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHuvecCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel HUVEC CTCF    Hs1
@@ -198,7 +198,7 @@ noInherit on
         color 224,75,0
         # subId=1307 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneNhekCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsNhekCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel NHEK  CTCF    Hs1
@@ -209,7 +209,7 @@ noInherit on
         color 179,0,134
         # subId=1310 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSaecCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsSaecCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel SAEC  CTCF    Hs1
@@ -219,7 +219,7 @@ noInherit on
         origAssembly hg18
         # subId=1312 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSknshraCtcfStdHotspotsRep1
+        track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel SKNSH CTCF    Hs1
@@ -229,7 +229,7 @@ noInherit on
         origAssembly hg18
         # subId=1313 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneWerirb1CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot       off
         shortLabel WERIR CTCF    Hs1
@@ -239,7 +239,7 @@ noInherit on
         origAssembly hg18
         # subId=1315 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneBjCtcfStdHotspotsRep2
+        track wgEncodeUwTfbsBjCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel BJ    CTCF    Hs2
@@ -249,7 +249,7 @@ noInherit on
         origAssembly hg18
         # subId=1262 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneK562CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsK562CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot 
         shortLabel K562  CTCF    Hs2
@@ -260,7 +260,7 @@ noInherit on
         color 46,0,184
         # subId=1264 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneGm12878CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12878CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot 
         shortLabel GM878 CTCF    Hs2
@@ -271,7 +271,7 @@ noInherit on
         color 153,38,0
         # subId=1265 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneCaco2CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsCaco2CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel Caco2 CTCF    Hs2
@@ -281,7 +281,7 @@ noInherit on
         origAssembly hg18
         # subId=1267 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm06990CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm06990CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM990 CTCF    Hs2
@@ -291,7 +291,7 @@ noInherit on
         origAssembly hg18
         # subId=1271 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12865CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12865CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM865 CTCF    Hs2
@@ -301,7 +301,7 @@ noInherit on
         origAssembly hg18
         # subId=1274 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12872CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12872CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM872 CTCF    Hs2
@@ -311,7 +311,7 @@ noInherit on
         origAssembly hg18
         # subId=1278 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12874CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12874CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM874 CTCF    Hs2
@@ -321,7 +321,7 @@ noInherit on
         origAssembly hg18
         # subId=1280 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneHelas3CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsHelas3CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel HeLaS CTCF    Hs2
@@ -332,7 +332,7 @@ noInherit on
         color 0,119,158
         # subId=1296 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHepg2CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsHepg2CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel HepG2 CTCF    Hs2
@@ -343,7 +343,7 @@ noInherit on
         color 189,0,157
         # subId=1299 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdHotspotsRep2
+        track wgEncodeUwTfbsHreCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel HRE   CTCF    Hs2
@@ -353,7 +353,7 @@ noInherit on
         origAssembly hg18
         # subId=1305 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHuvecCtcfStdHotspotsRep2
+        track wgEncodeUwTfbsHuvecCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel HUVEC CTCF    Hs2
@@ -364,7 +364,7 @@ noInherit on
         color 224,75,0
         # subId=1306 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneNhekCtcfStdHotspotsRep2
+        track wgEncodeUwTfbsNhekCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel NHEK  CTCF    Hs2
@@ -375,7 +375,7 @@ noInherit on
         color 179,0,134
         # subId=1309 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSaecCtcfStdHotspotsRep2
+        track wgEncodeUwTfbsSaecCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel SAEC  CTCF    Hs2
@@ -385,7 +385,7 @@ noInherit on
         origAssembly hg18
         # subId=1311 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSknshraCtcfStdHotspotsRep2
+        track wgEncodeUwTfbsSknshraCtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel SKNSH CTCF    Hs2
@@ -395,7 +395,7 @@ noInherit on
         origAssembly hg18
         # subId=1314 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12864CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12864CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM864 CTCF    Hs2
@@ -405,7 +405,7 @@ noInherit on
         origAssembly hg18
         # subId=1273 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12873CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12873CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM873 CTCF    Hs1
@@ -415,7 +415,7 @@ noInherit on
         origAssembly hg18
         # subId=1276 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12875CtcfStdHotspotsRep1
+        track wgEncodeUwTfbsGm12875CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM875 CTCF    Hs1
@@ -425,7 +425,7 @@ noInherit on
         origAssembly hg18
         # subId=1482 dateSubmitted=2010-06-15
 
-      	track wgEncodeUwHistoneGm12801CtcfStdHotspotsRep1
+      	track wgEncodeUwTfbsGm12801CtcfStdHotspotsRep1
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM801 CTCF    Hs1
@@ -435,7 +435,7 @@ noInherit on
         origAssembly hg18
         # subId=1270 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12873CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12873CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM873 CTCF    Hs2
@@ -445,7 +445,7 @@ noInherit on
         origAssembly hg18
         # subId=1279 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneHek293CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsHek293CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel HEK29 CTCF    Hs2
@@ -455,7 +455,7 @@ noInherit on
         origAssembly hg18
         # subId=1486 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12875CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsGm12875CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel GM875 CTCF    Hs2
@@ -465,7 +465,7 @@ noInherit on
         origAssembly hg18
         # subId=1484 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneWerirb1CtcfStdHotspotsRep2
+        track wgEncodeUwTfbsWerirb1CtcfStdHotspotsRep2
         release alpha
         parent wgEncodeUwTFBSViewHot off
         shortLabel WERIR CTCF    Hs2
@@ -483,7 +483,7 @@ noInherit on
     pValueFilter 0.0
     pValueFilterLimits 0:324
 
-        track wgEncodeUwHistoneBjCtcfStdPkRep1
+        track wgEncodeUwTfbsBjCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel BJ    CTCF    Pk1
@@ -493,7 +493,7 @@ noInherit on
         origAssembly hg18
         # subId=1255 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneGm12878CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12878CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks 
         shortLabel GM878 CTCF    Pk1
@@ -504,7 +504,7 @@ noInherit on
         color 153,38,0
         # subId=1263 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneK562CtcfStdPkRep1
+        track wgEncodeUwTfbsK562CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks 
         shortLabel K562  CTCF    Pk1
@@ -515,7 +515,7 @@ noInherit on
         color 46,0,184
         # subId=1266 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm06990CtcfStdPkRep1
+        track wgEncodeUwTfbsGm06990CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM990 CTCF    Pk1
@@ -525,7 +525,7 @@ noInherit on
         origAssembly hg18
         # subId=1268 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneCaco2CtcfStdPkRep1
+        track wgEncodeUwTfbsCaco2CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel Caco2 CTCF    Pk1
@@ -535,7 +535,7 @@ noInherit on
         origAssembly hg18
         # subId=1269 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12864CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12864CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM864 CTCF    Pk1
@@ -545,7 +545,7 @@ noInherit on
         origAssembly hg18
         # subId=1272 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12865CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12865CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM865 CTCF    Pk1
@@ -555,7 +555,7 @@ noInherit on
         origAssembly hg18
         # subId=1275 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12872CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12872CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM872 CTCF    Pk1
@@ -565,7 +565,7 @@ noInherit on
         origAssembly hg18
         # subId=1277 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12874CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12874CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM874 CTCF    Pk1
@@ -575,7 +575,7 @@ noInherit on
         origAssembly hg18
         # subId=1281 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneHek293CtcfStdPkRep1
+        track wgEncodeUwTfbsHek293CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HEK29 CTCF    Pk1
@@ -585,7 +585,7 @@ noInherit on
         origAssembly hg18
         # subId=1294 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHelas3CtcfStdPkRep1
+        track wgEncodeUwTfbsHelas3CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HeLaS CTCF    Pk1
@@ -596,7 +596,7 @@ noInherit on
         color 0,119,158
         # subId=1297 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHepg2CtcfStdPkRep1
+        track wgEncodeUwTfbsHepg2CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HepG2 CTCF    Pk1
@@ -607,7 +607,7 @@ noInherit on
         color 189,0,157
         # subId=1298 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHl60CtcfStdPkRep1
+        track wgEncodeUwTfbsHl60CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HL-60 CTCF    Pk1
@@ -617,7 +617,7 @@ noInherit on
         origAssembly hg18
         # subId=1300 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHmecCtcfStdPkRep1
+        track wgEncodeUwTfbsHmecCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HMEC  CTCF    Pk1
@@ -627,7 +627,7 @@ noInherit on
         origAssembly hg18
         # subId=1301 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdPkRep1
+        track wgEncodeUwTfbsHreCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HRE   CTCF    Pk1
@@ -637,7 +637,7 @@ noInherit on
         origAssembly hg18
         # subId=1304 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHuvecCtcfStdPkRep1
+        track wgEncodeUwTfbsHuvecCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HUVEC CTCF    Pk1
@@ -648,7 +648,7 @@ noInherit on
         color 224,75,0
         # subId=1307 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneNhekCtcfStdPkRep1
+        track wgEncodeUwTfbsNhekCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel NHEK  CTCF    Pk1
@@ -659,7 +659,7 @@ noInherit on
         color 179,0,134
         # subId=1310 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSaecCtcfStdPkRep1
+        track wgEncodeUwTfbsSaecCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel SAEC  CTCF    Pk1
@@ -669,7 +669,7 @@ noInherit on
         origAssembly hg18
         # subId=1312 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSknshraCtcfStdPkRep1
+        track wgEncodeUwTfbsSknshraCtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel SKNSH CTCF    Pk1
@@ -679,7 +679,7 @@ noInherit on
         origAssembly hg18
         # subId=1313 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneWerirb1CtcfStdPkRep1
+        track wgEncodeUwTfbsWerirb1CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel WERIR CTCF    Pk1
@@ -689,7 +689,7 @@ noInherit on
         origAssembly hg18
         # subId=1315 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneBjCtcfStdPkRep2
+        track wgEncodeUwTfbsBjCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel BJ    CTCF    Pk2
@@ -699,7 +699,7 @@ noInherit on
         origAssembly hg18
         # subId=1262 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneK562CtcfStdPkRep2
+        track wgEncodeUwTfbsK562CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  
         shortLabel K562  CTCF    Pk2
@@ -710,7 +710,7 @@ noInherit on
         color 46,0,184
         # subId=1264 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneGm12878CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12878CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks 
         shortLabel GM878 CTCF    Pk2
@@ -721,7 +721,7 @@ noInherit on
         color 153,38,0
         # subId=1265 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneCaco2CtcfStdPkRep2
+        track wgEncodeUwTfbsCaco2CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel Caco2 CTCF    Pk2
@@ -731,7 +731,7 @@ noInherit on
         origAssembly hg18
         # subId=1267 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm06990CtcfStdPkRep2
+        track wgEncodeUwTfbsGm06990CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM990 CTCF    Pk2
@@ -741,7 +741,7 @@ noInherit on
         origAssembly hg18
         # subId=1271 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12865CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12865CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM865 CTCF    Pk2
@@ -751,7 +751,7 @@ noInherit on
         origAssembly hg18
         # subId=1274 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12872CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12872CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM872 CTCF    Pk2
@@ -761,7 +761,7 @@ noInherit on
         origAssembly hg18
         # subId=1278 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12874CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12874CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM874 CTCF    Pk2
@@ -771,7 +771,7 @@ noInherit on
         origAssembly hg18
         # subId=1280 dateSubmitted=2010-06-08
 
-     	track wgEncodeUwHistoneHelas3CtcfStdPkRep2
+     	track wgEncodeUwTfbsHelas3CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HeLaS CTCF    Pk2
@@ -782,7 +782,7 @@ noInherit on
         color 0,119,158
         # subId=1296 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHepg2CtcfStdPkRep2
+        track wgEncodeUwTfbsHepg2CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HepG2 CTCF    Pk2
@@ -793,7 +793,7 @@ noInherit on
         color 189,0,157
         # subId=1299 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdPkRep2
+        track wgEncodeUwTfbsHreCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HRE   CTCF    Pk2
@@ -803,7 +803,7 @@ noInherit on
         origAssembly hg18
         # subId=1305 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHuvecCtcfStdPkRep2
+        track wgEncodeUwTfbsHuvecCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HUVEC CTCF    Pk2
@@ -814,7 +814,7 @@ noInherit on
         color 224,75,0
         # subId=1306 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneNhekCtcfStdPkRep2
+        track wgEncodeUwTfbsNhekCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel NHEK  CTCF    Pk2
@@ -825,7 +825,7 @@ noInherit on
         color 179,0,134
         # subId=1309 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSaecCtcfStdPkRep2
+        track wgEncodeUwTfbsSaecCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel SAEC  CTCF    Pk2
@@ -835,7 +835,7 @@ noInherit on
         origAssembly hg18
         # subId=1311 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSknshraCtcfStdPkRep2
+        track wgEncodeUwTfbsSknshraCtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel SKNSH CTCF    Pk2
@@ -845,7 +845,7 @@ noInherit on
         origAssembly hg18
         # subId=1314 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12864CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12864CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM864 CTCF    Pk2
@@ -855,7 +855,7 @@ noInherit on
         origAssembly hg18
         # subId=1273 dateSubmitted=2010-06-08
 
-       track wgEncodeUwHistoneGm12873CtcfStdPkRep1
+       track wgEncodeUwTfbsGm12873CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM873 CTCF    Pk1
@@ -865,7 +865,7 @@ noInherit on
         origAssembly hg18
         # subId=1276 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12875CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12875CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM875 CTCF    Pk1
@@ -875,7 +875,7 @@ noInherit on
         origAssembly hg18
         # subId=1482 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12873CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12873CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM873 CTCF    Pk2
@@ -885,7 +885,7 @@ noInherit on
         origAssembly hg18
         # subId=1279 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneHek293CtcfStdPkRep2
+        track wgEncodeUwTfbsHek293CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel HEK29 CTCF    Pk2
@@ -895,7 +895,7 @@ noInherit on
         origAssembly hg18
         # subId=1486 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12875CtcfStdPkRep2
+        track wgEncodeUwTfbsGm12875CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM875 CTCF    Pk2
@@ -905,7 +905,7 @@ noInherit on
         origAssembly hg18
         # subId=1484 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12801CtcfStdPkRep1
+        track wgEncodeUwTfbsGm12801CtcfStdPkRep1
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel GM801 CTCF    Pk1
@@ -915,7 +915,7 @@ noInherit on
         origAssembly hg18
         # subId=1270 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneWerirb1CtcfStdPkRep2
+        track wgEncodeUwTfbsWerirb1CtcfStdPkRep2
         release alpha
         parent wgEncodeUwTFBSViewPeaks  off
         shortLabel WERIR CTCF    Pk2
@@ -937,7 +937,7 @@ noInherit on
     maxHeightPixels 100:32:16
     windowingFunction mean
 
-        track wgEncodeUwHistoneBjCtcfStdRawRep1
+        track wgEncodeUwTfbsBjCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel BJ    CTCF    Ra1
@@ -947,7 +947,7 @@ noInherit on
         origAssembly hg18
         # subId=1255 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneGm12878CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12878CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig
         shortLabel GM878 CTCF    Ra1
@@ -958,7 +958,7 @@ noInherit on
         color 153,38,0
         # subId=1263 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneK562CtcfStdRawRep1
+        track wgEncodeUwTfbsK562CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig
         shortLabel K562  CTCF    Ra1
@@ -969,7 +969,7 @@ noInherit on
         color 46,0,184
         # subId=1266 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm06990CtcfStdRawRep1
+        track wgEncodeUwTfbsGm06990CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM990 CTCF    Ra1
@@ -979,7 +979,7 @@ noInherit on
         origAssembly hg18
         # subId=1268 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneCaco2CtcfStdRawRep1
+        track wgEncodeUwTfbsCaco2CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel Caco2 CTCF    Ra1
@@ -989,7 +989,7 @@ noInherit on
         origAssembly hg18
         # subId=1269 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12864CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12864CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM864 CTCF    Ra1
@@ -999,7 +999,7 @@ noInherit on
         origAssembly hg18
         # subId=1272 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12865CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12865CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM865 CTCF    Ra1
@@ -1009,7 +1009,7 @@ noInherit on
         origAssembly hg18
         # subId=1275 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12872CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12872CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM872 CTCF    Ra1
@@ -1019,7 +1019,7 @@ noInherit on
         origAssembly hg18
         # subId=1277 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12874CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12874CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM874 CTCF    Ra1
@@ -1029,7 +1029,7 @@ noInherit on
         origAssembly hg18
         # subId=1281 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneHek293CtcfStdRawRep1
+        track wgEncodeUwTfbsHek293CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HEK29 CTCF    Ra1
@@ -1039,7 +1039,7 @@ noInherit on
         origAssembly hg18
         # subId=1294 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHelas3CtcfStdRawRep1
+        track wgEncodeUwTfbsHelas3CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HeLaS CTCF    Ra1
@@ -1050,7 +1050,7 @@ noInherit on
         color 0,119,158
         # subId=1297 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHepg2CtcfStdRawRep1
+        track wgEncodeUwTfbsHepg2CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HepG2 CTCF    Ra1
@@ -1061,7 +1061,7 @@ noInherit on
         color 189,0,157
         # subId=1298 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHl60CtcfStdRawRep1
+        track wgEncodeUwTfbsHl60CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HL-60 CTCF    Ra1
@@ -1071,7 +1071,7 @@ noInherit on
         origAssembly hg18
         # subId=1300 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHmecCtcfStdRawRep1
+        track wgEncodeUwTfbsHmecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HMEC  CTCF    Ra1
@@ -1081,7 +1081,7 @@ noInherit on
         origAssembly hg18
         # subId=1301 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdRawRep1
+        track wgEncodeUwTfbsHreCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HRE   CTCF    Ra1
@@ -1091,7 +1091,7 @@ noInherit on
         origAssembly hg18
         # subId=1304 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHuvecCtcfStdRawRep1
+        track wgEncodeUwTfbsHuvecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HUVEC CTCF    Ra1
@@ -1102,7 +1102,7 @@ noInherit on
         color 224,75,0
         # subId=1307 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneNhekCtcfStdRawRep1
+        track wgEncodeUwTfbsNhekCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel NHEK  CTCF    Ra1
@@ -1113,7 +1113,7 @@ noInherit on
         color 179,0,134
         # subId=1310 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSaecCtcfStdRawRep1
+        track wgEncodeUwTfbsSaecCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel SAEC  CTCF    Ra1
@@ -1123,7 +1123,7 @@ noInherit on
         origAssembly hg18
         # subId=1312 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSknshraCtcfStdRawRep1
+        track wgEncodeUwTfbsSknshraCtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel SKNSH CTCF    Ra1
@@ -1133,7 +1133,7 @@ noInherit on
         origAssembly hg18
         # subId=1313 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneWerirb1CtcfStdRawRep1
+        track wgEncodeUwTfbsWerirb1CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel WERIR CTCF    Ra1
@@ -1143,7 +1143,7 @@ noInherit on
         origAssembly hg18
         # subId=1315 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneBjCtcfStdRawRep2
+        track wgEncodeUwTfbsBjCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel BJ    CTCF    Ra2
@@ -1153,7 +1153,7 @@ noInherit on
         origAssembly hg18
         # subId=1262 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneK562CtcfStdRawRep2
+        track wgEncodeUwTfbsK562CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig 
         shortLabel K562  CTCF    Ra2
@@ -1164,7 +1164,7 @@ noInherit on
         color 46,0,184
         # subId=1264 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneGm12878CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12878CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig 
         shortLabel GM878 CTCF    Ra2
@@ -1175,7 +1175,7 @@ noInherit on
         color 153,38,0
         # subId=1265 dateSubmitted=2010-06-07
 
-        track wgEncodeUwHistoneCaco2CtcfStdRawRep2
+        track wgEncodeUwTfbsCaco2CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel Caco2 CTCF    Ra2
@@ -1185,7 +1185,7 @@ noInherit on
         origAssembly hg18
         # subId=1267 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm06990CtcfStdRawRep2
+        track wgEncodeUwTfbsGm06990CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM990 CTCF    Ra2
@@ -1195,7 +1195,7 @@ noInherit on
         origAssembly hg18
         # subId=1271 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12865CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12865CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM865 CTCF    Ra2
@@ -1205,7 +1205,7 @@ noInherit on
         origAssembly hg18
         # subId=1274 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12872CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12872CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM872 CTCF    Ra2
@@ -1215,7 +1215,7 @@ noInherit on
         origAssembly hg18
         # subId=1278 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12874CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12874CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM874 CTCF    Ra2
@@ -1225,7 +1225,7 @@ noInherit on
         origAssembly hg18
         # subId=1280 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneHelas3CtcfStdRawRep2
+        track wgEncodeUwTfbsHelas3CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HeLaS CTCF    Ra2
@@ -1236,7 +1236,7 @@ noInherit on
         color 0,119,158
         # subId=1296 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHepg2CtcfStdRawRep2
+        track wgEncodeUwTfbsHepg2CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HepG2 CTCF    Ra2
@@ -1247,7 +1247,7 @@ noInherit on
         color 189,0,157
         # subId=1299 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHreCtcfStdRawRep2
+        track wgEncodeUwTfbsHreCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HRE   CTCF    Ra2
@@ -1257,7 +1257,7 @@ noInherit on
         origAssembly hg18
         # subId=1305 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneHuvecCtcfStdRawRep2
+        track wgEncodeUwTfbsHuvecCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HUVEC CTCF    Ra2
@@ -1268,7 +1268,7 @@ noInherit on
         color 224,75,0
         # subId=1306 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneNhekCtcfStdRawRep2
+        track wgEncodeUwTfbsNhekCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel NHEK  CTCF    Ra2
@@ -1279,7 +1279,7 @@ noInherit on
         color 179,0,134
         # subId=1309 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSaecCtcfStdRawRep2
+        track wgEncodeUwTfbsSaecCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel SAEC  CTCF    Ra2
@@ -1289,7 +1289,7 @@ noInherit on
         origAssembly hg18
         # subId=1311 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneSknshraCtcfStdRawRep2
+        track wgEncodeUwTfbsSknshraCtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel SKNSH CTCF    Ra2
@@ -1299,7 +1299,7 @@ noInherit on
         origAssembly hg18
         # subId=1314 dateSubmitted=2010-06-10
 
-        track wgEncodeUwHistoneGm12864CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12864CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM864 CTCF    Ra2
@@ -1309,7 +1309,7 @@ noInherit on
         origAssembly hg18
         # subId=1273 dateSubmitted=2010-06-08
 
-        track wgEncodeUwHistoneGm12873CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12873CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM873 CTCF    Ra1
@@ -1319,7 +1319,7 @@ noInherit on
         origAssembly hg18
         # subId=1276 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12875CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12875CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM875 CTCF    Ra1
@@ -1329,7 +1329,7 @@ noInherit on
         origAssembly hg18
         # subId=1482 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneGm12801CtcfStdRawRep1
+        track wgEncodeUwTfbsGm12801CtcfStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM801 CTCF    Ra1
@@ -1339,7 +1339,7 @@ noInherit on
         origAssembly hg18
         # subId=1270 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12873CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12873CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM873 CTCF    Ra2
@@ -1349,7 +1349,7 @@ noInherit on
         origAssembly hg18
         # subId=1279 dateSubmitted=2010-06-15
 
-        track wgEncodeUwHistoneHek293CtcfStdRawRep2
+        track wgEncodeUwTfbsHek293CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HEK29 CTCF    Ra2
@@ -1359,7 +1359,7 @@ noInherit on
         origAssembly hg18
         # subId=1486 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneGm12875CtcfStdRawRep2
+        track wgEncodeUwTfbsGm12875CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM875 CTCF    Ra2
@@ -1369,7 +1369,7 @@ noInherit on
         origAssembly hg18
         # subId=1484 dateSubmitted=2010-06-16
 
-        track wgEncodeUwHistoneWerirb1CtcfStdRawRep2
+        track wgEncodeUwTfbsWerirb1CtcfStdRawRep2
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel WERIR CTCF    Ra2
@@ -1379,8 +1379,7 @@ noInherit on
         origAssembly hg18
         # subId=1492 dateSubmitted=2010-06-16
 
-		track wgEncodeUwTFBSBjInputStdRawRep1        
-		table wgEncodeUwHistoneBjInputStdRawRep1
+	track wgEncodeUwTfbsBjInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel BJ    Input   Ra1
@@ -1390,8 +1389,7 @@ noInherit on
         origAssembly hg18
         # subId=1283 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSCaco2InputStdRawRep1       
-		table wgEncodeUwHistoneCaco2InputStdRawRep1
+	track wgEncodeUwTfbsCaco2InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel Caco2 Input   Ra1
@@ -1402,8 +1400,7 @@ noInherit on
         # subId=1287 dateSubmitted=2010-06-10
 
 
-        track wgEncodeUwTFBSGm06990InputStdRawRep1
-        table wgEncodeUwHistoneGm06990InputStdRawRep1
+        track wgEncodeUwTfbsGm06990InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM990 Input   Ra1
@@ -1414,7 +1411,7 @@ noInherit on
         # subId=1288 dateSubmitted=2010-06-10
 
 	
-        track wgEncodeUwHistoneGm12801InputStdRawRep1
+        track wgEncodeUwTfbsGm12801InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM801 Input   Ra1
@@ -1425,7 +1422,7 @@ noInherit on
         # subId=1289 dateSubmitted=2010-06-10
 
        
-	    track wgEncodeUwHistoneGm12864InputStdRawRep1
+	    track wgEncodeUwTfbsGm12864InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM864 Input   Ra1
@@ -1436,7 +1433,7 @@ noInherit on
         # subId=1290 dateSubmitted=2010-06-10
 
     
-        track wgEncodeUwHistoneGm12865InputStdRawRep1
+        track wgEncodeUwTfbsGm12865InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM865 Input   Ra1
@@ -1447,7 +1444,7 @@ noInherit on
         # subId=1291 dateSubmitted=2010-06-10
 
 	
-        track wgEncodeUwHistoneGm12872InputStdRawRep1
+        track wgEncodeUwTfbsGm12872InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM872 Input   Ra1
@@ -1457,8 +1454,7 @@ noInherit on
         origAssembly hg18
         # subId=1292 dateSubmitted=2010-06-10
         
-		track wgEncodeUwTFBSGm12878InputStdRawRep1
-    	table wgEncodeUwHistoneGm12878InputStdRawRep1
+	track wgEncodeUwTfbsGm12878InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig
         shortLabel GM878 Input   Ra1
@@ -1470,7 +1466,7 @@ noInherit on
         # subId=1293 dateSubmitted=2010-06-10
 
 	
-        track wgEncodeUwHistoneHek293InputStdRawRep1
+        track wgEncodeUwTfbsHek293InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HEK29 Input   Ra1
@@ -1480,8 +1476,7 @@ noInherit on
         origAssembly hg18
         # subId=1295 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSHmecInputStdRawRep1
-        table wgEncodeUwHistoneHmecInputStdRawRep1
+        track wgEncodeUwTfbsHmecInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HMEC  Input   Ra1
@@ -1491,8 +1486,7 @@ noInherit on
         origAssembly hg18
         # subId=1302 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSHreInputStdRawRep1
-        table wgEncodeUwHistoneHreInputStdRawRep1
+        track wgEncodeUwTfbsHreInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HRE   Input   Ra1
@@ -1502,8 +1496,7 @@ noInherit on
         origAssembly hg18
         # subId=1303 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSK562InputStdRawRep1
-        table wgEncodeUwHistoneK562InputStdRawRep1
+        track wgEncodeUwTfbsK562InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig
         shortLabel K562  Input   Ra1
@@ -1514,8 +1507,7 @@ noInherit on
         color 46,0,184
         # subId=1308 dateSubmitted=2010-06-10
 	
-		track wgEncodeUwTFBSHuvecInputStdRawRep1
-        table wgEncodeUwHistoneHuvecInputStdRawRep1
+        track wgEncodeUwTfbsHuvecInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HUVEC Input   Ra1
@@ -1526,8 +1518,7 @@ noInherit on
         color 224,75,0
         # subId=1316 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSNhekInputStdRawRep1
-        table wgEncodeUwHistoneNhekInputStdRawRep1
+        track wgEncodeUwTfbsNhekInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel NHEK  Input   Ra1
@@ -1538,8 +1529,7 @@ noInherit on
         color 179,0,134
         # subId=1317 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSSaecInputStdRawRep1
-        table wgEncodeUwHistoneSaecInputStdRawRep1
+        track wgEncodeUwTfbsSaecInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel SAEC  Input   Ra1
@@ -1549,8 +1539,7 @@ noInherit on
         origAssembly hg18
         # subId=1318 dateSubmitted=2010-06-10
 
-		track wgEncodeUwTFBSSknshraInputStdRawRep1
-        table wgEncodeUwHistoneSknshraInputStdRawRep1
+        track wgEncodeUwTfbsSknshraInputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel SKNSH Input   Ra1
@@ -1561,7 +1550,7 @@ noInherit on
         # subId=1319 dateSubmitted=2010-06-10
 
 
-        track wgEncodeUwHistoneWerirb1InputStdRawRep1
+        track wgEncodeUwTfbsWerirb1InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel WERIR Input   Ra1
@@ -1572,7 +1561,7 @@ noInherit on
         # subId=1320 dateSubmitted=2010-06-10
 
 	
-        track wgEncodeUwHistoneGm12874InputStdRawRep1
+        track wgEncodeUwTfbsGm12874InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM874 Input   Ra1
@@ -1582,8 +1571,7 @@ noInherit on
         origAssembly hg18
         # subId=1416 dateSubmitted=2010-06-14
 
-		track wgEncodeUwTFBSHelas3InputStdRawRep1
-        table wgEncodeUwHistoneHelas3InputStdRawRep1
+        track wgEncodeUwTfbsHelas3InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HeLaS Input   Ra1
@@ -1594,8 +1582,7 @@ noInherit on
         color 0,119,158
         # subId=1423 dateSubmitted=2010-06-14
 
-		track wgEncodeUwTFBSHepg2InputStdRawRep1
-        table wgEncodeUwHistoneHepg2InputStdRawRep1
+        track wgEncodeUwTfbsHepg2InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HepG2 Input   Ra1
@@ -1606,8 +1593,7 @@ noInherit on
         color 189,0,157
         # subId=1435 dateSubmitted=2010-06-15
 
-		track wgEncodeUwTFBSHl60InputStdRawRep1
-        table wgEncodeUwHistoneHl60InputStdRawRep1
+        track wgEncodeUwTfbsHl60InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel HL-60 Input   Ra1
@@ -1618,7 +1604,7 @@ noInherit on
         # subId=1438 dateSubmitted=2010-06-15
 
 
-        track wgEncodeUwHistoneGm12873InputStdRawRep1
+        track wgEncodeUwTfbsGm12873InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM873 Input   Ra1
@@ -1629,7 +1615,7 @@ noInherit on
         # subId=1481 dateSubmitted=2010-06-15
 
 	
-        track wgEncodeUwHistoneGm12875InputStdRawRep1
+        track wgEncodeUwTfbsGm12875InputStdRawRep1
         release alpha
         parent wgEncodeUwTFBSViewRawSig off
         shortLabel GM875 Input   Ra1
