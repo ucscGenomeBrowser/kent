@@ -5,7 +5,9 @@ include ../../../inc/common.mk
 CSS_FILES=HGStyle.css autocomplete.css blueStyle.css floretStyle.css jquery-ui.css jquery.contextmenu.css ui.dropdownchecklist.css 
 
 user:
-	${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/style
+	if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstall DEST=${DOCUMENTROOT}-${USER}/style; \
+	fi
 
 alpha:
 	${GITUP}

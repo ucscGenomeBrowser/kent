@@ -6,11 +6,14 @@
 #keeps track of files submitted to ENCODE docId system
 CREATE TABLE docIdSub (
     ix int not null AUTO_INCREMENT,	# auto-increment ID
-    submitDate varchar(255) not null,	# submission data
-    md5sum varchar(255) not null,	# md5sum of file
-    valReport text not null,	        # validation report
-    metaData text not null,	        # metaData RA
-    submitPath text not null,	        # file path in DDF line
+    status int not null,	# current status: for background process
+    assembly varchar(255) not null,	# assembly
+    submitDate date not null,	# submission data
+    md5sum varchar(255),	# md5sum of file
+    valReport text,	# validation report
+    valVersion varchar(255),	# validator version
+    metaData text not null,	# metaData RA
+    submitPath text not null,	# file path in DDF line
     submitter varchar(255) not null,	# submitter id
               #Indices
     PRIMARY KEY(ix)

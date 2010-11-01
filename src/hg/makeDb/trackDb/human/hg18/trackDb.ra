@@ -2504,7 +2504,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     #replaces record vegaGene in parent dir missing/extra release,group,visibility,chromosomes,type,url
     parent vegaGeneComposite
     shortLabel Vega Protein Genes
-    longLabel Vega Protein Coding Annotations
+    longLabel Vega Protein-Coding Annotations
     priority 1
     color 0,50,225
     html vegaGeneComposite
@@ -4237,7 +4237,8 @@ group x
 priority 53.5
 visibility hide
 type wigMaf
-speciesOrder panTro2 ponAbe2 rheMac2
+speciesOrder panTro20 panTro21 panTro22 panTro23 panTro24 panTro25 panTro26 panTro27 ponAbe20 ponAbe21 ponAbe22 ponAbe23 ponAbe24 ponAbe25 ponAbe26 ponAbe27 ponAbe28 rheMac20 rheMac21 rheMac22 rheMac23 rheMac24 rheMac25 rheMac26
+
 frames multizPrimateFrames
 
 track cactusBed
