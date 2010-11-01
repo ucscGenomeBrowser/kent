@@ -2332,22 +2332,6 @@ sex U
 tier 3
 protocol UW_Stam:Th2_Stam_protocol.pdf
 
-term Trophobl
-tag Trophobl
-type Cell Line
-organism Human
-description Trophoblast (HTR-8/SVneo) cell line.  A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
-tier 3
-lineage blastula
-karyotype normal
-sex U
-tissue ectoderm
-vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen’s University at Kingston, Kingston, Ontario, Canada
-vendorId
-orderUrl
-termId BTBTO:0001079
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001079&termName=trophoblast
-protocol Open_Chromatin:Trophobl_Crawford_protocol.pdf
 
 term T-47D
 tag T47D
