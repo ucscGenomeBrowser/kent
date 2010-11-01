@@ -18,26 +18,29 @@ void usage()
 /* Explain usage and exit. */
 {
 errAbort(
-  "refreshNamedSessionCustomTracks -- scan central database's %s\n"
+  "refreshNamedSessionCustomTracks -- scan central database table: '%s'\n"
   "    contents for custom tracks and touch any that are found, to prevent\n"
   "    them from being removed by the custom track cleanup process.\n"
   "usage:\n"
-  "    refreshNamedSessionCustomTracks hgcentral[test,beta]\n"
+  "    refreshNamedSessionCustomTracks hgcentral[test,beta] [-workDir=/path]\n"
   "options:\n"
-  "    -atime=N           If the session has not been accessed since N days ago,\n"
-  "                       don't refresh its custom tracks.  Default: no limit.\n"
+  "    -workDir=%s - a directory to work from where\n"
+  "                                       - ../trash can be found\n"
+  "             default will be %s\n"
+  "             which implies ../trash is: /usr/local/apache/trash\n"
+  "    -atime=N - If the session has not been accessed since N days ago,\n"
+  "             - don't refresh its custom tracks.  Default: no limit.\n"
   "This is intended to be run as a nightly cron job for each central db.\n"
   "The ~/.hg.conf file (or $HGDB_CONF) must specify the same central db\n"
-  "as the command line.  [The command line arg exists only to suppress this\n"
-  "message].\n"
-  "\n",
-  savedSessionTable
+  "as the command line.  [The command line arg helps to verify coordination.]",
+  savedSessionTable, CGI_BIN, CGI_BIN
   );
 }
 
 /* Options: */
 static struct optionSpec options[] = {
     {"atime",    OPTION_INT},
+    {"workDir",    OPTION_STRING},
     {"hardcore", OPTION_BOOLEAN}, /* Intentionally omitted from usage(). */
     {NULL, 0},
 };
@@ -232,7 +235,8 @@ int main(int argc, char *argv[])
 optionInit(&argc, argv, options);
 if (argc != 2)
     usage();
-setCurrentDir(CGI_BIN);
+char *workDir = optionVal("workDir", CGI_BIN);
+setCurrentDir(workDir);
 refreshNamedSessionCustomTracks(argv[1]);
 return 0;
 }

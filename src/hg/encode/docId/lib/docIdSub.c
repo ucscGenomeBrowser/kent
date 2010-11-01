@@ -17,12 +17,15 @@ void docIdSubStaticLoad(char **row, struct docIdSub *ret)
 {
 
 ret->ix = sqlSigned(row[0]);
-ret->submitDate = row[1];
-ret->md5sum = row[2];
-ret->valReport = row[3];
-ret->metaData = row[4];
-ret->submitPath = row[5];
-ret->submitter = row[6];
+ret->status = sqlSigned(row[1]);
+ret->assembly = row[2];
+ret->submitDate = row[3];
+ret->md5sum = row[4];
+ret->valReport = row[5];
+ret->valVersion = row[6];
+ret->metaData = row[7];
+ret->submitPath = row[8];
+ret->submitter = row[9];
 }
 
 struct docIdSub *docIdSubLoad(char **row)
@@ -33,12 +36,15 @@ struct docIdSub *ret;
 
 AllocVar(ret);
 ret->ix = sqlSigned(row[0]);
-ret->submitDate = cloneString(row[1]);
-ret->md5sum = cloneString(row[2]);
-ret->valReport = cloneString(row[3]);
-ret->metaData = cloneString(row[4]);
-ret->submitPath = cloneString(row[5]);
-ret->submitter = cloneString(row[6]);
+ret->status = sqlSigned(row[1]);
+ret->assembly = cloneString(row[2]);
+ret->submitDate = cloneString(row[3]);
+ret->md5sum = cloneString(row[4]);
+ret->valReport = cloneString(row[5]);
+ret->valVersion = cloneString(row[6]);
+ret->metaData = cloneString(row[7]);
+ret->submitPath = cloneString(row[8]);
+ret->submitter = cloneString(row[9]);
 return ret;
 }
 
@@ -48,7 +54,7 @@ struct docIdSub *docIdSubLoadAll(char *fileName)
 {
 struct docIdSub *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[10];
 
 while (lineFileRow(lf, row))
     {
@@ -66,7 +72,7 @@ struct docIdSub *docIdSubLoadAllByChar(char *fileName, char chopper)
 {
 struct docIdSub *list = NULL, *el;
 struct lineFile *lf = lineFileOpen(fileName, TRUE);
-char *row[7];
+char *row[10];
 
 while (lineFileNextCharRow(lf, chopper, row, ArraySize(row)))
     {
@@ -88,9 +94,12 @@ char *s = *pS;
 if (ret == NULL)
     AllocVar(ret);
 ret->ix = sqlSignedComma(&s);
+ret->status = sqlSignedComma(&s);
+ret->assembly = sqlStringComma(&s);
 ret->submitDate = sqlStringComma(&s);
 ret->md5sum = sqlStringComma(&s);
 ret->valReport = sqlStringComma(&s);
+ret->valVersion = sqlStringComma(&s);
 ret->metaData = sqlStringComma(&s);
 ret->submitPath = sqlStringComma(&s);
 ret->submitter = sqlStringComma(&s);
@@ -105,9 +114,11 @@ void docIdSubFree(struct docIdSub **pEl)
 struct docIdSub *el;
 
 if ((el = *pEl) == NULL) return;
+freeMem(el->assembly);
 freeMem(el->submitDate);
 freeMem(el->md5sum);
 freeMem(el->valReport);
+freeMem(el->valVersion);
 freeMem(el->metaData);
 freeMem(el->submitPath);
 freeMem(el->submitter);
@@ -132,6 +143,12 @@ void docIdSubOutput(struct docIdSub *el, FILE *f, char sep, char lastSep)
 {
 fprintf(f, "%d", el->ix);
 fputc(sep,f);
+fprintf(f, "%d", el->status);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->assembly);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->submitDate);
 if (sep == ',') fputc('"',f);
@@ -142,6 +159,10 @@ if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
 fprintf(f, "%s", el->valReport);
+if (sep == ',') fputc('"',f);
+fputc(sep,f);
+if (sep == ',') fputc('"',f);
+fprintf(f, "%s", el->valVersion);
 if (sep == ',') fputc('"',f);
 fputc(sep,f);
 if (sep == ',') fputc('"',f);
@@ -220,22 +241,37 @@ dyStringPrintf(dy, "%s.%s", docId, suffix);
 return dyStringCannibalize(&dy);
 }
 
+char *nullString = "";
+
+void fillNull(char **val)
+{
+if (*val == NULL)
+    *val = nullString;
+}
+
 void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
     char *docIdDir, char *type)
 {
 
 verbose(2, "Submitting------\n");
+verbose(2, "status %d\n", docIdSub->status);
+verbose(2, "assembly %s\n", docIdSub->assembly);
 verbose(2, "submitDate %s\n", docIdSub->submitDate);
 verbose(2, "md5sum %s\n", docIdSub->md5sum);
 verbose(2, "valReport %s\n", docIdSub->valReport);
+verbose(2, "valVersion %s\n", docIdSub->valVersion);
 verbose(2, "metaData %s\n", docIdSub->metaData);
 verbose(2, "submitPath %s\n", docIdSub->submitPath);
 verbose(2, "submitter %s\n", docIdSub->submitter);
+verbose(2, "type %s\n", type);
 
 char query[10 * 1024];
 
-safef(query, sizeof query, "insert into %s (submitDate, md5sum, valReport, metaData, submitPath, submitter) values (\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
-    docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
+fillNull(&docIdSub->valReport);
+fillNull(&docIdSub->md5sum);
+
+safef(query, sizeof query, "insert into %s (status, assembly, submitDate, md5sum, valReport, valVersion, metaData, submitPath, submitter) values (\"%d\",\"%s\",\"%s\",\"%s\", \"%s\", \"%s\", \"%s\",\"%s\",\"%s\")\n", docIdTable,
+    docIdSub->status, docIdSub->assembly, docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, docIdSub->valVersion, docIdSub->metaData, docIdSub->submitPath, docIdSub->submitter);
     //docIdSub->submitDate, docIdSub->md5sum, docIdSub->valReport, "null", docIdSub->submitPath, docIdSub->submitter);
 //printf("query is %s\n", query);
 char *response = sqlQuickString(conn, query);

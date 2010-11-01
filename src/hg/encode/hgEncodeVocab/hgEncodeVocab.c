@@ -159,7 +159,7 @@ if (sameWord(type,CELL_TYPE))
     }
 else if (sameWord(type,ANTIBODY_TYPE))
     {
-    printf("  <TH>Target</TH><TH>%s</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH><TH><I>Label</I></TH>",type);
+    printf("  <TH>%s</TH><TH>Target</TH><TH>Target Description</TH><TH>Antibody Description</TH><TH>Vendor ID</TH><TH>Lab</TH><TH>Documents</TH><TH>Lots</TH><TH>Target Link</TH><TH><I>Label</I></TH>",type);
     }
 else if(sameWord(type,LAB_TYPE))
     {
@@ -338,9 +338,9 @@ else if (sameWord(type,ANTIBODY_TYPE))
      * print "term target targetDescription antibodyDescription" */
 
     puts("<TR>");
-    s = hashFindVal(ra, "target");                  // target is first
-    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "target");                  // target is NOT first but still is major sort order
+    printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "targetDescription");
     printf("  <TD>%s</TD>\n", s ? s : "&nbsp;");
     s = hashFindVal(ra, "antibodyDescription");
@@ -517,6 +517,13 @@ for(ix=0;ix<requestCount;ix++)
 return targets;
 }
 
+///boolean typeDescription(char type)
+///// Write out description of type if it is known
+///{
+///// TODO: move this list into cv.ra as type=term
+///
+///}
+
 static char *normalizeType(char *type)
 /* Strips any quotation marks and converts common synonyms */
 {
@@ -670,6 +677,7 @@ while ((hEl = hashNext(&hc)) != NULL)
     }
 if (slCount(termList) == 0)
     {
+    // TODO: Make header with typeDescription().  This will also allow calling hgEncodeVocab for a type defined in cv.ra even though the term is NOT in cv.ra
     errAbort("Error: Unrecognised type (%s)\n", type);
     }
 slSort(&termList, termCmp);
