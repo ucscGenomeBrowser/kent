@@ -17,7 +17,7 @@ PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 
 all:
-	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config 
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config
 
 alpha:
 	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts config 
@@ -37,7 +37,9 @@ ${SCRIPTS}/%: %
 	cp -p $< $@.tmp
 	mv -f $@.tmp $@
 
-config: ${CONFIG_FILES:%=${CONFIG_DIR}/%}
+config: ${CONFIG_FILES:%=${CONFIG_DIR}/%} ${CONFIG_DIR}/${CV}
+
+${CONFIG_DIR}/${CV}: ${CVDIR}/${CV}
 	cp -p ${CVDIR}/${CV} ${CONFIG_DIR}/cv.ra.tmp
 	mv -f  ${CONFIG_DIR}/cv.ra.tmp ${CONFIG_DIR}/cv.ra
 
