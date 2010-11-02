@@ -1,5 +1,5 @@
 /* Stuff to parse .ra files. Ra files are simple text databases.
- * The database is broken into records by blank lines. 
+ * The database is broken into records by blank lines.
  * Each field takes a line.  The name of the field is the first
  * word in the line.  The value of the field is the rest of the line.
  *
@@ -16,8 +16,8 @@
 static char const rcsid[] = "$Id: ra.c,v 1.17 2009/12/08 20:42:50 kent Exp $";
 
 boolean raSkipLeadingEmptyLines(struct lineFile *lf, struct dyString *dy)
-/* Skip leading empty lines and comments.  Returns FALSE at end of file. 
- * Together with raNextTagVal you can construct your own raNextRecord.... 
+/* Skip leading empty lines and comments.  Returns FALSE at end of file.
+ * Together with raNextTagVal you can construct your own raNextRecord....
  * If dy parameter is non-null, then the text parsed gets placed into dy. */
 {
 char *line;
@@ -83,7 +83,7 @@ return TRUE;
 }
 
 struct hash *raNextRecord(struct lineFile *lf)
-/* Return a hash containing next record.   
+/* Return a hash containing next record.
  * Returns NULL at end of file.  freeHash this
  * when done.  Note this will free the hash
  * keys and values as well, so you'll have to
@@ -105,7 +105,7 @@ return hash;
 }
 
 struct slPair *raNextRecordAsSlPairList(struct lineFile *lf)
-/* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order. 
+/* Return ra record as a slPair list instead of a hash.  Handy if you want to preserve the order.
  * Do a slPairFreeValsAndList on result when done. */
 {
 struct slPair *list = NULL;
@@ -146,7 +146,7 @@ return hash;
 }
 
 char *raFoldInOneRetName(struct lineFile *lf, struct hash *hashOfHash)
-/* Fold in one record from ra file into hashOfHash. 
+/* Fold in one record from ra file into hashOfHash.
  * This will add ra's and ra fields to whatever already
  * exists in the hashOfHash,  overriding fields of the
  * same name if they exist already. */
@@ -161,7 +161,7 @@ if (!lineFileNextReal(lf, &line))
     return NULL;
 word = nextWord(&line);
 if (!sameString(word, "name"))
-    errAbort("Expecting 'name' line %d of %s, got %s", 
+    errAbort("Expecting 'name' line %d of %s, got %s",
     	lf->lineIx, lf->fileName, word);
 name = nextWord(&line);
 if (name == NULL)
@@ -206,7 +206,7 @@ return raFoldInOneRetName(lf, hashOfHash) != NULL;
 }
 
 void raFoldIn(char *fileName, struct hash *hashOfHash)
-/* Read ra's in file name and fold them into hashOfHash. 
+/* Read ra's in file name and fold them into hashOfHash.
  * This will add ra's and ra fields to whatever already
  * exists in the hashOfHash,  overriding fields of the
  * same name if they exist already. */
@@ -219,7 +219,7 @@ if (lf != NULL)
     while ((name = raFoldInOneRetName(lf, hashOfHash)) != NULL)
 	{
 	if (hashLookup(uniqHash, name))
-	    errAbort("%s duplicated in record ending line %d of %s", name, 
+	    errAbort("%s duplicated in record ending line %d of %s", name,
 	    	lf->lineIx, lf->fileName);
 	hashAdd(uniqHash, name, NULL);
 	}
@@ -252,6 +252,40 @@ while ((hash = raNextRecord(lf)) != NULL)
         errAbort("Couldn't find key field %s line %d of %s",
 		keyField, lf->lineIx, lf->fileName);
     hashAdd(bigHash, key, hash);
+    }
+lineFileClose(&lf);
+return bigHash;
+}
+
+struct hash *raReadWithFilter(char *fileName, char *keyField,char *filterKey,char *filterValue)
+/* Return hash that contains all filtered ra records in file keyed by given field, which must exist.
+ * The values of the hash are themselves hashes.  The filter is a key/value pair that must exist.
+ * Example raReadWithFilter(file,"term","type","antibody"): returns hash of hashes of every term with type=antibody */
+{
+struct lineFile *lf = lineFileOpen(fileName, TRUE);
+struct hash *bigHash = hashNew(0);
+struct hash *hash;
+while ((hash = raNextRecord(lf)) != NULL)
+    {
+    char *key = hashFindVal(hash, keyField);
+    if (key == NULL)
+        errAbort("Couldn't find key field %s line %d of %s",
+                keyField, lf->lineIx, lf->fileName);
+    if (filterKey != NULL)
+        {
+        char *filter = hashFindVal(hash, filterKey);
+        if (filter == NULL)
+            {
+            hashFree(&hash);
+            continue;
+            }
+        if (filterValue != NULL && differentString(filterValue,filter))
+            {
+            hashFree(&hash);
+            continue;
+            }
+        }
+        hashAdd(bigHash, key, hash);
     }
 lineFileClose(&lf);
 return bigHash;
