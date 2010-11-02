@@ -48,7 +48,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -70,7 +70,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneGm12878ControlStdRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell GM12878
 composite wgEncodeBroadHistone
 control std
@@ -1144,7 +1144,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneH1hescControlStdRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -1166,7 +1166,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneH1hescControlStdRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell H1-hESC
 composite wgEncodeBroadHistone
 control std
@@ -3413,7 +3413,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -3435,7 +3435,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHepg2ControlStdRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell HepG2
 composite wgEncodeBroadHistone
 control std
@@ -5716,7 +5716,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneHsmmControlStdRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -5738,7 +5738,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneHsmmControlStdRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell HSMM
 composite wgEncodeBroadHistone
 control std
@@ -12029,7 +12029,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhekControlStdRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell NHEK
 composite wgEncodeBroadHistone
 control std
@@ -13835,7 +13835,7 @@ view Alignments
 
 metaObject wgEncodeBroadHistoneNhlfControlStdRawDataRep1
 objType file
-antibody Input
+antibody Control
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -13857,7 +13857,7 @@ view RawData
 
 metaObject wgEncodeBroadHistoneNhlfControlStdRawDataRep2
 objType file
-antibody Input
+antibody Control
 cell NHLF
 composite wgEncodeBroadHistone
 control std
@@ -14924,4 +14924,4 @@ subId 1699
 tableName wgEncodeBroadHistoneNhlfH4k20me1StdSig
 view Signal
 
-# MAGIC: 994479522
+# MAGIC: 998859293
