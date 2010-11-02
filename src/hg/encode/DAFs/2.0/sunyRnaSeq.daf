@@ -1,0 +1,55 @@
+# Data Agreement File for RIP-Chip GeneST project $Revision: 1.2 $
+# This file specifies the data agreement between your lab and 
+# the DCC.  It should not be changed unilaterally.
+
+# The header for the associated .ddf file should look like this:
+# files   view    cell    localization    rnaExtract      replicate
+
+
+dafVersion        2.0
+
+# Lab and general info
+grant             Tenenbaum
+lab               SunyAlbany
+dataType          RipSeq  
+#dataType          RnaSeq  
+compositeSuffix   SunyAlbanyRipSeq
+#compositeSuffix   SunyAlbanyRnaSeq
+group             regulation
+variables         cell  
+assembly          hg19
+
+
+validationSettings validateFiles.bam:mismatches=7,nMatch
+noAutoCreate     yes
+
+# Track/view definition
+view             Transfrags
+longLabelPrefix  SUNY RNA-seq Analysis 
+type             bed6+    
+hasReplicates    no
+required         no
+
+view             PlusRawSignal
+longLabelPrefix  SUNY RNA-seq Plus Strand Raw Signal
+type             bigWig
+hasReplicates    no
+required         no
+
+view             MinusRawSignal
+longLabelPrefix  SUNY RNA-seq Minus Strand Raw Signal
+type             bigWig
+hasReplicates    no 
+required         no
+
+view             Alignments
+longLabelPrefix  CSHL RNA-seq Alignments
+type             bam
+hasReplicates    no
+required         yes
+
+view             RawData
+type             fastq
+hasReplicates    no
+required         no
+downloadOnly     yes

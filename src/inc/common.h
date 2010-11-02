@@ -654,6 +654,18 @@ void slPairSortCase(struct slPair **pList);
 int slPairCmp(const void *va, const void *vb);
 /* Compare two slPairs. */
 
+int slPairValCmpCase(const void *va, const void *vb);
+/* Case insensitive compare two slPairs on their values (must be string). */
+
+int slPairValCmp(const void *va, const void *vb);
+/* Compare two slPairs on their values (must be string). */
+
+void slPairValSortCase(struct slPair **pList);
+/* Sort slPair list on values (must be string), ignore case. */
+
+void slPairValSort(struct slPair **pList);
+/* Sort slPair list on values (must be string). */
+
 void gentleFree(void *pt);
 /* check pointer for NULL before freeing.
  * (Actually plain old freeMem does that these days.) */

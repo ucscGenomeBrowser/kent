@@ -6178,7 +6178,12 @@ char *url = tdb->url;
 if (sameWord(database,"oryCun2"))
     printf("<B>Name:</B>&nbsp;%s<BR>\n", ctgName);
 else if (isNotEmpty(url))
-    printCustomUrl(tdb, ctgName, TRUE);
+    {
+    if (sameWord(url, "none"))
+	printf("<B>Name:</B>&nbsp;%s<BR>\n", ctgName);
+    else
+	printCustomUrl(tdb, ctgName, TRUE);
+    }
 else
     printf("<B>Name:</B>&nbsp;<A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n",
 	query, ctgName);

@@ -1589,8 +1589,8 @@ while (TRUE)
 	    char urlExt[1024];
 	    safef(urlExt, sizeof(urlExt), "%s;byterange=%llu-%llu"
 	    , url
-	    , (unsigned long long) pc->rangeStart + pc->received
-	    , (unsigned long long) pc->rangeStart + pc->partSize - 1 );
+	    , (unsigned long long) (pc->rangeStart + pc->received)
+	    , (unsigned long long) (pc->rangeStart + pc->partSize - 1) );
 
 
 	    int oldSd = pc->sd;  /* in case we need to remember where we were */
@@ -1713,7 +1713,7 @@ while (TRUE)
 			, (unsigned long long) pc->rangeStart
 			, (unsigned long long) pc->received );
 
-		verbose(2,"seeking to %llu\n", (unsigned long long) pc->rangeStart + pc->received);
+		verbose(2,"seeking to %llu\n", (unsigned long long) (pc->rangeStart + pc->received));
 
 		if (lseek(out, pc->rangeStart + pc->received, SEEK_SET) == -1)
 		    {

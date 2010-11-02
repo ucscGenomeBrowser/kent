@@ -9,7 +9,7 @@ BROWSER_BINS=cartReset das hgBlat makeDb/hgCgiData hgConvert \
 	hgLiftOver visiGene/hgVisiGene \
 	encode/mkEncodeFrameset encode/hgEncodeDataVersions \
 	encode/hgEncodeVocab phyloGif hgCustom hgPal \
-	makeDb/hgCgiData js
+	makeDb/hgCgiData js htdocs/style
 
 ifdef LOWELAB
     BROWSER_BINS += archaeStuff/tooltip archaeStuff/chooseorg 
@@ -18,7 +18,7 @@ endif
 BROWSER_LOADERS = makeDb/hgLoadBed makeDb/hgLoadWiggle makeDb/hgLoadMaf
 
 ifneq ($(findstring $(shell hostname),hgwdev hgwbeta),)
-    ENCODE_FILES = encode/encodeValidate
+    ENCODE_FILES =
 endif
 
 

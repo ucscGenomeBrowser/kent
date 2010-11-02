@@ -295,8 +295,7 @@ group map
 priority 10
 visibility hide
 type ctgPos
-urlLabel Genome Reference Consortium
-url http://www.ncbi.nlm.nih.gov/projects/genome/assembly/grc/human/index.shtml
+url none
 
 track multiz4way
 shortLabel 4-way Multiz
@@ -1529,7 +1528,7 @@ url http://vega.sanger.ac.uk/Homo_sapiens/transview?transcript=$$
     track vegaGene
     subTrack vegaGeneComposite
     shortLabel Vega Protein Genes
-    longLabel Vega Protein Coding Annotations
+    longLabel Vega Protein-Coding Annotations
     priority 1
     color 0,50,225
     html vegaGeneComposite

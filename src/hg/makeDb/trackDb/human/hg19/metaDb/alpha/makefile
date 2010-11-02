@@ -22,6 +22,7 @@ wgEncodeRikenCage.ra \
 wgEncodeHaibMethylSeq.ra \
 wgEncodeGisRnaSeq.ra \
 wgEncodeGisDnaPet.ra \
+wgEncodeUwTfbs.ra \
 wgEncodeGisRnaPet.ra \
 wgEncodeYaleRnaSeq.ra \
 wgEncodeMapability.ra \
