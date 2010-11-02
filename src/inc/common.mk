@@ -45,6 +45,11 @@ ifeq (${PNGLIB},)
       PNGLIB=/usr/lib/libpng.a
   endif
 endif
+ifeq (${PNGLIB},)
+  ifeq (${USE_PNG},1)
+      PNGLIB=-lpng
+  endif
+endif
 ifneq (${PNGLIB},)
   ifeq (${USE_PNG},)
     USE_PNG=1

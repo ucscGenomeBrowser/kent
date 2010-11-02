@@ -89,7 +89,7 @@ void specialHelp()
 /* Explain usage and exit. */
 {
 errAbort(
-  "mdbPrint - Prints specially output from metadata objects and variables.\n"
+  "mdbPrint - Prints specialty output from metadata objects and variables.\n"
   "usage:\n"
   "   mdbPrint {db} [-table=] -vars=\"var1=val1 var2=val2...\"\n"
   "            -updDB={db} -updMdb={metaDb} -updSelect=var1,var2,... -updVars=varA,varB,...\n"
@@ -111,7 +111,7 @@ errAbort(
   "                Special case updVar=\"expId={n}\" to insert expIds starting with 'n'.\n"
   "    Print INSERT SQL statements to load experiment table with metadata values.\n"
   "    -expTbl     The experiment table name to be used in insert statements.\n"
-  "    -expVars    A comma separated list of variables that are expiment defining\n"
+  "    -expVars    A comma separated list of variables that are 'experiment defining'\n"
   "The purpose of this special option is to generate mdbUpdate commands from existing metadata.\n"
   "Examples:\n"
   "  mdbPrint hg18 -vars=\"composite=wgEncodeYaleChIPseq\" -updDb=hg19 -updMdb=metaDb_braney\n"

@@ -10,7 +10,7 @@ O = docIdSubmitDir.o
 
 docIdSubmitDir: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
-	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
+#	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 
 compile:: ${O}
 	${CC} ${COPT} -o ${A}${EXE} ${O} ${MYLIBS} $L
