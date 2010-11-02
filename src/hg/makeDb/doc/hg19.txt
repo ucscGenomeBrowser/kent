@@ -10215,6 +10215,11 @@ EOF
     #  hgsql -e "select count(*) from affyU133Plus2;" hg19
     #     58592  
 
+
+    # Added knownToU133Plus2 track
+    hgMapToGene hg19 affyU133Plus2 knownGene knownToU133Plus2
+
+
 #############################################################################
 # AFFY U95 (DONE 2010-10-07 Chin)
     # Align probes 
@@ -10265,6 +10270,9 @@ EOF
     #   12386 sequences
     #   Updating seq table
     #   All done
+
+    # Added knownToU95 track
+    hgMapToGene hg19 affyU95 knownGene knownToU95
 
 #############################################################################
 # ucscRetro track (2010-03-31, baertsch,hartera DONE)
