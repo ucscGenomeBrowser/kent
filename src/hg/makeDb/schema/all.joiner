@@ -1502,6 +1502,7 @@ identifier ccdsGeneId
     $ccdsDb.ccdsGene.name dupeOk
     $ccdsDb.ccdsInfo.ccds full
     $ccdsDb.ccdsKgMap.ccdsId
+    $ccdsDb.ccdsNotes.ccds
 
 identifier ctdGeneSymbol
 "CTD Gene Symbol"
