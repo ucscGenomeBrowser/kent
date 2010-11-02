@@ -625,7 +625,7 @@ identifier wgEncodeGencodeClassesV4
 
 identifier wgEncodeGencodeYalePseudoV4
 "Link together Gencode gene model and possible pseudogenes for May 2010 Data Version"
-    hg19.wgEncodeGencodeYalePseudoV4.name
+    hg19.wgEncodeGencodeYalePseudoV4.transcript
     hg19.wgEncodeGencodeAutoV4.name unique
     hg19.wgEncodeGencodeManualV4.name unique
     hg19.wgEncodeGencodePolyaV4.name unique
@@ -2307,6 +2307,11 @@ identifier bgiGeneId external=BGI
 
 # Other Identifiers
 
+identifier hg19Patch2ExtFileId
+"External file ID for hg19 patch2 sequences"
+    hg19.extHg19Patch2.id
+    hg19.seqHg19Patch2.extFile
+
 identifier extFileId
 "External file ID"
     $gbd.extFile.id
@@ -3204,6 +3209,9 @@ tablesIgnored $kgDb
     pep%Dist
 
 tablesIgnored hg19
+    altSeqHaplotypes
+    altSeqLiftOverPsl
+    altSeqPatches
     bacEndPairsBad
     multizMHCSummary
     netSyn_mann_hap4
