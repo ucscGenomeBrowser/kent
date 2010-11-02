@@ -163,7 +163,7 @@ if ( "$mode" == "review2") then
     echo "<li><a href="review/index.html">Design/Review - Day 2 - v$NEXTNN</a> ($TODAY to $REVIEWDAY)" >> index.html
     echo "<li><a href="/git-reports-history/">Previous versions</a> " >> index.html
 else
-    echo "<li><a href="branch/index.html">Biweekly Branch - Day 16 - v$BRANCHNN</a> ($REVIEW2DAY to $TODAY)" >> index.html
+    echo "<li><a href="branch/index.html">Branch - Day 16 - v$BRANCHNN</a> ($REVIEW2DAY to $TODAY)" >> index.html
     echo "<li><a href="review2/index.html">Design/Review2 Branch - Day 9 - v$BRANCHNN</a> ($REVIEWDAY to $REVIEW2DAY)" >> index.html
     echo "<li><a href="review/index.html">Design/Review - Day 2 - v$BRANCHNN</a> ($LASTWEEK to $REVIEWDAY)" >> index.html
     echo "<li><a href="/git-reports-history/">Previous versions</a>" >> index.html
