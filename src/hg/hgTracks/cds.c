@@ -1000,7 +1000,9 @@ for (i = 0, start = seq->dna + seqOffset; i < seq->size; i++, chromPos++)
         sf->start = winEnd - sf->start + winStart - 3;
         sf->end = sf->start + 3;
         }
-    sf->grayIx = codonToGrayIx(codon, sf->start % 6 < 3, NULL, FALSE, TRUE);
+    // Base offsets mod 6 for alternating colors: 0,1,2 --> first codon, 3,4,5 --> second codon.
+    bool codonFirstColor = (sf->start % 6 < 3);
+    sf->grayIx = codonToGrayIx(codon, codonFirstColor, NULL, FALSE, TRUE);
     zeroBytes(codon, 4);
     slAddHead(&sfList, sf);
     }

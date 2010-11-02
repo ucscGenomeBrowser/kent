@@ -11364,6 +11364,11 @@ liftOver final.bed /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz hg18.bed unmappe
 hgLoadBed hg18 polyaDB hg18.bed
 # trackDb entry/html in human/hg18
 
+# redmine issue 19: wrong bed file format used on hgwdev
+# reload it with table from beta  (2010-10-28 - Chin)
+cd /cluster/data/hg18/bed/polyaDB
+hgLoadBed hg18 polyaDb hg18.beta.polyaDb.bed
+
 ############################################################################
 # Translate SNP Array data from hg17 (Heather August 2006)
 
@@ -29779,7 +29784,8 @@ see doc/builds.txt for specific details.
     hgLoadBed -allowStartEqualEnd hg18 snpArrayIlluminaHumanOmni1_Quad snpArrayIlluminaHumanOmni1_Quad.tab -tab -sqlTable=snpArrayIlluminaHumanOmni1_Quad.sql
 
 #############################################################################
-# NHGRI GWAS CATALOG (DONE 10/6/10)
+# NHGRI GWAS CATALOG (DONE 11/1/10)
+# Updated 10/6/10
 # Updated 9/1/10
 # Updated 8/2/10
 # Updated 6/2/10
@@ -29856,18 +29862,21 @@ see doc/builds.txt for specific details.
         > gwasCatalog.bed
     hgLoadBed hg18 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4175 elements of size 22
+#Loaded 4399 elements of size 22
 
     # For David: find examples of risk alleles for which dbSNP observed
     # alleles are complementary (A/T or C/G) -- how do we know what strand the
-    # risk allele is on??  -- asking corresp. author Teri Manolio.
+    # risk allele is on??  -- asked corresp. author Teri Manolio.  Info is not
+    # always available in the original publication, so sadly there is not always 
+    # a way to resolve these. GWAS catalog folks aren't going to modify their 
+    # database to add a column for these cases.
     hgsql hg18 -NBe 'select snp.name,gc.riskAllele,snp.strand,snp.refNcbi,snp.observed \
                      from gwasCatalog as gc, snp130 as snp \
                      where gc.riskAllele rlike "^rs[0-9]+-[ACGT]" and \
                            gc.name = snp.name and snp.observed in ("C/G", "A/T") \
                      order by gc.name;' > ambigStrand.txt
     wc -l ambigStrand.txt 
-#198 ambigStrand.txt
+#230 ambigStrand.txt
 
 
 #############################################################################

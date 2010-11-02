@@ -1634,6 +1634,23 @@ sex F
 tier 3
 protocol HudsonAlpha:HTB-11_Myers_protocol.pdf
 
+term HTR8svn
+tag HTR8
+type Cell Line
+organism Human
+tier 3
+description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo. 
+lineage Blastula
+karyotype normal
+sex U
+tissue Ectoderm
+vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada 
+vendorId HTR8svn
+orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
+termId BTO:0001079
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001079
+protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf 
+
 term HVMF
 tag HVMF
 type Cell Line
@@ -2061,6 +2078,25 @@ sex U
 tier 3
 protocol Open_Chromatin:pHTE_Crawford_protocol.pdf
 
+term PrEC
+tag PrEC
+type Cell Line
+organism Human
+tier 3
+description Human Prostate Epithelial Cell line
+tissue Prostate
+vendorName Lonza
+VendorId CC-2555
+orderUrl https://shop.lonza.com/shop/prd/human-prostate-epithelial-cells/lonza_b2b/5.1-6_1_75_65_8_11/2/DF3699AD8CEEBBF18852001A4B525E10/
+lineage Epithelial
+karyotype Normal
+termId BTO:0002398
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0002398
+sex U
+tier 3
+protocol UW_Stam:PrEC_Stam_protocol.pdf
+
+
 term ProgFib
 tag ProgFib
 type Cell Line
@@ -2296,22 +2332,6 @@ sex U
 tier 3
 protocol UW_Stam:Th2_Stam_protocol.pdf
 
-term Trophobl
-tag Trophobl
-type Cell Line
-organism Human
-description Trophoblast (HTR-8/SVneo) cell line.  A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
-tier 3
-lineage blastula
-karyotype normal
-sex U
-tissue ectoderm
-vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen’s University at Kingston, Kingston, Ontario, Canada
-vendorId
-orderUrl
-termId BTBTO:0001079
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001079&termName=trophoblast
-protocol Open_Chromatin:Trophobl_Crawford_protocol.pdf
 
 term T-47D
 tag T47D
@@ -2341,7 +2361,9 @@ karyotype normal
 sex F
 tissue urothelium
 vendorName lab of Dr. D Sens (University of N. Dakota)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001267&termName=urothelial%20cell%20line
+vendorId Urothelia
+orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO001267
 termId BTO:0001267
 protocol Open_Chromatin:Urothelia_Crawford_protocol.pdf
 
@@ -2356,7 +2378,7 @@ vendorId HTB-14
 orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/Default.aspx?ATCCNum=HTB-14&Template=cellBiology
 karyotype hypodiploid female with a modal chromosome number of 44 in 48% of cells and a 5.9% rate of higher ploidy
 termId BTO:0002036
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002036&termName=U-87%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0002036
 sex F
 tier 3
 protocol HudsonAlpha:U-87_Myers_protocol.pdf
@@ -7114,25 +7136,28 @@ hidden yes
 
 term accession
 type typeOfTerm
-label Lab provided accession
-description Some labs provide an accession with their data.  When not self explanatory, the lab may provide further description.
+label GEO accession number provided by lab
+description A generic GEO accession number provided by the producing lab.
 searchable no
 cvDefined no
 # Superceded by geoSample?
+# VALIDATION:  GS[M,E][0-9]*
 
 term age
 type typeOfTerm
-label Age of experimental organism
-description Some experiments take the age of the animal or tissue sample as a variable.
+label Age of donor organism
+description The age of the organism used to produce tissue or cell line.              
 searchable select
 cvDefined yes
+validation cv
 
 term annotation
 type typeOfTerm
-label Gencode annotation
-description GENCODE provides a version of it's annotation.
+label GENCODE annotation.
+description GENCODE specifies if an annotation is done manually or automatically.
 searchable no
 cvDefined no
+validation /manual/ || /automatic/
 
 term antibody
 type typeOfTerm
@@ -7140,14 +7165,15 @@ label Antibody or target protein
 description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
 searchable select
 cvDefined yes
+validation cv
 
 term bioRep
 type typeOfTerm
-label UNKNOWN
-description WHAT IS THIS???
+label  Transcriptome Bio-Replicate ID
+description Cross Transcriptome sample ID number.
 searchable no
 cvDefined no
-# WHAT IS THIS???
+validation [0-9][0-9][0-9][A-Z]*
 
 term cellType
 type typeOfTerm
@@ -7155,6 +7181,7 @@ label Cell, tissue or DNA sample
 description Cell line or tissue used as the source of experimental material.
 searchable select
 cvDefined yes
+validation cv
 ### Warning should be term cell but this is already in localization!
 
 term composite
@@ -7163,28 +7190,33 @@ label UCSC Composite Track
 description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.  This allows convenient selection and configuration.  Also provided will be a detailed description of the set of related experiments.
 searchable no
 cvDefined no
-# Could be cvDefined
+# Should be cvDefined
 
 term control
 type typeOfTerm
 label Control or Input for ChIPseq
-description Control or 'input' datasets are often used in ChIP-seq experiments, in order to remove background noise before peak calling.  Different types of control sets are sometimes appropriate.
+description The type of control (or 'input') used in ChIP-seq experiments to remove background noise before peak calling.
 searchable select
 cvDefined yes
+validate cv
 
 term controlId
 type typeOfTerm
 label ControlId - explicit relationship
+#label Control ID - Specific dataset used as the control
 description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling.
 searchable no
 cvDefined no
+validate none
+#This is diffiuclt to validate as it could be an experiment ID from the lab or from the DCC or just a list of variables that define the experiment
 
 term dataType
 type typeOfTerm
-label Experiment type
-description Different types of experiments such as ChIP-seq, DNase-seq and RNA-seq result in different file and table formats that should be interpreted appropriately.
+label Experiment (Assay) type
+description Different types of experiments such as ChIP-seq, DNAse-seq and RNA-seq.
 searchable select
 cvDefined yes
+validate cv
 
 term dataVersion
 type typeOfTerm
@@ -7192,13 +7224,16 @@ label ENCODE release
 description The ENCODE project declares specific data freezes and all submissions are tagged as coming on or before a specified freeze.  This is not a release date but allows identification of which experiments were available for particular rounds of ENCODE analysis.
 searchable select
 cvDefined no
+validate ENCODE Three letter month and 4 digit year, we currenlty abuse this with the "post Month Year"
+
 
 term dateResubmitted
 type typeOfTerm
 label Date resubmitted to UCSC
-description Submitted data that is found to have errors or otherwise needed to be updated will not only have the originally submitted date but this date of resubmission.
+description Submitted data that was remapped to a new assembly, found to have errors or otherwise needed to be updated will not only have the originally submitted date but this date of resubmission.
 searchable date
 cvDefined no
+validation date, later than dateSubmitted
 
 term dateSubmitted
 type typeOfTerm
@@ -7206,13 +7241,15 @@ label Date submitted to UCSC
 description Date that a particular dataset was originally submitted to the UCSC Genome Browser.
 searchable date
 cvDefined no
+#VALIDATION date, nine months less than dateUnrestricted
 
 term dateUnrestricted
 type typeOfTerm
 label Date restrictions are lifted
-description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted.
+description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted. This is the date the data is free to use.
 searchable date
 cvDefined no
+#VALIDATION date/ nine months more than dateSubmitted
 
 # term expVars
 # type typeOfTerm
@@ -7246,10 +7283,10 @@ cvDefined no
 
 term fragSize
 type typeOfTerm
-label Length of GIS PET fragments
-description WHAT IS THIS???
+label Length of GIS DNA PET fragments
+description 
 searchable no
-cvDefined no
+cvDefined yes 
 # WHAT IS THIS?
 
 term freezeDate
@@ -7265,6 +7302,7 @@ label GEO accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
 searchable select
 cvDefined no
+# VALIDATE GM[0-9]* 
 
 # term geoSampleAccession
 # type typeOfTerm
@@ -7280,6 +7318,7 @@ label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
 searchable select
 cvDefined no
+# VALIDATE GS[0-9]* 
 
 # term geoSeriesAccession
 # type typeOfTerm
@@ -7291,7 +7330,7 @@ cvDefined no
 
 term grant
 type typeOfTerm
-label Principal Investigator
+label Principal Investigator on grant
 description Principle investigator holding the grant by which a set of experiments are financed.  The data sets associated with a single PI often investigate broad questions in a harmonious way.  Some grant PIs coordinate the work of several labs.
 searchable select
 cvDefined yes
