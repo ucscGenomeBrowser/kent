@@ -134,15 +134,22 @@ return FALSE;
 char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
 // returns allocated string of HTML link to controlled vocabulary term
 {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
-char *encFile = cgiEncode(file);
+#define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+struct dyString *dyLink = NULL;
 char *encTerm = cgiEncode(term);
 char *encValue = cgiEncode(value);
-struct dyString *dyLink = dyStringCreate(VOCAB_LINK,encFile,encTerm,encValue,title,label);
+if (file != NULL)
+    {
+    char *encFile = cgiEncode(file);
+    dyLink = dyStringCreate(VOCAB_LINK_WITH_FILE,encFile,encTerm,encValue,title,label);
+    freeMem(encFile);
+    }
+else
+    dyLink = dyStringCreate(VOCAB_LINK,encTerm,encValue,title,label);
 if (suffix != NULL)
     dyStringAppend(dyLink,suffix);  // Don't encode since this may contain HTML
 
-freeMem(encFile);
 freeMem(encTerm);
 freeMem(encValue);
 return dyStringCannibalize(&dyLink);
@@ -162,15 +169,8 @@ if(showLongLabel)
 if(showShortLabel)
     dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
-//#define DONT_USE_CV_WHITELIST
-#ifndef DONT_USE_CV_WHITELIST
-// Need whiteListed cv terms and the cv.ra file
-struct slPair *oneTerm,*whiteList = mdbCvWhiteList(FALSE,TRUE); // Want terms that are defined in cv, not searchable via trackSearch
-char *cvFile = NULL;
-char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-if(vocab != NULL)
-    cvFile = firstWordInLine(cloneString(vocab));
-#endif///ndef DONT_USE_CV_WHITELIST
+// Get the hash of mdb and cv term types
+struct hash *cvTermTypes = mdbCvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -193,27 +193,38 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
 
-#ifndef DONT_USE_CV_WHITELIST
-        if (cvFile && whiteList)
+        if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
             {
-            for(oneTerm=whiteList;oneTerm!=NULL;oneTerm=oneTerm->next)
+            struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
+            if (cvTerm != NULL)
                 {
-                if (sameWord(oneTerm->name,mdbVar->var))
-                    break;
-                }
-            if (oneTerm != NULL)
-                {
-                //build link then
-                // TODO: If hgEncodeVocab was changed to give a description of a term not found in cv.ra, then "type" could almost always be linked
-                char *linkOfType = controlledVocabLink(cvFile,"type",oneTerm->name,oneTerm->val,oneTerm->val,NULL);
-                char *linkOfTerm = controlledVocabLink(cvFile,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
-                dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
-                freeMem(linkOfType);
-                freeMem(linkOfTerm);
-                continue;
+                if(SETTING_NOT_ON(hashFindVal(cvTerm,"hidden")))  // NULL is not on
+                    {
+                    char *label=hashFindVal(cvTerm,"label");
+                    if (label == NULL)
+                        label = mdbVar->var;
+                    char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
+                    char *cvDefined=hashFindVal(cvTerm,"cvDefined");
+                    if (cvDefined != NULL && differentWord(cvDefined,"no") && differentWord(cvDefined,"0"))
+                        {
+                        char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
+                        freeMem(linkOfTerm);
+                        }
+                    else
+                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
+                        //{  // NOTE: Could just have a tool tip for these.
+                        //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
+                        //label = cgiEncode(label);
+                        //dyStringPrintf(dyTable,"<tr><td align=right><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
+                        //freeMem(descr);
+                        //freeMem(label);
+                        //}
+                    freeMem(linkOfType);
+                    continue;
+                    }
                 }
             }
-#endif///ndef DONT_USE_CV_WHITELIST
         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
