@@ -4546,81 +4546,6 @@ subId 1293
 tableName wgEncodeUwTfbsGm12878InputStdRawRep1
 view RawSignal
 
-metaObject wgEncodeUwTfbsH7esInputStdAlnRep1
-objType file
-antibody Input
-cell H7-hESC
-composite wgEncodeUwTfbs
-control std
-controlId H7-hESC/Input/std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileIndex wgEncodeUwTfbsH7esInputStdAlnRep1.bam.bai
-fileName wgEncodeUwTfbsH7esInputStdAlnRep1.bam
-fragLength 350
-grant Stam
-lab UW
-labVersion Bowtie 0.12.5
-origAssembly hg19
-parentTable wgEncodeUwTfbsH7esInputStdAlnRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 2033
-view Alignments
-
-metaObject wgEncodeUwTfbsH7esInputStdRawDataRep1
-objType file
-antibody Input
-cell H7-hESC
-composite wgEncodeUwTfbs
-control std
-controlId H7-hESC/Input/std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwTfbsH7esInputStdRawDataRep1.fastq.gz
-fragLength 350
-grant Stam
-lab UW
-origAssembly hg19
-parentTable wgEncodeUwTfbsH7esInputStdRawSignalRep1
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 2033
-view RawData
-
-metaObject wgEncodeUwTfbsH7esInputStdRawRep1
-objType table
-antibody Input
-cell H7-hESC
-composite wgEncodeUwTfbs
-control std
-controlId H7-hESC/Input/std
-dataType ChIP-seq
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-24
-dateUnrestricted 2011-04-23
-fileName wgEncodeUwTfbsH7esInputStdRawRep1.bigWig
-fragLength 350
-grant Stam
-lab UW
-labVersion WindowDensity-bin20-win+/-75
-origAssembly hg19
-project wgEncode
-rank 1
-replicate 1
-setType input
-subId 2033
-tableName wgEncodeUwTfbsH7esInputStdRawRep1
-view RawSignal
-
 metaObject wgEncodeUwTfbsHaspCtcfStdAlnRep1
 objType file
 antibody CTCF
@@ -10559,4 +10484,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: -56320274
+# MAGIC: 1182673378
