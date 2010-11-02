@@ -2147,90 +2147,63 @@ slPairSortCase(&pairs);
 return pairs;
 }
 
-struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks)
+struct hash *mdbCvTermTypeHash()
+// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
+// Those terms should contain label,descrition,searchable,cvDefined,hidden
+{
+static struct hash *cvHashOfTermTypes = NULL;
+
+// Establish cv hash of Term Types if it doesn't already exist
+if (cvHashOfTermTypes == NULL)
+    {
+    cvHashOfTermTypes = raReadWithFilter(cv_file(), "term","type","typeOfTerm");
+    // Patch up an ugly inconsistency with 'cell'
+    struct hash *cellHash = hashRemove(cvHashOfTermTypes,"cellType");
+    if (cellHash)
+        hashAdd(cvHashOfTermTypes,"cell",cellHash);
+    }
+
+
+return cvHashOfTermTypes;
+}
+
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
 // returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 {
-#define WHITE_LIST_COUNT 35
-
-struct cvTerms
-    {
-    char *term;          // The actual term as it appears in the mdb or cv.ra
-    void *title;         // The title that should appear in Track Search
-    boolean searchable;  // Can this term be searched for in Track Search?
-    boolean cvTerm;      // Can this term be linked to cv.ra content?
-    };
-
-// TODO: move this list into cv.ra as type=term
-// TODO: If hgEncodeVocab was changed to give a description of a term not found in cv.ra, then many more of these could be linked.
-struct cvTerms whiteList[] = {
-   // term                  Title                              search cvTerm
-    {"accession"           ,"Lab provided accession"           ,FALSE,FALSE}, // Superceded by geoSample?
-    {"age"                 ,"Age of experimental organism"     ,TRUE ,TRUE },
-    {"annotation"          ,"Gencode annotation"               ,FALSE,FALSE},
-    {"antibody"            ,"Antibody or target protein"       ,TRUE ,TRUE },
-    {"bioRep"              ,"UNKNOWN"                          ,FALSE,FALSE},
-    {"cell"                ,"Cell, tissue or DNA sample"       ,TRUE ,TRUE },
-    {"composite"           ,"UCSC Composite Track"             ,FALSE,FALSE}, // Could be in cv.ra
-    {"control"             ,"Control or Input for ChIPseq"     ,TRUE ,TRUE },
-    {"controlId"           ,"ControlId - explicit relationship",FALSE,FALSE},
-    {"dataType"            ,"Experiment type"                  ,TRUE ,TRUE },
-    {"dataVersion"         ,"ENCODE release"                   ,TRUE ,FALSE},
-    {"dateResubmitted"     ,"Date resubmitted to UCSC"         ,FALSE,FALSE},
-    {"dateSubmitted"       ,"Date submitted to UCSC"           ,FALSE,FALSE},
-    {"dateUnrestricted"    ,"Date restrictions are lifted"     ,FALSE,FALSE},
-    {"expVars"             ,"Experimental variables"           ,FALSE,FALSE}, // Only defined for one obj: wgEncodeCaltechRnaSeq
-    {"fileIndex"           ,"BAM Index file"                   ,FALSE,FALSE},
-    {"fileName"            ,"File Name for downloading"        ,FALSE,FALSE},
-    {"fragLength"          ,"Mean Length of DNA fragments"     ,FALSE,FALSE},
-    {"fragSize"            ,"Length of GIS PET fragments"      ,FALSE,FALSE}, // WHAT IS THIS?
-    {"freezeDate"          ,"Gencode freeze date"              ,FALSE,FALSE},
-    {"geoSample"           ,"GEO accession"                    ,TRUE ,FALSE},
-  //{"geoSampleAccession"  ,"GEO sample accession"             ,TRUE ,FALSE}, // Should be replaced by geoSample
-    {"geoSeries"           ,"GEO series accession"             ,TRUE ,FALSE},
-  //{"geoSeriesAccession"  ,"GEO series"                       ,TRUE ,FALSE}, // Should be replaced by geoSeries
-    {"grant"               ,"Principal Investigator"           ,TRUE ,TRUE },
-    {"insertLength"        ,"Insertion length"                 ,FALSE,FALSE}, // WHAT IS THIS?
-    {"lab"                 ,"Lab producing data"               ,TRUE ,TRUE },
-    {"labExpId"            ,"Lab specific identifier"          ,TRUE ,FALSE},
-    {"labProtocolId"       ,"Lab specific protocol ID"         ,FALSE,FALSE},
-    {"labVersion"          ,"Lab specific details"             ,TRUE ,FALSE},
-    {"level"               ,"Gencode level"                    ,FALSE,FALSE},
-    {"localization"        ,"Cell compartment"                 ,TRUE ,TRUE },
-    {"mapAlgorithm"        ,"Mapping algorithm"                ,TRUE ,TRUE },
-    {"origAssembly"        ,"Assembly originally mapped to"    ,TRUE ,FALSE}, // Could be cv.ra term
-  //{"parentTable"         ,"Closest related table"            ,FALSE,FALSE}, // On its way out
-    {"phase"               ,"Cell phase"                       ,FALSE,FALSE}, // Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-  //{"project"             ,"Project funded by"                ,FALSE,FALSE}, // Only one: all encode is under single project='wgEncode'
-    {"protocol"            ,"Library Protocol"                 ,TRUE ,TRUE },
-    {"rank"                ,"Rank of replicate"                ,FALSE,FALSE}, // UW used rank in hg18 only
-    {"readType"            ,"Paired/Single reads lengths"      ,TRUE ,TRUE },
-    {"replicate"           ,"Replicate number"                 ,TRUE ,FALSE},
-    {"restrictionEnzyme"   ,"Restriction Enzyme used"          ,FALSE,TRUE },
-    {"rnaExtract"          ,"RNA Extract"                      ,TRUE ,TRUE },
-    {"seqPlatform"         ,"Sequencing Platform"              ,TRUE ,TRUE },
-    {"setType"             ,"Experiment or Input"              ,TRUE ,FALSE},
-    {"sex"                 ,"Sex of organism"                  ,TRUE ,TRUE }, // really want to link to this?
-  //{"size"                ,"Mapability windowing size"        ,FALSE,FALSE}, // Used in hg19 mapability only
-    {"softwareVersion"     ,"Lab specific informatics"         ,TRUE ,FALSE},
-    {"strain"              ,"Strain of organism"               ,TRUE ,TRUE },
-    {"subId"               ,"Submission Id"                    ,TRUE ,FALSE},
-    {"submittedDataVersion","Version of data if resubmitted"   ,FALSE,FALSE},
-    {"tableName"           ,"Name of msql table at UCSC"       ,FALSE,FALSE},
-    {"treatment"           ,"Treatment"                        ,TRUE ,TRUE },
-  //{"type"                ,"Data Format type"                 ,FALSE,FALSE}, // Used rarely in hg18 to distinguish wig and bedGraph
-  //{"uniqueness"          ,"Number of mismatches tolerated"   ,FALSE,FALSE}, // Used in hg19 mapability only
-    {"view"                ,"View - Peaks or Signals"          ,TRUE ,FALSE},
-};
-int ix,size = sizeof(whiteList)/sizeof(struct cvTerms);
 struct slPair *whitePairs = NULL;
-for(ix=0;ix<size;ix++)
-    {
-    if (searchTracks && !whiteList[ix].searchable)
-        continue;
-    if (cvLinks && !whiteList[ix].cvTerm)
-        continue;
 
-    slPairAdd(&whitePairs, whiteList[ix].term, cloneString(whiteList[ix].title));
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hashCookie hc = hashFirst(termTypeHash);
+struct hashEl *hEl;
+while ((hEl = hashNext(&hc)) != NULL)
+    {
+    char *setting = NULL;
+    struct hash *typeHash = (struct hash *)hEl->val;
+    //if (!includeHidden)
+        {
+        setting = hashFindVal(typeHash,"hidden");
+        if(SETTING_IS_ON(setting))
+            continue;
+        }
+    if (searchTracks)
+        {
+        setting = hashFindVal(typeHash,"searchable");
+        if (setting == NULL || differentWord(setting,"select")) // TODO: Currently only 'select's are supported
+            continue;
+        }
+    if (cvDefined)
+        {
+        setting = hashFindVal(typeHash,"cvDefined");
+        if(SETTING_NOT_ON(setting))
+            continue;
+        }
+    char *term = hashMustFindVal(typeHash,"term");
+    char *label = hashFindVal(typeHash,"label");
+    if (label == NULL)
+        label = term;
+
+    slPairAdd(&whitePairs, term, cloneString(label)); // Term gets cloned in slPairAdd
     }
 if (whitePairs != NULL)
     slPairValSortCase(&whitePairs);
