@@ -1,14 +1,14 @@
+COPT=-ggdb
 include ../../../../inc/common.mk
 
 L += $(MYSQLLIBS) -lm
 MYLIBDIR = ../../../../lib/${MACHTYPE}
-MYLIBS =  $(MYLIBDIR)/docId.a $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a
+MYLIBS =  $(MYLIBDIR)/docId.a $(MYLIBDIR)/jkhgap.a ${MYLIBDIR}/jkweb.a 
 
+A = docIdTidy
+O = docIdTidy.o
 
-A = docIdSubmitDir
-O = docIdSubmitDir.o
-
-docIdSubmitDir: ${O} ${MYLIBS}
+docIdTidy: ${O} ${MYLIBS}
 	${CC} ${COPT} -o ${DESTDIR}${BINDIR}/${A}${EXE} $O ${MYLIBS} $L
 #	${STRIP} ${DESTDIR}${BINDIR}/${A}${EXE}
 

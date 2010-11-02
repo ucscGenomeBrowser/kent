@@ -7,23 +7,23 @@ SCRIPT_FILES = \
 CONFIG_FILES = \
 	fields.ra \
 	labs.ra \
-	cv.ra \
 	hg18_chromInfo.txt \
         expVars.ra
 
 CV = cv.ra
+CVDIR=../../makeDb/trackDb/cv/alpha
 
 PIPELINE_PATH=/hive/groups/encode/dcc/pipeline
 CONFIG_DIR = ${PIPELINE_PATH}/${PIPELINE_DIR}/config
 
 all:
-	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config cgi
+	@${MAKE} --no-print-directory SCRIPTS=${HOME}/bin/scripts PIPELINE_DIR=encpipeline_${USER} scripts config
 
 alpha:
-	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts config install-cgi
+	@${MAKE} --no-print-directory SCRIPTS=${SCRIPTS} PIPELINE_DIR=encpipeline_beta scripts config 
 
 install:
-	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} PIPELINE_DIR=encpipeline_prod scripts config install-cgi
+	@${MAKE} --no-print-directory SCRIPTS=${ENCODE_PIPELINE_BIN} PIPELINE_DIR=encpipeline_prod scripts config 
 
 # recursive targets, arguments:
 #   SCRIPTS PIPELINE_DIR
@@ -37,21 +37,11 @@ ${SCRIPTS}/%: %
 	cp -p $< $@.tmp
 	mv -f $@.tmp $@
 
-config: ${CONFIG_FILES:%=${CONFIG_DIR}/%}
+config: ${CONFIG_FILES:%=${CONFIG_DIR}/%} ${CONFIG_DIR}/${CV}
 
-install-cgi:
-	@if [ ! -d "${CGI_BIN}/encode" ]; then \
-		${MKDIR} ${CGI_BIN}/encode; \
-	fi
-	rm -f ${CGI_BIN}/encode/${CV}
-	cp -p config/${CV} ${CGI_BIN}/encode/${CV}
-
-cgi:
-	@if [ ! -d "${CGI_BIN}-${USER}/encode" ]; then \
-		${MKDIR} ${CGI_BIN}-${USER}/encode; \
-	fi
-	rm -f ${CGI_BIN}-${USER}/encode/${CV}
-	cp -p config/${CV} ${CGI_BIN}-${USER}/encode/${CV}
+${CONFIG_DIR}/${CV}: ${CVDIR}/${CV}
+	cp -p ${CVDIR}/${CV} ${CONFIG_DIR}/cv.ra.tmp
+	mv -f  ${CONFIG_DIR}/cv.ra.tmp ${CONFIG_DIR}/cv.ra
 
 ${CONFIG_DIR}/%: config/%
 	@mkdir -p $(dir $@)
