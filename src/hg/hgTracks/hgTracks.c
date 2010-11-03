@@ -1574,9 +1574,18 @@ if (tdbIsCompositeChild(subtrack->tdb))
                 subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
             else
                 {
+                #ifdef OMIT
+                // Not sure this is needed at all!  OMITting because of the recursive loop that wigMafs fell into on rightClick
                 if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
+                    {
+                    // wigMaf legitimately has no items even after loadItems, as it triggers a loop to ->loadItems() !
+                    // Really should protect against infinite loops better than this!
+                    if (!startsWith("wigMaf", subtrack->tdb->type) && !startsWith("maf", subtrack->tdb->type))
+                        {
                         subtrack->loadItems(subtrack);
-
+                        }
+                    }
+                #endif///def OMIT
                 limitVisibility(subtrack);
                 }
             return hTvFromString(var);
