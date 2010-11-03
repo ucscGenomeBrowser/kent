@@ -7140,14 +7140,14 @@ projectName UNC-Giddings
 #    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
 #
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
+#  validation: outlines the expected values
 
 
-# provisional this whole section is provisional
 
 term typeOfTerm
 type typeOfTerm
 label Term types defined
-description Types of terms used frequently in controlled vocabulary or metadata should be defined here.
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here. (Provisional)
 searchable no
 cvDefined no
 hidden yes
@@ -7196,7 +7196,7 @@ validation [0-9][0-9][0-9][A-Z]*
 term cellType
 type typeOfTerm
 label Cell, tissue or DNA sample
-description Cell line or tissue used as the source of experimental material.
+description Cell line or tissue used as the source of experimental material. (Provisional)
 searchable select
 cvDefined yes
 validation cv
@@ -7225,7 +7225,7 @@ term controlId
 type typeOfTerm
 label ControlId - explicit relationship
 #label Control ID - Specific dataset used as the control
-description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment.
+description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment. (Provisional)
 searchable no
 cvDefined no
 validate none
@@ -7242,10 +7242,10 @@ validate cv
 term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
-description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis. (Provisional)
 searchable select
 cvDefined no
-validate ENCODE Three letter month and 4 digit year, we currenlty abuse this with the "post Month Year"
+validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 
 term dateResubmitted
 type typeOfTerm
@@ -7258,7 +7258,7 @@ validation date, later than dateSubmitted
 term dateSubmitted
 type typeOfTerm
 label Date submitted to UCSC
-description Date that a particular file  was originally submitted to the UCSC Genome Browser.
+description Date that a particular file  was originally submitted to the UCSC Genome Browser. 
 searchable date
 cvDefined no
 validation date, nine months less than dateUnrestricted
@@ -7277,12 +7277,12 @@ validation date nine months more than dateSubmitted
 # description Experiment defining variables for a given ENCODE composite set of tracks.
 # searchable no
 # cvDefined no
-# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite
+# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite. 11/3/10
 
 term fileIndex
 type typeOfTerm
 label BAM Index file
-description The name of the index file in the downloads directory associated with a particular track or raw data file.
+description The name of the index file in the downloads directory associated with a particular track or raw data file. (Provisional)
 searchable no
 cvDefined no
 validate Matches the fileName prefix with the suffix .bai
@@ -7293,7 +7293,7 @@ validate Matches the fileName prefix with the suffix .bai
 term fileName
 type typeOfTerm
 label File Name for downloading
-description The name of a downloadable file associated with a particular track in the browser.
+description The name of a downloadable file associated with a particular track in the browser. (Provisional)
 searchable no
 cvDefined no
 validate Exists?
@@ -7301,7 +7301,7 @@ validate Exists?
 term fragLength
 type typeOfTerm
 label Mean Length of DNA fragments
-description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size.
+description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. (Provisional)
 searchable no
 cvDefined no
 # Collapse with fragSize?
@@ -7310,7 +7310,7 @@ cvDefined no
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description
+description (Provisional)
 searchable no
 cvDefined yes
 # WHAT IS THIS?
@@ -7323,7 +7323,7 @@ description Date when GENCODE froze data in order to submit to UCSC.
 searchable no
 cvDefined yes
 validation cv
-# outdated, should not be used going forward
+# outdated, should not be used going forward. 11/3/10
 
 term geoSample
 type typeOfTerm
@@ -7339,7 +7339,7 @@ validate GSM[0-9]*
 # description GEO sample accession number applied to a single data set in a series of related data sets.
 # searchable select
 # cvDefined no
-# Should be replaced by geoSample
+# Should be replaced by geoSample (11/3/10)
 
 term geoSeries
 type typeOfTerm
@@ -7355,7 +7355,7 @@ validate GSE[0-9]*
 # searchable select
 # description GEO Sample accession number applied to a single data set in a series of related data sets.
 # cvDefined no
-# Should be replaced by geoSeries
+# Should be replaced by geoSeries (11/3/10)
 
 term grant
 type typeOfTerm
@@ -7425,11 +7425,11 @@ validate cv
 term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
-description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
+description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome. (Provisional)
 searchable select
 cvDefined yes
 validate cv
-# This is Caltech only and possibly should be retired.
+# This is Caltech only and possibly should be retired.  (11/3/10)
 
 term origAssembly
 type typeOfTerm
@@ -7447,7 +7447,7 @@ description A data file available for downloads may not be directly associated w
 searchable no
 cvDefined no
 hidden yes
-# On its way out
+# On its way out (11/3/10)
 
 term phase
 type typeOfTerm
@@ -7457,7 +7457,7 @@ searchable no
 cvDefined yes
 validate cv
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-# We have talked about obsoleting this term, but thought there was more data like this coming
+# We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
 
 # term project
 # type typeOfTerm
@@ -7465,7 +7465,7 @@ validate cv
 # description Project that funded this and a related set of experiments.
 # searchable no
 # cvDefined no
-# Only one: all encode is under single project='wgEncode'
+# Only one: all encode is under single project='wgEncode' (11/3/10)
 
 term protocol
 type typeOfTerm
@@ -7474,7 +7474,7 @@ description Lab specific protocol that may cover a number of steps in an experim
 searchable select
 cvDefined yes
 validate cv
-# Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab
+# Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab (11/3/10)
 
 term rank
 type typeOfTerm
@@ -7483,7 +7483,7 @@ description Experiments with multiple replicates may declare a preferred replica
 searchable no
 cvDefined no
 validate [0-9]
-# Was retired.  UW used rank in hg18 only, only for 1 occurance
+# Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 
 term readType
 type typeOfTerm
@@ -7549,7 +7549,7 @@ description The windowing size used, typically in a whole genome computational a
 searchable no
 cvDefined no
 validate integer
-# Used in hg19 mapability only
+# Used in hg19 mapability only (11/3/10)
 
 term softwareVersion
 type typeOfTerm
@@ -7608,7 +7608,7 @@ validate cv
 # description Data format of a particular file or table.
 # cvDefined no
 # Used rarely in hg18 to distinguish wig and bedGraph
-#This is to be retired
+#This is to be retired (11/3/10)
 
 term uniqueness
 type typeOfTerm
@@ -7618,7 +7618,7 @@ searchable no
 cvDefined no
 validate
 # Used in hg19 mapability only
-# It does not vary at all, it was on the possible retire list
+# It does not vary at all, it was on the possible retire list (11/3/10)
 
 term view
 type typeOfTerm
@@ -7626,4 +7626,4 @@ label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable select
 cvDefined no
-#This should be CV defined
+#This should be CV defined (11/3/10)
