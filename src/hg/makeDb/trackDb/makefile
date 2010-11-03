@@ -130,7 +130,7 @@ update: #clean
 
 alpha: clean
 	${GIT} pull
-	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
+	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
 	cp cv/alpha/cv.ra  /usr/local/apache/cgi-bin/encode
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${HIVE_TRIX} ${DBS}
@@ -138,14 +138,14 @@ alpha: clean
 
 beta: clean
 	${GIT} pull
-	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
+	./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
 	cp cv/beta/cv.ra  /usr/local/apache/cgi-bin/encode
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 public: clean
 	${GIT} pull
-	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
+	./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}
 	cp cv/public/cv.ra  /usr/local/apache/cgi-bin-public/encode
 	HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public /usr/local/apache/cgi-bin-public/encode/cv.ra ${DATA_TRIX} ${DBS}
@@ -159,7 +159,7 @@ buildBeta: checkbeta clean strict
 
 encodeReport:
 	${GIT} pull
-	./loadTracks trackDb_encodeReport hgFindSpec ${DBS}
+	./loadTracks ${EXTRA} trackDb_encodeReport hgFindSpec ${DBS}
 
 listDbs:
 	@echo "# databases listed in trackDb/makefile DBS variable, with table counts"

@@ -13,7 +13,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion Tim Ready PMID: 19801529
-parentTable wgEncodeHudsonalphaChipSeqRawSignalA549Control
 project wgEncode
 protocol PCR1x
 setType input
@@ -37,7 +36,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion Tim Ready PMID: 19801529
-parentTable wgEncodeHudsonalphaChipSeqRawSignalA549Gr
 project wgEncode
 protocol PCR1x
 setType exp
@@ -61,7 +59,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL474
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -85,7 +82,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL475
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -109,7 +105,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL307
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549ControlPcr2xEtoh02
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -133,7 +128,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1204
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -157,7 +151,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1205
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -181,7 +174,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -205,7 +197,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex50nm
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -229,7 +220,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -253,7 +243,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -278,7 +267,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL244
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -302,7 +290,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL245
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549Pol2Pcr2xEtoh02
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -326,7 +313,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1206
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -350,7 +336,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1207
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -373,7 +358,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Be2cControl.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cControl
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -396,7 +380,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Be2cNrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Be2cNrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -420,7 +403,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 7
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -444,7 +426,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -468,7 +449,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL652
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl3Pcr1xBcl3
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -492,7 +472,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -517,7 +496,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlV2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -542,7 +520,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 6
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -566,7 +543,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Egr1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -590,7 +566,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Gabp
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -614,7 +589,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 7
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -638,7 +612,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -662,7 +635,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Oct2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -686,7 +658,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -710,7 +681,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -734,7 +704,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL677
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5n19
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -758,7 +727,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -782,7 +750,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -806,7 +773,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL748
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -830,7 +796,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pu1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -854,7 +819,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -878,7 +842,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL746
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -902,7 +865,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Srf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -927,7 +889,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -952,7 +913,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -976,7 +936,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1000,7 +959,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 7
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1024,7 +982,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL817
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891ControlPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1048,7 +1005,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL910
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1072,7 +1028,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL908
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1096,7 +1051,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL802
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1120,7 +1074,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL977
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pu1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1144,7 +1097,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL749
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1168,7 +1120,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL818
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1192,7 +1143,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL911
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1216,7 +1166,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL909
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1240,7 +1189,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL736
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1264,7 +1212,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL969
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescControlPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1288,7 +1235,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL978
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1312,7 +1258,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL979
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1336,7 +1281,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL980
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1360,7 +1304,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL853
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1383,7 +1326,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Control
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1407,7 +1349,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL610
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Gabp
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1430,7 +1371,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Helas3Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Pol2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1454,7 +1394,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL590
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Taf1Pcr1xTaf1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1478,7 +1417,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1059
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1502,7 +1440,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL593
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1526,7 +1463,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL632
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Fosl2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1550,7 +1486,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Gabp
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1574,7 +1509,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1057
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Hey1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1597,7 +1531,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Jund.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Jund
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1620,7 +1553,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1643,7 +1575,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2P300.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2P300
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1666,7 +1597,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Pol2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1690,7 +1620,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL984
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1713,7 +1642,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Sin3ak20
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1736,7 +1664,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Srf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Srf
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1760,7 +1687,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Taf1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1783,7 +1709,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Hepg2Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1807,7 +1732,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL981
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1830,7 +1754,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Control
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1853,7 +1776,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Htb11Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Htb11Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1877,7 +1799,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1901,7 +1822,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL127
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1JurkatPol2Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1925,7 +1845,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1950,7 +1869,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -1975,7 +1893,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1999,7 +1916,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Gabp
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2023,7 +1939,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2047,7 +1962,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2071,7 +1985,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2095,7 +2008,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2119,7 +2031,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pu1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2143,7 +2054,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2167,7 +2077,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2191,7 +2100,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Srf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2215,7 +2123,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2239,7 +2146,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2262,7 +2168,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Panc1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2285,7 +2190,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Panc1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2308,7 +2212,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Control
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2331,7 +2234,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Foxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Foxp2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2354,7 +2256,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1Pfsk1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Pfsk1Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2377,7 +2278,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1SknmcFoxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1SknmcFoxp2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -2400,7 +2300,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1U87Control
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2423,7 +2322,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep1U87Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1U87Nrsf
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -2447,7 +2345,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1077
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2471,7 +2368,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1078
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2495,7 +2391,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2519,7 +2414,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex50nm
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2543,7 +2437,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2567,7 +2460,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2591,7 +2483,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL306
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2615,7 +2506,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL334
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549Pol2Pcr2xEtoh02
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2639,7 +2529,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1079
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2663,7 +2552,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1080
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2686,7 +2574,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Be2cControl.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cControl
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2709,7 +2596,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Be2cNrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Be2cNrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2733,7 +2619,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2757,7 +2642,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl11a
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2781,7 +2665,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1018
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl3Pcr1xBcl3
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2805,7 +2688,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2830,7 +2712,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlV2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2855,7 +2736,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Ebf
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2879,7 +2759,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2903,7 +2782,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Gabp
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2927,7 +2805,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2951,7 +2828,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -2975,7 +2851,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Oct2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -2999,7 +2874,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878P300
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3023,7 +2897,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 6
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3047,7 +2920,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL848
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5n19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3071,7 +2943,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3095,7 +2966,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -3119,7 +2989,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL847
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3143,7 +3012,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion originally rep #5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3167,7 +3035,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -3191,7 +3058,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL846
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sp1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3215,7 +3081,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Srf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -3239,7 +3104,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Gm12878Taf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3264,7 +3128,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tcf12
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3288,7 +3151,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -3312,7 +3174,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Zbtb33
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3336,7 +3197,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL922
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3360,7 +3220,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL921
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3384,7 +3243,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL918
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3408,7 +3266,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL948
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pu1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3432,7 +3289,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL920
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3456,7 +3312,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL946
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3480,7 +3335,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL944
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3504,7 +3358,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL945
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3528,7 +3381,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1053
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescNrsfPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3552,7 +3404,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1051
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3576,7 +3427,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1052
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3600,7 +3450,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL964
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescTaf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3623,7 +3472,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Control
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3648,7 +3496,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL611
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Gabp
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3671,7 +3518,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Helas3Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Pol2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3695,7 +3541,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL706
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Taf1Pcr1xTaf1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3719,7 +3564,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1169
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3743,7 +3587,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL819
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -3767,7 +3610,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1107
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Fosl2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3791,7 +3633,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Gabp
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3815,7 +3656,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1170
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Hey1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3838,7 +3678,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Jund.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Jund
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3861,7 +3700,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -3884,7 +3722,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2P300.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2P300
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3907,7 +3744,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Pol2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Pol2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3931,7 +3767,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1054
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3954,7 +3789,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Sin3ak20.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -3978,7 +3812,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Taf1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4001,7 +3834,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Hepg2Usf1.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4025,7 +3857,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL1055
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4048,7 +3879,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Control
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4071,7 +3901,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Htb11Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Htb11Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4095,7 +3924,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4119,7 +3947,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion SL187
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2JurkatPol2Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4143,7 +3970,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4168,7 +3994,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4193,7 +4018,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4217,7 +4041,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Gabp
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4241,7 +4064,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Hey1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4265,7 +4087,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4289,7 +4110,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4313,7 +4133,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol24h8
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4337,7 +4156,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pu1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4361,7 +4179,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4385,7 +4202,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Six5
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4409,7 +4225,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Srf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4433,7 +4248,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Taf1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4457,7 +4271,6 @@ fragLength 225
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4480,7 +4293,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Panc1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4503,7 +4315,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Panc1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4526,7 +4337,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Control
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4549,7 +4359,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Foxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4572,7 +4381,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2Pfsk1Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4595,7 +4403,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2SknmcFoxp2.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -4618,7 +4425,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Control.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2U87Control
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4641,7 +4447,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsRep2U87Nrsf.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2U87Nrsf
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -4664,7 +4469,6 @@ fileName wgEncodeHudsonalphaChipSeqAlignmentsSknmcControl.tagAlign.gz
 fragLength 225
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -8528,7 +8332,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549CtcfPcr1xDexa.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1204
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8551,7 +8354,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549CtcfPcr1xEtoh02.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1205
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549CtcfPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8574,7 +8376,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xDex500pm.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex500pm
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8597,7 +8398,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xDex50nm.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex50nm
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8620,7 +8420,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xDex5nm.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xDex5nm
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8643,7 +8442,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549GrPcr1xEtoh02.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549GrPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8667,7 +8465,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549Usf1Pcr1xDexa.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1206
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8690,7 +8487,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1A549Usf1Pcr1xEtoh02.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1207
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1A549Usf1Pcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8713,7 +8509,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Batf.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 7
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Batf
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8736,7 +8531,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Bcl11a.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl11a
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8759,7 +8553,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Bcl3Pcr1xBcl3.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL652
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Bcl3Pcr1xBcl3
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8781,7 +8574,6 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878ControlPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878ControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -8804,7 +8596,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Ebf.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 6
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Ebf
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8827,7 +8618,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878GabpPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878GabpPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -8850,7 +8640,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878InputPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL516
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878InputPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8873,7 +8662,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Irf4.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 7
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Irf4
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8896,7 +8684,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878NrsfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878NrsfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -8919,7 +8706,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878P300.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878P300
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8942,7 +8728,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pax5c20.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 5
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pax5c20
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8965,7 +8750,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pbx3Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL615
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pbx3Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -8988,7 +8772,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL748
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9011,7 +8794,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pol2Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pol2Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9034,7 +8816,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Pou2f2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL614
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Pou2f2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9057,7 +8838,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sin3ak20Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sin3ak20Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9081,7 +8861,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Sp1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL612
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Sp1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9104,7 +8883,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878SrfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878SrfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9127,7 +8905,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Taf1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL288
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Taf1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9150,7 +8927,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Tcf12Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL673
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Tcf12Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9173,7 +8949,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Usf1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Usf1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9196,7 +8971,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12878Zbtb33.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 7
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12878Zbtb33
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9219,7 +8993,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891ControlPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL817
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891ControlPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9242,7 +9015,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL910
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9265,7 +9037,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL908
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9288,7 +9059,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pou2f2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL802
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pou2f2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9311,7 +9081,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Pu1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL977
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Pu1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9334,7 +9103,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12891Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL749
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12891Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9357,7 +9125,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892ControlPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL818
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892ControlPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9380,7 +9147,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL911
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9403,7 +9169,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL909
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9426,7 +9191,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Gm12892Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL736
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Gm12892Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9449,7 +9213,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescControlPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL969
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescControlPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9472,7 +9235,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescNrsfPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL978
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescNrsfPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9495,7 +9257,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescPol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL979
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9518,7 +9279,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescPol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL980
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescPol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9541,7 +9301,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1H1hescTaf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL853
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1H1hescTaf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9564,7 +9323,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Helas3GabpPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL610
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3GabpPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9587,7 +9345,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Helas3Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL631
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9610,7 +9367,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Helas3Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL590
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Helas3Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9633,7 +9389,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Bhlhe40Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1059
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Bhlhe40Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9656,7 +9411,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2ControlPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL593
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2ControlPcr1x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9679,7 +9433,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Fosl2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL632
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Fosl2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9702,7 +9455,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2GabpPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL275
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2GabpPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9725,7 +9477,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Hey1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1057
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Hey1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9748,7 +9499,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2JundPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL635
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2JundPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9771,7 +9521,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2P300Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL634
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2P300Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9794,7 +9543,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2RxraPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL984
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2RxraPcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9817,7 +9565,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Usf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL582
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Usf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9840,7 +9587,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Hepg2Zbtb33Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL981
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Hepg2Zbtb33Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9864,7 +9610,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562ControlV2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 1
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562ControlV2
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9888,7 +9633,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Egr1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Egr1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9911,7 +9655,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562GabpPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562GabpPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9934,7 +9677,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Hey1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Hey1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -9957,7 +9699,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562NrsfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562NrsfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9979,7 +9720,6 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol2.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -9999,7 +9739,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Pol24h8.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10022,7 +9761,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Sin3ak20Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sin3ak20Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10045,7 +9783,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Six5.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Six5
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -10068,7 +9805,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Sp1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL646
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Sp1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -10091,7 +9827,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562SrfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562SrfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10114,7 +9849,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Taf1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Taf1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -10137,7 +9871,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1K562Usf1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Usf1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10160,7 +9893,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Panc1Control.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL117
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1Control
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10183,7 +9915,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep1Panc1NrsfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL116
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1Panc1NrsfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10206,7 +9937,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549CtcfPcr1xDexa.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1077
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10229,7 +9959,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549CtcfPcr1xEtoh02.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1078
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549CtcfPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10252,7 +9981,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xDex500pm.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex500pm
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10275,7 +10003,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xDex50nm.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex50nm
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10298,7 +10025,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xDex5nm.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xDex5nm
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10321,7 +10047,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549GrPcr1xEtoh02.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549GrPcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10344,7 +10069,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549Usf1Pcr1xDexa.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1079
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xDexa
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10367,7 +10091,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2A549Usf1Pcr1xEtoh02.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1080
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2A549Usf1Pcr1xEtoh02
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10390,7 +10113,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Batf.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Batf
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10413,7 +10135,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Bcl11a.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl11a
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10436,7 +10157,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Bcl3Pcr1xBcl3.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1018
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Bcl3Pcr1xBcl3
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10458,7 +10178,6 @@ dateUnrestricted 2010-04-06
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878ControlPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878ControlPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10481,7 +10200,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Ebf.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Ebf
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10504,7 +10222,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Egr1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Egr1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10527,7 +10244,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878GabpPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878GabpPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10550,7 +10266,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878InputPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL517
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878InputPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10573,7 +10288,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Irf4.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Irf4
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10596,7 +10310,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878NrsfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878NrsfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10619,7 +10332,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878P300.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878P300
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10642,7 +10354,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pax5c20.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 6
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5c20
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10665,7 +10376,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pax5n19.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL848
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pax5n19
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10688,7 +10398,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pbx3Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL647
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pbx3Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10711,7 +10420,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL847
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10734,7 +10442,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pol2Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pol2Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10758,7 +10465,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pou2f2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL648
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pou2f2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10781,7 +10487,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Pu1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL649
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Pu1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10804,7 +10509,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Sin3ak20Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sin3ak20Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10827,7 +10531,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Sp1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL846
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Sp1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10850,7 +10553,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878SrfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878SrfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10873,7 +10575,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL588
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10896,7 +10597,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Tcf12.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Tcf12
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10919,7 +10619,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Usf1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Usf1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10942,7 +10641,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12878Zbtb33.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 8
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12878Zbtb33
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10965,7 +10663,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL922
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -10988,7 +10685,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL921
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11011,7 +10707,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pou2f2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL918
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pou2f2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11034,7 +10729,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Pu1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL948
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Pu1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11057,7 +10751,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12891Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL920
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12891Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11080,7 +10773,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12892Pol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL946
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11103,7 +10795,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12892Pol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL944
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Pol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11126,7 +10817,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Gm12892Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL945
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Gm12892Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11149,7 +10839,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescNrsfPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1053
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescNrsfPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11172,7 +10861,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescPol24h8Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1051
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol24h8Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11195,7 +10883,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescPol2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1052
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescPol2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11218,7 +10905,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2H1hescTaf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL964
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2H1hescTaf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11241,7 +10927,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Helas3GabpPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL611
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3GabpPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11264,7 +10949,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Helas3Taf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL706
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Helas3Taf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11287,7 +10971,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Bhlhe40Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1169
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Bhlhe40Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11310,7 +10993,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2ControlPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL819
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2ControlPcr1x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11333,7 +11015,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Fosl2Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1107
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Fosl2Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11356,7 +11037,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Hey1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1170
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Hey1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11379,7 +11059,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2JundPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL629
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2JundPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11402,7 +11081,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2P300Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL630
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2P300Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11425,7 +11103,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2RxraPcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1054
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2RxraPcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11448,7 +11125,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Sin3ak20Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL637
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Sin3ak20Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11471,7 +11147,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Usf1Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL636
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Usf1Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11494,7 +11169,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Hepg2Zbtb33Pcr1x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL1055
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Hepg2Zbtb33Pcr1x
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11518,7 +11192,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562ControlV2.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 2
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562ControlV2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11542,7 +11215,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Egr1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Egr1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11565,7 +11237,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562GabpPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562GabpPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11588,7 +11259,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Hey1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Hey1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11611,7 +11281,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562NrsfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562NrsfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11633,7 +11302,6 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol2.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -11653,7 +11321,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Pol24h8.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep1K562Pol24h8
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11676,7 +11343,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Pu1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Pu1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11699,7 +11365,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Sin3ak20Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Sin3ak20Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11722,7 +11387,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Six5.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 4
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Six5
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11745,7 +11409,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562SrfPcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562SrfPcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11768,7 +11431,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Taf1.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion 3
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Taf1
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11791,7 +11453,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2K562Usf1Pcr2x.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion PCR2x
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2K562Usf1Pcr2x
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11814,7 +11475,6 @@ fileName wgEncodeHudsonalphaChipSeqRawDataRep2Panc1Control.fastq.gz
 grant Myers
 lab HudsonAlpha
 labVersion SL523
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Panc1Control
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -11836,7 +11496,6 @@ dateUnrestricted 2009-07-31
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2Pfsk1Foxp2.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2Pfsk1Foxp2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11858,7 +11517,6 @@ dateUnrestricted 2009-07-31
 fileName wgEncodeHudsonalphaChipSeqRawDataRep2SknmcFoxp2.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalRep2SknmcFoxp2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -11880,7 +11538,6 @@ dateUnrestricted 2009-06-11
 fileName wgEncodeHudsonalphaChipSeqRawDataSknmcControl.fastq.gz
 grant Myers
 lab HudsonAlpha
-parentTable wgEncodeHudsonalphaChipSeqRawSignalSknmcControl
 project wgEncode
 protocol PCR1x
 setType input
