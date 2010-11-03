@@ -76,6 +76,13 @@ The format of the type fields:
    <fieldCount> - the number of standard fields
    <extraInfo> - either '.' meaning no non-standard fields
        or '+' if there are additional non-standard fields.
+   Optional variable for bed tracks with 9 or more of the standard fields:
+   itemRgb=on  - interpret field nine as a color for this item specified
+               - as an R,G,B triplet.  When loaded this field appears
+               - as an integer with the RGB values in specific bits of
+               - the integer.  The input ascii data in the bed file is
+               - specifically three numbers in the range 0-255 separated by
+               - commas in field nine, e.g.: 0,0,255 == full blue color
 3. type chain <otherDb>
    Alignment data
    <otherDb> - other database this organism is aligned to
