@@ -532,6 +532,18 @@ else if (sameWord(type,TYPE_OF_TERM))
         printf("  <TD><I>%s</I></TD>\n", s );
     else
         printf("  <TD>%s</TD>\n", term );
+    if (sameString(term,CELL_TYPE_ALT))
+        {
+        puts("<TR>");
+        printf("  <TD><A HREF='hgEncodeVocab?type=%s&organism=Mouse' title='Mouse %s details' TARGET=ucscVocabChild>%s</a> <em>(for mouse)</em></TD>\n", term, term, term);
+        s = hashFindVal(ra, DESCRIPTION_FIELD);
+        printf("  <TD colspan=%d>%s <em>(for mouse)</em></TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
+        s = hashFindVal(ra, LABEL_FIELD);
+        if (s != NULL)
+            printf("  <TD><I>%s</I></TD>\n", s );
+        else
+            printf("  <TD>%s</TD>\n", term );
+        }
     }
 else
     {
