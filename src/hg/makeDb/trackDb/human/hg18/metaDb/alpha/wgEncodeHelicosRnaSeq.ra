@@ -28,7 +28,6 @@ fileName wgEncodeHelicosRnaSeqRawDataK562CytosolLongpolya.fasta.gz
 grant Gingeras
 lab Helicos
 localization cytosol
-parentTable wgEncodeHelicosRnaSeqRawSignalK562CytosolLongpolya
 project wgEncode
 rnaExtract longPolyA
 subId 249

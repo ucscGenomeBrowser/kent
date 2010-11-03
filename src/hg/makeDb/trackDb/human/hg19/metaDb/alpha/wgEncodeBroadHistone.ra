@@ -15,7 +15,6 @@ fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39,7 +38,6 @@ fileName wgEncodeBroadHistoneGm12878ControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878ControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -61,7 +59,6 @@ fileName wgEncodeBroadHistoneGm12878ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878ControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -83,7 +80,6 @@ fileName wgEncodeBroadHistoneGm12878ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878ControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType input
@@ -129,7 +125,6 @@ fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -153,7 +148,6 @@ fileName wgEncodeBroadHistoneGm12878CtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -195,7 +189,6 @@ fileName wgEncodeBroadHistoneGm12878CtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -241,7 +234,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -265,7 +257,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -287,7 +278,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -309,7 +299,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -355,7 +344,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -379,7 +367,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -401,7 +388,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -423,7 +409,6 @@ fileName wgEncodeBroadHistoneGm12878H3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -469,7 +454,6 @@ fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -493,7 +477,6 @@ fileName wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -515,7 +498,6 @@ fileName wgEncodeBroadHistoneGm12878H3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -537,7 +519,6 @@ fileName wgEncodeBroadHistoneGm12878H3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -583,7 +564,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -607,7 +587,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -629,7 +608,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -651,7 +629,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -697,7 +674,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -721,7 +697,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -743,7 +718,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -765,7 +739,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -811,7 +784,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -835,7 +807,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -857,7 +828,6 @@ fileName wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -923,7 +893,6 @@ fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -947,7 +916,6 @@ fileName wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -969,7 +937,6 @@ fileName wgEncodeBroadHistoneGm12878H3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -991,7 +958,6 @@ fileName wgEncodeBroadHistoneGm12878H3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1037,7 +1003,6 @@ fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1061,7 +1026,6 @@ fileName wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1083,7 +1047,6 @@ fileName wgEncodeBroadHistoneGm12878H4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1105,7 +1068,6 @@ fileName wgEncodeBroadHistoneGm12878H4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneGm12878H4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1151,7 +1113,6 @@ fileName wgEncodeBroadHistoneH1hescControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1175,7 +1136,6 @@ fileName wgEncodeBroadHistoneH1hescControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1197,7 +1157,6 @@ fileName wgEncodeBroadHistoneH1hescControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1219,7 +1178,6 @@ fileName wgEncodeBroadHistoneH1hescControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType input
@@ -1264,7 +1222,6 @@ fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1288,7 +1245,6 @@ fileName wgEncodeBroadHistoneH1hescCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1310,7 +1266,6 @@ fileName wgEncodeBroadHistoneH1hescCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1332,7 +1287,6 @@ fileName wgEncodeBroadHistoneH1hescCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1378,7 +1332,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneH1hescH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1402,7 +1355,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneH1hescH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1424,7 +1376,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneH1hescH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1446,7 +1397,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneH1hescH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1491,7 +1441,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1515,7 +1464,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1537,7 +1485,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1559,7 +1506,6 @@ fileName wgEncodeBroadHistoneH1hescH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1605,7 +1551,6 @@ fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1629,7 +1574,6 @@ fileName wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1651,7 +1595,6 @@ fileName wgEncodeBroadHistoneH1hescH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1673,7 +1616,6 @@ fileName wgEncodeBroadHistoneH1hescH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1719,7 +1661,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1743,7 +1684,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1765,7 +1705,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1787,7 +1726,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1833,7 +1771,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1857,7 +1794,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1879,7 +1815,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1901,7 +1836,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1947,7 +1881,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1971,7 +1904,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1993,7 +1925,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2015,7 +1946,6 @@ fileName wgEncodeBroadHistoneH1hescH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2061,7 +1991,6 @@ fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2085,7 +2014,6 @@ fileName wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2107,7 +2035,6 @@ fileName wgEncodeBroadHistoneH1hescH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2129,7 +2056,6 @@ fileName wgEncodeBroadHistoneH1hescH3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2175,7 +2101,6 @@ fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2199,7 +2124,6 @@ fileName wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2221,7 +2145,6 @@ fileName wgEncodeBroadHistoneH1hescH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2243,7 +2166,6 @@ fileName wgEncodeBroadHistoneH1hescH4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneH1hescH4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2289,7 +2211,6 @@ fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2313,7 +2234,6 @@ fileName wgEncodeBroadHistoneHelas3ControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3ControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2335,7 +2255,6 @@ fileName wgEncodeBroadHistoneHelas3ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3ControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2357,7 +2276,6 @@ fileName wgEncodeBroadHistoneHelas3ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3ControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2403,7 +2321,6 @@ fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2427,7 +2344,6 @@ fileName wgEncodeBroadHistoneHelas3CtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2449,7 +2365,6 @@ fileName wgEncodeBroadHistoneHelas3CtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2471,7 +2386,6 @@ fileName wgEncodeBroadHistoneHelas3CtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2516,7 +2430,6 @@ fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2540,7 +2453,6 @@ fileName wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2562,7 +2474,6 @@ fileName wgEncodeBroadHistoneHelas3H3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2584,7 +2495,6 @@ fileName wgEncodeBroadHistoneHelas3H3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2629,7 +2539,6 @@ fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2653,7 +2562,6 @@ fileName wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2675,7 +2583,6 @@ fileName wgEncodeBroadHistoneHelas3H3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2697,7 +2604,6 @@ fileName wgEncodeBroadHistoneHelas3H3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2742,7 +2648,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2766,7 +2671,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2788,7 +2692,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2810,7 +2713,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2855,7 +2757,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2879,7 +2780,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2901,7 +2801,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2923,7 +2822,6 @@ fileName wgEncodeBroadHistoneHelas3H3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2968,7 +2866,6 @@ fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2992,7 +2889,6 @@ fileName wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3014,7 +2910,6 @@ fileName wgEncodeBroadHistoneHelas3H3k79me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k79me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3036,7 +2931,6 @@ fileName wgEncodeBroadHistoneHelas3H3k79me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k79me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3081,7 +2975,6 @@ fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3105,7 +2998,6 @@ fileName wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3127,7 +3019,6 @@ fileName wgEncodeBroadHistoneHelas3H3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3149,7 +3040,6 @@ fileName wgEncodeBroadHistoneHelas3H3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3194,7 +3084,6 @@ fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3218,7 +3107,6 @@ fileName wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3240,7 +3128,6 @@ fileName wgEncodeBroadHistoneHelas3H4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3262,7 +3149,6 @@ fileName wgEncodeBroadHistoneHelas3H4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3H4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3307,7 +3193,6 @@ fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3Pol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3331,7 +3216,6 @@ fileName wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3Pol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3353,7 +3237,6 @@ fileName wgEncodeBroadHistoneHelas3Pol2bStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3Pol2bStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3375,7 +3258,6 @@ fileName wgEncodeBroadHistoneHelas3Pol2bStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHelas3Pol2bStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3420,7 +3302,6 @@ fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3444,7 +3325,6 @@ fileName wgEncodeBroadHistoneHepg2ControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2ControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3466,7 +3346,6 @@ fileName wgEncodeBroadHistoneHepg2ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2ControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -3488,7 +3367,6 @@ fileName wgEncodeBroadHistoneHepg2ControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2ControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType input
@@ -3533,7 +3411,6 @@ fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3557,7 +3434,6 @@ fileName wgEncodeBroadHistoneHepg2CtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3579,7 +3455,6 @@ fileName wgEncodeBroadHistoneHepg2CtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3601,7 +3476,6 @@ fileName wgEncodeBroadHistoneHepg2CtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3647,7 +3521,6 @@ fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H2azStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3671,7 +3544,6 @@ fileName wgEncodeBroadHistoneHepg2H2azStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H2azStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3693,7 +3565,6 @@ fileName wgEncodeBroadHistoneHepg2H2azStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H2azStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3715,7 +3586,6 @@ fileName wgEncodeBroadHistoneHepg2H2azStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H2azStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3760,7 +3630,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3784,7 +3653,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3806,7 +3674,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3828,7 +3695,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3874,7 +3740,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3898,7 +3763,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3920,7 +3784,6 @@ fileName wgEncodeBroadHistoneHepg2H3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3966,7 +3829,6 @@ fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3990,7 +3852,6 @@ fileName wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4012,7 +3873,6 @@ fileName wgEncodeBroadHistoneHepg2H3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4034,7 +3894,6 @@ fileName wgEncodeBroadHistoneHepg2H3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4080,7 +3939,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4104,7 +3962,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4126,7 +3983,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4148,7 +4004,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4194,7 +4049,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4218,7 +4072,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4240,7 +4093,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4262,7 +4114,6 @@ fileName wgEncodeBroadHistoneHepg2H3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4308,7 +4159,6 @@ fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4332,7 +4182,6 @@ fileName wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4354,7 +4203,6 @@ fileName wgEncodeBroadHistoneHepg2H3k79me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H3k79me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4376,7 +4224,6 @@ fileName wgEncodeBroadHistoneHepg2H3k79me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHepg2H3k79me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4421,7 +4268,6 @@ fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4445,7 +4291,6 @@ fileName wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4467,7 +4312,6 @@ fileName wgEncodeBroadHistoneHepg2H3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4489,7 +4333,6 @@ fileName wgEncodeBroadHistoneHepg2H3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4535,7 +4378,6 @@ fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4559,7 +4401,6 @@ fileName wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4581,7 +4422,6 @@ fileName wgEncodeBroadHistoneHepg2H4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4603,7 +4443,6 @@ fileName wgEncodeBroadHistoneHepg2H4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHepg2H4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4649,7 +4488,6 @@ fileName wgEncodeBroadHistoneHmecControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4673,7 +4511,6 @@ fileName wgEncodeBroadHistoneHmecControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4695,7 +4532,6 @@ fileName wgEncodeBroadHistoneHmecControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4761,7 +4597,6 @@ fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4785,7 +4620,6 @@ fileName wgEncodeBroadHistoneHmecCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4807,7 +4641,6 @@ fileName wgEncodeBroadHistoneHmecCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4829,7 +4662,6 @@ fileName wgEncodeBroadHistoneHmecCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4875,7 +4707,6 @@ fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4899,7 +4730,6 @@ fileName wgEncodeBroadHistoneHmecH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4921,7 +4751,6 @@ fileName wgEncodeBroadHistoneHmecH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4943,7 +4772,6 @@ fileName wgEncodeBroadHistoneHmecH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4989,7 +4817,6 @@ fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5013,7 +4840,6 @@ fileName wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5035,7 +4861,6 @@ fileName wgEncodeBroadHistoneHmecH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5057,7 +4882,6 @@ fileName wgEncodeBroadHistoneHmecH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5103,7 +4927,6 @@ fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5127,7 +4950,6 @@ fileName wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5149,7 +4971,6 @@ fileName wgEncodeBroadHistoneHmecH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5171,7 +4992,6 @@ fileName wgEncodeBroadHistoneHmecH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5217,7 +5037,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5241,7 +5060,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5263,7 +5081,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5285,7 +5102,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5331,7 +5147,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5355,7 +5170,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5377,7 +5191,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5399,7 +5212,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5445,7 +5257,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5469,7 +5280,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5491,7 +5301,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5513,7 +5322,6 @@ fileName wgEncodeBroadHistoneHmecH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5559,7 +5367,6 @@ fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5583,7 +5390,6 @@ fileName wgEncodeBroadHistoneHmecH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5605,7 +5411,6 @@ fileName wgEncodeBroadHistoneHmecH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5671,7 +5476,6 @@ fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5695,7 +5499,6 @@ fileName wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5717,7 +5520,6 @@ fileName wgEncodeBroadHistoneHmecH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHmecH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5783,7 +5585,6 @@ fileName wgEncodeBroadHistoneHsmmControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5807,7 +5608,6 @@ fileName wgEncodeBroadHistoneHsmmControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5829,7 +5629,6 @@ fileName wgEncodeBroadHistoneHsmmControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5851,7 +5650,6 @@ fileName wgEncodeBroadHistoneHsmmControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType input
@@ -5896,7 +5694,6 @@ fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5920,7 +5717,6 @@ fileName wgEncodeBroadHistoneHsmmCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5942,7 +5738,6 @@ fileName wgEncodeBroadHistoneHsmmCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5964,7 +5759,6 @@ fileName wgEncodeBroadHistoneHsmmCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6010,7 +5804,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6034,7 +5827,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6056,7 +5848,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6078,7 +5869,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6124,7 +5914,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6148,7 +5937,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6170,7 +5958,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6192,7 +5979,6 @@ fileName wgEncodeBroadHistoneHsmmH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6238,7 +6024,6 @@ fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6262,7 +6047,6 @@ fileName wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6284,7 +6068,6 @@ fileName wgEncodeBroadHistoneHsmmH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6306,7 +6089,6 @@ fileName wgEncodeBroadHistoneHsmmH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6352,7 +6134,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6376,7 +6157,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6398,7 +6178,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6420,7 +6199,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6466,7 +6244,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6490,7 +6267,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6512,7 +6288,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6534,7 +6309,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6580,7 +6354,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6604,7 +6377,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6626,7 +6398,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6648,7 +6419,6 @@ fileName wgEncodeBroadHistoneHsmmH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6694,7 +6464,6 @@ fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6718,7 +6487,6 @@ fileName wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6740,7 +6508,6 @@ fileName wgEncodeBroadHistoneHsmmH3k79me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k79me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6762,7 +6529,6 @@ fileName wgEncodeBroadHistoneHsmmH3k79me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k79me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6807,7 +6573,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6831,7 +6596,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6853,7 +6617,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6875,7 +6638,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6921,7 +6683,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6945,7 +6706,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k9me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6967,7 +6727,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k9me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6989,7 +6748,6 @@ fileName wgEncodeBroadHistoneHsmmH3k9me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmH3k9me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7034,7 +6792,6 @@ fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7058,7 +6815,6 @@ fileName wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7080,7 +6836,6 @@ fileName wgEncodeBroadHistoneHsmmH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7102,7 +6857,6 @@ fileName wgEncodeBroadHistoneHsmmH4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHsmmH4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7148,7 +6902,6 @@ fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7172,7 +6925,6 @@ fileName wgEncodeBroadHistoneHsmmtControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7194,7 +6946,6 @@ fileName wgEncodeBroadHistoneHsmmtControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7216,7 +6967,6 @@ fileName wgEncodeBroadHistoneHsmmtControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7261,7 +7011,6 @@ fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7285,7 +7034,6 @@ fileName wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7307,7 +7055,6 @@ fileName wgEncodeBroadHistoneHsmmtCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7329,7 +7076,6 @@ fileName wgEncodeBroadHistoneHsmmtCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7374,7 +7120,6 @@ fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH2azStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7398,7 +7143,6 @@ fileName wgEncodeBroadHistoneHsmmtH2azStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH2azStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7420,7 +7164,6 @@ fileName wgEncodeBroadHistoneHsmmtH2azStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH2azStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7442,7 +7185,6 @@ fileName wgEncodeBroadHistoneHsmmtH2azStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH2azStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7487,7 +7229,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7511,7 +7252,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7533,7 +7273,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7555,7 +7294,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7600,7 +7338,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7624,7 +7361,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7646,7 +7382,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7668,7 +7403,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7713,7 +7447,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7737,7 +7470,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7759,7 +7491,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7781,7 +7512,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7826,7 +7556,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7850,7 +7579,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7872,7 +7600,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7894,7 +7621,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7939,7 +7665,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7963,7 +7688,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7985,7 +7709,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8007,7 +7730,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8052,7 +7774,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8076,7 +7797,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k79me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8098,7 +7818,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k79me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k79me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8120,7 +7839,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k79me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k79me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8165,7 +7883,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8189,7 +7906,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8211,7 +7927,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8233,7 +7948,6 @@ fileName wgEncodeBroadHistoneHsmmtH3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8278,7 +7992,6 @@ fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8302,7 +8015,6 @@ fileName wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8324,7 +8036,6 @@ fileName wgEncodeBroadHistoneHsmmtH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8346,7 +8057,6 @@ fileName wgEncodeBroadHistoneHsmmtH4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneHsmmtH4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8391,7 +8101,6 @@ fileName wgEncodeBroadHistoneHuvecControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8415,7 +8124,6 @@ fileName wgEncodeBroadHistoneHuvecControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8439,7 +8147,6 @@ fileName wgEncodeBroadHistoneHuvecControlStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecControlStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8461,7 +8168,6 @@ fileName wgEncodeBroadHistoneHuvecControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8483,7 +8189,6 @@ fileName wgEncodeBroadHistoneHuvecControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8505,7 +8210,6 @@ fileName wgEncodeBroadHistoneHuvecControlStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecControlStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8551,7 +8255,6 @@ fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8575,7 +8278,6 @@ fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8599,7 +8301,6 @@ fileName wgEncodeBroadHistoneHuvecCtcfStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecCtcfStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8621,7 +8322,6 @@ fileName wgEncodeBroadHistoneHuvecCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8643,7 +8343,6 @@ fileName wgEncodeBroadHistoneHuvecCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8665,7 +8364,6 @@ fileName wgEncodeBroadHistoneHuvecCtcfStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecCtcfStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8711,7 +8409,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8735,7 +8432,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8759,7 +8455,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8781,7 +8476,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8803,7 +8497,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8825,7 +8518,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27acStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27acStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8871,7 +8563,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8895,7 +8586,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8917,7 +8607,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8939,7 +8628,6 @@ fileName wgEncodeBroadHistoneHuvecH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8985,7 +8673,6 @@ fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9009,7 +8696,6 @@ fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9033,7 +8719,6 @@ fileName wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k36me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9055,7 +8740,6 @@ fileName wgEncodeBroadHistoneHuvecH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9077,7 +8761,6 @@ fileName wgEncodeBroadHistoneHuvecH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9099,7 +8782,6 @@ fileName wgEncodeBroadHistoneHuvecH3k36me3StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k36me3StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9145,7 +8827,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9169,7 +8850,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9193,7 +8873,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9215,7 +8894,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9237,7 +8915,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9259,7 +8936,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me1StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me1StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9305,7 +8981,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9329,7 +9004,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9351,7 +9025,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9373,7 +9046,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9419,7 +9091,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9443,7 +9114,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9467,7 +9137,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9489,7 +9158,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9511,7 +9179,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9533,7 +9200,6 @@ fileName wgEncodeBroadHistoneHuvecH3k4me3StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k4me3StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9579,7 +9245,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9603,7 +9268,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9627,7 +9291,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9649,7 +9312,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9671,7 +9333,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9693,7 +9354,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9acStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9acStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9739,7 +9399,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9763,7 +9422,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9787,7 +9445,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9809,7 +9466,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9831,7 +9487,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9853,7 +9508,6 @@ fileName wgEncodeBroadHistoneHuvecH3k9me1StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH3k9me1StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9899,7 +9553,6 @@ fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9923,7 +9576,6 @@ fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9947,7 +9599,6 @@ fileName wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH4k20me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9969,7 +9620,6 @@ fileName wgEncodeBroadHistoneHuvecH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9991,7 +9641,6 @@ fileName wgEncodeBroadHistoneHuvecH4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10013,7 +9662,6 @@ fileName wgEncodeBroadHistoneHuvecH4k20me1StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecH4k20me1StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -10059,7 +9707,6 @@ fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecPol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10083,7 +9730,6 @@ fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecPol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10107,7 +9753,6 @@ fileName wgEncodeBroadHistoneHuvecPol2bStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecPol2bStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -10129,7 +9774,6 @@ fileName wgEncodeBroadHistoneHuvecPol2bStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecPol2bStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10151,7 +9795,6 @@ fileName wgEncodeBroadHistoneHuvecPol2bStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecPol2bStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10173,7 +9816,6 @@ fileName wgEncodeBroadHistoneHuvecPol2bStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneHuvecPol2bStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -10219,7 +9861,6 @@ fileName wgEncodeBroadHistoneK562ControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562ControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10241,7 +9882,6 @@ fileName wgEncodeBroadHistoneK562ControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562ControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10287,7 +9927,6 @@ fileName wgEncodeBroadHistoneK562CtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10311,7 +9950,6 @@ fileName wgEncodeBroadHistoneK562CtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10333,7 +9971,6 @@ fileName wgEncodeBroadHistoneK562CtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10399,7 +10036,6 @@ fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10423,7 +10059,6 @@ fileName wgEncodeBroadHistoneK562H3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10445,7 +10080,6 @@ fileName wgEncodeBroadHistoneK562H3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10511,7 +10145,6 @@ fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10535,7 +10168,6 @@ fileName wgEncodeBroadHistoneK562H3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10557,7 +10189,6 @@ fileName wgEncodeBroadHistoneK562H3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10579,7 +10210,6 @@ fileName wgEncodeBroadHistoneK562H3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10625,7 +10255,6 @@ fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10649,7 +10278,6 @@ fileName wgEncodeBroadHistoneK562H3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10671,7 +10299,6 @@ fileName wgEncodeBroadHistoneK562H3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10737,7 +10364,6 @@ fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10761,7 +10387,6 @@ fileName wgEncodeBroadHistoneK562H3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10783,7 +10408,6 @@ fileName wgEncodeBroadHistoneK562H3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10849,7 +10473,6 @@ fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10873,7 +10496,6 @@ fileName wgEncodeBroadHistoneK562H3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10895,7 +10517,6 @@ fileName wgEncodeBroadHistoneK562H3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10961,7 +10582,6 @@ fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10985,7 +10605,6 @@ fileName wgEncodeBroadHistoneK562H3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11007,7 +10626,6 @@ fileName wgEncodeBroadHistoneK562H3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11029,7 +10647,6 @@ fileName wgEncodeBroadHistoneK562H3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11075,7 +10692,6 @@ fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11099,7 +10715,6 @@ fileName wgEncodeBroadHistoneK562H3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11121,7 +10736,6 @@ fileName wgEncodeBroadHistoneK562H3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11143,7 +10757,6 @@ fileName wgEncodeBroadHistoneK562H3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11189,7 +10802,6 @@ fileName wgEncodeBroadHistoneK562H3k9me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k9me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11211,7 +10823,6 @@ fileName wgEncodeBroadHistoneK562H3k9me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H3k9me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11257,7 +10868,6 @@ fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11281,7 +10891,6 @@ fileName wgEncodeBroadHistoneK562H4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11303,7 +10912,6 @@ fileName wgEncodeBroadHistoneK562H4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562H4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11369,7 +10977,6 @@ fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562Pol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11393,7 +11000,6 @@ fileName wgEncodeBroadHistoneK562Pol2bStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562Pol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11415,7 +11021,6 @@ fileName wgEncodeBroadHistoneK562Pol2bStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneK562Pol2bStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11480,7 +11085,6 @@ fileName wgEncodeBroadHistoneNhaControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11503,7 +11107,6 @@ fileName wgEncodeBroadHistoneNhaControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11525,7 +11128,6 @@ fileName wgEncodeBroadHistoneNhaControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11547,7 +11149,6 @@ fileName wgEncodeBroadHistoneNhaControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11591,7 +11192,6 @@ fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11614,7 +11214,6 @@ fileName wgEncodeBroadHistoneNhaCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11636,7 +11235,6 @@ fileName wgEncodeBroadHistoneNhaCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11658,7 +11256,6 @@ fileName wgEncodeBroadHistoneNhaCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11702,7 +11299,6 @@ fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11725,7 +11321,6 @@ fileName wgEncodeBroadHistoneNhaH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11747,7 +11342,6 @@ fileName wgEncodeBroadHistoneNhaH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11769,7 +11363,6 @@ fileName wgEncodeBroadHistoneNhaH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11813,7 +11406,6 @@ fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11836,7 +11428,6 @@ fileName wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11858,7 +11449,6 @@ fileName wgEncodeBroadHistoneNhaH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11880,7 +11470,6 @@ fileName wgEncodeBroadHistoneNhaH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11924,7 +11513,6 @@ fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11947,7 +11535,6 @@ fileName wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11991,7 +11578,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12014,7 +11600,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12036,7 +11621,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12058,7 +11642,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12102,7 +11685,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12125,7 +11707,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12147,7 +11728,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12169,7 +11749,6 @@ fileName wgEncodeBroadHistoneNhaH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg19
-parentTable wgEncodeBroadHistoneNhaH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12214,7 +11793,6 @@ fileName wgEncodeBroadHistoneNhekControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12238,7 +11816,6 @@ fileName wgEncodeBroadHistoneNhekControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12260,7 +11837,6 @@ fileName wgEncodeBroadHistoneNhekControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12282,7 +11858,6 @@ fileName wgEncodeBroadHistoneNhekControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType input
@@ -12328,7 +11903,6 @@ fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12352,7 +11926,6 @@ fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12376,7 +11949,6 @@ fileName wgEncodeBroadHistoneNhekCtcfStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekCtcfStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12398,7 +11970,6 @@ fileName wgEncodeBroadHistoneNhekCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12420,7 +11991,6 @@ fileName wgEncodeBroadHistoneNhekCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12442,7 +12012,6 @@ fileName wgEncodeBroadHistoneNhekCtcfStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekCtcfStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12488,7 +12057,6 @@ fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12512,7 +12080,6 @@ fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12536,7 +12103,6 @@ fileName wgEncodeBroadHistoneNhekH3k27acStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12558,7 +12124,6 @@ fileName wgEncodeBroadHistoneNhekH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12580,7 +12145,6 @@ fileName wgEncodeBroadHistoneNhekH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12602,7 +12166,6 @@ fileName wgEncodeBroadHistoneNhekH3k27acStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27acStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12648,7 +12211,6 @@ fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12672,7 +12234,6 @@ fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12696,7 +12257,6 @@ fileName wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12718,7 +12278,6 @@ fileName wgEncodeBroadHistoneNhekH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12740,7 +12299,6 @@ fileName wgEncodeBroadHistoneNhekH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12762,7 +12320,6 @@ fileName wgEncodeBroadHistoneNhekH3k27me3StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k27me3StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12808,7 +12365,6 @@ fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12832,7 +12388,6 @@ fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12856,7 +12411,6 @@ fileName wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k36me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12878,7 +12432,6 @@ fileName wgEncodeBroadHistoneNhekH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12900,7 +12453,6 @@ fileName wgEncodeBroadHistoneNhekH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12922,7 +12474,6 @@ fileName wgEncodeBroadHistoneNhekH3k36me3StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k36me3StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -12968,7 +12519,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12992,7 +12542,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13016,7 +12565,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13038,7 +12586,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13060,7 +12607,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13082,7 +12628,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me1StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me1StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13128,7 +12673,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13152,7 +12696,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13176,7 +12719,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13198,7 +12740,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13220,7 +12761,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13242,7 +12782,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me2StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me2StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13288,7 +12827,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13312,7 +12850,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13336,7 +12873,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me3StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13358,7 +12894,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13380,7 +12915,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13402,7 +12936,6 @@ fileName wgEncodeBroadHistoneNhekH3k4me3StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k4me3StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13448,7 +12981,6 @@ fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13472,7 +13004,6 @@ fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13496,7 +13027,6 @@ fileName wgEncodeBroadHistoneNhekH3k9acStdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9acStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13518,7 +13048,6 @@ fileName wgEncodeBroadHistoneNhekH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13540,7 +13069,6 @@ fileName wgEncodeBroadHistoneNhekH3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13562,7 +13090,6 @@ fileName wgEncodeBroadHistoneNhekH3k9acStdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9acStdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13608,7 +13135,6 @@ fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13632,7 +13158,6 @@ fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13656,7 +13181,6 @@ fileName wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13678,7 +13202,6 @@ fileName wgEncodeBroadHistoneNhekH3k9me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13700,7 +13223,6 @@ fileName wgEncodeBroadHistoneNhekH3k9me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13722,7 +13244,6 @@ fileName wgEncodeBroadHistoneNhekH3k9me1StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH3k9me1StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13768,7 +13289,6 @@ fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13792,7 +13312,6 @@ fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13816,7 +13335,6 @@ fileName wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH4k20me1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13838,7 +13356,6 @@ fileName wgEncodeBroadHistoneNhekH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13860,7 +13377,6 @@ fileName wgEncodeBroadHistoneNhekH4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13882,7 +13398,6 @@ fileName wgEncodeBroadHistoneNhekH4k20me1StdRawDataRep3.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekH4k20me1StdRawSignalRep3
 project wgEncode
 replicate 3
 setType exp
@@ -13928,7 +13443,6 @@ fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekPol2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13952,7 +13466,6 @@ fileName wgEncodeBroadHistoneNhekPol2bStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekPol2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13974,7 +13487,6 @@ fileName wgEncodeBroadHistoneNhekPol2bStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekPol2bStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13996,7 +13508,6 @@ fileName wgEncodeBroadHistoneNhekPol2bStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhekPol2bStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14042,7 +13553,6 @@ fileName wgEncodeBroadHistoneNhlfControlStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfControlStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14066,7 +13576,6 @@ fileName wgEncodeBroadHistoneNhlfControlStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfControlStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14088,7 +13597,6 @@ fileName wgEncodeBroadHistoneNhlfControlStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfControlStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -14110,7 +13618,6 @@ fileName wgEncodeBroadHistoneNhlfControlStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfControlStdRawSignalRep2
 project wgEncode
 replicate 2
 setType input
@@ -14155,7 +13662,6 @@ fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14179,7 +13685,6 @@ fileName wgEncodeBroadHistoneNhlfCtcfStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14201,7 +13706,6 @@ fileName wgEncodeBroadHistoneNhlfCtcfStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14223,7 +13727,6 @@ fileName wgEncodeBroadHistoneNhlfCtcfStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14269,7 +13772,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14293,7 +13795,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14315,7 +13816,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14337,7 +13837,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14383,7 +13882,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14407,7 +13905,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14429,7 +13926,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14451,7 +13947,6 @@ fileName wgEncodeBroadHistoneNhlfH3k27me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14497,7 +13992,6 @@ fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14521,7 +14015,6 @@ fileName wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14543,7 +14036,6 @@ fileName wgEncodeBroadHistoneNhlfH3k36me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14565,7 +14057,6 @@ fileName wgEncodeBroadHistoneNhlfH3k36me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14611,7 +14102,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14635,7 +14125,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14657,7 +14146,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14679,7 +14167,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14725,7 +14212,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14749,7 +14235,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14771,7 +14256,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me2StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14793,7 +14277,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me2StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14839,7 +14322,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14863,7 +14345,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14885,7 +14366,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me3StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14907,7 +14387,6 @@ fileName wgEncodeBroadHistoneNhlfH3k4me3StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14953,7 +14432,6 @@ fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k9acStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14977,7 +14455,6 @@ fileName wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k9acStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14999,7 +14476,6 @@ fileName wgEncodeBroadHistoneNhlfH3k9acStdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k9acStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15021,7 +14497,6 @@ fileName wgEncodeBroadHistoneNhlfH3k9acStdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH3k9acStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15067,7 +14542,6 @@ fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15091,7 +14565,6 @@ fileName wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2.bam
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH4k20me1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15113,7 +14586,6 @@ fileName wgEncodeBroadHistoneNhlfH4k20me1StdRawDataRep1.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH4k20me1StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15135,7 +14607,6 @@ fileName wgEncodeBroadHistoneNhlfH4k20me1StdRawDataRep2.fastq.gz
 grant Bernstein
 lab Broad
 origAssembly hg18
-parentTable wgEncodeBroadHistoneNhlfH4k20me1StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp

@@ -6,12 +6,12 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -29,14 +29,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CjunIggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -53,14 +52,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CjunIggrabAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CjunIggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -77,13 +75,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CjunIggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -101,14 +99,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CjunIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CjunIggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -125,14 +122,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CjunIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CjunIggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -149,13 +145,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CjunIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -173,14 +169,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CmycIggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -197,14 +192,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CmycIggrabAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CmycIggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -221,13 +215,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CmycIggrabPk.narrowPe
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -245,14 +239,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CmycIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CmycIggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -269,14 +262,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CmycIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CmycIggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -293,13 +285,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12CmycIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -317,15 +309,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -342,15 +333,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CtcfIggyaleAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -367,13 +357,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12CtcfIggyalePk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -391,14 +381,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CtcfIggyaleRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -415,14 +404,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12CtcfIggyaleRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -439,13 +427,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId CH12/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12CtcfIggyaleSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -463,14 +451,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12E2f4IggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -487,14 +474,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12E2f4IggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -511,13 +497,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12E2f4IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -535,14 +521,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12E2f4IggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -559,14 +544,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12E2f4IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12E2f4IggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -583,13 +567,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12E2f4IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -607,14 +591,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12InputIggmusAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12InputIggmusAln
+lab Stanford-m
 project wgEncode
 setType input
 strain B10.H-2aH-4bp/Wts
@@ -630,14 +613,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12InputIggmusRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12InputIggmusRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain B10.H-2aH-4bp/Wts
@@ -653,13 +635,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12InputIggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -677,14 +659,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12InputIggrabAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12InputIggrabAln
+lab Stanford-m
 project wgEncode
 setType input
 strain B10.H-2aH-4bp/Wts
@@ -700,14 +681,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12InputIggrabRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12InputIggrabRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain B10.H-2aH-4bp/Wts
@@ -723,13 +703,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12InputIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -747,14 +727,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12JundIggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -771,14 +750,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12JundIggrabAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12JundIggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -795,13 +773,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12JundIggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -819,14 +797,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12JundIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12JundIggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -843,14 +820,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12JundIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12JundIggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -867,13 +843,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12JundIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -891,15 +867,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12MaxIggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -916,15 +891,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12MaxIggrabAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12MaxIggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -941,13 +915,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12MaxIggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -965,14 +939,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12MaxIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12MaxIggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -989,14 +962,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12MaxIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12MaxIggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1013,13 +985,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12MaxIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1037,15 +1009,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12P300IggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1062,15 +1033,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12P300IggrabAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12P300IggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1087,13 +1057,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12P300IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1111,14 +1081,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12P300IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12P300IggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1135,14 +1104,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12P300IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12P300IggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1159,13 +1127,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12P300IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1183,14 +1151,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Pol2IggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1207,14 +1174,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Pol2IggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1231,13 +1197,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12Pol2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1255,14 +1221,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Pol2IggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1279,14 +1244,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12Pol2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Pol2IggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1303,13 +1267,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12Pol2IggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1327,15 +1291,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Rad21IggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1352,15 +1315,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Rad21IggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1377,13 +1339,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Rad21IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1401,14 +1363,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Rad21IggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1425,14 +1386,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Rad21IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Rad21IggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1449,13 +1409,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId CH12/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Rad21IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1473,14 +1433,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12TbpIggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1497,14 +1456,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12TbpIggmusAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12TbpIggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1521,13 +1479,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12TbpIggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1545,14 +1503,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12TbpIggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12TbpIggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1569,14 +1526,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12TbpIggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12TbpIggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1593,13 +1549,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsCh12TbpIggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1617,15 +1573,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Usf2IggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1642,15 +1597,14 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Usf2IggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1667,13 +1621,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Usf2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1691,14 +1645,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Usf2IggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1715,14 +1668,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Usf2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsCh12Usf2IggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1739,13 +1691,13 @@ cell CH12
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId CH12/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsCh12Usf2IggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1763,14 +1715,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCmycIggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1787,14 +1738,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelCmycIggrabAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCmycIggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1811,13 +1761,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelCmycIggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1835,14 +1785,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelCmycIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCmycIggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1859,14 +1808,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelCmycIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCmycIggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1883,13 +1831,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelCmycIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1907,15 +1855,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -1932,15 +1879,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileIndex wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCtcfDmso20StdAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -1957,13 +1903,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1981,14 +1927,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCtcfDmso20StdRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2005,14 +1950,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelCtcfDmso20StdRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2029,13 +1973,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelCtcfDmso20StdSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2053,15 +1997,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelE2f4IggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2078,15 +2021,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileIndex wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelE2f4IggrabAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelE2f4IggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2103,13 +2045,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2127,14 +2069,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelE2f4IggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2151,14 +2092,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelE2f4IggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2175,13 +2115,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-12
 dateUnrestricted 2011-02-12
 fileName wgEncodeSydhTfbsMelE2f4IggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2199,14 +2139,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelGata1IggratAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelGata1IggratAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2223,14 +2162,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelGata1IggratAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelGata1IggratAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2247,13 +2185,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelGata1IggratPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2271,14 +2209,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelGata1IggratRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelGata1IggratRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2295,14 +2232,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelGata1IggratRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelGata1IggratRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2319,13 +2255,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelGata1IggratSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2343,15 +2279,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileIndex wgEncodeSydhTfbsMelInputDmso20StdAln.bam.bai
 fileName wgEncodeSydhTfbsMelInputDmso20StdAln.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputDmso20StdAln
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2367,14 +2302,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelInputDmso20StdRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputDmso20StdRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2390,13 +2324,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control std
 controlId MEL/DMSO_2.0pct/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-09
 dateUnrestricted 2011-04-09
 fileName wgEncodeSydhTfbsMelInputDmso20StdSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -2414,14 +2348,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggmusAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggmusAln
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2437,14 +2370,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggmusRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggmusRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2460,13 +2392,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -2484,14 +2416,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggrabAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggrabAln
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2507,14 +2438,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggrabRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggrabRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2530,13 +2460,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -2554,14 +2484,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggratAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggratAln
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2577,14 +2506,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggratRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggratRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2600,13 +2528,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rat
 controlId MEL/None/Input/IgG-rat
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelInputIggratSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -2624,14 +2552,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsMelInputIggyaleAln.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggyaleAln
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2647,14 +2574,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId MEL/None/Input/IgG-Yale
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-26
 dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsMelInputIggyaleRawData.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelInputIggyaleRawSignal
+lab Stanford-m
 project wgEncode
 setType input
 strain Unknown
@@ -2670,15 +2596,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelJundIggrabAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2695,15 +2620,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileIndex wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelJundIggrabAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelJundIggrabAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2720,13 +2644,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2744,14 +2668,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelJundIggrabRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2768,14 +2691,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelJundIggrabRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2792,13 +2714,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-rab
 controlId MEL/None/Input/IgG-rab
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-05-11
 dateUnrestricted 2011-02-11
 fileName wgEncodeSydhTfbsMelJundIggrabSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2816,15 +2738,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelMaxIggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2841,15 +2762,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelMaxIggmusAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelMaxIggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2866,13 +2786,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelMaxIggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2890,14 +2810,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelMaxIggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelMaxIggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2914,14 +2833,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelMaxIggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelMaxIggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -2938,13 +2856,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelMaxIggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -2962,15 +2880,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelP300IggmusAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelP300IggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -2987,15 +2904,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelP300IggmusAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelP300IggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3012,13 +2928,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3036,14 +2952,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelP300IggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3060,14 +2975,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelP300IggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3084,13 +2998,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelP300IggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3108,14 +3022,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelPol2IggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3132,14 +3045,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelPol2IggmusAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelPol2IggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3156,13 +3068,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelPol2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3180,14 +3092,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelPol2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelPol2IggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3204,14 +3115,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelPol2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelPol2IggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3228,13 +3138,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelPol2IggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3252,14 +3162,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep1.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelTbpIggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3276,14 +3185,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelTbpIggmusAlnRep2.tagAlign.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelTbpIggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3300,13 +3208,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelTbpIggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3324,14 +3232,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelTbpIggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelTbpIggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3348,14 +3255,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelTbpIggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelTbpIggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3372,13 +3278,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-04-22
 dateUnrestricted 2011-01-22
 fileName wgEncodeSydhTfbsMelTbpIggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3396,15 +3302,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep1.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelUsf2IggmusAlnRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3421,15 +3326,14 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileIndex wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMelUsf2IggmusAlnRep2.bam
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelUsf2IggmusAlnRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3446,13 +3350,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelUsf2IggmusPk.narrowPeak.gz
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -3470,14 +3374,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelUsf2IggmusRawDataRep1.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelUsf2IggmusRawSignalRep1
+lab Stanford-m
 project wgEncode
 replicate 1
 setType exp
@@ -3494,14 +3397,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelUsf2IggmusRawDataRep2.fastq.gz
 grant Snyder
-lab Stanford
-parentTable wgEncodeSydhTfbsMelUsf2IggmusRawSignalRep2
+lab Stanford-m
 project wgEncode
 replicate 2
 setType exp
@@ -3518,13 +3420,13 @@ cell MEL
 composite wgEncodeSydhTfbs
 control IgG-mus
 controlId MEL/None/Input/IgG-mus
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-08
 dateUnrestricted 2011-04-08
 fileName wgEncodeSydhTfbsMelUsf2IggmusSig.bigWig
 grant Snyder
-lab Stanford
+lab Stanford-m
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
