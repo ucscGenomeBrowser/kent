@@ -101,7 +101,6 @@ labExpId LID8963
 labProtocolId 021WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqA549CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -123,7 +122,6 @@ labExpId LID8964
 labProtocolId 022WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqA549CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -145,7 +143,6 @@ labExpId LID8963
 labProtocolId 021WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqA549CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -167,7 +164,6 @@ labExpId LID8964
 labProtocolId 022WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqA549CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -324,7 +320,6 @@ labExpId LID9001
 labProtocolId 017WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -347,7 +342,6 @@ labExpId LID9001
 labProtocolId 017WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -503,7 +497,6 @@ labExpId LID8965
 labProtocolId 017WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -525,7 +518,6 @@ labExpId LID8966
 labProtocolId 018WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -547,7 +539,6 @@ labExpId LID8965
 labProtocolId 017WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -569,7 +560,6 @@ labExpId LID8966
 labProtocolId 018WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -767,7 +757,6 @@ labExpId LID8969
 labProtocolId 037WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqBjCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -789,7 +778,6 @@ labExpId LID8970
 labProtocolId 038WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqBjCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -811,7 +799,6 @@ labExpId LID8969
 labProtocolId 037WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqBjCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -833,7 +820,6 @@ labExpId LID8970
 labProtocolId 038WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqBjCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -987,7 +973,6 @@ labExpId LID8662
 labProtocolId 004WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -1009,7 +994,6 @@ labExpId LID8662
 labProtocolId 004WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -1163,7 +1147,6 @@ labExpId LID16629
 labProtocolId 003WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1185,7 +1168,6 @@ labExpId LID16630
 labProtocolId 004WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1207,7 +1189,6 @@ labExpId LID16629
 labProtocolId 003WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1229,7 +1210,6 @@ labExpId LID16630
 labProtocolId 004WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1420,7 +1400,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep1.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
@@ -1439,7 +1419,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqGm12878CellTotalFastqRep2.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
@@ -1635,7 +1615,6 @@ labExpId LID8467
 labProtocolId 003C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1657,7 +1636,6 @@ labExpId LID8468
 labProtocolId 004C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1679,7 +1657,6 @@ labExpId LID8467
 labProtocolId 003C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1701,7 +1678,6 @@ labExpId LID8468
 labProtocolId 004C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1899,7 +1875,6 @@ labExpId LID8532
 labProtocolId 003N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1921,7 +1896,6 @@ labExpId LID8533
 labProtocolId 004N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -1943,7 +1917,6 @@ labExpId LID8532
 labProtocolId 003N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1965,7 +1938,6 @@ labExpId LID8533
 labProtocolId 004N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2163,7 +2135,6 @@ labExpId LID8663
 labProtocolId 005WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -2185,7 +2156,6 @@ labExpId LID8664
 labProtocolId 006WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -2207,7 +2177,6 @@ labExpId LID8663
 labProtocolId 005WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -2229,7 +2198,6 @@ labExpId LID8664
 labProtocolId 006WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -2427,7 +2395,6 @@ labExpId LID8461
 labProtocolId 005WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2449,7 +2416,6 @@ labExpId LID8462
 labProtocolId 006WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2471,7 +2437,6 @@ labExpId LID8461
 labProtocolId 005WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2493,7 +2458,6 @@ labExpId LID8462
 labProtocolId 006WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2647,7 +2611,6 @@ labExpId LID8536
 labProtocolId 006C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCytosolPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2669,7 +2632,6 @@ labExpId LID8536
 labProtocolId 006C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescCytosolPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2779,7 +2741,6 @@ labExpId LID8558
 labProtocolId 006N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescNucleusPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2801,7 +2762,6 @@ labExpId LID8558
 labProtocolId 006N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqH1hescNucleusPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2955,7 +2915,6 @@ labExpId LID16633
 labProtocolId 011WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -2977,7 +2936,6 @@ labExpId LID16634
 labProtocolId 012WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -2999,7 +2957,6 @@ labExpId LID16633
 labProtocolId 011WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3021,7 +2978,6 @@ labExpId LID16634
 labProtocolId 012WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3219,7 +3175,6 @@ labExpId LID8469
 labProtocolId 011C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3241,7 +3196,6 @@ labExpId LID8470
 labProtocolId 012C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3263,7 +3217,6 @@ labExpId LID8469
 labProtocolId 011C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3285,7 +3238,6 @@ labExpId LID8470
 labProtocolId 012C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3483,7 +3435,6 @@ labExpId LID8559
 labProtocolId 011N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3505,7 +3456,6 @@ labExpId LID8560
 labProtocolId 012N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3527,7 +3477,6 @@ labExpId LID8559
 labProtocolId 011N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -3549,7 +3498,6 @@ labExpId LID8560
 labProtocolId 012N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -3747,7 +3695,6 @@ labExpId LID8792
 labProtocolId 013WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -3769,7 +3716,6 @@ labExpId LID8793
 labProtocolId 014WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -3791,7 +3737,6 @@ labExpId LID8792
 labProtocolId 013WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -3813,7 +3758,6 @@ labExpId LID8793
 labProtocolId 014WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -4011,7 +3955,6 @@ labExpId LID16635
 labProtocolId 013WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4033,7 +3976,6 @@ labExpId LID16636
 labProtocolId 014WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4055,7 +3997,6 @@ labExpId LID16635
 labProtocolId 013WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4077,7 +4018,6 @@ labExpId LID16636
 labProtocolId 014WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4275,7 +4215,6 @@ labExpId LID8471
 labProtocolId 013C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4297,7 +4236,6 @@ labExpId LID8472
 labProtocolId 014C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4319,7 +4257,6 @@ labExpId LID8471
 labProtocolId 013C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4341,7 +4278,6 @@ labExpId LID8472
 labProtocolId 014C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4539,7 +4475,6 @@ labExpId LID8534
 labProtocolId 013N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4561,7 +4496,6 @@ labExpId LID8535
 labProtocolId 014N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4583,7 +4517,6 @@ labExpId LID8534
 labProtocolId 013N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4605,7 +4538,6 @@ labExpId LID8535
 labProtocolId 014N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -4762,7 +4694,6 @@ labExpId LID8831
 labProtocolId 036WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -4785,7 +4716,6 @@ labExpId LID8831
 labProtocolId 036WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -4897,7 +4827,6 @@ labExpId LID8695
 labProtocolId 036WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHmecCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -4919,7 +4848,6 @@ labExpId LID8695
 labProtocolId 036WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHmecCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5078,7 +5006,6 @@ labExpId LID8826
 labProtocolId 023WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -5101,7 +5028,6 @@ labExpId LID8827
 labProtocolId 024WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -5124,7 +5050,6 @@ labExpId LID8826
 labProtocolId 023WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -5147,7 +5072,6 @@ labExpId LID8827
 labProtocolId 024WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -5349,7 +5273,6 @@ labExpId LID8710
 labProtocolId 023WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5371,7 +5294,6 @@ labExpId LID8711
 labProtocolId 024WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5393,7 +5315,6 @@ labExpId LID8710
 labProtocolId 023WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5415,7 +5336,6 @@ labExpId LID8711
 labProtocolId 024WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5613,7 +5533,6 @@ labExpId LID8463
 labProtocolId 009WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5635,7 +5554,6 @@ labExpId LID8464
 labProtocolId 010WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5657,7 +5575,6 @@ labExpId LID8463
 labProtocolId 009WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -5679,7 +5596,6 @@ labExpId LID8464
 labProtocolId 010WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -5877,7 +5793,6 @@ labExpId LID8688
 labProtocolId 029C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -5899,7 +5814,6 @@ labExpId LID8689
 labProtocolId 030C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -5921,7 +5835,6 @@ labExpId LID8688
 labProtocolId 029C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -5943,7 +5856,6 @@ labExpId LID8689
 labProtocolId 030C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -6141,7 +6053,6 @@ labExpId LID8690
 labProtocolId 029N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -6163,7 +6074,6 @@ labExpId LID8691
 labProtocolId 030N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -6185,7 +6095,6 @@ labExpId LID8690
 labProtocolId 029N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -6207,7 +6116,6 @@ labExpId LID8691
 labProtocolId 030N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -6405,7 +6313,6 @@ labExpId LID8659
 labProtocolId 001WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -6427,7 +6334,6 @@ labExpId LID8660
 labProtocolId 002WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -6449,7 +6355,6 @@ labExpId LID8659
 labProtocolId 001WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -6471,7 +6376,6 @@ labExpId LID8660
 labProtocolId 002WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -6669,7 +6573,6 @@ labExpId LID16627
 labProtocolId 001WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -6691,7 +6594,6 @@ labExpId LID16628
 labProtocolId 002WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6713,7 +6615,6 @@ labExpId LID16627
 labProtocolId 001WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -6735,7 +6636,6 @@ labExpId LID16628
 labProtocolId 002WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -6926,7 +6826,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalFastqRep1.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 origAssembly hg18
 project wgEncode
@@ -6945,7 +6845,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqK562CellTotalFastqRep2.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 origAssembly hg19
 project wgEncode
@@ -7146,7 +7046,6 @@ labExpId LID9185
 labProtocolId 025CH+
 localization chromatin
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract total
@@ -7169,7 +7068,6 @@ labExpId LID9186
 labProtocolId 026CH+
 localization chromatin
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract total
@@ -7192,7 +7090,6 @@ labExpId LID9185
 labProtocolId 025CH+
 localization chromatin
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract total
@@ -7215,7 +7112,6 @@ labExpId LID9186
 labProtocolId 026CH+
 localization chromatin
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract total
@@ -7324,7 +7220,7 @@ dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolLongpolyaFastqRep1V2.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 origAssembly hg18
 project wgEncode
@@ -7436,7 +7332,6 @@ labExpId LID8465
 labProtocolId 001C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -7458,7 +7353,6 @@ labExpId LID8466
 labProtocolId 002C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -7480,7 +7374,6 @@ labExpId LID8465
 labProtocolId 001C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -7502,7 +7395,6 @@ labExpId LID8466
 labProtocolId 002C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -7705,7 +7597,6 @@ labExpId LID9187
 labProtocolId 025NL+
 localization nucleolus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract total
@@ -7728,7 +7619,6 @@ labExpId LID9188
 labProtocolId 026NL+
 localization nucleolus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract total
@@ -7751,7 +7641,6 @@ labExpId LID9187
 labProtocolId 025NL+
 localization nucleolus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract total
@@ -7774,7 +7663,6 @@ labExpId LID9188
 labProtocolId 026NL+
 localization nucleolus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract total
@@ -7981,7 +7869,6 @@ labExpId LID9189
 labProtocolId 025NP+
 localization nucleoplasm
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract total
@@ -8004,7 +7891,6 @@ labExpId LID9190
 labProtocolId 026NP+
 localization nucleoplasm
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract total
@@ -8027,7 +7913,6 @@ labExpId LID9189
 labProtocolId 025NP+
 localization nucleoplasm
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract total
@@ -8050,7 +7935,6 @@ labExpId LID9190
 labProtocolId 026NP+
 localization nucleoplasm
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract total
@@ -8252,7 +8136,6 @@ labExpId LID8556
 labProtocolId 001N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8274,7 +8157,6 @@ labExpId LID8557
 labProtocolId 002N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8296,7 +8178,6 @@ labExpId LID8556
 labProtocolId 001N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8318,7 +8199,6 @@ labExpId LID8557
 labProtocolId 002N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8521,7 +8401,6 @@ labExpId LID8824
 labProtocolId 015WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -8544,7 +8423,6 @@ labExpId LID8825
 labProtocolId 016WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -8567,7 +8445,6 @@ labExpId LID8824
 labProtocolId 015WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -8590,7 +8467,6 @@ labExpId LID8825
 labProtocolId 016WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -8792,7 +8668,6 @@ labExpId LID8686
 labProtocolId 015WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8814,7 +8689,6 @@ labExpId LID8687
 labProtocolId 016WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -8836,7 +8710,6 @@ labExpId LID8686
 labProtocolId 015WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -8858,7 +8731,6 @@ labExpId LID8687
 labProtocolId 016WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -9102,7 +8974,6 @@ labExpId LID8665
 labProtocolId 007WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -9124,7 +8995,6 @@ labExpId LID8666
 labProtocolId 008WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -9147,7 +9017,6 @@ labExpId LID8830
 labProtocolId 035WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep5
 project wgEncode
 replicate 5
 rnaExtract longNonPolyA
@@ -9169,7 +9038,6 @@ labExpId LID8665
 labProtocolId 007WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -9191,7 +9059,6 @@ labExpId LID8666
 labProtocolId 008WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -9214,7 +9081,6 @@ labExpId LID8830
 labProtocolId 035WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep5
 project wgEncode
 replicate 5
 rnaExtract longNonPolyA
@@ -9502,7 +9368,6 @@ labExpId LID16631
 labProtocolId 007WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9524,7 +9389,6 @@ labExpId LID16632
 labProtocolId 008WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -9546,7 +9410,6 @@ labExpId LID8694
 labProtocolId 035WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep5
 project wgEncode
 replicate 5
 rnaExtract longPolyA
@@ -9568,7 +9431,6 @@ labExpId LID16631
 labProtocolId 007WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -9590,7 +9452,6 @@ labExpId LID16632
 labProtocolId 008WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -9612,7 +9473,6 @@ labExpId LID8694
 labProtocolId 035WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep5
 project wgEncode
 replicate 5
 rnaExtract longPolyA
@@ -9854,7 +9714,6 @@ labExpId LID8795
 labProtocolId 027C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -9876,7 +9735,6 @@ labExpId LID8796
 labProtocolId 028C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -9898,7 +9756,6 @@ labExpId LID8795
 labProtocolId 027C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -9920,7 +9777,6 @@ labExpId LID8796
 labProtocolId 028C+
 localization cytosol
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -10118,7 +9974,6 @@ labExpId LID8797
 labProtocolId 027N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -10140,7 +9995,6 @@ labExpId LID8798
 labProtocolId 028N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -10162,7 +10016,6 @@ labExpId LID8797
 labProtocolId 027N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd2Rep3
 project wgEncode
 replicate 3
 rnaExtract longPolyA
@@ -10184,7 +10037,6 @@ labExpId LID8798
 labProtocolId 028N+
 localization nucleus
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd2Rep4
 project wgEncode
 replicate 4
 rnaExtract longPolyA
@@ -10387,7 +10239,6 @@ labExpId LID8828
 labProtocolId 033WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -10410,7 +10261,6 @@ labExpId LID8829
 labProtocolId 034WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -10433,7 +10283,6 @@ labExpId LID8828
 labProtocolId 033WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longNonPolyA
@@ -10456,7 +10305,6 @@ labExpId LID8829
 labProtocolId 034WC-
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longNonPolyA
@@ -10658,7 +10506,6 @@ labExpId LID8692
 labProtocolId 033WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10680,7 +10527,6 @@ labExpId LID8701
 labProtocolId 034WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -10702,7 +10548,6 @@ labExpId LID8692
 labProtocolId 033WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10724,7 +10569,6 @@ labExpId LID8701
 labProtocolId 034WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -10922,7 +10766,6 @@ labExpId LID8967
 labProtocolId 019WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10944,7 +10787,6 @@ labExpId LID8968
 labProtocolId 020WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -10966,7 +10808,6 @@ labExpId LID8967
 labProtocolId 019WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep1
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -10988,7 +10829,6 @@ labExpId LID8968
 labProtocolId 020WC+
 localization cell
 origAssembly hg19
-parentTable wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep2
 project wgEncode
 replicate 2
 rnaExtract longPolyA

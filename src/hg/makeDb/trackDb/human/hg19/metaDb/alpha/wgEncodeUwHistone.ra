@@ -15,7 +15,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04449H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39,7 +38,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04449H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -158,7 +156,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04449H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -181,7 +178,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04449H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -253,7 +249,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04449InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -276,7 +271,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04449InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -324,7 +318,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04450H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -348,7 +341,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04450H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -467,7 +459,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04450H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -490,7 +481,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04450H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -562,7 +552,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04450InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -585,7 +574,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg04450InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -633,7 +621,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09309H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -657,7 +644,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09309H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -776,7 +762,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09309H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -799,7 +784,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09309H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -871,7 +855,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09309InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -894,7 +877,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09309InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -942,7 +924,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09319H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -966,7 +947,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09319H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1085,7 +1065,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09319H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1108,7 +1087,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09319H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1180,7 +1158,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09319InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1203,7 +1180,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg09319InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1251,7 +1227,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg10803H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1275,7 +1250,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg10803H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1394,7 +1368,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg10803H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1417,7 +1390,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg10803H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1489,7 +1461,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg10803InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1512,7 +1483,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAg10803InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1560,7 +1530,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAoafH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1584,7 +1553,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAoafH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1703,7 +1671,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAoafH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1726,7 +1693,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAoafH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1798,7 +1764,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneAoafInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1821,7 +1786,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneAoafInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1871,7 +1835,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1897,7 +1860,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2073,7 +2035,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2099,7 +2060,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2275,7 +2235,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2301,7 +2260,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2465,7 +2423,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -2477,7 +2435,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneBjInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2492,7 +2449,7 @@ cell BJ
 composite wgEncodeUwHistone
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2529,7 +2486,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2555,7 +2511,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2731,7 +2686,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2757,7 +2711,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2933,7 +2886,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2959,7 +2911,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3123,7 +3074,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -3135,7 +3086,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneCaco2InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3150,7 +3100,7 @@ cell Caco-2
 composite wgEncodeUwHistone
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -3188,7 +3138,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3214,7 +3163,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3390,7 +3338,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3416,7 +3363,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3592,7 +3538,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3618,7 +3563,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3782,7 +3726,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -3794,7 +3738,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm06990InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3809,7 +3752,7 @@ cell GM06990
 composite wgEncodeUwHistone
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -3847,7 +3790,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3873,7 +3815,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4049,7 +3990,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4075,7 +4015,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4251,7 +4190,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4277,7 +4215,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4441,7 +4378,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -4453,7 +4390,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneGm12878InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4468,7 +4404,7 @@ cell GM12878
 composite wgEncodeUwHistone
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4505,7 +4441,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4530,7 +4465,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4649,7 +4583,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k27me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4672,7 +4605,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k27me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4745,7 +4677,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4770,7 +4701,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4889,7 +4819,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k36me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4912,7 +4841,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4985,7 +4913,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5010,7 +4937,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5129,7 +5055,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5152,7 +5077,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5214,7 +5138,7 @@ cell H7-hESC
 composite wgEncodeUwHistone
 control std
 controlId H7-hESC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5225,7 +5149,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5240,7 +5163,7 @@ cell H7-hESC
 composite wgEncodeUwHistone
 control std
 controlId H7-hESC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5249,7 +5172,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneH7esInputStdRawSignalRep1
 project wgEncode
 rank 1
 replicate 1
@@ -5264,7 +5186,7 @@ cell H7-hESC
 composite wgEncodeUwHistone
 control std
 controlId H7-hESC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
@@ -5299,7 +5221,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHaspH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5323,7 +5244,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHaspH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5442,7 +5362,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHaspH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5465,7 +5384,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHaspH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5537,7 +5455,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHaspInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5560,7 +5477,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHaspInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5608,7 +5524,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHbmecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5632,7 +5547,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHbmecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5751,7 +5665,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHbmecH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5774,7 +5687,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHbmecH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5846,7 +5758,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHbmecInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5869,7 +5780,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHbmecInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5917,7 +5827,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfaaH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5988,7 +5897,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfaaH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6036,7 +5944,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfaaInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -6059,7 +5966,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfaaInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -6107,7 +6013,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6131,7 +6036,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6250,7 +6154,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6273,7 +6176,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6345,7 +6247,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -6368,7 +6269,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -6416,7 +6316,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcmH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6440,7 +6339,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcmH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6559,7 +6457,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcmH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6582,7 +6479,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcmH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6654,7 +6550,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcmInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -6677,7 +6572,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcmInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -6725,7 +6619,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcpeH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6749,7 +6642,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcpeH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6868,7 +6760,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcpeH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6891,7 +6782,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcpeH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6963,7 +6853,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcpeInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -6986,7 +6875,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHcpeInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -7034,7 +6922,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHct116H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7058,7 +6945,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHct116H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7177,7 +7063,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHct116H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7200,7 +7085,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHct116H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7272,7 +7156,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHct116InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7295,7 +7178,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHct116InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -7343,7 +7225,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHeeH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7367,7 +7248,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHeeH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7486,7 +7366,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHeeH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7509,7 +7388,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHeeH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7581,7 +7459,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHeeInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7604,7 +7481,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHeeInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -7652,7 +7528,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHek293H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7676,7 +7551,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHek293H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7795,7 +7669,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHek293H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7818,7 +7691,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHek293H3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7880,7 +7752,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -7892,7 +7764,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHek293InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -7907,7 +7778,7 @@ cell HEK293
 composite wgEncodeUwHistone
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -7945,7 +7816,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7971,7 +7841,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8147,7 +8016,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8173,7 +8041,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8349,7 +8216,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8375,7 +8241,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8539,7 +8404,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
@@ -8551,7 +8416,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHelas3InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -8566,7 +8430,7 @@ cell HeLa-S3
 composite wgEncodeUwHistone
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -8604,7 +8468,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8630,7 +8493,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8806,7 +8668,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8831,7 +8692,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8952,7 +8812,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHepg2H3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9027,7 +8886,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9053,7 +8911,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9217,7 +9074,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -9229,7 +9086,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHepg2InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9244,7 +9100,7 @@ cell HepG2
 composite wgEncodeUwHistone
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9282,7 +9138,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHl60H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9308,7 +9163,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHl60H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9472,7 +9326,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -9484,7 +9338,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHl60InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9499,7 +9352,7 @@ cell HL-60
 composite wgEncodeUwHistone
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -9537,7 +9390,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHmecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9636,7 +9488,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9660,7 +9511,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9779,7 +9629,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmecH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9802,7 +9651,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmecH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9864,7 +9712,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -9876,7 +9724,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHmecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9891,7 +9738,7 @@ cell HMEC
 composite wgEncodeUwHistone
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9927,7 +9774,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmfH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9951,7 +9797,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmfH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10070,7 +9915,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmfH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10093,7 +9937,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmfH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10165,7 +10008,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -10188,7 +10030,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHmfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -10236,7 +10077,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpafH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10260,7 +10100,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpafH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10379,7 +10218,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpafH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10402,7 +10240,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpafH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10474,7 +10311,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpafInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -10497,7 +10333,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpafInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -10545,7 +10380,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpfH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10569,7 +10403,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpfH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10688,7 +10521,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpfH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10711,7 +10543,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpfH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10783,7 +10614,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -10806,7 +10636,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHpfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -10856,7 +10685,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10882,7 +10710,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11058,7 +10885,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11084,7 +10910,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11260,7 +11085,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11286,7 +11110,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11450,7 +11273,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -11462,7 +11285,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHreInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -11477,7 +11299,7 @@ cell HRE
 composite wgEncodeUwHistone
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -11513,7 +11335,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHrpeH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11537,7 +11358,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHrpeH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11656,7 +11476,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHrpeH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11679,7 +11498,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHrpeH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11751,7 +11569,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHrpeInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -11774,7 +11591,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHrpeInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -11824,7 +11640,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11850,7 +11665,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12026,7 +11840,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12052,7 +11865,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12228,7 +12040,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12254,7 +12065,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12418,7 +12228,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -12430,7 +12240,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneHuvecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -12445,7 +12254,7 @@ cell HUVEC
 composite wgEncodeUwHistone
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -12481,7 +12290,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHvmfH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12505,7 +12313,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHvmfH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12624,7 +12431,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHvmfH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12647,7 +12453,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHvmfH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12719,7 +12524,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneHvmfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -12742,7 +12546,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneHvmfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -12790,7 +12593,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneJurkatH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12814,7 +12616,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneJurkatH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12933,7 +12734,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneJurkatH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12956,7 +12756,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneJurkatH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13028,7 +12827,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneJurkatInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -13051,7 +12849,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneJurkatInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -13101,7 +12898,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562H3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13127,7 +12923,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562H3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13303,7 +13098,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562H3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13329,7 +13123,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13505,7 +13298,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13531,7 +13323,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562H3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13695,7 +13486,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -13707,7 +13498,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneK562InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -13722,7 +13512,7 @@ cell K562
 composite wgEncodeUwHistone
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -13758,7 +13548,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneMcf7H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13829,7 +13618,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneMcf7H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13877,7 +13665,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneMcf7InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -13900,7 +13687,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneMcf7InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -13948,7 +13734,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneNb4H3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14019,7 +13804,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneNb4H3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14067,7 +13851,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneNb4InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -14090,7 +13873,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneNb4InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -14138,7 +13920,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14162,7 +13943,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneNhdfneoH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14281,7 +14061,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneNhdfneoH3k4me3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14304,7 +14083,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneNhdfneoH3k4me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14376,7 +14154,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwHistoneNhdfneoInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -14399,7 +14176,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwHistoneNhdfneoInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -14449,7 +14225,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14475,7 +14250,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14651,7 +14425,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14677,7 +14450,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14853,7 +14625,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14879,7 +14650,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15043,7 +14813,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -15055,7 +14825,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneNhekInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -15070,7 +14839,7 @@ cell NHEK
 composite wgEncodeUwHistone
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -15108,7 +14877,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15134,7 +14902,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15310,7 +15077,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15336,7 +15102,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15512,7 +15277,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15538,7 +15302,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15702,7 +15465,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -15714,7 +15477,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSaecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -15729,7 +15491,7 @@ cell SAEC
 composite wgEncodeUwHistone
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -15767,7 +15529,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraH3k27me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15793,7 +15554,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraH3k27me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15969,7 +15729,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraH3k36me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15995,7 +15754,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraH3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -16171,7 +15929,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraH3k4me3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -16197,7 +15954,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraH3k4me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -16361,7 +16117,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -16373,7 +16129,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwHistoneSknshraInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -16388,7 +16143,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwHistone
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10

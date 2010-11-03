@@ -15,7 +15,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04449CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -39,7 +38,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04449CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -158,7 +156,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04449CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -181,7 +178,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04449CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -253,7 +249,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04449InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -276,7 +271,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04449InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -324,7 +318,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04450CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -395,7 +388,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04450CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -443,7 +435,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04450InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -466,7 +457,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg04450InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -514,7 +504,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09309CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -538,7 +527,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09309CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -657,7 +645,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09309CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -680,7 +667,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09309CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -752,7 +738,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09309InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -775,7 +760,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09309InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -823,7 +807,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09319CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -847,7 +830,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09319CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -966,7 +948,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09319CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -989,7 +970,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09319CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1061,7 +1041,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09319InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1084,7 +1063,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg09319InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1132,7 +1110,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg10803CtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1156,7 +1133,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg10803CtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1275,7 +1251,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg10803CtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1298,7 +1273,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg10803CtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1370,7 +1344,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg10803InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1393,7 +1366,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAg10803InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1441,7 +1413,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAoafCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1465,7 +1436,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAoafCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1584,7 +1554,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAoafCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1607,7 +1576,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAoafCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1679,7 +1647,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsAoafInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1702,7 +1669,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsAoafInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -1740,7 +1706,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1752,7 +1718,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1767,7 +1732,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1779,7 +1744,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -1794,7 +1758,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1820,7 +1784,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1846,7 +1810,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1872,7 +1836,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2010-06-07
@@ -1898,7 +1862,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1908,7 +1872,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjCtcfStdRawSignalRep1
 project wgEncode
 rank 1
 replicate 1
@@ -1923,7 +1886,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1949,7 +1912,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-20
@@ -1975,7 +1938,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -1987,7 +1950,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsBjInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2002,7 +1964,7 @@ cell BJ
 composite wgEncodeUwTfbs
 control std
 controlId BJ/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2028,7 +1990,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2040,7 +2002,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsCaco2CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2055,7 +2016,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2067,7 +2028,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsCaco2CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2082,7 +2042,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2108,7 +2068,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2134,7 +2094,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2160,7 +2120,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -2186,7 +2146,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2212,7 +2172,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-20
@@ -2238,7 +2198,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -2250,7 +2210,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsCaco2InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2265,7 +2224,7 @@ cell Caco-2
 composite wgEncodeUwTfbs
 control std
 controlId Caco-2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2291,7 +2250,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -2303,7 +2262,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm06990CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2318,7 +2276,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -2330,7 +2288,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm06990CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2345,7 +2302,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -2371,7 +2328,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -2397,7 +2354,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -2423,7 +2380,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -2449,7 +2406,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-29
@@ -2475,7 +2432,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-09-21
@@ -2501,7 +2458,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -2513,7 +2470,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm06990InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2528,7 +2484,7 @@ cell GM06990
 composite wgEncodeUwTfbs
 control std
 controlId GM06990/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2554,7 +2510,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2566,7 +2522,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12801CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2581,7 +2536,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2607,7 +2562,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2633,7 +2588,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -2659,7 +2614,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -2671,7 +2626,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12801InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2686,7 +2640,7 @@ cell GM12801
 composite wgEncodeUwTfbs
 control std
 controlId GM12801/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2712,7 +2666,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2724,7 +2678,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12864CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2739,7 +2692,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2751,7 +2704,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12864CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -2766,7 +2718,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2792,7 +2744,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2818,7 +2770,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2844,7 +2796,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -2870,7 +2822,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2896,7 +2848,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2922,7 +2874,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -2934,7 +2886,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12864InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -2949,7 +2900,7 @@ cell GM12864
 composite wgEncodeUwTfbs
 control std
 controlId GM12864/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -2975,7 +2926,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -2987,7 +2938,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12865CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3002,7 +2952,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3014,7 +2964,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12865CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -3029,7 +2978,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3055,7 +3004,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3081,7 +3030,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3107,7 +3056,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -3133,7 +3082,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3159,7 +3108,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3185,7 +3134,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -3197,7 +3146,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12865InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3212,7 +3160,7 @@ cell GM12865
 composite wgEncodeUwTfbs
 control std
 controlId GM12865/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -3238,7 +3186,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3250,7 +3198,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12872CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3265,7 +3212,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3277,7 +3224,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12872CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -3292,7 +3238,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3318,7 +3264,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3344,7 +3290,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3370,7 +3316,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -3396,7 +3342,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3422,7 +3368,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3448,7 +3394,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -3460,7 +3406,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12872InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3475,7 +3420,7 @@ cell GM12872
 composite wgEncodeUwTfbs
 control std
 controlId GM12872/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -3501,7 +3446,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3513,7 +3458,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12873CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3528,7 +3472,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3540,7 +3484,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12873CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -3555,7 +3498,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3581,7 +3524,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3607,7 +3550,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3633,7 +3576,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -3659,7 +3602,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3685,7 +3628,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -3711,7 +3654,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -3723,7 +3666,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12873InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3738,7 +3680,7 @@ cell GM12873
 composite wgEncodeUwTfbs
 control std
 controlId GM12873/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -3764,7 +3706,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3776,7 +3718,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12874CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -3791,7 +3732,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3803,7 +3744,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12874CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -3818,7 +3758,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3844,7 +3784,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3870,7 +3810,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3896,7 +3836,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-06-08
@@ -3922,7 +3862,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3948,7 +3888,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2010-01-11
@@ -3974,7 +3914,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
@@ -3986,7 +3926,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12874InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4001,7 +3940,7 @@ cell GM12874
 composite wgEncodeUwTfbs
 control std
 controlId GM12874/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -4027,7 +3966,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4039,7 +3978,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12875CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4054,7 +3992,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4066,7 +4004,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12875CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -4081,7 +4018,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4107,7 +4044,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4133,7 +4070,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4159,7 +4096,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
@@ -4185,7 +4122,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4211,7 +4148,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-01-11
@@ -4237,7 +4174,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -4249,7 +4186,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12875InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4264,7 +4200,7 @@ cell GM12875
 composite wgEncodeUwTfbs
 control std
 controlId GM12875/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-16
@@ -4290,7 +4226,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4302,7 +4238,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12878CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4317,7 +4252,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4329,7 +4264,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12878CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -4344,7 +4278,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4370,7 +4304,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4396,7 +4330,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-29
@@ -4422,7 +4356,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4448,7 +4382,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -4474,7 +4408,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -4500,7 +4434,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -4512,7 +4446,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsGm12878InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -4527,7 +4460,7 @@ cell GM12878
 composite wgEncodeUwTfbs
 control std
 controlId GM12878/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -4563,7 +4496,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHaspCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4634,7 +4566,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHaspCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4682,7 +4613,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHaspInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -4705,7 +4635,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHaspInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -4753,7 +4682,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHbmecCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4777,7 +4705,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHbmecCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4896,7 +4823,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHbmecCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4919,7 +4845,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHbmecCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4991,7 +4916,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHbmecInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5014,7 +4938,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHbmecInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5062,7 +4985,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcfaaCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5133,7 +5055,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcfaaCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5181,7 +5102,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcfaaInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5204,7 +5124,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcfaaInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5252,7 +5171,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5275,7 +5193,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5323,7 +5240,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcmInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5346,7 +5262,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcmInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5394,7 +5309,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcpeCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5418,7 +5332,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcpeCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5537,7 +5450,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcpeCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5560,7 +5472,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcpeCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5632,7 +5543,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcpeInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5655,7 +5565,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHcpeInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5703,7 +5612,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHct116InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5726,7 +5634,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHct116InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -5774,7 +5681,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHeeCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5798,7 +5704,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHeeCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5917,7 +5822,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHeeCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5940,7 +5844,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHeeCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6012,7 +5915,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHeeInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -6035,7 +5937,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHeeInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -6073,7 +5974,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6085,7 +5986,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHek293CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6100,7 +6000,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -6112,7 +6012,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHek293CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -6127,7 +6026,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6153,7 +6052,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -6179,7 +6078,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6205,7 +6104,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-06-30
@@ -6231,7 +6130,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6257,7 +6156,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-09-29
@@ -6283,7 +6182,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -6295,7 +6194,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHek293InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6310,7 +6208,7 @@ cell HEK293
 composite wgEncodeUwTfbs
 control std
 controlId HEK293/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -6336,7 +6234,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -6348,7 +6246,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHelas3CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6363,7 +6260,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -6375,7 +6272,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHelas3CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -6390,7 +6286,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6416,7 +6312,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -6442,7 +6338,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6468,7 +6364,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6494,7 +6390,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6520,7 +6416,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -6546,7 +6442,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-02-18
@@ -6558,7 +6454,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHelas3InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6573,7 +6468,7 @@ cell HeLa-S3
 composite wgEncodeUwTfbs
 control std
 controlId HeLa-S3/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-06-14
@@ -6599,7 +6494,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6611,7 +6506,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHepg2CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6626,7 +6520,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6638,7 +6532,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHepg2CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -6653,7 +6546,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6679,7 +6572,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6705,7 +6598,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6731,7 +6624,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6757,7 +6650,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6783,7 +6676,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -6809,7 +6702,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -6821,7 +6714,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHepg2InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6836,7 +6728,7 @@ cell HepG2
 composite wgEncodeUwTfbs
 control std
 controlId HepG2/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -6862,7 +6754,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6874,7 +6766,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHl60CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6889,7 +6780,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6915,7 +6806,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6941,7 +6832,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-06-30
@@ -6967,7 +6858,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-02-18
@@ -6979,7 +6870,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHl60InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -6994,7 +6884,7 @@ cell HL-60
 composite wgEncodeUwTfbs
 control std
 controlId HL-60/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2010-06-15
@@ -7020,7 +6910,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -7032,7 +6922,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHmecCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -7047,7 +6936,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -7073,7 +6962,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -7099,7 +6988,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-12
@@ -7125,7 +7014,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -7137,7 +7026,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHmecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -7152,7 +7040,7 @@ cell HMEC
 composite wgEncodeUwTfbs
 control std
 controlId HMEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -7188,7 +7076,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHmfCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7212,7 +7099,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHmfCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7331,7 +7217,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHmfCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7354,7 +7239,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHmfCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7426,7 +7310,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHmfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7449,7 +7332,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHmfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -7497,7 +7379,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpafCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7521,7 +7402,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpafCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7640,7 +7520,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpafCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7663,7 +7542,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpafCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7735,7 +7613,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpafInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7758,7 +7635,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpafInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -7806,7 +7682,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpfCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7830,7 +7705,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpfCtcfStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7949,7 +7823,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpfCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7972,7 +7845,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpfCtcfStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8044,7 +7916,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -8067,7 +7938,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHpfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -8105,7 +7975,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8117,7 +7987,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHreCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -8132,7 +8001,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8144,7 +8013,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHreCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -8159,7 +8027,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8185,7 +8053,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8211,7 +8079,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8237,7 +8105,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8263,7 +8131,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -8289,7 +8157,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8315,7 +8183,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -8327,7 +8195,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHreInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -8342,7 +8209,7 @@ cell HRE
 composite wgEncodeUwTfbs
 control std
 controlId HRE/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -8378,7 +8245,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHrpeCtcfStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8449,7 +8315,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHrpeCtcfStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8497,7 +8362,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHrpeInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -8520,7 +8384,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHrpeInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -8558,7 +8421,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8570,7 +8433,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHuvecCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -8585,7 +8447,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -8597,7 +8459,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHuvecCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -8612,7 +8473,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8638,7 +8499,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -8664,7 +8525,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8690,7 +8551,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -8716,7 +8577,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-29
@@ -8742,7 +8603,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -8768,7 +8629,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -8780,7 +8641,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsHuvecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -8795,7 +8655,7 @@ cell HUVEC
 composite wgEncodeUwTfbs
 control std
 controlId HUVEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -8831,7 +8691,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsHvmfInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -8854,7 +8713,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsHvmfInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -8902,7 +8760,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsJurkatInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -8925,7 +8782,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsJurkatInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -8963,7 +8819,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -8975,7 +8831,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsK562CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -8990,7 +8845,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -9002,7 +8857,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsK562CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -9017,7 +8871,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -9043,7 +8897,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -9069,7 +8923,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -9095,7 +8949,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-06-30
@@ -9121,7 +8975,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-08
 dateSubmitted 2009-06-30
@@ -9147,7 +9001,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-07
 dateSubmitted 2009-09-21
@@ -9173,7 +9027,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -9185,7 +9039,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsK562InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9200,7 +9053,7 @@ cell K562
 composite wgEncodeUwTfbs
 control std
 controlId K562/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9236,7 +9089,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsMcf7InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -9259,7 +9111,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsMcf7InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -9307,7 +9158,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsNb4InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -9330,7 +9180,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsNb4InputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -9378,7 +9227,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.7
 origAssembly hg19
-parentTable wgEncodeUwTfbsNhdfneoInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -9401,7 +9249,6 @@ fragLength 350
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwTfbsNhdfneoInputStdRawSignalRep1
 project wgEncode
 replicate 1
 setType input
@@ -9439,7 +9286,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -9451,7 +9298,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsNhekCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9466,7 +9312,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9478,7 +9324,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsNhekCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -9493,7 +9338,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -9519,7 +9364,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9545,7 +9390,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -9571,7 +9416,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9597,7 +9442,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-09-21
@@ -9623,7 +9468,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9649,7 +9494,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -9661,7 +9506,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsNhekInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9676,7 +9520,7 @@ cell NHEK
 composite wgEncodeUwTfbs
 control std
 controlId NHEK/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9702,7 +9546,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9714,7 +9558,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSaecCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9729,7 +9572,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9741,7 +9584,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSaecCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -9756,7 +9598,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9782,7 +9624,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9808,7 +9650,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9834,7 +9676,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9860,7 +9702,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9886,7 +9728,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9912,7 +9754,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -9924,7 +9766,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSaecInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9939,7 +9780,7 @@ cell SAEC
 composite wgEncodeUwTfbs
 control std
 controlId SAEC/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -9965,7 +9806,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -9977,7 +9818,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSknshraCtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -9992,7 +9832,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-23
@@ -10004,7 +9844,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSknshraCtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -10019,7 +9858,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -10045,7 +9884,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -10071,7 +9910,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -10097,7 +9936,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -10123,7 +9962,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-10-19
@@ -10149,7 +9988,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -10175,7 +10014,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -10187,7 +10026,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsSknshraInputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -10202,7 +10040,7 @@ cell SK-N-SH_RA
 composite wgEncodeUwTfbs
 control std
 controlId SK-N-SH_RA/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
@@ -10228,7 +10066,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -10240,7 +10078,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsWerirb1CtcfStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -10255,7 +10092,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -10267,7 +10104,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsWerirb1CtcfStdAlnRep2
 project wgEncode
 rank 2
 replicate 2
@@ -10282,7 +10118,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -10308,7 +10144,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -10334,7 +10170,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -10360,7 +10196,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -10386,7 +10222,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2009-07-02
@@ -10412,7 +10248,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-15
 dateSubmitted 2009-07-02
@@ -10438,7 +10274,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-02-18
@@ -10450,7 +10286,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwTfbsWerirb1InputStdAlnRep1
 project wgEncode
 rank 1
 replicate 1
@@ -10465,7 +10300,7 @@ cell WERI-Rb-1
 composite wgEncodeUwTfbs
 control std
 controlId WERI-Rb-1/Input/std
-dataType ChIP-seq
+dataType ChipSeq
 dataVersion ENCODE June 2010 Freeze
 dateResubmitted 2010-06-10
 dateSubmitted 2010-06-10
