@@ -793,7 +793,6 @@ fileName wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL305
-labVersion SL305
 origAssembly hg19
 project wgEncode
 protocol PCR2x
@@ -817,7 +816,6 @@ fileName wgEncodeHaibTfbsA549GrPcr2xEtoh02PkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL305
-labVersion SL305
 origAssembly hg19
 project wgEncode
 protocol PCR2x
@@ -2218,7 +2216,6 @@ fileName wgEncodeHaibTfbsGm12878ControlPcr1xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL516
-labVersion SL516
 origAssembly hg18
 project wgEncode
 protocol PCR1x
@@ -2933,7 +2930,6 @@ fileName wgEncodeHaibTfbsGm12878NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL202
-labVersion SL202
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -2983,7 +2979,6 @@ fileName wgEncodeHaibTfbsGm12878NrsfPcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL202
-labVersion SL202
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -9771,7 +9766,6 @@ fileName wgEncodeHaibTfbsHtb11ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL108
-labVersion SL108
 origAssembly hg18
 project wgEncode
 protocol PCR2x
@@ -9820,7 +9814,6 @@ fileName wgEncodeHaibTfbsHtb11NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL83
-labVersion SL83
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -9866,7 +9859,6 @@ fileName wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL83
-labVersion SL83
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10866,7 +10858,6 @@ fileName wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL523
-labVersion SL523
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -10912,7 +10903,6 @@ fileName wgEncodeHaibTfbsPanc1NrsfPcr2xAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL522
-labVersion SL522
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10959,7 +10949,6 @@ fileName wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep2.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL522
-labVersion SL522
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -10984,7 +10973,6 @@ fileName wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL150
-labVersion SL150
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -11030,7 +11018,6 @@ fileName wgEncodeHaibTfbsPfsk1NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL149
-labVersion SL149
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -11076,7 +11063,6 @@ fileName wgEncodeHaibTfbsPfsk1NrsfPcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL149
-labVersion SL149
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -11390,7 +11376,6 @@ fileName wgEncodeHaibTfbsU87ControlPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL103
-labVersion SL103
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -11436,7 +11421,6 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labExpId SL88
-labVersion SL88
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -11482,7 +11466,6 @@ fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1.broadPeak.gz
 grant Myers
 lab HudsonAlpha
 labExpId SL88
-labVersion SL88
 project wgEncode
 protocol PCR2x
 replicate 1

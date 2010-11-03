@@ -122,7 +122,7 @@ DATA_TRIX = /data/trix
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
-	cp cv/alpha/cv.ra  /usr/local/apache/cgi-bin-${USER}/encode
+	cp -p cv/alpha/cv.ra  /usr/local/apache/cgi-bin-${USER}/encode
 #  if you want to test track search tool with your own trix file
 #	HGDB_TRACKDB=trackDb_${USER} ./buildTrix trackDb_${USER} metaDb_${USER} /usr/local/apache/cgi-bin-${USER}/encode/cv.ra ${HIVE_TRIX} ${DBS}
 # you'll also need to set browser.trixPath to point to your trix file
@@ -132,7 +132,7 @@ alpha: clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
-	cp cv/alpha/cv.ra  /usr/local/apache/cgi-bin/encode
+	cp -p cv/alpha/cv.ra  /usr/local/apache/cgi-bin/encode
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${HIVE_TRIX} ${DBS}
 	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
@@ -140,14 +140,14 @@ beta: clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
-	cp cv/beta/cv.ra  /usr/local/apache/cgi-bin/encode
+	cp -p cv/beta/cv.ra  /usr/local/apache/cgi-bin/encode
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 public: clean
 	${GIT} pull
 	./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}
-	cp cv/public/cv.ra  /usr/local/apache/cgi-bin-public/encode
+	cp -p cv/public/cv.ra  /usr/local/apache/cgi-bin-public/encode
 	HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public /usr/local/apache/cgi-bin-public/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 # this will fail if we are not in a beta checkout:
