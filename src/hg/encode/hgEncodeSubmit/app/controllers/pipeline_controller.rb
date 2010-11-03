@@ -15,7 +15,7 @@ class PipelineController < ApplicationController
   before_filter :check_user_is_owner, :except => 
         [ :new, :create, :list, :show_active, :show_user, :show, 
         :valid_status, :load_status, :unload_status, :upload_status, 
-        :show_tools, :mass_tools, :mass_ftp, :mass_url ]
+        :show_tools, :mass_tools, :mass_ftp, :mass_url, :delete_archive ]
   
   layout 'main'
   
@@ -81,14 +81,16 @@ class PipelineController < ApplicationController
     end
     @errText = ""
     case @project.status
+      when "upload failed"
+	@errText = getUploadErrText(@project)
+      when "expand failed"
+	@errText = getExpandErrText(@project)
       when "validate failed"
         @errText = getValidateErrText(@project)
       when "load failed"
         @errText = getLoadErrText(@project)
       when "unload failed"
 	@errText = getUnloadErrText(@project)
-      when "upload failed"
-	@errText = getUploadErrText(@project)
       when "uploading"
 	# old wget method
 	#upText = getUploadErrText(@project)
@@ -159,6 +161,11 @@ class PipelineController < ApplicationController
   def upload_status
     @project = Project.find(params[:id])
     @errText = getUploadErrText(@project)
+  end
+
+  def expand_status
+    @project = Project.find(params[:id])
+    @errText = getExpandErrText(@project)
   end
 
   def show_daf

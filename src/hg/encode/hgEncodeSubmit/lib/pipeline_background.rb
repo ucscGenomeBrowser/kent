@@ -97,7 +97,7 @@ module PipelineBackground
       #new_status project, "validated"
       #load_background(project_id)
       new_status project, "load requested"
-      # do not chain through immediatly, instead request the next step.
+      # do not chain through immediately, instead request the next step.
       unless queue_job project.id, "load_background(#{project.id})"
         print "System error - queued_jobs save failed."
         return
@@ -334,13 +334,18 @@ module PipelineBackground
       end
     end
 
+    unless process_uploaded_archive(project, filename)
+      new_status project, "upload failed"
+      return
+    end
+
     unless new_status project, "uploaded"
       return
     end
 
     #old way: 
     #expand_background(project_id, filename, allowReloads)
-    # do not chain through immediatly, instead request the next step.
+    # do not chain through immediately, instead request the next step.
     new_status project, "expand requested"
     unless queue_job project.id, "expand_background(#{project.id}, \"#{filename}\", \"#{allowReloads}\")"
       print "System error - queued_jobs save failed.\n"
@@ -357,32 +362,29 @@ module PipelineBackground
       return
     end
 
-    nextArchiveNo = project.archive_count+1
-    if prep_one_archive(project, filename, nextArchiveNo)
-      if process_uploaded_archive(project, filename)
-        project.status = "expanded"
-      else
-        project.status = "expand failed"
-      end
-    else
-        project.status = "expand failed"
-    end
-
-    unless new_status project, project.status
+    #new_status project, project.status
+    unless prep_one_archive(project, filename, project.archive_count)
+      new_status project, "expand failed"
       return
     end
 
-    if project.status == "expanded"
-      #old way: 
-      #validate_background(project_id, allowReloads)
-      # do not chain through immediatly, instead request the next step.
-      new_status project, "validate requested"
-      unless queue_job project.id, "validate_background(#{project.id}, \"#{allowReloads}\")"
-        print "System error - queued_jobs save failed.\n"
-        return
-      end
+    unless expand_archive(project, project.project_archives[project.archive_count-1])
+      new_status project, "expand failed"
+      return
     end
 
+    unless new_status project, "expanded"
+      return
+    end
+
+    #old way: 
+    #validate_background(project_id, allowReloads)
+    # do not chain through immediately, instead request the next step.
+    new_status project, "validate requested"
+    unless queue_job project.id, "validate_background(#{project.id}, \"#{allowReloads}\")"
+      print "System error - queued_jobs save failed.\n"
+      return
+    end
 
   end
 
@@ -409,6 +411,8 @@ module PipelineBackground
     project_archive.status = "see current"
     project_archive.archives_active = ""
     unless saver project_archive
+      ecmd = "echo 'saving project_archive record failed for #{filename}' > #{projectDir}/upload_error"
+      run_with_timeout(ecmd, 60)
       return false
     end
 
@@ -416,12 +420,8 @@ module PipelineBackground
     project.archives_active += "1"
 
     unless saver project
-      return false
-    end
-
-    unless expand_archive(project, project_archive)
-      project.archive_count = nextArchiveNo - 1
-      new_status project, "expand failed"
+      ecmd = "echo 'saving project record failed for #{filename}' > #{projectDir}/upload_error"
+      run_with_timeout(ecmd, 60)
       return false
     end
 
@@ -436,7 +436,9 @@ module PipelineBackground
     projectDir = path_to_project_dir(project.id)
     uploadDir = projectDir+"/upload_#{archive.archive_no}"
 
-    process_archive(project, archive.id, projectDir, uploadDir, "")
+    unless process_archive(project, archive.id, projectDir, uploadDir, "")
+      return false
+    end
 
     # cleanup: delete temporary upload subdirectory
     clean_out_dir uploadDir
@@ -468,7 +470,9 @@ module PipelineBackground
 	unless File.exists?(newDir)
 	  Dir.mkdir(newDir,0775)
 	end
-        process_archive(project, archive_id, projectDir, uploadDir, newRelativePath)
+        unless process_archive(project, archive_id, projectDir, uploadDir, newRelativePath)
+          return false
+        end
       else 
         if File.ftype(fullName) == "file"
    
@@ -486,7 +490,8 @@ module PipelineBackground
           project_file.file_date = File.ctime(fullName)
           project_file.project_archive_id = archive_id 
           unless project_file.save
-            flash[:error] = "System error saving project_file record for: #{f}."
+            ecmd = "echo 'saving project_file record failed for project #{project.id} archive #{archive_id} file #{filename}' > #{projectDir}/expand_error"
+            run_with_timeout(ecmd, 60)
             return false
           end
     
@@ -499,6 +504,7 @@ module PipelineBackground
         end
       end
     end
+    return true
   end
 
   def prep_one_archive(project, filename, archive_no)
@@ -516,7 +522,7 @@ module PipelineBackground
     exitCode = run_with_timeout(cmd, timeout)
 
     if exitCode == -1
-      ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/upload_error"
+      ecmd = "echo 'Timeout #{timeout} exceeded running [#{cmd}]' >> #{projectDir}/expand_error"
       run_with_timeout(ecmd, 60)
     end
 
@@ -539,6 +545,7 @@ module PipelineBackground
     # keep other special files
     keepers["validate_error"] = "keep"
     keepers["load_error"] = "keep"
+    keepers["expand_error"] = "keep"
     keepers["upload_error"] = "keep"
     keepers["out"] = "keep"
 
@@ -554,7 +561,11 @@ module PipelineBackground
         cmd = "rm -fr #{fullName}"
         unless system(cmd)
           yell "System error cleaning up subdirectory: <br>command=[#{cmd}].<br>"  
-          return false
+          ecmd = "echo 'expansion failed: system error for command=[#{cmd}].}' > #{projectDir}/expand_error"
+          run_with_timeout(ecmd, 60)
+          project.status = "expand failed"
+          new_status project, project.status
+          return
         end
       end
     end
@@ -579,7 +590,13 @@ module PipelineBackground
         n = a.archive_no-1
         c = project.archives_active[n..n]
         if c == "1"
-          prep_one_archive project, a.file_name, a.archive_no
+          unless prep_one_archive project, a.file_name, a.archive_no
+            ecmd = "echo 'expansion failed for #{a.file_name}' > #{projectDir}/expand_error"
+            run_with_timeout(ecmd, 60)
+            project.status = "expand failed"
+            new_status project, project.status
+            return            
+          end
         end
       end
       reexpand_all_completion project
@@ -587,7 +604,7 @@ module PipelineBackground
       if project.project_archives.length == 0
         project.status = "new"
       else
-        project.status = "expandeded"
+        project.status = "expanded"
       end
       new_status project, project.status
     end
@@ -750,12 +767,12 @@ private
     # handle unzipping the archive
     pf = path_to_file(project.id, filename)
     if ["zip", "ZIP"].any? {|ext| filename.ends_with?("." + ext) }
-      cmd = "unzip -o  #{pf} -d #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"   # .zip 
+      cmd = "unzip -o  #{pf} -d #{uploadDir} &> #{File.dirname(uploadDir)}/expand_error"   # .zip 
     else
       if ["gz", "GZ", "tgz", "TGZ"].any? {|ext| filename.ends_with?("." + ext) }
-        cmd = "tar -xzf #{pf} -C #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"  # .gz .tgz gzip 
+        cmd = "tar -xzf #{pf} -C #{uploadDir} &> #{File.dirname(uploadDir)}/expand_error"  # .gz .tgz gzip 
       else  
-        cmd = "tar -xjf #{pf} -C #{uploadDir} &> #{File.dirname(uploadDir)}/upload_error"  # .bz2 bzip2
+        cmd = "tar -xjf #{pf} -C #{uploadDir} &> #{File.dirname(uploadDir)}/expand_error"  # .bz2 bzip2
       end
     end
   end
@@ -781,6 +798,10 @@ private
 
   def getUploadErrText(project)
     return getErrText(project, "upload_error")
+  end
+
+  def getExpandErrText(project)
+    return getErrText(project, "expand_error")
   end
 
   def getValidateErrText(project)
