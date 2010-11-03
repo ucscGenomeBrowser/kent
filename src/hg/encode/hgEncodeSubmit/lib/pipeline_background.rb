@@ -837,12 +837,12 @@ private
     end
     unless newest == ""
       theFile = path_to_file(project_id, newest)
-      return File.open(theFile, "rb") { |f| f.read }
+      return newest, File.open(theFile, "rb") { |f| f.read }
     else
-      return ""
+      return "",""
     end
   rescue
-    return ""
+    return "",""
   end
 
   def getDafText(project)

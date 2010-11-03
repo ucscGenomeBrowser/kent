@@ -8373,7 +8373,8 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
     # 6885145 bases of 2897316137 (0.238%) in intersection
 
 ########################################################################
-# NHGRI GWAS CATALOG (DONE 10/6/10 angie)
+# NHGRI GWAS CATALOG (DONE 11/1/10 angie)
+# Updated 10/6/10
 # Updated 9/1/10
 # Updated 8/2/10
 # Updated 6/2/10
@@ -8398,7 +8399,7 @@ hgLoadSqlTab hg19 omimToKnownCanonical  \
         > gwasCatalog.bed
     hgLoadBed hg19 gwasCatalog gwasCatalog.bed \
       -tab -sqlTable=$HOME/kent/src/hg/lib/gwasCatalog.sql -notItemRgb -allowStartEqualEnd
-#Loaded 4550 elements of size 22
+#Loaded 4791 elements of size 22
 
 
 ######################################################################## 
@@ -10215,6 +10216,11 @@ EOF
     #  hgsql -e "select count(*) from affyU133Plus2;" hg19
     #     58592  
 
+
+    # Added knownToU133Plus2 track
+    hgMapToGene hg19 affyU133Plus2 knownGene knownToU133Plus2
+
+
 #############################################################################
 # AFFY U95 (DONE 2010-10-07 Chin)
     # Align probes 
@@ -10265,6 +10271,9 @@ EOF
     #   12386 sequences
     #   Updating seq table
     #   All done
+
+    # Added knownToU95 track
+    hgMapToGene hg19 affyU95 knownGene knownToU95
 
 #############################################################################
 # ucscRetro track (2010-03-31, baertsch,hartera DONE)

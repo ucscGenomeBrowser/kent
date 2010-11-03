@@ -123,8 +123,8 @@ class PipelineController < ApplicationController
         end
 
     end 
-    @dafText = getDafText(@project)
-    @ddfText = getDdfText(@project)
+    @dafName,@dafText = getDafText(@project)
+    @ddfName,@ddfText = getDdfText(@project)
 
     if @project.run_stat and @project.run_stat == "waiting"
       job = QueuedJob.find(:first, :conditions => ["project_id = ?", @project.id])
@@ -170,12 +170,26 @@ class PipelineController < ApplicationController
 
   def show_daf
     @project = Project.find(params[:id])
-    @dafText = getDafText(@project)
+    @dafName,@dafText = getDafText(@project)
+  end
+
+  def download_daf
+    @project = Project.find(params[:id])
+    @dafName,@dafText = getDafText(@project)
+    headers.merge!('Content-Disposition' => "attachment; filename=\"#{@dafName}\"")
+    render :text => @dafText, :content_type => 'text/plain'
   end
 
   def show_ddf
     @project = Project.find(params[:id])
-    @ddfText = getDdfText(@project)
+    @ddfName,@ddfText = getDdfText(@project)
+  end
+
+  def download_ddf
+    @project = Project.find(params[:id])
+    @ddfName,@ddfText = getDdfText(@project)
+    headers.merge!('Content-Disposition' => "attachment; filename=\"#{@ddfName}\"")
+    render :text => @ddfText, :content_type => 'text/plain'
   end
 
   def db_load

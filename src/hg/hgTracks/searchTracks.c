@@ -180,101 +180,26 @@ static int metaDbVars(struct sqlConnection *conn, char *** metaVars, char *** me
 // Search the assemblies metaDb table; If name == NULL, we search every metadata field.
 {
 char query[256];
-#define WHITE_LIST_COUNT 35
-#ifdef WHITE_LIST_COUNT
-#define WHITE_LIST_VAR 0
-#define WHITE_LIST_LABEL 1
-char *whiteList[WHITE_LIST_COUNT][2] = {
-    {"age",              "Age of experimental organism"},
-    {"antibody",         "Antibody or target protein"},
-    {"origAssembly",     "Assembly originally mapped to"},
-    {"cell",             "Cell, tissue or DNA sample"},
-    {"localization",     "Cell compartment"},
-    {"control",          "Control or Input for ChIPseq"},
-    //{"controlId",        "ControlId - explicit relationship"},
-    {"dataType",         "Experiment type"},
-    {"dataVersion",      "ENCODE release"},
-    //{"fragLength",       "Fragment Length for ChIPseq"},
-    //{"freezeDate",       "Gencode freeze date"},
-    //{"level",            "Gencode level"},
-    //{"annotation",       "Gencode annotation"},
-    {"geoSample",        "GEO accession"},
-    {"growthProtocol",   "Growth Protocol"},
-    {"lab",              "Lab producing data"},
-    {"labVersion",       "Lab specific details"},
-    {"labExpId",         "Lab specific identifier"},
-    {"softwareVersion",  "Lab specific informatics"},
-    {"protocol",         "Library Protocol"},
-    {"mapAlgorithm",     "Mapping algorithm"},
-    {"readType",         "Paired/Single reads lengths"},
-    {"grant",            "Principal Investigator"},
-    {"replicate",        "Replicate number"},
-    //{"restrictionEnzyme","Restriction Enzyme used"},
-    //{"ripAntibody",      "RIP Antibody"},
-    //{"ripTgtProtein",    "RIP Target Protein"},
-    {"rnaExtract",       "RNA Extract"},
-    {"seqPlatform",      "Sequencing Platform"},
-    {"setType",          "Experiment or Input"},
-    {"sex",              "Sex of organism"},
-    {"strain",           "Strain of organism"},
-    {"subId",            "Submission Id"},
-    {"treatment",        "Treatment"},
-    {"view",             "View - Peaks or Signals"},
-};
-// FIXME: The whitelist should be a table or ra
-// FIXME: The whitelist should be in list order
-// FIXME: Should read in list, then verify that an mdb val exists.
+struct slPair *oneTerm,*whiteList = mdbCvWhiteList(TRUE,FALSE);
+int count =0, whiteCount = slCount(whiteList);
+char **retVar = needMem(sizeof(char *) * whiteCount);
+char **retLab = needMem(sizeof(char *) * whiteCount);
 
-char **retVar = needMem(sizeof(char *) * WHITE_LIST_COUNT);
-char **retLab = needMem(sizeof(char *) * WHITE_LIST_COUNT);
-int ix,count;
-for(ix=0,count=0;ix<WHITE_LIST_COUNT;ix++)
+for(oneTerm=whiteList;oneTerm!=NULL;oneTerm=oneTerm->next)
     {
-    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",whiteList[ix][WHITE_LIST_VAR]);
+    safef(query, sizeof(query), "select count(*) from metaDb where var = '%s'",oneTerm->name);
     if(sqlQuickNum(conn,query) > 0)
         {
-        retVar[count] = whiteList[ix][WHITE_LIST_VAR];
-        retLab[count] = whiteList[ix][WHITE_LIST_LABEL];
+        retVar[count] = oneTerm->name;
+        retLab[count] = oneTerm->val;
         count++;
         }
     }
-if(count == 0)
-    {
-    freez(&retVar);
-    freez(&retLab);
-    }
+// Don't do it, unless you clone strings above:  slPairFreeValsAndList(&whileList);
+
 *metaVars = retVar;
 *metaLabels = retLab;
 return count;
-
-#else///ifndef WHITE_LIST_COUNT
-
-char **retVar;
-char **retLab;
-struct slName *el, *varList = NULL;
-struct sqlResult *sr = NULL;
-char **row = NULL;
-
-safef(query, sizeof(query), "select distinct var from metaDb order by var");
-sr = sqlGetResult(conn, query);
-while ((row = sqlNextRow(sr)) != NULL)
-    slNameAddHead(&varList, row[0]);
-sqlFreeResult(&sr);
-retVar = needMem(sizeof(char *) * slCount(varList));
-retLab = needMem(sizeof(char *) * slCount(varList));
-slReverse(&varList);
-//slNameSort(&varList);
-int count = 0;
-for (el = varList; el != NULL; el = el->next)
-    {
-    retVar[count] = el->name;
-    retLab[count] = el->name;
-    count++;
-    }
-*metaVars = retVar;
-*whiteLabels = retLab;
-return count;
-#endif///ndef WHITE_LIST_COUNT
 }
 
 static int printMdbSelects(struct sqlConnection *conn,struct cart *cart,boolean simpleSearch,char ***pMdbVar,char ***pMdbVal,int *numMetadataNonEmpty,int cols)

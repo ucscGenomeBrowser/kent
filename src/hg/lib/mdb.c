@@ -2147,3 +2147,66 @@ slPairSortCase(&pairs);
 return pairs;
 }
 
+struct hash *mdbCvTermTypeHash()
+// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
+// Those terms should contain label,descrition,searchable,cvDefined,hidden
+{
+static struct hash *cvHashOfTermTypes = NULL;
+
+// Establish cv hash of Term Types if it doesn't already exist
+if (cvHashOfTermTypes == NULL)
+    {
+    cvHashOfTermTypes = raReadWithFilter(cv_file(), "term","type","typeOfTerm");
+    // Patch up an ugly inconsistency with 'cell'
+    struct hash *cellHash = hashRemove(cvHashOfTermTypes,"cellType");
+    if (cellHash)
+        hashAdd(cvHashOfTermTypes,"cell",cellHash);
+    }
+
+
+return cvHashOfTermTypes;
+}
+
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
+// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
+{
+struct slPair *whitePairs = NULL;
+
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hashCookie hc = hashFirst(termTypeHash);
+struct hashEl *hEl;
+while ((hEl = hashNext(&hc)) != NULL)
+    {
+    char *setting = NULL;
+    struct hash *typeHash = (struct hash *)hEl->val;
+    //if (!includeHidden)
+        {
+        setting = hashFindVal(typeHash,"hidden");
+        if(SETTING_IS_ON(setting))
+            continue;
+        }
+    if (searchTracks)
+        {
+        setting = hashFindVal(typeHash,"searchable");
+        if (setting == NULL || differentWord(setting,"select")) // TODO: Currently only 'select's are supported
+            continue;
+        }
+    if (cvDefined)
+        {
+        setting = hashFindVal(typeHash,"cvDefined");
+        if(SETTING_NOT_ON(setting))
+            continue;
+        }
+    char *term = hashMustFindVal(typeHash,"term");
+    char *label = hashFindVal(typeHash,"label");
+    if (label == NULL)
+        label = term;
+
+    slPairAdd(&whitePairs, term, cloneString(label)); // Term gets cloned in slPairAdd
+    }
+if (whitePairs != NULL)
+    slPairValSortCase(&whitePairs);
+
+return whitePairs;
+}

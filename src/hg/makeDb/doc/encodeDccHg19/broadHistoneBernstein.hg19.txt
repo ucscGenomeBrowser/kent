@@ -1475,3 +1475,384 @@ Broad 2010-10-22 NHEK WCE
 
 Broad 2010-10-22 NHLF H3K4me2
 
+### Use Galt's new mass submission
+# Edit all ddfs: Alignment => Alignments and add "Signal" for signal view
+# Edit all dafs to allowReloads
+# Restart all
+select id,name,status,user_id from projects where name like "BI_%" order by id ;
++------+--------------------+---------+---------+
+| id   | name               | status  | user_id |
++------+--------------------+---------+---------+
+| 2723 | BI_GM12878_CTCF    | loaded  |      34 | 
+| 2724 | BI_GM12878_H3K4me3 | loaded  |      34 | 
+| 2725 | BI_HMEC_H3K9ac     | loaded  |      34 | 
+| 2726 | BI_HMEC_H4K20me1   | loaded  |      34 | 
+| 2727 | BI_HMEC_WCE        | loaded  |      34 | 
+| 2728 | BI_HepG2_H3K27me3  | loaded  |      34 | 
+| 2729 | BI_Huvec_CTCF      | loaded  |      34 | 
+| 2730 | BI_Huvec_H3K27ac   | loaded  |      34 | 
+| 2731 | BI_Huvec_H3K27me3  | loaded  |      34 | 
+| 2732 | BI_Huvec_H3K36me3  | loaded  |      34 | 
+| 2733 | BI_Huvec_H3K4me1   | loaded  |      34 | 
+| 2734 | BI_Huvec_H3K4me2   | loaded  |      34 | 
+| 2735 | BI_Huvec_H3K4me3   | loaded  |      34 | 
+| 2736 | BI_Huvec_H3K9ac    | loaded  |      34 | 
+| 2737 | BI_Huvec_H3K9me1   | loaded  |      34 | 
+| 2738 | BI_Huvec_H4K20me1  | loaded  |      34 | 
+| 2739 | BI_Huvec_RNA-pol2  | loaded  |      34 | 
+| 2740 | BI_Huvec_WCE       | loaded  |      34 | 
+| 2741 | BI_K562_CTCF       | loaded  |      34 | 
+| 2742 | BI_K562_H3K27ac    | loaded  |      34 | 
+| 2743 | BI_K562_H3K36me3   | loaded  |      34 | 
+| 2744 | BI_K562_H3K4me1    | loaded  |      34 | 
+| 2745 | BI_K562_H3K4me2    | loaded  |      34 | 
+| 2746 | BI_K562_H3K9me1    | loaded  |      34 | 
+| 2747 | BI_K562_H4K20me1   | loaded  |      34 | 
+| 2748 | BI_K562_RNA-pol2   | loaded  |      34 | 
+| 2749 | BI_K562_WCE        | loaded  |      34 | 
+| 2750 | BI_NHEK_CTCF       | loaded  |      34 | 
+| 2751 | BI_NHEK_H3K27ac    | loaded  |      34 | 
+| 2752 | BI_NHEK_H3K27me3   | loaded  |      34 | 
+| 2753 | BI_NHEK_H3K36me3   | loaded  |      34 | 
+| 2754 | BI_NHEK_H3K4me1    | loaded  |      34 | 
+| 2755 | BI_NHEK_H3K4me2    | loaded  |      34 | 
+| 2756 | BI_NHEK_H3K4me3    | loaded  |      34 | 
+| 2757 | BI_NHEK_H3K9ac     | loaded  |      34 | 
+| 2758 | BI_NHEK_H3K9me1    | loaded  |      34 | 
+| 2759 | BI_NHEK_H4K20me1   | loaded  |      34 | 
+| 2760 | BI_NHEK_RNA-pol2   | loaded  |      34 | 
+| 2761 | BI_NHEK_WCE        | loaded  |      34 | 
+| 2762 | BI_NHLF_H3K4me2    | loaded  |      34 | 
+update projects set name = "Broad 2010-10-26 GM12878 CTCF" where id = 2723;
+update projects set name = "Broad 2010-10-26 GM12878 H3K4me3" where id = 2724;
+update projects set name = "Broad 2010-10-26 HMEC H3K9ac" where id = 2725;
+update projects set name = "Broad 2010-10-26 HMEC H4K20me1" where id = 2726;
+update projects set name = "Broad 2010-10-26 HMEC WCE" where id = 2727;
+update projects set name = "Broad 2010-10-26 HepG2 H3K27me3" where id = 2728;
+update projects set name = "Broad 2010-10-26 Huvec CTCF" where id = 2729;
+update projects set name = "Broad 2010-10-26 Huvec H3K27ac" where id = 2730;
+update projects set name = "Broad 2010-10-26 Huvec H3K27me3" where id = 2731;
+update projects set name = "Broad 2010-10-26 Huvec H3K36me3" where id = 2732;
+update projects set name = "Broad 2010-10-26 Huvec H3K4me1" where id = 2733;
+update projects set name = "Broad 2010-10-26 Huvec H3K4me2" where id = 2734;
+update projects set name = "Broad 2010-10-26 Huvec H3K4me3" where id = 2735;
+update projects set name = "Broad 2010-10-26 Huvec H3K9ac" where id = 2736;
+update projects set name = "Broad 2010-10-26 Huvec H3K9me1" where id = 2737;
+update projects set name = "Broad 2010-10-26 Huvec H4K20me1" where id = 2738;
+update projects set name = "Broad 2010-10-26 Huvec RNA-pol2" where id = 2739;
+update projects set name = "Broad 2010-10-26 Huvec WCE" where id = 2740;
+update projects set name = "Broad 2010-10-26 K562 CTCF" where id = 2741;
+update projects set name = "Broad 2010-10-26 K562 H3K27ac" where id = 2742;
+update projects set name = "Broad 2010-10-26 K562 H3K36me3" where id = 2743;
+update projects set name = "Broad 2010-10-26 K562 H3K4me1" where id = 2744;
+update projects set name = "Broad 2010-10-26 K562 H3K4me2" where id = 2745;
+update projects set name = "Broad 2010-10-26 K562 H3K9me1" where id = 2746;
+update projects set name = "Broad 2010-10-26 K562 H4K20me1" where id = 2747;
+update projects set name = "Broad 2010-10-26 K562 RNA-pol2" where id = 2748;
+update projects set name = "Broad 2010-10-26 K562 WCE" where id = 2749;
+update projects set name = "Broad 2010-10-26 NHEK CTCF" where id = 2750;
+update projects set name = "Broad 2010-10-26 NHEK H3K27ac" where id = 2751;
+update projects set name = "Broad 2010-10-26 NHEK H3K27me3" where id = 2752;
+update projects set name = "Broad 2010-10-26 NHEK H3K36me3" where id = 2753;
+update projects set name = "Broad 2010-10-26 NHEK H3K4me1" where id = 2754;
+update projects set name = "Broad 2010-10-26 NHEK H3K4me2" where id = 2755;
+update projects set name = "Broad 2010-10-26 NHEK H3K4me3" where id = 2756;
+update projects set name = "Broad 2010-10-26 NHEK H3K9ac" where id = 2757;
+update projects set name = "Broad 2010-10-26 NHEK H3K9me1" where id = 2758;
+update projects set name = "Broad 2010-10-26 NHEK H4K20me1" where id = 2759;
+update projects set name = "Broad 2010-10-26 NHEK RNA-pol2" where id = 2760;
+update projects set name = "Broad 2010-10-26 NHEK WCE" where id = 2761;
+update projects set name = "Broad 2010-10-26 NHLF H3K4me2" where id = 2762;
+
+select id,name,status,user_id from projects where id >= 2723 and id <= 2762 order by id ;
++------+----------------------------------+--------+---------+
+| id   | name                             | status | user_id |
++------+----------------------------------+--------+---------+
+| 2723 | Broad 2010-10-26 GM12878 CTCF    | loaded |      34 | 
+| 2724 | Broad 2010-10-26 GM12878 H3K4me3 | loaded |      34 | 
+| 2725 | Broad 2010-10-26 HMEC H3K9ac     | loaded |      34 | 
+| 2726 | Broad 2010-10-26 HMEC H4K20me1   | loaded |      34 | 
+| 2727 | Broad 2010-10-26 HMEC WCE        | loaded |      34 | 
+| 2728 | Broad 2010-10-26 HepG2 H3K27me3  | loaded |      34 | 
+| 2729 | Broad 2010-10-26 Huvec CTCF      | loaded |      34 | 
+| 2730 | Broad 2010-10-26 Huvec H3K27ac   | loaded |      34 | 
+| 2731 | Broad 2010-10-26 Huvec H3K27me3  | loaded |      34 | 
+| 2732 | Broad 2010-10-26 Huvec H3K36me3  | loaded |      34 | 
+| 2733 | Broad 2010-10-26 Huvec H3K4me1   | loaded |      34 | 
+| 2734 | Broad 2010-10-26 Huvec H3K4me2   | loaded |      34 | 
+| 2735 | Broad 2010-10-26 Huvec H3K4me3   | loaded |      34 | 
+| 2736 | Broad 2010-10-26 Huvec H3K9ac    | loaded |      34 | 
+| 2737 | Broad 2010-10-26 Huvec H3K9me1   | loaded |      34 | 
+| 2738 | Broad 2010-10-26 Huvec H4K20me1  | loaded |      34 | 
+| 2739 | Broad 2010-10-26 Huvec RNA-pol2  | loaded |      34 | 
+| 2740 | Broad 2010-10-26 Huvec WCE       | loaded |      34 | 
+| 2741 | Broad 2010-10-26 K562 CTCF       | loaded |      34 | 
+| 2742 | Broad 2010-10-26 K562 H3K27ac    | loaded |      34 | 
+| 2743 | Broad 2010-10-26 K562 H3K36me3   | loaded |      34 | 
+| 2744 | Broad 2010-10-26 K562 H3K4me1    | loaded |      34 | 
+| 2745 | Broad 2010-10-26 K562 H3K4me2    | loaded |      34 | 
+| 2746 | Broad 2010-10-26 K562 H3K9me1    | loaded |      34 | 
+| 2747 | Broad 2010-10-26 K562 H4K20me1   | loaded |      34 | 
+| 2748 | Broad 2010-10-26 K562 RNA-pol2   | loaded |      34 | 
+| 2749 | Broad 2010-10-26 K562 WCE        | loaded |      34 | 
+| 2750 | Broad 2010-10-26 NHEK CTCF       | loaded |      34 | 
+| 2751 | Broad 2010-10-26 NHEK H3K27ac    | loaded |      34 | 
+| 2752 | Broad 2010-10-26 NHEK H3K27me3   | loaded |      34 | 
+| 2753 | Broad 2010-10-26 NHEK H3K36me3   | loaded |      34 | 
+| 2754 | Broad 2010-10-26 NHEK H3K4me1    | loaded |      34 | 
+| 2755 | Broad 2010-10-26 NHEK H3K4me2    | loaded |      34 | 
+| 2756 | Broad 2010-10-26 NHEK H3K4me3    | loaded |      34 | 
+| 2757 | Broad 2010-10-26 NHEK H3K9ac     | loaded |      34 | 
+| 2758 | Broad 2010-10-26 NHEK H3K9me1    | loaded |      34 | 
+| 2759 | Broad 2010-10-26 NHEK H4K20me1   | loaded |      34 | 
+| 2760 | Broad 2010-10-26 NHEK RNA-pol2   | loaded |      34 | 
+| 2761 | Broad 2010-10-26 NHEK WCE        | loaded |      34 | 
+| 2762 | Broad 2010-10-26 NHLF H3K4me2    | loaded |      34 | 
++------+----------------------------------+--------+---------+
+40 rows in set (0.00 sec)
+
+# edit all mdb.txt dateSubmitted => dateResubmitted  remove dateUnrestricted. On alignments and signals
+# This should allow simple mdbUpdte statements
+mdbUpdate hg19 2723/out/mdb.txt
+mdbUpdate hg19 2724/out/mdb.txt
+mdbUpdate hg19 2725/out/mdb.txt
+mdbUpdate hg19 2726/out/mdb.txt
+mdbUpdate hg19 2727/out/mdb.txt
+mdbUpdate hg19 2728/out/mdb.txt
+mdbUpdate hg19 2729/out/mdb.txt
+mdbUpdate hg19 2730/out/mdb.txt
+mdbUpdate hg19 2731/out/mdb.txt
+mdbUpdate hg19 2732/out/mdb.txt
+mdbUpdate hg19 2733/out/mdb.txt
+mdbUpdate hg19 2734/out/mdb.txt
+mdbUpdate hg19 2735/out/mdb.txt
+mdbUpdate hg19 2736/out/mdb.txt
+mdbUpdate hg19 2737/out/mdb.txt
+mdbUpdate hg19 2738/out/mdb.txt
+mdbUpdate hg19 2739/out/mdb.txt
+mdbUpdate hg19 2740/out/mdb.txt
+mdbUpdate hg19 2741/out/mdb.txt
+mdbUpdate hg19 2742/out/mdb.txt
+mdbUpdate hg19 2743/out/mdb.txt
+mdbUpdate hg19 2744/out/mdb.txt
+mdbUpdate hg19 2745/out/mdb.txt
+mdbUpdate hg19 2746/out/mdb.txt
+mdbUpdate hg19 2747/out/mdb.txt
+mdbUpdate hg19 2748/out/mdb.txt
+mdbUpdate hg19 2749/out/mdb.txt
+mdbUpdate hg19 2750/out/mdb.txt
+mdbUpdate hg19 2751/out/mdb.txt
+mdbUpdate hg19 2752/out/mdb.txt
+mdbUpdate hg19 2753/out/mdb.txt
+mdbUpdate hg19 2754/out/mdb.txt
+mdbUpdate hg19 2755/out/mdb.txt
+mdbUpdate hg19 2756/out/mdb.txt
+mdbUpdate hg19 2757/out/mdb.txt
+mdbUpdate hg19 2758/out/mdb.txt
+mdbUpdate hg19 2759/out/mdb.txt
+mdbUpdate hg19 2760/out/mdb.txt
+mdbUpdate hg19 2761/out/mdb.txt
+mdbUpdate hg19 2762/out/mdb.txt
+
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra
+gold wgEncodeBroadHistone.ra
+# verify changes
+git ci; git push
+cd {tdb}
+make DBS=hg19
+make alpha DBS=hg19
+
+#update downloads index.html
+cd {downloads19}/wgEncodeBroadHistone
+encodeDownloadsPage.pl -db=hg19 index.html
+# 928 files
+grep fastq\.gz index.html | wl  # 257 = 178 + 79 (expected 81!)  ## Verified that all expected are there.  2 must have replaced existing ones
+encodeDownloadsPage.pl -db=hg19 -checksum index.html &
+
+# mark as displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2723 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2724 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2725 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2726 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2727 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2728 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2729 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2730 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2731 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2732 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2733 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2734 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2735 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2736 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2737 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2738 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2739 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2740 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2741 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2742 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2743 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2744 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2745 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2746 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2747 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2748 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2749 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2750 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2751 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2752 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2753 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2754 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2755 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2756 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2757 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2758 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2759 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2760 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2761 displayed
+/cluster/data/encode/pipeline/bin/encodeStatus.pl 2762 displayed
+
+
+2010-11-02 Cricket noticed 15 missing fastq.
+============================================
+Run Brian's verifier from metaDb/alpha
+
+metaCollect wgEncodeBroadHistone.ra wgEncodeBroadHistone.reqViews.txt wgEncodeBroadHistone.expVars.txt | grep -v Signal
+didn't find view RawData for replicate 2 in {antibody = Pol2(b),cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K9ac,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K4me3,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = H3K4me2,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K4me1,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K27me3,cell = HepG2}
+didn't find view RawData for replicate 2 in {antibody = H3K27ac,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = CTCF,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = CTCF,cell = GM12878}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = NHLF}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = NHLF}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = NHEK}
+aborting
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = HSMM}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = HSMM}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = HepG2}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = HepG2}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = H1-hESC}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = H1-hESC}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = GM12878}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = GM12878}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = NHLF}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = NHLF}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = NHEK}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = HSMM}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HSMM}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HMEC}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = HepG2}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HepG2}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = H1-hESC}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = H1-hESC}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = GM12878}
+
+## Clean up mdb where antibody = "input" instead of "control"
+select * from metaDb where obj like "wgEncodeBroadHistone%" and var = "Antibody" and val = "Input";
++--------------------------------------------------+----------+---------+-------+
+| obj                                              | var      | varType | val   |
++--------------------------------------------------+----------+---------+-------+
+| wgEncodeBroadHistoneGm12878ControlStdRawDataRep1 | antibody | txt     | Input | 
+| wgEncodeBroadHistoneGm12878ControlStdRawDataRep2 | antibody | txt     | Input | 
+| wgEncodeBroadHistoneH1hescControlStdRawDataRep1  | antibody | txt     | Input | 
+| wgEncodeBroadHistoneH1hescControlStdRawDataRep2  | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHepg2ControlStdRawDataRep1   | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHepg2ControlStdRawDataRep2   | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHsmmControlStdRawDataRep1    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHsmmControlStdRawDataRep2    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneNhekControlStdRawDataRep2    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneNhlfControlStdRawDataRep1    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneNhlfControlStdRawDataRep2    | antibody | txt     | Input | 
++--------------------------------------------------+----------+---------+-------+
+11 rows in set (0.00 sec)
+update metaDb set val = "Control" where obj like "wgEncodeBroadHistone%" and var = "Antibody" and val = "Input";
+Query OK, 11 rows affected (0.03 sec)
+Rows matched: 11  Changed: 11  Warnings: 0
+
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra
+gold wgEncodeBroadHistone.ra
+
+metaCollect wgEncodeBroadHistone.ra wgEncodeBroadHistone.reqViews.txt wgEncodeBroadHistone.expVars.txt | grep -v Signal
+didn't find view RawData for replicate 2 in {antibody = Pol2(b),cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K9ac,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K4me3,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = H3K4me2,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K4me1,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K27me3,cell = HepG2}
+didn't find view RawData for replicate 2 in {antibody = H3K27ac,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = CTCF,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = CTCF,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HMEC}
+
+# These three are missing, new to hg19 and will be resubmitted by Broad
+ll wgEncodeBroadHistoneNhaH3k36me3StdRawDataRep1.fastq.gz
+ll wgEncodeBroadHistoneNhaH3k36me3StdRawDataRep2.fastq.gz
+ll wgEncodeBroadHistoneHepg2H3k27me3StdRawDataRep2.fastq.gz
+
+# These 12 need to be linked from hg18:
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562Pol2b.fastq.gz      wgEncodeBroadHistoneK562Pol2bStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H4k20me1.fastq.gz   wgEncodeBroadHistoneK562H4k20me1StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k4me2.fastq.gz    wgEncodeBroadHistoneK562H3k4me2StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k4me1.fastq.gz    wgEncodeBroadHistoneK562H3k4me1StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k36me3.fastq.gz   wgEncodeBroadHistoneK562H3k36me3StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k27ac.fastq.gz    wgEncodeBroadHistoneK562H3k27acStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562Ctcf.fastq.gz       wgEncodeBroadHistoneK562CtcfStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1.fastq.gz   wgEncodeBroadHistoneHmecH4k20me1StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac.fastq.gz     wgEncodeBroadHistoneHmecH3k9acStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2HmecControl.fastq.gz    wgEncodeBroadHistoneHmecControlStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3.fastq.gz wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf.fastq.gz    wgEncodeBroadHistoneGm12878CtcfStdRawDataRep1.fastq.gz
+
+rm importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562Pol2b      >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H4k20me1   >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k4me2    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k4me1    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k36me3   >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k27ac    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562Ctcf       >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1   >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac     >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2HmecControl    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3 >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf    >> importMoreBroadhg18Tohg19.ra
+## EDIT for objName, composite, fileName, origAssembly and remove parentName
+mdbUpdate hg19 importMoreBroadhg18Tohg19.ra
+ Using table named 'hg19.metaDb_tdreszer'.
+Read 12 metadata objects from hg19
+Affected 216 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra
+gold wgEncodeBroadHistone.ra
+# verify changes
+git ci; git push
+cd {tdb}
+make DBS=hg19
+make alpha DBS=hg19
+
+#update downloads index.html
+cd {downloads19}/wgEncodeBroadHistone
+encodeDownloadsPage.pl -db=hg19 index.html
+grep fastq\.gz index.html | wl  # 178: 64 + 114 as EXPECTED Total 849 files!
+# Don't bother with -checksum until resubmissions are added.
+
+metaCollect wgEncodeBroadHistone.ra wgEncodeBroadHistone.reqViews.txt wgEncodeBroadHistone.expVars.txt | grep -v Signal
+didn't find view RawData for replicate 1 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K27me3,cell = HepG2}
+
+### At this point Noam informs me that the 3 missing will be submitted and that ALL BAMS and bogWigs will need to be resubmitted again!
