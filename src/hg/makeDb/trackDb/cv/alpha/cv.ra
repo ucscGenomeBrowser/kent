@@ -1639,17 +1639,17 @@ tag HTR8
 type Cell Line
 organism Human
 tier 3
-description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo. 
+description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
 lineage Blastula
 karyotype normal
 sex U
 tissue Ectoderm
-vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada 
+vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada
 vendorId HTR8svn
 orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
 termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001079
-protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf 
+protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf
 
 term HVMF
 tag HVMF
@@ -6358,7 +6358,7 @@ tag methyl27
 type dataType
 label Methyl 27
 
-term Methyl-seq
+term MethylSeq
 tag methylseq
 type dataType
 
@@ -6633,15 +6633,15 @@ labPiFull Thomas Tullius
 grantPi Tullius
 organism human
 
-#lab CRG-Guigo
-#tag CRG
-#type lab
-#label Guigo - CGR, Barcelona
-#labInst Genome Center for Genomic Regulation, Barcelona
-#labPi Guigo
-#labPiFull Roderic Guigo
-#grantPi Guigo
-#organism human
+term CRG-Guigo
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Guigo
+organism human
 
 term GIS-Chia
 tag GIS-Chia
@@ -6671,6 +6671,16 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
+organism human
+
+term UCSC
+tag UCSC
+type lab
+label Kent - UC Santa Cruz
+labInst University of California at Santa Cruz
+labPi Kent
+labPiFull Jim Kent
+grantPi Kent
 organism human
 
 term UW
@@ -7053,6 +7063,12 @@ type grant
 grantInst National Human Genome Research Institute
 projectName NHGRI-Elnitski
 
+term Kent
+tag kent
+type grant
+grantInst UCSC
+projectName Ucsc
+
 term Margulies
 tag margulies
 type grant
@@ -7148,7 +7164,7 @@ validation  GS[M,E][0-9]*
 term age
 type typeOfTerm
 label Age of donor organism
-description The age of the organism used to produce tissue or cell line.              
+description The age of the organism used to produce tissue or cell line.
 searchable select
 cvDefined yes
 validation cv
@@ -7189,7 +7205,7 @@ validation cv
 term composite
 type typeOfTerm
 label UCSC Composite Track
-description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.  
+description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.
 searchable no
 cvDefined no
 validation wgEncode*
@@ -7294,9 +7310,9 @@ cvDefined no
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description 
+description
 searchable no
-cvDefined yes 
+cvDefined yes
 # WHAT IS THIS?
 #Cricket fill in with special story
 
@@ -7315,7 +7331,7 @@ label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
 searchable select
 cvDefined no
-validate GSM[0-9]* 
+validate GSM[0-9]*
 
 # term geoSampleAccession
 # type typeOfTerm
@@ -7331,7 +7347,7 @@ label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
 searchable select
 cvDefined no
-validate GSE[0-9]* 
+validate GSE[0-9]*
 
 # term geoSeriesAccession
 # type typeOfTerm
@@ -7439,7 +7455,7 @@ label Cell phase
 description The phase in a cell cycle.  Some experiments attempt to isolate DNA from a single phase.
 searchable no
 cvDefined yes
-validate cv 
+validate cv
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
 # We have talked about obsoleting this term, but thought there was more data like this coming
 
@@ -7481,7 +7497,7 @@ validate cv
 term replicate
 type typeOfTerm
 label Replicate number
-description The biological replicate of a particular experiment.  
+description The biological replicate of a particular experiment.
 searchable select
 cvDefined no
 validate [0-9]
