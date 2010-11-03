@@ -2782,6 +2782,11 @@ identifier transMapAlnKnownGeneMmId
     hg19.knownGene.name
     mm9.transMapAlnUcscGenes.qName chopAfter=-
 
+identifier hg18ContigDiff
+"contig difference track"
+    hg18.gold.frag dupeOk $split
+    hg18.hg18ContigDiff.name
+
 identifier hg19ContigDiff
 "contig difference track"
     hg19.gold.frag dupeOk
