@@ -1710,3 +1710,149 @@ encodeDownloadsPage.pl -db=hg19 -checksum index.html &
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 2760 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 2761 displayed
 /cluster/data/encode/pipeline/bin/encodeStatus.pl 2762 displayed
+
+
+2010-11-02 Cricket noticed 15 missing fastq.
+============================================
+Run Brian's verifier from metaDb/alpha
+
+metaCollect wgEncodeBroadHistone.ra wgEncodeBroadHistone.reqViews.txt wgEncodeBroadHistone.expVars.txt | grep -v Signal
+didn't find view RawData for replicate 2 in {antibody = Pol2(b),cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K9ac,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K4me3,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = H3K4me2,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K4me1,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K27me3,cell = HepG2}
+didn't find view RawData for replicate 2 in {antibody = H3K27ac,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = CTCF,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = CTCF,cell = GM12878}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = NHLF}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = NHLF}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = NHEK}
+aborting
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = HSMM}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = HSMM}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = HepG2}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = HepG2}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = H1-hESC}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = H1-hESC}
+didn't find view Alignments for replicate 1 in {antibody = Input,cell = GM12878}
+didn't find view Alignments for replicate 2 in {antibody = Input,cell = GM12878}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = NHLF}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = NHLF}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = NHEK}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = HSMM}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HSMM}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HMEC}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = HepG2}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HepG2}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = H1-hESC}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = H1-hESC}
+didn't find view RawData for replicate 1 in {antibody = Control,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = GM12878}
+
+## Clean up mdb where antibody = "input" instead of "control"
+select * from metaDb where obj like "wgEncodeBroadHistone%" and var = "Antibody" and val = "Input";
++--------------------------------------------------+----------+---------+-------+
+| obj                                              | var      | varType | val   |
++--------------------------------------------------+----------+---------+-------+
+| wgEncodeBroadHistoneGm12878ControlStdRawDataRep1 | antibody | txt     | Input | 
+| wgEncodeBroadHistoneGm12878ControlStdRawDataRep2 | antibody | txt     | Input | 
+| wgEncodeBroadHistoneH1hescControlStdRawDataRep1  | antibody | txt     | Input | 
+| wgEncodeBroadHistoneH1hescControlStdRawDataRep2  | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHepg2ControlStdRawDataRep1   | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHepg2ControlStdRawDataRep2   | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHsmmControlStdRawDataRep1    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneHsmmControlStdRawDataRep2    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneNhekControlStdRawDataRep2    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneNhlfControlStdRawDataRep1    | antibody | txt     | Input | 
+| wgEncodeBroadHistoneNhlfControlStdRawDataRep2    | antibody | txt     | Input | 
++--------------------------------------------------+----------+---------+-------+
+11 rows in set (0.00 sec)
+update metaDb set val = "Control" where obj like "wgEncodeBroadHistone%" and var = "Antibody" and val = "Input";
+Query OK, 11 rows affected (0.03 sec)
+Rows matched: 11  Changed: 11  Warnings: 0
+
+mdbPrint hg19 -table=metaDb -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra
+gold wgEncodeBroadHistone.ra
+
+metaCollect wgEncodeBroadHistone.ra wgEncodeBroadHistone.reqViews.txt wgEncodeBroadHistone.expVars.txt | grep -v Signal
+didn't find view RawData for replicate 2 in {antibody = Pol2(b),cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H4K20me1,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K9ac,cell = HMEC}
+didn't find view RawData for replicate 2 in {antibody = H3K4me3,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = H3K4me2,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K4me1,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = H3K27me3,cell = HepG2}
+didn't find view RawData for replicate 2 in {antibody = H3K27ac,cell = K562}
+didn't find view RawData for replicate 2 in {antibody = CTCF,cell = K562}
+didn't find view RawData for replicate 1 in {antibody = CTCF,cell = GM12878}
+didn't find view RawData for replicate 2 in {antibody = Control,cell = HMEC}
+
+# These three are missing, new to hg19 and will be resubmitted by Broad
+ll wgEncodeBroadHistoneNhaH3k36me3StdRawDataRep1.fastq.gz
+ll wgEncodeBroadHistoneNhaH3k36me3StdRawDataRep2.fastq.gz
+ll wgEncodeBroadHistoneHepg2H3k27me3StdRawDataRep2.fastq.gz
+
+# These 12 need to be linked from hg18:
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562Pol2b.fastq.gz      wgEncodeBroadHistoneK562Pol2bStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H4k20me1.fastq.gz   wgEncodeBroadHistoneK562H4k20me1StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k4me2.fastq.gz    wgEncodeBroadHistoneK562H3k4me2StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k4me1.fastq.gz    wgEncodeBroadHistoneK562H3k4me1StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k36me3.fastq.gz   wgEncodeBroadHistoneK562H3k36me3StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562H3k27ac.fastq.gz    wgEncodeBroadHistoneK562H3k27acStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2K562Ctcf.fastq.gz       wgEncodeBroadHistoneK562CtcfStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1.fastq.gz   wgEncodeBroadHistoneHmecH4k20me1StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac.fastq.gz     wgEncodeBroadHistoneHmecH3k9acStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2HmecControl.fastq.gz    wgEncodeBroadHistoneHmecControlStdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3.fastq.gz wgEncodeBroadHistoneGm12878H3k4me3StdRawDataRep2.fastq.gz
+ln ../../hg18/wgEncodeBroadChipSeq/wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf.fastq.gz    wgEncodeBroadHistoneGm12878CtcfStdRawDataRep1.fastq.gz
+
+rm importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562Pol2b      >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H4k20me1   >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k4me2    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k4me1    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k36me3   >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562H3k27ac    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2K562Ctcf       >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2HmecH4k20me1   >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2HmecH3k9ac     >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2HmecControl    >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep2Gm12878H3k4me3 >> importMoreBroadhg18Tohg19.ra
+mdbPrint hg18 -obj=wgEncodeBroadChipSeqRawDataRep1Gm12878Ctcf    >> importMoreBroadhg18Tohg19.ra
+## EDIT for objName, composite, fileName, origAssembly and remove parentName
+mdbUpdate hg19 importMoreBroadhg18Tohg19.ra
+ Using table named 'hg19.metaDb_tdreszer'.
+Read 12 metadata objects from hg19
+Affected 216 row(s) in hg19.metaDb_tdreszer
+
+mdbPrint hg19 -vars="composite=wgEncodeBroadHistone" > wgEncodeBroadHistone.ra
+gold wgEncodeBroadHistone.ra
+# verify changes
+git ci; git push
+cd {tdb}
+make DBS=hg19
+make alpha DBS=hg19
+
+#update downloads index.html
+cd {downloads19}/wgEncodeBroadHistone
+encodeDownloadsPage.pl -db=hg19 index.html
+grep fastq\.gz index.html | wl  # 178: 64 + 114 as EXPECTED Total 849 files!
+# Don't bother with -checksum until resubmissions are added.
+
+metaCollect wgEncodeBroadHistone.ra wgEncodeBroadHistone.reqViews.txt wgEncodeBroadHistone.expVars.txt | grep -v Signal
+didn't find view RawData for replicate 1 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K36me3,cell = NH-A}
+didn't find view RawData for replicate 2 in {antibody = H3K27me3,cell = HepG2}
+
+### At this point Noam informs me that the 3 missing will be submitted and that ALL BAMS and bogWigs will need to be resubmitted again!

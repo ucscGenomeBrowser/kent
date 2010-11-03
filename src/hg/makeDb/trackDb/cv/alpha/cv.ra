@@ -1639,17 +1639,17 @@ tag HTR8
 type Cell Line
 organism Human
 tier 3
-description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo. 
+description Trophoblast (HTR-8/SVneo) cell line. A thin layer of ectoderm that forms the wall of many mammalian blastulas and functions in the nutrition and implantation of the embryo.
 lineage Blastula
 karyotype normal
 sex U
 tissue Ectoderm
-vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada 
+vendorName Charles H. Graham, Department of Anatomy & Cell Biology, Queen's University at Kingston, Kingston, Ontario, Canada
 vendorId HTR8svn
 orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
 termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001079
-protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf 
+protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf
 
 term HVMF
 tag HVMF
@@ -6358,7 +6358,7 @@ tag methyl27
 type dataType
 label Methyl 27
 
-term Methyl-seq
+term MethylSeq
 tag methylseq
 type dataType
 
@@ -6633,15 +6633,15 @@ labPiFull Thomas Tullius
 grantPi Tullius
 organism human
 
-#lab CRG-Guigo
-#tag CRG
-#type lab
-#label Guigo - CGR, Barcelona
-#labInst Genome Center for Genomic Regulation, Barcelona
-#labPi Guigo
-#labPiFull Roderic Guigo
-#grantPi Guigo
-#organism human
+term CRG-Guigo
+tag CRG
+type lab
+label Guigo - CGR, Barcelona
+labInst Genome Center for Genomic Regulation, Barcelona
+labPi Guigo
+labPiFull Roderic Guigo
+grantPi Guigo
+organism human
 
 term GIS-Chia
 tag GIS-Chia
@@ -6671,6 +6671,16 @@ labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
 grantPi Tenenbaum
+organism human
+
+term UCSC
+tag UCSC
+type lab
+label Kent - UC Santa Cruz
+labInst University of California at Santa Cruz
+labPi Kent
+labPiFull Jim Kent
+grantPi Kent
 organism human
 
 term UW
@@ -7053,6 +7063,12 @@ type grant
 grantInst National Human Genome Research Institute
 projectName NHGRI-Elnitski
 
+term Kent
+tag kent
+type grant
+grantInst UCSC
+projectName Ucsc
+
 term Margulies
 tag margulies
 type grant
@@ -7126,6 +7142,8 @@ projectName UNC-Giddings
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
 
 
+# provisional this whole section is provisional
+
 term typeOfTerm
 type typeOfTerm
 label Term types defined
@@ -7140,13 +7158,13 @@ label GEO accession number provided by lab
 description A generic GEO accession number provided by the producing lab.
 searchable no
 cvDefined no
-# Superceded by geoSample?
-# VALIDATION:  GS[M,E][0-9]*
+validation  GS[M,E][0-9]*
+# Superceded by geoSample? will be, but for now we can't sort the lab ones into geoSample or geoSeries easily
 
 term age
 type typeOfTerm
 label Age of donor organism
-description The age of the organism used to produce tissue or cell line.              
+description The age of the organism used to produce tissue or cell line.
 searchable select
 cvDefined yes
 validation cv
@@ -7159,7 +7177,7 @@ searchable no
 cvDefined no
 validation /manual/ || /automatic/
 
-term antibody
+term Antibody
 type typeOfTerm
 label Antibody or target protein
 description The antibody to a specific protein.  Used in immuno-precipitation to target certain fractions of biological interest.
@@ -7187,9 +7205,12 @@ validation cv
 term composite
 type typeOfTerm
 label UCSC Composite Track
-description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.  This allows convenient selection and configuration.  Also provided will be a detailed description of the set of related experiments.
+description Related tracks in the UCSC Genome Browser are often grouped into a named composite track.
 searchable no
 cvDefined no
+validation wgEncode*
+# Are composites used by the browser in the same way?
+# This allows convenient selection and configuration.  Also provided will be a detailed description of the set of related experiments.
 # Should be cvDefined
 
 term control
@@ -7204,7 +7225,7 @@ term controlId
 type typeOfTerm
 label ControlId - explicit relationship
 #label Control ID - Specific dataset used as the control
-description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling.
+description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment.
 searchable no
 cvDefined no
 validate none
@@ -7213,24 +7234,23 @@ validate none
 term dataType
 type typeOfTerm
 label Experiment (Assay) type
-description Different types of experiments such as ChIP-seq, DNAse-seq and RNA-seq.
+description The types of experiments such as ChIP-seq, DNAse-seq and RNA-seq.
 searchable select
 cvDefined yes
 validate cv
 
 term dataVersion
 type typeOfTerm
-label ENCODE release
-description The ENCODE project declares specific data freezes and all submissions are tagged as coming on or before a specified freeze.  This is not a release date but allows identification of which experiments were available for particular rounds of ENCODE analysis.
+label ENCODE Data Freeze
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 searchable select
 cvDefined no
 validate ENCODE Three letter month and 4 digit year, we currenlty abuse this with the "post Month Year"
 
-
 term dateResubmitted
 type typeOfTerm
 label Date resubmitted to UCSC
-description Submitted data that was remapped to a new assembly, found to have errors or otherwise needed to be updated will not only have the originally submitted date but this date of resubmission.
+description Submitted data that was remapped to a new assembly, found to have errors or otherwise needed to be updated will have a date of resubmission.
 searchable date
 cvDefined no
 validation date, later than dateSubmitted
@@ -7238,18 +7258,18 @@ validation date, later than dateSubmitted
 term dateSubmitted
 type typeOfTerm
 label Date submitted to UCSC
-description Date that a particular dataset was originally submitted to the UCSC Genome Browser.
+description Date that a particular file  was originally submitted to the UCSC Genome Browser.
 searchable date
 cvDefined no
-#VALIDATION date, nine months less than dateUnrestricted
+validation date, nine months less than dateUnrestricted
 
 term dateUnrestricted
 type typeOfTerm
-label Date restrictions are lifted
-description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted. This is the date the data is free to use.
+label Date that data is available for unrestricted use.
+description ENCODE data is made publicly available but with restrictions on use for the first nine months since date submitted. After this date, the data is unrestricted.
 searchable date
 cvDefined no
-#VALIDATION date/ nine months more than dateSubmitted
+validation date nine months more than dateSubmitted
 
 # term expVars
 # type typeOfTerm
@@ -7265,6 +7285,10 @@ label BAM Index file
 description The name of the index file in the downloads directory associated with a particular track or raw data file.
 searchable no
 cvDefined no
+validate Matches the fileName prefix with the suffix .bai
+#hidden yes
+#Cricket thinks, but could be wrong that the index file is only for bam files.  So the description should read:
+#description The name of the index file (.bai) that is associated with a particular bam file.
 
 term fileName
 type typeOfTerm
@@ -7272,6 +7296,7 @@ label File Name for downloading
 description The name of a downloadable file associated with a particular track in the browser.
 searchable no
 cvDefined no
+validate Exists?
 
 term fragLength
 type typeOfTerm
@@ -7280,29 +7305,33 @@ description DNA libraries built for ChIP-seq and similar experiments often invol
 searchable no
 cvDefined no
 # Collapse with fragSize?
+#Cricket fill in with Special story
 
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description 
+description
 searchable no
-cvDefined yes 
+cvDefined yes
 # WHAT IS THIS?
+#Cricket fill in with special story
 
 term freezeDate
 type typeOfTerm
 label Gencode freeze date
 description Date when GENCODE froze data in order to submit to UCSC.
 searchable no
-cvDefined no
+cvDefined yes
+validation cv
+# outdated, should not be used going forward
 
 term geoSample
 type typeOfTerm
-label GEO accession
+label GEO sample accession
 description GEO sample accession number applied to a single data set in a series of related data sets.
 searchable select
 cvDefined no
-# VALIDATE GM[0-9]* 
+validate GSM[0-9]*
 
 # term geoSampleAccession
 # type typeOfTerm
@@ -7318,7 +7347,7 @@ label GEO series accession
 description GEO series accession number applied to all data sets in a related series.
 searchable select
 cvDefined no
-# VALIDATE GS[0-9]* 
+validate GSE[0-9]*
 
 # term geoSeriesAccession
 # type typeOfTerm
@@ -7331,31 +7360,35 @@ cvDefined no
 term grant
 type typeOfTerm
 label Principal Investigator on grant
-description Principle investigator holding the grant by which a set of experiments are financed.  The data sets associated with a single PI often investigate broad questions in a harmonious way.  Some grant PIs coordinate the work of several labs.
+description Principle investigator holding the grant by which a set of experiments are financed. Several labs led by other PI's may be under one grant.
 searchable select
 cvDefined yes
+valdate cv
 
 term insertLength
 type typeOfTerm
 label Insertion length
-description WHAT IS THIS???
+description The length of the insertion for paired reads for RNA-seq experiments.
 searchable no
-cvDefined no
-# WHAT IS THIS?
+cvDefined yes
+validate cv
+# This is Caltech only and we are not supposed to take variation on this variable any more (11/2/2010)
 
 term lab
 type typeOfTerm
 label Lab producing data
-description Lab details for a particular lab often producing a large number of experiments that investigate broad questions in a harmonious way.  Some labs work in concert with other labs under a single grant and coordinated by a single PI.
+description The name of the lab producing the data.  Often many labs are working together under one grant or one project.
 searchable select
 cvDefined yes
+validate cv
 
 term labExpId
 type typeOfTerm
-label Lab specific identifier
-description An ID provided by a lab during data submission that uniquely identifies an experiment to that lab.
+label Lab provided identifier
+description An ID provided by a lab that uniquely identifies an experiment (dataset) to that lab.
 searchable select
 cvDefined no
+validate none
 
 term labProtocolId
 type typeOfTerm
@@ -7363,6 +7396,7 @@ label Lab specific protocol ID
 description Some labs produce experiments under multiple defined protocols which may or may not be experiment altering, but which should be recorded all the same.
 searchable no
 cvDefined no
+validate none
 
 term labVersion
 type typeOfTerm
@@ -7370,6 +7404,7 @@ label Lab specific details
 description Free text field for labs to record miscellaneous details of their experiments and submitted data sets.
 searchable select
 cvDefined no
+validate none
 
 term level
 type typeOfTerm
@@ -7377,13 +7412,15 @@ label Gencode level
 description GENCODE level of annotation.  Level 1: validated.  Level 2: manually annotated.  Level 3: automated annotation.
 searchable no
 cvDefined no
+validate [1,2,3]
 
 term localization
 type typeOfTerm
-label Cell compartment
-description Localization within a cell compartment.
+label Cellular compartment
+description The cellular compartment from which RNA is extracted. Primarily used by the Transcriptome Project.
 searchable select
 cvDefined yes
+validate cv
 
 term mapAlgorithm
 type typeOfTerm
@@ -7391,6 +7428,8 @@ label Mapping algorithm
 description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
 searchable select
 cvDefined yes
+validate cv
+# This is Caltech only and possibly should be retired.
 
 term origAssembly
 type typeOfTerm
@@ -7398,6 +7437,7 @@ label Assembly originally mapped to
 description Some experiments are originally performed and mapped to an earlier assembly of the reference genome and then are remapped or lifted over to a more recent assembly.
 searchable select
 cvDefined no
+validate /hg18/ || /hg19/ || /mm9/
 # Could be cv.ra term
 
 term parentTable
@@ -7412,10 +7452,12 @@ hidden yes
 term phase
 type typeOfTerm
 label Cell phase
-description The phase in a cell cycle.  Some experiments attempt to isolate results at a single phase.
+description The phase in a cell cycle.  Some experiments attempt to isolate DNA from a single phase.
 searchable no
-cvDefined no
+cvDefined yes
+validate cv
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
+# We have talked about obsoleting this term, but thought there was more data like this coming
 
 # term project
 # type typeOfTerm
@@ -7431,6 +7473,8 @@ label Library Protocol
 description Lab specific protocol that may cover a number of steps in an experiment.  Most typically this identifies methods for building a DNA or RNA library.
 searchable select
 cvDefined yes
+validate cv
+# Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab
 
 term rank
 type typeOfTerm
@@ -7438,21 +7482,25 @@ label Rank of replicate
 description Experiments with multiple replicates may declare a preferred replicate for visualization.
 searchable no
 cvDefined no
-# UW used rank in hg18 only
+validate [0-9]
+# Was retired.  UW used rank in hg18 only, only for 1 occurance
 
 term readType
 type typeOfTerm
 label Paired/Single reads lengths
-description Length of single or paired-end reads in a high-throughput sequencing experiment.
+description Specific information about cDNA sequence reads including length, directionality and single versus paired read.
 searchable select
 cvDefined yes
+validate cv
+#description Length of single or paired-end reads in a high-throughput sequencing experiment.
 
 term replicate
 type typeOfTerm
 label Replicate number
-description Many experiments are replicated from distinct sample cultures for obvious reasons.  These separate experiments may be submitted to UCSC as numbered replicates.
+description The biological replicate of a particular experiment.
 searchable select
 cvDefined no
+validate [0-9]
 
 term restrictionEnzyme
 type typeOfTerm
@@ -7460,13 +7508,15 @@ label Restriction Enzyme used
 description The restriction enzyme used in an experiment, typically for DNA library preparation for a high-throughput sequencing experiment.
 searchable no
 cvDefined yes
+validate cv
 
 term rnaExtract
 type typeOfTerm
 label RNA Extract
-description Fraction of total cellular RNA selected for by an experiment.
+description Fraction of total cellular RNA selected for by an experiment. This includes size fractionation (long versus short) and feature frationation (PolyA-, PolyA+, rRNA-).
 searchable select
 cvDefined yes
+validate cv
 
 term seqPlatform
 type typeOfTerm
@@ -7474,20 +7524,23 @@ label Sequencing Platform
 description Sequencing platform used in high-throughput sequencing experiment.
 searchable select
 cvDefined yes
+validate cv
 
 term setType
 type typeOfTerm
 label Experiment or Input
-description ChIP-seq experiments often require 'input' or control (such as whole cell extract) results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
+description ChIP-seq experiments often require 'input' or control results to be subtracted from the experimental results.  This term clearly identifies which datasets are being used as the experiment and which are the input.
 searchable select
 cvDefined no
+validate /exp/ || /input/ || /control/
 
 term sex
 type typeOfTerm
-label Sex of organism
+label Sex of donor organism
 description The sex of a cell line or tissue sample affects the genome target of an experiment.
 searchable select
 cvDefined yes
+validate cv
 
 term size
 type typeOfTerm
@@ -7495,6 +7548,7 @@ label Mapability windowing size
 description The windowing size used, typically in a whole genome computational analysis and characterization dataset.
 searchable no
 cvDefined no
+validate integer
 # Used in hg19 mapability only
 
 term softwareVersion
@@ -7503,20 +7557,23 @@ label Lab specific informatics
 description A free-text field for a lab to declare the software and computational methods used in an experiment.
 searchable select
 cvDefined no
+validate none
 
 term strain
 type typeOfTerm
 label Strain of organism
-description The strain of an organism or tissue sample used in an experiment.
+description The strain of the doner organism used in an experiment.
 searchable select
 cvDefined yes
+validate cv
 
 term subId
 type typeOfTerm
-label Submission Id
-description The submission ID assigned by the UCSC Genome Browser at time of actual submission of data.
+label Submission ID
+description The submission ID assigned by the UCSC Genome Browser at time of actual data submission.
 searchable select
 cvDefined no
+validate [0-9]*
 
 term submittedDataVersion
 type typeOfTerm
@@ -7524,6 +7581,7 @@ label Version of data if resubmitted
 description When submitted data has been publicly released in the Genome Browser, but subsequently corrected and re-released, this data version will advance from the implicit V1.
 searchable no
 cvDefined no
+validate V[2-9]*
 
 term tableName
 type typeOfTerm
@@ -7541,6 +7599,7 @@ label Treatment
 description Treatment used as an experimental variable in a series of experiments.
 searchable select
 cvDefined yes
+validate cv
 
 # term type
 # type typeOfTerm
@@ -7549,6 +7608,7 @@ cvDefined yes
 # description Data format of a particular file or table.
 # cvDefined no
 # Used rarely in hg18 to distinguish wig and bedGraph
+#This is to be retired
 
 term uniqueness
 type typeOfTerm
@@ -7556,7 +7616,9 @@ label Number of mismatches tolerated
 description Mapping sequence tags to a reference genome will typically tolerate a number of mismatches which may be due to natural variability. This variable is used in generating mapability tracks.
 searchable no
 cvDefined no
+validate
 # Used in hg19 mapability only
+# It does not vary at all, it was on the possible retire list
 
 term view
 type typeOfTerm
@@ -7564,3 +7626,4 @@ label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable select
 cvDefined no
+#This should be CV defined

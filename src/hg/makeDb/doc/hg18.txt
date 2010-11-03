@@ -11364,6 +11364,11 @@ liftOver final.bed /gbdb/hg16/liftOver/hg16ToHg18.over.chain.gz hg18.bed unmappe
 hgLoadBed hg18 polyaDB hg18.bed
 # trackDb entry/html in human/hg18
 
+# redmine issue 19: wrong bed file format used on hgwdev
+# reload it with table from beta  (2010-10-28 - Chin)
+cd /cluster/data/hg18/bed/polyaDB
+hgLoadBed hg18 polyaDb hg18.beta.polyaDb.bed
+
 ############################################################################
 # Translate SNP Array data from hg17 (Heather August 2006)
 

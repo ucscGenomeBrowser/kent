@@ -16,7 +16,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -42,7 +41,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -68,7 +66,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -94,7 +91,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -120,7 +116,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -146,7 +141,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -172,7 +166,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM10847_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -198,7 +191,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM10847_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -224,7 +216,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM10847_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847NfkbIggrabAlnRep5
 project wgEncode
 replicate 5
 setType exp
@@ -250,7 +241,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM10847_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm10847Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -276,7 +266,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878CfosStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -302,7 +291,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878CfosStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -328,7 +316,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878CfosStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -354,7 +341,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -380,7 +366,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -406,7 +391,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -432,7 +416,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -458,7 +441,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -484,7 +466,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878JundStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -510,7 +491,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878JundStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -536,7 +516,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878MaxStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -562,7 +541,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878MaxStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -588,7 +566,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -614,7 +591,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -640,7 +616,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -666,7 +641,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbIggrabAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -692,7 +666,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -718,7 +691,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -744,7 +716,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -770,7 +741,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878NfkbTnfaStdAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -796,7 +766,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -822,7 +791,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -848,7 +816,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -874,7 +841,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -900,7 +866,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep5
 project wgEncode
 replicate 5
 setType exp
@@ -926,7 +891,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep6
 project wgEncode
 replicate 6
 setType exp
@@ -952,7 +916,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2IggmusAlnRep7
 project wgEncode
 replicate 7
 setType exp
@@ -978,7 +941,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1004,7 +966,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1030,7 +991,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Incomplete fastq due to Illumina pipeline version
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1056,7 +1016,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Incomplete fastq due to Illumina pipeline version
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Pol3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1082,7 +1041,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Rad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1108,7 +1066,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Rad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1131,7 +1088,6 @@ fileIndex wgEncodeSydhTfbsGm12878TbpIggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878TbpIggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878TbpIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1154,7 +1110,6 @@ fileIndex wgEncodeSydhTfbsGm12878TbpIggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878TbpIggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878TbpIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1198,7 +1153,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878TbpIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1220,7 +1174,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsGm12878TbpIggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878TbpIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1265,10 +1218,9 @@ dateUnrestricted 2010-10-07
 fileIndex wgEncodeSydhTfbsGm12878Tr4StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Tr4StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1291,10 +1243,9 @@ dateUnrestricted 2010-10-07
 fileIndex wgEncodeSydhTfbsGm12878Tr4StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878Tr4StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001), samples were 71% and 72% matching in the top 40% overlap analysis.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Tr4StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1317,7 +1268,6 @@ fileIndex wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878WhipIggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1340,7 +1290,6 @@ fileIndex wgEncodeSydhTfbsGm12878WhipIggmusAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878WhipIggmusAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878WhipIggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1384,7 +1333,6 @@ dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878WhipIggmusRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1406,7 +1354,6 @@ dateUnrestricted 2011-01-26
 fileName wgEncodeSydhTfbsGm12878WhipIggmusRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsGm12878WhipIggmusRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1451,10 +1398,9 @@ dateUnrestricted 2010-09-19
 fileIndex wgEncodeSydhTfbsGm12878Yy1StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Yy1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1477,10 +1423,9 @@ dateUnrestricted 2010-09-19
 fileIndex wgEncodeSydhTfbsGm12878Yy1StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878Yy1StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with Staph A, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Yy1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1502,8 +1447,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsGm12878Znf274UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -1525,8 +1469,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsGm12878Znf274UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -1547,7 +1490,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
@@ -1569,9 +1512,8 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1592,9 +1534,8 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsGm12878Znf274UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1615,7 +1556,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsGm12878Znf274UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -1642,7 +1583,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Zzz3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1668,7 +1608,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12878Zzz3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1694,7 +1633,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1720,7 +1658,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -1746,7 +1683,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -1772,7 +1708,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -1798,7 +1733,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1824,7 +1758,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1850,7 +1783,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -1876,7 +1808,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -1902,7 +1833,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -1928,7 +1858,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -1954,7 +1883,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -1980,7 +1908,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep5
 project wgEncode
 replicate 5
 setType exp
@@ -2006,7 +1933,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM12891_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12891Pol2IggmusAlnRep6
 project wgEncode
 replicate 6
 setType exp
@@ -2032,7 +1958,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2058,7 +1983,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2084,7 +2008,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2110,7 +2033,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2136,7 +2058,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2162,7 +2083,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2188,7 +2108,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -2214,7 +2133,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12892_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2240,7 +2158,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12892_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2266,7 +2183,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12892_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm12892Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -2292,7 +2208,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2318,7 +2233,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2344,7 +2258,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2370,7 +2283,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2396,7 +2308,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2422,7 +2333,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2448,7 +2358,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -2474,7 +2383,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -2500,7 +2408,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510NfkbIggrabAlnRep5
 project wgEncode
 replicate 5
 setType exp
@@ -2526,7 +2433,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2552,7 +2458,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2578,7 +2483,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM15510_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm15510Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -2604,7 +2508,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2630,7 +2533,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2656,7 +2558,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2682,7 +2583,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2708,7 +2608,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2734,7 +2633,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2760,7 +2658,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -2786,7 +2683,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -2812,7 +2708,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18505_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505NfkbIggrabAlnRep5
 project wgEncode
 replicate 5
 setType exp
@@ -2838,7 +2733,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -2864,7 +2758,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -2890,7 +2783,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -2916,7 +2808,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM18505_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18505Pol2IggmusAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -2942,7 +2833,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -2968,7 +2858,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -2994,7 +2883,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526InputIggmusAlnRep3
 project wgEncode
 replicate 3
 setType input
@@ -3020,7 +2908,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3046,7 +2933,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -3072,7 +2958,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18526_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3098,7 +2983,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18526_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3124,7 +3008,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18526_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3150,7 +3033,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3175,7 +3057,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3201,7 +3082,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with GM12878_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18526Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3227,7 +3107,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3253,7 +3132,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3278,7 +3156,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -3304,7 +3181,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3329,7 +3205,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3355,7 +3230,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM18951_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3381,7 +3255,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM18951_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951NfkbIggrabAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -3407,7 +3280,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3432,7 +3304,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3458,7 +3329,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3484,7 +3354,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm18951Pol2IggmusAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -3510,7 +3379,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3535,7 +3403,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -3561,7 +3428,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3586,7 +3452,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -3612,7 +3477,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19099_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3637,7 +3501,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19099_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3663,7 +3526,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19099_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3689,7 +3551,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, llumina 2.0, low confidence sequences excluded.  Data paired with GM19099_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3714,7 +3575,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, llumina 2.0, low confidence sequences excluded.  Data paired with GM19099_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3740,7 +3600,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, llumina 2.0, low confidence sequences excluded.  Data paired with GM19099_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19099Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3766,7 +3625,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3791,7 +3649,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -3817,7 +3674,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -3842,7 +3698,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193InputIggrabAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -3868,7 +3723,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19193_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3894,7 +3748,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19193_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3920,7 +3773,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with GM19193_IgG_Control
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193NfkbIggrabAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -3946,7 +3798,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -3972,7 +3823,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -3998,7 +3848,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -4024,7 +3873,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with GM19193_IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsGm19193Pol2IggmusAlnRep4
 project wgEncode
 replicate 4
 setType exp
@@ -4046,8 +3894,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsH1hescInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsH1hescInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsH1hescInputUcdAln
+lab UCD
 project wgEncode
 setType input
 subId 1176
@@ -4067,8 +3914,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsH1hescInputUcdRawSignal
+lab UCD
 project wgEncode
 setType input
 subId 1176
@@ -4088,7 +3934,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -4112,7 +3958,6 @@ fileIndex wgEncodeSydhTfbsH1hescMaxUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsH1hescMaxUcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4135,7 +3980,6 @@ fileIndex wgEncodeSydhTfbsH1hescMaxUcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsH1hescMaxUcdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsH1hescMaxUcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4179,7 +4023,6 @@ dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsH1hescMaxUcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4201,7 +4044,6 @@ dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsH1hescMaxUcdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsH1hescMaxUcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4245,8 +4087,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsH1hescSuz12UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -4268,8 +4109,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsH1hescSuz12UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -4290,7 +4130,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4312,9 +4152,8 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
-parentTable wgEncodeSydhTfbsH1hescSuz12UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4335,9 +4174,8 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A
-parentTable wgEncodeSydhTfbsH1hescSuz12UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4358,7 +4196,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsH1hescSuz12UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -4382,10 +4220,9 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHct116InputUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHct116InputUcdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -4408,10 +4245,9 @@ dateUnrestricted 2010-02-15
 fileIndex wgEncodeSydhTfbsHct116Pol2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHct116Pol2UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4434,10 +4270,9 @@ dateUnrestricted 2010-02-15
 fileIndex wgEncodeSydhTfbsHct116Pol2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHct116Pol2UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHct116Pol2UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4460,10 +4295,9 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHct116Tcf4UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4486,10 +4320,9 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHct116Tcf4UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4515,7 +4348,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHek293bInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -4541,7 +4373,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHek293bPol2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4567,7 +4398,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHek293bPol2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4593,7 +4423,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHek293bPol2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -4616,10 +4445,9 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4642,10 +4470,9 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ap2alphaStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4668,10 +4495,9 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4694,10 +4520,9 @@ dateUnrestricted 2010-06-23
 fileIndex wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ap2gammaStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4723,7 +4548,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4749,7 +4573,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4775,7 +4598,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Baf155IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -4801,7 +4623,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4827,7 +4648,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4853,7 +4673,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Baf170IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -4879,7 +4698,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Bdp1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4905,7 +4723,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Bdp1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4931,7 +4748,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brf1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -4957,7 +4773,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brf1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -4983,7 +4798,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brf2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5009,7 +4823,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brf2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5035,7 +4848,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5061,7 +4873,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5087,7 +4898,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Brg1IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -5113,7 +4923,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3CfosStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5139,7 +4948,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3CfosStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5165,7 +4973,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3CjunIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5191,7 +4998,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3CjunIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5217,7 +5023,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3CmycStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5243,7 +5048,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3CmycStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5266,10 +5070,9 @@ dateUnrestricted 2010-10-08
 fileIndex wgEncodeSydhTfbsHelas3E2f1StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3E2f1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5292,10 +5095,9 @@ dateUnrestricted 2010-10-08
 fileIndex wgEncodeSydhTfbsHelas3E2f1StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f1StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to E2F1, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3E2f1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5318,10 +5120,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeSydhTfbsHelas3E2f4StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3E2f4StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5344,10 +5145,9 @@ dateUnrestricted 2010-06-29
 fileIndex wgEncodeSydhTfbsHelas3E2f4StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f4StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3E2f4StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5370,10 +5170,9 @@ dateUnrestricted 2010-07-20
 fileIndex wgEncodeSydhTfbsHelas3E2f6StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3E2f6StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5396,10 +5195,9 @@ dateUnrestricted 2010-07-20
 fileIndex wgEncodeSydhTfbsHelas3E2f6StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3E2f6StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3E2f6StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5421,8 +5219,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3Elk4UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -5444,8 +5241,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3Elk4UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -5466,7 +5262,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5488,8 +5284,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3Elk4UcdRawSignalRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -5510,8 +5305,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3Elk4UcdRawSignalRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -5532,7 +5326,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Elk4UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -5556,10 +5350,9 @@ dateUnrestricted 2011-03-14
 fileIndex wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5582,10 +5375,9 @@ dateUnrestricted 2011-03-14
 fileIndex wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, HeLa cells stably expressed a tagged HA-E2F1 were fragmented using a Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Hae2f1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5611,7 +5403,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -5637,7 +5428,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -5663,7 +5453,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Ini1IggmusAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -5689,7 +5478,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputIfng30StdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5715,7 +5503,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5741,7 +5528,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -5767,7 +5553,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputIggrabAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5793,7 +5578,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5819,7 +5603,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputLargefragmentAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -5845,7 +5628,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputMnaseAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5871,7 +5653,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputMnaseAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -5897,7 +5678,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5923,7 +5703,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -5949,7 +5728,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputNakeddnaAlnRep3
 project wgEncode
 replicate 3
 setType input
@@ -5975,7 +5753,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -5997,8 +5774,7 @@ dateUnrestricted 2011-01-27
 fileIndex wgEncodeSydhTfbsHelas3InputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsHelas3InputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3InputUcdAln
+lab UCD
 project wgEncode
 setType input
 subId 1140
@@ -6018,8 +5794,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3InputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3InputUcdRawSignal
+lab UCD
 project wgEncode
 setType input
 subId 1140
@@ -6039,7 +5814,7 @@ dateSubmitted 2010-04-27
 dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3InputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -6063,7 +5838,6 @@ fileIndex wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6086,7 +5860,6 @@ fileIndex wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Irf3IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6130,7 +5903,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Irf3IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6152,7 +5924,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Irf3IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Irf3IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6200,7 +5971,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3JundIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6226,7 +5996,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3JundIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6252,7 +6021,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3MaxStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6278,7 +6046,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3MaxStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6304,7 +6071,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data set paired with HeLa-S3_MouseIgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6330,7 +6096,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data set paired with HeLa-S3_MouseIgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Nrf1IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6356,7 +6121,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Pol2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6382,7 +6146,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Pol2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6408,7 +6171,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Pol2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -6431,7 +6193,6 @@ fileIndex wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6454,7 +6215,6 @@ fileIndex wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6498,7 +6258,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6520,7 +6279,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3Rad21IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Rad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6568,7 +6326,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Rpc155StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6594,7 +6351,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Rpc155StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6620,7 +6376,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6646,7 +6401,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Stat1Ifng30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6669,7 +6423,6 @@ fileIndex wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6692,7 +6445,6 @@ fileIndex wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Stat3IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6736,7 +6488,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Stat3IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6758,7 +6509,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHelas3Stat3IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3Stat3IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6803,7 +6553,6 @@ fileIndex wgEncodeSydhTfbsHelas3TbpIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3TbpIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3TbpIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6826,7 +6575,6 @@ fileIndex wgEncodeSydhTfbsHelas3TbpIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3TbpIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3TbpIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6870,7 +6618,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3TbpIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6892,7 +6639,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHelas3TbpIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHelas3TbpIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6940,7 +6686,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -6966,7 +6711,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Tf3c110StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -6989,10 +6733,9 @@ dateUnrestricted 2010-06-24
 fileIndex wgEncodeSydhTfbsHelas3Tr4StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Tr4StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7015,10 +6758,9 @@ dateUnrestricted 2010-06-24
 fileIndex wgEncodeSydhTfbsHelas3Tr4StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHelas3Tr4StdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHelas3Tr4StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7039,8 +6781,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -7061,8 +6802,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -7083,7 +6823,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -7105,9 +6845,8 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
-parentTable wgEncodeSydhTfbsHelas3Znf274UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7128,9 +6867,8 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  StaphA
-parentTable wgEncodeSydhTfbsHelas3Znf274UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7151,7 +6889,7 @@ dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -7174,7 +6912,6 @@ dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1.bam
 grant Snyder
 lab Harvard(Weissman)
-parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7196,7 +6933,6 @@ dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2.bam
 grant Snyder
 lab Harvard(Weissman)
-parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7241,7 +6977,6 @@ fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard(Weissman)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
-parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7264,7 +6999,6 @@ fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard(Weissman)
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunopreciptation:  Protein A Sepharose
-parentTable wgEncodeSydhTfbsHelas3Zzz3IggyaleRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7309,10 +7043,9 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2bInputUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2bInputUcdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7335,10 +7068,9 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2bTr4UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7361,10 +7093,9 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2bTr4UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7390,7 +7121,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2CebpbForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7416,7 +7146,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2CebpbForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7439,7 +7168,6 @@ fileIndex wgEncodeSydhTfbsHepg2CjunIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2CjunIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2CjunIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7462,7 +7190,6 @@ fileIndex wgEncodeSydhTfbsHepg2CjunIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2CjunIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2CjunIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7506,7 +7233,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2CjunIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7528,7 +7254,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2CjunIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2CjunIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7576,7 +7301,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2ErraForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7602,7 +7326,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2ErraForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7628,7 +7351,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Grp20ForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7654,7 +7376,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Grp20ForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7680,7 +7401,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Hnf4aForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7706,7 +7426,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Hnf4aForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7732,7 +7451,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Hsf1ForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -7758,7 +7476,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Hsf1ForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -7784,7 +7501,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7810,7 +7526,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -7833,7 +7548,6 @@ fileIndex wgEncodeSydhTfbsHepg2InputIggrabAln.bam.bai
 fileName wgEncodeSydhTfbsHepg2InputIggrabAln.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2InputIggrabAln
 project wgEncode
 setType input
 subId 1136
@@ -7854,7 +7568,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2InputIggrabRawData.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2InputIggrabRawSignal
 project wgEncode
 setType input
 subId 1136
@@ -7901,7 +7614,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputInslnStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7927,7 +7639,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputInslnStdAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -7953,7 +7664,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputPravastStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -7979,7 +7689,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputPravastStdAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -8005,7 +7714,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2InputPravastStdAlnRep3
 project wgEncode
 replicate 3
 setType input
@@ -8028,7 +7736,6 @@ fileIndex wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8051,7 +7758,6 @@ fileIndex wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Irf3IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8095,7 +7801,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Irf3IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8117,7 +7822,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Irf3IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Irf3IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8162,7 +7866,6 @@ fileIndex wgEncodeSydhTfbsHepg2JundIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2JundIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2JundIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8185,7 +7888,6 @@ fileIndex wgEncodeSydhTfbsHepg2JundIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2JundIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2JundIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8229,7 +7931,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2JundIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8251,7 +7952,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2JundIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2JundIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8296,7 +7996,6 @@ fileIndex wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8319,7 +8018,6 @@ fileIndex wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Nrf1IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8363,7 +8061,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Nrf1IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8385,7 +8082,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Nrf1IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Nrf1IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8433,7 +8129,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pgc1aForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8459,7 +8154,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pgc1aForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8485,7 +8179,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pol2ForsklnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8511,7 +8204,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Forskolin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pol2ForsklnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8534,7 +8226,6 @@ fileIndex wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8557,7 +8248,6 @@ fileIndex wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Pol2IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8601,7 +8291,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Pol2IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8623,7 +8312,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2Pol2IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Pol2IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8671,7 +8359,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8697,7 +8384,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8723,7 +8409,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Pol2PravastStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8746,7 +8431,6 @@ fileIndex wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8769,7 +8453,6 @@ fileIndex wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Rad21IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8813,7 +8496,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Rad21IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8835,7 +8517,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Rad21IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Rad21IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8883,7 +8564,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8909,7 +8589,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8935,7 +8614,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded.  Data paired with HepG2_Insulin_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp1InslnStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -8961,7 +8639,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -8987,7 +8664,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9013,7 +8689,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp1PravastStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9039,7 +8714,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9065,7 +8739,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9091,7 +8764,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHepg2Srebp2PravastStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9114,7 +8786,6 @@ fileIndex wgEncodeSydhTfbsHepg2TbpIggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2TbpIggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2TbpIggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9137,7 +8808,6 @@ fileIndex wgEncodeSydhTfbsHepg2TbpIggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2TbpIggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2TbpIggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9181,7 +8851,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2TbpIggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9203,7 +8872,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsHepg2TbpIggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2TbpIggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9248,7 +8916,6 @@ fileIndex wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9271,7 +8938,6 @@ fileIndex wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Usf2IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9315,7 +8981,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Usf2IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9337,7 +9002,6 @@ dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsHepg2Usf2IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsHepg2Usf2IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9381,8 +9045,7 @@ dateUnrestricted 2011-02-10
 fileIndex wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHepg2Znf274UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -9404,8 +9067,7 @@ dateUnrestricted 2011-02-10
 fileIndex wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHepg2Znf274UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -9426,7 +9088,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0.  Replicate overlap below cutoff, but submitted because there are very few biologically real targets and all the targets are in heterochromatic regions.
 project wgEncode
 setType exp
@@ -9448,9 +9110,8 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9471,9 +9132,8 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsHepg2Znf274UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9494,7 +9154,7 @@ dateSubmitted 2010-05-10
 dateUnrestricted 2011-02-10
 fileName wgEncodeSydhTfbsHepg2Znf274UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -9521,7 +9181,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecCjunStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9547,7 +9206,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecCjunStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9569,8 +9227,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHuvecGata2UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -9592,8 +9249,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsHuvecGata2UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHuvecGata2UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -9614,7 +9270,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -9636,9 +9292,8 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9659,9 +9314,8 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA
-parentTable wgEncodeSydhTfbsHuvecGata2UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9682,7 +9336,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecGata2UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -9709,7 +9363,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecInputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -9735,7 +9388,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecInputStdAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -9757,8 +9409,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsHuvecInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHuvecInputUcdAln
+lab UCD
 project wgEncode
 setType input
 subId 1207
@@ -9779,8 +9430,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsHuvecInputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsHuvecInputUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHuvecInputUcdAlnRep1
+lab UCD
 project wgEncode
 setType input
 subId 1207
@@ -9800,8 +9450,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsHuvecInputUcdRawSignal
+lab UCD
 project wgEncode
 setType input
 subId 1207
@@ -9821,7 +9470,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsHuvecInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -9848,7 +9497,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecMaxStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9874,7 +9522,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecMaxStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9900,7 +9547,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecPol2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -9926,7 +9572,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecPol2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -9952,7 +9597,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsHuvecPol2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -9978,7 +9622,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Atf3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10004,7 +9647,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Atf3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10030,7 +9672,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Bdp1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10056,7 +9697,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Bdp1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10082,7 +9722,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Bdp1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -10105,10 +9744,9 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bE2f4UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10131,10 +9769,9 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA (replicate 1) or protein A agarose beads (replicate 2), PeakSeq 1.0 (fdr 0.001) Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bE2f4UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10157,10 +9794,9 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001) Lane A is Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bE2f6UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10183,10 +9819,9 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bE2f6UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bE2f6UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10209,10 +9844,9 @@ dateUnrestricted 2009-11-27
 fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bGata1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10235,10 +9869,9 @@ dateUnrestricted 2009-11-27
 fileIndex wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bGata1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bGata1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10261,10 +9894,9 @@ dateUnrestricted 2010-06-02
 fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bGata2UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10287,10 +9919,9 @@ dateUnrestricted 2010-06-02
 fileIndex wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bGata2UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bGata2UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10313,10 +9944,9 @@ dateUnrestricted 2010-03-11
 fileIndex wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bInputUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bInputUcdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -10342,7 +9972,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brf1StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10368,7 +9997,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brf1StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10394,7 +10022,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brf1StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -10420,7 +10047,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brf2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10446,7 +10072,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brf2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10472,7 +10097,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brf2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -10498,7 +10122,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brg1IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10524,7 +10147,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Brg1IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10547,10 +10169,9 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10573,10 +10194,9 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using MNase and used proteinA agarose beads for ChIPs, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bSetdb1MnasedUcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10599,10 +10219,9 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bSetdb1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10625,10 +10244,9 @@ dateUnrestricted 2010-03-15
 fileIndex wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bSetdb1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10651,10 +10269,9 @@ dateUnrestricted 2010-03-22
 fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bTr4UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10677,10 +10294,9 @@ dateUnrestricted 2010-03-22
 fileIndex wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bTr4UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein A agarose beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bTr4UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10703,10 +10319,9 @@ dateUnrestricted 2010-06-03
 fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bYy1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10729,10 +10344,9 @@ dateUnrestricted 2010-06-03
 fileIndex wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bYy1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with protein G magnetic beads, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bYy1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10755,10 +10369,9 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bZnf263UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10781,10 +10394,9 @@ dateUnrestricted 2009-11-25
 fileIndex wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf263UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bZnf263UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10807,10 +10419,9 @@ dateUnrestricted 2010-10-04
 fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bZnf274UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10833,10 +10444,9 @@ dateUnrestricted 2010-10-04
 fileIndex wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562bZnf274UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562bZnf274UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10859,7 +10469,6 @@ fileIndex wgEncodeSydhTfbsK562Ccnt2StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Ccnt2StdAlnRep1.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Ccnt2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10882,7 +10491,6 @@ fileIndex wgEncodeSydhTfbsK562Ccnt2StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Ccnt2StdAlnRep2.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Ccnt2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10926,7 +10534,6 @@ dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Ccnt2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -10948,7 +10555,6 @@ dateUnrestricted 2011-01-28
 fileName wgEncodeSydhTfbsK562Ccnt2StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Ccnt2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -10996,7 +10602,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CfosStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11022,7 +10627,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CfosStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11048,7 +10652,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CfosStdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -11074,7 +10677,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11100,7 +10702,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunIfna6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11126,7 +10727,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunIfng30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11152,7 +10752,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunIfng30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11178,7 +10777,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11204,7 +10802,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunIfng6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11230,7 +10827,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11256,7 +10852,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CjunStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11282,7 +10877,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycIfna30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11308,7 +10902,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycIfna30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11334,7 +10927,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11360,7 +10952,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycIfna6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11382,7 +10973,6 @@ dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11404,7 +10994,6 @@ dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11448,7 +11037,6 @@ dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CmycIfng30StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11470,7 +11058,6 @@ dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562CmycIfng30StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11518,7 +11105,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11544,7 +11130,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycIfng6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11570,7 +11155,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11596,7 +11180,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562CmycStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11622,7 +11205,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Gtf2bStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11648,7 +11230,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Gtf2bStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11694,7 +11275,6 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Gtf2bStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11717,7 +11297,6 @@ dateUnrestricted 2010-10-11
 fileName wgEncodeSydhTfbsK562Gtf2bStdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Gtf2bStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11763,7 +11342,6 @@ fileIndex wgEncodeSydhTfbsK562Hmgn3StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Hmgn3StdAlnRep1.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Hmgn3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11786,7 +11364,6 @@ fileIndex wgEncodeSydhTfbsK562Hmgn3StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Hmgn3StdAlnRep2.bam
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Hmgn3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11830,7 +11407,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdRawDataRep1.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Hmgn3StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11852,7 +11428,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Hmgn3StdRawDataRep2.fastq.gz
 grant Snyder
 lab Harvard
-parentTable wgEncodeSydhTfbsK562Hmgn3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11900,7 +11475,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Ini1IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -11926,7 +11500,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded. Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Ini1IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -11952,7 +11525,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputIfna30StdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -11978,7 +11550,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputIfna6hStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -12004,7 +11575,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputIfng30StdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -12030,7 +11600,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputIfng6hStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -12056,7 +11625,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputIggmusAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -12082,7 +11650,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputIggmusAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -12105,7 +11672,6 @@ fileIndex wgEncodeSydhTfbsK562InputIggrabAln.bam.bai
 fileName wgEncodeSydhTfbsK562InputIggrabAln.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562InputIggrabAln
 project wgEncode
 setType input
 subId 1132
@@ -12126,7 +11692,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562InputIggrabRawData.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562InputIggrabRawSignal
 project wgEncode
 setType input
 subId 1132
@@ -12173,7 +11738,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, V2
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -12199,7 +11763,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded,V2
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562InputStdAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -12222,7 +11785,6 @@ fileIndex wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12245,7 +11807,6 @@ fileIndex wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Irf1Ifna30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12289,7 +11850,6 @@ dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifna30StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Irf1Ifna30StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12312,7 +11872,6 @@ fileName wgEncodeSydhTfbsK562Irf1Ifna30StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion low-quality reads excluded
-parentTable wgEncodeSydhTfbsK562Irf1Ifna30StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12357,7 +11916,6 @@ fileIndex wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12380,7 +11938,6 @@ fileIndex wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Irf1Ifng6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12424,7 +11981,6 @@ dateUnrestricted 2011-01-29
 fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Irf1Ifng6hStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12447,7 +12003,6 @@ fileName wgEncodeSydhTfbsK562Irf1Ifng6hStdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion low quality reads excluded
-parentTable wgEncodeSydhTfbsK562Irf1Ifng6hStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12495,7 +12050,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562JundStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12521,7 +12075,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562JundStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12542,8 +12095,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsK562Kap1UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -12564,8 +12116,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsK562Kap1UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -12586,7 +12137,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12608,9 +12159,8 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
-parentTable wgEncodeSydhTfbsK562Kap1UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12631,9 +12181,8 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  StaphA.
-parentTable wgEncodeSydhTfbsK562Kap1UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12654,7 +12203,7 @@ dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -12681,7 +12230,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562MaxStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12707,7 +12255,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562MaxStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12733,7 +12280,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562NelfeStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12759,7 +12305,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562NelfeStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12785,7 +12330,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Nfe2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12811,7 +12355,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Nfe2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12837,7 +12380,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562NfyaStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12863,7 +12405,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562NfyaStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12889,7 +12430,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562NfybStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12915,7 +12455,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562NfybStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -12938,7 +12477,6 @@ fileIndex wgEncodeSydhTfbsK562Nrf1IggrabAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Nrf1IggrabAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Nrf1IggrabAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -12961,7 +12499,6 @@ fileIndex wgEncodeSydhTfbsK562Nrf1IggrabAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Nrf1IggrabAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Nrf1IggrabAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13005,7 +12542,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Nrf1IggrabRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13027,7 +12563,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Nrf1IggrabRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Nrf1IggrabRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13075,7 +12610,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13101,7 +12635,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifna30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13127,7 +12660,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13153,7 +12685,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifna6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13179,7 +12710,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifng30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13205,7 +12735,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifng30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13231,7 +12760,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13257,7 +12785,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2Ifng6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13283,7 +12810,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2IggmusAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13309,7 +12835,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Data paired with IgG_Control.
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2IggmusAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13332,7 +12857,6 @@ fileIndex wgEncodeSydhTfbsK562Pol2s2StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Pol2s2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13355,7 +12879,6 @@ fileIndex wgEncodeSydhTfbsK562Pol2s2StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Pol2s2StdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Pol2s2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13400,7 +12923,6 @@ fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Early pipeline version.  Low quality reads excluded.
-parentTable wgEncodeSydhTfbsK562Pol2s2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13423,7 +12945,6 @@ fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Early pipeline version.  Low quality reads excluded.
-parentTable wgEncodeSydhTfbsK562Pol2s2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13471,7 +12992,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13497,7 +13017,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13523,7 +13042,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol3StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13549,7 +13067,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Pol3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13575,7 +13092,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Rad21StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13601,7 +13117,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Rad21StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13627,7 +13142,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Rpc155StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13653,7 +13167,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Rpc155StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13679,7 +13192,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Sirt6StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13705,7 +13217,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, fragmented with both a probe sonicator and a Misonix sonicator, and precipitated with protein A sepharose beads
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Sirt6StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13731,7 +13242,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13757,7 +13267,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifna30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13783,7 +13292,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13809,7 +13317,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifna6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13835,7 +13342,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifng30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13861,7 +13367,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifng30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13887,7 +13392,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifng6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13913,7 +13417,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat1Ifng6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13939,7 +13442,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -13965,7 +13467,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat2Ifna30StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -13991,7 +13492,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14017,7 +13517,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Stat2Ifna6hStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14043,7 +13542,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Tf3c110StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14069,7 +13567,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Tf3c110StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14095,7 +13592,6 @@ grant Snyder
 lab Harvard
 labVersion remapped from hg18, Illumina 2.0, low confidence sequences excluded
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Tf3c110StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -14118,7 +13614,6 @@ fileIndex wgEncodeSydhTfbsK562Usf2StdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsK562Usf2StdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Usf2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14141,7 +13636,6 @@ fileIndex wgEncodeSydhTfbsK562Usf2StdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsK562Usf2StdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Usf2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14185,7 +13679,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Usf2StdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14207,7 +13700,6 @@ dateUnrestricted 2011-01-27
 fileName wgEncodeSydhTfbsK562Usf2StdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsK562Usf2StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14255,7 +13747,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Xrcc4StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14281,7 +13772,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18, Contains incomplete fastq files
 origAssembly hg18
-parentTable wgEncodeSydhTfbsK562Xrcc4StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14304,10 +13794,9 @@ dateUnrestricted 2010-07-28
 fileIndex wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14330,10 +13819,9 @@ dateUnrestricted 2010-07-28
 fileIndex wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, MCF-7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, precipitated with StaphA and an antibody to the  HA tag, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsMcf7Hae2f1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14356,10 +13844,9 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsMcf7InputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsMcf7InputUcdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -14382,10 +13869,9 @@ dateUnrestricted 2010-10-15
 fileIndex wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsMcf7InputUcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, MCF7 cells stably expressed a tagged HA-E2F1 were fragmented using Bioruptor, crosslinks were reversed at 67*C overnight and Input was Qiagen purified, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsMcf7InputUcdAlnRep2
 project wgEncode
 replicate 2
 setType input
@@ -14407,7 +13893,6 @@ dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsNb4CmycStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14429,7 +13914,6 @@ dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsNb4CmycStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14473,7 +13957,6 @@ dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsNb4CmycStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14495,7 +13978,6 @@ dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsNb4CmycStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14543,7 +14025,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNb4InputStdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -14565,7 +14046,6 @@ dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdAlnRep1.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsNb4MaxStdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14587,7 +14067,6 @@ dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdAlnRep2.bam
 grant Snyder
 lab Stanford
-parentTable wgEncodeSydhTfbsNb4MaxStdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14632,7 +14111,6 @@ fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep1.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
-parentTable wgEncodeSydhTfbsNb4MaxStdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14655,7 +14133,6 @@ fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep2.fastq.gz
 grant Snyder
 lab Stanford
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  ChIP
-parentTable wgEncodeSydhTfbsNb4MaxStdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14703,7 +14180,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNb4Pol2StdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14729,7 +14205,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNb4Pol2StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14755,7 +14230,6 @@ grant Snyder
 lab Stanford
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNb4Pol2StdAlnRep3
 project wgEncode
 replicate 3
 setType exp
@@ -14778,10 +14252,9 @@ dateUnrestricted 2010-03-08
 fileIndex wgEncodeSydhTfbsNt2d1InputUcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsNt2d1InputUcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNt2d1InputUcdAlnRep1
 project wgEncode
 replicate 1
 setType input
@@ -14804,10 +14277,9 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14830,10 +14302,9 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNt2d1Suz12UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14856,10 +14327,9 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep1
 project wgEncode
 replicate 1
 setType exp
@@ -14882,10 +14352,9 @@ dateUnrestricted 2010-03-05
 fileIndex wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion remapped from hg18, Fragmented using Bioruptor, precipitated with StaphA, PeakSeq 1.0 (fdr 0.001)
 origAssembly hg18
-parentTable wgEncodeSydhTfbsNt2d1Yy1UcdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -14907,8 +14376,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsRajiInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsRajiInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsRajiInputUcdAln
+lab UCD
 project wgEncode
 setType input
 subId 1208
@@ -14928,8 +14396,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsRajiInputUcdRawSignal
+lab UCD
 project wgEncode
 setType input
 subId 1208
@@ -14949,7 +14416,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -14972,8 +14439,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsRajiPol2UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsRajiPol2UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -14995,8 +14461,7 @@ dateUnrestricted 2011-02-20
 fileIndex wgEncodeSydhTfbsRajiPol2UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsRajiPol2UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsRajiPol2UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -15017,7 +14482,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15039,8 +14504,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsRajiPol2UcdRawSignalRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -15061,8 +14525,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsRajiPol2UcdRawSignalRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -15083,7 +14546,7 @@ dateSubmitted 2010-05-20
 dateUnrestricted 2011-02-20
 fileName wgEncodeSydhTfbsRajiPol2UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15106,8 +14569,7 @@ dateUnrestricted 2011-03-11
 fileIndex wgEncodeSydhTfbsU2osInputUcdAln.bam.bai
 fileName wgEncodeSydhTfbsU2osInputUcdAln.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsU2osInputUcdAln
+lab UCD
 project wgEncode
 setType input
 subId 1355
@@ -15127,8 +14589,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osInputUcdRawData.fastq.gz
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsU2osInputUcdRawSignal
+lab UCD
 project wgEncode
 setType input
 subId 1355
@@ -15148,7 +14609,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osInputUcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType input
@@ -15171,8 +14632,7 @@ dateUnrestricted 2011-03-11
 fileIndex wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1.bam.bai
 fileName wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsU2osSetdb1UcdAlnRep1
+lab UCD
 project wgEncode
 replicate 1
 setType exp
@@ -15194,8 +14654,7 @@ dateUnrestricted 2011-03-11
 fileIndex wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2.bam.bai
 fileName wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2.bam
 grant Snyder
-lab UCD(Farnham)
-parentTable wgEncodeSydhTfbsU2osSetdb1UcdAlnRep2
+lab UCD
 project wgEncode
 replicate 2
 setType exp
@@ -15216,7 +14675,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdPk.narrowPeak.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp
@@ -15238,9 +14697,8 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdRawDataRep1.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A.
-parentTable wgEncodeSydhTfbsU2osSetdb1UcdRawSignalRep1
 project wgEncode
 replicate 1
 setType exp
@@ -15261,9 +14719,8 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdRawDataRep2.fastq.gz
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion Method of Chromatin Fragmentation:  Sonication.  Method of Immunoprecipitation:  Staph A.
-parentTable wgEncodeSydhTfbsU2osSetdb1UcdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -15284,7 +14741,7 @@ dateSubmitted 2010-06-11
 dateUnrestricted 2011-03-11
 fileName wgEncodeSydhTfbsU2osSetdb1UcdSig.bigWig
 grant Snyder
-lab UCD(Farnham)
+lab UCD
 labVersion PeakSeq1.0
 project wgEncode
 setType exp

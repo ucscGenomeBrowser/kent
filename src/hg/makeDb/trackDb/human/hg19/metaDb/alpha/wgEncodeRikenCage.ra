@@ -259,7 +259,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageGm12878CytosolLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -523,7 +522,6 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 origAssembly hg18
-parentTable wgEncodeRikenCageGm12878NucleolusTotalRawSignal
 project wgEncode
 rnaExtract total
 subId 2433
@@ -874,7 +872,6 @@ grant Gingeras
 lab RIKEN
 localization cell
 origAssembly hg18
-parentTable wgEncodeRikenCageH1hescCellLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -2061,7 +2058,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageHepg2CytosolLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -2325,7 +2321,6 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 origAssembly hg18
-parentTable wgEncodeRikenCageHepg2NucleolusTotalRawSignal
 project wgEncode
 rnaExtract total
 subId 2433
@@ -2408,7 +2403,6 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 origAssembly hg18
-parentTable wgEncodeRikenCageHepg2NucleusLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -2859,7 +2853,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageHuvecCytosolLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -3494,7 +3487,6 @@ grant Gingeras
 lab RIKEN
 localization chromatin
 origAssembly hg18
-parentTable wgEncodeRikenCageK562ChromatinTotalRawSignal
 project wgEncode
 rnaExtract total
 subId 2433
@@ -3578,7 +3570,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageK562CytosolLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -3598,7 +3589,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageK562CytosolLongnonpolyaRawSignal2
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -3822,7 +3812,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageK562CytosolPapRawSignal
 project wgEncode
 rnaExtract longPolyA
 subId 2433
@@ -3949,7 +3938,6 @@ grant Gingeras
 lab RIKEN
 localization nucleolus
 origAssembly hg18
-parentTable wgEncodeRikenCageK562NucleolusTotalRawSignal
 project wgEncode
 rnaExtract total
 subId 2433
@@ -4032,7 +4020,6 @@ grant Gingeras
 lab RIKEN
 localization nucleoplasm
 origAssembly hg18
-parentTable wgEncodeRikenCageK562NucleoplasmTotalRawSignal
 project wgEncode
 rnaExtract total
 subId 2433
@@ -4113,7 +4100,6 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 origAssembly hg18
-parentTable wgEncodeRikenCageK562NucleusLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -4133,7 +4119,6 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 origAssembly hg18
-parentTable wgEncodeRikenCageK562NucleusLongnonpolyaRawSignal2
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -4400,7 +4385,6 @@ grant Gingeras
 lab RIKEN
 localization polysome
 origAssembly hg18
-parentTable wgEncodeRikenCageK562PolysomeLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -4759,7 +4743,6 @@ grant Gingeras
 lab RIKEN
 localization cytosol
 origAssembly hg18
-parentTable wgEncodeRikenCageNhekCytosolLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -4934,7 +4917,6 @@ grant Gingeras
 lab RIKEN
 localization nucleus
 origAssembly hg18
-parentTable wgEncodeRikenCageNhekNucleusLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2433
@@ -5110,7 +5092,6 @@ grant Gingeras
 lab RIKEN
 localization cell
 origAssembly hg18
-parentTable wgEncodeRikenCageProstateCellLongnonpolyaRawSignal
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438
@@ -5130,7 +5111,6 @@ grant Gingeras
 lab RIKEN
 localization cell
 origAssembly hg18
-parentTable wgEncodeRikenCageProstateCellLongnonpolyaRawSignal2
 project wgEncode
 rnaExtract longNonPolyA
 subId 2438

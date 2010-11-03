@@ -11,7 +11,6 @@ fileIndex wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL111
-parentTable wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -33,7 +32,6 @@ fileIndex wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL112
-parentTable wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -95,7 +93,6 @@ fileIndex wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL84
-parentTable wgEncodeHaibMethylSeqBg02esHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -137,7 +134,6 @@ fileIndex wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL296
-parentTable wgEncodeHaibMethylSeqGm12878HpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -159,7 +155,6 @@ fileIndex wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL297
-parentTable wgEncodeHaibMethylSeqGm12878HpaAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -181,7 +176,6 @@ fileIndex wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL298
-parentTable wgEncodeHaibMethylSeqGm12878MspAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -203,7 +197,6 @@ fileIndex wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL299
-parentTable wgEncodeHaibMethylSeqGm12878MspAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -265,7 +258,6 @@ fileIndex wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL832
-parentTable wgEncodeHaibMethylSeqGm12891HpaAlnRep1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -287,7 +279,6 @@ fileIndex wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL833
-parentTable wgEncodeHaibMethylSeqGm12891HpaAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -309,7 +300,6 @@ fileIndex wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL828
-parentTable wgEncodeHaibMethylSeqGm12891MspAlnRep1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -331,7 +321,6 @@ fileIndex wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL829
-parentTable wgEncodeHaibMethylSeqGm12891MspAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -393,7 +382,6 @@ fileIndex wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL834
-parentTable wgEncodeHaibMethylSeqGm12892HpaAlnRep1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -415,7 +403,6 @@ fileIndex wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL835
-parentTable wgEncodeHaibMethylSeqGm12892HpaAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -437,7 +424,6 @@ fileIndex wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL830
-parentTable wgEncodeHaibMethylSeqGm12892MspAlnRep1
 project wgEncode
 protocol PCR1x
 replicate 1
@@ -459,7 +445,6 @@ fileIndex wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL831
-parentTable wgEncodeHaibMethylSeqGm12892MspAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -521,7 +506,6 @@ fileIndex wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL605
-parentTable wgEncodeHaibMethylSeqH1hescHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -543,7 +527,6 @@ fileIndex wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL659
-parentTable wgEncodeHaibMethylSeqH1hescHpaAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -565,7 +548,6 @@ fileIndex wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL604
-parentTable wgEncodeHaibMethylSeqH1hescMspAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -587,7 +569,6 @@ fileIndex wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL658
-parentTable wgEncodeHaibMethylSeqH1hescMspAlnRep2
 project wgEncode
 protocol PCR1x
 replicate 2
@@ -649,7 +630,6 @@ fileIndex wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL43
-parentTable wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -671,7 +651,6 @@ fileIndex wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL42
-parentTable wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -713,7 +692,6 @@ fileIndex wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL46
-parentTable wgEncodeHaibMethylSeqH9escmHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -755,7 +733,6 @@ fileIndex wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL86
-parentTable wgEncodeHaibMethylSeqH9esebdHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -797,7 +774,6 @@ fileIndex wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL44
-parentTable wgEncodeHaibMethylSeqH9esebHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -819,7 +795,6 @@ fileIndex wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL24
-parentTable wgEncodeHaibMethylSeqH9eseHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -861,7 +836,6 @@ fileIndex wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL26
-parentTable wgEncodeHaibMethylSeqH9esHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -903,7 +877,6 @@ fileIndex wgEncodeHaibMethylSeqHalHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL37
-parentTable wgEncodeHaibMethylSeqHalHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -945,7 +918,6 @@ fileIndex wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL8
-parentTable wgEncodeHaibMethylSeqHct116HpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -967,7 +939,6 @@ fileIndex wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL33
-parentTable wgEncodeHaibMethylSeqHct116HpaAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1009,7 +980,6 @@ fileIndex wgEncodeHaibMethylSeqHct116MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL10
-parentTable wgEncodeHaibMethylSeqHct116MspAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1031,7 +1001,6 @@ fileIndex wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL577
-parentTable wgEncodeHaibMethylSeqHelas3HpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1053,7 +1022,6 @@ fileIndex wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL603
-parentTable wgEncodeHaibMethylSeqHelas3HpaAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1075,7 +1043,6 @@ fileIndex wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL574
-parentTable wgEncodeHaibMethylSeqHelas3MspAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1097,7 +1064,6 @@ fileIndex wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL602
-parentTable wgEncodeHaibMethylSeqHelas3MspAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1159,7 +1125,6 @@ fileIndex wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL578
-parentTable wgEncodeHaibMethylSeqHepg2HpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1181,7 +1146,6 @@ fileIndex wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL579
-parentTable wgEncodeHaibMethylSeqHepg2HpaAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1203,7 +1167,6 @@ fileIndex wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL575
-parentTable wgEncodeHaibMethylSeqHepg2MspAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1225,7 +1188,6 @@ fileIndex wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL576
-parentTable wgEncodeHaibMethylSeqHepg2MspAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1287,7 +1249,6 @@ fileIndex wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL113
-parentTable wgEncodeHaibMethylSeqHfl11wHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1329,7 +1290,6 @@ fileIndex wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL114
-parentTable wgEncodeHaibMethylSeqHfl24wHpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1371,7 +1331,6 @@ fileIndex wgEncodeHaibMethylSeqK562HpaAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL229
-parentTable wgEncodeHaibMethylSeqK562HpaAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1393,7 +1352,6 @@ fileIndex wgEncodeHaibMethylSeqK562HpaAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL231
-parentTable wgEncodeHaibMethylSeqK562HpaAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2
@@ -1415,7 +1373,6 @@ fileIndex wgEncodeHaibMethylSeqK562MspAlnRep1.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL230
-parentTable wgEncodeHaibMethylSeqK562MspAlnRep1
 project wgEncode
 protocol PCR2x
 replicate 1
@@ -1437,7 +1394,6 @@ fileIndex wgEncodeHaibMethylSeqK562MspAlnRep2.bam.bai
 grant Myers
 lab HudsonAlpha
 labVersion SL232
-parentTable wgEncodeHaibMethylSeqK562MspAlnRep2
 project wgEncode
 protocol PCR2x
 replicate 2

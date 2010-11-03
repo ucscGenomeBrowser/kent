@@ -33,8 +33,7 @@ shortLabel UW Histone
 longLabel ENCODE Histone Modifications by ChIP-Seq from Univ. of Washington
 group regulation
 subGroup1 view Views Hot=Hotspots Peaks=Peaks zRSig=Raw_Signal
-#subGroup2 cellType Cell_Line BJ=BJ Caco2=Caco-2 GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 GM12878=GM12878 HEK293=HEK293 HELA=HeLa-S3 HEPG2=HepG2 HL60=HL-60 HMEC=HMEC HRE=HRE HUVEC=HUVEC K562=K562 NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
-subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ Caco2=Caco-2 HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-HESC HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HELA=HeLa-S3&nbsp;(Tier_2) HEPG2=HepG2&nbsp;(Tier_2) HUVEC=HUVEC&nbsp;(Tier_2) AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 AOAF=AoAF BJ=BJ Caco2=Caco-2 HA-sp=HA-sp HBMEC=HBMEC HCFaa=HCFaa HCM=HCM HCF=HCF HCPE=HCPEpiC HCT116=HCT-116 H7es=H7-HESC HEE=HEEpIC HEK293=HEK293 HL60=HL-60 HMEC=HMEC HMF=HMF HPAF=HPAF HPF=HPF HRE=HRE HRPE=HRPEpIC HVMF=HVMF GM06990=GM06990 GM12801=GM12801 GM12864=GM12864 GM12865=GM12865 GM12872=GM12872 GM12873=GM12873 GM12874=GM12874 GM12875=GM12875 Jurkat=Jurkat MCF7=MCF-7 NB4=NB4 NHDF-neo=NHDF-neo NHEK=NHEK SAEC=SAEC SKNSHRA=SK-N-SH_RA WERIRb1=WERI-Rb-1
 subGroup3 factor Factor H3K04me3=H3K4me3 H3K27me3=H3K27me3 H3K36me3=H3K36me3 zInput=Input
 subGroup4 rep Replicate 1=1 2=2
 dimensions dimensionX=factor dimensionY=cellType dimensionZ=rep
@@ -1352,6 +1351,26 @@ noInherit on
         origAssembly hg19
         # subId=2661 dateSubmitted=2010-10-23
 
+        track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep1
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HA-sp H3K4me3 1
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 1 (H3K4me3 in HA-sp cells)
+        subGroups view=Hot factor=H3K04me3 cellType=HA-sp rep=1
+        type broadPeak
+        origAssembly hg19
+        # subId=2778 dateSubmitted=2010-10-28
+
+        track wgEncodeUwHistoneHaspH3k4me3StdHotspotsRep2
+        release alpha
+        parent wgEncodeUwHistoneViewHot off
+        shortLabel HA-sp H3K4me3 2
+        longLabel ENCODE UW Histone Mods Hotspots Replicate 2 (H3K4me3 in HA-sp cells)
+        subGroups view=Hot factor=H3K04me3 cellType=HA-sp  rep=2
+        type broadPeak
+        origAssembly hg19
+        # subId=2779 dateSubmitted=2010-10-28
+
 
     track wgEncodeUwHistoneViewPeaks
     shortLabel Peaks
@@ -2657,6 +2676,26 @@ noInherit on
         origAssembly hg19
         # subId=2661 dateSubmitted=2010-10-23
 
+        track wgEncodeUwHistoneHaspH3k4me3StdPkRep1
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HA-sp H3K4me3 Pk 1
+        longLabel ENCODE UW Histone Mods Peaks Replicate 1 (H3K4me3 in HA-sp cells)
+        subGroups view=Peaks factor=H3K04me3 cellType=HA-sp rep=1
+        type narrowPeak
+        origAssembly hg19
+        # subId=2778 dateSubmitted=2010-10-28
+
+        track wgEncodeUwHistoneHaspH3k4me3StdPkRep2
+        release alpha
+        parent wgEncodeUwHistoneViewPeaks off
+        shortLabel HA-sp H3K4me3 Pk 2
+        longLabel ENCODE UW Histone Mods Peaks Replicate 2 (H3K4me3 in HA-sp cells)
+        subGroups view=Peaks factor=H3K04me3 cellType=HA-sp rep=2
+        type narrowPeak
+        origAssembly hg19
+        # subId=2779 dateSubmitted=2010-10-28
+
 
     track wgEncodeUwHistoneViewRawSig
     shortLabel Raw Signal
@@ -2710,49 +2749,6 @@ noInherit on
         origAssembly hg18
         # subId=1288 dateSubmitted=2010-06-10
 
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12801InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM801 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12801 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12801 rep=1
-#        type bigWig 1.000000 10337.000000
-#        origAssembly hg18
-#        # subId=1289 dateSubmitted=2010-06-10
-
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12864InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM864 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12864 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12864 rep=1
-#        type bigWig 1.000000 8541.000000
-#        origAssembly hg18
-#        # subId=1290 dateSubmitted=2010-06-10
-
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12865InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM865 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12865 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12865 rep=1
-#        type bigWig 1.000000 9831.000000
-#        origAssembly hg18
-#        # subId=1291 dateSubmitted=2010-06-10
-
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12872InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM872 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12872 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12872 rep=1
-#        type bigWig 1.000000 7087.000000
-#        origAssembly hg18
-#        # subId=1292 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneGm12878InputStdRawRep1
         release alpha
@@ -2765,16 +2761,15 @@ noInherit on
         color 153,38,0
         # subId=1293 dateSubmitted=2010-06-10
 
-# Commenting out track as it has not equivalent Histone experiment tracks
-#        track wgEncodeUwHistoneHek293InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel HEK29 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HEK293 cells)
-#        subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
-#        type bigWig 1.000000 8215.000000
-#        origAssembly hg18
-#        # subId=1295 dateSubmitted=2010-06-10
+        track wgEncodeUwHistoneHek293InputStdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HEK29 Input   Ra1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HEK293 cells)
+        subGroups view=zRSig factor=zInput cellType=HEK293 rep=1
+        type bigWig 1.000000 8215.000000
+        origAssembly hg18
+        # subId=1295 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneHmecInputStdRawRep1
         release alpha
@@ -2849,16 +2844,6 @@ noInherit on
         origAssembly hg18
         # subId=1319 dateSubmitted=2010-06-10
 
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneWerirb1InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel WERIR Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in WERI-Rb-1 cells)
-#        subGroups view=zRSig factor=zInput cellType=WERIRb1 rep=1
-#        type bigWig 1.000000 9496.000000
-#        origAssembly hg18
-#        # subId=1320 dateSubmitted=2010-06-10
 
         track wgEncodeUwHistoneBjH3k4me3StdRawRep1
         release alpha
@@ -3010,16 +2995,6 @@ noInherit on
         origAssembly hg18
         # subId=1415 dateSubmitted=2010-06-14
 
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12874InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM874 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12874 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12874 rep=1
-#        type bigWig 1.000000 8370.000000
-#        origAssembly hg18
-#        # subId=1416 dateSubmitted=2010-06-14
 
         track wgEncodeUwHistoneGm12878H3k4me3StdRawRep1
         release alpha
@@ -3647,27 +3622,6 @@ noInherit on
         origAssembly hg18
         # subId=1476 dateSubmitted=2010-06-15
 
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12873InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM873 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12873 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12873 rep=1
-#        type bigWig 1.000000 8562.000000
-#        origAssembly hg18
-#        # subId=1481 dateSubmitted=2010-06-15
-
-# Commenting out track as it has no equivalent Histone experiment
-#        track wgEncodeUwHistoneGm12875InputStdRawRep1
-#        release alpha
-#        parent wgEncodeUwHistoneViewRawSig off
-#        shortLabel GM875 Input   Ra1
-#        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in GM12875 cells)
-#        subGroups view=zRSig factor=zInput cellType=GM12875 rep=1
-#        type bigWig 1.000000 7544.000000
-#        origAssembly hg18
-#        # subId=1485 dateSubmitted=2010-06-16
 
         track wgEncodeUwHistoneHreH3k4me3StdRawRep1
         release alpha
@@ -4440,4 +4394,34 @@ noInherit on
         type bigWig 1.000000 9369.000000
         origAssembly hg19
         # subId=2661 dateSubmitted=2010-10-23
+
+        track wgEncodeUwHistoneHaspInputStdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HA-sp Input Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (Input in HA-sp cells)
+        subGroups view=zRSig factor=zInput cellType=HA-sp rep=1
+        type bigWig 1.000000 22062.000000
+        origAssembly hg19
+        # subId=2777 dateSubmitted=2010-10-28
+
+        track wgEncodeUwHistoneHaspH3k4me3StdRawRep1
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HA-sp H3K4me3 Raw 1
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 1 (H3K4me3 in HA-sp cells)
+        subGroups view=zRSig factor=H3K04me3 cellType=HA-sp rep=1
+        type bigWig 1.000000 5096.000000
+        origAssembly hg19
+        # subId=2778 dateSubmitted=2010-10-28
+
+        track wgEncodeUwHistoneHaspH3k4me3StdRawRep2
+        release alpha
+        parent wgEncodeUwHistoneViewRawSig off
+        shortLabel HA-sp H3K4me3 Raw 2
+        longLabel ENCODE UW Histone Mods Raw Signal Replicate 2 (H3K4me3 in HA-sp cells)
+        subGroups view=zRSig factor=H3K04me3 cellType=HA-sp rep=2
+        type bigWig 1.000000 7657.000000
+        origAssembly hg19
+        # subId=2779 dateSubmitted=2010-10-28
 
