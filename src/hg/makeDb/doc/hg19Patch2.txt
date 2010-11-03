@@ -590,5 +590,18 @@ done
         /hive/data/genomes/hg19/hg19.2bit \
         /hive/data/genomes/hg19Patch2/hg19Patch2.2bit \
         hg19.hg19Patch2.over.psl
+    # chainToPsl appears to have a problem, note errors from pslCheck:
+    pslCheck -db=hg19 hg19.hg19Patch2.over.psl
+# Error: invalid PSL: chr6_ssto_hap7:3797750-3798078 chr6:32538701-32539032 + hg19.hg19Patch2.over.psl:362
+# alignment size (328) doesn't match counts (0)
+    pslRecalcMatch hg19.hg19Patch2.over.psl \
+	/hive/data/genomes/hg19/hg19.2bit \
+	/hive/data/genomes/hg19Patch2/hg19Patch2.2bit \
+	fixup.hg19.hg19Patch2.over.psl
+    pslCheck -db=hg19 fixup.hg19.hg19Patch2.over.psl
+    checked: 391 failed: 0 errors: 0
+
     # load this PSL track
-    hgLoadPsl hg19 -table=altSeqLiftOverPsl hg19.hg19Patch2.over.psl
+    hgLoadPsl hg19 -table=altSeqLiftOverPsl fixup.hg19.hg19Patch2.over.psl
+
+############################################################################

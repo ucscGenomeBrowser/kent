@@ -122,13 +122,15 @@ errAbort(
   "usage:\n"
   "   mutationClassifier database snp.bed(s)\n"
   "options:\n"
+  "   -geneModel=table\tGene model. Default model is knownCanonical. Table must be a valid gene prediction table;\n"
+  "   \t\t\te.g. ensGene or refGene.\n"
   "   -lazyLoading\t\tAvoid loading complete gene model (performance hack for when you are classifying only a few items).\n"
   "   -maxNearestGene\tMaximum distance used when computing nearest gene (default: %d).\n"
   "   -minDelta\t\tLook for regulatory sites with score(after) - score(before) < minDelta (default: %.1f).\n"
   "\t\t\tLogic is reversed if positive (i.e. look for sites with score(after) - score(before) > minDelta.)\n"
+  "   -oneBased\t\tUse one-based coordinates instead of zero-based.\n"
   "   -outputExtension\tCreate an output file with this extension for each input file (instead of writing to stdout).\n"
   "   -verbose=N\t\tverbose level for extra information to STDERR\n\n"
-  "   -oneBased     = Use one-based coordinates instead of zero-based.\n"
   "Classifies SNPs and indels which are in coding regions of UCSC\n"
   "canononical genes as synonymous or non-synonymous.\n"
   "Prints bed4 for identified SNPs; name field contains the codon transformation.\n"
@@ -329,7 +331,26 @@ else
     fprintf(stream, "\t%s\n", key);
 }
 
-static void clipGenPred(char *database, struct genePred *gp)
+static struct dnaSeq *getChromSeq(struct nibTwoCache *ntc, char *seqName)
+{
+// We read whole chromosome sequences at a time in order to speedup loading of whole gene models.
+// This yields very large speedup compared to using nibTwoCacheSeqPartExt to load regions.
+// This speedup assumes that gene models have been sorted by chromosome!!
+
+static char *cachedSeqName = NULL;
+static struct dnaSeq *cachedSeq = NULL;
+if(cachedSeqName == NULL || !sameString(seqName, cachedSeqName))
+    {
+    freeDnaSeq(&cachedSeq);
+    freeMem(cachedSeqName);
+    cachedSeq = nibTwoCacheSeq(ntc, seqName);
+    cachedSeqName = cloneString(seqName);
+    }
+return cachedSeq;
+}
+
+
+static void clipGenPred(char *database, struct nibTwoCache *ntc, struct genePred *gp)
 {
 // Clip exonStarts/exonEnds to cdsStart/cdsEnd and then read in the whole DNA for this gene in preparation for a SNP check.
 // After this call, exonStarts/exonEnds contain only the exons used for CDS (i.e. some may be removed).
@@ -340,17 +361,20 @@ static void clipGenPred(char *database, struct genePred *gp)
     unsigned *newEnds = needMem(gp->exonCount * sizeof(unsigned));
     int newCount = 0;
     gp->name2 = cloneString("");
+    struct dnaSeq *seq = getChromSeq(ntc, gp->chrom);
     for (i=0;i<gp->exonCount;i++)
         {
         if (gp->exonEnds[i] >= gp->cdsStart && gp->exonStarts[i] <= gp->cdsEnd)
             {
-            char retNibName[HDB_MAX_PATH_STRING];
             newStarts[newCount] = max(gp->exonStarts[i], gp->cdsStart);
             newEnds[newCount] = min(gp->exonEnds[i], gp->cdsEnd);
-            hNibForChrom(database, gp->chrom, retNibName);
-            struct dnaSeq *dna = hFetchSeqMixed(retNibName, gp->chrom, newStarts[newCount], newEnds[newCount]);
-            char *newName = needMem(strlen(gp->name2) + strlen(dna->dna) + 1);
-            sprintf(newName, "%s%s", gp->name2, dna->dna);
+            int oldLen = strlen(gp->name2);
+            int newLen = newEnds[newCount] - newStarts[newCount];
+            char *newName = needMem(oldLen + newLen + 1);
+            strcpy(newName, gp->name2);
+            memcpy(newName + oldLen, seq->dna + newStarts[newCount], newLen);
+            newName[oldLen + newLen] = 0;
+            touppers(newName + oldLen);
             freeMem(gp->name2);
             gp->name2 = newName;
             newCount++;
@@ -366,11 +390,11 @@ static void clipGenPred(char *database, struct genePred *gp)
         reverseComplement(gp->name2, strlen(gp->name2));
         }
     gp->score = strlen(gp->name2);
-    if (debug)
-        printf("%s - %d: %s\n", gp->name2, (int) strlen(gp->name2), gp->name2);
+    verbose(2, "read gene %s %s:%d-%d (%d)\n", gp->name, gp->chrom, gp->txStart, gp->txEnd, gp->score);
+    verbose(3, "%s - %d: %s\n", gp->name2, (int) strlen(gp->name2), gp->name2);
 }
 
-static int transformPos(char *database, struct genePred *gp, unsigned pos, boolean *lastExon)
+static int transformPos(char *database, struct nibTwoCache *ntc, struct genePred *gp, unsigned pos, boolean *lastExon)
 {
 // transformPos chrom:chromStart coordinates to relative CDS coordinates
 // returns -1 if pos is NOT within the CDS
@@ -380,7 +404,7 @@ boolean reverse = gp->strand[0] == '-';
 
 if (gp->name2 == NULL)
     {
-    clipGenPred(database, gp);
+    clipGenPred(database, ntc, gp);
     }
 for (i=0;i<gp->exonCount;i++)
     {
@@ -402,7 +426,7 @@ for (i=0;i<gp->exonCount;i++)
 return -1;
 }
 
-static struct genePred *readGenes(char *database, struct sqlConnection *conn)
+static struct genePred *readGenes(char *database, struct sqlConnection *conn, struct nibTwoCache *ntc)
 {
 struct genePred *el, *retVal = NULL;
 char query[256];
@@ -437,21 +461,9 @@ if(sameString(geneModel, "knownCanonical"))
         }
     sqlFreeResult(&sr);
     }
-else if(sameString(geneModel, "refGene"))
+else if(sqlTableExists(conn, geneModel))
     {
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from refGene where cdsStart != cdsEnd");
-    sr = sqlGetResult(conn, query);
-    while ((row = sqlNextRow(sr)) != NULL)
-        {
-        struct genePred *gp = genePredLoad(row);
-        gp->name2 = NULL;
-        slAddHead(&retVal, gp);
-        }
-    sqlFreeResult(&sr);
-    }
-else if(sameString(geneModel, "ensGene"))
-    {
-    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from ensGene where cdsStart != cdsEnd");
+    safef(query, sizeof(query), "select name, chrom, strand, txStart, txEnd, cdsStart, cdsEnd, exonCount, exonStarts, exonEnds from %s where cdsStart != cdsEnd", geneModel);
     sr = sqlGetResult(conn, query);
     while ((row = sqlNextRow(sr)) != NULL)
         {
@@ -468,7 +480,7 @@ if(!lazyLoading)
     {
     for(el = retVal; el != NULL; el = el->next)
         {
-        clipGenPred(database, el);
+        clipGenPred(database, ntc, el);
         }
     }
 freeHash(&geneHash);
@@ -612,7 +624,7 @@ ntc = nibTwoCacheNew(pathName);
 if(!skipGeneModel || bindingSites)
     {
     time = clock1000();
-    genes = readGenes(database, conn);
+    genes = readGenes(database, conn, ntc);
     verbose(2, "readGenes took: %ld ms\n", clock1000() - time);
     verbose(2, "%d canonical known genes\n", slCount(genes));
     }
@@ -677,7 +689,7 @@ while(!done)
         // boolean reverse = !strcmp(overlapA->strand, "-");
         boolean lastExon;
 
-        int pos = transformPos(database, gp, overlapA->chromStart, &lastExon);
+        int pos = transformPos(database, ntc, gp, overlapA->chromStart, &lastExon);
         if (pos >= 0)
             {
             int len = strlen(overlapA->name);

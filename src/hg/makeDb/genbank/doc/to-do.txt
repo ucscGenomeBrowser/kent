@@ -1194,3 +1194,6 @@ Error: danRer1: gene danRer1.refFlat:1854 NM_131267 chr7: NM_131267 geneName "ir
 
 - hg19:chr1:145,103,933-145,103,966 CR624978 VitroGen/Genoscope modified to match
   stop codon in the genome.
+
+- problematic NR alignment filtering do to repeat masking.  Poor alignments
+  chosen NR_031679 NR_031644 NR_030317.  
