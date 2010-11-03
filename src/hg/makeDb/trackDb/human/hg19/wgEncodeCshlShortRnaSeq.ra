@@ -369,8 +369,7 @@ superTrack wgEncodeRnaSeqSuper
     subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 0
     scoreFilterLimits 0:1000
-    scoreMin 0
-    minGrayLevel 4
+    #noScoreFilter .
 
         track wgEncodeCshlShortRnaSeqProstateCellShortTransfrags
         parent wgEncodeCshlShortRnaSeqViewTransfrags off

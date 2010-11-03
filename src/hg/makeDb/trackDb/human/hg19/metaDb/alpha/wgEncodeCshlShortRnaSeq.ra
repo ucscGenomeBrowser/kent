@@ -102,7 +102,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -202,7 +202,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -302,7 +302,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -402,7 +402,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-14
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
@@ -502,7 +502,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -602,7 +602,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -702,7 +702,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -802,7 +802,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -902,7 +902,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -1002,7 +1002,7 @@ objType table
 cell K562
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -1022,7 +1022,7 @@ objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-20
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -1042,7 +1042,7 @@ objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -1063,7 +1063,7 @@ objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -1083,7 +1083,7 @@ objType table
 cell prostate
 composite wgEncodeCshlShortRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-06-30
 dateSubmitted 2009-09-23
 dateUnrestricted 2010-06-23
@@ -1098,4 +1098,4 @@ subId 1837
 tableName wgEncodeCshlShortRnaSeqProstateCellTotalPlusRaw
 view PlusRawSignal
 
-# MAGIC: 36751104
+# MAGIC: 137626844
