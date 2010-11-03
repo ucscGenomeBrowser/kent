@@ -8,9 +8,8 @@ dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-05
 fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag04449.tagAlign.gz
 grant Stam
-lab Uw
+lab UW
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag04449
 project wgEncode
 rank 1st
 replicate 1
@@ -29,7 +28,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag04450.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag04450
 project wgEncode
 rank 1st
 replicate 1
@@ -48,7 +46,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag09309.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag09309
 project wgEncode
 rank 1st
 replicate 1
@@ -67,7 +64,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag09319.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag09319
 project wgEncode
 rank 1st
 replicate 1
@@ -86,7 +82,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Ag10803.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag10803
 project wgEncode
 rank 1st
 replicate 1
@@ -105,7 +100,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Bjtert.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.0.0)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Bjtert
 project wgEncode
 rank 1st
 replicate 1
@@ -124,7 +118,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Caco2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Caco2
 project wgEncode
 rank 1st
 replicate 1
@@ -143,7 +136,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Cmk.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Cmk
 project wgEncode
 rank 1st
 replicate 1
@@ -162,7 +154,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Gm06990.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Gm06990
 project wgEncode
 rank 1st
 replicate 1
@@ -181,7 +172,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Gm12865.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Gm12865
 project wgEncode
 rank 1st
 replicate 1
@@ -200,7 +190,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Gm12878.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Gm12878
 project wgEncode
 rank 2nd
 replicate 1
@@ -219,7 +208,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1H1es.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1H1es
 project wgEncode
 rank 1st
 replicate 1
@@ -238,7 +226,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1H7es.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1H7es
 project wgEncode
 rank 1st
 replicate 1
@@ -257,7 +244,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hae.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hae
 project wgEncode
 rank 1st
 replicate 1
@@ -276,7 +262,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hcf.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hcf
 project wgEncode
 rank 1st
 replicate 1
@@ -295,7 +280,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hcm.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hcm
 project wgEncode
 rank 1st
 replicate 1
@@ -314,7 +298,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hcpe.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hcpe
 project wgEncode
 rank 1st
 replicate 1
@@ -333,7 +316,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hee.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hee
 project wgEncode
 rank 1st
 replicate 1
@@ -352,7 +334,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Helas3.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Helas3
 project wgEncode
 rank 1st
 replicate 1
@@ -371,7 +352,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hepg2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hepg2
 project wgEncode
 rank 1st
 replicate 1
@@ -390,7 +370,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hgf.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hgf
 project wgEncode
 rank 1st
 replicate 1
@@ -409,7 +388,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hipe.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hipe
 project wgEncode
 rank 1st
 replicate 1
@@ -428,7 +406,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hl60.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hl60
 project wgEncode
 rank 1st
 replicate 1
@@ -447,7 +424,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hl60V2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hl60V2
 project wgEncode
 rank 1st
 replicate 1
@@ -467,7 +443,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hmec.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hmec
 project wgEncode
 rank 1st
 replicate 1
@@ -486,7 +461,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hnpce.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hnpce
 project wgEncode
 rank 1st
 replicate 1
@@ -505,7 +479,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hrcepic.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hrcepic
 project wgEncode
 rank 1st
 replicate 1
@@ -524,7 +497,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hre.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hre
 project wgEncode
 rank 1st
 replicate 1
@@ -543,7 +515,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Hrpe.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hrpe
 project wgEncode
 rank 1st
 replicate 1
@@ -562,7 +533,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Huvec.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.0.0)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Huvec
 project wgEncode
 rank 1st
 replicate 1
@@ -582,7 +552,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Jurkat.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Jurkat
 project wgEncode
 rank 1st
 replicate 1
@@ -601,7 +570,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1JurkatG1.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
 phase G1
 project wgEncode
 rank 1st
@@ -621,7 +589,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1K562.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.0)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1K562
 project wgEncode
 rank 1st
 replicate 1
@@ -640,7 +607,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Mcf7.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Mcf7
 project wgEncode
 rank 1st
 replicate 1
@@ -659,7 +625,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Nb4.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nb4
 project wgEncode
 rank 1st
 replicate 1
@@ -678,7 +643,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Nb4V2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nb4V2
 project wgEncode
 rank 1st
 replicate 1
@@ -698,7 +662,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Nhdfneo.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nhdfneo
 project wgEncode
 rank 1st
 replicate 1
@@ -717,7 +680,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Nhek.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nhek
 project wgEncode
 rank 1st
 replicate 1
@@ -736,7 +698,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Nhlf.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nhlf
 project wgEncode
 rank 1st
 replicate 1
@@ -755,7 +716,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Panc1.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Panc1
 project wgEncode
 rank 1st
 replicate 1
@@ -774,7 +734,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Saec.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Saec
 project wgEncode
 rank 1st
 replicate 1
@@ -793,7 +752,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Skmc.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Skmc
 project wgEncode
 rank 1st
 replicate 1
@@ -813,7 +771,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1SkmcV2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1SkmcV2
 project wgEncode
 rank 1st
 replicate 1
@@ -833,7 +790,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Sknshra.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-0.3.0)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Sknshra
 project wgEncode
 rank 1st
 replicate 1
@@ -852,7 +808,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Th1.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Th1
 project wgEncode
 rank 1st
 replicate 1
@@ -871,7 +826,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep1Th2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Th2
 project wgEncode
 rank 1st
 replicate 1
@@ -890,7 +844,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag04449.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag04449
 project wgEncode
 rank 2nd
 replicate 2
@@ -909,7 +862,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag04450.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag04450
 project wgEncode
 rank 2nd
 replicate 2
@@ -928,7 +880,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag09309.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag09309
 project wgEncode
 rank 2nd
 replicate 2
@@ -947,7 +898,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag09319.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag09319
 project wgEncode
 rank 2nd
 replicate 2
@@ -966,7 +916,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Ag10803.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag10803
 project wgEncode
 rank 2nd
 replicate 2
@@ -985,7 +934,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Bjtert.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Bjtert
 project wgEncode
 rank 2nd
 replicate 2
@@ -1004,7 +952,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Caco2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Caco2
 project wgEncode
 rank 2nd
 replicate 2
@@ -1023,7 +970,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Gm06990.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Gm06990
 project wgEncode
 rank 2nd
 replicate 2
@@ -1042,7 +988,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Gm12865.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Gm12865
 project wgEncode
 rank 2nd
 replicate 2
@@ -1061,7 +1006,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Gm12878.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.3.2)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Gm12878
 project wgEncode
 rank 1st
 replicate 2
@@ -1080,7 +1024,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hae.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hae
 project wgEncode
 rank 2nd
 replicate 2
@@ -1099,7 +1042,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hcf.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -1118,7 +1060,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hcm.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hcm
 project wgEncode
 rank 2nd
 replicate 2
@@ -1137,7 +1078,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hcpe.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hcpe
 project wgEncode
 rank 2nd
 replicate 2
@@ -1156,7 +1096,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hee.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hee
 project wgEncode
 rank 2nd
 replicate 2
@@ -1175,7 +1114,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Helas3.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Helas3
 project wgEncode
 rank 2nd
 replicate 2
@@ -1194,7 +1132,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hepg2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (SolexaPipeline-0.2.2.5)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hepg2
 project wgEncode
 rank 2nd
 replicate 2
@@ -1213,7 +1150,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hgf.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hgf
 project wgEncode
 rank 2nd
 replicate 2
@@ -1232,7 +1168,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hipe.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hipe
 project wgEncode
 rank 2nd
 replicate 2
@@ -1251,7 +1186,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hl60.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hl60
 project wgEncode
 rank 2nd
 replicate 2
@@ -1270,7 +1204,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hnpce.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hnpce
 project wgEncode
 rank 2nd
 replicate 2
@@ -1289,7 +1222,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hrcepic.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hrcepic
 project wgEncode
 rank 2nd
 replicate 2
@@ -1308,7 +1240,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hre.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hre
 project wgEncode
 rank 2nd
 replicate 2
@@ -1327,7 +1258,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Hrpe.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hrpe
 project wgEncode
 rank 2nd
 replicate 2
@@ -1347,7 +1277,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Jurkat.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Jurkat
 project wgEncode
 rank 2nd
 replicate 2
@@ -1366,7 +1295,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2K562.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.0)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2K562
 project wgEncode
 rank 2nd
 replicate 2
@@ -1385,7 +1313,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Mcf7.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Mcf7
 project wgEncode
 rank 2nd
 replicate 2
@@ -1404,7 +1331,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Nb4.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Nb4
 project wgEncode
 rank 2nd
 replicate 2
@@ -1423,7 +1349,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Nhdfneo.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo
 project wgEncode
 rank 2nd
 replicate 2
@@ -1442,7 +1367,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Nhlf.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Nhlf
 project wgEncode
 rank 2nd
 replicate 2
@@ -1461,7 +1385,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Panc1.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Panc1
 project wgEncode
 rank 2nd
 replicate 2
@@ -1480,7 +1403,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Saec.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Saec
 project wgEncode
 rank 2nd
 replicate 2
@@ -1499,7 +1421,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Skmc.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Skmc
 project wgEncode
 rank 2nd
 replicate 2
@@ -1518,7 +1439,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2Sknshra.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Sknshra
 project wgEncode
 rank 2nd
 replicate 2
@@ -1537,7 +1457,6 @@ fileName wgEncodeUwDnaseSeqAlignmentsRep2SknshraV2.tagAlign.gz
 grant Stam
 lab Uw
 labVersion Eland (GAPipeline-1.4)
-parentTable wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 project wgEncode
 rank 2nd
 replicate 2
@@ -4618,7 +4537,6 @@ dateUnrestricted 2010-10-05
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag04449.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag04449
 project wgEncode
 rank 1st
 replicate 1
@@ -4636,7 +4554,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag04450.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag04450
 project wgEncode
 rank 1st
 replicate 1
@@ -4654,7 +4571,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag09309.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag09309
 project wgEncode
 rank 1st
 replicate 1
@@ -4672,7 +4588,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag09319.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag09319
 project wgEncode
 rank 1st
 replicate 1
@@ -4690,7 +4605,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1Ag10803.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Ag10803
 project wgEncode
 rank 1st
 replicate 1
@@ -4708,7 +4622,6 @@ dateUnrestricted 2010-01-27
 fileName wgEncodeUwDnaseSeqRawDataRep1Bjtert.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Bjtert
 project wgEncode
 rank 1st
 replicate 1
@@ -4726,7 +4639,6 @@ dateUnrestricted 2010-01-24
 fileName wgEncodeUwDnaseSeqRawDataRep1Caco2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Caco2
 project wgEncode
 rank 1st
 replicate 1
@@ -4744,7 +4656,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Cmk.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Cmk
 project wgEncode
 rank 1st
 replicate 1
@@ -4762,7 +4673,6 @@ dateUnrestricted 2009-08-18
 fileName wgEncodeUwDnaseSeqRawDataRep1Gm06990.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Gm06990
 project wgEncode
 rank 1st
 replicate 1
@@ -4780,7 +4690,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep1Gm12865.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Gm12865
 project wgEncode
 rank 1st
 replicate 1
@@ -4798,7 +4707,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep1Gm12878.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Gm12878
 project wgEncode
 rank 2nd
 replicate 1
@@ -4816,7 +4724,6 @@ dateUnrestricted 2010-06-18
 fileName wgEncodeUwDnaseSeqRawDataRep1H1es.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1H1es
 project wgEncode
 rank 1st
 replicate 1
@@ -4834,7 +4741,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1H7es.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1H7es
 project wgEncode
 rank 1st
 replicate 1
@@ -4852,7 +4758,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Hae.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hae
 project wgEncode
 rank 1st
 replicate 1
@@ -4870,7 +4775,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1Hcf.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hcf
 project wgEncode
 rank 1st
 replicate 1
@@ -4888,7 +4792,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1Hcm.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hcm
 project wgEncode
 rank 1st
 replicate 1
@@ -4906,7 +4809,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Hcpe.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hcpe
 project wgEncode
 rank 1st
 replicate 1
@@ -4924,7 +4826,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep1Hee.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hee
 project wgEncode
 rank 1st
 replicate 1
@@ -4942,7 +4843,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep1Helas3.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Helas3
 project wgEncode
 rank 1st
 replicate 1
@@ -4960,7 +4860,6 @@ dateUnrestricted 2009-08-18
 fileName wgEncodeUwDnaseSeqRawDataRep1Hepg2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hepg2
 project wgEncode
 rank 1st
 replicate 1
@@ -4978,7 +4877,6 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwDnaseSeqRawDataRep1Hgf.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hgf
 project wgEncode
 rank 1st
 replicate 1
@@ -4996,7 +4894,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Hipe.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hipe
 project wgEncode
 rank 1st
 replicate 1
@@ -5014,7 +4911,6 @@ dateUnrestricted 2010-01-29
 fileName wgEncodeUwDnaseSeqRawDataRep1Hl60.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hl60
 project wgEncode
 rank 1st
 replicate 1
@@ -5032,7 +4928,6 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeUwDnaseSeqRawDataRep1Hl60V2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hl60V2
 project wgEncode
 rank 1st
 replicate 1
@@ -5051,7 +4946,6 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeUwDnaseSeqRawDataRep1Hmec.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hmec
 project wgEncode
 rank 1st
 replicate 1
@@ -5069,7 +4963,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep1Hnpce.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hnpce
 project wgEncode
 rank 1st
 replicate 1
@@ -5087,7 +4980,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep1Hrcepic.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hrcepic
 project wgEncode
 rank 1st
 replicate 1
@@ -5105,7 +4997,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep1Hre.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hre
 project wgEncode
 rank 1st
 replicate 1
@@ -5123,7 +5014,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1Hrpe.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Hrpe
 project wgEncode
 rank 1st
 replicate 1
@@ -5141,7 +5031,6 @@ dateUnrestricted 2010-01-27
 fileName wgEncodeUwDnaseSeqRawDataRep1Huvec.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Huvec
 project wgEncode
 rank 1st
 replicate 1
@@ -5160,7 +5049,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep1Jurkat.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Jurkat
 project wgEncode
 rank 1st
 replicate 1
@@ -5178,7 +5066,6 @@ dateUnrestricted 2010-10-12
 fileName wgEncodeUwDnaseSeqRawDataRep1JurkatG1.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1JurkatG1
 phase G1
 project wgEncode
 rank 1st
@@ -5197,7 +5084,6 @@ dateUnrestricted 2009-09-09
 fileName wgEncodeUwDnaseSeqRawDataRep1K562.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1K562
 project wgEncode
 rank 1st
 replicate 1
@@ -5215,7 +5101,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUwDnaseSeqRawDataRep1Mcf7.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Mcf7
 project wgEncode
 rank 1st
 replicate 1
@@ -5233,7 +5118,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep1Nb4.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nb4
 project wgEncode
 rank 1st
 replicate 1
@@ -5251,7 +5135,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1Nb4V2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nb4V2
 project wgEncode
 rank 1st
 replicate 1
@@ -5270,7 +5153,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep1Nhdfneo.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nhdfneo
 project wgEncode
 rank 1st
 replicate 1
@@ -5288,7 +5170,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep1Nhek.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nhek
 project wgEncode
 rank 1st
 replicate 1
@@ -5306,7 +5187,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep1Nhlf.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Nhlf
 project wgEncode
 rank 1st
 replicate 1
@@ -5324,7 +5204,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep1Panc1.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Panc1
 project wgEncode
 rank 1st
 replicate 1
@@ -5342,7 +5221,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep1Saec.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Saec
 project wgEncode
 rank 1st
 replicate 1
@@ -5360,7 +5238,6 @@ dateUnrestricted 2010-01-29
 fileName wgEncodeUwDnaseSeqRawDataRep1Skmc.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Skmc
 project wgEncode
 rank 1st
 replicate 1
@@ -5379,7 +5256,6 @@ dateUnrestricted 2010-01-29
 fileName wgEncodeUwDnaseSeqRawDataRep1SkmcV2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1SkmcV2
 project wgEncode
 rank 1st
 replicate 1
@@ -5398,7 +5274,6 @@ dateUnrestricted 2010-01-17
 fileName wgEncodeUwDnaseSeqRawDataRep1Sknshra.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Sknshra
 project wgEncode
 rank 1st
 replicate 1
@@ -5416,7 +5291,6 @@ dateUnrestricted 2009-08-20
 fileName wgEncodeUwDnaseSeqRawDataRep1Th1.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Th1
 project wgEncode
 rank 1st
 replicate 1
@@ -5434,7 +5308,6 @@ dateUnrestricted 2010-01-29
 fileName wgEncodeUwDnaseSeqRawDataRep1Th2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep1Th2
 project wgEncode
 rank 1st
 replicate 1
@@ -5452,7 +5325,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag04449.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag04449
 project wgEncode
 rank 2nd
 replicate 2
@@ -5470,7 +5342,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag04450.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag04450
 project wgEncode
 rank 2nd
 replicate 2
@@ -5488,7 +5359,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag09309.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag09309
 project wgEncode
 rank 2nd
 replicate 2
@@ -5506,7 +5376,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag09319.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag09319
 project wgEncode
 rank 2nd
 replicate 2
@@ -5524,7 +5393,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep2Ag10803.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Ag10803
 project wgEncode
 rank 2nd
 replicate 2
@@ -5542,7 +5410,6 @@ dateUnrestricted 2010-03-29
 fileName wgEncodeUwDnaseSeqRawDataRep2Bjtert.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Bjtert
 project wgEncode
 rank 2nd
 replicate 2
@@ -5560,7 +5427,6 @@ dateUnrestricted 2010-03-30
 fileName wgEncodeUwDnaseSeqRawDataRep2Caco2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Caco2
 project wgEncode
 rank 2nd
 replicate 2
@@ -5578,7 +5444,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Gm06990.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Gm06990
 project wgEncode
 rank 2nd
 replicate 2
@@ -5596,7 +5461,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep2Gm12865.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Gm12865
 project wgEncode
 rank 2nd
 replicate 2
@@ -5614,7 +5478,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Gm12878.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Gm12878
 project wgEncode
 rank 1st
 replicate 2
@@ -5632,7 +5495,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Hae.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hae
 project wgEncode
 rank 2nd
 replicate 2
@@ -5650,7 +5512,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Hcf.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hcf
 project wgEncode
 rank 2nd
 replicate 2
@@ -5668,7 +5529,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep2Hcm.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hcm
 project wgEncode
 rank 2nd
 replicate 2
@@ -5686,7 +5546,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Hcpe.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hcpe
 project wgEncode
 rank 2nd
 replicate 2
@@ -5704,7 +5563,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Hee.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hee
 project wgEncode
 rank 2nd
 replicate 2
@@ -5722,7 +5580,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Helas3.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Helas3
 project wgEncode
 rank 2nd
 replicate 2
@@ -5740,7 +5597,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Hepg2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hepg2
 project wgEncode
 rank 2nd
 replicate 2
@@ -5758,7 +5614,6 @@ dateUnrestricted 2010-07-20
 fileName wgEncodeUwDnaseSeqRawDataRep2Hgf.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hgf
 project wgEncode
 rank 2nd
 replicate 2
@@ -5776,7 +5631,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep2Hipe.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hipe
 project wgEncode
 rank 2nd
 replicate 2
@@ -5794,7 +5648,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep2Hl60.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hl60
 project wgEncode
 rank 2nd
 replicate 2
@@ -5812,7 +5665,6 @@ dateUnrestricted 2010-10-07
 fileName wgEncodeUwDnaseSeqRawDataRep2Hnpce.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hnpce
 project wgEncode
 rank 2nd
 replicate 2
@@ -5830,7 +5682,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Hrcepic.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hrcepic
 project wgEncode
 rank 2nd
 replicate 2
@@ -5848,7 +5699,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Hre.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hre
 project wgEncode
 rank 2nd
 replicate 2
@@ -5866,7 +5716,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep2Hrpe.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Hrpe
 project wgEncode
 rank 2nd
 replicate 2
@@ -5885,7 +5734,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep2Jurkat.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Jurkat
 project wgEncode
 rank 2nd
 replicate 2
@@ -5903,7 +5751,6 @@ dateUnrestricted 2009-09-09
 fileName wgEncodeUwDnaseSeqRawDataRep2K562.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2K562
 project wgEncode
 rank 2nd
 replicate 2
@@ -5921,7 +5768,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep2Mcf7.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Mcf7
 project wgEncode
 rank 2nd
 replicate 2
@@ -5939,7 +5785,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep2Nb4.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Nb4
 project wgEncode
 rank 2nd
 replicate 2
@@ -5957,7 +5802,6 @@ dateUnrestricted 2010-10-08
 fileName wgEncodeUwDnaseSeqRawDataRep2Nhdfneo.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Nhdfneo
 project wgEncode
 rank 2nd
 replicate 2
@@ -5975,7 +5819,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeUwDnaseSeqRawDataRep2Nhlf.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Nhlf
 project wgEncode
 rank 2nd
 replicate 2
@@ -5993,7 +5836,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep2Panc1.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Panc1
 project wgEncode
 rank 2nd
 replicate 2
@@ -6011,7 +5853,6 @@ dateUnrestricted 2010-06-19
 fileName wgEncodeUwDnaseSeqRawDataRep2Saec.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Saec
 project wgEncode
 rank 2nd
 replicate 2
@@ -6029,7 +5870,6 @@ dateUnrestricted 2010-07-26
 fileName wgEncodeUwDnaseSeqRawDataRep2Skmc.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Skmc
 project wgEncode
 rank 2nd
 replicate 2
@@ -6047,7 +5887,6 @@ dateUnrestricted 2010-04-01
 fileName wgEncodeUwDnaseSeqRawDataRep2Sknshra.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2Sknshra
 project wgEncode
 rank 2nd
 replicate 2
@@ -6065,7 +5904,6 @@ dateUnrestricted 2010-07-21
 fileName wgEncodeUwDnaseSeqRawDataRep2SknshraV2.fastq.gz
 grant Stam
 lab Uw
-parentTable wgEncodeUwDnaseSeqRawSignalRep2SknshraV2
 project wgEncode
 rank 2nd
 replicate 2

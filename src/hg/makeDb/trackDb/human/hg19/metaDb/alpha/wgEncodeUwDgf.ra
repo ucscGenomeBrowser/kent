@@ -13,7 +13,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfGm06990Aln
 project wgEncode
 subId 1682
 view Alignments
@@ -106,7 +105,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfH7esAln
 project wgEncode
 subId 2047
 view Alignments
@@ -177,7 +175,6 @@ fileName wgEncodeUwDgfH7esRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfH7esRawSignal
 project wgEncode
 subId 2047
 view RawData
@@ -212,7 +209,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHaeAln
 project wgEncode
 subId 2048
 view Alignments
@@ -283,7 +279,6 @@ fileName wgEncodeUwDgfHaeRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHaeRawSignal
 project wgEncode
 subId 2048
 view RawData
@@ -318,7 +313,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHcpeAln
 project wgEncode
 subId 2050
 view Alignments
@@ -389,7 +383,6 @@ fileName wgEncodeUwDgfHcpeRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHcpeRawSignal
 project wgEncode
 subId 2050
 view RawData
@@ -426,7 +419,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfHepg2Aln
 project wgEncode
 subId 1814
 view Alignments
@@ -519,7 +511,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHmfAln
 project wgEncode
 subId 2049
 view Alignments
@@ -590,7 +581,6 @@ fileName wgEncodeUwDgfHmfRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHmfRawSignal
 project wgEncode
 subId 2049
 view RawData
@@ -625,7 +615,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHmvecdbladAln
 project wgEncode
 subId 2051
 view Alignments
@@ -696,7 +685,6 @@ fileName wgEncodeUwDgfHmvecdbladRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHmvecdbladRawSignal
 project wgEncode
 subId 2051
 view RawData
@@ -733,7 +721,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfK562Aln
 project wgEncode
 subId 1815
 view Alignments
@@ -826,7 +813,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfNhdfadAln
 project wgEncode
 subId 2046
 view Alignments
@@ -897,7 +883,6 @@ fileName wgEncodeUwDgfNhdfadRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfNhdfadRawSignal
 project wgEncode
 subId 2046
 view RawData
@@ -932,7 +917,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfSkmcAln
 project wgEncode
 subId 2045
 view Alignments
@@ -1003,7 +987,6 @@ fileName wgEncodeUwDgfSkmcRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfSkmcRawSignal
 project wgEncode
 subId 2045
 view RawData
@@ -1040,7 +1023,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfSknshraAln
 project wgEncode
 subId 1795
 view Alignments
@@ -1135,7 +1117,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfTh1Aln
 project wgEncode
 subId 1816
 view Alignments
