@@ -3,7 +3,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -25,7 +25,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -46,7 +46,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -67,7 +67,7 @@ objType file
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -87,7 +87,7 @@ objType file
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -107,7 +107,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -129,7 +129,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -150,7 +150,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -171,7 +171,7 @@ objType file
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -191,7 +191,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -213,7 +213,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -235,7 +235,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -256,7 +256,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -277,7 +277,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -298,7 +298,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -319,7 +319,7 @@ objType file
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -339,7 +339,7 @@ objType file
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -359,7 +359,7 @@ objType file
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-17
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -374,4 +374,4 @@ rnaExtract longPolyA
 subId 2323
 view RawData
 
-# MAGIC: 175882973
+# MAGIC: -1369200778

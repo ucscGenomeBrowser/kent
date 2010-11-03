@@ -786,7 +786,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL305
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsA549GrPcr2xEtoh02AlnRep2.bam
@@ -810,7 +810,7 @@ cell A549
 composite wgEncodeHaibTfbs
 controlId SL305
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsA549GrPcr2xEtoh02PkRep2.broadPeak.gz
@@ -1390,7 +1390,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1034
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hAlnRep1.bam
@@ -1412,7 +1412,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1092
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hAlnRep2.bam
@@ -1434,7 +1434,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1034
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hPkRep1.broadPeak.gz
@@ -1458,7 +1458,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1092
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsEcc1EralphaaV0416102Gen1hPkRep2.broadPeak.gz
@@ -1628,7 +1628,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2AlnRep1.bam
@@ -1650,7 +1650,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2AlnRep2.bam
@@ -1672,7 +1672,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep1.broadPeak.gz
@@ -1696,7 +1696,7 @@ cell ECC-1
 composite wgEncodeHaibTfbs
 controlId SL1882
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsEcc1Pol2V0416102Dmso2PkRep2.broadPeak.gz
@@ -1720,7 +1720,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Atf3Pcr1xAlnRep1.bam
@@ -1742,7 +1742,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Atf3Pcr1xAlnRep2.bam
@@ -1764,7 +1764,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Atf3Pcr1xPkRep1.broadPeak.gz
@@ -1788,7 +1788,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Atf3Pcr1xPkRep2.broadPeak.gz
@@ -2118,7 +2118,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Bclaf1m33V0416101AlnRep1.bam
@@ -2140,7 +2140,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Bclaf1m33V0416101AlnRep2.bam
@@ -2162,7 +2162,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1395
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep1.broadPeak.gz
@@ -2186,7 +2186,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Bclaf1m33V0416101PkRep2.broadPeak.gz
@@ -2210,7 +2210,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL516
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-05
 dateSubmitted 2008-12-117
 dateUnrestricted 2011-05-05
@@ -2537,7 +2537,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xAlnRep1.bam
@@ -2559,7 +2559,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xAlnRep2.bam
@@ -2581,7 +2581,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep1.broadPeak.gz
@@ -2605,7 +2605,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Ets1Pcr1xPkRep2.broadPeak.gz
@@ -2833,7 +2833,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Mef2aPcr1xAlnRep1.bam
@@ -2855,7 +2855,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Mef2aPcr1xAlnRep2.bam
@@ -2877,7 +2877,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Mef2aPcr1xPkRep1.broadPeak.gz
@@ -2901,7 +2901,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL1613
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsGm12878Mef2aPcr1xPkRep2.broadPeak.gz
@@ -2925,7 +2925,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-06
 dateSubmitted 2008-11-25
 dateUnrestricted 2011-05-06
@@ -2975,7 +2975,7 @@ cell GM12878
 composite wgEncodeHaibTfbs
 controlId SL217
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-06
 dateSubmitted 2008-11-25
 dateUnrestricted 2011-05-06
@@ -5411,7 +5411,7 @@ cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsGm12891Yy1c20V0416101AlnRep1.bam
@@ -5433,7 +5433,7 @@ cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsGm12891Yy1c20V0416101AlnRep2.bam
@@ -5455,7 +5455,7 @@ cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep1.broadPeak.gz
@@ -5479,7 +5479,7 @@ cell GM12891
 composite wgEncodeHaibTfbs
 controlId SL1782
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsGm12891Yy1c20V0416101PkRep2.broadPeak.gz
@@ -5957,7 +5957,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescAtf3Pcr1xAlnRep1.bam
@@ -5979,7 +5979,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescAtf3Pcr1xPkRep1.broadPeak.gz
@@ -6003,7 +6003,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescAtf3V0416102AlnRep2.bam
@@ -6025,7 +6025,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescAtf3V0416102PkRep2.broadPeak.gz
@@ -6568,7 +6568,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsH1hescP300Pcr1xAlnRep2.bam
@@ -6590,7 +6590,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsH1hescP300Pcr1xPkRep2.broadPeak.gz
@@ -6614,7 +6614,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsH1hescP300V0416102AlnRep1.bam
@@ -6636,7 +6636,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-27
 dateUnrestricted 2011-06-27
 fileName wgEncodeHaibTfbsH1hescP300V0416102PkRep1.broadPeak.gz
@@ -6868,7 +6868,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsH1hescRxraV0416102AlnRep1.bam
@@ -6890,7 +6890,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsH1hescRxraV0416102AlnRep2.bam
@@ -6912,7 +6912,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsH1hescRxraV0416102PkRep1.broadPeak.gz
@@ -6935,7 +6935,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsH1hescRxraV0416102PkRep2.broadPeak.gz
@@ -7648,7 +7648,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescYy1c20Pcr1xAlnRep1.bam
@@ -7670,7 +7670,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescYy1c20Pcr1xPkRep1.broadPeak.gz
@@ -7694,7 +7694,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescYy1c20V0416102AlnRep2.bam
@@ -7716,7 +7716,7 @@ cell H1-hESC
 composite wgEncodeHaibTfbs
 controlId SL1398
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsH1hescYy1c20V0416102PkRep2.broadPeak.gz
@@ -8071,7 +8071,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsHepg2Atf3Pcr1xAlnRep2.bam
@@ -8093,7 +8093,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsHepg2Atf3Pcr1xPkRep2.broadPeak.gz
@@ -8117,7 +8117,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsHepg2Atf3V0416101AlnRep1.bam
@@ -8139,7 +8139,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1781
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-15
 dateUnrestricted 2011-06-15
 fileName wgEncodeHaibTfbsHepg2Atf3V0416101PkRep1.broadPeak.gz
@@ -9277,7 +9277,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsHepg2Sp1Pcr1xAlnRep1.bam
@@ -9299,7 +9299,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsHepg2Sp1Pcr1xAlnRep2.bam
@@ -9321,7 +9321,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1400
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsHepg2Sp1Pcr1xPkRep1.broadPeak.gz
@@ -9344,7 +9344,7 @@ cell HepG2
 composite wgEncodeHaibTfbs
 controlId SL1401
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-13
 dateUnrestricted 2011-06-13
 fileName wgEncodeHaibTfbsHepg2Sp1Pcr1xPkRep2.broadPeak.gz
@@ -9763,7 +9763,7 @@ cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL108
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-06
 dateSubmitted 2009-07-19
 dateUnrestricted 2011-05-06
@@ -9813,7 +9813,7 @@ cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL108
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsHtb11NrsfPcr2xAlnRep1.bam
@@ -9859,7 +9859,7 @@ cell HTB-11
 composite wgEncodeHaibTfbs
 controlId SL108
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsHtb11NrsfPcr2xPkRep1.broadPeak.gz
@@ -9908,7 +9908,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep1.bam
@@ -9930,7 +9930,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xAlnRep2.bam
@@ -9952,7 +9952,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep1.broadPeak.gz
@@ -9976,7 +9976,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bcl3Pcr1xPkRep2.broadPeak.gz
@@ -10000,7 +10000,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bclaf1m33Pcr1xAlnRep1.bam
@@ -10022,7 +10022,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bclaf1m33Pcr1xAlnRep2.bam
@@ -10044,7 +10044,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep1.broadPeak.gz
@@ -10068,7 +10068,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562Bclaf1m33Pcr1xPkRep2.broadPeak.gz
@@ -10142,7 +10142,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-21
 dateUnrestricted 2011-06-21
 fileName wgEncodeHaibTfbsK562ControlV0416101AlnRep2.bam
@@ -10164,7 +10164,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsK562Gata2cg2Pcr1xAlnRep1.bam
@@ -10186,7 +10186,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsK562Gata2cg2Pcr1xAlnRep2.bam
@@ -10208,7 +10208,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep1.broadPeak.gz
@@ -10232,7 +10232,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsK562Gata2cg2Pcr1xPkRep2.broadPeak.gz
@@ -10766,7 +10766,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-16
 dateUnrestricted 2011-06-16
 fileName wgEncodeHaibTfbsK562Zbtb33Pcr1xAlnRep1.bam
@@ -10788,7 +10788,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-16
 dateUnrestricted 2011-06-16
 fileName wgEncodeHaibTfbsK562Zbtb33Pcr1xAlnRep2.bam
@@ -10810,7 +10810,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-16
 dateUnrestricted 2011-06-16
 fileName wgEncodeHaibTfbsK562Zbtb33Pcr1xPkRep1.broadPeak.gz
@@ -10834,7 +10834,7 @@ cell K562
 composite wgEncodeHaibTfbs
 controlId SL2455
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-16
 dateUnrestricted 2011-06-16
 fileName wgEncodeHaibTfbsK562Zbtb33Pcr1xPkRep2.broadPeak.gz
@@ -10858,7 +10858,7 @@ cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileIndex wgEncodeHaibTfbsPanc1ControlPcr2xAlnRep1.bam.bai
@@ -10905,7 +10905,7 @@ cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsPanc1NrsfPcr2xAlnRep2.bam
@@ -10952,7 +10952,7 @@ cell PANC-1
 composite wgEncodeHaibTfbs
 controlId SL523
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsPanc1NrsfPcr2xPkRep2.broadPeak.gz
@@ -10977,7 +10977,7 @@ cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsPfsk1ControlPcr2xAlnRep1.bam
@@ -11023,7 +11023,7 @@ cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsPfsk1NrsfPcr2xAlnRep1.bam
@@ -11069,7 +11069,7 @@ cell PFSK-1
 composite wgEncodeHaibTfbs
 controlId SL150
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsPfsk1NrsfPcr2xPkRep1.broadPeak.gz
@@ -11291,7 +11291,7 @@ cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1216
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hAlnRep1.bam
@@ -11313,7 +11313,7 @@ cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1490
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hAlnRep2.bam
@@ -11335,7 +11335,7 @@ cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1216
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep1.broadPeak.gz
@@ -11359,7 +11359,7 @@ cell T-47D
 composite wgEncodeHaibTfbs
 controlId SL1490
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-28
 dateUnrestricted 2011-06-28
 fileName wgEncodeHaibTfbsT47dEralphaaV0416102Estradia1hPkRep2.broadPeak.gz
@@ -11383,7 +11383,7 @@ cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsU87ControlPcr2xAlnRep1.bam
@@ -11429,7 +11429,7 @@ cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsU87NrsfPcr2xAlnRep1.bam
@@ -11475,7 +11475,7 @@ cell U87
 composite wgEncodeHaibTfbs
 controlId SL103
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-06
 dateUnrestricted 2011-05-06
 fileName wgEncodeHaibTfbsU87NrsfPcr2xPkRep1.broadPeak.gz
@@ -11517,4 +11517,4 @@ tableName wgEncodeHaibTfbsU87NrsfPcr2xPkRep2
 treatment None
 view Peaks
 
-# MAGIC: 1709636997
+# MAGIC: -511915538

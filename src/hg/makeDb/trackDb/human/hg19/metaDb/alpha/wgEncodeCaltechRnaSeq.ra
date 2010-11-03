@@ -287,7 +287,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
@@ -327,7 +327,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
@@ -409,7 +409,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
@@ -449,7 +449,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
@@ -489,7 +489,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2.gtf.gz
@@ -529,7 +529,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep2.insDistrib.gz
@@ -569,7 +569,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep2.junction.gz
@@ -611,7 +611,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam.bai
@@ -654,7 +654,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
@@ -697,7 +697,7 @@ objType table
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam.bai
@@ -739,7 +739,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
@@ -779,7 +779,7 @@ objType file
 cell GM12878
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
@@ -4119,7 +4119,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
@@ -4139,7 +4139,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
@@ -4159,7 +4159,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
@@ -4179,7 +4179,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
@@ -4199,7 +4199,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1.fpkm1.gz
@@ -4219,7 +4219,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
@@ -4239,7 +4239,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep1.fpkm1.gz
@@ -4259,7 +4259,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
@@ -4279,7 +4279,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1.gtf.gz
@@ -4299,7 +4299,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2.gtf.gz
@@ -4319,7 +4319,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1.junction.gz
@@ -4339,7 +4339,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2.junction.gz
@@ -4359,7 +4359,7 @@ objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam.bai
@@ -4381,7 +4381,7 @@ objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam.bai
@@ -4403,7 +4403,7 @@ objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
@@ -4424,7 +4424,7 @@ objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
@@ -4445,7 +4445,7 @@ objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam.bai
@@ -4467,7 +4467,7 @@ objType table
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam.bai
@@ -4489,7 +4489,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1.fpkm2.gz
@@ -4509,7 +4509,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
@@ -4529,7 +4529,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep1.fpkm2.gz
@@ -4549,7 +4549,7 @@ objType file
 cell HSMM
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
@@ -6101,7 +6101,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
@@ -6121,7 +6121,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
@@ -6141,7 +6141,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
@@ -6161,7 +6161,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
@@ -6181,7 +6181,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2.gtf.gz
@@ -6201,7 +6201,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2.junction.gz
@@ -6221,7 +6221,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.bai
@@ -6243,7 +6243,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
@@ -6264,7 +6264,7 @@ objType table
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.bai
@@ -6286,7 +6286,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
@@ -6306,7 +6306,7 @@ objType file
 cell MCF-7
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
@@ -6479,7 +6479,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
@@ -6520,7 +6520,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
@@ -6561,7 +6561,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
@@ -6602,7 +6602,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
@@ -6643,7 +6643,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2.gtf.gz
@@ -6705,7 +6705,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2.junction.gz
@@ -6748,7 +6748,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam.bai
@@ -6792,7 +6792,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
@@ -6836,7 +6836,7 @@ objType table
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam.bai
@@ -6879,7 +6879,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
@@ -6920,7 +6920,7 @@ objType file
 cell NHEK
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
@@ -6940,7 +6940,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
@@ -6960,7 +6960,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
@@ -6980,7 +6980,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
@@ -7000,7 +7000,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
@@ -7020,7 +7020,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1.fpkm1.gz
@@ -7040,7 +7040,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2.fpkm1.gz
@@ -7060,7 +7060,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneFPKMRep2.fpkm1.gz
@@ -7080,7 +7080,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1.gtf.gz
@@ -7100,7 +7100,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2.gtf.gz
@@ -7120,7 +7120,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1.junction.gz
@@ -7140,7 +7140,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2.junction.gz
@@ -7160,7 +7160,7 @@ objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam.bai
@@ -7182,7 +7182,7 @@ objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam.bai
@@ -7204,7 +7204,7 @@ objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
@@ -7225,7 +7225,7 @@ objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
@@ -7246,7 +7246,7 @@ objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam.bai
@@ -7268,7 +7268,7 @@ objType table
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam.bai
@@ -7290,7 +7290,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1.fpkm2.gz
@@ -7310,7 +7310,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2.fpkm2.gz
@@ -7330,7 +7330,7 @@ objType file
 cell NHLF
 composite wgEncodeCaltechRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptFPKMRep2.fpkm2.gz
@@ -7345,4 +7345,4 @@ replicate 2
 subId 1905
 view TranscriptFPKM
 
-# MAGIC: -619773066
+# MAGIC: -795521540

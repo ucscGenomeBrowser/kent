@@ -3,7 +3,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapAllRawSigRep1.bigWig
@@ -25,7 +25,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapAllRawSigRep2.bigWig
@@ -47,7 +47,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapAlnRep1.bam
@@ -69,7 +69,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapAlnRep2.bam
@@ -91,7 +91,7 @@ objType file
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapFastqRd1Rep1.fastq.gz
@@ -112,7 +112,7 @@ objType file
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapFastqRd1Rep2.fastq.gz
@@ -133,7 +133,7 @@ objType file
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapFastqRd2Rep1.fastq.gz
@@ -154,7 +154,7 @@ objType file
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapFastqRd2Rep2.fastq.gz
@@ -175,7 +175,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep1.bigWig
@@ -197,7 +197,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapMinusRawSigRep2.bigWig
@@ -219,7 +219,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep1.bigWig
@@ -241,7 +241,7 @@ objType table
 cell A549
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqA549CellPapPlusRawSigRep2.bigWig
@@ -264,7 +264,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAllRawSigRep1.bigWig
@@ -287,7 +287,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaAlnRep1.bam
@@ -310,7 +310,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -332,7 +332,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -354,7 +354,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaMinusRawSigRep1.bigWig
@@ -377,7 +377,7 @@ bioRep 017WC
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqAg04450CellLongnonpolyaPlusRawSigRep1.bigWig
@@ -399,7 +399,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapAllRawSigRep1.bigWig
@@ -421,7 +421,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapAllRawSigRep2.bigWig
@@ -443,7 +443,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep1.bam
@@ -465,7 +465,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapAlnRep2.bam
@@ -487,7 +487,7 @@ objType file
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd1Rep1.fastq.gz
@@ -508,7 +508,7 @@ objType file
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd1Rep2.fastq.gz
@@ -529,7 +529,7 @@ objType file
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd2Rep1.fastq.gz
@@ -550,7 +550,7 @@ objType file
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapFastqRd2Rep2.fastq.gz
@@ -571,7 +571,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep1.bigWig
@@ -593,7 +593,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapMinusRawSigRep2.bigWig
@@ -615,7 +615,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep1.bigWig
@@ -637,7 +637,7 @@ objType table
 cell AG04450
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqAg04450CellPapPlusRawSigRep2.bigWig
@@ -659,7 +659,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqBjCellPapAllRawSigRep1.bigWig
@@ -681,7 +681,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeCshlLongRnaSeqBjCellPapAllRawSigRep2.bigWig
@@ -703,7 +703,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqBjCellPapAlnRep1.bam
@@ -725,7 +725,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeCshlLongRnaSeqBjCellPapAlnRep2.bam
@@ -747,7 +747,7 @@ objType file
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqBjCellPapFastqRd1Rep1.fastq.gz
@@ -768,7 +768,7 @@ objType file
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeCshlLongRnaSeqBjCellPapFastqRd1Rep2.fastq.gz
@@ -789,7 +789,7 @@ objType file
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqBjCellPapFastqRd2Rep1.fastq.gz
@@ -810,7 +810,7 @@ objType file
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeCshlLongRnaSeqBjCellPapFastqRd2Rep2.fastq.gz
@@ -831,7 +831,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep1.bigWig
@@ -853,7 +853,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeCshlLongRnaSeqBjCellPapMinusRawSigRep2.bigWig
@@ -875,7 +875,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep1.bigWig
@@ -897,7 +897,7 @@ objType table
 cell BJ
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeCshlLongRnaSeqBjCellPapPlusRawSigRep2.bigWig
@@ -919,7 +919,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAllRawSigRep2.bigWig
@@ -941,7 +941,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaAlnRep2.bam
@@ -963,7 +963,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -984,7 +984,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -1005,7 +1005,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaMinusRawSigRep2.bigWig
@@ -1027,7 +1027,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellLongnonpolyaPlusRawSigRep2.bigWig
@@ -1049,7 +1049,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapAllRawSigRep1.bigWig
@@ -1071,7 +1071,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapAllRawSigRep2.bigWig
@@ -1093,7 +1093,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep1.bam
@@ -1115,7 +1115,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapAlnRep2.bam
@@ -1137,7 +1137,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd1Rep1.fastq.gz
@@ -1158,7 +1158,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd1Rep2.fastq.gz
@@ -1179,7 +1179,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd2Rep1.fastq.gz
@@ -1200,7 +1200,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapFastqRd2Rep2.fastq.gz
@@ -1221,7 +1221,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep1.bigWig
@@ -1243,7 +1243,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapMinusRawSigRep2.bigWig
@@ -1265,7 +1265,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep1.bigWig
@@ -1287,7 +1287,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878CellPapPlusRawSigRep2.bigWig
@@ -1517,7 +1517,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAllRawSigRep1.bigWig
@@ -1539,7 +1539,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAllRawSigRep2.bigWig
@@ -1561,7 +1561,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep1.bam
@@ -1583,7 +1583,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapAlnRep2.bam
@@ -1605,7 +1605,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd1Rep1.fastq.gz
@@ -1626,7 +1626,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd1Rep2.fastq.gz
@@ -1647,7 +1647,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd2Rep1.fastq.gz
@@ -1668,7 +1668,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapFastqRd2Rep2.fastq.gz
@@ -1689,7 +1689,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep1.bigWig
@@ -1711,7 +1711,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapMinusRawSigRep2.bigWig
@@ -1733,7 +1733,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep1.bigWig
@@ -1755,7 +1755,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqGm12878CytosolPapPlusRawSigRep2.bigWig
@@ -1777,7 +1777,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAllRawSigRep1.bigWig
@@ -1799,7 +1799,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAllRawSigRep2.bigWig
@@ -1821,7 +1821,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep1.bam
@@ -1843,7 +1843,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapAlnRep2.bam
@@ -1865,7 +1865,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep1.fastq.gz
@@ -1886,7 +1886,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd1Rep2.fastq.gz
@@ -1907,7 +1907,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd2Rep1.fastq.gz
@@ -1928,7 +1928,7 @@ objType file
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapFastqRd2Rep2.fastq.gz
@@ -1949,7 +1949,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep1.bigWig
@@ -1971,7 +1971,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapMinusRawSigRep2.bigWig
@@ -1993,7 +1993,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep1.bigWig
@@ -2015,7 +2015,7 @@ objType table
 cell GM12878
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqGm12878NucleusPapPlusRawSigRep2.bigWig
@@ -2037,7 +2037,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAllRawSigRep1.bigWig
@@ -2059,7 +2059,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAllRawSigRep2.bigWig
@@ -2081,7 +2081,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep1.bam
@@ -2103,7 +2103,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaAlnRep2.bam
@@ -2125,7 +2125,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -2146,7 +2146,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -2167,7 +2167,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -2188,7 +2188,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -2209,7 +2209,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep1.bigWig
@@ -2231,7 +2231,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaMinusRawSigRep2.bigWig
@@ -2253,7 +2253,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep1.bigWig
@@ -2275,7 +2275,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellLongnonpolyaPlusRawSigRep2.bigWig
@@ -2297,7 +2297,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapAllRawSigRep1.bigWig
@@ -2319,7 +2319,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapAllRawSigRep2.bigWig
@@ -2341,7 +2341,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep1.bam
@@ -2363,7 +2363,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapAlnRep2.bam
@@ -2385,7 +2385,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd1Rep1.fastq.gz
@@ -2406,7 +2406,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd1Rep2.fastq.gz
@@ -2427,7 +2427,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd2Rep1.fastq.gz
@@ -2448,7 +2448,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapFastqRd2Rep2.fastq.gz
@@ -2469,7 +2469,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep1.bigWig
@@ -2491,7 +2491,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapMinusRawSigRep2.bigWig
@@ -2513,7 +2513,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep1.bigWig
@@ -2535,7 +2535,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCellPapPlusRawSigRep2.bigWig
@@ -2557,7 +2557,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapAllRawSigRep2.bigWig
@@ -2579,7 +2579,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapAlnRep2.bam
@@ -2601,7 +2601,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapFastqRd1Rep2.fastq.gz
@@ -2622,7 +2622,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapFastqRd2Rep2.fastq.gz
@@ -2643,7 +2643,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapMinusRawSigRep2.bigWig
@@ -2665,7 +2665,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescCytosolPapPlusRawSigRep2.bigWig
@@ -2687,7 +2687,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapAllRawSigRep2.bigWig
@@ -2709,7 +2709,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapAlnRep2.bam
@@ -2731,7 +2731,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapFastqRd1Rep2.fastq.gz
@@ -2752,7 +2752,7 @@ objType file
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapFastqRd2Rep2.fastq.gz
@@ -2773,7 +2773,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapMinusRawSigRep2.bigWig
@@ -2795,7 +2795,7 @@ objType table
 cell H1-hESC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqH1hescNucleusPapPlusRawSigRep2.bigWig
@@ -2817,7 +2817,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapAllRawSigRep1.bigWig
@@ -2839,7 +2839,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapAllRawSigRep2.bigWig
@@ -2861,7 +2861,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep1.bam
@@ -2883,7 +2883,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapAlnRep2.bam
@@ -2905,7 +2905,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep1.fastq.gz
@@ -2926,7 +2926,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd1Rep2.fastq.gz
@@ -2947,7 +2947,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd2Rep1.fastq.gz
@@ -2968,7 +2968,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapFastqRd2Rep2.fastq.gz
@@ -2989,7 +2989,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep1.bigWig
@@ -3011,7 +3011,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapMinusRawSigRep2.bigWig
@@ -3033,7 +3033,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep1.bigWig
@@ -3055,7 +3055,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CellPapPlusRawSigRep2.bigWig
@@ -3077,7 +3077,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAllRawSigRep1.bigWig
@@ -3099,7 +3099,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAllRawSigRep2.bigWig
@@ -3121,7 +3121,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep1.bam
@@ -3143,7 +3143,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapAlnRep2.bam
@@ -3165,7 +3165,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep1.fastq.gz
@@ -3186,7 +3186,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd1Rep2.fastq.gz
@@ -3207,7 +3207,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd2Rep1.fastq.gz
@@ -3228,7 +3228,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapFastqRd2Rep2.fastq.gz
@@ -3249,7 +3249,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep1.bigWig
@@ -3271,7 +3271,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapMinusRawSigRep2.bigWig
@@ -3293,7 +3293,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep1.bigWig
@@ -3315,7 +3315,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3CytosolPapPlusRawSigRep2.bigWig
@@ -3337,7 +3337,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAllRawSigRep1.bigWig
@@ -3359,7 +3359,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAllRawSigRep2.bigWig
@@ -3381,7 +3381,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep1.bam
@@ -3403,7 +3403,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapAlnRep2.bam
@@ -3425,7 +3425,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep1.fastq.gz
@@ -3446,7 +3446,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd1Rep2.fastq.gz
@@ -3467,7 +3467,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd2Rep1.fastq.gz
@@ -3488,7 +3488,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapFastqRd2Rep2.fastq.gz
@@ -3509,7 +3509,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep1.bigWig
@@ -3531,7 +3531,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapMinusRawSigRep2.bigWig
@@ -3553,7 +3553,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep1.bigWig
@@ -3575,7 +3575,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHelas3NucleusPapPlusRawSigRep2.bigWig
@@ -3597,7 +3597,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep1.bigWig
@@ -3619,7 +3619,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAllRawSigRep2.bigWig
@@ -3641,7 +3641,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep1.bam
@@ -3663,7 +3663,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaAlnRep2.bam
@@ -3685,7 +3685,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -3706,7 +3706,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -3727,7 +3727,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -3748,7 +3748,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -3769,7 +3769,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep1.bigWig
@@ -3791,7 +3791,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaMinusRawSigRep2.bigWig
@@ -3813,7 +3813,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep1.bigWig
@@ -3835,7 +3835,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHepg2CellLongnonpolyaPlusRawSigRep2.bigWig
@@ -3857,7 +3857,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapAllRawSigRep1.bigWig
@@ -3879,7 +3879,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapAllRawSigRep2.bigWig
@@ -3901,7 +3901,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep1.bam
@@ -3923,7 +3923,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapAlnRep2.bam
@@ -3945,7 +3945,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd1Rep1.fastq.gz
@@ -3966,7 +3966,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd1Rep2.fastq.gz
@@ -3987,7 +3987,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd2Rep1.fastq.gz
@@ -4008,7 +4008,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapFastqRd2Rep2.fastq.gz
@@ -4029,7 +4029,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep1.bigWig
@@ -4051,7 +4051,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapMinusRawSigRep2.bigWig
@@ -4073,7 +4073,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep1.bigWig
@@ -4095,7 +4095,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CellPapPlusRawSigRep2.bigWig
@@ -4117,7 +4117,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAllRawSigRep1.bigWig
@@ -4139,7 +4139,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAllRawSigRep2.bigWig
@@ -4161,7 +4161,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep1.bam
@@ -4183,7 +4183,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapAlnRep2.bam
@@ -4205,7 +4205,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd1Rep1.fastq.gz
@@ -4226,7 +4226,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd1Rep2.fastq.gz
@@ -4247,7 +4247,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd2Rep1.fastq.gz
@@ -4268,7 +4268,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapFastqRd2Rep2.fastq.gz
@@ -4289,7 +4289,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep1.bigWig
@@ -4311,7 +4311,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapMinusRawSigRep2.bigWig
@@ -4333,7 +4333,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep1.bigWig
@@ -4355,7 +4355,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2CytosolPapPlusRawSigRep2.bigWig
@@ -4377,7 +4377,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAllRawSigRep1.bigWig
@@ -4399,7 +4399,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAllRawSigRep2.bigWig
@@ -4421,7 +4421,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep1.bam
@@ -4443,7 +4443,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapAlnRep2.bam
@@ -4465,7 +4465,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd1Rep1.fastq.gz
@@ -4486,7 +4486,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd1Rep2.fastq.gz
@@ -4507,7 +4507,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd2Rep1.fastq.gz
@@ -4528,7 +4528,7 @@ objType file
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapFastqRd2Rep2.fastq.gz
@@ -4549,7 +4549,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep1.bigWig
@@ -4571,7 +4571,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapMinusRawSigRep2.bigWig
@@ -4593,7 +4593,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep1.bigWig
@@ -4615,7 +4615,7 @@ objType table
 cell HepG2
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHepg2NucleusPapPlusRawSigRep2.bigWig
@@ -4638,7 +4638,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAllRawSigRep1.bigWig
@@ -4661,7 +4661,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaAlnRep1.bam
@@ -4684,7 +4684,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -4706,7 +4706,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -4728,7 +4728,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaMinusRawSigRep1.bigWig
@@ -4751,7 +4751,7 @@ bioRep 036WC
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHmecCellLongnonpolyaPlusRawSigRep1.bigWig
@@ -4773,7 +4773,7 @@ objType table
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHmecCellPapAllRawSigRep1.bigWig
@@ -4795,7 +4795,7 @@ objType table
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHmecCellPapAlnRep1.bam
@@ -4817,7 +4817,7 @@ objType file
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHmecCellPapFastqRd1Rep1.fastq.gz
@@ -4838,7 +4838,7 @@ objType file
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHmecCellPapFastqRd2Rep1.fastq.gz
@@ -4859,7 +4859,7 @@ objType table
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHmecCellPapMinusRawSigRep1.bigWig
@@ -4881,7 +4881,7 @@ objType table
 cell HMEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHmecCellPapPlusRawSigRep1.bigWig
@@ -4904,7 +4904,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAllRawSigRep1.bigWig
@@ -4927,7 +4927,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAllRawSigRep2.bigWig
@@ -4950,7 +4950,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep1.bam
@@ -4973,7 +4973,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaAlnRep2.bam
@@ -4996,7 +4996,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -5018,7 +5018,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -5040,7 +5040,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -5062,7 +5062,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -5084,7 +5084,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep1.bigWig
@@ -5107,7 +5107,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaMinusRawSigRep2.bigWig
@@ -5130,7 +5130,7 @@ bioRep 023WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep1.bigWig
@@ -5153,7 +5153,7 @@ bioRep 024WC
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqHsmmCellLongnonpolyaPlusRawSigRep2.bigWig
@@ -5175,7 +5175,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapAllRawSigRep1.bigWig
@@ -5197,7 +5197,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapAllRawSigRep2.bigWig
@@ -5219,7 +5219,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep1.bam
@@ -5241,7 +5241,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapAlnRep2.bam
@@ -5263,7 +5263,7 @@ objType file
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd1Rep1.fastq.gz
@@ -5284,7 +5284,7 @@ objType file
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd1Rep2.fastq.gz
@@ -5305,7 +5305,7 @@ objType file
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd2Rep1.fastq.gz
@@ -5326,7 +5326,7 @@ objType file
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapFastqRd2Rep2.fastq.gz
@@ -5347,7 +5347,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep1.bigWig
@@ -5369,7 +5369,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapMinusRawSigRep2.bigWig
@@ -5391,7 +5391,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep1.bigWig
@@ -5413,7 +5413,7 @@ objType table
 cell HSMM
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHsmmCellPapPlusRawSigRep2.bigWig
@@ -5435,7 +5435,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapAllRawSigRep1.bigWig
@@ -5457,7 +5457,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapAllRawSigRep2.bigWig
@@ -5479,7 +5479,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep1.bam
@@ -5501,7 +5501,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapAlnRep2.bam
@@ -5523,7 +5523,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd1Rep1.fastq.gz
@@ -5544,7 +5544,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd1Rep2.fastq.gz
@@ -5565,7 +5565,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd2Rep1.fastq.gz
@@ -5586,7 +5586,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapFastqRd2Rep2.fastq.gz
@@ -5607,7 +5607,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep1.bigWig
@@ -5629,7 +5629,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapMinusRawSigRep2.bigWig
@@ -5651,7 +5651,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep1.bigWig
@@ -5673,7 +5673,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCellPapPlusRawSigRep2.bigWig
@@ -5695,7 +5695,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAllRawSigRep3.bigWig
@@ -5717,7 +5717,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAllRawSigRep4.bigWig
@@ -5739,7 +5739,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep3.bam
@@ -5761,7 +5761,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapAlnRep4.bam
@@ -5783,7 +5783,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd1Rep3.fastq.gz
@@ -5804,7 +5804,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd1Rep4.fastq.gz
@@ -5825,7 +5825,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd2Rep3.fastq.gz
@@ -5846,7 +5846,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapFastqRd2Rep4.fastq.gz
@@ -5867,7 +5867,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep3.bigWig
@@ -5889,7 +5889,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapMinusRawSigRep4.bigWig
@@ -5911,7 +5911,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep3.bigWig
@@ -5933,7 +5933,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecCytosolPapPlusRawSigRep4.bigWig
@@ -5955,7 +5955,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAllRawSigRep3.bigWig
@@ -5977,7 +5977,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAllRawSigRep4.bigWig
@@ -5999,7 +5999,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep3.bam
@@ -6021,7 +6021,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapAlnRep4.bam
@@ -6043,7 +6043,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd1Rep3.fastq.gz
@@ -6064,7 +6064,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd1Rep4.fastq.gz
@@ -6085,7 +6085,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd2Rep3.fastq.gz
@@ -6106,7 +6106,7 @@ objType file
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapFastqRd2Rep4.fastq.gz
@@ -6127,7 +6127,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep3.bigWig
@@ -6149,7 +6149,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapMinusRawSigRep4.bigWig
@@ -6171,7 +6171,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep3.bigWig
@@ -6193,7 +6193,7 @@ objType table
 cell HUVEC
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqHuvecNucleusPapPlusRawSigRep4.bigWig
@@ -6215,7 +6215,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAllRawSigRep1.bigWig
@@ -6237,7 +6237,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAllRawSigRep2.bigWig
@@ -6259,7 +6259,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep1.bam
@@ -6281,7 +6281,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaAlnRep2.bam
@@ -6303,7 +6303,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -6324,7 +6324,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -6345,7 +6345,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -6366,7 +6366,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -6387,7 +6387,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep1.bigWig
@@ -6409,7 +6409,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaMinusRawSigRep2.bigWig
@@ -6431,7 +6431,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep1.bigWig
@@ -6453,7 +6453,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellLongnonpolyaPlusRawSigRep2.bigWig
@@ -6475,7 +6475,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562CellPapAllRawSigRep1.bigWig
@@ -6497,7 +6497,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellPapAllRawSigRep2.bigWig
@@ -6519,7 +6519,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep1.bam
@@ -6541,7 +6541,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellPapAlnRep2.bam
@@ -6563,7 +6563,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep1.fastq.gz
@@ -6584,7 +6584,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd1Rep2.fastq.gz
@@ -6605,7 +6605,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd2Rep1.fastq.gz
@@ -6626,7 +6626,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellPapFastqRd2Rep2.fastq.gz
@@ -6647,7 +6647,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep1.bigWig
@@ -6669,7 +6669,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellPapMinusRawSigRep2.bigWig
@@ -6691,7 +6691,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep1.bigWig
@@ -6713,7 +6713,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CellPapPlusRawSigRep2.bigWig
@@ -6944,7 +6944,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep3.bigWig
@@ -6967,7 +6967,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAllRawSigRep4.bigWig
@@ -6990,7 +6990,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep3.bam
@@ -7013,7 +7013,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalAlnRep4.bam
@@ -7036,7 +7036,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep3.fastq.gz
@@ -7058,7 +7058,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd1Rep4.fastq.gz
@@ -7080,7 +7080,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep3.fastq.gz
@@ -7102,7 +7102,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalFastqRd2Rep4.fastq.gz
@@ -7124,7 +7124,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep3.bigWig
@@ -7147,7 +7147,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalMinusRawSigRep4.bigWig
@@ -7170,7 +7170,7 @@ bioRep 025CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep3.bigWig
@@ -7193,7 +7193,7 @@ bioRep 026CH
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562ChromatinTotalPlusRawSigRep4.bigWig
@@ -7234,7 +7234,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapAllRawSigRep1.bigWig
@@ -7256,7 +7256,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapAllRawSigRep2.bigWig
@@ -7278,7 +7278,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep1.bam
@@ -7300,7 +7300,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapAlnRep2.bam
@@ -7322,7 +7322,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd1Rep1.fastq.gz
@@ -7343,7 +7343,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd1Rep2.fastq.gz
@@ -7364,7 +7364,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd2Rep1.fastq.gz
@@ -7385,7 +7385,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapFastqRd2Rep2.fastq.gz
@@ -7406,7 +7406,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep1.bigWig
@@ -7428,7 +7428,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapMinusRawSigRep2.bigWig
@@ -7450,7 +7450,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep1.bigWig
@@ -7472,7 +7472,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqK562CytosolPapPlusRawSigRep2.bigWig
@@ -7495,7 +7495,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep3.bigWig
@@ -7518,7 +7518,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAllRawSigRep4.bigWig
@@ -7541,7 +7541,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep3.bam
@@ -7564,7 +7564,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalAlnRep4.bam
@@ -7587,7 +7587,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep3.fastq.gz
@@ -7609,7 +7609,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd1Rep4.fastq.gz
@@ -7631,7 +7631,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep3.fastq.gz
@@ -7653,7 +7653,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalFastqRd2Rep4.fastq.gz
@@ -7675,7 +7675,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep3.bigWig
@@ -7698,7 +7698,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalMinusRawSigRep4.bigWig
@@ -7721,7 +7721,7 @@ bioRep 025NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep3.bigWig
@@ -7744,7 +7744,7 @@ bioRep 026NL
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleolusTotalPlusRawSigRep4.bigWig
@@ -7767,7 +7767,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep3.bigWig
@@ -7790,7 +7790,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAllRawSigRep4.bigWig
@@ -7813,7 +7813,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep3.bam
@@ -7836,7 +7836,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalAlnRep4.bam
@@ -7859,7 +7859,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep3.fastq.gz
@@ -7881,7 +7881,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd1Rep4.fastq.gz
@@ -7903,7 +7903,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep3.fastq.gz
@@ -7925,7 +7925,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalFastqRd2Rep4.fastq.gz
@@ -7947,7 +7947,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep3.bigWig
@@ -7970,7 +7970,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalMinusRawSigRep4.bigWig
@@ -7993,7 +7993,7 @@ bioRep 025NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep3.bigWig
@@ -8016,7 +8016,7 @@ bioRep 026NP
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqK562NucleoplasmTotalPlusRawSigRep4.bigWig
@@ -8038,7 +8038,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapAllRawSigRep1.bigWig
@@ -8060,7 +8060,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapAllRawSigRep2.bigWig
@@ -8082,7 +8082,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep1.bam
@@ -8104,7 +8104,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapAlnRep2.bam
@@ -8126,7 +8126,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep1.fastq.gz
@@ -8147,7 +8147,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd1Rep2.fastq.gz
@@ -8168,7 +8168,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd2Rep1.fastq.gz
@@ -8189,7 +8189,7 @@ objType file
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapFastqRd2Rep2.fastq.gz
@@ -8210,7 +8210,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep1.bigWig
@@ -8232,7 +8232,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapMinusRawSigRep2.bigWig
@@ -8254,7 +8254,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep1.bigWig
@@ -8276,7 +8276,7 @@ objType table
 cell K562
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqK562NucleusPapPlusRawSigRep2.bigWig
@@ -8299,7 +8299,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAllRawSigRep1.bigWig
@@ -8322,7 +8322,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAllRawSigRep2.bigWig
@@ -8345,7 +8345,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep1.bam
@@ -8368,7 +8368,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaAlnRep2.bam
@@ -8391,7 +8391,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -8413,7 +8413,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -8435,7 +8435,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -8457,7 +8457,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -8479,7 +8479,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep1.bigWig
@@ -8502,7 +8502,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaMinusRawSigRep2.bigWig
@@ -8525,7 +8525,7 @@ bioRep 015WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep1.bigWig
@@ -8548,7 +8548,7 @@ bioRep 016WC
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqMcf7CellLongnonpolyaPlusRawSigRep2.bigWig
@@ -8570,7 +8570,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapAllRawSigRep1.bigWig
@@ -8592,7 +8592,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapAllRawSigRep2.bigWig
@@ -8614,7 +8614,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep1.bam
@@ -8636,7 +8636,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapAlnRep2.bam
@@ -8658,7 +8658,7 @@ objType file
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep1.fastq.gz
@@ -8679,7 +8679,7 @@ objType file
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd1Rep2.fastq.gz
@@ -8700,7 +8700,7 @@ objType file
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd2Rep1.fastq.gz
@@ -8721,7 +8721,7 @@ objType file
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapFastqRd2Rep2.fastq.gz
@@ -8742,7 +8742,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep1.bigWig
@@ -8764,7 +8764,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapMinusRawSigRep2.bigWig
@@ -8786,7 +8786,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep1.bigWig
@@ -8808,7 +8808,7 @@ objType table
 cell MCF-7
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-05
 dateUnrestricted 2011-07-05
 fileName wgEncodeCshlLongRnaSeqMcf7CellPapPlusRawSigRep2.bigWig
@@ -8830,7 +8830,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAllRawSigRep1.bigWig
@@ -8852,7 +8852,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAllRawSigRep2.bigWig
@@ -8875,7 +8875,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAllRawSigRep5.bigWig
@@ -8897,7 +8897,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep1.bam
@@ -8919,7 +8919,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep2.bam
@@ -8942,7 +8942,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaAlnRep5.bam
@@ -8964,7 +8964,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -8985,7 +8985,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -9007,7 +9007,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd1Rep5.fastq.gz
@@ -9028,7 +9028,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -9049,7 +9049,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -9071,7 +9071,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaFastqRd2Rep5.fastq.gz
@@ -9092,7 +9092,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep1.bigWig
@@ -9114,7 +9114,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep2.bigWig
@@ -9137,7 +9137,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaMinusRawSigRep5.bigWig
@@ -9159,7 +9159,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep1.bigWig
@@ -9181,7 +9181,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep2.bigWig
@@ -9204,7 +9204,7 @@ bioRep 035WC
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-25
 dateUnrestricted 2011-07-25
 fileName wgEncodeCshlLongRnaSeqNhekCellLongnonpolyaPlusRawSigRep5.bigWig
@@ -9226,7 +9226,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAllRawSigRep1.bigWig
@@ -9248,7 +9248,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAllRawSigRep2.bigWig
@@ -9270,7 +9270,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAllRawSigRep5.bigWig
@@ -9292,7 +9292,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep1.bam
@@ -9314,7 +9314,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep2.bam
@@ -9336,7 +9336,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellPapAlnRep5.bam
@@ -9358,7 +9358,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep1.fastq.gz
@@ -9379,7 +9379,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep2.fastq.gz
@@ -9400,7 +9400,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd1Rep5.fastq.gz
@@ -9421,7 +9421,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep1.fastq.gz
@@ -9442,7 +9442,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep2.fastq.gz
@@ -9463,7 +9463,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellPapFastqRd2Rep5.fastq.gz
@@ -9484,7 +9484,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep1.bigWig
@@ -9506,7 +9506,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep2.bigWig
@@ -9528,7 +9528,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellPapMinusRawSigRep5.bigWig
@@ -9550,7 +9550,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep1.bigWig
@@ -9572,7 +9572,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep2.bigWig
@@ -9594,7 +9594,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCellPapPlusRawSigRep5.bigWig
@@ -9616,7 +9616,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAllRawSigRep3.bigWig
@@ -9638,7 +9638,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAllRawSigRep4.bigWig
@@ -9660,7 +9660,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep3.bam
@@ -9682,7 +9682,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapAlnRep4.bam
@@ -9704,7 +9704,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep3.fastq.gz
@@ -9725,7 +9725,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd1Rep4.fastq.gz
@@ -9746,7 +9746,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd2Rep3.fastq.gz
@@ -9767,7 +9767,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapFastqRd2Rep4.fastq.gz
@@ -9788,7 +9788,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep3.bigWig
@@ -9810,7 +9810,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapMinusRawSigRep4.bigWig
@@ -9832,7 +9832,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-30
 dateUnrestricted 2011-06-30
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep3.bigWig
@@ -9854,7 +9854,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekCytosolPapPlusRawSigRep4.bigWig
@@ -9876,7 +9876,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAllRawSigRep3.bigWig
@@ -9898,7 +9898,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAllRawSigRep4.bigWig
@@ -9920,7 +9920,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep3.bam
@@ -9942,7 +9942,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapAlnRep4.bam
@@ -9964,7 +9964,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep3.fastq.gz
@@ -9985,7 +9985,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd1Rep4.fastq.gz
@@ -10006,7 +10006,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd2Rep3.fastq.gz
@@ -10027,7 +10027,7 @@ objType file
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapFastqRd2Rep4.fastq.gz
@@ -10048,7 +10048,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep3.bigWig
@@ -10070,7 +10070,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapMinusRawSigRep4.bigWig
@@ -10092,7 +10092,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep3.bigWig
@@ -10114,7 +10114,7 @@ objType table
 cell NHEK
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhekNucleusPapPlusRawSigRep4.bigWig
@@ -10137,7 +10137,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAllRawSigRep1.bigWig
@@ -10160,7 +10160,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAllRawSigRep2.bigWig
@@ -10183,7 +10183,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep1.bam
@@ -10206,7 +10206,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaAlnRep2.bam
@@ -10229,7 +10229,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd1Rep1.fastq.gz
@@ -10251,7 +10251,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd1Rep2.fastq.gz
@@ -10273,7 +10273,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd2Rep1.fastq.gz
@@ -10295,7 +10295,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaFastqRd2Rep2.fastq.gz
@@ -10317,7 +10317,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep1.bigWig
@@ -10340,7 +10340,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaMinusRawSigRep2.bigWig
@@ -10363,7 +10363,7 @@ bioRep 033WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep1.bigWig
@@ -10386,7 +10386,7 @@ bioRep 034WC
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeCshlLongRnaSeqNhlfCellLongnonpolyaPlusRawSigRep2.bigWig
@@ -10408,7 +10408,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapAllRawSigRep1.bigWig
@@ -10430,7 +10430,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapAllRawSigRep2.bigWig
@@ -10452,7 +10452,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep1.bam
@@ -10474,7 +10474,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapAlnRep2.bam
@@ -10496,7 +10496,7 @@ objType file
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep1.fastq.gz
@@ -10517,7 +10517,7 @@ objType file
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd1Rep2.fastq.gz
@@ -10538,7 +10538,7 @@ objType file
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd2Rep1.fastq.gz
@@ -10559,7 +10559,7 @@ objType file
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapFastqRd2Rep2.fastq.gz
@@ -10580,7 +10580,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep1.bigWig
@@ -10602,7 +10602,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapMinusRawSigRep2.bigWig
@@ -10624,7 +10624,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep1.bigWig
@@ -10646,7 +10646,7 @@ objType table
 cell NHLF
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqNhlfCellPapPlusRawSigRep2.bigWig
@@ -10668,7 +10668,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapAllRawSigRep1.bigWig
@@ -10690,7 +10690,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapAllRawSigRep2.bigWig
@@ -10712,7 +10712,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep1.bam
@@ -10734,7 +10734,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapAlnRep2.bam
@@ -10756,7 +10756,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep1.fastq.gz
@@ -10777,7 +10777,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd1Rep2.fastq.gz
@@ -10798,7 +10798,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep1.fastq.gz
@@ -10819,7 +10819,7 @@ objType file
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapFastqRd2Rep2.fastq.gz
@@ -10840,7 +10840,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep1.bigWig
@@ -10862,7 +10862,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapMinusRawSigRep2.bigWig
@@ -10884,7 +10884,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep1.bigWig
@@ -10906,7 +10906,7 @@ objType table
 cell SK-N-SH_RA
 composite wgEncodeCshlLongRnaSeq
 dataType LongRnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-09-29
 dateUnrestricted 2011-06-29
 fileName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2.bigWig
@@ -10923,4 +10923,4 @@ subId 2418
 tableName wgEncodeCshlLongRnaSeqSknshraCellPapPlusRawSigRep2
 view PlusRawSig
 
-# MAGIC: 1304422782
+# MAGIC: -1830857940

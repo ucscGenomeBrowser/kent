@@ -3,7 +3,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -24,7 +24,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -45,7 +45,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -66,7 +66,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -87,7 +87,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -108,7 +108,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -129,7 +129,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -150,7 +150,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -171,7 +171,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -192,7 +192,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -213,7 +213,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -234,7 +234,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -255,7 +255,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -276,7 +276,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -297,7 +297,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -318,7 +318,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -339,7 +339,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -360,7 +360,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -381,7 +381,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -402,7 +402,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-08
 dateSubmitted 2009-12-05
 dateUnrestricted 2010-09-05
@@ -423,7 +423,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -444,7 +444,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -465,7 +465,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -486,7 +486,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -507,7 +507,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -528,7 +528,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -549,7 +549,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -570,7 +570,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -591,7 +591,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -612,7 +612,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -633,7 +633,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -654,7 +654,7 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -675,7 +675,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -697,7 +697,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -718,7 +718,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -739,7 +739,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-12-04
 dateUnrestricted 2010-09-04
@@ -760,7 +760,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -782,7 +782,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -803,7 +803,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -824,7 +824,7 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -845,7 +845,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -866,7 +866,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -887,7 +887,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -908,7 +908,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -929,7 +929,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -950,7 +950,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -971,7 +971,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -992,7 +992,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1013,7 +1013,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1034,7 +1034,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1055,7 +1055,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1076,7 +1076,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-09-16
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1097,7 +1097,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1118,7 +1118,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1139,7 +1139,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1160,7 +1160,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1181,7 +1181,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1202,7 +1202,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1223,7 +1223,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1244,7 +1244,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1265,7 +1265,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1286,7 +1286,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1307,7 +1307,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1328,7 +1328,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-18
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1349,7 +1349,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1370,7 +1370,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1391,7 +1391,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1412,7 +1412,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1433,7 +1433,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1454,7 +1454,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1475,7 +1475,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1496,7 +1496,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1517,7 +1517,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1538,7 +1538,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1559,7 +1559,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1580,7 +1580,7 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-10-09
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1601,7 +1601,7 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1622,7 +1622,7 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2010-03-08
 dateUnrestricted 2010-12-08
@@ -1643,7 +1643,7 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1664,7 +1664,7 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-22
 dateSubmitted 2009-11-13
 dateUnrestricted 2010-08-13
@@ -1680,4 +1680,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSig
 
-# MAGIC: -2069211474
+# MAGIC: 347969870

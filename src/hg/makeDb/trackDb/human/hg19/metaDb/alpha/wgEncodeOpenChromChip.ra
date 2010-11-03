@@ -4,13 +4,13 @@ antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2480
@@ -22,13 +22,13 @@ antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2480
@@ -40,7 +40,7 @@ antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfBaseOverlapSignal.bigWig
@@ -58,7 +58,7 @@ antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfPkRep1.narrowPeak.gz
@@ -76,7 +76,7 @@ antibody CTCF
 cell Fibrobl
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-13
 dateUnrestricted 2011-07-13
 fileName wgEncodeOpenChromChipFibroblCtcfSig.bigWig
@@ -95,13 +95,13 @@ cell Fibrobl
 composite wgEncodeOpenChromChip
 controlId Fibrobl/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 fileName wgEncodeOpenChromChipFibroblInputAln.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 setType input
 subId 2487
@@ -114,7 +114,7 @@ cell Fibrobl
 composite wgEncodeOpenChromChip
 controlId Fibrobl/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-14
 dateUnrestricted 2011-07-14
 fileName wgEncodeOpenChromChipFibroblInputSig.bigWig
@@ -133,13 +133,13 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2516
@@ -151,13 +151,13 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2516
@@ -169,7 +169,7 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfBaseOverlapSignal.bigWig
@@ -187,7 +187,7 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfPkRep1.narrowPeak.gz
@@ -205,7 +205,7 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep1.fastq.gz
@@ -222,7 +222,7 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfRawDataRep2.fastq.gz
@@ -239,7 +239,7 @@ antibody CTCF
 cell Gliobla
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromChipGlioblaCtcfSig.bigWig
@@ -258,13 +258,13 @@ cell Gliobla
 composite wgEncodeOpenChromChip
 controlId Gliobla/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputAln.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 setType input
 subId 2499
@@ -277,7 +277,7 @@ cell Gliobla
 composite wgEncodeOpenChromChip
 controlId Gliobla/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputRawData.fastq.gz
@@ -295,7 +295,7 @@ cell Gliobla
 composite wgEncodeOpenChromChip
 controlId Gliobla/Input
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipGlioblaInputSig.bigWig
@@ -416,13 +416,13 @@ antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -435,13 +435,13 @@ antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -454,13 +454,13 @@ antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfAlnRep3.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
 project wgEncode
 replicate 3
@@ -473,7 +473,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfBaseOverlapSignal.bigWig
@@ -492,7 +492,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfPkRep1.narrowPeak.gz
@@ -511,7 +511,7 @@ antibody CTCF
 cell GM12878
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-01
 dateUnrestricted 2011-07-01
 fileName wgEncodeOpenChromChipGm12878CtcfSig.bigWig
@@ -2888,13 +2888,13 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2504
@@ -2907,13 +2907,13 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2504
@@ -2926,7 +2926,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehBaseOverlapSignal.bigWig
@@ -2945,7 +2945,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehPkRep1.narrowPeak.gz
@@ -2964,7 +2964,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep1.fastq.gz
@@ -2982,7 +2982,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehRawDataRep2.fastq.gz
@@ -3000,7 +3000,7 @@ antibody c-Myc
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CmycVehSig.bigWig
@@ -3081,13 +3081,13 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2502
@@ -3100,13 +3100,13 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2502
@@ -3119,7 +3119,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroBaseOverlapSignal.bigWig
@@ -3138,7 +3138,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroPkRep1.narrowPeak.gz
@@ -3157,7 +3157,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep1.fastq.gz
@@ -3175,7 +3175,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroRawDataRep2.fastq.gz
@@ -3193,7 +3193,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfEstroSig.bigWig
@@ -3252,13 +3252,13 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2505
@@ -3271,13 +3271,13 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehAlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2505
@@ -3290,7 +3290,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehBaseOverlapSignal.bigWig
@@ -3309,7 +3309,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehPkRep1.narrowPeak.gz
@@ -3328,7 +3328,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep1.fastq.gz
@@ -3346,7 +3346,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehRawDataRep2.fastq.gz
@@ -3364,7 +3364,7 @@ antibody CTCF
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromChipMcf7CtcfVehSig.bigWig
@@ -3427,13 +3427,13 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep1.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2495
@@ -3445,13 +3445,13 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2AlnRep2.bam
 grant Crawford
 lab UT-A
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2495
@@ -3463,7 +3463,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2BaseOverlapSignal.bigWig
@@ -3481,7 +3481,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2PkRep1.narrowPeak.gz
@@ -3499,7 +3499,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep1.fastq.gz
@@ -3516,7 +3516,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2RawDataRep2.fastq.gz
@@ -3533,7 +3533,7 @@ antibody Pol2
 cell MCF-7
 composite wgEncodeOpenChromChip
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromChipMcf7Pol2Sig.bigWig
@@ -3897,4 +3897,4 @@ subId 1652
 tableName wgEncodeOpenChromChipProgfibPol2Sig
 view Signal
 
-# MAGIC: 1349303022
+# MAGIC: 870013115
