@@ -9,7 +9,7 @@ subGroup1 cellType Cell_Line K562=K562&nbsp;<i>Tier1</i> GM12878=GM12878&nbsp;<i
 subGroup2 view View Sites=Sites
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 treatment Treatmenet None=None ANDRO=Methyltrienolone(androgen)
-subGroup5 protocol Growth_Protocol uwStamGrowProt=UW_Stam_Growth_Protocol hudsonAlphaGrowProt=HudsonAlpha_Growth_Protocol openChromGrowProt=Open_Chromatin_Growth_Protocol YaleGrowProt=Yale_TFBS_Growth_Protocol
+subGroup5 protocol Growth_Protocol uwStamGrowProt=UW_Stam hudsonAlphaGrowProt=HudsonAlpha openChromGrowProt=Open_Chromatin YaleGrowProt=Yale_TFBS
 #dimensions dimensionX=protocol dimensionY=cellType dimensionZ=rep 
 filterComposite dimensionA=all dimensionC=multi dimensionD=one
 dimensions  dimensionA=cellType dimensionC=treatment dimensionB=protocol dimensionD=rep
