@@ -267,6 +267,15 @@ The format of the type fields:
     In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal
     corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
     will be calculated from the data itself.
+    
+    The database loading procedure for the table can be:
+	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb
+    which is equivalent to:
+    hgsql hg18 -e 'drop table if exists itemRgbBbTest;
+            create table itemRgbBbTest (fileName varchar(255) not null);
+            insert into itemRgbBbTest values
+        ("/gbdb/hg18/bbi/itemRgb.hg18.bb");'
+    The fileName can also be a valid URL to the bb file.
 
 18. type bigWig [lower] [upper]
     This uses a binary indexed file rather than a database table.  It is, other
