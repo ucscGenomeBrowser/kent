@@ -6274,6 +6274,7 @@ term AffyExonArray
 tag AffyExonArray
 type dataType
 label Affy Exon-array
+description Affymetrix Exon Array
 
 
 #not currently in metaDb
@@ -6281,16 +6282,19 @@ term Bip
 tag bip
 type dataType
 label BIP
+description Bi-directional Promoters
 
 term Cage
 tag cage
 type dataType
 label CAGE
+description CAGE
 
 term ChipSeq
 tag chipSeq
 type dataType
 label ChIP-seq
+description ChIP-Seq
 
 term Cluster
 tag cluster
@@ -6303,113 +6307,134 @@ term Cnv
 tag CNV
 type dataType
 label CNV
+description Copy Number Variation
 
 #term not standard to match hg18???
 term DnaseDgf
 tag DGF
 type dataType
 label DNase-DGF
+description DNase Digital Footprinting
 
 term DnaPet
 tag dnaPet
 type dataType
 label DNA-PET
+description DNA Paired End Tag
 
 term DnaseSeq
 tag dnaseSeq
 type dataType
 label DNase-seq
+description DNase digestion followed by sequencing
 
 #The tag is not standard Camel case to be consistent with hg18
 term FaireSeq
 tag FAIREseq
 type dataType
 label FAIRE-seq
+description FAIRE followed by sequencing
 
 term Gencode
 tag gencode
 type dataType
 label Gencode
+description Gencode
 
-# TODO: retire this ?
+# TODO: retire this ?  (11/3/10)
 term LongRnaSeq
 tag longRnaSeq
 type dataType
 label RNA-seq
+description RNA sequencing: long RNAs
 
-# TODO: retire this ?
+# TODO: retire this ?  (11/3/10)
 term RnaSeqPolyA
 tag rnaSeqPolya
 type dataType
 label RNA-seq
+description RNA sequencing: polyA+ RNA
 
 term Orchid
 tag orchid
 type dataType
 label ORChID
+description ORChID
 
 term Mapability
 tag mapability
 type dataType
 label Mapability
+description Uniqueness of n-mer sequence fragments across the genome
 
 term Methyl27
 tag methyl27
 type dataType
 label Methyl 27
+description Methyl 27
 
 term MethylSeq
 tag methylseq
 type dataType
+description MethylSeq
 
 term MethylRrbs
 tag methylRrbs
 type dataType
 label Methyl RRBS
+description Methyl RRBS
 
 # tag not standard to match hg18
 term Nre
 tag NRE
 type dataType
+description Negative Regulatory Elements
 
 # tag not standard to match hg18
 term RnaPet
 tag PET
 type dataType
 label RNA-PET
+description RNA Paired-End Tag
 
 term RnaChip
 tag rnaChip
 type dataType
 label RNA-chip
+description microarray analysis of RNA expression
 
 term RnaSeq
 tag rnaSeq
 type dataType
 label RNA-seq
+description Sequencing analysis of RNA expression
 
 term RipChip
 tag  ripChip
 type dataType
 label RIP-chip
+description Rna IP measured on microarray
 
 #This should be retired
 term ShortRnaSeq
 tag shortRnaSeq
 type dataType
 label RNA-seq
+description sequencing of short RNAs
 
 #This is not in the metaDB currently
 term TfbsValid
 tag tfbsValid
 type dataType
 label TFBS-Valid
+description TFBS-Valid
 
 ### version
 
 term V2
 tag V2
 type version
+descriptoion version
 
 ### Strain
 # Used in conjunction with mouse submissions
@@ -6617,6 +6642,7 @@ term Broad
 tag Broad
 type lab
 label Bernstein - Broad Institute
+description Bernstein - Broad Institute
 labInst Broad Institute
 labPi Bernstein
 labPiFull Bradley Bernstein
@@ -6627,6 +6653,7 @@ term BU
 tag BU
 type lab
 label Tullius - Boston University
+description Tullius - Boston University
 labInst Boston University
 labPi Tullius
 labPiFull Thomas Tullius
@@ -6637,6 +6664,7 @@ term CRG-Guigo
 tag CRG
 type lab
 label Guigo - CGR, Barcelona
+description Guigo - CGR, Barcelona
 labInst Genome Center for Genomic Regulation, Barcelona
 labPi Guigo
 labPiFull Roderic Guigo
@@ -6647,6 +6675,7 @@ term GIS-Chia
 tag GIS-Chia
 type lab
 label Ruan - Genome Institute of Singapore (Chia)
+description Ruan - Genome Institute of Singapore (Chia)
 labInst Genome Institute of Singapore (Chia)
 labPi Ruan
 labPiFull Yijun Ruan
@@ -6657,6 +6686,7 @@ term Sanger
 tag gencode
 type lab
 label Hubbard - GENCODE at Sanger Institute
+description Hubbard - GENCODE at Sanger Institute
 labInst Gencode
 labPi Hubbard
 labPiFull Tim Hubbard
@@ -6667,6 +6697,7 @@ term SunyAlbany
 tag SUNY
 type lab
 label Tenenbaum - SUNY at Albany
+description Tenenbaum - SUNY at Albany
 labInst State University of New York at Albany
 labPi Tenenbaum
 labPiFull Scott Tenebaum
@@ -6677,6 +6708,7 @@ term UCSC
 tag UCSC
 type lab
 label Kent - UC Santa Cruz
+description Kent - UC Santa Cruz
 labInst University of California at Santa Cruz
 labPi Kent
 labPiFull Jim Kent
@@ -6687,6 +6719,7 @@ term UW
 tag UW
 type lab
 label Stamatoyannopoulous - University of Washington
+description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
 labPiFull George Stamatoyannopoulous
@@ -6701,6 +6734,7 @@ term Duke
 tag Duke
 type lab
 label Crawford - Duke University
+description Crawford - Duke University
 labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
@@ -6711,6 +6745,7 @@ term UT-A
 tag UT-A
 type lab
 label Iyer - University of Texas at Austin
+description Iyer - University of Texas at Austin
 labInst University of Texas at Austin
 labPi Iyer
 labPiFull Tara Iyer
@@ -6721,6 +6756,7 @@ term UNC
 tag UNC
 type lab
 label Lieb - University of North Carolina
+description Lieb - University of North Carolina
 labInst Univeristy of North Carolina
 labPi Lieb
 labPiFull Jason Lieb
@@ -6734,6 +6770,7 @@ term Caltech(Wold)
 tag Caltech
 type lab
 label Wold - California Institute of Technology
+description Wold - California Institute of Technology
 grantInst California Institute of Technology (Wold Lab)
 labPi Wold
 labPiFull Barbara Wold
@@ -6744,6 +6781,7 @@ term HudsonAlpha
 tag HAIB
 type lab
 label Myers - Hudson Alpha Institute for Biotechnology
+description Myers - Hudson Alpha Institute for Biotechnology
 labInst Hudson Alpha Institute for Biotechnology
 labPi Myers
 labPiFull Richard Myers
@@ -6757,6 +6795,7 @@ term NHGRI-Elnitski
 tag NHGRI-Elnitski
 type lab
 label Elnitski - National Human Genome Research Institute
+description Elnitski - National Human Genome Research Institute
 labInst National Human Genome Research Institute
 labPi Elnitski
 labPiFull Laura Elnitski
@@ -6767,6 +6806,7 @@ term NHGRI-Margulies
 tag NHGRI-Marigulies
 type lab
 label Margulies - National Human Genome Research Institute
+description Margulies - National Human Genome Research Institute
 labInst National Human Genome Research Institute
 labPi Margulies
 labPiFull Elliott Margulies
@@ -6782,6 +6822,7 @@ tag CSHL
 type lab
 project Transcriptome
 label Gingeras - Cold Spring Harbor Laboratory
+description Gingeras - Cold Spring Harbor Laboratory
 labInst Cold Spring Harbor Laboratory
 labPi Gingeras
 labpiFull Thomas Gingeras
@@ -6792,6 +6833,7 @@ term GIS
 tag  GIS
 type lab
 label Ruan - Genome Institute of Singapore
+description Ruan - Genome Institute of Singapore
 labInst Genome Institute of Singapore
 labPi Ruan
 labPiFull Yijun Ruan
@@ -6802,6 +6844,7 @@ term Helicos
 tag Helicos
 type lab
 label Kapranov - Helicos BioScience Corporation
+description Kapranov - Helicos BioScience Corporation
 labInst Helicos BioScience Corporation
 labPi Kapranov
 labPiFull Philipp Kapranov
@@ -6812,6 +6855,7 @@ term Affy
 tag  Affy
 type lab
 label Gingeras - Affymetrix
+description Gingeras - Affymetrix
 labInst Affymetrix
 labPi Gingeras
 labPiFull Thomas Gingeras
@@ -6821,8 +6865,8 @@ organism human
 term RIKEN
 tag  Riken
 type lab
-label Carninci - RIKEN Omics Science Center
 labInst Riken Omics Science Center
+description Carninci - RIKEN Omics Science Center
 labName Riken
 labPi Carninci
 labPiFull Piero Carninci
@@ -6837,6 +6881,7 @@ term UMass-Dekker
 tag UMass-Dekker
 type lab
 label Dekker - University of Massachusettes
+description Dekker - University of Massachusettes
 labInst UMass
 labPi Dekker
 labPiFull Job Dekker
@@ -6847,6 +6892,7 @@ term UMass-Weng
 tag UMass-Weng
 type lab
 label Weng - University of Massachusettes
+description Weng - University of Massachusettes
 labInst UMass
 labPi Weng
 labPiFull Zhiping Weng
@@ -6861,6 +6907,7 @@ term Stanford
 tag  Stanford
 type lab
 label Snyder - Stanford University
+description Snyder - Stanford University
 labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
@@ -6871,6 +6918,7 @@ term Yale
 tag  Yale
 type lab
 label Snyder - Yale University
+description Snyder - Yale University
 labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
@@ -6881,6 +6929,7 @@ term Harvard(Weissman)
 tag  YaleWeis
 type lab
 label Weissman - Yale University
+description Weissman - Yale University
 labInst Yale
 labPi Weissman
 labPiFull Sherman Weissman
@@ -6891,6 +6940,7 @@ term Harvard
 tag  Harvard
 type lab
 label Struhl - Harvard University
+description Struhl - Harvard University
 labInst Harvard
 labPi Struhl
 labPiFull Kevin Struhl
@@ -6901,6 +6951,7 @@ term UCD
 tag UCD
 type lab
 label Farnham - University of California at Davis
+description Farnham - University of California at Davis
 labName UCD
 labPi Farnham
 labPiFull Peggy Farnham
@@ -6916,6 +6967,7 @@ term LICR-m
 tag LICR
 type lab
 label Ren - Ludwig Institue for Cancer Research
+description Ren - Ludwig Institue for Cancer Research
 labInst Ludwig Institue for Cancer Research
 labPi Ren
 labPiFull Bing Ren
@@ -6926,6 +6978,7 @@ term Caltech-m
 tag Caltech
 type lab
 label Wold - Califonia Institute of Technology
+description Wold - Califonia Institute of Technology
 labInst Caltech
 labPi Wold
 labPiFull Barbara Wold
@@ -6936,6 +6989,7 @@ term UMass-m
 tag  UMass
 type lab
 label Dekker - University of Massachusettes
+description Dekker - University of Massachusettes
 labInst University of Massachusettes
 labPi Dekker
 labPiFull Job Dekker
@@ -6946,6 +7000,7 @@ term Duke-m
 tag Duke
 type lab
 label Crawford - Duke University
+description Crawford - Duke University
 labInst Duke University
 labPi Crawford
 labPiFull Greg Crawford
@@ -6956,6 +7011,7 @@ term UChicago-m
 tag UChicago
 type lab
 label White - University of Chicago
+description White - University of Chicago
 labInst University of Chicago
 labPi White
 labPiFull Kevin White
@@ -6966,6 +7022,7 @@ term UNC-m
 tag UNC
 type lab
 label Giddings - University of North Carolina
+description Giddings - University of North Carolina
 labInst University of North Carolina
 labPi Giddings
 labPiFull Morgan Giddings
@@ -6976,6 +7033,7 @@ term UW-m
 tag UW
 type lab
 label Stamatoyannopoulous - University of Washington
+description Stamatoyannopoulous - University of Washington
 labInst University of Washington
 labPi Stam
 labpiFull George Stamatoyannopoulous
@@ -6986,6 +7044,7 @@ term Stanford-m
 tag  Stanford
 type lab
 label Snyder - Stanford University
+description Snyder - Stanford University
 labInst Stanford
 labPi Snyder
 labPiFull Michael Snyder
@@ -6996,6 +7055,7 @@ term Yale-m
 tag  Yale
 type lab
 label Snyder - Yale University
+description Snyder - Yale University
 labInst Yale
 labPi Snyder
 labPiFull Michael Snyder
@@ -7012,90 +7072,105 @@ organism mouse
 term Bernstein
 tag bernstein
 type grant
+description Bernstein
 grantInst Broad Institute
 projectName Broad
 
 term Tullius
 tag tullius
 type grant
+description Tullis
 grantInst Boston University
 projectName BU
 
 term Ruan
 tag ruan
 type grant
+description Ruan
 grantInst Genome Institute of Singapore
 projectName Chia PET??
 
 term Hubbard
 tag hubbard
 type grant
+description Hubbard
 grantInst Sanger Institute
 projectName Sanger
 
 term Tenenbaum
 tag tenenbaum
 type grant
+description Tenenbaum
 grantInst SUNY-Albany
 projectName SUNY
 
 term Stam
 tag stam
 type grant
+description Stam
 grantInst University of Washington
 projectName UW
 
 term Crawford
 tag crawford
 type grant
+description Crawford
 grantInst Duke
 projectName OpenChrom
 
 term Myers
 tag myers
 type grant
+description Myers
 grantInst Hudson Alpha Institute of Biotechnology
 projectName HAIB
 
 term Elnitski
 tag elnitski
 type grant
+description Elnitski
 grantInst National Human Genome Research Institute
 projectName NHGRI-Elnitski
 
 term Kent
 tag kent
 type grant
+description Kent
 grantInst UCSC
 projectName Ucsc
 
 term Margulies
 tag margulies
 type grant
+description Margulies
 grantInst National Human Genome Research Institute
 projectName NHGRI-Margulies
 
 term Gingeras
 tag gingeras
 type grant
+description Gingeras
 grantInst Cold Spring Harbor Laboratory
 projectName Transcriptome
 
 term Dekker
 tag dekker
 type grant
+description Dekker
 grantInst University of Massachusetts Amherst
 projectName
 
 term Weng
 tag weng
 type grant
+description Weng
 grantInst University of Massachusetts Amherst
 projectName
 
 term Snyder
 tag snyder
 type grant
+description Snyder
 grantInst Stanford
 projectName SYDH
 # This is broken for mouse which uses StanfYale
@@ -7104,24 +7179,28 @@ projectName SYDH
 term Ren
 tag ren
 type grant
+description Ren
 grantInst LICR
 project LICR
 
 term Hardison
 tag hardison
 type grant
+description Hardison
 grantInst Penn State University
 projectName PSU
 
 term White
 tag white
 type grant
+description White
 grantInst University of Chicago
 projectName
 
 term Giddings
 tag giddings
 type grant
+description Diggings
 grantInst University of North Carolina
 projectName UNC-Giddings
 
@@ -7140,14 +7219,14 @@ projectName UNC-Giddings
 #    cvDefined [no/yes]  DEFAULT: NO.  Yes when every possible value must be in cv.ra
 #
 #       hidden [no/yes]  DEFAULT: NO.  Yes when users should not see this internal metadata.
+#  validation: outlines the expected values
 
 
-# provisional this whole section is provisional
 
 term typeOfTerm
 type typeOfTerm
 label Term types defined
-description Types of terms used frequently in controlled vocabulary or metadata should be defined here.
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here. (Provisional)
 searchable no
 cvDefined no
 hidden yes
@@ -7196,7 +7275,7 @@ validation [0-9][0-9][0-9][A-Z]*
 term cellType
 type typeOfTerm
 label Cell, tissue or DNA sample
-description Cell line or tissue used as the source of experimental material.
+description Cell line or tissue used as the source of experimental material. (Provisional)
 searchable select
 cvDefined yes
 validation cv
@@ -7225,7 +7304,7 @@ term controlId
 type typeOfTerm
 label ControlId - explicit relationship
 #label Control ID - Specific dataset used as the control
-description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment.
+description This ID is used to explicitly tie a ChIP-seq experiment with the control/input that was used in peak calling. The specification may be a labExpId or a UCSC docId or a list of variables that uniquely define an experiment. (Provisional)
 searchable no
 cvDefined no
 validate none
@@ -7242,10 +7321,10 @@ validate cv
 term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
-description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis. (Provisional)
 searchable select
 cvDefined no
-validate ENCODE Three letter month and 4 digit year, we currenlty abuse this with the "post Month Year"
+validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
 
 term dateResubmitted
 type typeOfTerm
@@ -7258,7 +7337,7 @@ validation date, later than dateSubmitted
 term dateSubmitted
 type typeOfTerm
 label Date submitted to UCSC
-description Date that a particular file  was originally submitted to the UCSC Genome Browser.
+description Date that a particular file  was originally submitted to the UCSC Genome Browser. 
 searchable date
 cvDefined no
 validation date, nine months less than dateUnrestricted
@@ -7277,12 +7356,12 @@ validation date nine months more than dateSubmitted
 # description Experiment defining variables for a given ENCODE composite set of tracks.
 # searchable no
 # cvDefined no
-# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite
+# Only defined for one obj: wgEncodeCaltechRnaSeq  Must be from geo submissions and attached to composite. 11/3/10
 
 term fileIndex
 type typeOfTerm
 label BAM Index file
-description The name of the index file in the downloads directory associated with a particular track or raw data file.
+description The name of the index file in the downloads directory associated with a particular track or raw data file. (Provisional)
 searchable no
 cvDefined no
 validate Matches the fileName prefix with the suffix .bai
@@ -7293,7 +7372,7 @@ validate Matches the fileName prefix with the suffix .bai
 term fileName
 type typeOfTerm
 label File Name for downloading
-description The name of a downloadable file associated with a particular track in the browser.
+description The name of a downloadable file associated with a particular track in the browser. (Provisional)
 searchable no
 cvDefined no
 validate Exists?
@@ -7301,7 +7380,7 @@ validate Exists?
 term fragLength
 type typeOfTerm
 label Mean Length of DNA fragments
-description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size.
+description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. (Provisional)
 searchable no
 cvDefined no
 # Collapse with fragSize?
@@ -7310,7 +7389,7 @@ cvDefined no
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description
+description (Provisional)
 searchable no
 cvDefined yes
 # WHAT IS THIS?
@@ -7323,7 +7402,7 @@ description Date when GENCODE froze data in order to submit to UCSC.
 searchable no
 cvDefined yes
 validation cv
-# outdated, should not be used going forward
+# outdated, should not be used going forward. 11/3/10
 
 term geoSample
 type typeOfTerm
@@ -7339,7 +7418,7 @@ validate GSM[0-9]*
 # description GEO sample accession number applied to a single data set in a series of related data sets.
 # searchable select
 # cvDefined no
-# Should be replaced by geoSample
+# Should be replaced by geoSample (11/3/10)
 
 term geoSeries
 type typeOfTerm
@@ -7355,7 +7434,7 @@ validate GSE[0-9]*
 # searchable select
 # description GEO Sample accession number applied to a single data set in a series of related data sets.
 # cvDefined no
-# Should be replaced by geoSeries
+# Should be replaced by geoSeries (11/3/10)
 
 term grant
 type typeOfTerm
@@ -7425,11 +7504,11 @@ validate cv
 term mapAlgorithm
 type typeOfTerm
 label Mapping algorithm
-description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome.
+description Algorithm used in high-throughput sequencing experiments to map sequenced tags to a particular location in the reference genome. (Provisional)
 searchable select
 cvDefined yes
 validate cv
-# This is Caltech only and possibly should be retired.
+# This is Caltech only and possibly should be retired.  (11/3/10)
 
 term origAssembly
 type typeOfTerm
@@ -7447,7 +7526,7 @@ description A data file available for downloads may not be directly associated w
 searchable no
 cvDefined no
 hidden yes
-# On its way out
+# On its way out (11/3/10)
 
 term phase
 type typeOfTerm
@@ -7457,7 +7536,7 @@ searchable no
 cvDefined yes
 validate cv
 # Only one exp in hg18: wgEncodeUwDnaseSeqPeaksRep1JurkatG1
-# We have talked about obsoleting this term, but thought there was more data like this coming
+# We have talked about obsoleting this term, but thought there was more data like this coming (11/3/10)
 
 # term project
 # type typeOfTerm
@@ -7465,7 +7544,7 @@ validate cv
 # description Project that funded this and a related set of experiments.
 # searchable no
 # cvDefined no
-# Only one: all encode is under single project='wgEncode'
+# Only one: all encode is under single project='wgEncode' (11/3/10)
 
 term protocol
 type typeOfTerm
@@ -7474,7 +7553,7 @@ description Lab specific protocol that may cover a number of steps in an experim
 searchable select
 cvDefined yes
 validate cv
-# Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab
+# Currently this also has growth protocol for the HAIB experiments.  Growth protocol is usually associated with one cell line/one lab (11/3/10)
 
 term rank
 type typeOfTerm
@@ -7483,7 +7562,7 @@ description Experiments with multiple replicates may declare a preferred replica
 searchable no
 cvDefined no
 validate [0-9]
-# Was retired.  UW used rank in hg18 only, only for 1 occurance
+# Was retired.  UW used rank in hg18 only, only for 1 occurance (11/3/10)
 
 term readType
 type typeOfTerm
@@ -7549,7 +7628,7 @@ description The windowing size used, typically in a whole genome computational a
 searchable no
 cvDefined no
 validate integer
-# Used in hg19 mapability only
+# Used in hg19 mapability only (11/3/10)
 
 term softwareVersion
 type typeOfTerm
@@ -7608,7 +7687,7 @@ validate cv
 # description Data format of a particular file or table.
 # cvDefined no
 # Used rarely in hg18 to distinguish wig and bedGraph
-#This is to be retired
+#This is to be retired (11/3/10)
 
 term uniqueness
 type typeOfTerm
@@ -7618,7 +7697,7 @@ searchable no
 cvDefined no
 validate
 # Used in hg19 mapability only
-# It does not vary at all, it was on the possible retire list
+# It does not vary at all, it was on the possible retire list (11/3/10)
 
 term view
 type typeOfTerm
@@ -7626,4 +7705,4 @@ label View - Peaks or Signals
 description Different track formats often allow different views of the data of a single experiment.  These views sometimes represent different stages of processing, such as experimental 'signal' resulting directly from high-throughput sequencing and called 'peaks' which result from further analysis.
 searchable select
 cvDefined no
-#This should be CV defined
+#This should be CV defined (11/3/10)
