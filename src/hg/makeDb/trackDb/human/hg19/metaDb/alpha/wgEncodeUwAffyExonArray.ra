@@ -4,13 +4,13 @@ accession GSM510528
 cell AG04449
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg04449SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -24,13 +24,13 @@ accession GSM510530
 cell AG04449
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg04449SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -44,13 +44,13 @@ accession GSM510532
 cell AG04450
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg04450SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -64,13 +64,13 @@ accession GSM510534
 cell AG04450
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg04450SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -84,13 +84,13 @@ accession GSM510522
 cell AG09309
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -104,12 +104,12 @@ accession GSM510525
 cell AG09309
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -123,13 +123,13 @@ accession GSM510536
 cell AG09319
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg09319SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -143,13 +143,13 @@ accession GSM510538
 cell AG09319
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg09319SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -163,13 +163,13 @@ accession GSM510520
 cell AG10803
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg10803SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -183,13 +183,13 @@ accession GSM510521
 cell AG10803
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayAg10803SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -203,12 +203,12 @@ accession GSM580029
 cell AoAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -222,12 +222,12 @@ accession GSM580030
 cell AoAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -241,13 +241,13 @@ accession GSM472924
 cell BJ
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayBjSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -261,13 +261,13 @@ accession GSM472925
 cell BJ
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayBjSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -281,13 +281,13 @@ accession GSM472900
 cell Caco-2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayCaco2SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -301,13 +301,13 @@ accession GSM472933
 cell Caco-2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayCaco2SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -321,13 +321,13 @@ accession GSM510583
 cell CMK
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayCmkSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -341,13 +341,13 @@ accession GSM472903
 cell GM06990
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -361,13 +361,13 @@ accession GSM472904
 cell GM06990
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayGm06990SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -381,13 +381,13 @@ accession GSM472931
 cell GM12878
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayGm12878SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -401,13 +401,13 @@ accession GSM510581
 cell H7-hESC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -421,12 +421,12 @@ accession GSM580005
 cell H7-hESC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -440,13 +440,13 @@ accession GSM510516
 cell HAEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHaeSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -460,13 +460,13 @@ accession GSM510517
 cell HAEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHaeSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -480,12 +480,12 @@ accession GSM580045
 cell HBMEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -499,12 +499,12 @@ accession GSM580031
 cell HCFaa
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -518,12 +518,12 @@ accession GSM580032
 cell HCFaa
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -537,13 +537,13 @@ accession GSM510542
 cell HCF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHcfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -557,13 +557,13 @@ accession GSM510545
 cell HCF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHcfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -577,13 +577,13 @@ accession GSM510566
 cell HCM
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHcmSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -597,13 +597,13 @@ accession GSM510569
 cell HCM
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHcmSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -617,12 +617,12 @@ accession GSM580007
 cell HConF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -636,12 +636,12 @@ accession GSM580008
 cell HConF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -655,13 +655,13 @@ accession GSM510547
 cell HCPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHcpeSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -675,13 +675,13 @@ accession GSM510551
 cell HCPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHcpeSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -695,12 +695,12 @@ accession GSM580039
 cell HCT-116
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -714,12 +714,12 @@ accession GSM580040
 cell HCT-116
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -733,13 +733,13 @@ accession GSM510571
 cell HEEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHeeSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -753,13 +753,13 @@ accession GSM510574
 cell HEEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHeeSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -773,12 +773,12 @@ accession GSM580027
 cell HEK293
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -792,12 +792,12 @@ accession GSM580028
 cell HEK293
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -811,13 +811,13 @@ accession GSM472916
 cell HeLa-S3
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayHelas3SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -831,13 +831,13 @@ accession GSM472932
 cell HeLa-S3
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwAffyExonArrayHelas3SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -851,13 +851,13 @@ accession GSM472906
 cell HepG2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -871,13 +871,13 @@ accession GSM472907
 cell HepG2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayHepg2SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -891,12 +891,12 @@ accession GSM472940
 cell HGF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -910,12 +910,12 @@ accession GSM472941
 cell HGF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -929,13 +929,13 @@ accession GSM510518
 cell HIPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHipeSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -949,13 +949,13 @@ accession GSM510519
 cell HIPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHipeSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -969,12 +969,12 @@ accession GSM472908
 cell HL-60
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -988,12 +988,12 @@ accession GSM472942
 cell HL-60
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1007,13 +1007,13 @@ accession GSM472934
 cell HMEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1027,12 +1027,12 @@ accession GSM580006
 cell HMEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1046,12 +1046,12 @@ accession GSM580041
 cell HMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1065,12 +1065,12 @@ accession GSM580042
 cell HMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1084,12 +1084,12 @@ accession GSM580021
 cell HMVEC-dBl-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1103,12 +1103,12 @@ accession GSM580022
 cell HMVEC-dBl-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1122,12 +1122,12 @@ accession GSM580023
 cell HMVEC-dBl-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1141,12 +1141,12 @@ accession GSM580024
 cell HMVEC-dBl-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1160,12 +1160,12 @@ accession GSM580014
 cell HMVEC-dLy-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1179,12 +1179,12 @@ accession GSM580013
 cell HMVEC-dLy-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1198,12 +1198,12 @@ accession GSM580011
 cell HMVEC-dLy-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1217,12 +1217,12 @@ accession GSM580012
 cell HMVEC-dLy-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1236,12 +1236,12 @@ accession GSM580015
 cell HMVEC-dNeo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1255,12 +1255,12 @@ accession GSM580016
 cell HMVEC-dNeo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1274,12 +1274,12 @@ accession GSM580019
 cell HMVEC-LBl
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1293,12 +1293,12 @@ accession GSM580020
 cell HMVEC-LBl
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1312,12 +1312,12 @@ accession GSM580009
 cell HMVEC-LLy
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1331,12 +1331,12 @@ accession GSM580010
 cell HMVEC-LLy
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1350,13 +1350,13 @@ accession GSM510560
 cell HNPCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1370,13 +1370,13 @@ accession GSM510564
 cell HNPCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHnpceSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1390,12 +1390,12 @@ accession GSM580033
 cell HPAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1409,12 +1409,12 @@ accession GSM580034
 cell HPAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1428,12 +1428,12 @@ accession GSM580025
 cell HPdLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1447,12 +1447,12 @@ accession GSM580026
 cell HPdLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1466,12 +1466,12 @@ accession GSM580035
 cell HPF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1485,12 +1485,12 @@ accession GSM580036
 cell HPF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1504,13 +1504,13 @@ accession GSM472920
 cell HRCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwAffyExonArrayHrceSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1524,13 +1524,13 @@ accession GSM472921
 cell HRCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwAffyExonArrayHrceSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1544,13 +1544,13 @@ accession GSM472919
 cell HRE
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwAffyExonArrayHreSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1564,13 +1564,13 @@ accession GSM472918
 cell HRE
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwAffyExonArrayHreSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1584,13 +1584,13 @@ accession GSM510514
 cell HRPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHrpeSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1604,13 +1604,13 @@ accession GSM510515
 cell HRPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayHrpeSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1624,13 +1624,13 @@ accession GSM472935
 cell HUVEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayHuvecSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1644,12 +1644,12 @@ accession GSM580037
 cell HVMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1663,12 +1663,12 @@ accession GSM580038
 cell HVMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1682,13 +1682,13 @@ accession GSM472928
 cell Jurkat
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayJurkatSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1702,13 +1702,13 @@ accession GSM510511
 cell Jurkat
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayJurkatSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1722,13 +1722,13 @@ accession GSM472926
 cell K562
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayK562SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1742,13 +1742,13 @@ accession GSM472927
 cell K562
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayK562SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1762,13 +1762,13 @@ accession GSM472936
 cell MCF-7
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayMcf7SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1782,13 +1782,13 @@ accession GSM510510
 cell MCF-7
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayMcf7SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1802,13 +1802,13 @@ accession GSM510512
 cell NB4
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayNb4SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1822,13 +1822,13 @@ accession GSM510513
 cell NB4
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayNb4SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1842,12 +1842,12 @@ accession GSM580043
 cell NH-A
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1861,12 +1861,12 @@ accession GSM580044
 cell NH-A
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1880,12 +1880,12 @@ accession GSM580017
 cell NHDF-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 1
@@ -1899,12 +1899,12 @@ accession GSM580018
 cell NHDF-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg19
 project wgEncode
 replicate 2
@@ -1918,13 +1918,13 @@ accession GSM510554
 cell NHDF-neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1938,13 +1938,13 @@ accession GSM510557
 cell NHDF-neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayNhdfneoSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -1958,13 +1958,13 @@ accession GSM472937
 cell NHEK
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayNhekSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1978,13 +1978,13 @@ accession GSM510577
 cell NHLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -1998,13 +1998,13 @@ accession GSM510579
 cell NHLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArrayNhlfSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2018,13 +2018,13 @@ accession GSM472939
 cell PANC-1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2038,13 +2038,13 @@ accession GSM472938
 cell PANC-1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArrayPanc1SimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2058,13 +2058,13 @@ accession GSM472923
 cell SAEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArraySaecSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2078,13 +2078,13 @@ accession GSM472922
 cell SAEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
 fileName wgEncodeUwAffyExonArraySaecSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2098,13 +2098,13 @@ accession GSM510509
 cell SKMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArraySkmcSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2118,13 +2118,13 @@ accession GSM472911
 cell SKMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
 fileName wgEncodeUwAffyExonArraySkmcSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2138,13 +2138,13 @@ accession GSM472913
 cell SK-N-SH_RA
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArraySknshraSimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2158,13 +2158,13 @@ accession GSM472912
 cell SK-N-SH_RA
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
 fileName wgEncodeUwAffyExonArraySknshraSimpleSignalRep2.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 2
@@ -2178,13 +2178,13 @@ accession GSM472914
 cell Th1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
 fileName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1.broadPeak.gz
 grant Stam
-lab Uw
+lab UW
 origAssembly hg18
 project wgEncode
 replicate 1
@@ -2192,4 +2192,4 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
 view SimpleSignal
 
-# MAGIC: -708164906
+# MAGIC: 98901430

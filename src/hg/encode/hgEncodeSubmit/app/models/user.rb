@@ -153,7 +153,11 @@ class User < ActiveRecord::Base
 
     #logger.info "GALT! ftpMount=[#{ftpMount}]" #debug
 
+    fullName = ftpMount + "/ftp_passwd"
+    begin; FileUtils.chmod 0664, fullName if File.exists?(fullName); rescue; end # otherwise it can't over-write the file
+
     cmd = "echo #{password} | ftpasswd --passwd --name=#{login} --change-password --stdin --file=#{ftpMount}/ftp_passwd"
+    # note ftpasswd will over-write the file and then try to change its perms to 444
 
     #logger.info "GALT! cmd=[#{cmd}]\n\n" #debug
 
@@ -172,13 +176,19 @@ class User < ActiveRecord::Base
     def create_ftp_user
       ftpMount = ActiveRecord::Base.configurations[RAILS_ENV]['ftpMount']
       userFtpDir = File.join(ftpMount,login)
+
       return if File.exists?(userFtpDir)
       ftpLocal = ActiveRecord::Base.configurations[RAILS_ENV]['ftpLocal'] 
       ftpUserId = ActiveRecord::Base.configurations[RAILS_ENV]['ftpUserId'] 
       ftpGroupId = ActiveRecord::Base.configurations[RAILS_ENV]['ftpGroupId'] 
       Dir.mkdir(userFtpDir,0775)
+
+      fullName = ftpMount + "/ftp_passwd"
+      begin; FileUtils.chmod 0664, fullName if File.exists?(fullName); rescue; end # otherwise it can't over-write the file
+
       cmd = "echo password | ftpasswd --passwd --name=#{login} --stdin --uid=#{ftpUserId} --gid=#{ftpGroupId}" +
              " --home=#{ftpLocal}/#{login} --shell=/sbin/nologin  --file=#{ftpMount}/ftp_passwd"
+      # note ftpasswd will over-write the file and then try to change its perms to 444
 
       #logger.info "\n\nGALT! cmd=[#{cmd}]" #debug
 

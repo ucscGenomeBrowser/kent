@@ -3,15 +3,14 @@ objType file
 age adult-8wks
 cell 3134
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnase3134C3hMAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnase3134C3hMAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -24,13 +23,13 @@ objType table
 age adult-8wks
 cell 3134
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnase3134C3hMAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -45,13 +44,13 @@ objType table
 age adult-8wks
 cell 3134
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnase3134C3hMAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -66,15 +65,14 @@ objType file
 age adult-8wks
 cell 3134
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnase3134C3hMAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnase3134C3hMAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -87,13 +85,13 @@ objType table
 age adult-8wks
 cell 3134
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnase3134C3hMAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -108,15 +106,14 @@ objType file
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -129,15 +126,14 @@ objType file
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnase416bC57bl6MAdult8wksAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -150,13 +146,13 @@ objType table
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -171,13 +167,13 @@ objType table
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -192,13 +188,13 @@ objType table
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -213,13 +209,13 @@ objType table
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -234,15 +230,14 @@ objType file
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnase416bC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -255,15 +250,14 @@ objType file
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnase416bC57bl6MAdult8wksRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -276,13 +270,13 @@ objType table
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -297,13 +291,13 @@ objType table
 age adult-8wks
 cell 416B
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnase416bC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -318,15 +312,14 @@ objType file
 age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -339,13 +332,13 @@ objType table
 age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -360,13 +353,13 @@ objType table
 age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -381,15 +374,14 @@ objType file
 age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -402,13 +394,13 @@ objType table
 age adult-8wks
 cell B-cell_(CD19+)
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseBcellcd19pC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -423,16 +415,15 @@ objType file
 age adult-8wks
 cell Cerebellum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-21
 dateUnrestricted 2011-04-20
 fileIndex wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseCerebellumC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -445,13 +436,13 @@ objType table
 age adult-8wks
 cell Cerebellum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-21
 dateUnrestricted 2011-04-20
 fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -466,13 +457,13 @@ objType table
 age adult-8wks
 cell Cerebellum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-21
 dateUnrestricted 2011-04-20
 fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -487,15 +478,14 @@ objType file
 age adult-8wks
 cell Cerebellum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-21
 dateUnrestricted 2011-04-20
 fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -508,13 +498,13 @@ objType table
 age adult-8wks
 cell Cerebellum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-21
 dateUnrestricted 2011-04-20
 fileName wgEncodeUwDnaseCerebellumC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -529,15 +519,14 @@ objType file
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -550,15 +539,14 @@ objType file
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -571,15 +559,14 @@ objType file
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep3.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseCerebrumC57bl6MAdult8wksAlnRep3
 project wgEncode
 replicate 3
 sex M
@@ -592,13 +579,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -613,13 +600,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -634,13 +621,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 3
@@ -655,13 +642,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -676,13 +663,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -697,13 +684,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksPkRep3.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 3
@@ -718,15 +705,14 @@ objType file
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -739,15 +725,14 @@ objType file
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -760,15 +745,14 @@ objType file
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawDataRep3.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawSignalRep3
 project wgEncode
 replicate 3
 sex M
@@ -781,13 +765,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -802,13 +786,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-22
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -823,13 +807,13 @@ objType table
 age adult-8wks
 cell Cerebrum
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-22
 fileName wgEncodeUwDnaseCerebrumC57bl6MAdult8wksRawRep3.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 3
@@ -844,15 +828,14 @@ objType file
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0AlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseEscj7S129ME0AlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -865,15 +848,14 @@ objType file
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0AlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseEscj7S129ME0AlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -886,13 +868,13 @@ objType table
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0HotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -907,13 +889,13 @@ objType table
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0HotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -928,13 +910,13 @@ objType table
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0PkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -949,13 +931,13 @@ objType table
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0PkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -970,15 +952,14 @@ objType file
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0RawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseEscj7S129ME0RawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -991,15 +972,14 @@ objType file
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0RawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseEscj7S129ME0RawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -1012,13 +992,13 @@ objType table
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0RawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -1033,13 +1013,13 @@ objType table
 age E0
 cell ES-CJ7
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseEscj7S129ME0RawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -1054,15 +1034,14 @@ objType file
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseFibroblastC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -1075,15 +1054,14 @@ objType file
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseFibroblastC57bl6MAdult8wksAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -1096,13 +1074,13 @@ objType table
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -1117,13 +1095,13 @@ objType table
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -1138,13 +1116,13 @@ objType table
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -1159,13 +1137,13 @@ objType table
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -1180,15 +1158,14 @@ objType file
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -1201,15 +1178,14 @@ objType file
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -1222,13 +1198,13 @@ objType table
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -1243,13 +1219,13 @@ objType table
 age adult-8wks
 cell Fibroblast
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseFibroblastC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -1264,15 +1240,14 @@ objType file
 age adult-8wks
 cell Kidney
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseKidneyC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -1285,13 +1260,13 @@ objType table
 age adult-8wks
 cell Kidney
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -1306,13 +1281,13 @@ objType table
 age adult-8wks
 cell Kidney
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -1327,15 +1302,14 @@ objType file
 age adult-8wks
 cell Kidney
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -1348,13 +1322,13 @@ objType table
 age adult-8wks
 cell Kidney
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseKidneyC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -1369,16 +1343,15 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -1391,16 +1364,15 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -1413,16 +1385,15 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep3.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep3.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep3
 project wgEncode
 replicate 3
 sex M
@@ -1435,16 +1406,15 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep4
 project wgEncode
 replicate 4
 sex M
@@ -1457,16 +1427,15 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep5
 project wgEncode
 replicate 5
 sex M
@@ -1479,16 +1448,15 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6.bam.bai
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksAlnRep6
 project wgEncode
 replicate 6
 sex M
@@ -1501,13 +1469,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -1522,13 +1490,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -1543,13 +1511,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 3
@@ -1564,13 +1532,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep4.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 4
@@ -1585,13 +1553,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep5.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 5
@@ -1606,13 +1574,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksHotspotsRep6.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 6
@@ -1627,13 +1595,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -1648,13 +1616,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -1669,13 +1637,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep3.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 3
@@ -1690,13 +1658,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep4.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 4
@@ -1711,13 +1679,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep5.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 5
@@ -1732,13 +1700,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksPkRep6.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 6
@@ -1753,15 +1721,14 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -1774,15 +1741,14 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -1795,15 +1761,14 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep3.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksRawSignalRep3
 project wgEncode
 replicate 3
 sex M
@@ -1816,15 +1781,14 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep4.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksRawSignalRep4
 project wgEncode
 replicate 4
 sex M
@@ -1837,15 +1801,14 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep5.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksRawSignalRep5
 project wgEncode
 replicate 5
 sex M
@@ -1858,15 +1821,14 @@ objType file
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawDataRep6.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLiverC57bl6MAdult8wksRawSignalRep6
 project wgEncode
 replicate 6
 sex M
@@ -1879,13 +1841,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -1900,13 +1862,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -1921,13 +1883,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep3.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 3
@@ -1942,13 +1904,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep4.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 4
@@ -1963,13 +1925,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep5.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 5
@@ -1984,13 +1946,13 @@ objType table
 age adult-8wks
 cell Liver
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-23
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLiverC57bl6MAdult8wksRawRep6.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 6
@@ -2005,16 +1967,15 @@ objType file
 age adult-8wks
 cell Lung
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseLungC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -2027,13 +1988,13 @@ objType table
 age adult-8wks
 cell Lung
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLungC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -2048,13 +2009,13 @@ objType table
 age adult-8wks
 cell Lung
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLungC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -2069,15 +2030,14 @@ objType file
 age adult-8wks
 cell Lung
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLungC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseLungC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -2090,13 +2050,13 @@ objType table
 age adult-8wks
 cell Lung
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseLungC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -2111,16 +2071,15 @@ objType file
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1.bam.bai
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -2133,16 +2092,15 @@ objType file
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep2.bam.bai
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -2155,16 +2113,15 @@ objType file
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep3.bam.bai
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep3.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseMelC57bl6MAdult8wksAlnRep3
 project wgEncode
 replicate 3
 sex M
@@ -2177,13 +2134,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -2198,13 +2155,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -2219,13 +2176,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 3
@@ -2240,13 +2197,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -2261,13 +2218,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -2282,13 +2239,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksPkRep3.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 3
@@ -2303,15 +2260,14 @@ objType file
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseMelC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -2324,15 +2280,14 @@ objType file
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseMelC57bl6MAdult8wksRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -2345,15 +2300,14 @@ objType file
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksRawDataRep3.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseMelC57bl6MAdult8wksRawSignalRep3
 project wgEncode
 replicate 3
 sex M
@@ -2366,13 +2320,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -2387,13 +2341,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -2408,13 +2362,13 @@ objType table
 age immortalized
 cell MEL
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseMelC57bl6MAdult8wksRawRep3.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 3
@@ -2429,15 +2383,14 @@ objType file
 age adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseTnaiveC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -2450,13 +2403,13 @@ objType table
 age adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -2471,13 +2424,13 @@ objType table
 age adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -2492,15 +2445,14 @@ objType file
 age adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -2513,13 +2465,13 @@ objType table
 age adult-8wks
 cell T-Naive
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseTnaiveC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -2534,15 +2486,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -2555,15 +2506,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -2576,15 +2526,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep3.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep3
 project wgEncode
 replicate 3
 sex M
@@ -2597,15 +2546,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep4.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep4
 project wgEncode
 replicate 4
 sex M
@@ -2618,15 +2566,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep5.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep5
 project wgEncode
 replicate 5
 sex M
@@ -2639,15 +2586,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep6.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksAlnRep6
 project wgEncode
 replicate 6
 sex M
@@ -2660,13 +2606,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -2681,13 +2627,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -2702,13 +2648,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep3.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 3
@@ -2723,13 +2669,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep4.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 4
@@ -2744,13 +2690,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep5.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 5
@@ -2765,13 +2711,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksHotspotsRep6.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 6
@@ -2786,13 +2732,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -2807,13 +2753,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -2828,13 +2774,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep3.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 3
@@ -2849,13 +2795,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep4.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 4
@@ -2870,13 +2816,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep5.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 5
@@ -2891,13 +2837,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksPkRep6.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 6
@@ -2912,15 +2858,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -2933,15 +2878,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -2954,15 +2898,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawDataRep3.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawSignalRep3
 project wgEncode
 replicate 3
 sex M
@@ -2975,15 +2918,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawDataRep4.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawSignalRep4
 project wgEncode
 replicate 4
 sex M
@@ -2996,15 +2938,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawDataRep5.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawSignalRep5
 project wgEncode
 replicate 5
 sex M
@@ -3017,15 +2958,14 @@ objType file
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawDataRep6.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawSignalRep6
 project wgEncode
 replicate 6
 sex M
@@ -3038,13 +2978,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -3059,13 +2999,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2
@@ -3080,13 +3020,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep3.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 3
@@ -3101,13 +3041,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep4.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 4
@@ -3122,13 +3062,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep5.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 5
@@ -3143,13 +3083,13 @@ objType table
 age adult-8wks
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6MAdult8wksRawRep6.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 6
@@ -3164,15 +3104,14 @@ objType file
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfAlnRep1.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6ME14halfAlnRep1
 project wgEncode
 replicate 1
 sex M
@@ -3185,15 +3124,14 @@ objType file
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfAlnRep2.bam
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Bowtie 0.12.5
-parentTable wgEncodeUwDnaseWholebrainC57bl6ME14halfAlnRep2
 project wgEncode
 replicate 2
 sex M
@@ -3206,13 +3144,13 @@ objType table
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfHotspotsRep1.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 1
@@ -3227,13 +3165,13 @@ objType table
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfHotspotsRep2.broadPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion Hotspot-v5.1
 project wgEncode
 replicate 2
@@ -3248,13 +3186,13 @@ objType table
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfPkRep1.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 1
@@ -3269,13 +3207,13 @@ objType table
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfPkRep2.narrowPeak.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion lmax-v1.0
 project wgEncode
 replicate 2
@@ -3290,15 +3228,14 @@ objType file
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawDataRep1.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6ME14halfRawSignalRep1
 project wgEncode
 replicate 1
 sex M
@@ -3311,15 +3248,14 @@ objType file
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawDataRep2.fastq.gz
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion 1
-parentTable wgEncodeUwDnaseWholebrainC57bl6ME14halfRawSignalRep2
 project wgEncode
 replicate 2
 sex M
@@ -3332,13 +3268,13 @@ objType table
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-28
 dateUnrestricted 2011-04-28
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep1.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 1
@@ -3353,13 +3289,13 @@ objType table
 age E14.5
 cell WholeBrain
 composite wgEncodeUwDnase
-dataType DNase-seq
+dataType DnaseSeq
 dataVersion post ENCODE June 2010 Freeze
 dateSubmitted 2010-07-27
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseWholebrainC57bl6ME14halfRawRep2.bigWig
 grant Stam
-lab UW-Mouse
+lab UW-m
 labVersion WindowDensity-bin20-win+/-75
 project wgEncode
 replicate 2

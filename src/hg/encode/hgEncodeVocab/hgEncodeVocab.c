@@ -37,6 +37,7 @@
 #define ANTIBODY_TYPE_ALT  "antibody"
 #define LOCALIZATION_TYPE  "localization"
 #define LAB_TYPE           "lab"
+#define GRANT_TYPE         "grant"
 #define CONTROL_TYPE       "control"
 #define DATA_TYPE          "dataType"
 #define TYPE_OF_TERM       "typeOfTerm"
@@ -218,6 +219,10 @@ else if (sameWord(type,ANTIBODY_TYPE))
 else if(sameWord(type,LAB_TYPE))
     {
     printf("  <TH>%s</TH><TH colspan=%d>Institution</TH><TH>Lab PI</TH><TH>Grant PI</TH><TH>Organism</TH><TH><I>Label</I></TH>",type,TABLE_ROWS_AVAILABLE(5));
+    }
+else if(sameWord(type,LAB_TYPE))
+    {
+    printf("  <TH>%s</TH><TH colspan=%d>Institution</TH><TH><I>Label</I></TH>",type,TABLE_ROWS_AVAILABLE(2));
     }
 else if(sameWord(type,DATA_TYPE))
     {
@@ -491,6 +496,18 @@ else if(sameWord(type,LAB_TYPE))
     printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
     s = hashFindVal(ra, "organism");
     printf("  <TD>%s</TD>\n", s?s:"&nbsp;");
+    s = hashFindVal(ra, LABEL_FIELD);
+    if (s != NULL)
+        printf("  <TD><I>%s</I></TD>\n", s );
+    else
+        printf("  <TD>%s</TD>\n", term );
+    }
+else if(sameWord(type,GRANT_TYPE))
+    {
+    puts("<TR>");
+    printf("  <TD>%s</TD>\n", term);
+    s = hashFindVal(ra, "grantInst");
+    printf("  <TD colspan=%d>%s</TD>\n", TABLE_ROWS_AVAILABLE(2), s?s:"&nbsp;");
     s = hashFindVal(ra, LABEL_FIELD);
     if (s != NULL)
         printf("  <TD><I>%s</I></TD>\n", s );
