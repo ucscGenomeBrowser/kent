@@ -6,8 +6,8 @@ shortLabel Affy RNA Loc
 longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
 group expression
 subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
-subGroup2 cellType Cell_Line GM12878=GM12878 HepG2=HepG2 K562=K562 NHEK=NHEK prostate=Prostate
-subGroup3 localization Localization 0-cell=Cell 10-polysome=Polysome 20-cytosol=Cytosol 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HepG2=HepG2  NHEK=NHEK prostate=Prostate
+subGroup3 localization Localization 0-cell=Cell 20-cytosol=Cytosol 25-polysome=Polysome 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longNonPolyA,longPolyA,total
@@ -90,7 +90,7 @@ wgEncode 1
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags
         shortLabel K562 psom pA- FT
         longLabel ENCODE Affy/CSHL Filtered Transfrags (PolyA- RNA in K562 polysome)
-        subGroups view=FiltTransfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
+        subGroups view=FiltTransfrags cellType=K562 localization=25-polysome rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
 
@@ -258,7 +258,7 @@ wgEncode 1
     minGrayLevel 4
 
         track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel pros cell pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in prostate whole cell)
         subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longNonPolyA
@@ -266,7 +266,7 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipTransfragsProstateCellLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel pros cell pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in prostate whole cell)
         subGroups view=Transfrags cellType=prostate localization=0-cell rnaExtract=longPolyA
@@ -274,7 +274,7 @@ wgEncode 1
         color 0,102,136
 
         track wgEncodeAffyRnaChipTransfragsK562NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 nucl pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 nucleus)
         subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longNonPolyA
@@ -282,7 +282,7 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562CellTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 cell tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 whole cell)
         subGroups view=Transfrags cellType=K562 localization=0-cell rnaExtract=total
@@ -290,7 +290,7 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 nucl pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 nucleus)
         subGroups view=Transfrags cellType=K562 localization=30-nucleus rnaExtract=longPolyA
@@ -298,7 +298,7 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 cytosol)
         subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longNonPolyA
@@ -306,7 +306,7 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in K562 cytosol)
         subGroups view=Transfrags cellType=K562 localization=20-cytosol rnaExtract=longPolyA
@@ -314,15 +314,15 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562PolysomeLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 psom pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in K562 polysome)
-        subGroups view=Transfrags cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
+        subGroups view=Transfrags cellType=K562 localization=25-polysome rnaExtract=longNonPolyA
         type broadPeak
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel GM12 nucl pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 nucleus)
         subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longNonPolyA
@@ -330,7 +330,7 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel GM12 cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 cytosol)
         subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longPolyA
@@ -338,7 +338,7 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsGm12878CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel GM12 cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in GM12878 cytosol)
         subGroups view=Transfrags cellType=GM12878 localization=20-cytosol rnaExtract=longNonPolyA
@@ -346,7 +346,7 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsK562ChromatinTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 chrm tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 chromatin)
         subGroups view=Transfrags cellType=K562 localization=50-chromatin rnaExtract=total
@@ -356,7 +356,7 @@ wgEncode 1
 
 
         track wgEncodeAffyRnaChipTransfragsK562NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 nlos tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleolus)
         subGroups view=Transfrags cellType=K562 localization=60-nucleolus rnaExtract=total
@@ -365,7 +365,7 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsK562NucleoplasmTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel K562 nplm tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in K562 nucleoplasm)
         subGroups view=Transfrags cellType=K562 localization=40-nucleoplasm rnaExtract=total
@@ -374,7 +374,7 @@ wgEncode 1
         color 46,0,184
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel GM12 nucl pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in GM12878 in nucleus)
         subGroups view=Transfrags cellType=GM12878 localization=30-nucleus rnaExtract=longPolyA
@@ -383,7 +383,7 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsGm12878CellTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags
+        subTrack wgEncodeAffyRnaChipViewTransfrags off
         shortLabel GM12 cell tot RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (Total RNA in GM12878 whole cell)
         subGroups view=Transfrags cellType=GM12878 localization=0-cell rnaExtract=total
@@ -392,7 +392,7 @@ wgEncode 1
         color 153,38,0
 
         track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel HepG cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in HepG2 cytosol)
         subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longNonPolyA
@@ -401,7 +401,7 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsHepg2CytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel HepG cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in HepG2 cytosol)
         subGroups view=Transfrags cellType=HepG2 localization=20-cytosol rnaExtract=longPolyA
@@ -410,7 +410,7 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel NHEK cyto pA- RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA- RNA in NHEK cytosol)
         subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longNonPolyA
@@ -419,7 +419,7 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteCytosolLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel NHEK cyto pA+ RT
         longLabel ENCODE Affy/CSHL Raw Transfrags (PolyA+ RNA in NHEK cytosol)
         subGroups view=Transfrags cellType=NHEK localization=20-cytosol rnaExtract=longPolyA
@@ -428,7 +428,7 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel NHEK nucl pA- RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in NHEK nucleus )
         subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longNonPolyA
@@ -436,7 +436,7 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsKeratinocyteNucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel NHEK nucl pA+ RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in NHEK nucleus )
         subGroups view=Transfrags cellType=NHEK localization=30-nucleus rnaExtract=longPolyA
@@ -444,7 +444,7 @@ wgEncode 1
         color 179,0,134
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongnonpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel HepG nucl pA- RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA- RNA in HepG2 nucleus)
         subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longNonPolyA
@@ -452,7 +452,7 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleusLongpolya
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel HepG nucl pA+ RT
         longLabel ENCODE Affy/CSHL Transfrags (PolyA+ RNA in HepG2 nucleus)
         subGroups view=Transfrags cellType=HepG2 localization=30-nucleus rnaExtract=longPolyA
@@ -460,7 +460,7 @@ wgEncode 1
         color 189,0,157
 
         track wgEncodeAffyRnaChipTransfragsHepg2NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags off
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel HepG nlos tot RT
         color 189,0,157
         longLabel ENCODE Affy/CSHL Transfrags (Total RNA in HepG2 nucleolus)
@@ -468,7 +468,7 @@ wgEncode 1
         type broadPeak
 
         track wgEncodeAffyRnaChipTransfragsGm12878NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewTransfrags on
+        subTrack wgEncodeAffyRnaChipViewTransfrags off off
         shortLabel GM12 nlos tot RT
         color 153,38,0
         longLabel ENCODE Affy/CSHL Transfrags (Total RNA in GM12878 nucleolus)
@@ -552,7 +552,7 @@ wgEncode 1
         subTrack wgEncodeAffyRnaChipViewFiltRawSignal
         shortLabel K562 psom pA- FS
         longLabel ENCODE Affy/CSHL Filtered Signal (PolyA- RNA in K562 polysome)
-        subGroups view=FiltRawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
+        subGroups view=FiltRawSignal cellType=K562 localization=25-polysome rnaExtract=longNonPolyA
         type wig -52880.00 48739.00
         spanList 1
         color 46,0,184
@@ -729,7 +729,7 @@ wgEncode 1
         type wig -57857.00 57814.00
 
         track wgEncodeAffyRnaChipFiltRawSignalGm12878NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewFiltRawSignal on
+        subTrack wgEncodeAffyRnaChipViewFiltRawSignal off
         shortLabel GM12 nlos tot FS
         color 153,38,0
         longLabel ENCODE Affy/CSHL Filtered Signal (Total RNA in GM12878 nucleolus)
@@ -813,7 +813,7 @@ wgEncode 1
         subTrack wgEncodeAffyRnaChipViewRawSignal
         shortLabel K562 psom pA- RS
         longLabel ENCODE Affy/CSHL Raw Signal (PolyA- RNA in K562 polysome)
-        subGroups view=RawSignal cellType=K562 localization=10-polysome rnaExtract=longNonPolyA
+        subGroups view=RawSignal cellType=K562 localization=25-polysome rnaExtract=longNonPolyA
         type wig -50161.00 55400.00
         spanList 1
         color 46,0,184
@@ -994,7 +994,7 @@ wgEncode 1
         type wig -57857.00 57814.00
 
         track wgEncodeAffyRnaChipRawSignalGm12878NucleolusTotal
-        subTrack wgEncodeAffyRnaChipViewRawSignal on
+        subTrack wgEncodeAffyRnaChipViewRawSignal off
         shortLabel GM12 nlos tot RS
         color 153,38,0
         longLabel ENCODE Affy/CSHL Raw Signal (Total RNA in GM12878 nucleolus)
