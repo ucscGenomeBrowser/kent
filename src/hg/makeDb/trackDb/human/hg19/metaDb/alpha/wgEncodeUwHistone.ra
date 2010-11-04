@@ -8691,7 +8691,8 @@ fragLength 350
 grant Stam
 lab UW
 labVersion Bowtie 0.12.5
-origAssembly hg19
+origAssembly hg18
+parentTable wgEncodeUwHistoneHepg2H3k36me3StdAlnRep2
 project wgEncode
 replicate 2
 setType exp
@@ -8788,7 +8789,7 @@ fragLength 350
 grant Stam
 lab UW
 labVersion lmax-v1.0
-origAssembly hg19
+origAssembly hg18
 project wgEncode
 replicate 2
 setType exp
@@ -8811,7 +8812,8 @@ fileName wgEncodeUwHistoneHepg2H3k36me3StdRawDataRep2.fastq.gz
 fragLength 350
 grant Stam
 lab UW
-origAssembly hg19
+origAssembly hg18
+parentTable wgEncodeUwHistoneHepg2H3k36me3StdRawSignalRep2
 project wgEncode
 replicate 2
 setType exp
@@ -16162,4 +16164,4 @@ subId 1319
 tableName wgEncodeUwHistoneSknshraInputStdRawRep1
 view RawSignal
 
-# MAGIC: -1242524761
+# MAGIC: -1108784644
