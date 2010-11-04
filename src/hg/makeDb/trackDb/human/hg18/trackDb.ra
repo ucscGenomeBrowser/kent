@@ -4237,9 +4237,10 @@ group x
 priority 53.5
 visibility hide
 type wigMaf
-speciesOrder panTro20 panTro21 panTro22 panTro23 panTro24 panTro25 panTro26 panTro27 ponAbe20 ponAbe21 ponAbe22 ponAbe23 ponAbe24 ponAbe25 ponAbe26 ponAbe27 ponAbe28 rheMac20 rheMac21 rheMac22 rheMac23 rheMac24 rheMac25 rheMac26
-
+#speciesOrder panTro20 panTro21 panTro22 panTro23 panTro24 panTro25 panTro26 panTro27 ponAbe20 ponAbe21 ponAbe22 ponAbe23 ponAbe24 ponAbe25 ponAbe26 ponAbe27 ponAbe28 rheMac20 rheMac21 rheMac22 rheMac23 rheMac24 rheMac25 rheMac26
 frames multizPrimateFrames
+speciesOrder hg180 hg181 panTro20 panTro21 panTro22 panTro23 ponAbe20 ponAbe21 rheMac20 rheMac21 rheMac22 rheMac23
+
 
 track cactusBed
 shortLabel cactusBed
