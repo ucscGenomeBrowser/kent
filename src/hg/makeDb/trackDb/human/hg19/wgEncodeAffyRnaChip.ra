@@ -7,7 +7,7 @@ longLabel ENCODE Affymetrix/CSHL Subcellular RNA Localization by Tiling Array
 group expression
 subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HepG2=HepG2  NHEK=NHEK prostate=Prostate
-subGroup3 localization Localization 0-cell=Cell 20-cytosol=Cytosol 25-polysome=Polysome 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
+subGroup3 localization Localization 0-cell=Whole_Cell 20-cytosol=Cytosol 25-polysome=Polysome 30-nucleus=Nucleus 40-nucleoplasm=Nucleoplasm 50-chromatin=Chromatin 60-nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=Long_PolyA- longPolyA=Long_PolyA+ total=Total_RNA
 dimensions dimensionX=cellType dimensionY=localization dimensionZ=rnaExtract
 dimensionZchecked longNonPolyA,longPolyA,total
