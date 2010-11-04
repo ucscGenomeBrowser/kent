@@ -443,12 +443,6 @@ module PipelineBackground
     # cleanup: delete temporary upload subdirectory
     clean_out_dir uploadDir
 
-    if project.project_archives.length == 0
-      project.status = "new"
-    else
-      project.status = "expanded"
-    end
-
     new_status project, project.status
     return true
 
@@ -669,6 +663,12 @@ private
           return
         end
       end
+    end
+
+    if project.project_archives.length == 0
+      project.status = "new"
+    else
+      project.status = "expanded"
     end
 
   end
