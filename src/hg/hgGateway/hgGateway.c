@@ -65,7 +65,7 @@ jsIncludeFile("utils.js", NULL);
 
 puts(
 "<CENTER>"
-"<TABLE BGCOLOR=\"FFFEF3\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
+"<TABLE BGCOLOR=\"#FFFEE8\" BORDERCOLOR=\"cccc99\" BORDER=0 CELLPADDING=1>\n"
 "<TR><TD>\n"
 "<CENTER><FONT SIZE=\"2\">\n"
 "The UCSC Genome Browser was created by the \n"
@@ -78,7 +78,8 @@ puts(
 );
 
 puts(
-"<center>\n"
+"<FORM ACTION='../cgi-bin/hgTracks' NAME='mainForm' METHOD='GET' style='display:inline;'>\n"
+"<center>"
 "<table bgcolor=\"cccc99\" border=\"0\" CELLPADDING=1 CELLSPACING=0>\n"
 "<tr><td>\n"
 "<table BGCOLOR=\"FEFDEF\" BORDERCOLOR=\"CCCC99\" BORDER=0 CELLPADDING=0 CELLSPACING=0>\n"
@@ -87,10 +88,6 @@ puts(
 "<tr>\n"
 "<td>\n");
 
-puts(
-"<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"mainForm\" METHOD=\"GET\">\n"
-"<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 puts("<table><tr>");
 if (gotClade)
     puts("<td align=center valign=baseline>clade</td>");
@@ -152,13 +149,16 @@ if(supportsSuggest)
     hButtonWithOnClick("Submit", "submit", NULL, "submitButtonOnClick()");
 else
     cgiMakeButton("Submit", "submit");
+/* This is a clear submit button that browsers will use by default when enter is pressed in position box. FIXME: This should be done with js onchange event! */
+printf("<input TYPE=\"IMAGE\" BORDER=\"0\" NAME=\"hgt.dummyEnterButton\" src=\"../images/DOT.gif\" WIDTH=1 HEIGHT=1 ALT=dot>");
+cartSaveSession(cart);  /* Put up hgsid= as hidden variable. */
 puts(
 "</td>\n"
 "</tr></table>\n"
-"</FORM></td></tr>\n");
+"</td></tr>\n");
 
 puts(
-"<tr><td><center>\n"
+"<tr><td><center><BR>\n"
 "<a HREF=\"../cgi-bin/cartReset\">Click here to reset</a> the browser user interface settings to their defaults.");
 
 #define SURVEY 1
@@ -176,14 +176,14 @@ puts(
 puts("<TABLE BORDER=\"0\">");
 puts("<TR>");
 
-if(isSearchTracksSupported(db))
+#ifdef TRACK_SEARCH
+if(isSearchTracksSupported(db,cart))
     {
     puts("<TD VALIGN=\"TOP\">");
-    puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    cgiMakeButton(searchTracks, "find tracks");
-    puts("</FORM></TD>");
+    cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
+    puts("</TD>");
     }
+#endif///def TRACK_SEARCH
 
 // custom track button. disable hgCustom button on GSID server, until
 // necessary additional work is authorized.
@@ -192,34 +192,27 @@ puts("<TD VALIGN=\"TOP\">");
 /* disable CT for CGB servers for the time being */
 if (!hIsGsidServer() && !hIsCgbServer())
     {
-    printf(
-	"<FORM ACTION=\"%s\" METHOD=\"GET\"><INPUT TYPE=SUBMIT VALUE=\"%s\">",
-        hgCustomName(), customTracksExist(cart, NULL) ?
-                        CT_MANAGE_BUTTON_LABEL : CT_ADD_BUTTON_LABEL);
-    cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-    puts("</FORM>");
+    boolean hasCustomTracks = customTracksExist(cart, NULL);
+    printf("<input TYPE=SUBMIT onclick=\"document.mainForm.action='%s';\" VALUE='%s' title='%s'>\n",
+        hgCustomName(),hasCustomTracks ? CT_MANAGE_BUTTON_LABEL:CT_ADD_BUTTON_LABEL,
+        hasCustomTracks ? "Manage your custom tracks" : "Add your own custom tracks"  );
     }
 puts("</TD>");
 
 // configure button
 puts("<TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
-cgiMakeButton("hgTracksConfigPage", "configure tracks and display");
-puts("</FORM></TD>");
+cgiMakeButtonWithMsg("hgTracksConfigPage", "configure tracks and display","Configure track selections and browser display");
+puts("</TD>");
 
 // clear possition button
 puts("<TD VALIGN=\"TOP\">");
-puts("<FORM ACTION=\"../cgi-bin/hgTracks\" NAME=\"buttonForm\" METHOD=\"GET\">\n");
-cartSaveSession(cart);	/* Put up hgsid= as hidden variable. */
 if(supportsSuggest)
     cgiMakeOnClickButton("document.mainForm.position.value=''; document.getElementById('suggest').value='';", "clear position");
 else
     cgiMakeOnClickButton("document.mainForm.position.value=''", "clear position");
-puts("</FORM></TD>");
+puts("</TD>");
 
-puts("</TR>");
-puts("</TABLE>");
+puts("</TR></TABLE>");
 
 puts("</center>\n"
 "</td></tr></table>\n"
@@ -227,6 +220,7 @@ puts("</center>\n"
 "</td></tr></table>\n"
 );
 puts("</center>");
+puts("</FORM>");
 if (isPrivateHost)
 puts("<P>This is just our test site.  It usually works, but it is filled with tracks in various "
 "stages of construction, and others of little interest to people outside of our local group. "

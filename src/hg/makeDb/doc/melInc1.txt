@@ -4,6 +4,7 @@
 # Sanger and Genoscope
 # http://www.nematode.net/Species.Summaries/Meloidogyne.incognita/index.php
 #	Genbank: CABB00000000
+#	http://www.ncbi.nlm.nih.gov/Traces/wgs/?val=CABB01
 
 ##############################################################################
 ## Fetch sequence (DONE - 2010-09-20 - Hiram)
@@ -402,3 +403,33 @@ cat q.*.psl | simpleChain -prot -outPsl -maxGap=50000 stdin \
     rm -rf blastOut
 
 #########################################################################
+# verify all.joiner has everything (DONE - 2010-10-21 - Hiram)
+    # edit all.joiner until all these commands are successful
+    cd $HOME/kent/src/hg/makeDb/schema
+    joinerCheck -tableCoverage -database=melInc1 ./all.joiner
+    joinerCheck -keys -database=melInc1 ./all.joiner
+    joinerCheck -times -database=melInc1 ./all.joiner
+    joinerCheck -all -database=melInc1 ./all.joiner
+    #	the -all command will complain about other databases on hgwdev
+    #	that are not specified in all.joiner.  There are a lot of test
+    #	databases on hgwdev
+
+#########################################################################
+# construct downloads files (DONE - 2010-10-21 - Hiram)
+    cd /hive/data/genomes/melInc1
+    makeDownloads.pl -dbHost=hgwdev -workhorse=hgwdev -verbose=2 melInc1 \
+	 > downloads.log 2>&1
+
+#########################################################################
+## Creating pushQ (DONE - 2010-10-21 - Hiram)
+    ssh hgwdev
+    mkdir /hive/data/genomes/melInc1/pushQ
+    cd /hive/data/genomes/melInc1/pushQ
+    makePushQSql.pl melInc1 > melInc1.sql 2> errorLog.out
+
+    ## check the errorLog.out for anything that needs to be fixed
+    ## copy melInc1.sql to hgwbeta:/tmp
+    ## then on hgwbeta:
+    hgsql qapushq < melInc1.sql
+
+#######################################################################

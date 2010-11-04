@@ -1763,4 +1763,48 @@ rm -f $c.gp $c.maf $c.ss
     featureBits -countGaps -or felCat4 gold gap
     #  3160303948 bases of 3160303948 (100.000%) in intersection
 
+    # Load the gaps that are not in the felCat4.agp file
+    cd /hive/data/genomes/felCat4/bed/allGaps
+    hgLoadBed -sqlTable=$HOME/kent/src/hg/lib/gap.sql \
+        -noLoad felCat4 otherGap other.gap
+    #   Reading other.gap
+    #   Loaded 1294 elements of size 8
+    #   Sorted
+    #   Saving bed.tab
+    #   No load option selected, see file: bed.tab
+    wc -l bed.tab
+    #   1294 bed.tab
+    #   starting with this many
+    hgsql -e "select count(*) from gap;" felCat4
+    #   500507
+    hgsql felCat4 -e 'load data local infile "bed.tab" into table gap;'
+    #   result count:
+    hgsql -e "select count(*) from gap;" felCat4
+    #   501801
+    # == 500507 + 1294
+
 #############################################################################
+# N-SCAN gene predictions (nscanGene) - (2010-11-02 markd)
+
+
+    # obtained NSCAN predictions from Jeltje van Baren <jeltje@mbari.org>,
+    cd /hive/data/genomes/felCat4/bed/nscan
+
+    cp /hive/users/jeltje/felis_Catus/for_browser/{felCat4.gtf,felCat4.prot.fa,readme.txt} .
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/felCat4/readme.txt
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/felCat4/felCat4.prot.fa
+    wget -nv http://mblab.wustl.edu/predictions/marmoset/felCat4/felCat4.gtf
+    gzip felCat4.*
+    chmod a-w *
+
+    # load track
+    gtfToGenePred -genePredExt felCat4.gtf.gz stdout | hgLoadGenePred -genePredExt felCat4 nscanGene stdin
+    hgPepPred felCat4 generic nscanPep felCat4.prot.fa.gz
+    rm *.tab
+
+    # cat/felCat4/trackDb.ra, add:
+    track nscanGene override
+    informant Cat N-SCAN used human (hg19) as the informant for conservation.
+
+    # veryify top-level search spec, should produce no results:
+    hgsql -Ne 'select name from nscanGene' felCat4 | egrep -v '^chr[0-9a-zA-Z_]+\.([0-9]+|pasa)((\.[0-9a-z]+)?\.[0-9a-z]+)?$' |head

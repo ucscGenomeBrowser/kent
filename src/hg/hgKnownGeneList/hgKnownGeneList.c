@@ -42,12 +42,7 @@ fprintf(outf, "<HTML><HEAD>");
 fprintf(outf, "<META HTTP-EQUIV=\"Content-Type\" CONTENT=\"text/html;CHARSET=iso-8859-1\">\n");
 fprintf(outf, "<META http-equiv=\"Content-Script-Type\" content=\"text/javascript\">\n");
 fprintf(outf, "<TITLE>UCSC Known Genes Description and Page Index</TITLE>\n");
-char *link = webTimeStampedLinkToResourceOnFirstCall("HGStyle.css",TRUE);
-if (link != NULL)
-    {
-    fprintf(outf, "%s",link);
-    freeMem(link);
-    }
+webIncludeResourcePrintToFile(outf,"HGStyle.css");
 fprintf(outf, "</HEAD><BODY BGCOLOR=\"FFF9D2\">\n");
 }
 

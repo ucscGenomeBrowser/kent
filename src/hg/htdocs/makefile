@@ -1,5 +1,4 @@
-HTDOCS=/usr/local/apache/htdocs
-HTDOCS_USER=${HTDOCS}-${USER}
+include ../../inc/common.mk
 
 # NOTES:
 #  - much of this is current repeats in the hgdownload htdocs makefile
@@ -11,26 +10,28 @@ GITUP = ${GIT} pull
 FIND=gitFiles
 
 user:
-	${MAKE} doInstall destDir=${HTDOCS_USER} extra=doSymLink
-	cd style && echo style && ${MAKE} user
+	if test -d ${DOCUMENTROOT}-${USER}; then \
+	    ${MAKE} doInstall destDir=${DOCUMENTROOT}-${USER} extra=doSymLink && \
+	    cd style && echo style && ${MAKE} user; \
+	fi
 
 alpha:
-	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
 	cd style && echo style && ${MAKE} alpha
 
 beta:
 	${GITUP}
-	${MAKE} doInstall destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstall destDir=${DOCUMENTROOT} extra=doSymLink
 	cd style && echo style && ${MAKE} beta
 
 alphaCancerPublic:
-	${MAKE} doInstallCancerPublic destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstallCancerPublic destDir=${DOCUMENTROOT} extra=doSymLink
 
 alphaCancerSU2C:
-	${MAKE} doInstallCancerSU2C destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstallCancerSU2C destDir=${DOCUMENTROOT} extra=doSymLink
 
 alphaCancerTCGA:
-	${MAKE} doInstallCancerTCGA destDir=${HTDOCS} extra=doSymLink
+	${MAKE} doInstallCancerTCGA destDir=${DOCUMENTROOT} extra=doSymLink
 
 # Recursive target to do install to destDir, with extra excludes excl and
 # specific includes in incl.  The variable extra are extra targets to depend
@@ -58,7 +59,7 @@ doInstallCancerTCGA: doRsync ${extra}
 # permissions maybe modified.  However, problems happen when a directory
 # is not owned by the current users.  These options attemp to work around it.
 # use care in changing
-rsyncOpts = --times --recursive --executability --omit-dir-times --relative --cvs-exclude --exclude='makefile'
+rsyncOpts = --times --recursive --executability --omit-dir-times --relative --cvs-exclude --exclude='makefile' --exclude='cpAndLinkToResourceFiles.pl'
 doRsync:
 	umask 002; rsync ${rsyncOpts} ${excl} ${incl} `$(FIND)` ${destDir}
 
@@ -75,3 +76,10 @@ doSymLink: doRsync
 	ln -sfn /gbdb/hg19/RNA-img ${destDir}/RNA-img/hg19
 	ln -sfn /gbdb/mm9/RNA-img  ${destDir}/RNA-img/mm9
 	ln -sfn /gbdb/rn4/RNA-img  ${destDir}/RNA-img/rn4
+
+# Other targets that may be invoked by ../makefile:
+compile:
+
+install: alpha
+
+clean:

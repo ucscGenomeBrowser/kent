@@ -204,7 +204,7 @@ if(advancedJavascriptFeaturesEnabled(cart))
     }
 else
     {
-    mapBoxJumpTo(hvg, x, y, width, height, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
+    mapBoxJumpTo(hvg, x, y, width, height, tg, cb->chrom, cb->chromStart, cb->chromEnd, cb->name);
     }
 }
 

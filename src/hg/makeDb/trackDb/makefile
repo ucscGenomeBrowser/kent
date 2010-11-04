@@ -32,6 +32,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	venter1 \
 	panTro1 panTro2 \
 	gorGor1 gorGor2 \
+        nomLeu1 \
 	ponAbe2 \
 	rheMac2 \
 	papHam1 \
@@ -51,7 +52,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	oviAri1 \
 	susScr1 susScr2 \
 	eriEur1 sorAra1 turTru1 vicVic1 pteVam1 tarSyr1 \
-	dipOrd1 proCap1 ochPri2 myoLuc1 \
+	dipOrd1 proCap1 ochPri2 myoLuc1 myoLuc2 \
 	micMur1 \
 	dasNov1 dasNov2 \
 	loxAfr1 loxAfr2 loxAfr3 \
@@ -115,24 +116,43 @@ ARCHIVED_DBS = \
 	mm6 \
 	danRer2
 
+HIVE_TRIX = /hive/data/inside/trix
+DATA_TRIX = /data/trix
+
 update: #clean
 	./loadTracks ${EXTRA} trackDb_${USER} hgFindSpec_${USER} ${DBS}
 	./checkMetaDb alpha metaDb_${USER} ${DBS}
+	rm -f /usr/local/apache/cgi-bin-${USER}/encode/cv.ra
+	cp -p cv/alpha/cv.ra  /usr/local/apache/cgi-bin-${USER}/encode
+#  if you want to test track search tool with your own trix file
+#	HGDB_TRACKDB=trackDb_${USER} ./buildTrix trackDb_${USER} metaDb_${USER} /usr/local/apache/cgi-bin-${USER}/encode/cv.ra ${HIVE_TRIX} ${DBS}
+# you'll also need to set browser.trixPath to point to your trix file
+# see kent/src/product/ex.hg/conf for details
 
 alpha: clean
 	${GIT} pull
-	./loadTracks -release=alpha trackDb hgFindSpec ${DBS}
+	./loadTracks ${EXTRA} -release=alpha trackDb hgFindSpec ${DBS}
 	./checkMetaDb alpha metaDb ${DBS}
+	rm -f /usr/local/apache/cgi-bin/encode/cv.ra
+	cp -p cv/alpha/cv.ra  /usr/local/apache/cgi-bin/encode
+	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${HIVE_TRIX} ${DBS}
+	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
 beta: clean
 	${GIT} pull
-	./loadTracks -strict -release=beta trackDb hgFindSpec ${DBS}
+	./loadTracks ${EXTRA} -strict -release=beta trackDb hgFindSpec ${DBS}
 	./checkMetaDb beta metaDb ${DBS}
+	rm -f /usr/local/apache/cgi-bin/encode/cv.ra
+	cp -p cv/beta/cv.ra  /usr/local/apache/cgi-bin/encode
+	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 public: clean
 	${GIT} pull
-	./loadTracks -strict -release=public trackDb_public hgFindSpec_public ${DBS}
+	./loadTracks ${EXTRA} -strict -release=public trackDb_public hgFindSpec_public ${DBS}
 	./checkMetaDb public metaDb_public ${DBS}
+	rm -f /usr/local/apache/cgi-bin-public/encode/cv.ra
+	cp -p cv/public/cv.ra  /usr/local/apache/cgi-bin-public/encode
+	HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public /usr/local/apache/cgi-bin-public/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 # this will fail if we are not in a beta checkout:
 checkbeta:
@@ -143,7 +163,7 @@ buildBeta: checkbeta clean strict
 
 encodeReport:
 	${GIT} pull
-	./loadTracks trackDb_encodeReport hgFindSpec ${DBS}
+	./loadTracks ${EXTRA} trackDb_encodeReport hgFindSpec ${DBS}
 
 listDbs:
 	@echo "# databases listed in trackDb/makefile DBS variable, with table counts"

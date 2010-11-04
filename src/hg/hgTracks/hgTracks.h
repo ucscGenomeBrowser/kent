@@ -12,6 +12,7 @@
 #include "hui.h"
 #endif
 
+#include "jsHelper.h"
 #include "imageV2.h"
 
 #ifndef CART_H
@@ -457,10 +458,11 @@ void mapBoxHc(struct hvGfx *hvg, int start, int end, int x, int y, int width, in
  * program. */
 
 void mapBoxReinvoke(struct hvGfx *hvg, int x, int y, int width, int height,
-		    struct track *toggleGroup, char *chrom,
+		    struct track *track, boolean toggle, char *chrom,
 		    int start, int end, char *message, char *extra);
 /* Print out image map rectangle that would invoke this program again.
- * If toggleGroup is non-NULL then toggle that track between full and dense.
+ * If track is non-NULL then put that track's id in the map item.
+ * if toggle is true, then toggle track between full and dense.
  * If chrom is non-null then jump to chrom:start-end.
  * Add extra string to the URL if it's not NULL */
 
@@ -469,7 +471,7 @@ void mapBoxToggleVis(struct hvGfx *hvg, int x, int y, int width, int height,
 /* Print out image map rectangle that would invoke this program again.
  * program with the current track expanded. */
 
-void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height,
+void mapBoxJumpTo(struct hvGfx *hvg, int x, int y, int width, int height, struct track *toggleGroup,
 		  char *newChrom, int newStart, int newEnd, char *message);
 /* Print out image map rectangle that would invoke this program again
  * at a different window. */
@@ -1223,9 +1225,6 @@ enum trackVisibility limitedVisFromComposite(struct track *subtrack);
 
 char *getScoreFilterClause(struct cart *cart,struct trackDb *tdb,char *scoreColumn);
 // Returns "score >= ..." extra where clause if one is needed
-
-boolean advancedJavascriptFeaturesEnabled(struct cart *cart);
-// Returns TRUE if drag-and-zoom is currently on
 
 #define SMALLBUF 128
 

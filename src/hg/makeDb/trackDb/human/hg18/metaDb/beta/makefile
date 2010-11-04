@@ -16,5 +16,7 @@ wgEncodeHudsonalphaMethyl27.ra\
 wgEncodeHudsonalphaRnaSeq.ra\
 wgEncodeRikenCage.ra\
 wgEncodeSangerGencode.ra\
+wgEncodeYaleRNAseq.ra\
+wgEncodeCshlLongRnaSeq.ra\
 
 include ../../../../makefile.metaDb

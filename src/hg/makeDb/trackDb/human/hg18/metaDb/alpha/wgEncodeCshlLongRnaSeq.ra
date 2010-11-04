@@ -8,7 +8,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -27,7 +27,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -46,7 +46,7 @@ dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -66,7 +66,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -85,7 +85,7 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal.bb
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -102,9 +102,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -121,9 +120,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -140,9 +138,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-fileName wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -160,9 +157,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -179,9 +175,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -198,9 +193,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -217,9 +211,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -236,9 +229,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-fileName wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -256,9 +248,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -275,9 +266,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -294,9 +284,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -313,9 +302,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 1
@@ -332,9 +320,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
-fileName wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
 project wgEncode
 replicate 1
@@ -352,9 +339,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -371,9 +357,8 @@ dataType RnaSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
-fileName wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal.bigWig.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
 project wgEncode
 replicate 2
@@ -392,9 +377,8 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep1Gm12878CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
-parentTable wgEncodeCshlLongRnaSeqRawSignalRep1Gm12878CellTotal
 project wgEncode
 replicate 1
 rnaExtract total
@@ -411,9 +395,8 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep1K562CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
-parentTable wgEncodeCshlLongRnaSeqRawSignalRep1K562CellTotal
 project wgEncode
 replicate 1
 rnaExtract total
@@ -430,9 +413,8 @@ dateSubmitted 2009-07-06
 dateUnrestricted 2010-04-06
 fileName wgEncodeCshlLongRnaSeqRawDataRep1K562CytosolLongpolyaV2.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cytosol
-parentTable wgEncodeCshlLongRnaSeqRawSignalRep1K562CytosolLongpolyaV2
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -449,9 +431,8 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep2Gm12878CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
-parentTable wgEncodeCshlLongRnaSeqRawSignalRep2Gm12878CellTotal
 project wgEncode
 replicate 2
 rnaExtract total
@@ -468,9 +449,8 @@ dateSubmitted 2009-10-22
 dateUnrestricted 2010-07-22
 fileName wgEncodeCshlLongRnaSeqRawDataRep2K562CellTotal.fastq.gz
 grant Gingeras
-lab Cshl
+lab CSHL
 localization cell
-parentTable wgEncodeCshlLongRnaSeqRawSignalRep2K562CellTotal
 project wgEncode
 replicate 2
 rnaExtract total

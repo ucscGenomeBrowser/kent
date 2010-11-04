@@ -13,6 +13,7 @@
 #include "cheapcgi.h"
 #include "dbDb.h"
 #include "hgColors.h"
+#include "searchTracks.h"
 #ifndef GBROWSE
 #include "axtInfo.h"
 #include "wikiLink.h"
@@ -98,9 +99,30 @@ char *scriptName = cgiScriptName();
 boolean isEncode = FALSE;
 boolean isGsid   = hIsGsidServer();
 boolean isGisaid = hIsGisaidServer();
+if (theCart)
+    {
+    char *theGenome = NULL;
+    char *genomeEnc = NULL;
+
+    getDbAndGenome(theCart, &db, &theGenome, NULL);
+    genomeEnc = cgiEncode(theGenome);
+
+    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
+	     orgCgiName, genomeEnc,
+	     dbCgiName, db,
+	     cartSessionVarName(), cartSessionId(theCart));
+    }
+else
+    {
+    uiState[0] = 0;
+    uiState[1] = 0;
+    }
 if (db == NULL)
     db = hDefaultDb();
 boolean dbIsFound = hDbExists(db);
+boolean haveBlat = FALSE;
+if (dbIsFound)
+    haveBlat = hIsBlatIndexedDatabase(db);
 
 if (scriptName == NULL)
     scriptName = cloneString("");
@@ -181,24 +203,6 @@ if (withLogo)
     puts("</TH></TR>" "\n"
     	 "" "\n" );
     }
-if (theCart)
-    {
-    char *theGenome = NULL;
-    char *genomeEnc = NULL;
-
-    getDbAndGenome(theCart, &db, &theGenome, NULL);
-    genomeEnc = cgiEncode(theGenome);
-
-    safef(uiState, sizeof(uiState), "?%s=%s&%s=%s&%s=%u",
-	     orgCgiName, genomeEnc,
-	     dbCgiName, db,
-	     cartSessionVarName(), cartSessionId(theCart));
-    }
-else
-    {
-    uiState[0] = 0;
-    uiState[1] = 0;
-    }
 
 /* Put up the hot links bar. */
 if (isGisaid)
@@ -210,7 +214,8 @@ if (isGisaid)
     printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+    if (haveBlat)
+	printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gisaidSample\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Sample View</FONT>");
@@ -246,7 +251,8 @@ else if (isGsid)
     printf("<TD ALIGN=CENTER><A HREF=\"../index.html\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Home</FONT></A></TD>");
 
     /* Blat */
-    printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
+    if (haveBlat)
+	printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/hgBlat?command=start\" class=\"topbar\"><FONT COLOR=\"#FFFFFF\">Blat</FONT></A></TD>");
 
     /* Subject  View */
     printf("<TD ALIGN=CENTER><A HREF=\"../cgi-bin/gsidSubj\" class=\"topbar\">%s</A></TD>", "<FONT COLOR=\"#FFFFFF\">Subject View</FONT>");
@@ -308,11 +314,16 @@ else
 	endsWith(scriptName, "hgSession") || endsWith(scriptName, "hgCustom") ||
 	endsWith(scriptName, "hgc") || endsWith(scriptName, "hgPal"))
 	{
-	printf("       <A HREF=\"../cgi-bin/hgTracks?hgTracksConfigPage=notSet%s\" class=\"topbar\">\n",
-	       uiState);
+#ifdef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet&%s=0' class='topbar'>\n",
+	       uiState,TRACK_SEARCH);
+#else///ifndef TRACK_SEARCH
+        printf("       <A HREF='../cgi-bin/hgTracks%s&hgTracksConfigPage=notSet' class='topbar'>\n",
+               uiState);
+#endif///ndef TRACK_SEARCH
 	puts("           Genome Browser</A> &nbsp;&nbsp;&nbsp;");
 	}
-    if (!endsWith(scriptName, "hgBlat"))
+    if (haveBlat && !endsWith(scriptName, "hgBlat"))
 	{
     	printf("       <A HREF=\"../cgi-bin/hgBlat?command=start%s%s\" class=\"topbar\">",
 		theCart ? "&" : "", uiState+1 );
@@ -931,6 +942,37 @@ if (differentWord(genome, hGenome(retDb)))
 return retDb;
 }
 
+#ifdef NOT
+static void phoneHome()
+{
+static boolean beenHere = FALSE;
+if (beenHere)  /* one at a time please */
+    return;
+beenHere = TRUE;
+char *scriptName = cgiScriptName();
+char *ip = getenv("SERVER_ADDR");
+if (scriptName && ip)
+    {
+    struct sqlConnection *conn = hConnectCentral();
+    if (conn)
+	{
+#define REGO_DB "UCSCRegistration"
+	if (sqlTableExists(conn, REGO_DB))
+	    return;
+	char query[256];
+	safef(query, sizeof(query), "create table %s", REGO_DB);
+	struct sqlResult *sr = sqlGetResult(conn, query);
+	sqlFreeResult(&sr);
+	hDisconnectCentral(&conn);
+	fprintf(stderr, "phoneHome: scriptName: %s, ip: %s\n", scriptName, ip);
+	}
+    else
+	fprintf(stderr, "phoneHome: scriptName: %s, ip: %s can not connect\n", scriptName, ip);
+    }
+else
+    fprintf(stderr, "phoneHome: scriptName: %s or ip %s are null\n", scriptName, ip);
+}
+#endif
 
 void getDbGenomeClade(struct cart *cart, char **retDb, char **retGenome,
 		      char **retClade, struct hash *oldVars)
@@ -953,6 +995,9 @@ boolean gotClade = hGotClade();
 *retDb = cgiOptionalString(dbCgiName);
 *retGenome = cgiOptionalString(orgCgiName);
 *retClade = cgiOptionalString(cladeCgiName);
+#ifdef NOT
+phoneHome();
+#endif
 
 /* Was the database passed in as a cgi param?
  * If so, it takes precedence and determines the genome. */
@@ -1205,6 +1250,7 @@ finishPartialTable(rowIx, itemPos, maxPerRow, webPrintLinkCellStart);
 char *webTimeStampedLinkToResource(char *fileName, boolean wrapInHtml)
 // Returns full path of timestamped link to the requested resource file (js, or css).
 // If wrapInHtml, then returns link embedded in style or script html. Free after use.
+// NOTE: png, jpg and gif should also be supported but are untested.
 {
 char baseName[PATH_LEN];
 char extension[FILEEXT_LEN];
@@ -1212,17 +1258,17 @@ splitPath(fileName, NULL, baseName, extension);
 boolean js = sameString(".js",extension);
 boolean style = !js && sameString(".css",extension);
 boolean image = !js && !style && (sameString(".png",extension) || sameString(".jpg",extension) || sameString(".gif",extension));
-if(!js && !style && !image)
+if(!js && !style) // && !image) NOTE: This code has not been tested on images but should work.
     errAbort("webTimeStampedLinkToResource: unknown resource type for %s.\n", fileName);
 
 // Build and verify directory
-char *dirName = NULL;
+char *dirName = "";
 if (js)
     dirName = cfgOptionDefault("browser.javaScriptDir", "js");
 else if (style)
-    dirName = "style";
-else
-    dirName = "style/images";
+    dirName = cfgOptionDefault("browser.styleDir","style");
+else if (image)
+    dirName = cfgOptionDefault("browser.styleImagesDir","style/images");
 struct dyString *fullDirName = NULL;
 char *docRoot = hDocumentRoot();
 if(docRoot != NULL) // tolerate missing docRoot (i.e. when running from command line)
@@ -1249,7 +1295,7 @@ if(!fileExists(dyStringContents(linkWithTimestamp)))
     // versioned softlinks won't match the real file; in that case, we try to create
     // the versioned links on the fly (which requires write access to the javascript or style directory!).
 
-        // Remove older links
+    // Remove older links
     struct dyString *pattern = dyStringCreate("%s-[0-9]+\\%s", baseName, extension);
     struct slName *file, *files = listDirRegEx(dyStringContents(fullDirName), dyStringContents(pattern), REG_EXTENDED);
     struct dyString *oldLink = dyStringNew(256);
@@ -1287,8 +1333,8 @@ if (wrapInHtml) // wrapped for christmas
         dyStringPrintf(wrapped,"<script type='text/javascript' SRC='../%s'></script>\n", link);
     else if (style)
         dyStringPrintf(wrapped,"<LINK rel='STYLESHEET' href='../%s' TYPE='text/css' />\n", link);
-    else // assume image!
-        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link); // NOTE: perhaps it is better to errAbort!
+    else // Will be image, since these are the only three choices allowed
+        dyStringPrintf(wrapped,"<IMG src='../%s' />\n", link);
     freeMem(link);
     link = dyStringCannibalize(&wrapped);
     }
@@ -1300,6 +1346,7 @@ char *webTimeStampedLinkToResourceOnFirstCall(char *fileName, boolean wrapInHtml
 // If this is the first call, will
 //   Return full path of timestamped link to the requested resource file (js, or css).  Free after use.
 // else returns NULL.  Useful to ensure multiple references to the same resource file are not made
+// NOTE: png, jpg and gif should also be supported but are untested.
 {
 static struct hash *includedResourceFiles = NULL;
 if(!includedResourceFiles)
@@ -1310,21 +1357,26 @@ if(hashLookup(includedResourceFiles, fileName))
 
 char * link = webTimeStampedLinkToResource(fileName,wrapInHtml);
 if (link)
-    hashAdd(includedResourceFiles, fileName, link);
+    hashAdd(includedResourceFiles, fileName, NULL);  // Don't hash link, because memory will be freed by caller!!!
 return link;
 }
 
-boolean webIncludeResourceFile(char *fileName)
-// Converts fileName to web Resource link and hPrintfs the html reference
+boolean webIncludeResourcePrintToFile(FILE * toFile, char *fileName)
+// Converts fileName to web Resource link and prints the html reference
 // This only prints and returns TRUE on first call for this resource.
+// Passing in NULL as the file pointer results in hPrintf call
 // The reference will be to a link with timestamp.
 {
 char *link = webTimeStampedLinkToResourceOnFirstCall(fileName,TRUE);
 if (link)
     {
-    hPrintf("%s",link);
+    if (toFile == NULL)
+        hPrintf("%s",link);
+    else
+        fprintf(toFile,"%s",link);
     freeMem(link);
     return TRUE;
     }
 return FALSE;
 }
+

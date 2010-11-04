@@ -1623,8 +1623,8 @@ canPack On
     noInherit on
     type wig 0 10000
     superTrack wgEncodeReg full
-    shortLabel Enhancer H3K4Me1
-    longLabel ENCODE Enhancer and Promoter Histone Mark (H3K4Me1) on 8 Cell Lines
+    shortLabel Enhanced H3K4Me1
+    longLabel ENCODE Enhancer and Promoter Associated Histone Mark (H3K4Me1) on 8 Cell Lines
     configurable on
     visibility full
     viewLimits 0:50
@@ -1636,7 +1636,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Gm12878
 	shortLabel Gm12878
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1644,7 +1644,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1H1hesc
 	shortLabel H1 ES
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k4me1
@@ -1652,7 +1652,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hepg2
 	shortLabel HepG2
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,255,128
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me1
@@ -1660,7 +1660,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hmec
 	shortLabel HMEC
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HMEC cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k4me1
@@ -1668,7 +1668,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Hsmm
 	shortLabel HSMM
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HSMM cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k4me1
@@ -1676,7 +1676,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Huvec
 	shortLabel HUVEC
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on HUVEC cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k4me1
@@ -1684,7 +1684,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1K562
 	shortLabel K562
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on K562 cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on K562 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k4me1
@@ -1692,7 +1692,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Nhek
 	shortLabel NHEK
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on NHEK cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k4me1
@@ -1700,7 +1700,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k4me1Nhlf
 	shortLabel NHLF
-	longLabel Enhancer and Promoter Histone Mark (H3K4Me1) on NHLF cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K4Me1) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k4me1
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k4me1
@@ -1711,8 +1711,8 @@ canPack On
     noInherit on
     type wig 0 10000
     superTrack wgEncodeReg hide
-    shortLabel Enhancer H3K27Ac
-    longLabel ENCODE Enhancer and Promoter Histone Mark (H3K27Ac) on 8 Cell Lines
+    shortLabel Enhanced H3K27Ac
+    longLabel ENCODE Enhancer and Promoter Associated Histone Mark (H3K27Ac) on 8 Cell Lines
     configurable on
     visibility full
     viewLimits 0:50
@@ -1724,7 +1724,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acGm12878
 	shortLabel Gm12878
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	type wig 0.00 9323.50
 	color 255,128,128
@@ -1732,7 +1732,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acH1hesc
 	shortLabel H1 ES
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on H1 ES cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,212,128
 	table wgEncodeBroadChipSeqSignalH1hescH3k27ac
@@ -1740,7 +1740,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHepg2
 	shortLabel HepG2
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,255,128
         table wgEncodeBroadChipSeqSignalHepg2H3k27ac
@@ -1748,7 +1748,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHmec
 	shortLabel HMEC
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HMEC cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,120
 	table wgEncodeBroadChipSeqSignalHmecH3k27ac
@@ -1756,7 +1756,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHsmm
 	shortLabel HSMM
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HSMM cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 120,235,204
 	table wgEncodeBroadChipSeqSignalHsmmH3k27ac
@@ -1764,7 +1764,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acHuvec
 	shortLabel HUVEC
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on HUVEC cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,212,255
 	table wgEncodeBroadChipSeqSignalHuvecH3k27ac
@@ -1772,7 +1772,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acK562
 	shortLabel K562
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on K562 cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on K562 cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 128,128,255
 	table wgEncodeBroadChipSeqSignalK562H3k27ac
@@ -1780,7 +1780,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acNhek
 	shortLabel NHEK
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on NHEK cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 212,128,255
 	table wgEncodeBroadChipSeqSignalNhekH3k27ac
@@ -1788,7 +1788,7 @@ canPack On
 
 	track wgEncodeRegMarkEnhH3k27acNhlf
 	shortLabel NHLF
-	longLabel Enhancer and Promoter Histone Mark (H3K27Ac) on NHLF cells from ENCODE
+	longLabel Enhancer and Promoter Associated Histone Mark (H3K27Ac) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkEnhH3k27ac
 	color 255,128,212
 	table wgEncodeBroadChipSeqSignalNhlfH3k27ac
@@ -1797,8 +1797,8 @@ canPack On
     track wgEncodeRegMarkPromoter
     container multiWig
     superTrack wgEncodeReg full
-    shortLabel Promoter H3K4Me3
-    longLabel ENCODE Promoter Histone Mark (H3K4Me3) on 9 Cell Lines
+    shortLabel Promoted H3K4Me3
+    longLabel ENCODE Promoter Associated Histone Mark (H3K4Me3) on 9 Cell Lines
     type wig 0 30000
     viewLimits 0:100
     configurable on
@@ -1814,7 +1814,7 @@ canPack On
 	track wgEncodeRegMarkPromoterGm12878
         table wgEncodeBroadChipSeqSignalGm12878H3k4me3
 	shortLabel Gm12878
-	longLabel Promoter Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on Gm12878 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 100593.50
 	color 255,128,128
@@ -1822,7 +1822,7 @@ canPack On
 	track wgEncodeRegMarkPromoterH1hesc
         table wgEncodeBroadChipSeqSignalH1hescH3k4me3
 	shortLabel H1 ES
-	longLabel Promoter Histone Mark (H3K4Me3) on H1 cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on H1 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12434.00
 	color 255,212,128
@@ -1830,7 +1830,7 @@ canPack On
 	track wgEncodeRegMarkEnhH3k4me3Hepg2
 	table wgEncodeBroadChipSeqSignalHepg2H3k4me3
 	shortLabel HepG2
-	longLabel Promoter Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on HepG2 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 4927.00
 	color 212,255,128
@@ -1838,7 +1838,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHmec
         table wgEncodeBroadChipSeqSignalHmecH3k4me3
 	shortLabel HMEC
-	longLabel Promoter Histone Mark (H3K4Me3) on HMEC cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on HMEC cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 15838.00
 	color 120,235,120
@@ -1846,7 +1846,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHsmm
         table wgEncodeBroadChipSeqSignalHsmmH3k4me3
 	shortLabel HSMM
-	longLabel Promoter Histone Mark (H3K4Me3) on HSMM cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on HSMM cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 42282.00
 	color 120,235,204
@@ -1854,7 +1854,7 @@ canPack On
 	track wgEncodeRegMarkPromoterHuvec
         table wgEncodeBroadChipSeqSignalHuvecH3k4me3
 	shortLabel HUVEC
-	longLabel Promoter Histone Mark (H3K4Me3) on HUVEC cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on HUVEC cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 9954.75
 	color 128,212,255
@@ -1862,7 +1862,7 @@ canPack On
 	track wgEncodeRegMarkPromoterK562
         table wgEncodeBroadChipSeqSignalK562H3k4me3
 	shortLabel K562
-	longLabel Promoter Histone Mark (H3K4Me3) on K562 cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on K562 cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 16145.25
 	color 128,128,255
@@ -1870,7 +1870,7 @@ canPack On
 	track wgEncodeRegMarkPromoterNhek
         table wgEncodeBroadChipSeqSignalNhekH3k4me3
 	shortLabel NHEK
-	longLabel Promoter Histone Mark (H3K4Me3) on NHEK cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on NHEK cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 12229.50
 	color 212,128,255
@@ -1878,7 +1878,7 @@ canPack On
 	track wgEncodeRegMarkPromoterNhlf
         table wgEncodeBroadChipSeqSignalNhlfH3k4me3
 	shortLabel NHLF
-	longLabel Promoter Histone Mark (H3K4Me3) on NHLF cells from ENCODE
+	longLabel Promoter Associated Histone Mark (H3K4Me3) on NHLF cells from ENCODE
 	parent wgEncodeRegMarkPromoter
         type wig 0.00 28587.00
 	color 255,128,212
@@ -3539,7 +3539,6 @@ wgEncode 1
     itemRgb on
     cell HepG2
 #    color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r1.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27HepG2r2
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3552,7 +3551,6 @@ wgEncode 1
     itemRgb on
     cell HepG2
 #    color 189,0,157
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=HepG2 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27HepG2r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27HepG2r2.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27GM12878r1
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3565,7 +3563,6 @@ wgEncode 1
     itemRgb on
     cell GM12878
 #    color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r1.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27GM12878r2
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3578,7 +3575,6 @@ wgEncode 1
     itemRgb on
     cell GM12878
 #    color 153,38,0
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=GM12878 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27GM12878r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27GM12878r2.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27K562r1
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3591,7 +3587,6 @@ wgEncode 1
     itemRgb on
     cell K562
 #    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=1 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r1 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r1.bed.gz subId=685
 
     track wgEncodeHudsonalphaMethyl27K562r2
     subTrack wgEncodeHudsonalphaMethyl27
@@ -3604,7 +3599,6 @@ wgEncode 1
     itemRgb on
     cell K562
 #    color 46,0,184
-    metadata project=wgEncode grant=Myers lab=HudsonAlpha cell=K562 replicate=2 dataVersion="ENCODE Feb 2009 Freeze" dateSubmitted=2008-12-23 dateUnrestricted=2009-09-23 composite=wgEncodeHudsonalphaMethyl27 tableName=wgEncodeHudsonalphaMethyl27K562r2 dataType=methyl27 fileName=wgEncodeHudsonalphaMethyl27K562r2.bed.gz subId=685
 
 # HudsonAlpha CNV (wrangler: braney)
 
@@ -5188,7 +5182,6 @@ noInherit on
         maxLimit 580871
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
@@ -5201,7 +5194,6 @@ noInherit on
         maxLimit 898990
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=PlusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep2Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
@@ -5214,7 +5206,6 @@ noInherit on
         maxLimit 384266
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal off
@@ -5227,7 +5218,6 @@ noInherit on
         maxLimit 421850
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=PlusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep2K562CellTotal
 
         track wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView1-PlusRawSignal on
@@ -5240,7 +5230,6 @@ noInherit on
         maxLimit 118018
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=PlusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqPlusRawSigRep1K562CytosolLongpolyaV2
 
     track wgEncodeCshlLongRnaSeqView2-MinusRawSignal
     shortLabel Minus Raw Signal
@@ -5265,7 +5254,6 @@ noInherit on
         maxLimit 2199965
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
@@ -5278,7 +5266,6 @@ noInherit on
         maxLimit 3756424
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=MinusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep2Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
@@ -5291,7 +5278,6 @@ noInherit on
         maxLimit 2180073
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal off
@@ -5304,7 +5290,6 @@ noInherit on
         maxLimit 1769868
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=MinusRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep2K562CellTotal
 
         track wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView2-MinusRawSignal on
@@ -5317,7 +5302,6 @@ noInherit on
         maxLimit 318978
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=MinusRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752  submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqMinusRawSigRep1K562CytosolLongpolyaV2
 
     track wgEncodeCshlLongRnaSeqView3-AllRawSignal
     shortLabel All Raw Signal
@@ -5342,7 +5326,6 @@ noInherit on
         maxLimit 2689207
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5355,7 +5338,6 @@ noInherit on
         maxLimit 4860029
         transformFunc NONE
         color 153,38,0
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=AllRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep2Gm12878CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5368,7 +5350,6 @@ noInherit on
         maxLimit 3032883
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5381,7 +5362,6 @@ noInherit on
         maxLimit 2411797
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=AllRawSignal replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep2K562CellTotal
 
         track wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView3-AllRawSignal off
@@ -5394,7 +5374,6 @@ noInherit on
         maxLimit 318978
         transformFunc NONE
         color 46,0,184
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=AllRawSignal replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAllRawSigRep1K562CytosolLongpolyaV2
 
     track wgEncodeCshlLongRnaSeqView4-Alignments
     shortLabel Alignments
@@ -5409,7 +5388,6 @@ noInherit on
         subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1Gm12878CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
@@ -5418,7 +5396,6 @@ noInherit on
         subGroups view=4-Alignments cellType=GM12878 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=GM12878 rnaExtract=total localization=cell view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2Gm12878CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
@@ -5427,7 +5404,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments off
@@ -5436,7 +5412,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=cell rnaExtract=total
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=total localization=cell view=Alignments replicate=2 dataVersion="ENCODE Sep 2009 Freeze" subId=752 dateSubmitted=2009-10-22 dateUnrestricted=2010-07-22 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal fileName=wgEncodeCshlLongRnaSeqAlignmentsRep2K562CellTotal.bb
 
         track wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2
         subTrack wgEncodeCshlLongRnaSeqView4-Alignments on
@@ -5445,7 +5420,6 @@ noInherit on
         subGroups view=4-Alignments cellType=K562 localization=cytosol rnaExtract=longPolyA
         type bigBed 12
         colorByStrand 46,0,184 238,85,34
-        metadata project=wgEncode grant=Gingeras lab=Cshl dataType=LongRnaSeq cell=K562 rnaExtract=longPolyA localization=cytosol view=Alignments replicate=1 dataVersion="ENCODE Sep 2009 Freeze"  subId=752 submittedDataVersion="V2 - file format change" dateSubmitted=2009-07-06 dateUnrestricted=2010-04-06 composite=wgEncodeCshlLongRnaSeq tableName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2 fileName=wgEncodeCshlLongRnaSeqAlignmentsRep1K562CytosolLongpolyaV2.bb
 
 # UMass Weng Lab TFBS Validation (wrangler: kate)
 

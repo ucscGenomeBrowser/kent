@@ -1,7 +1,7 @@
-#!/bin/bash -ex
-usage='buildTrix trixName metaDbName path_to_cv.ra ${DBS}'
+#!/bin/bash -e
+usage='buildTrix trixName metaDbName path_to_cv.ra outputPath ${DBS}'
 
-if [ $# -lt 4 ] ; then
+if [ $# -lt 5 ] ; then
     echo "wrong # args: $usage" >&2
     exit 1
 fi
@@ -9,6 +9,7 @@ fi
 trixName="$1"; shift
 metaDbName="$1" ; shift
 cvRaPath="$1" ; shift
+outPath="$1" ; shift
 dbs="$@"
 
 # check if a database exists, print note and return non-zero if it doesn't
@@ -32,15 +33,17 @@ buildDbTrix() {
     local trixName="$2"
     local metaDbName="$3"
     local cvRaPath="$4"
+    local outPath="$5"
     local tmpFile=`mktemp`;
     makeTrackIndex $db $metaDbName $cvRaPath > $$tmpFile;
-    rm -f /gbdb/$db/$trixName.ix /gbdb/$db/$trixName.ixx;
-    ixIxx $$tmpFile /gbdb/$db/$trixName.ix /gbdb/$db/$trixName.ixx
+    if test -s $$tmpFile; then
+        ixIxx $$tmpFile $outPath/${db}_${trixName}.ix $outPath/${db}_${trixName}.ixx
+    fi
     rm -f $$tmpFile 
 }
 
 for db in $dbs ; do
     if dbExists $db ; then
-        buildDbTrix $db $trixName $metaDbName $cvRaPath
+        buildDbTrix $db $trixName $metaDbName $cvRaPath $outPath
     fi
 done

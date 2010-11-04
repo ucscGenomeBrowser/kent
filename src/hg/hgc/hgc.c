@@ -6174,8 +6174,16 @@ char * ncbiTerm = cgiEncode(ctgName);
 safef(query, sizeof(query), "%s%s", NUCCORE_SEARCH, ncbiTerm);
 
 genericHeader(tdb, ctgName);
+char *url = tdb->url;
 if (sameWord(database,"oryCun2"))
     printf("<B>Name:</B>&nbsp;%s<BR>\n", ctgName);
+else if (isNotEmpty(url))
+    {
+    if (sameWord(url, "none"))
+	printf("<B>Name:</B>&nbsp;%s<BR>\n", ctgName);
+    else
+	printCustomUrl(tdb, ctgName, TRUE);
+    }
 else
     printf("<B>Name:</B>&nbsp;<A HREF=\"%s\" TARGET=_blank>%s</A><BR>\n",
 	query, ctgName);
@@ -6436,8 +6444,8 @@ wholeFfAli = pslToFfAliAndSequence(wholePsl, rnaSeq, &isRc, &dnaSeq,
 
 if (restrictToWindow)
     {
-    partTStart = winStart;
-    partTEnd = winEnd;
+    partTStart = max(wholePsl->tStart, winStart);
+    partTEnd = min(wholePsl->tEnd, winEnd);
     }
 
 /* Write body heading info. */

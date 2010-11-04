@@ -3,13 +3,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -22,13 +24,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapAlnRep2.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -41,13 +45,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -60,13 +66,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -74,18 +82,92 @@ subId 1979
 tableName wgEncodeGisRnaPetGm12878CytosolPapClustersRep2
 view Clusters
 
+metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1
+objType file
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2
+objType file
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd1Rep2.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1
+objType file
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
+metaObject wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2
+objType file
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetGm12878CytosolPapFastqRd2Rep2.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -98,13 +180,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -117,13 +201,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -136,13 +222,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -155,13 +243,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -174,13 +264,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -188,18 +280,56 @@ subId 1980
 tableName wgEncodeGisRnaPetGm12878NucleusPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetGm12878NucleusPapFastqRd1Rep1
+objType file
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetGm12878NucleusPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetGm12878NucleusPapFastqRd2Rep1
+objType file
+cell GM12878
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetGm12878NucleusPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1
 objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -212,13 +342,15 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetGm12878NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -231,13 +363,15 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetH1hescCellPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -250,13 +384,15 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetH1hescCellPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -264,18 +400,56 @@ subId 2114
 tableName wgEncodeGisRnaPetH1hescCellPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetH1hescCellPapFastqRd1Rep1
+objType file
+cell H1-hESC
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetH1hescCellPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetH1hescCellPapFastqRd2Rep1
+objType file
+cell H1-hESC
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetH1hescCellPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1
 objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetH1hescCellPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -288,13 +462,15 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetH1hescCellPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -307,13 +483,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2009-12-05
+dateUnrestricted 2010-09-05
 fileName wgEncodeGisRnaPetHelas3CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -326,13 +504,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHelas3CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -340,18 +520,54 @@ subId 2123
 tableName wgEncodeGisRnaPetHelas3CytosolPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetHelas3CytosolPapFastqRd1Rep1
+objType file
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetHelas3CytosolPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 841
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHelas3CytosolPapFastqRd2Rep1
+objType file
+cell HeLa-S3
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetHelas3CytosolPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis(Ruan)
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 841
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1
 objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2009-12-05
+dateUnrestricted 2010-09-05
 fileName wgEncodeGisRnaPetHelas3CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -364,13 +580,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-08
-dateUnrestricted 2011-07-08
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-08
+dateSubmitted 2009-12-05
+dateUnrestricted 2010-09-05
 fileName wgEncodeGisRnaPetHelas3CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -383,13 +601,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-12-04
+dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHelas3NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -402,13 +622,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHelas3NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -421,13 +643,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-12-04
+dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHelas3NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -440,13 +664,15 @@ objType table
 cell HeLa-S3
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-12-04
+dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHelas3NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -459,13 +685,15 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-19
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-19
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -478,13 +706,15 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-19
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-19
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -492,18 +722,56 @@ subId 2116
 tableName wgEncodeGisRnaPetHepg2CytosolPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetHepg2CytosolPapFastqRd1Rep1
+objType file
+cell HepG2
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetHepg2CytosolPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHepg2CytosolPapFastqRd2Rep1
+objType file
+cell HepG2
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetHepg2CytosolPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1
 objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-19
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-19
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -516,13 +784,15 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-19
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-19
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -535,13 +805,15 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -554,13 +826,15 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -568,18 +842,56 @@ subId 2117
 tableName wgEncodeGisRnaPetHepg2NucleusPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetHepg2NucleusPapFastqRd1Rep1
+objType file
+cell HepG2
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetHepg2NucleusPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHepg2NucleusPapFastqRd2Rep1
+objType file
+cell HepG2
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetHepg2NucleusPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1
 objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -592,13 +904,15 @@ objType table
 cell HepG2
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHepg2NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -611,14 +925,16 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-12-04
+dateUnrestricted 2010-09-04
 fileIndex wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam.bai
 fileName wgEncodeGisRnaPetHuvecCytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -631,13 +947,15 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -645,18 +963,54 @@ subId 1990
 tableName wgEncodeGisRnaPetHuvecCytosolPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1
+objType file
+cell HUVEC
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis(Ruan)
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 838
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1
+objType file
+cell HUVEC
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetHuvecCytosolPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis(Ruan)
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 838
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1
 objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-12-04
+dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -669,13 +1023,15 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-12-04
+dateUnrestricted 2010-09-04
 fileName wgEncodeGisRnaPetHuvecCytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -688,14 +1044,16 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileIndex wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam.bai
 fileName wgEncodeGisRnaPetHuvecNucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -708,13 +1066,15 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetHuvecNucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -722,18 +1082,56 @@ subId 1991
 tableName wgEncodeGisRnaPetHuvecNucleusPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetHuvecNucleusPapFastqRd1Rep1
+objType file
+cell HUVEC
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetHuvecNucleusPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetHuvecNucleusPapFastqRd2Rep1
+objType file
+cell HUVEC
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetHuvecNucleusPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1
 objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -746,13 +1144,15 @@ objType table
 cell HUVEC
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetHuvecNucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -765,13 +1165,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalAlnRep1.bam
 grant Gingeras
 lab GIS
 localization chromatin
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -784,13 +1186,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization chromatin
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -798,18 +1202,37 @@ subId 1986
 tableName wgEncodeGisRnaPetK562ChromatinTotalClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetK562ChromatinTotalFastqRep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetK562ChromatinTotalFastqRep1.fastq.gz
+grant Gingeras
+lab Gis
+localization chromatin
+project wgEncode
+rnaExtract total
+subId 841
+view RawData
+
 metaObject wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization chromatin
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -822,13 +1245,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562ChromatinTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization chromatin
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -841,13 +1266,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -860,13 +1287,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapAlnRep2.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -879,13 +1308,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -898,13 +1329,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562CytosolPapClustersRep2.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -912,18 +1345,90 @@ subId 2119
 tableName wgEncodeGisRnaPetK562CytosolPapClustersRep2
 view Clusters
 
+metaObject wgEncodeGisRnaPetK562CytosolPapFastaRd1Rep2
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-13
+dateUnrestricted 2011-01-13
+fileName wgEncodeGisRnaPetK562CytosolPapFastaRd1Rep2.fasta.gz
+grant Gingeras
+lab Gis(Ruan)
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 1169
+view FastaRd1
+
+metaObject wgEncodeGisRnaPetK562CytosolPapFastaRd2Rep2
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-13
+dateUnrestricted 2011-01-13
+fileName wgEncodeGisRnaPetK562CytosolPapFastaRd2Rep2.fasta.gz
+grant Gingeras
+lab Gis(Ruan)
+localization cytosol
+project wgEncode
+rnaExtract longPolyA
+subId 1169
+view FastaRd2
+
+metaObject wgEncodeGisRnaPetK562CytosolPapFastqRd1Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetK562CytosolPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetK562CytosolPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -936,13 +1441,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapMinusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -955,13 +1462,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -974,13 +1483,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-09-16
-dateUnrestricted 2011-06-16
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-16
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562CytosolPapPlusRawSigRep2.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 2
 rnaExtract longPolyA
@@ -993,13 +1504,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleolus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1012,13 +1525,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleolus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1026,18 +1541,54 @@ subId 1988
 tableName wgEncodeGisRnaPetK562NucleolusTotalClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetK562NucleolusTotalFastqRd1Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetK562NucleolusTotalFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleolus
+project wgEncode
+rnaExtract total
+subId 841
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetK562NucleolusTotalFastqRd2Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetK562NucleolusTotalFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis(Ruan)
+localization nucleolus
+project wgEncode
+rnaExtract total
+subId 841
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleolus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1050,13 +1601,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleolusTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleolus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1069,13 +1622,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1088,13 +1643,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1102,18 +1659,37 @@ subId 1987
 tableName wgEncodeGisRnaPetK562NucleoplasmTotalClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetK562NucleoplasmTotalFastqRep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE June 2010 Freeze
+dateSubmitted 2010-04-07
+dateUnrestricted 2011-01-07
+fileName wgEncodeGisRnaPetK562NucleoplasmTotalFastqRep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleoplasm
+project wgEncode
+rnaExtract total
+subId 841
+view RawData
+
 metaObject wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1126,13 +1702,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleoplasmTotalPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleoplasm
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract total
@@ -1145,13 +1723,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1164,13 +1744,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562NucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1178,18 +1760,56 @@ subId 1984
 tableName wgEncodeGisRnaPetK562NucleusPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetK562NucleusPapFastqRd1Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetK562NucleusPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetK562NucleusPapFastqRd2Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetK562NucleusPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1202,13 +1822,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-08-18
-dateUnrestricted 2011-05-18
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-08-18
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562NucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1221,13 +1843,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization polysome
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1240,13 +1864,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetK562PolysomePapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization polysome
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1254,18 +1880,56 @@ subId 1985
 tableName wgEncodeGisRnaPetK562PolysomePapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetK562PolysomePapFastqRd1Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetK562PolysomePapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization polysome
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetK562PolysomePapFastqRd2Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetK562PolysomePapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization polysome
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1
 objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization polysome
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1278,13 +1942,15 @@ objType table
 cell K562
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetK562PolysomePapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization polysome
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1297,13 +1963,15 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1316,13 +1984,15 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetNhekCytosolPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1330,18 +2000,56 @@ subId 2120
 tableName wgEncodeGisRnaPetNhekCytosolPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetNhekCytosolPapFastqRd1Rep1
+objType file
+cell NHEK
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetNhekCytosolPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetNhekCytosolPapFastqRd2Rep1
+objType file
+cell NHEK
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetNhekCytosolPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cytosol
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1
 objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1354,13 +2062,15 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekCytosolPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cytosol
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1373,13 +2083,15 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1392,13 +2104,15 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetNhekNucleusPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1406,18 +2120,56 @@ subId 2118
 tableName wgEncodeGisRnaPetNhekNucleusPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetNhekNucleusPapFastqRd1Rep1
+objType file
+cell NHEK
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetNhekNucleusPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetNhekNucleusPapFastqRd2Rep1
+objType file
+cell NHEK
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetNhekNucleusPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization nucleus
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1
 objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1430,13 +2182,15 @@ objType table
 cell NHEK
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-10-09
-dateUnrestricted 2011-07-09
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-10-09
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetNhekNucleusPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization nucleus
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1449,13 +2203,15 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapAlnRep1.bam
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1468,13 +2224,15 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2010-03-08
+dateUnrestricted 2010-12-08
 fileName wgEncodeGisRnaPetProstateCellPapClustersRep1.bed12.gz
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1482,18 +2240,56 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapClustersRep1
 view Clusters
 
+metaObject wgEncodeGisRnaPetProstateCellPapFastqRd1Rep1
+objType file
+cell prostate
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetProstateCellPapFastqRd1Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd1
+
+metaObject wgEncodeGisRnaPetProstateCellPapFastqRd2Rep1
+objType file
+cell prostate
+composite wgEncodeGisRnaPet
+dataType RnaPet
+dataVersion ENCODE Jan 2010 Freeze
+dateSubmitted 2009-11-17
+dateUnrestricted 2010-08-17
+fileName wgEncodeGisRnaPetProstateCellPapFastqRd2Rep1.fastq.gz
+grant Gingeras
+lab Gis
+localization cell
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 778
+view FastqRd2
+
 metaObject wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1
 objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapMinusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1506,13 +2302,15 @@ objType table
 cell prostate
 composite wgEncodeGisRnaPet
 dataType RnaPet
-dataVersion post ENCODE June 2010 Freeze
-dateSubmitted 2010-07-22
-dateUnrestricted 2011-04-22
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-07-22
+dateSubmitted 2009-11-13
+dateUnrestricted 2010-08-13
 fileName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1.bigWig
 grant Gingeras
 lab GIS
 localization cell
+origAssembly hg18
 project wgEncode
 replicate 1
 rnaExtract longPolyA
@@ -1520,4 +2318,4 @@ subId 1989
 tableName wgEncodeGisRnaPetProstateCellPapPlusRawSigRep1
 view PlusRawSig
 
-# MAGIC: -192115594
+# MAGIC: -856695111

@@ -1543,8 +1543,8 @@ return count;
 
 // ----------------- Utilities -----------------
 
-char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
-// Finds the val associated with the var or retruns NULL
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var)
+// Finds the mdbVar associated with the var or returns NULL
 {
 if (mdbObj == NULL)
     return NULL;
@@ -1560,6 +1560,17 @@ else
             break;
         }
     }
+if(mdbVar == NULL)
+    return NULL;
+
+return mdbVar;
+}
+
+char *mdbObjFindValue(struct mdbObj *mdbObj, char *var)
+// Finds the val associated with the var or retruns NULL
+{
+struct mdbVar *mdbVar = mdbObjFind(mdbObj, var);
+
 if(mdbVar == NULL)
     return NULL;
 
@@ -2044,9 +2055,9 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
 else
-    dyStringPrintf(dyQuery,"select distinct distinct val");
+    dyStringPrintf(dyQuery,"select distinct val");
 
 dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
 
@@ -2060,7 +2071,7 @@ slNameSortCase(&retVal);
 return retVal;
 }
 
-// TODO: decide to make this public or hide it away inside the one finction so far that uses it.
+// TODO: decide to make this public or hide it away inside the one function so far that uses it.
 static struct hash *cvHash = NULL;
 static char *cv_file()
 // return default location of cv.ra
@@ -2073,9 +2084,9 @@ return filePath;
 }
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files)
-// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
-// Can impose (non-zero) limit on returned string size of name.  Search is via mysql, so it's case-insensitive.
-// Return is sorted on name (label or else val).
+// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
+// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
+// Return is case insensitive sorted on name (label or else val).
 {  // TODO: Change this to use normal mdb struct routines?
 if (!tables && !files)
     errAbort("mdbValSearch requests values for neither table nor file objects.\n");
@@ -2084,9 +2095,9 @@ char *tableName = mdbTableName(conn,TRUE); // Look for sandBox name first
 
 struct dyString *dyQuery = dyStringNew(512);
 if (limit > 0)
-    dyStringPrintf(dyQuery,"select distinct distinct LEFT(val,%d)",limit);
+    dyStringPrintf(dyQuery,"select distinct LEFT(val,%d)",limit);
 else
-    dyStringPrintf(dyQuery,"select distinct distinct val");
+    dyStringPrintf(dyQuery,"select distinct val");
 
 dyStringPrintf(dyQuery," from %s l1 where l1.var='%s' ",tableName,var);
 
@@ -2095,33 +2106,36 @@ if (!tables || !files)
                    tableName,tables?"table":"file");
 dyStringAppend(dyQuery," order by val");
 
+// Establish cv hash
 if (cvHash == NULL)
-    {
     cvHash = raReadAll(cgiUsualString("ra", cv_file()), "term");
-    }
+
 struct slPair *pairs = NULL, *pair;
-struct sqlResult *sr = sqlGetResult(conn, dyStringCannibalize(&dyQuery));
+struct sqlResult *sr = sqlGetResult(conn, dyStringContents(dyQuery));
+dyStringFree(&dyQuery);
 char **row;
 struct hash *ra = NULL;
 while ((row = sqlNextRow(sr)) != NULL)
     {
     AllocVar(pair);
-    pair = slPairNew(row[0],cloneString(row[0]));  // defaults the label to the val
-    ra = hashFindVal(cvHash,row[0]);
-    if (ra == NULL && sameString(var,"lab"))  // ugly special case
+    char *name = cloneString(row[0]);
+    pair = slPairNew(name,name);  // defaults the label to the metaDb.val
+    ra = hashFindVal(cvHash,name);
+    if (ra == NULL && sameString(var,"lab"))  // FIXME: ugly special case to be removed when metaDb is cleaned up!
         {
-        char *val = cloneString(row[0]);
+        char *val = cloneString(name);
         ra = hashFindVal(cvHash,strUpper(val));
         if (ra == NULL)
             ra = hashFindVal(cvHash,strLower(val));
+        freeMem(val);
         }
     if (ra != NULL)
         {
         char *label = hashFindVal(ra,"label");
         if (label != NULL)
             {
-            freeMem(pair->name);
-            pair->name = strSwapChar(cloneString(label),'_',' ');
+            freeMem(pair->name); // Allocated when pair was created
+            pair->name = strSwapChar(cloneString(label),'_',' ');  // vestigial _ meaning space
             if (limit > 0 && strlen(pair->name) > limit)
                 pair->name[limit] = '\0';
             }
@@ -2133,3 +2147,66 @@ slPairSortCase(&pairs);
 return pairs;
 }
 
+struct hash *mdbCvTermTypeHash()
+// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
+// Those terms should contain label,descrition,searchable,cvDefined,hidden
+{
+static struct hash *cvHashOfTermTypes = NULL;
+
+// Establish cv hash of Term Types if it doesn't already exist
+if (cvHashOfTermTypes == NULL)
+    {
+    cvHashOfTermTypes = raReadWithFilter(cv_file(), "term","type","typeOfTerm");
+    // Patch up an ugly inconsistency with 'cell'
+    struct hash *cellHash = hashRemove(cvHashOfTermTypes,"cellType");
+    if (cellHash)
+        hashAdd(cvHashOfTermTypes,"cell",cellHash);
+    }
+
+
+return cvHashOfTermTypes;
+}
+
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvDefined)
+// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
+{
+struct slPair *whitePairs = NULL;
+
+// Get the list of term types from thew cv
+struct hash *termTypeHash = mdbCvTermTypeHash();
+struct hashCookie hc = hashFirst(termTypeHash);
+struct hashEl *hEl;
+while ((hEl = hashNext(&hc)) != NULL)
+    {
+    char *setting = NULL;
+    struct hash *typeHash = (struct hash *)hEl->val;
+    //if (!includeHidden)
+        {
+        setting = hashFindVal(typeHash,"hidden");
+        if(SETTING_IS_ON(setting))
+            continue;
+        }
+    if (searchTracks)
+        {
+        setting = hashFindVal(typeHash,"searchable");
+        if (setting == NULL || differentWord(setting,"select")) // TODO: Currently only 'select's are supported
+            continue;
+        }
+    if (cvDefined)
+        {
+        setting = hashFindVal(typeHash,"cvDefined");
+        if(SETTING_NOT_ON(setting))
+            continue;
+        }
+    char *term = hashMustFindVal(typeHash,"term");
+    char *label = hashFindVal(typeHash,"label");
+    if (label == NULL)
+        label = term;
+
+    slPairAdd(&whitePairs, term, cloneString(label)); // Term gets cloned in slPairAdd
+    }
+if (whitePairs != NULL)
+    slPairValSortCase(&whitePairs);
+
+return whitePairs;
+}

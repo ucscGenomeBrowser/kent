@@ -478,7 +478,7 @@ for my $line (@fileList) {
                     unshift @vals, $metaData{type};
                 }
                 my %remove; # Don't display these metadata values
-                $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
+                $remove{tableName} = $remove{fileIndex} = $remove{project} = $remove{composite} = $remove{fileName} = $remove{dateSubmitted} = $remove{dateUnrestricted} = $remove{parentTable} = 1;
                 $remove{antibody} = 1 if($input eq "removeAntiBodyDup");  # remove antibody if input=antibody
                 ( $tagRef, $valRef ) = metadataArraysRemoveHash( \@tags,\@vals,\%remove );
                 ( $tagRef, $valRef ) = metadataArraysMoveValuesToFront($tagRef, $valRef,\@sortFields);

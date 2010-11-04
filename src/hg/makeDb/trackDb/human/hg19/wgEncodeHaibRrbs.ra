@@ -5,12 +5,18 @@ superTrack wgEncodeDnaMethylSuper dense
 shortLabel HAIB Methyl RRBS
 longLabel ENCODE HudsonAlpha CpG Methylation by RRBS
 group regulation
-subGroup1 cellType Cell_Line GM12878=GM12878 GM12891=GM12891 GM19239=GM19239 GM19240=GM19240 GM12892=GM12892 HAE=HAE HCF=HCF HCPE=HCPEpiC HPAE=HPAEpiC SAEC=SAEC SKNSHRA=SK-N-SH_RA HepG2=HepG2 H1hESC=H1-hESC HeLaS3=HeLa-S3 K562=K562 AG04450=AG04450 AG04449=AG04449 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 Fibrobl=Fibrobl CMK=CMK HCT116=HCT116 HEE=HEE HEK293=HEK293 HIPE=HIPE HMEC=HMEC HNPCE=HNPCE HRCE=HRCE HRPE=HRPE HSMMt=HSMMt Jurkat=Jurkat LNCaP=LNCaP HCM=HCM HRE=HRE NHDF-neo=NHDF-neo NT2D1=NT2D1 MCF7=MCF7 NB4=NB4 NHBE=NHBE SKMC=SKMC
+subGroup1 cellType Cell_Line K562=K562&nbsp;<i>Tier1</i> GM12878=GM12878&nbsp;<i>Tier1</i> H1hESC=H1-hESC&nbsp;<i>Tier1</i> HeLaS3=HeLa-S3&nbsp;<i>Tier2</i> HepG2=HepG2&nbsp;<i>Tier2</i> AG04449=AG04449 AG04450=AG04450 AG09309=AG09309 AG09319=AG09319 AG10803=AG10803 CMK=CMK Fibrobl=Fibrobl GM12891=GM12891 GM12892=GM12892 GM19239=GM19239 GM19240=GM19240 HAE=HAEpiC HCF=HCF HCM=HCM HCPE=HCPEpiC HCT116=HCT-116 HEE=HEEpiC HEK293=HEK293 HIPE=HIPEpiC HMEC=HMEC HNPCE=HNPCEpiC HPAE=HPAEpiC HRCE=HRCEpiC HRE=HRE HRPE=HRPEpiC HSMMt=HSMMtube  Jurkat=Jurkat LNCaP=LNCaP MCF7=MCF-7 NB4=NB4 NHBE=NHBE NHDF-neo=NHDF-neo NT2D1=NT2-D1 SAEC=SAEC SKNSHRA=SK-N-SH_RA SKMC=SKMC 
 subGroup2 view View Sites=Sites
-subGroup3 rep Replicate rep1=rep1 rep2=rep2
-subGroup4 treatment Treatmenet None=None ANDRO=Methyltrienolone(androgen)
-subGroup5 protocol Growth_Protocol uwStamGrowProt=UW_Stam_Growth_Protocol hudsonAlphaGrowProt=HudsonAlpha_Growth_Protocol openChromGrowProt=Open_Chromatin_Growth_Protocol YaleGrowProt=Yale_TFBS_Growth_Protocol
-dimensions dimensionX=protocol dimensionY=cellType dimensionZ=rep 
+subGroup3 rep Replicate rep1=1 rep2=2
+subGroup4 treatment Treatment None=None ANDRO=Methyltrienolone(androgen)
+subGroup5 protocol Growth_Protocol uwStamGrowProt=UW_Stam hudsonAlphaGrowProt=HudsonAlpha openChromGrowProt=Open_Chromatin YaleGrowProt=Yale_TFBS
+#dimensions dimensionX=protocol dimensionY=cellType dimensionZ=rep 
+filterComposite dimensionA=all dimensionC=multi dimensionD=one
+dimensions  dimensionA=cellType dimensionC=treatment dimensionB=protocol dimensionD=rep
+dimensionAchecked K562,GM12878
+dimensionBchecked hudsonAlphaGrowProt,openChromGrowProt
+dimensionCchecked None
+dimensionDchecked rep1
 sortOrder cellType=+ protocol=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell treatment=treatment protocol=protocol
 dragAndDrop subTracks

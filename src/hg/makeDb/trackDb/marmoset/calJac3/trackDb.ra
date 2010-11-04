@@ -65,7 +65,7 @@ visibility hide
 type bed 12
 
 track bacEndCalJac3Singles
-shortLabel Bac End Singletons
+shortLabel Bac End Singles
 longLabel Marmoset BAC End singletons, without end pair
 group map
 priority 61

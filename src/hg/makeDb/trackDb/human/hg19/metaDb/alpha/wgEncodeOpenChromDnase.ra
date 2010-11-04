@@ -1,3 +1,120 @@
+metaObject wgEncodeOpenChromDnaseA549AlnRep1
+objType file
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549AlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2493
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseA549AlnRep2
+objType file
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549AlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2493
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseA549BaseOverlapSignal
+objType table
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2493
+tableName wgEncodeOpenChromDnaseA549BaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseA549Pk
+objType table
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549Pk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 2493
+tableName wgEncodeOpenChromDnaseA549Pk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseA549RawDataRep1
+objType file
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549RawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 2493
+view RawData
+
+metaObject wgEncodeOpenChromDnaseA549RawDataRep2
+objType file
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549RawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 2493
+view RawData
+
+metaObject wgEncodeOpenChromDnaseA549Sig
+objType table
+cell A549
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseA549Sig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 2493
+tableName wgEncodeOpenChromDnaseA549Sig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1
 objType file
 cell AoSMC
@@ -13,7 +130,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep1
 project wgEncode
 replicate 1
 subId 1678
@@ -35,7 +151,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseAosmcSerumfreeAlnRep2
 project wgEncode
 replicate 2
 subId 1678
@@ -117,7 +232,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseChorionAlnRep1
 project wgEncode
 replicate 1
 subId 1412
@@ -139,7 +253,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseChorionAlnRep2
 project wgEncode
 replicate 2
 subId 1412
@@ -221,7 +334,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseFibroblAlnRep1
 project wgEncode
 replicate 1
 subId 1653
@@ -243,7 +355,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseFibroblAlnRep2
 project wgEncode
 replicate 2
 subId 1653
@@ -325,7 +436,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseFibropAlnRep1
 project wgEncode
 replicate 1
 subId 1651
@@ -347,7 +457,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseFibropAlnRep2
 project wgEncode
 replicate 2
 subId 1651
@@ -369,7 +478,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseFibropAlnRep3
 project wgEncode
 replicate 3
 subId 1651
@@ -451,7 +559,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878AlnRep1
 project wgEncode
 replicate 1
 subId 1494
@@ -473,7 +580,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878AlnRep2
 project wgEncode
 replicate 2
 subId 1494
@@ -495,7 +601,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878AlnRep3
 project wgEncode
 replicate 3
 subId 1494
@@ -517,7 +622,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878AlnRep4
 project wgEncode
 replicate 4
 subId 1494
@@ -539,7 +643,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878AlnRep5
 project wgEncode
 replicate 5
 subId 1494
@@ -599,7 +702,6 @@ fileName wgEncodeOpenChromDnaseGm12878RawDataRep1.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878RawSignalRep1
 project wgEncode
 replicate 1
 subId 1494
@@ -619,7 +721,6 @@ fileName wgEncodeOpenChromDnaseGm12878RawDataRep2.fastq.gz
 grant Crawford
 lab Duke
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12878RawSignalRep2
 project wgEncode
 replicate 2
 subId 1494
@@ -661,7 +762,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12891AlnRep1
 project wgEncode
 replicate 1
 subId 1487
@@ -683,7 +783,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12891AlnRep2
 project wgEncode
 replicate 2
 subId 1487
@@ -765,7 +864,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12892AlnRep1
 project wgEncode
 replicate 1
 subId 1488
@@ -787,7 +885,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm12892AlnRep2
 project wgEncode
 replicate 2
 subId 1488
@@ -869,7 +966,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm18507AlnRep1
 project wgEncode
 replicate 1
 subId 1507
@@ -891,7 +987,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm18507AlnRep2
 project wgEncode
 replicate 2
 subId 1507
@@ -913,7 +1008,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm18507AlnRep3
 project wgEncode
 replicate 3
 subId 1507
@@ -995,7 +1089,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm19238AlnRep1
 project wgEncode
 replicate 1
 subId 1489
@@ -1017,7 +1110,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm19238AlnRep2
 project wgEncode
 replicate 2
 subId 1489
@@ -1099,7 +1191,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm19239AlnRep1
 project wgEncode
 replicate 1
 subId 1506
@@ -1121,7 +1212,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm19239AlnRep2
 project wgEncode
 replicate 2
 subId 1506
@@ -1203,7 +1293,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm19240AlnRep1
 project wgEncode
 replicate 1
 subId 1509
@@ -1225,7 +1314,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseGm19240AlnRep2
 project wgEncode
 replicate 2
 subId 1509
@@ -1307,7 +1395,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseH1hescAlnRep1
 project wgEncode
 replicate 1
 subId 1495
@@ -1329,7 +1416,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseH1hescAlnRep2
 project wgEncode
 replicate 2
 subId 1495
@@ -1411,7 +1497,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseH9esAlnRep1
 project wgEncode
 replicate 1
 subId 1519
@@ -1433,7 +1518,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseH9esAlnRep2
 project wgEncode
 replicate 2
 subId 1519
@@ -1515,7 +1599,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHelas3AlnRep1
 project wgEncode
 replicate 1
 subId 1498
@@ -1537,7 +1620,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHelas3AlnRep2
 project wgEncode
 replicate 2
 subId 1498
@@ -1559,7 +1641,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHelas3AlnRep3
 project wgEncode
 replicate 3
 subId 1498
@@ -1601,7 +1682,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep1
 project wgEncode
 replicate 1
 subId 1544
@@ -1623,7 +1703,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHelas3Ifna4hAlnRep2
 project wgEncode
 replicate 2
 subId 1544
@@ -1745,7 +1824,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHepg2AlnRep1
 project wgEncode
 replicate 1
 subId 1528
@@ -1767,7 +1845,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHepg2AlnRep2
 project wgEncode
 replicate 2
 subId 1528
@@ -1789,7 +1866,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHepg2AlnRep3
 project wgEncode
 replicate 3
 subId 1528
@@ -1871,7 +1947,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHsmmAlnRep1
 project wgEncode
 replicate 1
 subId 1654
@@ -1893,7 +1968,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHsmmAlnRep2
 project wgEncode
 replicate 2
 subId 1654
@@ -1915,7 +1989,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHsmmAlnRep3
 project wgEncode
 replicate 3
 subId 1654
@@ -1997,7 +2070,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHsmmtAlnRep1
 project wgEncode
 replicate 1
 subId 1679
@@ -2019,7 +2091,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHsmmtAlnRep2
 project wgEncode
 replicate 2
 subId 1679
@@ -2041,7 +2112,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHsmmtAlnRep3
 project wgEncode
 replicate 3
 subId 1679
@@ -2123,7 +2193,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHuvecAlnRep1
 project wgEncode
 replicate 1
 subId 1532
@@ -2145,7 +2214,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseHuvecAlnRep2
 project wgEncode
 replicate 2
 subId 1532
@@ -2227,7 +2295,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseK562AlnRep1
 project wgEncode
 replicate 1
 subId 1534
@@ -2249,7 +2316,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseK562AlnRep2
 project wgEncode
 replicate 2
 subId 1534
@@ -2331,7 +2397,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseLhsrAlnRep1
 project wgEncode
 replicate 1
 subId 1575
@@ -2353,7 +2418,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseLhsrAlnRep2
 project wgEncode
 replicate 2
 subId 1575
@@ -2375,7 +2439,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseLhsrAndroAlnRep1
 project wgEncode
 replicate 1
 subId 1535
@@ -2397,7 +2460,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseLhsrAndroAlnRep2
 project wgEncode
 replicate 2
 subId 1535
@@ -2524,6 +2586,280 @@ tableName wgEncodeOpenChromDnaseLhsrSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseLncapAlnRep1
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2482
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseLncapAlnRep2
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2482
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseLncapAlnRep3
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAlnRep3.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 3
+subId 2482
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseLncapAndroAlnRep1
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroAlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2492
+treatment androgen
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseLncapAndroAlnRep2
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroAlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2492
+treatment androgen
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
+objType table
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2492
+tableName wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal
+treatment androgen
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseLncapAndroPk
+objType table
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 2492
+tableName wgEncodeOpenChromDnaseLncapAndroPk
+treatment androgen
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseLncapAndroRawDataRep1
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 2492
+treatment androgen
+view RawData
+
+metaObject wgEncodeOpenChromDnaseLncapAndroRawDataRep2
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 2492
+treatment androgen
+view RawData
+
+metaObject wgEncodeOpenChromDnaseLncapAndroSig
+objType table
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapAndroSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 2492
+tableName wgEncodeOpenChromDnaseLncapAndroSig
+treatment androgen
+view Signal
+
+metaObject wgEncodeOpenChromDnaseLncapBaseOverlapSignal
+objType table
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2482
+tableName wgEncodeOpenChromDnaseLncapBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseLncapPk
+objType table
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 2482
+tableName wgEncodeOpenChromDnaseLncapPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseLncapRawDataRep1
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 2482
+view RawData
+
+metaObject wgEncodeOpenChromDnaseLncapRawDataRep2
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 2482
+view RawData
+
+metaObject wgEncodeOpenChromDnaseLncapRawDataRep3
+objType file
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapRawDataRep3.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 3
+subId 2482
+view RawData
+
+metaObject wgEncodeOpenChromDnaseLncapSig
+objType table
+cell LNCaP
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-15
+dateUnrestricted 2011-07-15
+fileName wgEncodeOpenChromDnaseLncapSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 2482
+tableName wgEncodeOpenChromDnaseLncapSig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseMcf7AlnRep1
 objType file
 cell MCF-7
@@ -2539,7 +2875,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMcf7AlnRep1
 project wgEncode
 replicate 1
 subId 1545
@@ -2561,7 +2896,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMcf7AlnRep2
 project wgEncode
 replicate 2
 subId 1545
@@ -2643,7 +2977,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMedulloAlnRep1
 project wgEncode
 replicate 1
 subId 1479
@@ -2665,7 +2998,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMedulloAlnRep2
 project wgEncode
 replicate 2
 subId 1479
@@ -2737,7 +3069,7 @@ objType file
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoAlnRep1.bam
@@ -2745,7 +3077,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMelanoAlnRep1
 project wgEncode
 replicate 1
 subId 2096
@@ -2757,7 +3088,7 @@ objType file
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoAlnRep2.bam
@@ -2765,7 +3096,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMelanoAlnRep2
 project wgEncode
 replicate 2
 subId 2096
@@ -2777,7 +3107,7 @@ objType table
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoBaseOverlapSignal.bigWig
@@ -2796,7 +3126,7 @@ objType table
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoPk.narrowPeak.gz
@@ -2815,7 +3145,7 @@ objType table
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoSig.bigWig
@@ -2844,7 +3174,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMyometrAlnRep1
 project wgEncode
 replicate 1
 subId 1655
@@ -2866,7 +3195,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseMyometrAlnRep2
 project wgEncode
 replicate 2
 subId 1655
@@ -2948,7 +3276,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseNhekAlnRep1
 project wgEncode
 replicate 1
 subId 1533
@@ -2970,7 +3297,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseNhekAlnRep2
 project wgEncode
 replicate 2
 subId 1533
@@ -3037,6 +3363,156 @@ tableName wgEncodeOpenChromDnaseNhekSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnaseOsteoblAlnRep1
+objType file
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblAlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2506
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseOsteoblAlnRep2
+objType file
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblAlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2506
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseOsteoblAlnRep3
+objType file
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblAlnRep3.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 3
+subId 2506
+view Alignments
+
+metaObject wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal
+objType table
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2506
+tableName wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnaseOsteoblPk
+objType table
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblPk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 2506
+tableName wgEncodeOpenChromDnaseOsteoblPk
+view Peaks
+
+metaObject wgEncodeOpenChromDnaseOsteoblRawDataRep1
+objType file
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblRawDataRep1.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 1
+subId 2506
+view RawData
+
+metaObject wgEncodeOpenChromDnaseOsteoblRawDataRep2
+objType file
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblRawDataRep2.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 2
+subId 2506
+view RawData
+
+metaObject wgEncodeOpenChromDnaseOsteoblRawDataRep3
+objType file
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblRawDataRep3.fastq.gz
+grant Crawford
+lab Duke
+project wgEncode
+replicate 3
+subId 2506
+view RawData
+
+metaObject wgEncodeOpenChromDnaseOsteoblSig
+objType table
+cell Osteobl
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-16
+dateUnrestricted 2011-07-16
+fileName wgEncodeOpenChromDnaseOsteoblSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_female
+project wgEncode
+subId 2506
+tableName wgEncodeOpenChromDnaseOsteoblSig
+view Signal
+
 metaObject wgEncodeOpenChromDnasePanisletsAlnRep1
 objType file
 cell PanIslets
@@ -3052,7 +3528,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnasePanisletsAlnRep1
 project wgEncode
 replicate 1
 subId 1656
@@ -3074,7 +3549,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnasePanisletsAlnRep2
 project wgEncode
 replicate 2
 subId 1656
@@ -3096,7 +3570,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnasePanisletsAlnRep3
 project wgEncode
 replicate 3
 subId 1656
@@ -3163,6 +3636,91 @@ tableName wgEncodeOpenChromDnasePanisletsSig
 treatment None
 view Signal
 
+metaObject wgEncodeOpenChromDnasePhteAlnRep1
+objType file
+cell pHTE
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-18
+dateUnrestricted 2011-07-18
+fileName wgEncodeOpenChromDnasePhteAlnRep1.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 1
+subId 2513
+view Alignments
+
+metaObject wgEncodeOpenChromDnasePhteAlnRep2
+objType file
+cell pHTE
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-18
+dateUnrestricted 2011-07-18
+fileName wgEncodeOpenChromDnasePhteAlnRep2.bam
+grant Crawford
+lab Duke
+labVersion align_on_cluster_bwa.pl v 1
+project wgEncode
+replicate 2
+subId 2513
+view Alignments
+
+metaObject wgEncodeOpenChromDnasePhteBaseOverlapSignal
+objType table
+cell pHTE
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-18
+dateUnrestricted 2011-07-18
+fileName wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig
+grant Crawford
+lab Duke
+labVersion baseAlignCounts.pl v 1
+project wgEncode
+subId 2513
+tableName wgEncodeOpenChromDnasePhteBaseOverlapSignal
+view Base_Overlap_Signal
+
+metaObject wgEncodeOpenChromDnasePhtePk
+objType table
+cell pHTE
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-18
+dateUnrestricted 2011-07-18
+fileName wgEncodeOpenChromDnasePhtePk.narrowPeak.gz
+grant Crawford
+lab Duke
+labVersion p-value cutoff: 0.05
+project wgEncode
+subId 2513
+tableName wgEncodeOpenChromDnasePhtePk
+view Peaks
+
+metaObject wgEncodeOpenChromDnasePhteSig
+objType table
+cell pHTE
+composite wgEncodeOpenChromDnase
+dataType DnaseSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-10-18
+dateUnrestricted 2011-07-18
+fileName wgEncodeOpenChromDnasePhteSig.bigWig
+grant Crawford
+lab Duke
+labVersion fseq v 1.84, iff_generic_male
+project wgEncode
+subId 2513
+tableName wgEncodeOpenChromDnasePhteSig
+view Signal
+
 metaObject wgEncodeOpenChromDnaseProgfibAlnRep1
 objType file
 cell ProgFib
@@ -3178,7 +3736,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseProgfibAlnRep1
 project wgEncode
 replicate 1
 subId 1650
@@ -3200,7 +3757,6 @@ grant Crawford
 lab Duke
 labVersion align_on_cluster_bwa.pl v 1
 origAssembly hg18
-parentTable wgEncodeOpenChromDnaseProgfibAlnRep2
 project wgEncode
 replicate 2
 subId 1650
@@ -3267,4 +3823,4 @@ tableName wgEncodeOpenChromDnaseProgfibSig
 treatment None
 view Signal
 
-# MAGIC: 387290386
+# MAGIC: -924875032

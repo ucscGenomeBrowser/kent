@@ -47,7 +47,7 @@ static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp
 #define ENCODE_DCC_DOWNLOADS "encodeDCC"
 
 //#define SUBTRACK_CFG_POPUP
-//#define BAM_CFG_UI_CHANGES
+#define BAM_CFG_UI_CHANGES
 
 struct trackDb *wgEncodeDownloadDirKeeper(char *db, struct trackDb *tdb, struct hash *trackHash)
 /* Look up through self and parents, looking for someone responsible for handling
@@ -131,6 +131,30 @@ if (hTableOrSplitExists(db, tdb->table))
 return FALSE;
 }
 
+char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
+// returns allocated string of HTML link to controlled vocabulary term
+{
+#define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+struct dyString *dyLink = NULL;
+char *encTerm = cgiEncode(term);
+char *encValue = cgiEncode(value);
+if (file != NULL)
+    {
+    char *encFile = cgiEncode(file);
+    dyLink = dyStringCreate(VOCAB_LINK_WITH_FILE,encFile,encTerm,encValue,title,label);
+    freeMem(encFile);
+    }
+else
+    dyLink = dyStringCreate(VOCAB_LINK,encTerm,encValue,title,label);
+if (suffix != NULL)
+    dyStringAppend(dyLink,suffix);  // Don't encode since this may contain HTML
+
+freeMem(encTerm);
+freeMem(encValue);
+return dyStringCannibalize(&dyLink);
+}
+
 char *metadataAsHtmlTable(char *db,struct trackDb *tdb,boolean showLongLabel,boolean showShortLabel, struct hash *trackHash)
 /* If metadata from metaDb exists, return string of html with table definition */
 {
@@ -144,6 +168,9 @@ if(showLongLabel)
     dyStringPrintf(dyTable,"<tr><td colspan=2>%s</td></tr>",tdb->longLabel);
 if(showShortLabel)
     dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
+
+// Get the hash of mdb and cv term types
+struct hash *cvTermTypes = mdbCvTermTypeHash();
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -166,6 +193,38 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
 
+        if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
+            {
+            struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
+            if (cvTerm != NULL)
+                {
+                if(SETTING_NOT_ON(hashFindVal(cvTerm,"hidden")))  // NULL is not on
+                    {
+                    char *label=hashFindVal(cvTerm,"label");
+                    if (label == NULL)
+                        label = mdbVar->var;
+                    char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
+                    char *cvDefined=hashFindVal(cvTerm,"cvDefined");
+                    if (cvDefined != NULL && differentWord(cvDefined,"no") && differentWord(cvDefined,"0"))
+                        {
+                        char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
+                        freeMem(linkOfTerm);
+                        }
+                    else
+                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
+                        //{  // NOTE: Could just have a tool tip for these.
+                        //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
+                        //label = cgiEncode(label);
+                        //dyStringPrintf(dyTable,"<tr><td align=right><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
+                        //freeMem(descr);
+                        //freeMem(label);
+                        //}
+                    freeMem(linkOfType);
+                    continue;
+                    }
+                }
+            }
         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
@@ -956,13 +1015,13 @@ if (isNotEmpty(setting))
 return gotIt;
 }
 
-static void baseColorDropLists(struct cart *cart, struct trackDb *tdb)
+static void baseColorDropLists(struct cart *cart, struct trackDb *tdb, char *name)
 /* draw the baseColor drop list options */
 {
 enum baseColorDrawOpt curOpt = baseColorDrawOptEnabled(cart, tdb);
 char *curValue = baseColorDrawAllOptionValues[curOpt];
 char var[512];
-safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, tdb->track);
+safef(var, sizeof(var), "%s." BASE_COLOR_VAR_SUFFIX, name);
 boolean gotCds = baseColorGotCds(tdb);
 boolean gotSeq = baseColorGotSequence(tdb);
 if (gotCds && gotSeq)
@@ -1009,7 +1068,7 @@ else if (gotSeq)
 void baseColorDrawOptDropDown(struct cart *cart, struct trackDb *tdb)
 /* Make appropriately labeled drop down of options if any are applicable.*/
 {
-baseColorDropLists(cart, tdb);
+baseColorDropLists(cart, tdb, tdb->track);
 }
 
 enum baseColorDrawOpt baseColorDrawOptEnabled(struct cart *cart,
@@ -1031,6 +1090,16 @@ return baseColorDrawOptStringToEnum(stringVal);
 
 /*** Control of fancy indel display code: ***/
 
+static boolean tdbOrCartBoolean(struct cart *cart, struct trackDb *tdb,
+                                char *settingName, char *defaultOnOff)
+/* Query cart & trackDb to determine if a boolean variable is set. */
+{
+boolean alreadySet;
+alreadySet = !sameString("off",trackDbSettingOrDefault(tdb, settingName, defaultOnOff));
+alreadySet = cartUsualBooleanClosestToHome(cart, tdb, FALSE, settingName, alreadySet); // NOTE: compositeLevel=FALSE because tdb param already is at appropriate level
+return alreadySet;
+}
+
 static boolean indelAppropriate(struct trackDb *tdb)
 /* Return true if it makes sense to offer indel display options for tdb. */
 {
@@ -1038,27 +1107,67 @@ return (tdb && (startsWith("psl", tdb->type) || sameString("bam", tdb->type)) &&
 	(cfgOptionDefault("browser.indelOptions", NULL) != NULL));
 }
 
-void indelShowOptions(struct cart *cart, struct trackDb *tdb)
+static void indelEnabledByName(struct cart *cart, struct trackDb *tdb, char *name,
+                  float basesPerPixel, boolean *retDoubleInsert, boolean *retQueryInsert,
+                  boolean *retPolyA)
+/* Query cart & trackDb to determine what indel display (if any) is enabled. Set
+ * basesPerPixel to 0.0 to disable check for zoom level.  */
+{
+struct trackDb *tdbLevel = tdb;
+if (differentString(tdb->track, name) && tdb->parent != NULL)
+    tdbLevel = tdb->parent;
+
+boolean apropos = indelAppropriate(tdb);
+if (apropos && (basesPerPixel > 0.0))
+    {
+    // check indel max zoom
+    float showIndelMaxZoom = trackDbFloatSettingOrDefault(tdbLevel, "showIndelMaxZoom", -1.0);
+    if ((showIndelMaxZoom >= 0)
+        && ((basesPerPixel > showIndelMaxZoom) || (showIndelMaxZoom == 0.0)))
+        apropos = FALSE;
+    }
+
+if (retDoubleInsert)
+    *retDoubleInsert = apropos &&
+        tdbOrCartBoolean(cart, tdbLevel, INDEL_DOUBLE_INSERT, "off");
+if (retQueryInsert)
+    *retQueryInsert = apropos &&
+        tdbOrCartBoolean(cart, tdbLevel, INDEL_QUERY_INSERT, "off");
+if (retPolyA)
+    *retPolyA = apropos &&
+        tdbOrCartBoolean(cart, tdbLevel, INDEL_POLY_A, "off");
+}
+
+void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
+                  boolean *retDoubleInsert, boolean *retQueryInsert,
+                  boolean *retPolyA)
+/* Query cart & trackDb to determine what indel display (if any) is enabled. Set
+ * basesPerPixel to 0.0 to disable check for zoom level.  */
+{
+indelEnabledByName(cart,tdb,tdb->track,basesPerPixel,retDoubleInsert,retQueryInsert,retPolyA);
+}
+
+static void indelShowOptionsWithName(struct cart *cart, struct trackDb *tdb,char *name)
 /* Make HTML inputs for indel display options if any are applicable. */
 {
 if (indelAppropriate(tdb))
     {
     boolean showDoubleInsert, showQueryInsert, showPolyA;
     char var[512];
-    indelEnabled(cart, tdb, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
+    indelEnabledByName(cart, tdb, name, 0.0, &showDoubleInsert, &showQueryInsert, &showPolyA);
 #ifdef BAM_CFG_UI_CHANGES
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
     printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
            INDEL_HELP_PAGE);
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
+    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, name);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("</TD><TD>Draw double horizontal lines when both genome and query have "
            "an insertion</TD></TR>\n<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->track);
+    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, name);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("</TD><TD>Draw a vertical purple line for an insertion at the beginning or "
            "end of the <BR>query, orange for insertion in the middle of the query</TD></TR>\n<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->track);
+    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, name);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))
@@ -1071,17 +1180,17 @@ if (indelAppropriate(tdb))
     printf("</TABLE>\n");
 #else///ifndef BAM_CFG_UI_CHANGES
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, tdb->track);
+    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, name);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("Draw double horizontal lines when both genome and query have "
 	   "an insertion "
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, tdb->track);
+    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, name);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("Draw a vertical purple line for an insertion at the beginning or "
 	   "end of the query, orange for insertion in the middle of the query"
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, tdb->track);
+    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, name);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))
@@ -1099,47 +1208,11 @@ if (indelAppropriate(tdb))
     }
 }
 
-static boolean tdbOrCartBoolean(struct cart *cart, struct trackDb *tdb,
-				char *settingName, char *defaultOnOff)
-/* Query cart & trackDb to determine if a boolean variable is set. */
+void indelShowOptions(struct cart *cart, struct trackDb *tdb)
+/* Make HTML inputs for indel display options if any are applicable. */
 {
-boolean alreadySet;
-char optionStr[512];
-alreadySet = !sameString("off",
-		trackDbSettingOrDefault(tdb, settingName, defaultOnOff));
-safef(optionStr, sizeof(optionStr), "%s_%s",
-      settingName, tdb->track);
-alreadySet = cartUsualBoolean(cart, optionStr, alreadySet);
-return alreadySet;
+indelShowOptionsWithName(cart, tdb, tdb->track);
 }
-
-void indelEnabled(struct cart *cart, struct trackDb *tdb, float basesPerPixel,
-		  boolean *retDoubleInsert, boolean *retQueryInsert,
-		  boolean *retPolyA)
-/* Query cart & trackDb to determine what indel display (if any) is enabled. Set
- * basesPerPixel to 0.0 to disable check for zoom level.  */
-{
-boolean apropos = indelAppropriate(tdb);
-if (apropos && (basesPerPixel > 0.0))
-    {
-    // check indel max zoom
-    float showIndelMaxZoom = trackDbFloatSettingOrDefault(tdb, "showIndelMaxZoom", -1.0);
-    if ((showIndelMaxZoom >= 0)
-        && ((basesPerPixel > showIndelMaxZoom) || (showIndelMaxZoom == 0.0)))
-        apropos = FALSE;
-    }
-
-if (retDoubleInsert)
-    *retDoubleInsert = apropos &&
-	tdbOrCartBoolean(cart, tdb, INDEL_DOUBLE_INSERT, "off");
-if (retQueryInsert)
-    *retQueryInsert = apropos &&
-	tdbOrCartBoolean(cart, tdb, INDEL_QUERY_INSERT, "off");
-if (retPolyA)
-    *retPolyA = apropos &&
-	tdbOrCartBoolean(cart, tdb, INDEL_POLY_A, "off");
-}
-
 
 /****** base position (ruler) controls *******/
 
@@ -2082,78 +2155,6 @@ if(hierarchy && *hierarchy)
     }
 }
 
-#define TV_HIDE "hide"
-static boolean subtracksViewIsHidden(struct cart *cart,struct trackDb *subtrack)
-// Returns TRUE if the subtrack belongs to a view that is hidden
-{
-if(subgroupFind(subtrack,"view",NULL) == FALSE)
-    return FALSE; // No view
-
-if(subtrack->parent == NULL || subtrack->parent->parent == NULL)
-    return FALSE; // Not the subtrack
-
-char * view = trackDbLocalSetting(subtrack->parent, "view");
-assert(view != NULL);
-
-char objName[SMALLBUF];
-char *setting =trackDbLocalSetting(subtrack->parent, "visibility");
-if(setting == NULL)
-    setting = TV_HIDE;
-
-safef(objName, sizeof(objName), "%s.%s.vis", subtrack->parent->parent->track,view);
-
-setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
-return sameWord(setting,TV_HIDE);
-}
-
-char *tdbResolveVis(struct cart *cart,struct trackDb *tdb, boolean applyMax)
-// Determines the correct vis for a tdb as modified by parent
-{
-// Vis can be in trackDb and/or in cart
-// vis at subtrack overrides higher up
-// no subtrack vis then composite is max applied to view vis
-// FIXME: This should become the main API for determining a subtrack's vis.
-
-char objName[SMALLBUF];
-char *setting = NULL;
-struct trackDb *thisTdb;
-enum trackVisibility vis = tvFull;  // Successively limited
-
-for(thisTdb = tdb;thisTdb != NULL;thisTdb = thisTdb->parent)
-    {
-    setting = trackDbLocalSetting(thisTdb, "visibility");
-    if(setting == NULL && thisTdb->subtracks != NULL)
-        {
-        setting = TV_HIDE;// non-subtrack must default to hide.  subtracks default to NULL
-        // FIXME: If querying for subtrack, need to determine if subtrack checked.
-        //if(tdbIsCompositeChild(tdb))
-        //    {
-        //    char *subSetting = trackDbLocalSetting(tdb, "parent");
-        //    if (subSetting != NULL && findWordByDelimiter("off",' ',subSetting) == NULL)
-        //        setting = "full";// subtrack checked, so default to full and let applyMax do it's trick
-        //    }
-        }
-
-    safef(objName, sizeof(objName), "%s.vis", thisTdb->track);
-    if(thisTdb->parent != NULL && thisTdb->subtracks != NULL) // middle level so probably view
-        {
-        char * view = trackDbLocalSetting(thisTdb, "view");
-        if(view != NULL)
-            safef(objName, sizeof(objName), "%s.%s.vis", thisTdb->parent->track,view);
-        }
-    setting = cartUsualString(cart, objName, setting); // Not ClosestToHome
-    if(setting != NULL && (thisTdb->subtracks == NULL || !applyMax))
-        return setting;  // defined at lowest level so accept it.
-
-    if(setting != NULL && applyMax) // applyMax is assertable if settings is not NULL !
-        vis = tvMin(vis,hTvFromStringNoAbort(setting)); // successively limits
-    }
-assert(setting != NULL);
-assert(applyMax);
-
-return hStringFromTv(vis);
-}
-
 // Four State checkboxes can be checked/unchecked by enable/disabled
 // NOTE: fourState is not a bitmap because it is manipulated in javascript and int seemed easier at the time
 #define FOUR_STATE_KEY               "fourState"
@@ -2179,12 +2180,17 @@ if ((setting = trackDbLocalSetting(subtrack, "parent")) != NULL)
     if(findWordByDelimiter("off",' ',setting) == NULL)
         fourState = FOUR_STATE_CHECKED;
     }
-// Now check visibility
-setting = tdbResolveVis(cart,subtrack,FALSE);
 
-// If subtrack's view is hide then fourstate includes disabled
-if(sameWord(setting,TV_HIDE) && subtracksViewIsHidden(cart,subtrack))
-    FOUR_STATE_DISABLE(fourState);
+// Now check visibility
+enum trackVisibility vis = tdbLocalVisibility(cart, subtrack, NULL);
+if (vis == tvHide)
+    {
+    if(tdbIsCompositeView(subtrack->parent))
+        {
+        if(tdbLocalVisibility(cart, subtrack->parent, NULL) == tvHide)
+            FOUR_STATE_DISABLE(fourState);
+        }
+    }
 
 safef(objName, sizeof(objName), "%s_sel", subtrack->track);
 fourState = cartUsualInt(cart, objName, fourState);
@@ -4616,12 +4622,12 @@ if (scoreCtString != NULL)
 cfgEndBox(boxed);
 }
 
-void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *prefix, char *title, boolean boxed)
+void pslCfgUi(char *db, struct cart *cart, struct trackDb *tdb, char *name, char *title, boolean boxed)
 /* Put up UI for psl tracks */
 {
 boxed = cfgBeginBoxAndTitle(tdb, boxed, title);
-baseColorDropLists(cart, tdb);
-indelShowOptions(cart, tdb);
+baseColorDropLists(cart, tdb, name);
+indelShowOptionsWithName(cart, tdb, name);
 cfgEndBox(boxed);
 }
 
@@ -5021,7 +5027,7 @@ if(trackDbSettingClosestToHomeOn(tdb, "nmdFilter"))
 if(!sameString(tdb->track, "tigrGeneIndex")
 && !sameString(tdb->track, "ensGeneNonCoding")
 && !sameString(tdb->track, "encodeGencodeRaceFrags"))
-    baseColorDrawOptDropDown(cart, tdb);
+    baseColorDropLists(cart, tdb, name);
 
 filterBy_t *filterBySet = filterBySetGet(tdb,cart,name);
 if(filterBySet != NULL)
@@ -5576,11 +5582,11 @@ if (isCustomTrack(name))
     hashAdd(tdb->settingsHash, SHOW_DIFF_BASES_ALL_SCALES, cloneString("."));
     hashAdd(tdb->settingsHash, "showDiffBasesMaxZoom", cloneString("100"));
     }
-baseColorDrawOptDropDown(cart, tdb);
+baseColorDropLists(cart, tdb, name);
 #ifdef BAM_CFG_UI_CHANGES
 puts("<BR>");
 #endif///def BAM_CFG_UI_CHANGES
-indelShowOptions(cart, tdb);
+indelShowOptionsWithName(cart, tdb, name);
 printf("<BR>\n");
 printf("<B>Additional coloring modes:</B><BR>\n");
 safef(cartVarName, sizeof(cartVarName), "%s." BAM_COLOR_MODE, name);
@@ -5825,15 +5831,9 @@ char *rootLabel = labelRoot(label,&suffix);
 
 for(ix=1;ix<count && !found;ix++)
     {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=%s&term=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
     if(sameString(vocabType,words[ix])) // controlledVocabulary setting matches tag so all labels are linked
         {
-        int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(words[ix])+2*strlen(label) + 2;
-        char *link=needMem(sz);
-        safef(link,sz,VOCAB_LINK,words[0],words[ix],rootLabel,rootLabel);
-        if(suffix)
-            safecat(link,sz,suffix);
-        freeMem(words[0]);
+        char *link = controlledVocabLink(words[0],"term",words[ix],rootLabel,rootLabel,suffix);
         return link;
         }
     else if(countChars(words[ix],'=') == 1 && childTdb != NULL) // The name of a trackDb setting follows and will be the controlled vocab term
@@ -5845,14 +5845,7 @@ for(ix=1;ix<count && !found;ix++)
             const char * cvTerm = metadataFindValue(childTdb,cvSetting);
             if(cvTerm != NULL)
                 {
-                char *encodedTerm = cgiEncode((char *)cvTerm);
-                int sz=strlen(VOCAB_LINK)+strlen(words[0])+strlen(encodedTerm)+2*strlen(label) + 2;
-                char *link=needMem(sz);
-                safef(link,sz,VOCAB_LINK,words[0],encodedTerm,cvTerm,rootLabel);
-                if(suffix)
-                    safecat(link,sz,suffix);
-                freeMem(words[0]);
-                freeMem(encodedTerm);
+                char *link = controlledVocabLink(words[0],(sameWord(cvSetting,"antibody")?"target":"term"),(char *)cvTerm,(char *)cvTerm,rootLabel,suffix);
                 return link;
                 }
             }
@@ -6082,9 +6075,6 @@ boolean found=FALSE;
 if((count = chopByWhite(vocab, words,15)) <= 1) // vocab now contains just the file name
     return cloneString(members->groupTitle);
 
-#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=%s&term=\""
-#define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
-struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab);
 char *mdbVar = NULL;
 
 // Find mdb var to look up based upon the groupTag and cv setting
@@ -6103,10 +6093,13 @@ for(ix=1;ix<count && !found;ix++)
     }
 if(mdbVar == NULL)
     {
-    dyStringFree(&dyLink);
     freeMem(vocab);
     return cloneString(members->groupTitle);
     }
+
+#define VOCAB_MULTILINK_BEG "<A HREF='hgEncodeVocab?ra=%s&%s=\""
+#define VOCAB_MULTILINK_END "\"' title='Click for details of each %s' TARGET=ucscVocab>%s</A>"
+struct dyString *dyLink = dyStringCreate(VOCAB_MULTILINK_BEG,vocab,(sameWord(mdbVar,"antibody")?"target":"term"));
 
 // Now build the comma delimited string of mdb vals (all have same mdb var)
 boolean first = TRUE;
@@ -6731,18 +6724,24 @@ else
     return b;
 }
 
-enum trackVisibility tdbVisLimitedByAncestry(struct cart *cart, struct trackDb *tdb, boolean noSupers)
-// returns visibility limited by ancestry (or subtrack vis override)
+enum trackVisibility tdbLocalVisibility(struct cart *cart, struct trackDb *tdb,boolean *subtrackOverride)
+// returns visibility NOT limited by ancestry.  Fills optional boolean if subtrack specific vis is found
+// If not NULL cart will be examined without ClosestToHome.  Folders/supertracks resolve to hide/full
 {
+if (subtrackOverride != NULL)
+*subtrackOverride = FALSE; // default
+
+// tdb->visibility should reflect local trackDb setting
 enum trackVisibility vis = tdb->visibility;
 if (tdbIsSuperTrack(tdb))
     vis = (tdb->isShow ? tvFull : tvHide);
-if (cart != NULL)
+
+if (cart != NULL) // cart is optional
     {
     char *cartVis = NULL;
     if (tdbIsCompositeView(tdb))
         {
-        char *view = trackDbLocalSetting(tdb,"view");
+        char *view = trackDbLocalSetting(tdb,"view"); // views have funky cart setting
         assert(view != NULL);
         char setting[512];
         safef(setting,sizeof(setting),"%s.%s.vis",tdb->parent->track,view);
@@ -6753,24 +6752,35 @@ if (cart != NULL)
     if (cartVis != NULL)
         {
         vis = hTvFromString(cartVis);
-        if (tdbIsContainerChild(tdb))
-            return vis; // subtrackVis override
+        if (subtrackOverride != NULL && tdbIsContainerChild(tdb))
+            *subtrackOverride = TRUE;
         }
     }
+return vis;
+}
+
+enum trackVisibility tdbVisLimitedByAncestors(struct cart *cart, struct trackDb *tdb, boolean checkBoxToo, boolean foldersToo)
+// returns visibility limited by ancestry.  This includes subtrack vis override and parents limit maximum.
+// cart may be null, in which case, only trackDb settings (default state) are examined
+// checkBoxToo means ensure subtrack checkbox state is visible
+// foldersToo means limit by folders (aka superTracks) as well.
+{
+boolean subtrackOverride = FALSE;
+enum trackVisibility vis = tdbLocalVisibility(cart,tdb,&subtrackOverride);
+if (subtrackOverride)
+    return vis;
 
 // subtracks without explicit (cart) vis but are selected, should get inherited vis
 if (vis == tvHide && tdbIsContainerChild(tdb))
     {
-    if (fourStateVisible(subtrackFourStateChecked(tdb,cart)))
-        vis = tvFull;
+    if (checkBoxToo && fourStateVisible(subtrackFourStateChecked(tdb,cart)))
+        vis = tvFull; // to be limited by ancestry
     }
 
-if (vis == tvHide || tdb->parent == NULL)
-    return vis;
+if (vis == tvHide || tdb->parent == NULL || (!foldersToo && tdbIsFolder(tdb->parent)))  // aka superTrack
+    return vis; // end of line
 
-if (noSupers && tdbIsSuperTrack(tdb->parent))
-    return vis;
-return tvMin(vis,tdbVisLimitedByAncestry(cart,tdb->parent,noSupers));
+return tvMin(vis,tdbVisLimitedByAncestors(cart,tdb->parent,checkBoxToo,foldersToo));
 }
 
 char *compositeViewControlNameFromTdb(struct trackDb *tdb)

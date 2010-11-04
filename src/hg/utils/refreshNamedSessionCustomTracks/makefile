@@ -25,6 +25,9 @@ scripts:
 	    cp -p $$F ${SCRIPTS}; \
 	 done
 
+compile: ${O}
+	${CC} ${COPT} -o refreshNamedSessionCustomTracks $O ${MYLIBS} $L
+
 clean:
-	rm -f $O
+	rm -f $O refreshNamedSessionCustomTracks
 

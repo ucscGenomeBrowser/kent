@@ -23,8 +23,10 @@ include wgEncodeGisRnaSeq.ra
 include wgEncodeGisRnaPet.ra
 include wgEncodeGisDnaPet.ra
 include wgEncodeAffyRnaChip.ra
-include trackDb.wgEncodeCshlLongRnaSeq.ra
+include wgEncodeUwTfbs.ra
+include wgEncodeCshlLongRnaSeq.ra
 include wgEncodeCaltechRnaSeq.ra
+include wgEncodeYaleRnaSeq.ra
 
 track wgEncodeMapability
 compositeTrack on

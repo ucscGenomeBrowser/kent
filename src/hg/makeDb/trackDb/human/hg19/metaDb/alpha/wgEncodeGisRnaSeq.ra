@@ -3,7 +3,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -25,7 +25,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -46,7 +46,7 @@ objType table
 cell GM12878
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -62,12 +62,52 @@ subId 1399
 tableName wgEncodeGisRnaSeqGm12878CytosolPapPlusRawRep1
 view PlusRawSignal
 
+metaObject wgEncodeGisRnaSeqGm12878CytosolPapRawData2Rep1
+objType file
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-17
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqGm12878CytosolPapRawData2Rep1.csqual.gz
+grant Gingeras
+lab GIS
+localization cytosol
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2323
+view RawData2
+
+metaObject wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1
+objType file
+cell GM12878
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-17
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqGm12878CytosolPapRawDataRep1.csfasta.gz
+grant Gingeras
+lab GIS
+localization cytosol
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2323
+view RawData
+
 metaObject wgEncodeGisRnaSeqH1hescCellPapAlnRep1
 objType table
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -89,7 +129,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -110,7 +150,7 @@ objType table
 cell H1-hESC
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-03
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -126,12 +166,32 @@ subId 1400
 tableName wgEncodeGisRnaSeqH1hescCellPapPlusRawRep1
 view PlusRawSignal
 
+metaObject wgEncodeGisRnaSeqH1hescCellPapRawData3Rep1
+objType file
+cell H1-hESC
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-17
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqH1hescCellPapRawData3Rep1.fastq.gz
+grant Gingeras
+lab GIS
+localization cell
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2323
+view RawData3
+
 metaObject wgEncodeGisRnaSeqK562CytosolPapAlnRep1
 objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -153,7 +213,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -175,7 +235,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -196,7 +256,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -217,7 +277,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -238,7 +298,7 @@ objType table
 cell K562
 composite wgEncodeGisRnaSeq
 dataType RnaSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-01
 dateSubmitted 2009-10-29
 dateUnrestricted 2010-07-29
@@ -254,4 +314,64 @@ subId 1401
 tableName wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2
 view PlusRawSignal
 
-# MAGIC: 324938325
+metaObject wgEncodeGisRnaSeqK562CytosolPapRawData2Rep2
+objType file
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-17
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqK562CytosolPapRawData2Rep2.csqual.gz
+grant Gingeras
+lab GIS
+localization cytosol
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 2323
+view RawData2
+
+metaObject wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1
+objType file
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-17
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqK562CytosolPapRawData3Rep1.fastq.gz
+grant Gingeras
+lab GIS
+localization cytosol
+origAssembly hg18
+project wgEncode
+replicate 1
+rnaExtract longPolyA
+subId 2323
+view RawData3
+
+metaObject wgEncodeGisRnaSeqK562CytosolPapRawDataRep2
+objType file
+cell K562
+composite wgEncodeGisRnaSeq
+dataType RnaSeq
+dataVersion ENCODE Jan 2011 Freeze
+dateResubmitted 2010-09-17
+dateSubmitted 2009-10-29
+dateUnrestricted 2010-07-29
+fileName wgEncodeGisRnaSeqK562CytosolPapRawDataRep2.csfasta.gz
+grant Gingeras
+lab GIS
+localization cytosol
+origAssembly hg18
+project wgEncode
+replicate 2
+rnaExtract longPolyA
+subId 2323
+view RawData
+
+# MAGIC: -1369200778

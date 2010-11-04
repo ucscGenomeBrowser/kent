@@ -252,6 +252,9 @@ int mdbByVarCount(struct mdbByVar *mdbByVars,boolean vars, boolean vals);
 // returns the count of objs belonging to this set of vars;
 
 // ----------------- Utilities -----------------
+struct mdbVar *mdbObjFind(struct mdbObj *mdbObj, char *var);
+// Finds the val associated with the var or retruns NULL
+
 char *mdbObjFindValue(struct mdbObj *mdbObj, char *var);
 // Finds the val associated with the var or retruns NULL
 
@@ -279,6 +282,9 @@ void mdbObjTransformToUpdate(struct mdbObj *mdbObjs, char *var, char *varType,ch
 
 struct mdbObj *mdbObjClone(const struct mdbObj *mdbObj);
 // Clones a single mdbObj, including hash and maintining order
+
+int mdbVarCmp(const void *va, const void *vb);
+/* Compare to sort on label. */
 
 
 // --------------- Free at last ----------------
@@ -308,9 +314,16 @@ struct slName *mdbValSearch(struct sqlConnection *conn, char *var, int limit, bo
 // Search is via mysql, so it's case-insensitive.  Return is sorted on val.
 
 struct slPair *mdbValLabelSearch(struct sqlConnection *conn, char *var, int limit, boolean tables, boolean files);
-// Search the metaDb table for vals by var and returns cv label (if it exists) and val as a pair.
-// Can impose (non-zero) limit on returned string size of name.  Search is via mysql, so it's case-insensitive.
-// Return is sorted on name (label or else val).
+// Search the metaDb table for vals by var and returns controlled vocabulary (cv) label
+// (if it exists) and val as a pair.  Can impose (non-zero) limit on returned string size of name.
+// Return is case insensitive sorted on name (label or else val).
+
+struct hash *mdbCvTermTypeHash();
+// returns a hash of hashes of mdb and controlled vocabulary (cv) term types
+// Those terms should contain label,descrition,searchable,cvDefined,hidden
+
+struct slPair *mdbCvWhiteList(boolean searchTracks, boolean cvLinks);
+// returns the official mdb/controlled vocabulary terms that have been whitelisted for certain uses.
 
 #endif /* MDB_H */
 
