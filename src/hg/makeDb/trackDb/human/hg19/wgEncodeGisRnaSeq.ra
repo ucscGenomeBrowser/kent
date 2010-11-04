@@ -4,7 +4,7 @@ shortLabel GIS RNA-seq
 longLabel RNA-seq from ENCODE/Genome Institute of Singapore
 group expression
 subGroup1 view Views 1-PlusRawSignal=Plus_Raw_Signal 2-MinusRawSignal=Minus_Raw_Signal 3-AllRawSignal=All_Raw_Signal 4-Alignments=Alignments 
-subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K652&nbsp;(Tier_1)
+subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1)
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=PolyA+
 subGroup5 localization Localization cell=Cell cytosol=Cytosol 
