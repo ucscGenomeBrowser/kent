@@ -23,7 +23,7 @@ wgEncode 1
     track wgEncodeGisRnaPetViewClusters
     shortLabel Clusters
     view Clusters
-    visibility dense
+    visibility full
     subTrack wgEncodeGisRnaPet
     maxHeightPixels 100:24:16
     minLimit .005
@@ -454,7 +454,7 @@ wgEncode 1
     track wgEncodeGisRnaPetViewMinusRawSig
     shortLabel MinusRawSig
     view MinusRawSig
-    visibility dense
+    visibility full
     subTrack wgEncodeGisRnaPet
     maxHeightPixels 100:24:16
     minLimit .005
@@ -669,7 +669,7 @@ wgEncode 1
     track wgEncodeGisRnaPetViewPlusRawSig
     shortLabel PlusRawSig
     view PlusRawSig
-    visibility dense
+    visibility full
     subTrack wgEncodeGisRnaPet
     maxHeightPixels 100:24:16
     minLimit .005
