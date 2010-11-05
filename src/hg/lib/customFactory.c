@@ -754,9 +754,13 @@ static struct bedDetail *customTrackBedDetail(char *db, char **row,
         struct hash *chromHash, struct lineFile *lf, int size)
 /* Convert a row of strings to a bed 4 + for bedDetail. */
 {
-struct bedDetail *item = bedDetailLoadWithGaps(row, size);
+struct bedDetail *item = bedDetailLineFileLoad(row, size, lf);
 hashStoreName(chromHash, item->chrom);
 customFactoryCheckChromNameDb(db, item->chrom, lf);
+int chromSize = hChromSize(db, item->chrom);
+if (item->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+        item->chrom, item->chromEnd, chromSize);
 return item;
 }
 
@@ -851,7 +855,7 @@ if (line == NULL)
     return FALSE;
 char *dupe = cloneString(line);
 char *row[7+3];
-int wordCount = chopLine(dupe, row); //has bin at this point?
+int wordCount = chopLine(dupe, row); 
 if (wordCount > 7 || wordCount < 5)
     return FALSE;
 track->fieldCount = wordCount;
@@ -907,13 +911,13 @@ static struct pgSnp *customTrackPgSnp(char *db, char **row,
         struct hash *chromHash, struct lineFile *lf)
 /* Convert a row of strings to pgSnp. */
 {
-struct pgSnp *item;
-if (startsWith("chr", row[0]))
-   item = pgSnpLoadNoBin(row);
-else 
-   item = pgSnpLoad(row);
+struct pgSnp *item = pgSnpLineFileLoad(row, lf);
 hashStoreName(chromHash, item->chrom);
 customFactoryCheckChromNameDb(db, item->chrom, lf);
+int chromSize = hChromSize(db, item->chrom);
+if (item->chromEnd > chromSize)
+    lineFileAbort(lf, "chromEnd larger than chrom %s size (%d > %d)",
+        item->chrom, item->chromEnd, chromSize);
 return item;
 }
 
