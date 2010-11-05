@@ -120,5 +120,9 @@ extern char *pgSnpAutoSqlString;
 struct pgSnp *pgSnpLoadNoBin (char **row);
 /* load struct from row without bin */
 
+struct pgSnp *pgSnpLineFileLoad(char **row, struct lineFile *lf);
+/* Load pgSnp from a lineFile line, with error checking. */
+/* Requires comma separated zeroes for frequency and scores. */
+
 #endif /* PGSNP_H */
 

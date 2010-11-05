@@ -46,8 +46,10 @@ checkMetaDb() {
     hgsqlTableDate $db $metaDb $metaDir/metaDb || rm $metaDir/metaDb 
 
     # makefile will call makeMetaDb if file list is newer than table
-    (cd $metaDir; make DB=$db TABLE=$metaDb)
-    rm -f $metaDir/metaDb
+    cd $metaDir 
+    make DB=$db TABLE=$metaDb
+    cd ../../../..
+    rm $metaDir/metaDb
 }
 
 # load for all specified databases
