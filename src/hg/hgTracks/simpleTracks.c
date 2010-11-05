@@ -9378,9 +9378,11 @@ char *allFreqCopy = cloneString(myItem->alleleFreq);
 int cnt = chopByChar(nameCopy, '/', allele, myItem->alleleCount);
 if (cnt != myItem->alleleCount)
     errAbort("Bad allele name %s", myItem->name);
-chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
+int fcnt = chopByChar(allFreqCopy, ',', freq, myItem->alleleCount);
+if (fcnt != myItem->alleleCount && fcnt != 0)
+    errAbort("Bad freq for %s",  myItem->name);
 int i = 0;
-for (i=0;i<myItem->alleleCount;i++)
+for (i=0;i<fcnt;i++)
     allTot += atoi(freq[i]);
 /* draw a tall box */
 if (sameString(display, "freq"))
@@ -10494,6 +10496,7 @@ else
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
     tg->bedSize = ct->fieldCount - 2; /* field count of bed part */
+    bedSize = tg->bedSize;
     }
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
