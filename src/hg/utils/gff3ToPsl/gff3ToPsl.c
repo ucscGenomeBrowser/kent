@@ -112,9 +112,9 @@ if ((attr == NULL) || (attr->vals == NULL) || (attr->vals->name == NULL))
 
 struct nameAndSize *ns = getNameAndSize(chromHash, node->targetId);
 
-struct psl *psl = pslFromCigar(node->seqid, node->end - node->start, node->start, node->end,
-                               ns->name, ns->size,  node->targetStart, node->targetEnd, 
-                               node->strand, attr->vals->name);
+struct psl *psl = pslFromGff3Cigar(node->seqid, node->end - node->start, node->start, node->end,
+                                   ns->name, ns->size,  node->targetStart, node->targetEnd, 
+                                   node->strand, attr->vals->name);
 pslOutput(psl, pslF, '\t' , '\n');
 pslFree(&psl);
 }

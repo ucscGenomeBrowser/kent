@@ -1921,10 +1921,10 @@ else
 return TRUE;
 }
 
-struct psl* pslFromCigar(char *qName, int qSize, int qStart, int qEnd,
-                         char *tName, int tSize, int tStart, int tEnd,
-                         char* strand, char *cigar)
-/* create a PSL from a cigar formatted alignment */
+struct psl* pslFromGff3Cigar(char *qName, int qSize, int qStart, int qEnd,
+                             char *tName, int tSize, int tStart, int tEnd,
+                             char* strand, char *cigar)
+/* create a PSL from a GFF3-style cigar formatted alignment */
 {
 // this is currently tested by the gff3ToPsl
 int blocksAlloced = 4;
