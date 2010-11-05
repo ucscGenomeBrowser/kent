@@ -10,7 +10,7 @@ subGroup2 view View Sites=Sites
 subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 treatment Treatment None=None ANDRO=Methyltrienolone(androgen)
 subGroup5 protocol Growth_Protocol uwStamGrowProt=UW_Stam hudsonAlphaGrowProt=HudsonAlpha openChromGrowProt=Open_Chromatin YaleGrowProt=Yale_TFBS
-subGroup6 lab Lab_Cells_Obtained UW=UW Open=Open_Chromatin haib=Hudson_Alpha Yale=Yale
+subGroup6 lab Obtained_From UW=UW Open=Open_Chromatin haib=Hudson_Alpha Yale=Yale
 #dimensions dimensionX=protocol dimensionY=cellType dimensionZ=rep 
 filterComposite dimensionA=all dimensionC=multi dimensionD=one
 #dimensions  dimensionA=cellType dimensionC=treatment dimensionB=protocol dimensionD=rep
