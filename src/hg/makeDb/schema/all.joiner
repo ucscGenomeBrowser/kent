@@ -3213,6 +3213,12 @@ tablesIgnored $kgDb
     pbStamp
     pep%Dist
 
+tablesIgnored hg18
+    numtSAssembled
+    numtS
+    numtSMitochondrion
+    numtSMitochondrionChrPlacement
+
 tablesIgnored hg19
     altSeqHaplotypes
     altSeqLiftOverPsl
