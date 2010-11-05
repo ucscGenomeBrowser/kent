@@ -11,7 +11,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1AosmcSerumfree.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1AosmcSerumfree
 project wgEncode
 replicate 1
 subId 939
@@ -31,7 +30,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Chorion.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Chorion
 project wgEncode
 replicate 1
 subId 881
@@ -50,7 +48,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Fibrobl.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Fibrobl
 project wgEncode
 replicate 1
 subId 857
@@ -69,7 +66,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Fibrop.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Fibrop
 project wgEncode
 replicate 1
 subId 960
@@ -87,7 +83,6 @@ dateUnrestricted 2009-08-08
 fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878.tagAlign.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
 project wgEncode
 replicate 1
 subId 31
@@ -106,7 +101,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12878V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS, align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12878V2
 project wgEncode
 replicate 1
 subId 461
@@ -126,7 +120,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12891.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12891
 project wgEncode
 replicate 1
 subId 643
@@ -145,7 +138,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm12892.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12892
 project wgEncode
 replicate 1
 subId 645
@@ -164,7 +156,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm18507.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm18507
 project wgEncode
 replicate 1
 subId 850
@@ -183,7 +174,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm19238.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm19238
 project wgEncode
 replicate 1
 subId 647
@@ -202,7 +192,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm19239.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm19239
 project wgEncode
 replicate 1
 subId 649
@@ -221,7 +210,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Gm19240.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm19240
 project wgEncode
 replicate 1
 subId 651
@@ -240,7 +228,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1H1hesc.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1H1hesc
 project wgEncode
 replicate 1
 subId 628
@@ -259,7 +246,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1H9es.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1H9es
 project wgEncode
 replicate 1
 subId 877
@@ -278,7 +264,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Helas3.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.7.1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Helas3
 project wgEncode
 replicate 1
 subId 280
@@ -297,7 +282,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Helas3Ifna4h.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Helas3Ifna4h
 project wgEncode
 replicate 1
 subId 836
@@ -318,7 +302,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Helas3V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Helas3V2
 project wgEncode
 replicate 1
 subId 495
@@ -338,7 +321,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.7.1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Hepg2
 project wgEncode
 replicate 1
 subId 272
@@ -358,7 +340,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hepg2V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Hepg2V2
 project wgEncode
 replicate 1
 subId 556
@@ -378,7 +359,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hsmm.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Hsmm
 project wgEncode
 replicate 1
 subId 855
@@ -397,7 +377,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Hsmmt.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Hsmmt
 project wgEncode
 replicate 1
 subId 856
@@ -416,7 +395,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Huvec.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Huvec
 project wgEncode
 replicate 1
 subId 545
@@ -435,7 +413,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1K562.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.6.5
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1K562
 project wgEncode
 replicate 1
 subId 112
@@ -455,7 +432,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1K562V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1K562V2
 project wgEncode
 replicate 1
 subId 480
@@ -475,7 +451,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Lhsr.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Lhsr
 project wgEncode
 replicate 1
 subId 848
@@ -494,7 +469,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1LhsrAndro.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1LhsrAndro
 project wgEncode
 replicate 1
 subId 851
@@ -514,7 +488,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Mcf7.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Mcf7
 project wgEncode
 replicate 1
 subId 849
@@ -533,7 +506,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Medullo.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Medullo
 project wgEncode
 replicate 1
 subId 831
@@ -552,7 +524,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Melano.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Melano
 project wgEncode
 replicate 1
 subId 953
@@ -571,7 +542,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Myometr.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Myometr
 project wgEncode
 replicate 1
 subId 940
@@ -590,7 +560,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Nhek.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Nhek
 project wgEncode
 replicate 1
 subId 594
@@ -609,7 +578,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Panislets.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Panislets
 project wgEncode
 replicate 1
 subId 835
@@ -628,7 +596,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep1Progfib.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Progfib
 project wgEncode
 replicate 1
 subId 834
@@ -647,7 +614,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2AosmcSerumfree.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2AosmcSerumfree
 project wgEncode
 replicate 2
 subId 939
@@ -667,7 +633,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Chorion.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Chorion
 project wgEncode
 replicate 2
 subId 881
@@ -686,7 +651,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Fibrobl.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Fibrobl
 project wgEncode
 replicate 2
 subId 857
@@ -705,7 +669,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Fibrop.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Fibrop
 project wgEncode
 replicate 2
 subId 960
@@ -723,7 +686,6 @@ dateUnrestricted 2009-08-08
 fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878.tagAlign.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
 project wgEncode
 replicate 2
 subId 31
@@ -743,7 +705,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12878V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS, align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12878V2
 project wgEncode
 replicate 2
 subId 461
@@ -763,7 +724,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12891.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12891
 project wgEncode
 replicate 2
 subId 643
@@ -782,7 +742,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm12892.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12892
 project wgEncode
 replicate 2
 subId 645
@@ -801,7 +760,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm18507.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm18507
 project wgEncode
 replicate 2
 subId 850
@@ -820,7 +778,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm19238.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm19238
 project wgEncode
 replicate 2
 subId 647
@@ -839,7 +796,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm19239.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm19239
 project wgEncode
 replicate 2
 subId 649
@@ -858,7 +814,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Gm19240.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm19240
 project wgEncode
 replicate 2
 subId 651
@@ -877,7 +832,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2H1hesc.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2H1hesc
 project wgEncode
 replicate 2
 subId 628
@@ -896,7 +850,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2H9es.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2H9es
 project wgEncode
 replicate 2
 subId 877
@@ -915,7 +868,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Helas3.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.7.1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Helas3
 project wgEncode
 replicate 2
 subId 280
@@ -934,7 +886,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Helas3Ifna4h.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Helas3Ifna4h
 project wgEncode
 replicate 2
 subId 836
@@ -955,7 +906,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Helas3V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Helas3V2
 project wgEncode
 replicate 2
 subId 495
@@ -975,7 +925,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.7.1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
 project wgEncode
 replicate 2
 subId 272
@@ -995,7 +944,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hepg2V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Hepg2V2
 project wgEncode
 replicate 2
 subId 556
@@ -1015,7 +963,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hsmm.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Hsmm
 project wgEncode
 replicate 2
 subId 855
@@ -1034,7 +981,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Hsmmt.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Hsmmt
 project wgEncode
 replicate 2
 subId 856
@@ -1053,7 +999,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Huvec.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Huvec
 project wgEncode
 replicate 2
 subId 545
@@ -1072,7 +1017,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2K562.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.6.5
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2K562
 project wgEncode
 replicate 2
 subId 112
@@ -1092,7 +1036,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2K562V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2K562V2
 project wgEncode
 replicate 2
 subId 480
@@ -1112,7 +1055,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Lhsr.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Lhsr
 project wgEncode
 replicate 2
 subId 848
@@ -1131,7 +1073,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2LhsrAndro.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2LhsrAndro
 project wgEncode
 replicate 2
 subId 851
@@ -1151,7 +1092,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Mcf7.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Mcf7
 project wgEncode
 replicate 2
 subId 849
@@ -1170,7 +1110,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Medullo.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Medullo
 project wgEncode
 replicate 2
 subId 831
@@ -1189,7 +1128,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Melano.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Melano
 project wgEncode
 replicate 2
 subId 953
@@ -1208,7 +1146,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Myometr.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Myometr
 project wgEncode
 replicate 2
 subId 940
@@ -1227,7 +1164,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Nhek.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Nhek
 project wgEncode
 replicate 2
 subId 594
@@ -1246,7 +1182,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Panislets.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Panislets
 project wgEncode
 replicate 2
 subId 835
@@ -1265,7 +1200,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep2Progfib.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Progfib
 project wgEncode
 replicate 2
 subId 834
@@ -1284,7 +1218,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Fibrop.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Fibrop
 project wgEncode
 replicate 3
 subId 960
@@ -1302,7 +1235,6 @@ dateUnrestricted 2009-08-08
 fileName wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878.tagAlign.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
 project wgEncode
 replicate 3
 subId 31
@@ -1322,7 +1254,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Gm12878V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS, align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Gm12878V2
 project wgEncode
 replicate 3
 subId 461
@@ -1342,7 +1273,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Gm18507.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Gm18507
 project wgEncode
 replicate 3
 subId 850
@@ -1361,7 +1291,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Helas3.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.7.1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Helas3
 project wgEncode
 replicate 3
 subId 280
@@ -1381,7 +1310,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Helas3V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Helas3V2
 project wgEncode
 replicate 3
 subId 495
@@ -1401,7 +1329,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.7.1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
 project wgEncode
 replicate 3
 subId 272
@@ -1421,7 +1348,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hepg2V2.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Hepg2V2
 project wgEncode
 replicate 3
 subId 556
@@ -1441,7 +1367,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hsmm.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Hsmm
 project wgEncode
 replicate 3
 subId 855
@@ -1460,7 +1385,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Hsmmt.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Hsmmt
 project wgEncode
 replicate 3
 subId 856
@@ -1479,7 +1403,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3K562.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion Maq 0.6.5
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3K562
 project wgEncode
 replicate 3
 subId 112
@@ -1498,7 +1421,6 @@ fileName wgEncodeDukeDNaseSeqAlignmentsRep3Panislets.tagAlign.gz
 grant Crawford
 lab Duke
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Panislets
 project wgEncode
 replicate 3
 subId 835
@@ -2606,7 +2528,6 @@ dateUnrestricted 2010-09-27
 fileName wgEncodeDukeDNaseSeqRawDataRep1Chorion.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Chorion
 project wgEncode
 replicate 1
 subId 881
@@ -2625,7 +2546,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12878.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12878
 project wgEncode
 replicate 1
 subId 131
@@ -2645,7 +2565,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12878V2.fastq.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12878V2
 project wgEncode
 replicate 1
 subId 461
@@ -2664,7 +2583,6 @@ dateUnrestricted 2010-07-03
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12891.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12891
 project wgEncode
 replicate 1
 subId 643
@@ -2682,7 +2600,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm12892.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm12892
 project wgEncode
 replicate 1
 subId 645
@@ -2700,7 +2617,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm18507.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm18507
 project wgEncode
 replicate 1
 subId 850
@@ -2718,7 +2634,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm19238.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm19238
 project wgEncode
 replicate 1
 subId 647
@@ -2736,7 +2651,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm19239.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm19239
 project wgEncode
 replicate 1
 subId 649
@@ -2754,7 +2668,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep1Gm19240.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Gm19240
 project wgEncode
 replicate 1
 subId 651
@@ -2772,7 +2685,6 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeDukeDNaseSeqRawDataRep1H1hesc.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1H1hesc
 project wgEncode
 replicate 1
 subId 628
@@ -2790,7 +2702,6 @@ dateUnrestricted 2010-09-23
 fileName wgEncodeDukeDNaseSeqRawDataRep1H9es.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1H9es
 project wgEncode
 replicate 1
 subId 877
@@ -2809,7 +2720,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep1Helas3.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Helas3
 project wgEncode
 replicate 1
 subId 280
@@ -2827,7 +2737,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep1Helas3Ifna4h.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Helas3Ifna4h
 project wgEncode
 replicate 1
 subId 836
@@ -2847,7 +2756,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeDukeDNaseSeqRawDataRep1Helas3V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Helas3V2
 project wgEncode
 replicate 1
 subId 495
@@ -2867,7 +2775,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep1Hepg2.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Hepg2
 project wgEncode
 replicate 1
 subId 272
@@ -2886,7 +2793,6 @@ dateUnrestricted 2009-12-11
 fileName wgEncodeDukeDNaseSeqRawDataRep1Hepg2V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Hepg2V2
 project wgEncode
 replicate 1
 subId 556
@@ -2905,7 +2811,6 @@ dateUnrestricted 2010-06-24
 fileName wgEncodeDukeDNaseSeqRawDataRep1Huvec.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Huvec
 project wgEncode
 replicate 1
 subId 545
@@ -2924,7 +2829,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep1K562.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1K562
 project wgEncode
 replicate 1
 subId 127
@@ -2943,7 +2847,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeDukeDNaseSeqRawDataRep1K562V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1K562V2
 project wgEncode
 replicate 1
 subId 480
@@ -2962,7 +2865,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep1Lhsr.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Lhsr
 project wgEncode
 replicate 1
 subId 848
@@ -2980,7 +2882,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep1LhsrAndro.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1LhsrAndro
 project wgEncode
 replicate 1
 subId 851
@@ -2999,7 +2900,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep1Mcf7.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Mcf7
 project wgEncode
 replicate 1
 subId 849
@@ -3017,7 +2917,6 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeDukeDNaseSeqRawDataRep1Medullo.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Medullo
 project wgEncode
 replicate 1
 subId 831
@@ -3035,7 +2934,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeDukeDNaseSeqRawDataRep1Melano.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Melano
 project wgEncode
 replicate 1
 subId 953
@@ -3053,7 +2951,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeDukeDNaseSeqRawDataRep1Nhek.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep1Nhek
 project wgEncode
 replicate 1
 subId 594
@@ -3071,7 +2968,6 @@ dateUnrestricted 2010-09-27
 fileName wgEncodeDukeDNaseSeqRawDataRep2Chorion.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Chorion
 project wgEncode
 replicate 2
 subId 881
@@ -3090,7 +2986,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12878.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12878
 project wgEncode
 replicate 2
 subId 131
@@ -3110,7 +3005,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12878V2.fastq.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12878V2
 project wgEncode
 replicate 2
 subId 461
@@ -3129,7 +3023,6 @@ dateUnrestricted 2010-07-03
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12891.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12891
 project wgEncode
 replicate 2
 subId 643
@@ -3147,7 +3040,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm12892.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm12892
 project wgEncode
 replicate 2
 subId 645
@@ -3165,7 +3057,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm18507.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm18507
 project wgEncode
 replicate 2
 subId 850
@@ -3183,7 +3074,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm19238.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm19238
 project wgEncode
 replicate 2
 subId 647
@@ -3201,7 +3091,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm19239.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm19239
 project wgEncode
 replicate 2
 subId 649
@@ -3219,7 +3108,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeDukeDNaseSeqRawDataRep2Gm19240.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Gm19240
 project wgEncode
 replicate 2
 subId 651
@@ -3237,7 +3125,6 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeDukeDNaseSeqRawDataRep2H1hesc.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2H1hesc
 project wgEncode
 replicate 2
 subId 628
@@ -3255,7 +3142,6 @@ dateUnrestricted 2010-09-23
 fileName wgEncodeDukeDNaseSeqRawDataRep2H9es.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2H9es
 project wgEncode
 replicate 2
 subId 877
@@ -3274,7 +3160,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep2Helas3.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Helas3
 project wgEncode
 replicate 2
 subId 280
@@ -3292,7 +3177,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep2Helas3Ifna4h.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Helas3Ifna4h
 project wgEncode
 replicate 2
 subId 836
@@ -3312,7 +3196,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeDukeDNaseSeqRawDataRep2Helas3V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Helas3V2
 project wgEncode
 replicate 2
 subId 495
@@ -3332,7 +3215,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep2Hepg2.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Hepg2
 project wgEncode
 replicate 2
 subId 272
@@ -3351,7 +3233,6 @@ dateUnrestricted 2009-12-11
 fileName wgEncodeDukeDNaseSeqRawDataRep2Hepg2V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Hepg2V2
 project wgEncode
 replicate 2
 subId 556
@@ -3370,7 +3251,6 @@ dateUnrestricted 2010-06-24
 fileName wgEncodeDukeDNaseSeqRawDataRep2Huvec.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Huvec
 project wgEncode
 replicate 2
 subId 545
@@ -3389,7 +3269,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep2K562.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2K562
 project wgEncode
 replicate 2
 subId 127
@@ -3408,7 +3287,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeDukeDNaseSeqRawDataRep2K562V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2K562V2
 project wgEncode
 replicate 2
 subId 480
@@ -3427,7 +3305,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep2Lhsr.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Lhsr
 project wgEncode
 replicate 2
 subId 848
@@ -3445,7 +3322,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep2LhsrAndro.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2LhsrAndro
 project wgEncode
 replicate 2
 subId 851
@@ -3464,7 +3340,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep2Mcf7.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Mcf7
 project wgEncode
 replicate 2
 subId 849
@@ -3482,7 +3357,6 @@ dateUnrestricted 2010-09-16
 fileName wgEncodeDukeDNaseSeqRawDataRep2Medullo.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Medullo
 project wgEncode
 replicate 2
 subId 831
@@ -3500,7 +3374,6 @@ dateUnrestricted 2010-10-09
 fileName wgEncodeDukeDNaseSeqRawDataRep2Melano.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Melano
 project wgEncode
 replicate 2
 subId 953
@@ -3518,7 +3391,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeDukeDNaseSeqRawDataRep2Nhek.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep2Nhek
 project wgEncode
 replicate 2
 subId 594
@@ -3537,7 +3409,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep3Gm12878.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Gm12878
 project wgEncode
 replicate 3
 subId 131
@@ -3557,7 +3428,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep3Gm12878V2.fastq.gz
 grant Crawford
 lab Duke
 labVersion DNaseHS
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Gm12878V2
 project wgEncode
 replicate 3
 submittedDataVersion V2 - new sequences generated
@@ -3575,7 +3445,6 @@ dateUnrestricted 2010-09-18
 fileName wgEncodeDukeDNaseSeqRawDataRep3Gm18507.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Gm18507
 project wgEncode
 replicate 3
 subId 850
@@ -3594,7 +3463,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep3Helas3.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Helas3
 project wgEncode
 replicate 3
 subId 280
@@ -3613,7 +3481,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeDukeDNaseSeqRawDataRep3Helas3V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Helas3V2
 project wgEncode
 replicate 3
 subId 495
@@ -3633,7 +3500,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep3Hepg2.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Hepg2
 project wgEncode
 replicate 3
 subId 272
@@ -3652,7 +3518,6 @@ dateUnrestricted 2009-12-11
 fileName wgEncodeDukeDNaseSeqRawDataRep3Hepg2V2.fastq.gz
 grant Crawford
 lab Duke
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3Hepg2V2
 project wgEncode
 replicate 3
 subId 556
@@ -3672,7 +3537,6 @@ fileName wgEncodeDukeDNaseSeqRawDataRep3K562.fastq.gz
 grant Crawford
 lab Duke
 labVersion Illumina
-parentTable wgEncodeDukeDNaseSeqRawSignalRep3K562
 project wgEncode
 replicate 3
 subId 127
@@ -4216,7 +4080,7 @@ objType file
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
@@ -4224,7 +4088,6 @@ fileName wgEncodeUncFAIREseqAlignmentsPanislets.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalPanislets
 project wgEncode
 subId 686
 view Alignments
@@ -4234,14 +4097,13 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeUncFAIREseqAlignmentsRep1Gm12878.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm12878
 project wgEncode
 replicate 1
 subId 231
@@ -4252,7 +4114,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -4261,7 +4123,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Gm12878V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm12878V2
 project wgEncode
 replicate 1
 subId 471
@@ -4273,7 +4134,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -4281,7 +4142,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Gm18507.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm18507
 project wgEncode
 replicate 1
 subId 852
@@ -4292,7 +4152,7 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -4300,7 +4160,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Gm19239.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm19239
 project wgEncode
 replicate 1
 subId 847
@@ -4311,7 +4170,7 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -4319,7 +4178,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1H1hesc.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1H1hesc
 project wgEncode
 replicate 1
 subId 629
@@ -4330,14 +4188,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3
 project wgEncode
 replicate 1
 subId 285
@@ -4348,7 +4205,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -4356,7 +4213,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3Ifna4h.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3Ifna4h
 project wgEncode
 replicate 1
 subId 858
@@ -4368,7 +4224,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -4376,7 +4232,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3Ifng4h.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3Ifng4h
 project wgEncode
 replicate 1
 subId 859
@@ -4388,7 +4243,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
@@ -4397,7 +4252,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Helas3V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3V2
 project wgEncode
 replicate 1
 subId 639
@@ -4409,14 +4263,13 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqAlignmentsRep1Hepg2.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Hepg2
 project wgEncode
 replicate 1
 subId 286
@@ -4427,7 +4280,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -4436,7 +4289,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Hepg2V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Hepg2V2
 project wgEncode
 replicate 1
 subId 557
@@ -4448,7 +4300,7 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -4456,7 +4308,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Huvec.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Huvec
 project wgEncode
 replicate 1
 subId 546
@@ -4467,14 +4318,13 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
 fileName wgEncodeUncFAIREseqAlignmentsRep1K562.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1K562
 project wgEncode
 replicate 1
 softwareVersion Maq 0.6.5
@@ -4486,7 +4336,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
@@ -4495,7 +4345,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1K562V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1K562V2
 project wgEncode
 replicate 1
 subId 640
@@ -4507,7 +4356,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -4515,7 +4364,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Lhsr.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Lhsr
 project wgEncode
 replicate 1
 subId 873
@@ -4526,7 +4374,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -4534,7 +4382,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1LhsrAndro.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1LhsrAndro
 project wgEncode
 replicate 1
 subId 874
@@ -4546,7 +4393,7 @@ objType file
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -4554,7 +4401,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Nhbe.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Nhbe
 project wgEncode
 replicate 1
 subId 955
@@ -4565,7 +4411,7 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -4573,7 +4419,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep1Nhek.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep1Nhek
 project wgEncode
 replicate 1
 subId 630
@@ -4584,14 +4429,13 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeUncFAIREseqAlignmentsRep2Gm12878.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm12878
 project wgEncode
 replicate 2
 subId 231
@@ -4602,7 +4446,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -4611,7 +4455,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Gm12878V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm12878V2
 project wgEncode
 replicate 2
 subId 471
@@ -4623,7 +4466,7 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -4631,7 +4474,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Gm18507.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm18507
 project wgEncode
 replicate 2
 subId 852
@@ -4642,7 +4484,7 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -4650,7 +4492,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Gm19239.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm19239
 project wgEncode
 replicate 2
 subId 847
@@ -4661,7 +4502,7 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -4669,7 +4510,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2H1hesc.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2H1hesc
 project wgEncode
 replicate 2
 subId 629
@@ -4680,14 +4520,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3
 project wgEncode
 replicate 2
 subId 285
@@ -4698,7 +4537,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -4706,7 +4545,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3Ifna4h.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3Ifna4h
 project wgEncode
 replicate 2
 subId 858
@@ -4718,7 +4556,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -4726,7 +4564,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3Ifng4h.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3Ifng4h
 project wgEncode
 replicate 2
 subId 859
@@ -4738,7 +4575,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
@@ -4747,7 +4584,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Helas3V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3V2
 project wgEncode
 replicate 2
 subId 639
@@ -4759,14 +4595,13 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqAlignmentsRep2Hepg2.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Hepg2
 project wgEncode
 replicate 2
 subId 286
@@ -4777,7 +4612,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -4786,7 +4621,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Hepg2V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Hepg2V2
 project wgEncode
 replicate 2
 subId 557
@@ -4798,7 +4632,7 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -4806,7 +4640,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Huvec.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Huvec
 project wgEncode
 replicate 2
 subId 546
@@ -4817,14 +4650,13 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
 fileName wgEncodeUncFAIREseqAlignmentsRep2K562.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2K562
 project wgEncode
 replicate 2
 softwareVersion Maq 0.6.5
@@ -4836,7 +4668,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
@@ -4845,7 +4677,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2K562V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2K562V2
 project wgEncode
 replicate 2
 subId 640
@@ -4857,7 +4688,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -4865,7 +4696,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Lhsr.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Lhsr
 project wgEncode
 replicate 2
 subId 873
@@ -4876,7 +4706,7 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -4884,7 +4714,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2LhsrAndro.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2LhsrAndro
 project wgEncode
 replicate 2
 subId 874
@@ -4896,7 +4725,7 @@ objType file
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -4904,7 +4733,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Nhbe.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Nhbe
 project wgEncode
 replicate 2
 subId 955
@@ -4915,7 +4743,7 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -4923,7 +4751,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep2Nhek.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep2Nhek
 project wgEncode
 replicate 2
 subId 630
@@ -4934,14 +4761,13 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeUncFAIREseqAlignmentsRep3Gm12878.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Gm12878
 project wgEncode
 replicate 3
 subId 231
@@ -4952,7 +4778,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -4961,7 +4787,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep3Gm12878V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep3Gm12878V2
 project wgEncode
 replicate 3
 subId 471
@@ -4973,14 +4798,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqAlignmentsRep3Helas3.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Helas3
 project wgEncode
 replicate 3
 subId 285
@@ -4991,7 +4815,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-22
@@ -5000,7 +4824,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep3Helas3V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep3Helas3V2
 project wgEncode
 replicate 3
 subId 494
@@ -5012,14 +4835,13 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqAlignmentsRep3Hepg2.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Hepg2
 project wgEncode
 replicate 3
 subId 286
@@ -5030,7 +4852,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -5039,7 +4861,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep3Hepg2V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep3Hepg2V2
 project wgEncode
 replicate 3
 subId 557
@@ -5051,14 +4872,13 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
 fileName wgEncodeUncFAIREseqAlignmentsRep3K562.tagAlign.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3K562
 project wgEncode
 replicate 3
 softwareVersion Maq 0.6.5
@@ -5070,7 +4890,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -5079,7 +4899,6 @@ fileName wgEncodeUncFAIREseqAlignmentsRep3K562V2.tagAlign.gz
 grant Crawford
 lab UNC
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUncFAIREseqRawSignalRep3K562V2
 project wgEncode
 replicate 3
 subId 483
@@ -5091,7 +4910,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-02-25
@@ -5111,7 +4930,7 @@ objType table
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -5129,7 +4948,7 @@ objType table
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -5147,7 +4966,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-30
@@ -5166,7 +4985,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -5185,7 +5004,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -5204,7 +5023,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-03-22
@@ -5224,7 +5043,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-04-17
@@ -5244,7 +5063,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-24
@@ -5263,7 +5082,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2008-12-09
@@ -5283,7 +5102,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -5301,7 +5120,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -5320,7 +5139,7 @@ objType table
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -5338,7 +5157,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-09-30
@@ -5357,7 +5176,7 @@ objType table
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-11-02
 dateSubmitted 2009-10-14
@@ -5376,7 +5195,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-04-20
@@ -5396,7 +5215,7 @@ objType table
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -5414,7 +5233,7 @@ objType table
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -5432,7 +5251,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
@@ -5452,7 +5271,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -5471,7 +5290,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -5490,7 +5309,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-03-22
@@ -5510,7 +5329,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-04-17
@@ -5530,7 +5349,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-24
@@ -5550,7 +5369,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-04-20
@@ -5570,7 +5389,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -5588,7 +5407,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -5607,7 +5426,7 @@ objType table
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -5625,7 +5444,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateResubmitted 2010-01-29
 dateSubmitted 2009-09-30
@@ -5645,7 +5464,7 @@ objType table
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
@@ -5663,14 +5482,13 @@ objType file
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
 fileName wgEncodeUncFAIREseqRawDataPanislets.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalPanislets
 project wgEncode
 subId 686
 view RawData
@@ -5680,14 +5498,13 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeUncFAIREseqRawDataRep1Gm12878.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm12878
 project wgEncode
 replicate 1
 subId 231
@@ -5698,7 +5515,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -5706,7 +5523,6 @@ dateUnrestricted 2010-01-20
 fileName wgEncodeUncFAIREseqRawDataRep1Gm12878V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm12878V2
 project wgEncode
 replicate 1
 subId 471
@@ -5718,14 +5534,13 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeUncFAIREseqRawDataRep1Gm18507.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm18507
 project wgEncode
 replicate 1
 subId 852
@@ -5736,14 +5551,13 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeUncFAIREseqRawDataRep1Gm19239.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Gm19239
 project wgEncode
 replicate 1
 subId 847
@@ -5754,14 +5568,13 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeUncFAIREseqRawDataRep1H1hesc.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1H1hesc
 project wgEncode
 replicate 1
 subId 629
@@ -5772,14 +5585,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3
 project wgEncode
 replicate 1
 subId 285
@@ -5790,14 +5602,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3Ifna4h.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3Ifna4h
 project wgEncode
 replicate 1
 subId 858
@@ -5809,14 +5620,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3Ifng4h.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3Ifng4h
 project wgEncode
 replicate 1
 subId 859
@@ -5828,7 +5638,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
@@ -5836,7 +5646,6 @@ dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqRawDataRep1Helas3V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Helas3V2
 project wgEncode
 replicate 1
 subId 639
@@ -5848,14 +5657,13 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqRawDataRep1Hepg2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Hepg2
 project wgEncode
 replicate 1
 subId 286
@@ -5866,7 +5674,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -5874,7 +5682,6 @@ dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqRawDataRep1Hepg2V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Hepg2V2
 project wgEncode
 replicate 1
 subId 557
@@ -5886,14 +5693,13 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeUncFAIREseqRawDataRep1Huvec.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Huvec
 project wgEncode
 replicate 1
 subId 546
@@ -5904,14 +5710,13 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
 fileName wgEncodeUncFAIREseqRawDataRep1K562.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1K562
 project wgEncode
 replicate 1
 softwareVersion Illumina
@@ -5923,7 +5728,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
@@ -5931,7 +5736,6 @@ dateUnrestricted 2009-08-09
 fileName wgEncodeUncFAIREseqRawDataRep1K562V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1K562V2
 project wgEncode
 replicate 1
 subId 640
@@ -5943,14 +5747,13 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeUncFAIREseqRawDataRep1Lhsr.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Lhsr
 project wgEncode
 replicate 1
 subId 873
@@ -5961,14 +5764,13 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeUncFAIREseqRawDataRep1LhsrAndro.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1LhsrAndro
 project wgEncode
 replicate 1
 subId 874
@@ -5980,14 +5782,13 @@ objType file
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeUncFAIREseqRawDataRep1Nhbe.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Nhbe
 project wgEncode
 replicate 1
 subId 955
@@ -5998,14 +5799,13 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeUncFAIREseqRawDataRep1Nhek.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep1Nhek
 project wgEncode
 replicate 1
 subId 630
@@ -6016,14 +5816,13 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeUncFAIREseqRawDataRep2Gm12878.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm12878
 project wgEncode
 replicate 2
 subId 231
@@ -6034,7 +5833,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -6042,7 +5841,6 @@ dateUnrestricted 2010-01-20
 fileName wgEncodeUncFAIREseqRawDataRep2Gm12878V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm12878V2
 project wgEncode
 replicate 2
 subId 471
@@ -6054,14 +5852,13 @@ objType file
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
 fileName wgEncodeUncFAIREseqRawDataRep2Gm18507.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm18507
 project wgEncode
 replicate 2
 subId 852
@@ -6072,14 +5869,13 @@ objType file
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
 fileName wgEncodeUncFAIREseqRawDataRep2Gm19239.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Gm19239
 project wgEncode
 replicate 2
 subId 847
@@ -6090,14 +5886,13 @@ objType file
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeUncFAIREseqRawDataRep2H1hesc.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2H1hesc
 project wgEncode
 replicate 2
 subId 629
@@ -6108,14 +5903,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3
 project wgEncode
 replicate 2
 subId 285
@@ -6126,14 +5920,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3Ifna4h.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3Ifna4h
 project wgEncode
 replicate 2
 subId 858
@@ -6145,14 +5938,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3Ifng4h.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3Ifng4h
 project wgEncode
 replicate 2
 subId 859
@@ -6164,7 +5956,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
@@ -6172,7 +5964,6 @@ dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqRawDataRep2Helas3V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Helas3V2
 project wgEncode
 replicate 2
 subId 639
@@ -6184,14 +5975,13 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqRawDataRep2Hepg2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Hepg2
 project wgEncode
 replicate 2
 subId 286
@@ -6202,7 +5992,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -6210,7 +6000,6 @@ dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqRawDataRep2Hepg2V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Hepg2V2
 project wgEncode
 replicate 2
 subId 557
@@ -6222,14 +6011,13 @@ objType file
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
 fileName wgEncodeUncFAIREseqRawDataRep2Huvec.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Huvec
 project wgEncode
 replicate 2
 subId 546
@@ -6240,14 +6028,13 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
 fileName wgEncodeUncFAIREseqRawDataRep2K562.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2K562
 project wgEncode
 replicate 2
 softwareVersion Illumina
@@ -6259,7 +6046,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2008-12-09
@@ -6267,7 +6054,6 @@ dateUnrestricted 2009-08-09
 fileName wgEncodeUncFAIREseqRawDataRep2K562V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2K562V2
 project wgEncode
 replicate 2
 subId 640
@@ -6279,14 +6065,13 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeUncFAIREseqRawDataRep2Lhsr.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Lhsr
 project wgEncode
 replicate 2
 subId 873
@@ -6297,14 +6082,13 @@ objType file
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
 fileName wgEncodeUncFAIREseqRawDataRep2LhsrAndro.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2LhsrAndro
 project wgEncode
 replicate 2
 subId 874
@@ -6316,14 +6100,13 @@ objType file
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
 fileName wgEncodeUncFAIREseqRawDataRep2Nhbe.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Nhbe
 project wgEncode
 replicate 2
 subId 955
@@ -6334,14 +6117,13 @@ objType file
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
 fileName wgEncodeUncFAIREseqRawDataRep2Nhek.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep2Nhek
 project wgEncode
 replicate 2
 subId 630
@@ -6352,14 +6134,13 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-02-25
 dateUnrestricted 2009-11-25
 fileName wgEncodeUncFAIREseqRawDataRep3Gm12878.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Gm12878
 project wgEncode
 replicate 3
 subId 231
@@ -6370,7 +6151,7 @@ objType file
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -6378,7 +6159,6 @@ dateUnrestricted 2010-01-20
 fileName wgEncodeUncFAIREseqRawDataRep3Gm12878V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Gm12878V2
 project wgEncode
 replicate 3
 subId 471
@@ -6390,14 +6170,13 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Feb 2009 Freeze
 dateSubmitted 2009-03-22
 dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqRawDataRep3Helas3.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Helas3
 project wgEncode
 replicate 3
 subId 285
@@ -6408,7 +6187,7 @@ objType file
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-10
 dateSubmitted 2009-03-22
@@ -6416,7 +6195,6 @@ dateUnrestricted 2009-12-22
 fileName wgEncodeUncFAIREseqRawDataRep3Helas3V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Helas3V2
 project wgEncode
 replicate 3
 subId 494
@@ -6428,14 +6206,13 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE May 2009 Freeze
 dateSubmitted 2009-04-17
 dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqRawDataRep3Hepg2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Hepg2
 project wgEncode
 replicate 3
 subId 286
@@ -6446,7 +6223,7 @@ objType file
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -6454,7 +6231,6 @@ dateUnrestricted 2010-01-17
 fileName wgEncodeUncFAIREseqRawDataRep3Hepg2V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3Hepg2V2
 project wgEncode
 replicate 3
 subId 557
@@ -6466,14 +6242,13 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Nov 2008 Freeze
 dateSubmitted 2008-12-07
 dateUnrestricted 2009-08-07
 fileName wgEncodeUncFAIREseqRawDataRep3K562.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3K562
 project wgEncode
 replicate 3
 softwareVersion Illumina
@@ -6485,7 +6260,7 @@ objType file
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-04-20
@@ -6493,7 +6268,6 @@ dateUnrestricted 2010-01-20
 fileName wgEncodeUncFAIREseqRawDataRep3K562V2.fastq.gz
 grant Crawford
 lab UNC
-parentTable wgEncodeUncFAIREseqRawSignalRep3K562V2
 project wgEncode
 replicate 3
 subId 483
@@ -6505,7 +6279,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-08
 dateSubmitted 2009-02-25
@@ -6525,7 +6299,7 @@ objType table
 cell GM18507
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-19
@@ -6543,7 +6317,7 @@ objType table
 cell GM19239
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-18
 dateUnrestricted 2010-09-18
@@ -6561,7 +6335,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -6579,7 +6353,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -6598,7 +6372,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-20
 dateUnrestricted 2010-09-20
@@ -6617,7 +6391,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-03-22
@@ -6637,7 +6411,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-09-28
 dateSubmitted 2009-04-17
@@ -6657,7 +6431,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-24
 dateUnrestricted 2010-06-24
@@ -6675,7 +6449,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateResubmitted 2009-10-02
 dateSubmitted 2009-02-26
@@ -6695,7 +6469,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -6713,7 +6487,7 @@ objType table
 cell LHSR
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2009-12-23
 dateUnrestricted 2010-09-23
@@ -6732,7 +6506,7 @@ objType table
 cell NHBE
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Jan 2010 Freeze
 dateSubmitted 2010-01-09
 dateUnrestricted 2010-10-09
@@ -6750,7 +6524,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-09-30
 dateUnrestricted 2010-06-30
@@ -6768,7 +6542,7 @@ objType table
 cell PanIslets
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion ENCODE Sep 2009 Freeze
 dateSubmitted 2009-10-14
 dateUnrestricted 2010-07-14
@@ -6786,7 +6560,7 @@ objType table
 cell GM12878
 composite wgEncodeChromatinMap
 controlId GM12878/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6804,7 +6578,7 @@ objType table
 cell H1-hESC
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6822,7 +6596,7 @@ objType table
 cell HeLa-S3
 composite wgEncodeChromatinMap
 controlId HeLa-S3/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6840,7 +6614,7 @@ objType table
 cell HepG2
 composite wgEncodeChromatinMap
 controlId HepG2/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6858,7 +6632,7 @@ objType table
 cell HUVEC
 composite wgEncodeChromatinMap
 controlId HUVEC/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6876,7 +6650,7 @@ objType table
 cell K562
 composite wgEncodeChromatinMap
 controlId K562/Input
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6894,7 +6668,7 @@ objType table
 cell NHEK
 composite wgEncodeChromatinMap
 controlId modelled
-dataType FAIREseq
+dataType FaireSeq
 dataVersion post ENCODE Jan 2010 Freeze
 dateSubmitted 2010-03-24
 dateUnrestricted 2010-12-24
@@ -6921,7 +6695,6 @@ fileName wgEncodeUtaChIPseqAlignmentsH1hescCmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalH1hescCmyc
 project wgEncode
 setType exp
 subId 882
@@ -6941,7 +6714,6 @@ fileName wgEncodeUtaChIPseqAlignmentsH1hescCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalH1hescCtcf
 project wgEncode
 setType exp
 subId 636
@@ -6961,7 +6733,6 @@ fileName wgEncodeUtaChIPseqAlignmentsH1hescPol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalH1hescPol2
 project wgEncode
 setType exp
 subId 641
@@ -6981,7 +6752,6 @@ fileName wgEncodeUtaChIPseqAlignmentsHuvecCmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalHuvecCmyc
 project wgEncode
 setType exp
 subId 635
@@ -7001,7 +6771,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -7021,7 +6790,6 @@ dateUnrestricted 2009-11-24
 fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7043,7 +6811,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -7065,7 +6832,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12878Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -7086,7 +6852,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12891Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12891Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7107,7 +6872,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm12892Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12892Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7128,7 +6892,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm19238Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm19238Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7149,7 +6912,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm19239Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm19239Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7170,7 +6932,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Gm19240Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm19240Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7191,7 +6952,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -7213,7 +6973,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3CmycV2
 project wgEncode
 replicate 1
 setType exp
@@ -7235,7 +6994,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7257,7 +7015,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -7278,7 +7035,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Helas3Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -7299,7 +7055,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -7321,7 +7076,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2CmycV2
 project wgEncode
 replicate 1
 setType exp
@@ -7343,7 +7097,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7365,7 +7118,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -7387,7 +7139,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Hepg2Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -7408,7 +7159,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1HuvecCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1HuvecCtcf
 project wgEncode
 replicate 1
 setType exp
@@ -7429,7 +7179,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1HuvecPol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1HuvecPol2
 project wgEncode
 replicate 1
 setType exp
@@ -7450,7 +7199,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1K562Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -7472,7 +7220,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1K562CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562CmycV2
 project wgEncode
 replicate 1
 setType exp
@@ -7494,7 +7241,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1K562Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7516,7 +7262,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1K562CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -7538,7 +7283,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1K562Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -7559,7 +7303,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Mcf7Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Mcf7Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -7580,7 +7323,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1Mcf7Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1Mcf7Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -7601,7 +7343,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1NhekCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1NhekCtcf
 project wgEncode
 replicate 1
 setType exp
@@ -7622,7 +7363,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1ProgfibCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1ProgfibCtcf
 project wgEncode
 replicate 1
 setType exp
@@ -7643,7 +7383,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep1ProgfibPol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep1ProgfibPol2
 project wgEncode
 replicate 1
 setType exp
@@ -7664,7 +7403,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -7684,7 +7422,6 @@ dateUnrestricted 2009-11-24
 fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7706,7 +7443,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -7728,7 +7464,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12878Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -7749,7 +7484,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12891Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12891Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7770,7 +7504,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm12892Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12892Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7791,7 +7524,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm19238Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm19238Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7812,7 +7544,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm19239Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm19239Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7833,7 +7564,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Gm19240Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm19240Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7854,7 +7584,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -7876,7 +7605,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3CmycV2
 project wgEncode
 replicate 2
 setType exp
@@ -7898,7 +7626,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -7920,7 +7647,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -7941,7 +7667,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Helas3Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -7962,7 +7687,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -7984,7 +7708,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2CmycV2
 project wgEncode
 replicate 2
 setType exp
@@ -8006,7 +7729,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -8028,7 +7750,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -8050,7 +7771,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Hepg2Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -8071,7 +7791,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2HuvecCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2HuvecCtcf
 project wgEncode
 replicate 2
 setType exp
@@ -8092,7 +7811,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2HuvecPol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2HuvecPol2
 project wgEncode
 replicate 2
 setType exp
@@ -8113,7 +7831,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2K562Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -8135,7 +7852,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2K562CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562CmycV2
 project wgEncode
 replicate 2
 setType exp
@@ -8157,7 +7873,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2K562Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -8179,7 +7894,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2K562CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -8201,7 +7915,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2K562Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -8222,7 +7935,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Mcf7Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Mcf7Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -8243,7 +7955,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2Mcf7Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2Mcf7Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -8264,7 +7975,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2NhekCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2NhekCtcf
 project wgEncode
 replicate 2
 setType exp
@@ -8285,7 +7995,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2ProgfibCtcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2ProgfibCtcf
 project wgEncode
 replicate 2
 setType exp
@@ -8306,7 +8015,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep2ProgfibPol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep2ProgfibPol2
 project wgEncode
 replicate 2
 setType exp
@@ -8326,7 +8034,6 @@ dateUnrestricted 2009-11-24
 fileName wgEncodeUtaChIPseqAlignmentsRep3Gm12878Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
 project wgEncode
 replicate 3
 setType exp
@@ -8348,7 +8055,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3Gm12878CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep3Gm12878CtcfV2
 project wgEncode
 replicate 3
 setType exp
@@ -8370,7 +8076,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3Hepg2Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
 project wgEncode
 replicate 3
 setType exp
@@ -8392,7 +8097,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3Hepg2CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep3Hepg2CmycV2
 project wgEncode
 replicate 3
 setType exp
@@ -8414,7 +8118,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3Hepg2Pol2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep3Hepg2Pol2
 project wgEncode
 replicate 3
 setType exp
@@ -8435,7 +8138,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3K562Cmyc.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
 project wgEncode
 replicate 3
 setType exp
@@ -8457,7 +8159,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3K562CmycV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562CmycV2
 project wgEncode
 replicate 3
 setType exp
@@ -8479,7 +8180,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3K562Ctcf.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
 project wgEncode
 replicate 3
 setType exp
@@ -8501,7 +8201,6 @@ fileName wgEncodeUtaChIPseqAlignmentsRep3K562CtcfV2.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562CtcfV2
 project wgEncode
 replicate 3
 setType exp
@@ -9712,7 +9411,6 @@ dateUnrestricted 2010-09-27
 fileName wgEncodeUtaChIPseqRawDataH1hescCmyc.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalH1hescCmyc
 project wgEncode
 setType exp
 subId 882
@@ -9731,7 +9429,6 @@ dateUnrestricted 2010-07-01
 fileName wgEncodeUtaChIPseqRawDataH1hescCtcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalH1hescCtcf
 project wgEncode
 setType exp
 subId 636
@@ -9750,7 +9447,6 @@ dateUnrestricted 2010-07-02
 fileName wgEncodeUtaChIPseqRawDataH1hescPol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalH1hescPol2
 project wgEncode
 setType exp
 subId 641
@@ -9769,7 +9465,6 @@ dateUnrestricted 2010-07-01
 fileName wgEncodeUtaChIPseqRawDataHuvecCmyc.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalHuvecCmyc
 project wgEncode
 setType exp
 subId 635
@@ -9788,7 +9483,6 @@ dateUnrestricted 2010-06-08
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878Cmyc.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -9808,7 +9502,6 @@ dateUnrestricted 2009-11-24
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -9829,7 +9522,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -9850,7 +9542,6 @@ dateUnrestricted 2010-09-22
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12878Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12878Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -9870,7 +9561,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12891Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12891Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -9890,7 +9580,6 @@ dateUnrestricted 2010-07-02
 fileName wgEncodeUtaChIPseqRawDataRep1Gm12892Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm12892Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -9910,7 +9599,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep1Gm19238Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm19238Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -9930,7 +9618,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep1Gm19239Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm19239Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -9950,7 +9637,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep1Gm19240Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Gm19240Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -9971,7 +9657,6 @@ fileName wgEncodeUtaChIPseqRawDataRep1Helas3Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -9992,7 +9677,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeUtaChIPseqRawDataRep1Helas3CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3CmycV2
 project wgEncode
 replicate 1
 setType exp
@@ -10014,7 +9698,6 @@ fileName wgEncodeUtaChIPseqRawDataRep1Helas3Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -10035,7 +9718,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeUtaChIPseqRawDataRep1Helas3CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -10056,7 +9738,6 @@ dateUnrestricted 2010-09-28
 fileName wgEncodeUtaChIPseqRawDataRep1Helas3Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Helas3Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -10077,7 +9758,6 @@ fileName wgEncodeUtaChIPseqRawDataRep1Hepg2Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -10098,7 +9778,6 @@ dateUnrestricted 2009-12-22
 fileName wgEncodeUtaChIPseqRawDataRep1Hepg2CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2CmycV2
 project wgEncode
 replicate 1
 setType exp
@@ -10120,7 +9799,6 @@ fileName wgEncodeUtaChIPseqRawDataRep1Hepg2Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -10141,7 +9819,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeUtaChIPseqRawDataRep1Hepg2CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -10162,7 +9839,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUtaChIPseqRawDataRep1Hepg2Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Hepg2Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -10182,7 +9858,6 @@ dateUnrestricted 2010-06-25
 fileName wgEncodeUtaChIPseqRawDataRep1HuvecCtcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1HuvecCtcf
 project wgEncode
 replicate 1
 setType exp
@@ -10202,7 +9877,6 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeUtaChIPseqRawDataRep1HuvecPol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1HuvecPol2
 project wgEncode
 replicate 1
 setType exp
@@ -10223,7 +9897,6 @@ fileName wgEncodeUtaChIPseqRawDataRep1K562Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -10244,7 +9917,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep1K562CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562CmycV2
 project wgEncode
 replicate 1
 setType exp
@@ -10266,7 +9938,6 @@ fileName wgEncodeUtaChIPseqRawDataRep1K562Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -10287,7 +9958,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep1K562CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562CtcfV2
 project wgEncode
 replicate 1
 setType exp
@@ -10308,7 +9978,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUtaChIPseqRawDataRep1K562Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1K562Pol2
 project wgEncode
 replicate 1
 setType exp
@@ -10328,7 +9997,6 @@ dateUnrestricted 2010-09-28
 fileName wgEncodeUtaChIPseqRawDataRep1Mcf7Cmyc.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Mcf7Cmyc
 project wgEncode
 replicate 1
 setType exp
@@ -10348,7 +10016,6 @@ dateUnrestricted 2010-09-28
 fileName wgEncodeUtaChIPseqRawDataRep1Mcf7Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1Mcf7Ctcf
 project wgEncode
 replicate 1
 setType exp
@@ -10368,7 +10035,6 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeUtaChIPseqRawDataRep1NhekCtcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep1NhekCtcf
 project wgEncode
 replicate 1
 setType exp
@@ -10388,7 +10054,6 @@ dateUnrestricted 2010-06-08
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878Cmyc.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -10408,7 +10073,6 @@ dateUnrestricted 2009-11-24
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10429,7 +10093,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -10450,7 +10113,6 @@ dateUnrestricted 2010-09-22
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12878Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12878Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -10470,7 +10132,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12891Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12891Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10490,7 +10151,6 @@ dateUnrestricted 2010-07-02
 fileName wgEncodeUtaChIPseqRawDataRep2Gm12892Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm12892Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10510,7 +10170,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep2Gm19238Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm19238Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10530,7 +10189,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep2Gm19239Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm19239Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10550,7 +10208,6 @@ dateUnrestricted 2010-07-06
 fileName wgEncodeUtaChIPseqRawDataRep2Gm19240Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Gm19240Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10571,7 +10228,6 @@ fileName wgEncodeUtaChIPseqRawDataRep2Helas3Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -10592,7 +10248,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeUtaChIPseqRawDataRep2Helas3CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3CmycV2
 project wgEncode
 replicate 2
 setType exp
@@ -10614,7 +10269,6 @@ fileName wgEncodeUtaChIPseqRawDataRep2Helas3Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10635,7 +10289,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeUtaChIPseqRawDataRep2Helas3CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -10656,7 +10309,6 @@ dateUnrestricted 2010-09-28
 fileName wgEncodeUtaChIPseqRawDataRep2Helas3Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Helas3Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -10677,7 +10329,6 @@ fileName wgEncodeUtaChIPseqRawDataRep2Hepg2Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -10698,7 +10349,6 @@ dateUnrestricted 2009-12-22
 fileName wgEncodeUtaChIPseqRawDataRep2Hepg2CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2CmycV2
 project wgEncode
 replicate 2
 setType exp
@@ -10720,7 +10370,6 @@ fileName wgEncodeUtaChIPseqRawDataRep2Hepg2Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10741,7 +10390,6 @@ dateUnrestricted 2009-12-21
 fileName wgEncodeUtaChIPseqRawDataRep2Hepg2CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -10762,7 +10410,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUtaChIPseqRawDataRep2Hepg2Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Hepg2Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -10782,7 +10429,6 @@ dateUnrestricted 2010-06-25
 fileName wgEncodeUtaChIPseqRawDataRep2HuvecCtcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2HuvecCtcf
 project wgEncode
 replicate 2
 setType exp
@@ -10802,7 +10448,6 @@ dateUnrestricted 2010-06-28
 fileName wgEncodeUtaChIPseqRawDataRep2HuvecPol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2HuvecPol2
 project wgEncode
 replicate 2
 setType exp
@@ -10823,7 +10468,6 @@ fileName wgEncodeUtaChIPseqRawDataRep2K562Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -10844,7 +10488,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep2K562CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562CmycV2
 project wgEncode
 replicate 2
 setType exp
@@ -10866,7 +10509,6 @@ fileName wgEncodeUtaChIPseqRawDataRep2K562Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10887,7 +10529,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep2K562CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562CtcfV2
 project wgEncode
 replicate 2
 setType exp
@@ -10908,7 +10549,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUtaChIPseqRawDataRep2K562Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2K562Pol2
 project wgEncode
 replicate 2
 setType exp
@@ -10928,7 +10568,6 @@ dateUnrestricted 2010-09-28
 fileName wgEncodeUtaChIPseqRawDataRep2Mcf7Cmyc.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Mcf7Cmyc
 project wgEncode
 replicate 2
 setType exp
@@ -10948,7 +10587,6 @@ dateUnrestricted 2010-09-28
 fileName wgEncodeUtaChIPseqRawDataRep2Mcf7Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2Mcf7Ctcf
 project wgEncode
 replicate 2
 setType exp
@@ -10968,7 +10606,6 @@ dateUnrestricted 2010-06-30
 fileName wgEncodeUtaChIPseqRawDataRep2NhekCtcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep2NhekCtcf
 project wgEncode
 replicate 2
 setType exp
@@ -10988,7 +10625,6 @@ dateUnrestricted 2009-11-24
 fileName wgEncodeUtaChIPseqRawDataRep3Gm12878Ctcf.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3Gm12878Ctcf
 project wgEncode
 replicate 3
 setType exp
@@ -11009,7 +10645,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep3Gm12878CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3Gm12878CtcfV2
 project wgEncode
 replicate 3
 setType exp
@@ -11031,7 +10666,6 @@ fileName wgEncodeUtaChIPseqRawDataRep3Hepg2Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep3Hepg2Cmyc
 project wgEncode
 replicate 3
 setType exp
@@ -11052,7 +10686,6 @@ dateUnrestricted 2009-12-22
 fileName wgEncodeUtaChIPseqRawDataRep3Hepg2CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3Hepg2CmycV2
 project wgEncode
 replicate 3
 setType exp
@@ -11073,7 +10706,6 @@ dateUnrestricted 2010-06-29
 fileName wgEncodeUtaChIPseqRawDataRep3Hepg2Pol2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3Hepg2Pol2
 project wgEncode
 replicate 3
 setType exp
@@ -11094,7 +10726,6 @@ fileName wgEncodeUtaChIPseqRawDataRep3K562Cmyc.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562Cmyc
 project wgEncode
 replicate 3
 setType exp
@@ -11115,7 +10746,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep3K562CmycV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562CmycV2
 project wgEncode
 replicate 3
 setType exp
@@ -11137,7 +10767,6 @@ fileName wgEncodeUtaChIPseqRawDataRep3K562Ctcf.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562Ctcf
 project wgEncode
 replicate 3
 setType exp
@@ -11158,7 +10787,6 @@ dateUnrestricted 2009-12-20
 fileName wgEncodeUtaChIPseqRawDataRep3K562CtcfV2.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaChIPseqRawSignalRep3K562CtcfV2
 project wgEncode
 replicate 3
 setType exp
@@ -11753,7 +11381,6 @@ dateUnrestricted 2009-07-07
 fileName wgEncodeUtaustinChIPseqAlignmentsGm12878Input.tagAlign.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaustinChIPseqRawSignalGm12878Input
 project wgEncode
 setType input
 subId 34
@@ -11773,7 +11400,6 @@ fileName wgEncodeUtaustinChIPseqAlignmentsHelas3Input.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaustinChIPseqRawSignalHelas3Input
 project wgEncode
 setType input
 subId 275
@@ -11793,7 +11419,6 @@ fileName wgEncodeUtaustinChIPseqAlignmentsHepg2Input.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.7.1
-parentTable wgEncodeUtaustinChIPseqRawSignalHepg2Input
 project wgEncode
 setType input
 subId 274
@@ -11813,7 +11438,6 @@ fileName wgEncodeUtaustinChIPseqAlignmentsHuvecInput.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaustinChIPseqRawSignalHuvecInput
 project wgEncode
 setType input
 subId 544
@@ -11833,7 +11457,6 @@ fileName wgEncodeUtaustinChIPseqAlignmentsK562Input.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion Maq 0.6.5
-parentTable wgEncodeUtaustinChIPseqRawSignalK562Input
 project wgEncode
 setType input
 subId 109
@@ -11853,7 +11476,6 @@ fileName wgEncodeUtaustinChIPseqAlignmentsMcf7.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaustinChIPseqRawSignalMcf7
 project wgEncode
 setType input
 subId 866
@@ -11873,7 +11495,6 @@ fileName wgEncodeUtaustinChIPseqAlignmentsProgfib.tagAlign.gz
 grant Crawford
 lab UT-A
 labVersion align_on_cluster.pl v 1
-parentTable wgEncodeUtaustinChIPseqRawSignalProgfib
 project wgEncode
 setType input
 subId 871
@@ -11892,7 +11513,6 @@ dateUnrestricted 2009-07-07
 fileName wgEncodeUtaustinChIPseqRawDataGm12878Input.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaustinChIPseqRawSignalGm12878Input
 project wgEncode
 setType input
 subId 34
@@ -11912,7 +11532,6 @@ fileName wgEncodeUtaustinChIPseqRawDataHelas3Input.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina, pooled
-parentTable wgEncodeUtaustinChIPseqRawSignalHelas3Input
 project wgEncode
 setType input
 subId 275
@@ -11932,7 +11551,6 @@ fileName wgEncodeUtaustinChIPseqRawDataHepg2Input.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina, pooled
-parentTable wgEncodeUtaustinChIPseqRawSignalHepg2Input
 project wgEncode
 setType input
 subId 274
@@ -11951,7 +11569,6 @@ dateUnrestricted 2010-06-24
 fileName wgEncodeUtaustinChIPseqRawDataHuvecInput.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaustinChIPseqRawSignalHuvecInput
 project wgEncode
 setType input
 subId 544
@@ -11971,7 +11588,6 @@ fileName wgEncodeUtaustinChIPseqRawDataK562Input.fastq.gz
 grant Crawford
 lab UT-A
 labVersion Illumina
-parentTable wgEncodeUtaustinChIPseqRawSignalK562Input
 project wgEncode
 setType input
 subId 109
@@ -11990,7 +11606,6 @@ dateUnrestricted 2010-09-22
 fileName wgEncodeUtaustinChIPseqRawDataMcf7.fastq.gz
 grant Crawford
 lab UT-A
-parentTable wgEncodeUtaustinChIPseqRawSignalMcf7
 project wgEncode
 setType input
 subId 866

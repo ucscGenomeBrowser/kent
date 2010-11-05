@@ -6,7 +6,7 @@ shortLabel CSHL Long RNA-seq
 longLabel ENCODE Cold Spring Harbor Labs Long RNA-seq
 group expression
 subGroup1 view Views PlusRawSig=Plus_Raw_Signal MinusRawSig=Minus_Raw_Signal AllRawSig=All_Raw_Signal Alignments=Alignments
-subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K652&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC NHEK=NHEK A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC  HSMM=HSMM MCF7=MCF-7  NHLF=NHLF SKNSHRA=SK-N-SH_RA
+subGroup2 cellType Cell_Line 1-GM12878=GM12878&nbsp;(Tier_1) 2-H1hESC=H1hESC&nbsp;(Tier_1) 3-K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2 HUVEC=HUVEC NHEK=NHEK A549=A549 AG04450=AG04450 BJ=BJ HMEC=HMEC  HSMM=HSMM MCF7=MCF-7  NHLF=NHLF SKNSHRA=SK-N-SH_RA
 subGroup3 localization Localization cell=Cell cytosol=Cytosol nucleus=Nucleus polysome=Polysome nucleoplasm=Nucleoplasm chromatin=Chromatin nucleolus=Nucleolus
 subGroup4 rnaExtract RNA_Extract longNonPolyA=PolyA- longPolyA=PolyA+ total=Total_RNA
 subGroup5 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5 

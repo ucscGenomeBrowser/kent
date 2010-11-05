@@ -3,7 +3,7 @@ objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyAlnRep1.bam
@@ -20,7 +20,7 @@ objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyAlnRep2.bam
@@ -37,7 +37,7 @@ objType table
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyBaseOverlapSignal.bigWig
@@ -54,7 +54,7 @@ objType table
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyPk.narrowPeak.gz
@@ -71,7 +71,7 @@ objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep1.fastq.gz
@@ -87,7 +87,7 @@ objType file
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocyRawDataRep2.fastq.gz
@@ -103,7 +103,7 @@ objType table
 cell Astrocy
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireAstrocySig.bigWig
@@ -120,13 +120,13 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaAlnRep1.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2515
@@ -137,13 +137,13 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaAlnRep2.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2515
@@ -154,13 +154,13 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaAlnRep3.bam
 grant Crawford
 lab UNC
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 3
 subId 2515
@@ -171,7 +171,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaBaseOverlapSignal.bigWig
@@ -188,7 +188,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaPk.narrowPeak.gz
@@ -205,7 +205,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep1.fastq.gz
@@ -221,7 +221,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep2.fastq.gz
@@ -237,7 +237,7 @@ objType file
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaRawDataRep3.fastq.gz
@@ -253,7 +253,7 @@ objType table
 cell Gliobla
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-20
 dateUnrestricted 2011-07-19
 fileName wgEncodeOpenChromFaireGlioblaSig.bigWig
@@ -387,7 +387,7 @@ objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891AlnRep1.bam
@@ -404,7 +404,7 @@ objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891AlnRep2.bam
@@ -421,7 +421,7 @@ objType table
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891BaseOverlapSignal.bigWig
@@ -438,7 +438,7 @@ objType table
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891Pk.narrowPeak.gz
@@ -455,7 +455,7 @@ objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891RawDataRep1.fastq.gz
@@ -471,7 +471,7 @@ objType file
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891RawDataRep2.fastq.gz
@@ -487,7 +487,7 @@ objType table
 cell GM12891
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12891Sig.bigWig
@@ -504,7 +504,7 @@ objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892AlnRep1.bam
@@ -521,7 +521,7 @@ objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892AlnRep2.bam
@@ -538,7 +538,7 @@ objType table
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892BaseOverlapSignal.bigWig
@@ -555,7 +555,7 @@ objType table
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892Pk.narrowPeak.gz
@@ -572,7 +572,7 @@ objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892RawDataRep1.fastq.gz
@@ -588,7 +588,7 @@ objType file
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892RawDataRep2.fastq.gz
@@ -604,7 +604,7 @@ objType table
 cell GM12892
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromFaireGm12892Sig.bigWig
@@ -1723,7 +1723,7 @@ objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloAlnRep1.bam
@@ -1740,7 +1740,7 @@ objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloAlnRep2.bam
@@ -1757,7 +1757,7 @@ objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloBaseOverlapSignal.bigWig
@@ -1774,7 +1774,7 @@ objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloPk.narrowPeak.gz
@@ -1791,7 +1791,7 @@ objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloRawDataRep1.fastq.gz
@@ -1807,7 +1807,7 @@ objType file
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloRawDataRep2.fastq.gz
@@ -1823,7 +1823,7 @@ objType table
 cell Medullo
 composite wgEncodeOpenChromFaire
 dataType FaireSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromFaireMedulloSig.bigWig
@@ -2106,4 +2106,4 @@ subId 1546
 tableName wgEncodeOpenChromFairePanisletsSig
 view Signal
 
-# MAGIC: -921151794
+# MAGIC: -1248722457

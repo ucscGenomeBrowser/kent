@@ -207,7 +207,7 @@ objType table
 cell GM12878
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -471,7 +471,7 @@ objType table
 cell K562
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -491,7 +491,7 @@ objType table
 cell K562
 composite wgEncodeGisDnaPet
 dataType DnaPet
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-07-07
 dateSubmitted 2009-03-11
 dateUnrestricted 2009-12-11
@@ -594,4 +594,4 @@ project wgEncode
 subId 761
 view FastqRd2
 
-# MAGIC: 1401934143
+# MAGIC: 1116762533

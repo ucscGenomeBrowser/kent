@@ -3,13 +3,13 @@ objType file
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549AlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2493
@@ -20,13 +20,13 @@ objType file
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549AlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2493
@@ -37,7 +37,7 @@ objType table
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549BaseOverlapSignal.bigWig
@@ -54,7 +54,7 @@ objType table
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549Pk.narrowPeak.gz
@@ -71,7 +71,7 @@ objType file
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549RawDataRep1.fastq.gz
@@ -87,7 +87,7 @@ objType file
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549RawDataRep2.fastq.gz
@@ -103,7 +103,7 @@ objType table
 cell A549
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseA549Sig.bigWig
@@ -2591,13 +2591,13 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2482
@@ -2608,13 +2608,13 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2482
@@ -2625,13 +2625,13 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAlnRep3.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 3
 subId 2482
@@ -2642,13 +2642,13 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2492
@@ -2660,13 +2660,13 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2492
@@ -2678,7 +2678,7 @@ objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroBaseOverlapSignal.bigWig
@@ -2696,7 +2696,7 @@ objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroPk.narrowPeak.gz
@@ -2714,7 +2714,7 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep1.fastq.gz
@@ -2731,7 +2731,7 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroRawDataRep2.fastq.gz
@@ -2748,7 +2748,7 @@ objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapAndroSig.bigWig
@@ -2766,7 +2766,7 @@ objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapBaseOverlapSignal.bigWig
@@ -2783,7 +2783,7 @@ objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapPk.narrowPeak.gz
@@ -2800,7 +2800,7 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapRawDataRep1.fastq.gz
@@ -2816,7 +2816,7 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapRawDataRep2.fastq.gz
@@ -2832,7 +2832,7 @@ objType file
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapRawDataRep3.fastq.gz
@@ -2848,7 +2848,7 @@ objType table
 cell LNCaP
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-15
 dateUnrestricted 2011-07-15
 fileName wgEncodeOpenChromDnaseLncapSig.bigWig
@@ -3069,7 +3069,7 @@ objType file
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoAlnRep1.bam
@@ -3088,7 +3088,7 @@ objType file
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoAlnRep2.bam
@@ -3107,7 +3107,7 @@ objType table
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoBaseOverlapSignal.bigWig
@@ -3126,7 +3126,7 @@ objType table
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoPk.narrowPeak.gz
@@ -3145,7 +3145,7 @@ objType table
 cell Melano
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-11
 dateUnrestricted 2011-05-11
 fileName wgEncodeOpenChromDnaseMelanoSig.bigWig
@@ -3368,13 +3368,13 @@ objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2506
@@ -3385,13 +3385,13 @@ objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2506
@@ -3402,13 +3402,13 @@ objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblAlnRep3.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 3
 subId 2506
@@ -3419,7 +3419,7 @@ objType table
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblBaseOverlapSignal.bigWig
@@ -3436,7 +3436,7 @@ objType table
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblPk.narrowPeak.gz
@@ -3453,7 +3453,7 @@ objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblRawDataRep1.fastq.gz
@@ -3469,7 +3469,7 @@ objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblRawDataRep2.fastq.gz
@@ -3485,7 +3485,7 @@ objType file
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblRawDataRep3.fastq.gz
@@ -3501,7 +3501,7 @@ objType table
 cell Osteobl
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-16
 dateUnrestricted 2011-07-16
 fileName wgEncodeOpenChromDnaseOsteoblSig.bigWig
@@ -3641,13 +3641,13 @@ objType file
 cell pHTE
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeOpenChromDnasePhteAlnRep1.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 1
 subId 2513
@@ -3658,13 +3658,13 @@ objType file
 cell pHTE
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeOpenChromDnasePhteAlnRep2.bam
 grant Crawford
 lab Duke
-labVersion  align_on_cluster_bwa.pl v 1
+labVersion align_on_cluster_bwa.pl v 1
 project wgEncode
 replicate 2
 subId 2513
@@ -3675,7 +3675,7 @@ objType table
 cell pHTE
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeOpenChromDnasePhteBaseOverlapSignal.bigWig
@@ -3692,7 +3692,7 @@ objType table
 cell pHTE
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeOpenChromDnasePhtePk.narrowPeak.gz
@@ -3709,7 +3709,7 @@ objType table
 cell pHTE
 composite wgEncodeOpenChromDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-18
 dateUnrestricted 2011-07-18
 fileName wgEncodeOpenChromDnasePhteSig.bigWig
@@ -3823,4 +3823,4 @@ tableName wgEncodeOpenChromDnaseProgfibSig
 treatment None
 view Signal
 
-# MAGIC: -605775557
+# MAGIC: -924875032

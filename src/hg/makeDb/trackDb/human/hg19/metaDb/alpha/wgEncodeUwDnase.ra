@@ -803,7 +803,7 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafAlnRep1.bam
@@ -821,7 +821,7 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafAlnRep2.bam
@@ -839,7 +839,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafHotspotsRep1.broadPeak.gz
@@ -858,7 +858,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafHotspotsRep2.broadPeak.gz
@@ -877,7 +877,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafPkRep1.narrowPeak.gz
@@ -896,7 +896,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafPkRep2.narrowPeak.gz
@@ -915,7 +915,7 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafRawDataRep1.fastq.gz
@@ -932,7 +932,7 @@ objType file
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafRawDataRep2.fastq.gz
@@ -949,7 +949,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseAoafRawRep1.bigWig
@@ -968,7 +968,7 @@ objType table
 cell AoAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseAoafRawRep2.bigWig
@@ -1985,7 +1985,7 @@ objType file
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileIndex wgEncodeUwDnaseH7esAlnRep2.bam.bai
@@ -2024,7 +2024,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esHotspotsRep2.broadPeak.gz
@@ -2063,7 +2063,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esPkRep2.narrowPeak.gz
@@ -2082,7 +2082,7 @@ objType file
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esRawDataRep2.fastq.gz
@@ -2119,7 +2119,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-23
 fileName wgEncodeUwDnaseH7esRawRep2.bigWig
@@ -2298,7 +2298,7 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecAlnRep1.bam
@@ -2316,7 +2316,7 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecAlnRep2.bam
@@ -2334,7 +2334,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecHotspotsRep1.broadPeak.gz
@@ -2353,7 +2353,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecHotspotsRep2.broadPeak.gz
@@ -2372,7 +2372,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecPkRep1.narrowPeak.gz
@@ -2391,7 +2391,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecPkRep2.narrowPeak.gz
@@ -2410,7 +2410,7 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawDataRep1.fastq.gz
@@ -2427,7 +2427,7 @@ objType file
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawDataRep2.fastq.gz
@@ -2444,7 +2444,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawRep1.bigWig
@@ -2463,7 +2463,7 @@ objType table
 cell HBMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseHbmecRawRep2.bigWig
@@ -2482,7 +2482,7 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaAlnRep1.bam
@@ -2500,7 +2500,7 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaAlnRep2.bam
@@ -2518,7 +2518,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaHotspotsRep1.broadPeak.gz
@@ -2537,7 +2537,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaHotspotsRep2.broadPeak.gz
@@ -2556,7 +2556,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaPkRep1.narrowPeak.gz
@@ -2575,7 +2575,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaPkRep2.narrowPeak.gz
@@ -2594,7 +2594,7 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawDataRep1.fastq.gz
@@ -2611,7 +2611,7 @@ objType file
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawDataRep2.fastq.gz
@@ -2628,7 +2628,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawRep1.bigWig
@@ -2647,7 +2647,7 @@ objType table
 cell HCFaa
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHcfaaRawRep2.bigWig
@@ -2986,7 +2986,7 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfAlnRep1.bam
@@ -3004,7 +3004,7 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfAlnRep2.bam
@@ -3022,7 +3022,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfHotspotsRep1.broadPeak.gz
@@ -3041,7 +3041,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfHotspotsRep2.broadPeak.gz
@@ -3060,7 +3060,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfPkRep1.narrowPeak.gz
@@ -3079,7 +3079,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfPkRep2.narrowPeak.gz
@@ -3098,7 +3098,7 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawDataRep1.fastq.gz
@@ -3115,7 +3115,7 @@ objType file
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawDataRep2.fastq.gz
@@ -3132,7 +3132,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawRep1.bigWig
@@ -3151,7 +3151,7 @@ objType table
 cell HConF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHconfRawRep2.bigWig
@@ -3330,7 +3330,7 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileIndex wgEncodeUwDnaseHct116AlnRep1.bam.bai
@@ -3349,7 +3349,7 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileIndex wgEncodeUwDnaseHct116AlnRep2.bam.bai
@@ -3368,7 +3368,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116HotspotsRep1.broadPeak.gz
@@ -3387,7 +3387,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116HotspotsRep2.broadPeak.gz
@@ -3406,7 +3406,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116PkRep1.narrowPeak.gz
@@ -3425,7 +3425,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116PkRep2.narrowPeak.gz
@@ -3444,7 +3444,7 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawDataRep1.fastq.gz
@@ -3461,7 +3461,7 @@ objType file
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawDataRep2.fastq.gz
@@ -3478,7 +3478,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawRep1.bigWig
@@ -3497,7 +3497,7 @@ objType table
 cell HCT-116
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHct116RawRep2.bigWig
@@ -4336,7 +4336,7 @@ objType file
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileIndex wgEncodeUwDnaseHmecAlnRep2.bam.bai
@@ -4375,7 +4375,7 @@ objType table
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecHotspotsRep2.broadPeak.gz
@@ -4414,7 +4414,7 @@ objType table
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecPkRep2.narrowPeak.gz
@@ -4433,7 +4433,7 @@ objType file
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecRawDataRep2.fastq.gz
@@ -4470,7 +4470,7 @@ objType table
 cell HMEC
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmecRawRep2.bigWig
@@ -4489,7 +4489,7 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfAlnRep1.bam
@@ -4507,7 +4507,7 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfAlnRep2.bam
@@ -4525,7 +4525,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfHotspotsRep1.broadPeak.gz
@@ -4544,7 +4544,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfHotspotsRep2.broadPeak.gz
@@ -4563,7 +4563,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfPkRep1.narrowPeak.gz
@@ -4582,7 +4582,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfPkRep2.narrowPeak.gz
@@ -4601,7 +4601,7 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawDataRep1.fastq.gz
@@ -4618,7 +4618,7 @@ objType file
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawDataRep2.fastq.gz
@@ -4635,7 +4635,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawRep1.bigWig
@@ -4654,7 +4654,7 @@ objType table
 cell HMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmfRawRep2.bigWig
@@ -4673,7 +4673,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladAlnRep1.bam
@@ -4691,7 +4691,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladAlnRep2.bam
@@ -4709,7 +4709,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladHotspotsRep1.broadPeak.gz
@@ -4728,7 +4728,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladHotspotsRep2.broadPeak.gz
@@ -4747,7 +4747,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladPkRep1.narrowPeak.gz
@@ -4766,7 +4766,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladPkRep2.narrowPeak.gz
@@ -4785,7 +4785,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawDataRep1.fastq.gz
@@ -4802,7 +4802,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawDataRep2.fastq.gz
@@ -4819,7 +4819,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawRep1.bigWig
@@ -4838,7 +4838,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdbladRawRep2.bigWig
@@ -4857,7 +4857,7 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoAlnRep1.bam
@@ -4875,7 +4875,7 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoAlnRep2.bam
@@ -4893,7 +4893,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoHotspotsRep1.broadPeak.gz
@@ -4912,7 +4912,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoHotspotsRep2.broadPeak.gz
@@ -4931,7 +4931,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoPkRep1.narrowPeak.gz
@@ -4950,7 +4950,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoPkRep2.narrowPeak.gz
@@ -4969,7 +4969,7 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawDataRep1.fastq.gz
@@ -4986,7 +4986,7 @@ objType file
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawDataRep2.fastq.gz
@@ -5003,7 +5003,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawRep1.bigWig
@@ -5022,7 +5022,7 @@ objType table
 cell HMVEC-dBl-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdblneoRawRep2.bigWig
@@ -5041,7 +5041,7 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadAlnRep1.bam
@@ -5059,7 +5059,7 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadAlnRep2.bam
@@ -5077,7 +5077,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadHotspotsRep1.broadPeak.gz
@@ -5096,7 +5096,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadHotspotsRep2.broadPeak.gz
@@ -5115,7 +5115,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadPkRep1.narrowPeak.gz
@@ -5134,7 +5134,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadPkRep2.narrowPeak.gz
@@ -5153,7 +5153,7 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawDataRep1.fastq.gz
@@ -5170,7 +5170,7 @@ objType file
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawDataRep2.fastq.gz
@@ -5187,7 +5187,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawRep1.bigWig
@@ -5206,7 +5206,7 @@ objType table
 cell HMVEC-dLy-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyadRawRep2.bigWig
@@ -5225,7 +5225,7 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoAlnRep1.bam
@@ -5243,7 +5243,7 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoAlnRep2.bam
@@ -5261,7 +5261,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoHotspotsRep1.broadPeak.gz
@@ -5280,7 +5280,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoHotspotsRep2.broadPeak.gz
@@ -5299,7 +5299,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoPkRep1.narrowPeak.gz
@@ -5318,7 +5318,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoPkRep2.narrowPeak.gz
@@ -5337,7 +5337,7 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawDataRep1.fastq.gz
@@ -5354,7 +5354,7 @@ objType file
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawDataRep2.fastq.gz
@@ -5371,7 +5371,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawRep1.bigWig
@@ -5390,7 +5390,7 @@ objType table
 cell HMVEC-dLy-Neo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdlyneoRawRep2.bigWig
@@ -5409,7 +5409,7 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoAlnRep1.bam
@@ -5427,7 +5427,7 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoAlnRep2.bam
@@ -5445,7 +5445,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoHotspotsRep1.broadPeak.gz
@@ -5464,7 +5464,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoHotspotsRep2.broadPeak.gz
@@ -5483,7 +5483,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoPkRep1.narrowPeak.gz
@@ -5502,7 +5502,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoPkRep2.narrowPeak.gz
@@ -5521,7 +5521,7 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawDataRep1.fastq.gz
@@ -5538,7 +5538,7 @@ objType file
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawDataRep2.fastq.gz
@@ -5555,7 +5555,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawRep1.bigWig
@@ -5574,7 +5574,7 @@ objType table
 cell HMVEC-dNeo
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecdneoRawRep2.bigWig
@@ -5593,7 +5593,7 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblAlnRep1.bam
@@ -5611,7 +5611,7 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblAlnRep2.bam
@@ -5629,7 +5629,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblHotspotsRep1.broadPeak.gz
@@ -5648,7 +5648,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblHotspotsRep2.broadPeak.gz
@@ -5667,7 +5667,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblPkRep1.narrowPeak.gz
@@ -5686,7 +5686,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblPkRep2.narrowPeak.gz
@@ -5705,7 +5705,7 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblRawDataRep1.fastq.gz
@@ -5722,7 +5722,7 @@ objType file
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblRawDataRep2.fastq.gz
@@ -5739,7 +5739,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-24
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDnaseHmveclblRawRep1.bigWig
@@ -5758,7 +5758,7 @@ objType table
 cell HMVEC-LBl
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmveclblRawRep2.bigWig
@@ -5777,7 +5777,7 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyAlnRep1.bam
@@ -5795,7 +5795,7 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyAlnRep2.bam
@@ -5813,7 +5813,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyHotspotsRep1.broadPeak.gz
@@ -5832,7 +5832,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyHotspotsRep2.broadPeak.gz
@@ -5851,7 +5851,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyPkRep1.narrowPeak.gz
@@ -5870,7 +5870,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyPkRep2.narrowPeak.gz
@@ -5889,7 +5889,7 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawDataRep1.fastq.gz
@@ -5906,7 +5906,7 @@ objType file
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawDataRep2.fastq.gz
@@ -5923,7 +5923,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawRep1.bigWig
@@ -5942,7 +5942,7 @@ objType table
 cell HMVEC-LLy
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHmvecllyRawRep2.bigWig
@@ -6121,7 +6121,7 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafAlnRep1.bam
@@ -6139,7 +6139,7 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafAlnRep2.bam
@@ -6157,7 +6157,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafHotspotsRep1.broadPeak.gz
@@ -6176,7 +6176,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafHotspotsRep2.broadPeak.gz
@@ -6195,7 +6195,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafPkRep1.narrowPeak.gz
@@ -6214,7 +6214,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafPkRep2.narrowPeak.gz
@@ -6233,7 +6233,7 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawDataRep1.fastq.gz
@@ -6250,7 +6250,7 @@ objType file
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawDataRep2.fastq.gz
@@ -6267,7 +6267,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawRep1.bigWig
@@ -6286,7 +6286,7 @@ objType table
 cell HPAF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpafRawRep2.bigWig
@@ -6305,7 +6305,7 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfAlnRep1.bam
@@ -6323,7 +6323,7 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfAlnRep2.bam
@@ -6341,7 +6341,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfHotspotsRep1.broadPeak.gz
@@ -6360,7 +6360,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfHotspotsRep2.broadPeak.gz
@@ -6379,7 +6379,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfPkRep1.narrowPeak.gz
@@ -6398,7 +6398,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfPkRep2.narrowPeak.gz
@@ -6417,7 +6417,7 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawDataRep1.fastq.gz
@@ -6434,7 +6434,7 @@ objType file
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawDataRep2.fastq.gz
@@ -6451,7 +6451,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawRep1.bigWig
@@ -6470,7 +6470,7 @@ objType table
 cell HPdLF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpdlfRawRep2.bigWig
@@ -6489,7 +6489,7 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfAlnRep1.bam
@@ -6507,7 +6507,7 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfAlnRep2.bam
@@ -6525,7 +6525,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfHotspotsRep1.broadPeak.gz
@@ -6544,7 +6544,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfHotspotsRep2.broadPeak.gz
@@ -6563,7 +6563,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfPkRep1.narrowPeak.gz
@@ -6582,7 +6582,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfPkRep2.narrowPeak.gz
@@ -6601,7 +6601,7 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawDataRep1.fastq.gz
@@ -6618,7 +6618,7 @@ objType file
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawDataRep2.fastq.gz
@@ -6635,7 +6635,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawRep1.bigWig
@@ -6654,7 +6654,7 @@ objType table
 cell HPF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHpfRawRep2.bigWig
@@ -7233,7 +7233,7 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfAlnRep1.bam
@@ -7251,7 +7251,7 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfAlnRep2.bam
@@ -7269,7 +7269,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfHotspotsRep1.broadPeak.gz
@@ -7288,7 +7288,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfHotspotsRep2.broadPeak.gz
@@ -7307,7 +7307,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfPkRep1.narrowPeak.gz
@@ -7326,7 +7326,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfPkRep2.narrowPeak.gz
@@ -7345,7 +7345,7 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawDataRep1.fastq.gz
@@ -7362,7 +7362,7 @@ objType file
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawDataRep2.fastq.gz
@@ -7379,7 +7379,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawRep1.bigWig
@@ -7398,7 +7398,7 @@ objType table
 cell HVMF
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseHvmfRawRep2.bigWig
@@ -7897,7 +7897,7 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaAlnRep1.bam
@@ -7915,7 +7915,7 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaAlnRep2.bam
@@ -7933,7 +7933,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaHotspotsRep1.broadPeak.gz
@@ -7952,7 +7952,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaHotspotsRep2.broadPeak.gz
@@ -7971,7 +7971,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaPkRep1.narrowPeak.gz
@@ -7990,7 +7990,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaPkRep2.narrowPeak.gz
@@ -8009,7 +8009,7 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawDataRep1.fastq.gz
@@ -8026,7 +8026,7 @@ objType file
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawDataRep2.fastq.gz
@@ -8043,7 +8043,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawRep1.bigWig
@@ -8062,7 +8062,7 @@ objType table
 cell NH-A
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-31
 dateUnrestricted 2011-05-01
 fileName wgEncodeUwDnaseNhaRawRep2.bigWig
@@ -8081,7 +8081,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadAlnRep1.bam
@@ -8099,7 +8099,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadAlnRep2.bam
@@ -8117,7 +8117,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadHotspotsRep1.broadPeak.gz
@@ -8136,7 +8136,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadHotspotsRep2.broadPeak.gz
@@ -8155,7 +8155,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadPkRep1.narrowPeak.gz
@@ -8174,7 +8174,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadPkRep2.narrowPeak.gz
@@ -8193,7 +8193,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawDataRep1.fastq.gz
@@ -8210,7 +8210,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawDataRep2.fastq.gz
@@ -8227,7 +8227,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawRep1.bigWig
@@ -8246,7 +8246,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDnase
 dataType DnaseSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-26
 dateUnrestricted 2011-04-26
 fileName wgEncodeUwDnaseNhdfadRawRep2.bigWig
@@ -9460,4 +9460,4 @@ subId 1677
 tableName wgEncodeUwDnaseTh2RawRep1
 view RawSignal
 
-# MAGIC: 1235979356
+# MAGIC: 1834079726

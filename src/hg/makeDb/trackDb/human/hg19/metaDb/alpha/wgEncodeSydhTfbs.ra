@@ -6776,7 +6776,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep1.bam
@@ -6797,7 +6797,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdAlnRep2.bam
@@ -6818,7 +6818,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdPk.narrowPeak.gz
@@ -6840,7 +6840,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep1.fastq.gz
@@ -6862,7 +6862,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdRawDataRep2.fastq.gz
@@ -6884,7 +6884,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId HeLa-S3/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Znf274UcdSig.bigWig
@@ -6906,7 +6906,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId HeLa-S3/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep1.bam
@@ -6927,7 +6927,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId HeLa-S3/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleAlnRep2.bam
@@ -6948,7 +6948,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId HeLa-S3/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyalePk.narrowPeak.gz
@@ -6970,7 +6970,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId HeLa-S3/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep1.fastq.gz
@@ -6992,7 +6992,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId HeLa-S3/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleRawDataRep2.fastq.gz
@@ -7014,7 +7014,7 @@ composite wgEncodeSydhTfbs
 control IgG-Yale
 controlId HeLa-S3/None/Input/IgG-Yale
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsHelas3Zzz3IggyaleSig.bigWig
@@ -10967,7 +10967,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep1.bam
@@ -10988,7 +10988,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdAlnRep2.bam
@@ -11009,7 +11009,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdPk.narrowPeak.gz
@@ -11031,7 +11031,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep1.fastq.gz
@@ -11052,7 +11052,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdRawDataRep2.fastq.gz
@@ -11073,7 +11073,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/IFNg30/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-17
 dateUnrestricted 2011-05-17
 fileName wgEncodeSydhTfbsK562CmycIfng30StdSig.bigWig
@@ -12090,7 +12090,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep1.bam
@@ -12111,7 +12111,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdAlnRep2.bam
@@ -12132,7 +12132,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdPk.narrowPeak.gz
@@ -12154,7 +12154,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep1.fastq.gz
@@ -12176,7 +12176,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdRawDataRep2.fastq.gz
@@ -12198,7 +12198,7 @@ composite wgEncodeSydhTfbs
 control UCDavis
 controlId K562/None/Input/UCDavis
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-23
 dateUnrestricted 2011-05-23
 fileName wgEncodeSydhTfbsK562Kap1UcdSig.bigWig
@@ -12850,7 +12850,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeSydhTfbsK562Pol2s2StdAlnRep1.bam.bai
@@ -12872,7 +12872,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeSydhTfbsK562Pol2s2StdAlnRep2.bam.bai
@@ -12894,7 +12894,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdPk.narrowPeak.gz
@@ -12916,7 +12916,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep1.fastq.gz
@@ -12938,7 +12938,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdRawDataRep2.fastq.gz
@@ -12960,7 +12960,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId K562/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-12
 dateUnrestricted 2011-04-12
 fileName wgEncodeSydhTfbsK562Pol2s2StdSig.bigWig
@@ -13887,7 +13887,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdAlnRep1.bam
@@ -13908,7 +13908,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdAlnRep2.bam
@@ -13929,7 +13929,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdPk.narrowPeak.gz
@@ -13951,7 +13951,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep1.fastq.gz
@@ -13972,7 +13972,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdRawDataRep2.fastq.gz
@@ -13993,7 +13993,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4CmycStdSig.bigWig
@@ -14040,7 +14040,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdAlnRep1.bam
@@ -14061,7 +14061,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdAlnRep2.bam
@@ -14082,7 +14082,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdPk.narrowPeak.gz
@@ -14104,7 +14104,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep1.fastq.gz
@@ -14126,7 +14126,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdRawDataRep2.fastq.gz
@@ -14148,7 +14148,7 @@ composite wgEncodeSydhTfbs
 control std
 controlId NB4/None/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-26
 dateUnrestricted 2011-05-26
 fileName wgEncodeSydhTfbsNb4MaxStdSig.bigWig
@@ -14750,4 +14750,4 @@ tableName wgEncodeSydhTfbsU2osSetdb1UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1419720918
+# MAGIC: -1148452462

@@ -6,7 +6,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdAlnRep1.bam
@@ -29,7 +29,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdAlnRep2.bam
@@ -52,7 +52,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep1.broadPeak.gz
@@ -76,7 +76,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdHotspotsRep2.broadPeak.gz
@@ -100,7 +100,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdPkRep1.narrowPeak.gz
@@ -124,7 +124,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdPkRep2.narrowPeak.gz
@@ -148,7 +148,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdRawDataRep1.fastq.gz
@@ -170,7 +170,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdRawDataRep2.fastq.gz
@@ -192,7 +192,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdRawRep1.bigWig
@@ -216,7 +216,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449CtcfStdRawRep2.bigWig
@@ -240,7 +240,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449InputStdAlnRep1.bam
@@ -263,7 +263,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449InputStdRawDataRep1.fastq.gz
@@ -285,7 +285,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04449/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-22
 dateUnrestricted 2011-07-22
 fileName wgEncodeUwTfbsAg04449InputStdRawRep1.bigWig
@@ -309,7 +309,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450CtcfStdAlnRep1.bam
@@ -332,7 +332,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450CtcfStdHotspotsRep1.broadPeak.gz
@@ -356,7 +356,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450CtcfStdPkRep1.narrowPeak.gz
@@ -380,7 +380,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450CtcfStdRawDataRep1.fastq.gz
@@ -402,7 +402,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450CtcfStdRawRep1.bigWig
@@ -426,7 +426,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450InputStdAlnRep1.bam
@@ -449,7 +449,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450InputStdRawDataRep1.fastq.gz
@@ -471,7 +471,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG04450/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg04450InputStdRawRep1.bigWig
@@ -495,7 +495,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdAlnRep1.bam
@@ -518,7 +518,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdAlnRep2.bam
@@ -541,7 +541,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep1.broadPeak.gz
@@ -565,7 +565,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdHotspotsRep2.broadPeak.gz
@@ -589,7 +589,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdPkRep1.narrowPeak.gz
@@ -613,7 +613,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdPkRep2.narrowPeak.gz
@@ -637,7 +637,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdRawDataRep1.fastq.gz
@@ -659,7 +659,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdRawDataRep2.fastq.gz
@@ -681,7 +681,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdRawRep1.bigWig
@@ -705,7 +705,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309CtcfStdRawRep2.bigWig
@@ -729,7 +729,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309InputStdAlnRep1.bam
@@ -752,7 +752,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309InputStdRawDataRep1.fastq.gz
@@ -774,7 +774,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09309/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09309InputStdRawRep1.bigWig
@@ -798,7 +798,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdAlnRep1.bam
@@ -821,7 +821,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdAlnRep2.bam
@@ -844,7 +844,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep1.broadPeak.gz
@@ -868,7 +868,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdHotspotsRep2.broadPeak.gz
@@ -892,7 +892,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdPkRep1.narrowPeak.gz
@@ -916,7 +916,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdPkRep2.narrowPeak.gz
@@ -940,7 +940,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdRawDataRep1.fastq.gz
@@ -962,7 +962,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdRawDataRep2.fastq.gz
@@ -984,7 +984,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdRawRep1.bigWig
@@ -1008,7 +1008,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319CtcfStdRawRep2.bigWig
@@ -1032,7 +1032,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319InputStdAlnRep1.bam
@@ -1055,7 +1055,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319InputStdRawDataRep1.fastq.gz
@@ -1077,7 +1077,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG09319/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg09319InputStdRawRep1.bigWig
@@ -1101,7 +1101,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdAlnRep1.bam
@@ -1124,7 +1124,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdAlnRep2.bam
@@ -1147,7 +1147,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep1.broadPeak.gz
@@ -1171,7 +1171,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdHotspotsRep2.broadPeak.gz
@@ -1195,7 +1195,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdPkRep1.narrowPeak.gz
@@ -1219,7 +1219,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdPkRep2.narrowPeak.gz
@@ -1243,7 +1243,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdRawDataRep1.fastq.gz
@@ -1265,7 +1265,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdRawDataRep2.fastq.gz
@@ -1287,7 +1287,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdRawRep1.bigWig
@@ -1311,7 +1311,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803CtcfStdRawRep2.bigWig
@@ -1335,7 +1335,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803InputStdAlnRep1.bam
@@ -1358,7 +1358,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803InputStdRawDataRep1.fastq.gz
@@ -1380,7 +1380,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AG10803/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAg10803InputStdRawRep1.bigWig
@@ -1404,7 +1404,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdAlnRep1.bam
@@ -1427,7 +1427,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdAlnRep2.bam
@@ -1450,7 +1450,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdHotspotsRep1.broadPeak.gz
@@ -1474,7 +1474,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdHotspotsRep2.broadPeak.gz
@@ -1498,7 +1498,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdPkRep1.narrowPeak.gz
@@ -1522,7 +1522,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdPkRep2.narrowPeak.gz
@@ -1546,7 +1546,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdRawDataRep1.fastq.gz
@@ -1568,7 +1568,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdRawDataRep2.fastq.gz
@@ -1590,7 +1590,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdRawRep1.bigWig
@@ -1614,7 +1614,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafCtcfStdRawRep2.bigWig
@@ -1638,7 +1638,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafInputStdAlnRep1.bam
@@ -1661,7 +1661,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafInputStdRawDataRep1.fastq.gz
@@ -1683,7 +1683,7 @@ composite wgEncodeUwTfbs
 control std
 controlId AoAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsAoafInputStdRawRep1.bigWig
@@ -4487,7 +4487,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspCtcfStdAlnRep1.bam
@@ -4510,7 +4510,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspCtcfStdHotspotsRep1.broadPeak.gz
@@ -4534,7 +4534,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspCtcfStdPkRep1.narrowPeak.gz
@@ -4558,7 +4558,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspCtcfStdRawDataRep1.fastq.gz
@@ -4580,7 +4580,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspCtcfStdRawRep1.bigWig
@@ -4604,7 +4604,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspInputStdAlnRep1.bam
@@ -4627,7 +4627,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspInputStdRawDataRep1.fastq.gz
@@ -4649,7 +4649,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HA-sp/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-28
 dateUnrestricted 2011-07-28
 fileName wgEncodeUwTfbsHaspInputStdRawRep1.bigWig
@@ -4673,7 +4673,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdAlnRep1.bam
@@ -4696,7 +4696,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdAlnRep2.bam
@@ -4719,7 +4719,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep1.broadPeak.gz
@@ -4743,7 +4743,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdHotspotsRep2.broadPeak.gz
@@ -4767,7 +4767,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdPkRep1.narrowPeak.gz
@@ -4791,7 +4791,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdPkRep2.narrowPeak.gz
@@ -4815,7 +4815,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdRawDataRep1.fastq.gz
@@ -4837,7 +4837,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdRawDataRep2.fastq.gz
@@ -4859,7 +4859,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdRawRep1.bigWig
@@ -4883,7 +4883,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecCtcfStdRawRep2.bigWig
@@ -4907,7 +4907,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecInputStdAlnRep1.bam
@@ -4930,7 +4930,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecInputStdRawDataRep1.fastq.gz
@@ -4952,7 +4952,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HBMEC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHbmecInputStdRawRep1.bigWig
@@ -4976,7 +4976,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaCtcfStdAlnRep1.bam
@@ -4999,7 +4999,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaCtcfStdHotspotsRep1.broadPeak.gz
@@ -5023,7 +5023,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaCtcfStdPkRep1.narrowPeak.gz
@@ -5047,7 +5047,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaCtcfStdRawDataRep1.fastq.gz
@@ -5069,7 +5069,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaCtcfStdRawRep1.bigWig
@@ -5093,7 +5093,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaInputStdAlnRep1.bam
@@ -5116,7 +5116,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaInputStdRawDataRep1.fastq.gz
@@ -5138,7 +5138,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCFaa/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfaaInputStdRawRep1.bigWig
@@ -5162,7 +5162,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfInputStdAlnRep1.bam
@@ -5185,7 +5185,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfInputStdRawDataRep1.fastq.gz
@@ -5207,7 +5207,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcfInputStdRawRep1.bigWig
@@ -5231,7 +5231,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcmInputStdAlnRep1.bam
@@ -5254,7 +5254,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcmInputStdRawDataRep1.fastq.gz
@@ -5276,7 +5276,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCM/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcmInputStdRawRep1.bigWig
@@ -5300,7 +5300,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdAlnRep1.bam
@@ -5323,7 +5323,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdAlnRep2.bam
@@ -5346,7 +5346,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep1.broadPeak.gz
@@ -5370,7 +5370,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdHotspotsRep2.broadPeak.gz
@@ -5394,7 +5394,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdPkRep1.narrowPeak.gz
@@ -5418,7 +5418,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdPkRep2.narrowPeak.gz
@@ -5442,7 +5442,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdRawDataRep1.fastq.gz
@@ -5464,7 +5464,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdRawDataRep2.fastq.gz
@@ -5486,7 +5486,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdRawRep1.bigWig
@@ -5510,7 +5510,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeCtcfStdRawRep2.bigWig
@@ -5534,7 +5534,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeInputStdAlnRep1.bam
@@ -5557,7 +5557,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeInputStdRawDataRep1.fastq.gz
@@ -5579,7 +5579,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHcpeInputStdRawRep1.bigWig
@@ -5603,7 +5603,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCT-116/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHct116InputStdAlnRep1.bam
@@ -5626,7 +5626,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCT-116/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHct116InputStdRawDataRep1.fastq.gz
@@ -5648,7 +5648,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HCT-116/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHct116InputStdRawRep1.bigWig
@@ -5672,7 +5672,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdAlnRep1.bam
@@ -5695,7 +5695,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdAlnRep2.bam
@@ -5718,7 +5718,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdHotspotsRep1.broadPeak.gz
@@ -5742,7 +5742,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdHotspotsRep2.broadPeak.gz
@@ -5766,7 +5766,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdPkRep1.narrowPeak.gz
@@ -5790,7 +5790,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdPkRep2.narrowPeak.gz
@@ -5814,7 +5814,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdRawDataRep1.fastq.gz
@@ -5836,7 +5836,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdRawDataRep2.fastq.gz
@@ -5858,7 +5858,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdRawRep1.bigWig
@@ -5882,7 +5882,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeCtcfStdRawRep2.bigWig
@@ -5906,7 +5906,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeInputStdAlnRep1.bam
@@ -5929,7 +5929,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeInputStdRawDataRep1.fastq.gz
@@ -5951,7 +5951,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HEEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHeeInputStdRawRep1.bigWig
@@ -7067,7 +7067,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdAlnRep1.bam
@@ -7090,7 +7090,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdAlnRep2.bam
@@ -7113,7 +7113,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdHotspotsRep1.broadPeak.gz
@@ -7137,7 +7137,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdHotspotsRep2.broadPeak.gz
@@ -7161,7 +7161,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdPkRep1.narrowPeak.gz
@@ -7185,7 +7185,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdPkRep2.narrowPeak.gz
@@ -7209,7 +7209,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdRawDataRep1.fastq.gz
@@ -7231,7 +7231,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdRawDataRep2.fastq.gz
@@ -7253,7 +7253,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdRawRep1.bigWig
@@ -7277,7 +7277,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfCtcfStdRawRep2.bigWig
@@ -7301,7 +7301,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfInputStdAlnRep1.bam
@@ -7324,7 +7324,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfInputStdRawDataRep1.fastq.gz
@@ -7346,7 +7346,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHmfInputStdRawRep1.bigWig
@@ -7370,7 +7370,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdAlnRep1.bam
@@ -7393,7 +7393,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdAlnRep2.bam
@@ -7416,7 +7416,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdHotspotsRep1.broadPeak.gz
@@ -7440,7 +7440,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdHotspotsRep2.broadPeak.gz
@@ -7464,7 +7464,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdPkRep1.narrowPeak.gz
@@ -7488,7 +7488,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdPkRep2.narrowPeak.gz
@@ -7512,7 +7512,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdRawDataRep1.fastq.gz
@@ -7534,7 +7534,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdRawDataRep2.fastq.gz
@@ -7556,7 +7556,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdRawRep1.bigWig
@@ -7580,7 +7580,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafCtcfStdRawRep2.bigWig
@@ -7604,7 +7604,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafInputStdAlnRep1.bam
@@ -7627,7 +7627,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafInputStdRawDataRep1.fastq.gz
@@ -7649,7 +7649,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPAF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpafInputStdRawRep1.bigWig
@@ -7673,7 +7673,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdAlnRep1.bam
@@ -7696,7 +7696,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdAlnRep2.bam
@@ -7719,7 +7719,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdHotspotsRep1.broadPeak.gz
@@ -7743,7 +7743,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdHotspotsRep2.broadPeak.gz
@@ -7767,7 +7767,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdPkRep1.narrowPeak.gz
@@ -7791,7 +7791,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdPkRep2.narrowPeak.gz
@@ -7815,7 +7815,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdRawDataRep1.fastq.gz
@@ -7837,7 +7837,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdRawDataRep2.fastq.gz
@@ -7859,7 +7859,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdRawRep1.bigWig
@@ -7883,7 +7883,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfCtcfStdRawRep2.bigWig
@@ -7907,7 +7907,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfInputStdAlnRep1.bam
@@ -7930,7 +7930,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfInputStdRawDataRep1.fastq.gz
@@ -7952,7 +7952,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HPF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHpfInputStdRawRep1.bigWig
@@ -8236,7 +8236,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeCtcfStdAlnRep1.bam
@@ -8259,7 +8259,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeCtcfStdHotspotsRep1.broadPeak.gz
@@ -8283,7 +8283,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeCtcfStdPkRep1.narrowPeak.gz
@@ -8307,7 +8307,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeCtcfStdRawDataRep1.fastq.gz
@@ -8329,7 +8329,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeCtcfStdRawRep1.bigWig
@@ -8353,7 +8353,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeInputStdAlnRep1.bam
@@ -8376,7 +8376,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeInputStdRawDataRep1.fastq.gz
@@ -8398,7 +8398,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HRPEpiC/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHrpeInputStdRawRep1.bigWig
@@ -8682,7 +8682,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HVMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHvmfInputStdAlnRep1.bam
@@ -8705,7 +8705,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HVMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHvmfInputStdRawDataRep1.fastq.gz
@@ -8727,7 +8727,7 @@ composite wgEncodeUwTfbs
 control std
 controlId HVMF/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsHvmfInputStdRawRep1.bigWig
@@ -8751,7 +8751,7 @@ composite wgEncodeUwTfbs
 control std
 controlId Jurkat/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsJurkatInputStdAlnRep1.bam
@@ -8774,7 +8774,7 @@ composite wgEncodeUwTfbs
 control std
 controlId Jurkat/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsJurkatInputStdRawDataRep1.fastq.gz
@@ -8796,7 +8796,7 @@ composite wgEncodeUwTfbs
 control std
 controlId Jurkat/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsJurkatInputStdRawRep1.bigWig
@@ -9080,7 +9080,7 @@ composite wgEncodeUwTfbs
 control std
 controlId MCF-7/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsMcf7InputStdAlnRep1.bam
@@ -9103,7 +9103,7 @@ composite wgEncodeUwTfbs
 control std
 controlId MCF-7/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsMcf7InputStdRawDataRep1.fastq.gz
@@ -9125,7 +9125,7 @@ composite wgEncodeUwTfbs
 control std
 controlId MCF-7/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsMcf7InputStdRawRep1.bigWig
@@ -9149,7 +9149,7 @@ composite wgEncodeUwTfbs
 control std
 controlId NB4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsNb4InputStdAlnRep1.bam
@@ -9172,7 +9172,7 @@ composite wgEncodeUwTfbs
 control std
 controlId NB4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsNb4InputStdRawDataRep1.fastq.gz
@@ -9194,7 +9194,7 @@ composite wgEncodeUwTfbs
 control std
 controlId NB4/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsNb4InputStdRawRep1.bigWig
@@ -9218,7 +9218,7 @@ composite wgEncodeUwTfbs
 control std
 controlId NHDF-neo/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsNhdfneoInputStdAlnRep1.bam
@@ -9241,7 +9241,7 @@ composite wgEncodeUwTfbs
 control std
 controlId NHDF-neo/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsNhdfneoInputStdRawDataRep1.fastq.gz
@@ -9263,7 +9263,7 @@ composite wgEncodeUwTfbs
 control std
 controlId NHDF-neo/Input/std
 dataType ChipSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-10-23
 dateUnrestricted 2011-07-23
 fileName wgEncodeUwTfbsNhdfneoInputStdRawRep1.bigWig
@@ -10319,4 +10319,4 @@ subId 1320
 tableName wgEncodeUwTfbsWerirb1InputStdRawRep1
 view RawSignal
 
-# MAGIC: 1182673378
+# MAGIC: -1296499869
