@@ -10460,6 +10460,7 @@ else
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
     tg->bedSize = ct->fieldCount - 2; /* field count of bed part */
+    bedSize = tg->bedSize;
     }
 sr = hRangeQuery(conn, table, chromName, winStart, winEnd, NULL, &rowOffset);
 while ((row = sqlNextRow(sr)) != NULL)
