@@ -9613,10 +9613,18 @@ void cactusDraw(struct track *tg, int seqStart, int seqEnd,
 {
 double scale = scaleForWindow(width, seqStart, seqEnd);
 struct slList *item;
+        color=MG_RED;
+hvGfxSetClip(hvg, insideX, yOff, insideWidth, tg->height);
 for (item = tg->items; item != NULL; item = item->next)
     {
-    if(tg->itemColor != NULL)
-        color = tg->itemColor(tg, item, hvg);
+    //if(tg->itemColor != NULL)
+        //color = tg->itemColor(tg, item, hvg);
+    /*
+    if (color == MG_BLACK)
+        color=MG_RED;
+    else
+        color=MG_BLACK;
+        */
     char *name = tg->itemName(tg, item);
     name = strchr(name, '.');
 
@@ -9626,6 +9634,7 @@ for (item = tg->items; item != NULL; item = item->next)
 
     tg->drawItemAt(tg, item, hvg, xOff, y, scale, font, color, vis);
     }
+hvGfxUnclip(hvg);
 //linkedFeaturesDraw(tg, seqStart, seqEnd,
         //hvg, xOff, yOff, width,
         //font, color, vis);
@@ -9642,7 +9651,7 @@ linkedFeaturesDrawAt(tg, item,
 
 int cactusHeight(struct track *tg, enum trackVisibility vis)
 {
-tg->height = 3 * tg->lineHeight;
+tg->height = 5 * tg->lineHeight;
 return tg->height;
 }
 
@@ -9663,6 +9672,33 @@ void cactusLeftLabels(struct track *tg, int seqStart, int seqEnd,
 {
 }
 
+Color cactusColor(struct track *tg, void *item, struct hvGfx *hvg)
+{
+static boolean firstTime = TRUE;
+static unsigned colorArray[5];
+
+if (firstTime)
+    {
+    firstTime = FALSE;
+    int ii;
+    for(ii=0; ii < 5; ii++)
+        colorArray[ii] = MG_RED;
+    }
+
+char *name = tg->itemName(tg, item);
+name = strchr(name, '.');
+
+if (name != NULL)
+    name++;
+int y = atoi(name);
+
+if (colorArray[y] == MG_RED)
+    colorArray[y] = MG_BLACK;
+else
+    colorArray[y] = MG_RED;
+return colorArray[y];
+}
+
 void cactusBedMethods(struct track *tg)
 /* cactus bed track methods */
 {
@@ -9681,7 +9717,7 @@ tg->loadItems = loadGappedBed;
 //tg->itemName = cactusName;
 tg->itemName = linkedFeaturesName;
 //tg->mapItemName = refGeneMapName;
-//tg->itemColor = blastColor;
+tg->itemColor = cactusColor;
 tg->itemNameColor = cactusNameColor;
 tg->drawLeftLabels = cactusLeftLabels;
 }
