@@ -2998,6 +2998,7 @@ if (singleSearch(db, term, cart, hgp))
 /* Allow any search term to end with a :Start-End range -- also support stuff 
  * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
  * If found, strip it off and remember the start and end. */
+char *originalTerm = cloneString(term);
 if ((canonicalSpec = 
         matchRegexSubstr(term, canonicalRangeExp,
 				  substrs, ArraySize(substrs))) ||
@@ -3064,6 +3065,11 @@ else
     struct hgFindSpec *shortList = NULL, *longList = NULL;
     struct hgFindSpec *hfs;
     boolean done = FALSE;
+
+    // Disable singleBaseSpec for any term that is not hgOfficialChromName
+    // because that mangles legitimate IDs that are [A-Z]:[0-9]+.
+    if (singleBaseSpec)
+	term = sqlEscapeString(originalTerm);
 
     hgFindSpecGetAllSpecs(db, &shortList, &longList);
     for (hfs = shortList;  hfs != NULL;  hfs = hfs->next)
