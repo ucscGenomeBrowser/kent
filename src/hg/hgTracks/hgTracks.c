@@ -1574,7 +1574,7 @@ if (tdbIsCompositeChild(subtrack->tdb))
                 subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
             else
                 {
-                #ifdef OMIT
+                //#ifdef OMIT
                 // Not sure this is needed at all!  OMITting because of the recursive loop that wigMafs fell into on rightClick
                 if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
                     {
@@ -1585,7 +1585,7 @@ if (tdbIsCompositeChild(subtrack->tdb))
                         subtrack->loadItems(subtrack);
                         }
                     }
-                #endif///def OMIT
+                //#endif///def OMIT
                 limitVisibility(subtrack);
                 }
             return hTvFromString(var);
@@ -1602,6 +1602,14 @@ enum trackVisibility vis = subtrack->limitedVis == tvHide ?
 struct trackDb *tdb = subtrack->tdb;
 if(tdbIsCompositeChild(tdb))
     {
+    if (!subtrack->limitedVisSet)
+        {
+        subtrack->visibility = tdbVisLimitedByAncestors(cart, subtrack->tdb, TRUE, TRUE);
+        limitVisibility(subtrack);
+        return vis;
+        }
+    return subtrack->limitedVis;
+    /*
     struct trackDb *parentTdb = tdbGetComposite(tdb);
     assert(parentTdb != NULL);
 
@@ -1621,6 +1629,7 @@ if(tdbIsCompositeChild(tdb))
             vis = tvMin(vis,visCompositeViewDefault(parentTdb,viewName));
         subgroupFree(&viewName);
 	}
+    */
     }
 return vis;
 }
@@ -4293,14 +4302,14 @@ for (;track != NULL; track = track->next)
     boolean shapedByubtrackOverride = FALSE;
     boolean cleanedByContainerSettings = FALSE;
 
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
+
     if (tdbIsContainer(track->tdb))
         {
         shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
-
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
@@ -4384,6 +4393,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
 #ifdef SUBTRACKS_HAVE_VIS
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
 #endif///def SUBTRACKS_HAVE_VIS
+
 
 /* Honor hideAll and visAll variables */
 if (hideAll || defaultTracks)
