@@ -60,6 +60,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	monDom1 monDom4 monDom5 \
 	anoCar1 \
 	galGal2 galGal3 \
+	melGal1 \
 	taeGut1 \
 	xenTro1 xenTro2 \
 	tetNig1 tetNig2 \
