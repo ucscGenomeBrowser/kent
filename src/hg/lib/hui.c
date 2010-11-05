@@ -134,15 +134,22 @@ return FALSE;
 char *controlledVocabLink(char *file,char *term,char *value,char *title, char *label,char *suffix)
 // returns allocated string of HTML link to controlled vocabulary term
 {
-#define VOCAB_LINK "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
-char *encFile = cgiEncode(file);
+#define VOCAB_LINK_WITH_FILE "<A HREF='hgEncodeVocab?ra=%s&%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+#define VOCAB_LINK "<A HREF='hgEncodeVocab?%s=\"%s\"' title='%s details' TARGET=ucscVocab>%s</A>"
+struct dyString *dyLink = NULL;
 char *encTerm = cgiEncode(term);
 char *encValue = cgiEncode(value);
-struct dyString *dyLink = dyStringCreate(VOCAB_LINK,encFile,encTerm,encValue,title,label);
+if (file != NULL)
+    {
+    char *encFile = cgiEncode(file);
+    dyLink = dyStringCreate(VOCAB_LINK_WITH_FILE,encFile,encTerm,encValue,title,label);
+    freeMem(encFile);
+    }
+else
+    dyLink = dyStringCreate(VOCAB_LINK,encTerm,encValue,title,label);
 if (suffix != NULL)
     dyStringAppend(dyLink,suffix);  // Don't encode since this may contain HTML
 
-freeMem(encFile);
 freeMem(encTerm);
 freeMem(encValue);
 return dyStringCannibalize(&dyLink);
@@ -162,15 +169,10 @@ if(showLongLabel)
 if(showShortLabel)
     dyStringPrintf(dyTable,"<tr><td align=right><i>shortLabel:</i></td><td nowrap>%s</td></tr>",tdb->shortLabel);
 
-//#define DONT_USE_CV_WHITELIST
-#ifndef DONT_USE_CV_WHITELIST
-// Need whiteListed cv terms and the cv.ra file
-struct slPair *oneTerm,*whiteList = mdbCvWhiteList(FALSE,TRUE); // Want terms that are defined in cv, not searchable via trackSearch
-char *cvFile = NULL;
-char *vocab = trackDbSetting(tdb, "controlledVocabulary");
-if(vocab != NULL)
-    cvFile = firstWordInLine(cloneString(vocab));
-#endif///ndef DONT_USE_CV_WHITELIST
+// Get the hash of mdb and cv term types
+//#ifdef OMIT
+struct hash *cvTermTypes = mdbCvTermTypeHash();
+//#endif///def OMIT
 
 struct mdbObj *mdbObj = mdbObjClone(safeObj); // Important if we are going to remove vars!
 mdbObjRemoveVars(mdbObj,"composite project objType"); // Don't bother showing these (suggest: "composite project dataType view tableName")
@@ -192,28 +194,40 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
         // If antibody and metadata contains input={sameValue} then just print input
         if(sameString(mdbVar->var,"antibody") && mdbObjContains(mdbObj,"input",mdbVar->val))
             continue;
-
-#ifndef DONT_USE_CV_WHITELIST
-        if (cvFile && whiteList)
+//#ifdef OMIT
+        if (cvTermTypes && differentString(mdbVar->var,"tableName")) // Don't bother with tableName
             {
-            for(oneTerm=whiteList;oneTerm!=NULL;oneTerm=oneTerm->next)
+            struct hash *cvTerm = hashFindVal(cvTermTypes,mdbVar->var);
+            if (cvTerm != NULL)
                 {
-                if (sameWord(oneTerm->name,mdbVar->var))
-                    break;
-                }
-            if (oneTerm != NULL)
-                {
-                //build link then
-                // TODO: If hgEncodeVocab was changed to give a description of a term not found in cv.ra, then "type" could almost always be linked
-                char *linkOfType = controlledVocabLink(cvFile,"type",oneTerm->name,oneTerm->val,oneTerm->val,NULL);
-                char *linkOfTerm = controlledVocabLink(cvFile,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
-                dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
-                freeMem(linkOfType);
-                freeMem(linkOfTerm);
-                continue;
+                if(SETTING_NOT_ON(hashFindVal(cvTerm,"hidden")))  // NULL is not on
+                    {
+                    char *label=hashFindVal(cvTerm,"label");
+                    if (label == NULL)
+                        label = mdbVar->var;
+                    char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
+                    char *cvDefined=hashFindVal(cvTerm,"cvDefined");
+                    if (cvDefined != NULL && differentWord(cvDefined,"no") && differentWord(cvDefined,"0"))
+                        {
+                        char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
+                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
+                        freeMem(linkOfTerm);
+                        }
+                    else
+                        dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,mdbVar->val);
+                        //{  // NOTE: Could just have a tool tip for these.
+                        //char *descr=cgiEncode(hashMustFindVal(cvTerm,"description"));
+                        //label = cgiEncode(label);
+                        //dyStringPrintf(dyTable,"<tr><td align=right><i title='%s'>%s:</i></td><td nowrap>%s</td></tr>",descr,label,mdbVar->val);
+                        //freeMem(descr);
+                        //freeMem(label);
+                        //}
+                    freeMem(linkOfType);
+                    continue;
+                    }
                 }
             }
-#endif///ndef DONT_USE_CV_WHITELIST
+//#endif///def OMIT
         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",mdbVar->var,mdbVar->val);
         }
     }
@@ -1148,15 +1162,15 @@ if (indelAppropriate(tdb))
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
     printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
            INDEL_HELP_PAGE);
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("</TD><TD>Draw double horizontal lines when both genome and query have "
            "an insertion</TD></TR>\n<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("</TD><TD>Draw a vertical purple line for an insertion at the beginning or "
            "end of the <BR>query, orange for insertion in the middle of the query</TD></TR>\n<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))
@@ -1169,17 +1183,17 @@ if (indelAppropriate(tdb))
     printf("</TABLE>\n");
 #else///ifndef BAM_CFG_UI_CHANGES
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("Draw double horizontal lines when both genome and query have "
 	   "an insertion "
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("Draw a vertical purple line for an insertion at the beginning or "
 	   "end of the query, orange for insertion in the middle of the query"
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))

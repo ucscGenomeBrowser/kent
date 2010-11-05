@@ -625,7 +625,7 @@ identifier wgEncodeGencodeClassesV4
 
 identifier wgEncodeGencodeYalePseudoV4
 "Link together Gencode gene model and possible pseudogenes for May 2010 Data Version"
-    hg19.wgEncodeGencodeYalePseudoV4.name
+    hg19.wgEncodeGencodeYalePseudoV4.transcript
     hg19.wgEncodeGencodeAutoV4.name unique
     hg19.wgEncodeGencodeManualV4.name unique
     hg19.wgEncodeGencodePolyaV4.name unique
@@ -893,14 +893,15 @@ identifier affyU95
     $hg.knownToU95.value
 
 identifier affyU133hg18
+# chopBefore and chopAfter needed for hg16, 17 and 18.
 "Affymetrix Human U133 chip identifiers"
      hg18,hg17,hg16.affyU133.qName dupeOk chopBefore=U133A: chopBefore=U133B: chopAfter=;
-     $hg.knownToU133.value
+     hg18,hg17,hg16.knownToU133.value
 
 identifier affyU133
 "Affymetrix Human U133 chip identifiers"
-     $hg,!hg18,!hg17,!hg16.affyU133.qName dupeOk
-     $hg.knownToU133.value
+    $hg,!hg18,!hg17,!hg16.affyU133.qName dupeOk
+    $hg,!hg18,!hg17,!hg16.knownToU133.value
 
 identifier affyU133Plus2
 "Affymetrix Human U133 chip identifiers"
@@ -1502,6 +1503,7 @@ identifier ccdsGeneId
     $ccdsDb.ccdsGene.name dupeOk
     $ccdsDb.ccdsInfo.ccds full
     $ccdsDb.ccdsKgMap.ccdsId
+    $ccdsDb.ccdsNotes.ccds
 
 identifier ctdGeneSymbol
 "CTD Gene Symbol"
@@ -2306,6 +2308,11 @@ identifier bgiGeneId external=BGI
 
 # Other Identifiers
 
+identifier hg19Patch2ExtFileId
+"External file ID for hg19 patch2 sequences"
+    hg19.extHg19Patch2.id
+    hg19.seqHg19Patch2.extFile
+
 identifier extFileId
 "External file ID"
     $gbd.extFile.id
@@ -2776,6 +2783,11 @@ identifier transMapAlnKnownGeneMmId
     hg19.knownGene.name
     mm9.transMapAlnUcscGenes.qName chopAfter=-
 
+identifier hg18ContigDiff
+"contig difference track"
+    hg18.gold.frag dupeOk $split
+    hg18.hg18ContigDiff.name
+
 identifier hg19ContigDiff
 "contig difference track"
     hg19.gold.frag dupeOk
@@ -3202,7 +3214,16 @@ tablesIgnored $kgDb
     pbStamp
     pep%Dist
 
+tablesIgnored hg18
+    numtSAssembled
+    numtS
+    numtSMitochondrion
+    numtSMitochondrionChrPlacement
+
 tablesIgnored hg19
+    altSeqHaplotypes
+    altSeqLiftOverPsl
+    altSeqPatches
     bacEndPairsBad
     multizMHCSummary
     netSyn_mann_hap4

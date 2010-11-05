@@ -3702,6 +3702,13 @@ type bed 4 +
     longLabel Stephen Quake (Stanford)
     priority 51
 
+    track pgIrish
+    parent pgSnpHgwdev
+    shortLabel Irish male
+    longLabel Anonymous Irish male
+    color 0,100,100
+    priority 53
+
     track pgSaqqaq
     parent pgSnpHgwdev
     shortLabel Saqqaq

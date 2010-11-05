@@ -8,7 +8,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageAlignmentsGm12878CytosolLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -26,7 +26,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsGm12878NucleolusTotal.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -45,7 +45,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageAlignmentsGm12878NucleusLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -63,7 +63,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsH1hescCellLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cell
 project wgEncode
 rnaExtract longNonPolyA
@@ -81,7 +81,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsHepg2CytosolLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -100,7 +100,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsHepg2NucleolusTotal.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -119,7 +119,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsHepg2NucleusLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -138,7 +138,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsHuvecCytosolLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -157,7 +157,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageAlignmentsK562ChromatinTotal.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization chromatin
 project wgEncode
 rnaExtract total
@@ -175,7 +175,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageAlignmentsK562CytosolLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization cytosol
 project wgEncode
@@ -194,7 +194,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCageAlignmentsK562CytosolLongpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -212,7 +212,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageAlignmentsK562NucleolusTotal.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -230,7 +230,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageAlignmentsK562NucleoplasmTotal.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleoplasm
 project wgEncode
 rnaExtract total
@@ -248,7 +248,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageAlignmentsK562NucleusLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization nucleus
 project wgEncode
@@ -267,7 +267,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCageAlignmentsK562NucleusLongpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longPolyA
@@ -285,7 +285,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageAlignmentsK562PolysomeLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization polysome
 project wgEncode
 rnaExtract longNonPolyA
@@ -303,7 +303,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsNhekCytosolLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -322,7 +322,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageAlignmentsNhekNucleusLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -341,7 +341,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageAlignmentsProstateCellLongnonpolya.tagAlign.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization cell
 project wgEncode
@@ -360,7 +360,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageMinusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -378,7 +378,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageMinusClustersGm12878NucleolusTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -396,7 +396,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageMinusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -414,7 +414,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageMinusClustersH1hescCellLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cell
 project wgEncode
 rnaExtract longNonPolyA
@@ -432,7 +432,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageMinusClustersHepg2CytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -450,7 +450,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageMinusClustersHepg2NucleolusTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -468,7 +468,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageMinusClustersHepg2NucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -486,7 +486,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeRikenCageMinusClustersHuvecCytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -504,7 +504,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageMinusClustersK562ChromatinTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization chromatin
 project wgEncode
 rnaExtract total
@@ -522,7 +522,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageMinusClustersK562CytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization cytosol
 project wgEncode
@@ -541,7 +541,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCageMinusClustersK562CytosolLongpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -559,7 +559,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageMinusClustersK562NucleolusTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -577,7 +577,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageMinusClustersK562NucleoplasmTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleoplasm
 project wgEncode
 rnaExtract total
@@ -595,7 +595,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageMinusClustersK562NucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization nucleus
 project wgEncode
@@ -614,7 +614,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCageMinusClustersK562NucleusLongpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longPolyA
@@ -632,7 +632,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageMinusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization polysome
 project wgEncode
 rnaExtract longNonPolyA
@@ -650,7 +650,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageMinusClustersNhekCytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -668,7 +668,7 @@ dateSubmitted 2010-01-27
 dateUnrestricted 2010-10-27
 fileName wgEncodeRikenCageMinusClustersNhekNucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -686,7 +686,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageMinusClustersProstateCellLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization cell
 project wgEncode
@@ -705,7 +705,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCagePlusClustersGm12878CytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -723,7 +723,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCagePlusClustersGm12878NucleolusTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -741,7 +741,7 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCagePlusClustersGm12878NucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -759,7 +759,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCagePlusClustersH1hescCellLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cell
 project wgEncode
 rnaExtract longNonPolyA
@@ -777,7 +777,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCagePlusClustersHepg2CytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -795,7 +795,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCagePlusClustersHepg2NucleolusTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -813,7 +813,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCagePlusClustersHepg2NucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -831,7 +831,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeRikenCagePlusClustersHuvecCytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -849,7 +849,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCagePlusClustersK562ChromatinTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization chromatin
 project wgEncode
 rnaExtract total
@@ -867,7 +867,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCagePlusClustersK562CytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization cytosol
 project wgEncode
@@ -886,7 +886,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCagePlusClustersK562CytosolLongpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longPolyA
@@ -904,7 +904,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCagePlusClustersK562NucleolusTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
 project wgEncode
 rnaExtract total
@@ -922,7 +922,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCagePlusClustersK562NucleoplasmTotal.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleoplasm
 project wgEncode
 rnaExtract total
@@ -940,7 +940,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCagePlusClustersK562NucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization nucleus
 project wgEncode
@@ -959,7 +959,7 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCagePlusClustersK562NucleusLongpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longPolyA
@@ -977,7 +977,7 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCagePlusClustersK562PolysomeLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization polysome
 project wgEncode
 rnaExtract longNonPolyA
@@ -995,7 +995,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCagePlusClustersNhekCytosolLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
 project wgEncode
 rnaExtract longNonPolyA
@@ -1013,7 +1013,7 @@ dateSubmitted 2010-01-27
 dateUnrestricted 2010-10-27
 fileName wgEncodeRikenCagePlusClustersNhekNucleusLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
 project wgEncode
 rnaExtract longNonPolyA
@@ -1031,7 +1031,7 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCagePlusClustersProstateCellLongnonpolya.bedGraph4.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 labVersion Nexalign 1.3.3
 localization cell
 project wgEncode
@@ -1050,9 +1050,8 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageRawData2K562CytosolLongnonpolya.csqual.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignal2K562CytosolLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 9
@@ -1068,9 +1067,8 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageRawData2K562NucleusLongnonpolya.csqual.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
-parentTable wgEncodeRikenCageRawSignal2K562NucleusLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 9
@@ -1086,9 +1084,8 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageRawData2ProstateCellLongnonpolya.csqual.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cell
-parentTable wgEncodeRikenCageRawSignal2ProstateCellLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 9
@@ -1104,9 +1101,8 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3Gm12878NucleolusTotal.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
-parentTable wgEncodeRikenCageRawSignal3Gm12878NucleolusTotal
 project wgEncode
 rnaExtract total
 subId 1001
@@ -1122,9 +1118,8 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3H1hescCellLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cell
-parentTable wgEncodeRikenCageRawSignal3H1hescCellLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 1002
@@ -1140,9 +1135,8 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3Hepg2CytosolLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignal3Hepg2CytosolLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 1015
@@ -1158,9 +1152,8 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3Hepg2NucleolusTotal.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
-parentTable wgEncodeRikenCageRawSignal3Hepg2NucleolusTotal
 project wgEncode
 rnaExtract total
 subId 1015
@@ -1176,9 +1169,8 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3Hepg2NucleusLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
-parentTable wgEncodeRikenCageRawSignal3Hepg2NucleusLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 1015
@@ -1194,9 +1186,8 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3HuvecCytosolLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignal3HuvecCytosolLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 1014
@@ -1212,9 +1203,8 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3NhekCytosolLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignal3NhekCytosolLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 1018
@@ -1230,9 +1220,8 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeRikenCageRawData3NhekNucleusLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
-parentTable wgEncodeRikenCageRawSignal3NhekNucleusLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 1018
@@ -1248,9 +1237,8 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageRawDataGm12878CytosolLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignalGm12878CytosolLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 232
@@ -1266,9 +1254,8 @@ dateSubmitted 2009-03-09
 dateUnrestricted 2009-12-09
 fileName wgEncodeRikenCageRawDataGm12878NucleusLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
-parentTable wgEncodeRikenCageRawSignalGm12878NucleusLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 232
@@ -1284,9 +1271,8 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageRawDataK562ChromatinTotal.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization chromatin
-parentTable wgEncodeRikenCageRawSignalK562ChromatinTotal
 project wgEncode
 rnaExtract total
 subId 212
@@ -1302,9 +1288,8 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageRawDataK562CytosolLongnonpolya.csfasta.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignalK562CytosolLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 9
@@ -1320,9 +1305,8 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCageRawDataK562CytosolLongpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cytosol
-parentTable wgEncodeRikenCageRawSignalK562CytosolLongpolya
 project wgEncode
 rnaExtract longPolyA
 subId 202
@@ -1338,9 +1322,8 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageRawDataK562NucleolusTotal.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleolus
-parentTable wgEncodeRikenCageRawSignalK562NucleolusTotal
 project wgEncode
 rnaExtract total
 subId 212
@@ -1356,9 +1339,8 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageRawDataK562NucleoplasmTotal.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleoplasm
-parentTable wgEncodeRikenCageRawSignalK562NucleoplasmTotal
 project wgEncode
 rnaExtract total
 subId 212
@@ -1374,9 +1356,8 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageRawDataK562NucleusLongnonpolya.csfasta.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
-parentTable wgEncodeRikenCageRawSignalK562NucleusLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 9
@@ -1392,9 +1373,8 @@ dateSubmitted 2009-02-04
 dateUnrestricted 2009-11-04
 fileName wgEncodeRikenCageRawDataK562NucleusLongpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization nucleus
-parentTable wgEncodeRikenCageRawSignalK562NucleusLongpolya
 project wgEncode
 rnaExtract longPolyA
 subId 202
@@ -1410,9 +1390,8 @@ dateSubmitted 2009-02-19
 dateUnrestricted 2009-11-19
 fileName wgEncodeRikenCageRawDataK562PolysomeLongnonpolya.fastq.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization polysome
-parentTable wgEncodeRikenCageRawSignalK562PolysomeLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 212
@@ -1428,9 +1407,8 @@ dateSubmitted 2008-12-09
 dateUnrestricted 2009-09-09
 fileName wgEncodeRikenCageRawDataProstateCellLongnonpolya.csfasta.gz
 grant Gingeras
-lab Riken
+lab RIKEN
 localization cell
-parentTable wgEncodeRikenCageRawSignalProstateCellLongnonpolya
 project wgEncode
 rnaExtract longNonPolyA
 subId 9

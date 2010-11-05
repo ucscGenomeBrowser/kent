@@ -23770,6 +23770,7 @@ else if (sameString("pgVenter", table) ||
          sameString("pgAbtIllum", table) ||
          sameString("pgAk1", table) ||
          sameString("pgQuake", table) ||
+         sameString("pgIrish", table) ||
          sameString("pgSaqqaq", table) ||
          sameString("pgSaqqaqHc", table) ||
          sameString("pgTest", table) )

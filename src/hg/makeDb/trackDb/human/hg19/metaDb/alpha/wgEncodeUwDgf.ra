@@ -13,7 +13,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfGm06990Aln
 project wgEncode
 subId 1682
 view Alignments
@@ -98,7 +97,7 @@ objType file
 cell H7-hESC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esAln.bam
@@ -106,7 +105,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfH7esAln
 project wgEncode
 subId 2047
 view Alignments
@@ -116,7 +114,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esHotspots.broadPeak.gz
@@ -134,7 +132,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esPk.narrowPeak.gz
@@ -152,7 +150,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esRaw.bigWig
@@ -170,14 +168,13 @@ objType file
 cell H7-hESC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfH7esRawSignal
 project wgEncode
 subId 2047
 view RawData
@@ -187,7 +184,7 @@ objType table
 cell H7-hESC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfH7esSig.bigWig
@@ -204,7 +201,7 @@ objType file
 cell HAEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeAln.bam
@@ -212,7 +209,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHaeAln
 project wgEncode
 subId 2048
 view Alignments
@@ -222,7 +218,7 @@ objType table
 cell HAEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeHotspots.broadPeak.gz
@@ -240,7 +236,7 @@ objType table
 cell HAEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaePk.narrowPeak.gz
@@ -258,7 +254,7 @@ objType table
 cell HAEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeRaw.bigWig
@@ -276,14 +272,13 @@ objType file
 cell HAEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHaeRawSignal
 project wgEncode
 subId 2048
 view RawData
@@ -293,7 +288,7 @@ objType table
 cell HAEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfHaeSig.bigWig
@@ -310,7 +305,7 @@ objType file
 cell HCPEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeAln.bam
@@ -318,7 +313,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHcpeAln
 project wgEncode
 subId 2050
 view Alignments
@@ -328,7 +322,7 @@ objType table
 cell HCPEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeHotspots.broadPeak.gz
@@ -346,7 +340,7 @@ objType table
 cell HCPEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpePk.narrowPeak.gz
@@ -364,7 +358,7 @@ objType table
 cell HCPEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeRaw.bigWig
@@ -382,14 +376,13 @@ objType file
 cell HCPEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHcpeRawSignal
 project wgEncode
 subId 2050
 view RawData
@@ -399,7 +392,7 @@ objType table
 cell HCPEpiC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHcpeSig.bigWig
@@ -426,7 +419,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfHepg2Aln
 project wgEncode
 subId 1814
 view Alignments
@@ -511,7 +503,7 @@ objType file
 cell HMF
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfAln.bam
@@ -519,7 +511,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHmfAln
 project wgEncode
 subId 2049
 view Alignments
@@ -529,7 +520,7 @@ objType table
 cell HMF
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfHotspots.broadPeak.gz
@@ -547,7 +538,7 @@ objType table
 cell HMF
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfPk.narrowPeak.gz
@@ -565,7 +556,7 @@ objType table
 cell HMF
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfRaw.bigWig
@@ -583,14 +574,13 @@ objType file
 cell HMF
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHmfRawSignal
 project wgEncode
 subId 2049
 view RawData
@@ -600,7 +590,7 @@ objType table
 cell HMF
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmfSig.bigWig
@@ -617,7 +607,7 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladAln.bam
@@ -625,7 +615,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfHmvecdbladAln
 project wgEncode
 subId 2051
 view Alignments
@@ -635,7 +624,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladHotspots.broadPeak.gz
@@ -653,7 +642,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladPk.narrowPeak.gz
@@ -671,7 +660,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladRaw.bigWig
@@ -689,14 +678,13 @@ objType file
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfHmvecdbladRawSignal
 project wgEncode
 subId 2051
 view RawData
@@ -706,7 +694,7 @@ objType table
 cell HMVEC-dBl-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-25
 fileName wgEncodeUwDgfHmvecdbladSig.bigWig
@@ -733,7 +721,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfK562Aln
 project wgEncode
 subId 1815
 view Alignments
@@ -818,7 +805,7 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadAln.bam
@@ -826,7 +813,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfNhdfadAln
 project wgEncode
 subId 2046
 view Alignments
@@ -836,7 +822,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadHotspots.broadPeak.gz
@@ -854,7 +840,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadPk.narrowPeak.gz
@@ -872,7 +858,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadRaw.bigWig
@@ -890,14 +876,13 @@ objType file
 cell NHDF-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfNhdfadRawSignal
 project wgEncode
 subId 2046
 view RawData
@@ -907,7 +892,7 @@ objType table
 cell NHDF-Ad
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfNhdfadSig.bigWig
@@ -924,7 +909,7 @@ objType file
 cell SKMC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcAln.bam
@@ -932,7 +917,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg19
-parentTable wgEncodeUwDgfSkmcAln
 project wgEncode
 subId 2045
 view Alignments
@@ -942,7 +926,7 @@ objType table
 cell SKMC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcHotspots.broadPeak.gz
@@ -960,7 +944,7 @@ objType table
 cell SKMC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcPk.narrowPeak.gz
@@ -978,7 +962,7 @@ objType table
 cell SKMC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcRaw.bigWig
@@ -996,14 +980,13 @@ objType file
 cell SKMC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcRawData.fastq.gz
 grant Stam
 lab UW
 origAssembly hg19
-parentTable wgEncodeUwDgfSkmcRawSignal
 project wgEncode
 subId 2045
 view RawData
@@ -1013,7 +996,7 @@ objType table
 cell SKMC
 composite wgEncodeUwDgf
 dataType DnaseDgf
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-25
 dateUnrestricted 2011-04-24
 fileName wgEncodeUwDgfSkmcSig.bigWig
@@ -1040,7 +1023,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfSknshraAln
 project wgEncode
 subId 1795
 view Alignments
@@ -1135,7 +1117,6 @@ grant Stam
 lab UW
 labVersion Bowtie 0.12.5
 origAssembly hg18
-parentTable wgEncodeUwDgfTh1Aln
 project wgEncode
 subId 1816
 view Alignments
@@ -1215,4 +1196,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: 125362848
+# MAGIC: -1730278219

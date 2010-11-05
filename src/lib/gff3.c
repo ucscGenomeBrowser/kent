@@ -14,9 +14,16 @@
 #include "fa.h"
 
 // FIXME: spec unclear if attributes can be specified multiple times
-// FIXME: spec unclear if start/end can be `.'
+// FIXME: spec unclear on attribute of discontinuous features.
 // FIXME: should spaces be striped from attributes?
-// FIXME: chop functions might cause grief by skipping initial separators
+
+/*
+ * Notes:
+ *   - a separate feature object that linked discontinuous feature annotations
+ *     was not used because it create more complexity with the linking of parents
+ *     and the fact that the restriction on discontinguous features attributes is
+ *     not clearly defined.
+ */
 
 static const int gffNumCols = 9;
 
@@ -42,6 +49,12 @@ char *gff3FeatFivePrimeUTR = "five_prime_UTR";
 char *gff3FeatStartCodon = "start_codon";
 char *gff3FeatStopCodon = "stop_codon";
 
+static bool gff3FileStopDueToErrors(struct gff3File *g3f)
+/* determine if we should stop due to the number of errors */
+{
+return g3f->errCnt > g3f->maxErr;
+}
+
 static void gff3FileErr(struct gff3File *g3f, char *format, ...)
 #if defined(__GNUC__)
 __attribute__((format(printf, 2, 3)))
@@ -62,7 +75,7 @@ if (g3f->lf != NULL)
 vfprintf(g3f->errFh, format, args);
 fprintf(g3f->errFh, "\n");
 g3f->errCnt++;
-if (g3f->errCnt > g3f->maxErr)
+if (gff3FileStopDueToErrors(g3f))
     errAbort("GFF3: %d parser errors", g3f->errCnt);
 }
 
@@ -410,12 +423,14 @@ static void parseIDAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
 /* parse the ID attribute */
 {
 checkSingleValAttr(g3a, attr);
-char *id = attr->vals->name;
-struct hashEl *hel = hashStore(g3a->file->byId, id);
-if (hel->val != NULL)
-    gff3AnnErr(g3a, "duplicate annotation record with ID: %s", id);
+g3a->id = attr->vals->name;
+// link into other parts of feature if discontinuous
+struct hashEl *hel = hashStore(g3a->file->byId, g3a->id);
+struct gff3Ann *head = hel->val;
+if (head != NULL)
+    head->prevPart = g3a;
+g3a->nextPart = head;
 hel->val = g3a;
-g3a->id = id;
 }
 
 static void parseNameAttr(struct gff3Ann *g3a, struct gff3Attr *attr)
@@ -544,7 +559,7 @@ g3a->lineNum = g3f->lf->lineIx;
 parseFields(g3a, words);
 parseAttrs(g3a, words[8]);
 parseStdAttrs(g3a);
-slAddHead(&g3f->anns, g3a);
+slAddHead(&g3f->anns, gff3AnnRefNew(g3a));
 }
 
 static void writeAttr(struct gff3Attr *attr, FILE *fh)
@@ -829,11 +844,93 @@ char *line;
 while (lineFileNext(g3f->lf, &line, NULL))
     {
     parseLine(g3f, line);
-    if (g3f->errCnt >= g3f->maxErr)
+    if (gff3FileStopDueToErrors(g3f))
         break;
     }
 lineFileClose(&g3f->lf);
 slReverse(&g3f->anns);
+}
+
+static int gff3AnnCount(struct gff3Ann *g3a)
+/* count the number of gff3Ann objects linked together in a feature */
+{
+int cnt = 0;
+for (; g3a != NULL; g3a = g3a->nextPart)
+    cnt++;
+return cnt;
+}
+
+static void discontinFeatureCheck(struct gff3Ann *g3a)
+/* sanity check linked gff3Ann discontinuous features */
+{
+struct gff3Ann *g3a2;
+for (g3a2 = g3a->nextPart; (g3a2 != NULL) && !gff3FileStopDueToErrors(g3a->file); g3a2 = g3a2->nextPart)
+    {
+    if (!sameString(g3a->type, g3a2->type))
+        gff3AnnErr(g3a, "Annotation records for discontinuous features with ID=\"%s\" do not have the same type, found \"%s\" and \"%s\"", g3a->id, g3a->type, g3a2->type);
+    }
+}
+
+static void discontinFeatureFillArray(struct gff3Ann *g3a, int numAnns, struct gff3Ann *featAnns[])
+/* convert list to array for sorting */
+{
+int i = 0;
+for (; g3a != NULL; g3a = g3a->nextPart)
+    featAnns[i++] = g3a;
+}
+
+static struct gff3Ann *discontinFeatureArrayLink(int numAnns, struct gff3Ann *featAnns[])
+/* convert sorted array to a list */
+{
+struct gff3Ann *g3aHead = NULL, *g3aPrev = NULL;
+int i;
+for (i = 0; i < numAnns; i++)
+    {
+    if (g3aHead == NULL)
+        g3aHead = featAnns[i];
+    if (g3aPrev != NULL)
+        g3aPrev->nextPart = featAnns[i];
+    featAnns[i]->prevPart = g3aPrev;
+    }
+return g3aHead;
+}
+
+static int discontigFeatureSortCmp(const void *p1, const void *p2)
+/* compare function for discontigFeatureSort */
+{
+struct gff3Ann *g3a1 = *((struct gff3Ann **)p1);
+struct gff3Ann *g3a2 = *((struct gff3Ann **)p2);
+int diff = g3a1->start - g3a2->start;
+if (diff == 0)
+    diff = g3a1->end - g3a2->end;
+return diff;
+}
+
+static struct gff3Ann *discontigFeatureSort(struct gff3Ann *g3a)
+/* sort a list of gff3Ann object representing discontinuous */
+{
+int numAnns = gff3AnnCount(g3a);
+struct gff3Ann *featAnns[numAnns];
+discontinFeatureFillArray(g3a, numAnns, featAnns);
+qsort(featAnns, numAnns, sizeof(struct gff3Ann*), discontigFeatureSortCmp);
+return discontinFeatureArrayLink(numAnns, featAnns);
+}
+
+static void discontigFeatureFinish(struct gff3File *g3f)
+/* finish up discontinuous features, sorting them into ascending order */
+{
+// only both sorting if more than one annotation
+struct hashCookie cookie = hashFirst(g3f->byId);
+struct hashEl *hel;
+while (((hel = hashNext(&cookie)) != NULL) && !gff3FileStopDueToErrors(g3f))
+    {
+    struct gff3Ann *g3a = hel->val;
+    if (g3a->nextPart != NULL)
+        {
+        discontinFeatureCheck(g3a);
+        hel->val = discontigFeatureSort(g3a);
+        }
+    }
 }
 
 static struct gff3Ann *resolveRef(struct gff3Ann *g3a, char *id, char *attr)
@@ -875,16 +972,20 @@ if (g3a->derivesFromId != NULL)
     g3a->derivesFrom = resolveRef(g3a, g3a->derivesFromId, gff3AttrDerivesFrom);
 }
 
+static void resolveAnns(struct gff3File *g3f)
+/* resolve links */
+{
+struct gff3AnnRef *g3aRef;
+for (g3aRef = g3f->anns; (g3aRef != NULL) && !gff3FileStopDueToErrors(g3f); g3aRef = g3aRef->next)
+    resolveAnn(g3aRef->ann);
+}
+
 static void resolveFile(struct gff3File *g3f)
 /* do resolution phase of reading a GFF3 file */
 {
-struct gff3Ann *g3a;
-for (g3a = g3f->anns; g3a != NULL; g3a = g3a->next)
-    {
-    resolveAnn(g3a);
-    if (g3f->errCnt >= g3f->maxErr)
-        break;
-    }
+// must sort first, as links point to the first feature
+discontigFeatureFinish(g3f);
+resolveAnns(g3f);
 // reorder just for test reproducibility
 slReverse(&g3f->seqRegions);
 slReverse(&g3f->featureOntologies);
@@ -915,7 +1016,7 @@ g3f->fileName = gff3FileCloneStr(g3f, fileName);
 g3f->errFh = (errFh != NULL) ? errFh : stderr;
 g3f->maxErr = (maxErr < 0) ? INT_MAX : maxErr;
 parseFile(g3f);
-if (g3f->errCnt < g3f->maxErr)
+if (!gff3FileStopDueToErrors(g3f))
     resolveFile(g3f);
 if (g3f->errCnt > 0)
     errAbort("GFF3: %d parser errors", g3f->errCnt);
@@ -959,9 +1060,9 @@ void gff3FileWrite(struct gff3File *g3f, char *fileName)
 {
 FILE *fh = mustOpen(fileName, "w");
 writeMeta(g3f, fh);
-struct gff3Ann *g3a;
-for (g3a = g3f->anns; g3a != NULL; g3a = g3a->next)
-    writeAnn(g3a, fh);
+struct gff3AnnRef *g3aRef;
+for (g3aRef = g3f->anns; g3aRef != NULL; g3aRef = g3aRef->next)
+    writeAnn(g3aRef->ann, fh);
 writeFastas(g3f, fh);
 carefulClose(&fh);
 }
