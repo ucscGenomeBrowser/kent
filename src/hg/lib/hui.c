@@ -1148,15 +1148,15 @@ if (indelAppropriate(tdb))
     printf("<TABLE><TR><TD colspan=2><B>Alignment Gap/Insertion Display Options</B>");
     printf("&nbsp;<A HREF=\"%s\">Help on display options</A>\n<TR valign='top'><TD>",
            INDEL_HELP_PAGE);
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("</TD><TD>Draw double horizontal lines when both genome and query have "
            "an insertion</TD></TR>\n<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("</TD><TD>Draw a vertical purple line for an insertion at the beginning or "
            "end of the <BR>query, orange for insertion in the middle of the query</TD></TR>\n<TR valign='top'><TD>");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))
@@ -1169,17 +1169,17 @@ if (indelAppropriate(tdb))
     printf("</TABLE>\n");
 #else///ifndef BAM_CFG_UI_CHANGES
     printf("<P><B>Alignment Gap/Insertion Display Options</B><BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_DOUBLE_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_DOUBLE_INSERT);
     cgiMakeCheckBox(var, showDoubleInsert);
     printf("Draw double horizontal lines when both genome and query have "
 	   "an insertion "
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_QUERY_INSERT, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_QUERY_INSERT);
     cgiMakeCheckBox(var, showQueryInsert);
     printf("Draw a vertical purple line for an insertion at the beginning or "
 	   "end of the query, orange for insertion in the middle of the query"
 	   "<BR>\n");
-    safef(var, sizeof(var), "%s_%s", INDEL_POLY_A, name);
+    safef(var, sizeof(var), "%s.%s", name, INDEL_POLY_A);
     /* We can highlight valid polyA's only if we have query sequence --
      * so indelPolyA code piggiebacks on baseColor code: */
     if (baseColorGotSequence(tdb))
