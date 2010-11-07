@@ -169,7 +169,7 @@ static struct dbToSpecies dbToSpeciesMap[] = {
     {"taeGut", taeGutNames},
     {"nomLeu", nomLeuNames},
     {"myoLuc", myoLucNames},
-    {"melGal", melGal1Names},
+    {"melGal", melGalNames},
     {NULL, endNames}
 };
 
