@@ -4,7 +4,7 @@ accession GSM510528
 cell AG04449
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -24,7 +24,7 @@ accession GSM510530
 cell AG04449
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -44,7 +44,7 @@ accession GSM510532
 cell AG04450
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -64,7 +64,7 @@ accession GSM510534
 cell AG04450
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -84,7 +84,7 @@ accession GSM510522
 cell AG09309
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -104,7 +104,7 @@ accession GSM510525
 cell AG09309
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayAg09309SimpleSignalRep2.broadPeak.gz
@@ -123,7 +123,7 @@ accession GSM510536
 cell AG09319
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -143,7 +143,7 @@ accession GSM510538
 cell AG09319
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -163,7 +163,7 @@ accession GSM510520
 cell AG10803
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -183,7 +183,7 @@ accession GSM510521
 cell AG10803
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -203,7 +203,7 @@ accession GSM580029
 cell AoAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep1.broadPeak.gz
@@ -222,7 +222,7 @@ accession GSM580030
 cell AoAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayAoafSimpleSignalRep2.broadPeak.gz
@@ -241,7 +241,7 @@ accession GSM472924
 cell BJ
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -261,7 +261,7 @@ accession GSM472925
 cell BJ
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -281,7 +281,7 @@ accession GSM472900
 cell Caco-2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -301,7 +301,7 @@ accession GSM472933
 cell Caco-2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -321,7 +321,7 @@ accession GSM510583
 cell CMK
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -341,7 +341,7 @@ accession GSM472903
 cell GM06990
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -361,7 +361,7 @@ accession GSM472904
 cell GM06990
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -381,7 +381,7 @@ accession GSM472931
 cell GM12878
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -401,7 +401,7 @@ accession GSM510581
 cell H7-hESC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -421,7 +421,7 @@ accession GSM580005
 cell H7-hESC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayH7esSimpleSignalRep2.broadPeak.gz
@@ -440,7 +440,7 @@ accession GSM510516
 cell HAEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -460,7 +460,7 @@ accession GSM510517
 cell HAEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -480,7 +480,7 @@ accession GSM580045
 cell HBMEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHbmecSimpleSignalRep1.broadPeak.gz
@@ -499,7 +499,7 @@ accession GSM580031
 cell HCFaa
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep1.broadPeak.gz
@@ -518,7 +518,7 @@ accession GSM580032
 cell HCFaa
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHcfaaSimpleSignalRep2.broadPeak.gz
@@ -537,7 +537,7 @@ accession GSM510542
 cell HCF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -557,7 +557,7 @@ accession GSM510545
 cell HCF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -577,7 +577,7 @@ accession GSM510566
 cell HCM
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -597,7 +597,7 @@ accession GSM510569
 cell HCM
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -617,7 +617,7 @@ accession GSM580007
 cell HConF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep1.broadPeak.gz
@@ -636,7 +636,7 @@ accession GSM580008
 cell HConF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHconfSimpleSignalRep2.broadPeak.gz
@@ -655,7 +655,7 @@ accession GSM510547
 cell HCPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -675,7 +675,7 @@ accession GSM510551
 cell HCPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -695,7 +695,7 @@ accession GSM580039
 cell HCT-116
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep1.broadPeak.gz
@@ -714,7 +714,7 @@ accession GSM580040
 cell HCT-116
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHct116SimpleSignalRep2.broadPeak.gz
@@ -733,7 +733,7 @@ accession GSM510571
 cell HEEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -753,7 +753,7 @@ accession GSM510574
 cell HEEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -773,7 +773,7 @@ accession GSM580027
 cell HEK293
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep1.broadPeak.gz
@@ -792,7 +792,7 @@ accession GSM580028
 cell HEK293
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHek293SimpleSignalRep2.broadPeak.gz
@@ -811,7 +811,7 @@ accession GSM472916
 cell HeLa-S3
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -831,7 +831,7 @@ accession GSM472932
 cell HeLa-S3
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -851,7 +851,7 @@ accession GSM472906
 cell HepG2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -871,7 +871,7 @@ accession GSM472907
 cell HepG2
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -891,7 +891,7 @@ accession GSM472940
 cell HGF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep1.broadPeak.gz
@@ -910,7 +910,7 @@ accession GSM472941
 cell HGF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHgfSimpleSignalRep2.broadPeak.gz
@@ -929,7 +929,7 @@ accession GSM510518
 cell HIPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -949,7 +949,7 @@ accession GSM510519
 cell HIPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -969,7 +969,7 @@ accession GSM472908
 cell HL-60
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep1.broadPeak.gz
@@ -988,7 +988,7 @@ accession GSM472942
 cell HL-60
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHl60SimpleSignalRep2.broadPeak.gz
@@ -1007,7 +1007,7 @@ accession GSM472934
 cell HMEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1027,7 +1027,7 @@ accession GSM580006
 cell HMEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmecSimpleSignalRep2.broadPeak.gz
@@ -1046,7 +1046,7 @@ accession GSM580041
 cell HMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep1.broadPeak.gz
@@ -1065,7 +1065,7 @@ accession GSM580042
 cell HMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmfSimpleSignalRep2.broadPeak.gz
@@ -1084,7 +1084,7 @@ accession GSM580021
 cell HMVEC-dBl-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep1.broadPeak.gz
@@ -1103,7 +1103,7 @@ accession GSM580022
 cell HMVEC-dBl-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdbladSimpleSignalRep2.broadPeak.gz
@@ -1122,7 +1122,7 @@ accession GSM580023
 cell HMVEC-dBl-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep1.broadPeak.gz
@@ -1141,7 +1141,7 @@ accession GSM580024
 cell HMVEC-dBl-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdblneoSimpleSignalRep2.broadPeak.gz
@@ -1160,7 +1160,7 @@ accession GSM580014
 cell HMVEC-dLy-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep1.broadPeak.gz
@@ -1179,7 +1179,7 @@ accession GSM580013
 cell HMVEC-dLy-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyadSimpleSignalRep2.broadPeak.gz
@@ -1198,7 +1198,7 @@ accession GSM580011
 cell HMVEC-dLy-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep1.broadPeak.gz
@@ -1217,7 +1217,7 @@ accession GSM580012
 cell HMVEC-dLy-Neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdlyneoSimpleSignalRep2.broadPeak.gz
@@ -1236,7 +1236,7 @@ accession GSM580015
 cell HMVEC-dNeo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep1.broadPeak.gz
@@ -1255,7 +1255,7 @@ accession GSM580016
 cell HMVEC-dNeo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecdneoSimpleSignalRep2.broadPeak.gz
@@ -1274,7 +1274,7 @@ accession GSM580019
 cell HMVEC-LBl
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep1.broadPeak.gz
@@ -1293,7 +1293,7 @@ accession GSM580020
 cell HMVEC-LBl
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmveclblSimpleSignalRep2.broadPeak.gz
@@ -1312,7 +1312,7 @@ accession GSM580009
 cell HMVEC-LLy
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep1.broadPeak.gz
@@ -1331,7 +1331,7 @@ accession GSM580010
 cell HMVEC-LLy
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHmvecllySimpleSignalRep2.broadPeak.gz
@@ -1350,7 +1350,7 @@ accession GSM510560
 cell HNPCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1370,7 +1370,7 @@ accession GSM510564
 cell HNPCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1390,7 +1390,7 @@ accession GSM580033
 cell HPAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep1.broadPeak.gz
@@ -1409,7 +1409,7 @@ accession GSM580034
 cell HPAF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpafSimpleSignalRep2.broadPeak.gz
@@ -1428,7 +1428,7 @@ accession GSM580025
 cell HPdLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep1.broadPeak.gz
@@ -1447,7 +1447,7 @@ accession GSM580026
 cell HPdLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpdlfSimpleSignalRep2.broadPeak.gz
@@ -1466,7 +1466,7 @@ accession GSM580035
 cell HPF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep1.broadPeak.gz
@@ -1485,7 +1485,7 @@ accession GSM580036
 cell HPF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHpfSimpleSignalRep2.broadPeak.gz
@@ -1504,7 +1504,7 @@ accession GSM472920
 cell HRCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -1524,7 +1524,7 @@ accession GSM472921
 cell HRCEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -1544,7 +1544,7 @@ accession GSM472919
 cell HRE
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -1564,7 +1564,7 @@ accession GSM472918
 cell HRE
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -1584,7 +1584,7 @@ accession GSM510514
 cell HRPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1604,7 +1604,7 @@ accession GSM510515
 cell HRPEpiC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1624,7 +1624,7 @@ accession GSM472935
 cell HUVEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1644,7 +1644,7 @@ accession GSM580037
 cell HVMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep1.broadPeak.gz
@@ -1663,7 +1663,7 @@ accession GSM580038
 cell HVMF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayHvmfSimpleSignalRep2.broadPeak.gz
@@ -1682,7 +1682,7 @@ accession GSM472928
 cell Jurkat
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1702,7 +1702,7 @@ accession GSM510511
 cell Jurkat
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1722,7 +1722,7 @@ accession GSM472926
 cell K562
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -1742,7 +1742,7 @@ accession GSM472927
 cell K562
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1762,7 +1762,7 @@ accession GSM472936
 cell MCF-7
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1782,7 +1782,7 @@ accession GSM510510
 cell MCF-7
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1802,7 +1802,7 @@ accession GSM510512
 cell NB4
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1822,7 +1822,7 @@ accession GSM510513
 cell NB4
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1842,7 +1842,7 @@ accession GSM580043
 cell NH-A
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep1.broadPeak.gz
@@ -1861,7 +1861,7 @@ accession GSM580044
 cell NH-A
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhaSimpleSignalRep2.broadPeak.gz
@@ -1880,7 +1880,7 @@ accession GSM580017
 cell NHDF-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep1.broadPeak.gz
@@ -1899,7 +1899,7 @@ accession GSM580018
 cell NHDF-Ad
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-08-19
 dateUnrestricted 2011-05-19
 fileName wgEncodeUwAffyExonArrayNhdfadSimpleSignalRep2.broadPeak.gz
@@ -1918,7 +1918,7 @@ accession GSM510554
 cell NHDF-neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1938,7 +1938,7 @@ accession GSM510557
 cell NHDF-neo
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1958,7 +1958,7 @@ accession GSM472937
 cell NHEK
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -1978,7 +1978,7 @@ accession GSM510577
 cell NHLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -1998,7 +1998,7 @@ accession GSM510579
 cell NHLF
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -2018,7 +2018,7 @@ accession GSM472939
 cell PANC-1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -2038,7 +2038,7 @@ accession GSM472938
 cell PANC-1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -2058,7 +2058,7 @@ accession GSM472923
 cell SAEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -2078,7 +2078,7 @@ accession GSM472922
 cell SAEC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-09-21
 dateUnrestricted 2010-06-21
@@ -2098,7 +2098,7 @@ accession GSM510509
 cell SKMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -2118,7 +2118,7 @@ accession GSM472911
 cell SKMC
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2010-01-10
 dateUnrestricted 2010-10-10
@@ -2138,7 +2138,7 @@ accession GSM472913
 cell SK-N-SH_RA
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -2158,7 +2158,7 @@ accession GSM472912
 cell SK-N-SH_RA
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-06-29
 dateUnrestricted 2010-03-29
@@ -2178,7 +2178,7 @@ accession GSM472914
 cell Th1
 composite wgEncodeUwAffyExonArray
 dataType AffyExonArray
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateResubmitted 2010-08-19
 dateSubmitted 2009-07-02
 dateUnrestricted 2010-04-02
@@ -2192,4 +2192,4 @@ subId 2110
 tableName wgEncodeUwAffyExonArrayTh1SimpleSignalRep1
 view SimpleSignal
 
-# MAGIC: -708164906
+# MAGIC: 98901430

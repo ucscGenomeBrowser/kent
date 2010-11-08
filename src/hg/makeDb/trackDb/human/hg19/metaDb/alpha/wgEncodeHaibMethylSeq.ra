@@ -3,11 +3,11 @@ objType file
 cell BG02ES-EBD
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL111
@@ -24,11 +24,11 @@ objType file
 cell BG02ES-EBD
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqBg02esebdHpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL112
@@ -45,7 +45,7 @@ objType table
 cell BG02ES-EBD
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep1.bed9.gz
@@ -65,7 +65,7 @@ objType table
 cell BG02ES-EBD
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqBg02esebdHpaRegionsRep2.bed9.gz
@@ -85,11 +85,11 @@ objType file
 cell BG02ES
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqBg02esHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL84
@@ -106,7 +106,7 @@ objType table
 cell BG02ES
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqBg02esHpaRegionsRep1.bed9.gz
@@ -129,8 +129,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL296
@@ -150,8 +150,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqGm12878HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL297
@@ -171,8 +171,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqGm12878MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL298
@@ -192,8 +192,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqGm12878MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL299
@@ -210,7 +210,7 @@ objType table
 cell GM12878
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-06
 dateUnrestricted 2011-04-06
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep1.bed9.gz
@@ -230,7 +230,7 @@ objType table
 cell GM12878
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-06
 dateUnrestricted 2011-04-06
 fileName wgEncodeHaibMethylSeqGm12878RegionsRep2.bed9.gz
@@ -253,8 +253,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL832
@@ -274,8 +274,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqGm12891HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL833
@@ -295,8 +295,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqGm12891MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL828
@@ -316,8 +316,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqGm12891MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL829
@@ -377,8 +377,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL834
@@ -398,8 +398,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqGm12892HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL835
@@ -419,8 +419,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqGm12892MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL830
@@ -440,8 +440,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqGm12892MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL831
@@ -501,8 +501,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL605
@@ -522,8 +522,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqH1hescHpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL659
@@ -543,8 +543,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH1hescMspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL604
@@ -564,8 +564,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqH1hescMspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL658
@@ -622,11 +622,11 @@ objType file
 cell H9ES-AFP-
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9esafpminusHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL43
@@ -643,11 +643,11 @@ objType file
 cell H9ES-AFP+
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9esafpplusHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL42
@@ -664,7 +664,7 @@ objType table
 cell H9ES-AFP+
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqH9esafpplusHpaRegionsRep1.bed9.gz
@@ -684,11 +684,11 @@ objType file
 cell H9ES-CM
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9escmHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL46
@@ -705,7 +705,7 @@ objType table
 cell H9ES-CM
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqH9escmHpaRegionsRep1.bed9.gz
@@ -725,11 +725,11 @@ objType file
 cell H9ES-EBD
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9esebdHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL86
@@ -746,7 +746,7 @@ objType table
 cell H9ES-EBD
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqH9esebdHpaRegionsRep1.bed9.gz
@@ -766,11 +766,11 @@ objType file
 cell H9ES-EB
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9esebHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL44
@@ -787,11 +787,11 @@ objType file
 cell H9ES-E
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9eseHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL24
@@ -808,7 +808,7 @@ objType table
 cell H9ES-E
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqH9eseHpaRegionsRep1.bed9.gz
@@ -828,11 +828,11 @@ objType file
 cell H9ES
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqH9esHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL26
@@ -849,7 +849,7 @@ objType table
 cell H9ES
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqH9esHpaRegionsRep1.bed9.gz
@@ -869,11 +869,11 @@ objType file
 cell HAL
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHalHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHalHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL37
@@ -890,7 +890,7 @@ objType table
 cell HAL
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqHalHpaRegionsRep1.bed9.gz
@@ -910,11 +910,11 @@ objType file
 cell HCT-116
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHct116HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL8
@@ -931,11 +931,11 @@ objType file
 cell HCT-116
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqHct116HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL33
@@ -952,7 +952,7 @@ objType table
 cell HCT-116
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqHct116HpaRegionsRep1.bed9.gz
@@ -972,11 +972,11 @@ objType file
 cell HCT-116
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHct116MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHct116MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL10
@@ -996,8 +996,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL577
@@ -1017,8 +1017,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqHelas3HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL603
@@ -1038,8 +1038,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHelas3MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL574
@@ -1059,8 +1059,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqHelas3MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL602
@@ -1120,8 +1120,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL578
@@ -1141,8 +1141,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqHepg2HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL579
@@ -1162,8 +1162,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHepg2MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL575
@@ -1183,8 +1183,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqHepg2MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL576
@@ -1241,11 +1241,11 @@ objType file
 cell HFL11W
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHfl11wHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL113
@@ -1262,7 +1262,7 @@ objType table
 cell HFL11W
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqHfl11wHpaRegionsRep1.bed9.gz
@@ -1282,11 +1282,11 @@ objType file
 cell HFL24W
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
-fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqHfl24wHpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL114
@@ -1303,7 +1303,7 @@ objType table
 cell HFL24W
 composite wgEncodeHaibMethylSeq
 dataType MethylSeq
-dataVersion post ENCODE June 2010 Freeze
+dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-16
 dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylSeqHfl24wHpaRegionsRep1.bed9.gz
@@ -1326,8 +1326,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqK562HpaAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqK562HpaAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqK562HpaAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL229
@@ -1347,8 +1347,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqK562HpaAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqK562HpaAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqK562HpaAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL231
@@ -1368,8 +1368,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqK562MspAlnRep1.bam
 fileIndex wgEncodeHaibMethylSeqK562MspAlnRep1.bam.bai
+fileName wgEncodeHaibMethylSeqK562MspAlnRep1.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL230
@@ -1389,8 +1389,8 @@ dataType MethylSeq
 dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
-fileName wgEncodeHaibMethylSeqK562MspAlnRep2.bam
 fileIndex wgEncodeHaibMethylSeqK562MspAlnRep2.bam.bai
+fileName wgEncodeHaibMethylSeqK562MspAlnRep2.bam
 grant Myers
 lab HudsonAlpha
 labVersion SL232
@@ -1442,4 +1442,4 @@ tableName wgEncodeHaibMethylSeqK562RegionsRep2
 treatment None
 view Regions
 
-# MAGIC: 193403058
+# MAGIC: 1135216346

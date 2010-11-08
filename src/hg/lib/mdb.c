@@ -2160,7 +2160,10 @@ if (cvHashOfTermTypes == NULL)
     // Patch up an ugly inconsistency with 'cell'
     struct hash *cellHash = hashRemove(cvHashOfTermTypes,"cellType");
     if (cellHash)
+        {
         hashAdd(cvHashOfTermTypes,"cell",cellHash);
+        hashReplace(cellHash, "term", cloneString("cell")); // spilling memory of 'cellType' val
+        }
     }
 
 
@@ -2198,11 +2201,10 @@ while ((hEl = hashNext(&hc)) != NULL)
         if(SETTING_NOT_ON(setting))
             continue;
         }
-    char *term = hashMustFindVal(typeHash,"term");
+    char *term  = hEl->name;
     char *label = hashFindVal(typeHash,"label");
     if (label == NULL)
         label = term;
-
     slPairAdd(&whitePairs, term, cloneString(label)); // Term gets cloned in slPairAdd
     }
 if (whitePairs != NULL)
