@@ -2998,7 +2998,7 @@ if (singleSearch(db, term, cart, hgp))
 /* Allow any search term to end with a :Start-End range -- also support stuff 
  * pasted in from BED (chrom start end) or SQL query (chrom | start | end).  
  * If found, strip it off and remember the start and end. */
-char *originalTerm = cloneString(term);
+char *originalTerm = term;
 if ((canonicalSpec = 
         matchRegexSubstr(term, canonicalRangeExp,
 				  substrs, ArraySize(substrs))) ||
@@ -3013,6 +3013,7 @@ if ((canonicalSpec =
 	matchRegexSubstr(term, singleBaseExp, substrs, ArraySize(substrs))) ||
     matchRegexSubstr(term, sqlRangeExp, substrs, ArraySize(substrs)))
     {
+    term = cloneString(term);
     /* Since we got a match, substrs[1] is the chrom/term, [2] is relStart, 
      * [3] is relEnd. ([0] is all.) */
     term[substrs[1].rm_eo] = 0;
@@ -3057,7 +3058,7 @@ if (hgOfficialChromName(db, term) != NULL)
 	if (start < 0)
 	    start = 0;
 	}
-    singlePos(hgp, "Chromosome Range", NULL, "chromInfo", term,
+    singlePos(hgp, "Chromosome Range", NULL, "chromInfo", originalTerm,
 	      "", chrom, start, end);
     }
 else
