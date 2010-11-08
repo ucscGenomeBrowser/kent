@@ -130,7 +130,7 @@ superTrack wgEncodeRnaSeqSuper
     pairEndsByName on
     showNames on
     noColorTag .
-    bamColorMode gray
+    bamColorMode strand
     bamGrayMode aliQual
     baseColorDefault diffBases
     baseColorUseSequence lfExtra
