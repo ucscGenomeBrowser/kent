@@ -1621,6 +1621,11 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
     } else if (cmd == 'openLink') {
         // Remove hgsid to force a new session (see redmine ticket 1333).
         var href = removeHgsid(selectedMenuItem.href);
+        var chrom = $("input[name=chromName]").val();
+        if(href.indexOf("c=" + chrom) == -1) {
+            // make sure the link contains chrom info (necessary b/c we are stripping hgsdi)
+            href = href + "&c=" + chrom;
+        }
         if(window.open(href) == null) {
             windowOpenFailedMsg();
         }
