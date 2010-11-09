@@ -1,10 +1,10 @@
 track wgEncodeSunyAlbanyTiling
 compositeTrack on
 shortLabel SUNY Tiling
-longLabel ENCODE SUNY Albany (Tenenbaum) RBP Associated RNA by Tiling Array
+longLabel ENCODE SUNY Albany Tenenbaum RBP Associatediated RNA by Tiling Array
 group regulation
 subGroup1 view Views RbpAssocRna=RBP_Assoc_RNA 
-subGroup2 cellType Cell_Line GM12878=GM12878 K562=K562
+subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1)  K562=K562&nbsp;(Tier_1)
 subGroup3 antibody Antibody_Target ELAVL1=ELAVL1 PABPC1=PABPC1 T7Tag=T7Tag ripInput=Input  
 dimensions dimensionX=antibody dimensionY=cellType
 sortOrder cellType=+ antibody=+ 
@@ -32,8 +32,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingGm12878RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel GM12878  Input
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (Input in GM12878 cells)
+    	shortLabel GM12878 Input
+        longLabel GM12878 Input RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=ripInput
     	type broadPeak
     	color 153,38,0
@@ -42,8 +42,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingGm12878T7tagRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel GM12878  T7Tag
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (T7Tag in GM12878 cells)
+    	shortLabel GM12878 T7Tag
+        longLabel GM12878 T7Tag RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=T7Tag
     	type broadPeak
     	color 153,38,0
@@ -53,7 +53,7 @@ origAssembly hg19
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel GM12878 PABPC1
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (PABPC1 in GM12878 cells)
+        longLabel GM12878 PABPC1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=PABPC1
     	type broadPeak
     	color 153,38,0
@@ -63,7 +63,7 @@ origAssembly hg19
     	release alpha
      	subTrack wgEncodeSunyAlbanyTilingView
   	shortLabel GM12878 ELAVL1
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (ELAVL1 in GM12878 cells)
+        longLabel GM12878 ELAVL1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=ELAVL1
     	type broadPeak
     	color 153,38,0
@@ -72,8 +72,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingK562RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel K562  Input
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (Input in K562 cells)
+    	shortLabel K562 Input
+        longLabel K562 Input RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=ripInput
     	type broadPeak
     	color 46,0,184
@@ -82,8 +82,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyTilingK562T7tagRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
-    	shortLabel K562  T7Tag
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (T7Tag in K562 cells)
+    	shortLabel K562 T7Tag
+        longLabel K562 T7Tag RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=T7Tag
     	type broadPeak
     	color 46,0,184
@@ -93,7 +93,7 @@ origAssembly hg19
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 PABPC1
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (PABPC1 in K562 cells)
+        longLabel K562 PABPC1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=PABPC1
     	type broadPeak
     	color 46,0,184
@@ -103,7 +103,7 @@ origAssembly hg19
     	release alpha
     	subTrack wgEncodeSunyAlbanyTilingView
     	shortLabel K562 ELAVL1
-    	longLabel ENCODE SUNY Albany RBP Assoc RNA by Tiling Array (ELAVL1 in K562 cells)
+        longLabel K562 ELAVL1 RBP Associated RNA by Tiling Array from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=ELAVL1
     	type broadPeak
     	color 46,0,184

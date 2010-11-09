@@ -36,7 +36,7 @@ DBS = 	hg16 hg17 hg18 hg19 hg19Haps hg19Patch2 \
 	ponAbe2 \
 	rheMac2 \
 	papHam1 \
-	macEug1 \
+	macEug1 macEug2 \
 	calJac1 calJac3 \
 	otoGar1 tupBel1\
 	ailMel1 \
@@ -126,6 +126,7 @@ update: #clean
 	rm -f /usr/local/apache/cgi-bin-${USER}/encode/cv.ra
 	cp -p cv/alpha/cv.ra  /usr/local/apache/cgi-bin-${USER}/encode
 #  if you want to test track search tool with your own trix file
+#	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb_${USER}.{ixx,ix}}
 #	HGDB_TRACKDB=trackDb_${USER} ./buildTrix trackDb_${USER} metaDb_${USER} /usr/local/apache/cgi-bin-${USER}/encode/cv.ra ${HIVE_TRIX} ${DBS}
 # you'll also need to set browser.trixPath to point to your trix file
 # see kent/src/product/ex.hg/conf for details
@@ -136,6 +137,7 @@ alpha: clean
 	./checkMetaDb alpha metaDb ${DBS}
 	rm -f /usr/local/apache/cgi-bin/encode/cv.ra
 	cp -p cv/alpha/cv.ra  /usr/local/apache/cgi-bin/encode
+	rm -f ${DBS:%=${HIVE_TRIX}/%_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${HIVE_TRIX} ${DBS}
 	./makeTrixLinks trackDb ${HIVE_TRIX} ${DBS}
 
@@ -145,6 +147,7 @@ beta: clean
 	./checkMetaDb beta metaDb ${DBS}
 	rm -f /usr/local/apache/cgi-bin/encode/cv.ra
 	cp -p cv/beta/cv.ra  /usr/local/apache/cgi-bin/encode
+	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb.{ixx,ix}}
 	HGDB_TRACKDB=trackDb ./buildTrix trackDb metaDb /usr/local/apache/cgi-bin/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 public: clean
@@ -153,6 +156,7 @@ public: clean
 	./checkMetaDb public metaDb_public ${DBS}
 	rm -f /usr/local/apache/cgi-bin-public/encode/cv.ra
 	cp -p cv/public/cv.ra  /usr/local/apache/cgi-bin-public/encode
+	rm -f ${DBS:%=${DATA_TRIX}/%_trackDb_public.{ixx,ix}}
 	HGDB_TRACKDB=trackDb_public ./buildTrix trackDb_public metaDb_public /usr/local/apache/cgi-bin-public/encode/cv.ra ${DATA_TRIX} ${DBS}
 
 # this will fail if we are not in a beta checkout:

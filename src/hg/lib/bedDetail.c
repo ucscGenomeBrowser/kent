@@ -310,3 +310,125 @@ ret->id = cloneString(row[size-2]);
 ret->description = cloneString(row[size-1]);
 return ret;
 }
+
+struct bedDetail *bedDetailLineFileLoad (char **row, int size, struct lineFile *lf)
+/* load from linefile line, with error checking */
+{
+struct bedDetail *item;
+int count; /* block count */
+int wordCount = size - 2; /* bed part of row */
+AllocVar(item);
+item->chrom = cloneString(row[0]);
+item->chromStart = lineFileNeedNum(lf, row, 1);
+item->chromEnd = lineFileNeedNum(lf, row, 2);
+if (item->chromEnd < 1)
+    lineFileAbort(lf, "chromEnd less than 1 (%d)", item->chromEnd);
+if (item->chromEnd < item->chromStart)
+    lineFileAbort(lf, "chromStart after chromEnd (%d > %d)",
+        item->chromStart, item->chromEnd);
+if (wordCount > 3)
+     item->name = cloneString(row[3]);
+if (wordCount > 4)
+     item->score = lineFileNeedNum(lf, row, 4);
+if (wordCount > 5)
+     {
+     strncpy(item->strand, row[5], sizeof(item->strand));
+     if (item->strand[0] != '+' && item->strand[0] != '-' && item->strand[0] != '.')
+          lineFileAbort(lf, "Expecting + or - in strand");
+     }
+if (wordCount > 6)
+     item->thickStart = lineFileNeedNum(lf, row, 6);
+else
+     item->thickStart = item->chromStart;
+if (wordCount > 7)
+     {
+     item->thickEnd = lineFileNeedNum(lf, row, 7);
+     if (item->thickEnd < item->thickStart)
+         lineFileAbort(lf, "thickStart after thickEnd");
+     if ((item->thickStart != 0) &&
+         ((item->thickStart < item->chromStart) ||
+          (item->thickStart > item->chromEnd)))
+         lineFileAbort(lf,
+             "thickStart out of range (chromStart to chromEnd, or 0 if no CDS)");
+     if ((item->thickEnd != 0) &&
+         ((item->thickEnd < item->chromStart) ||
+          (item->thickEnd > item->chromEnd)))
+         lineFileAbort(lf,
+             "thickEnd out of range for %s:%d-%d, thick:%d-%d (chromStart to chromEnd, or 0 if no CDS)",
+                       item->name, item->chromStart, item->chromEnd,
+                       item->thickStart, item->thickEnd);
+     }
+else
+     item->thickEnd = item->chromEnd;
+if (wordCount > 8)
+    {
+    char *comma;
+    /*  Allow comma separated list of rgb values here   */
+    comma = strchr(row[8], ',');
+    if (comma)
+        {
+        int rgb = bedParseRgb(row[8]);
+        if (rgb < 0)
+            lineFileAbort(lf,
+                "Expecting 3 comma separated numbers for r,g,b bed item color.");
+        else
+            item->reserved = rgb;
+        }
+    else
+        item->reserved = lineFileNeedNum(lf, row, 8);
+    }
+if (wordCount > 9)
+    item->blockCount = lineFileNeedNum(lf, row, 9);
+if (wordCount > 10)
+    {
+    sqlSignedDynamicArray(row[10], &item->blockSizes, &count);
+    if (count != item->blockCount)
+        lineFileAbort(lf,  "expecting %d elements in array", item->blockCount);
+    }
+if (wordCount > 11)
+    {
+    int i;
+    int lastEnd, lastStart;
+    sqlSignedDynamicArray(row[11], &item->chromStarts, &count);
+    if (count != item->blockCount)
+        lineFileAbort(lf, "expecting %d elements in array", item->blockCount);
+    // tell the user if they appear to be using absolute starts rather than
+    // relative... easy to forget!  Also check block order, coord ranges...
+    lastStart = -1;
+    lastEnd = 0;
+    for (i=0;  i < item->blockCount;  i++)
+        {
+        if (item->chromStarts[i]+item->chromStart >= item->chromEnd)
+            {
+            if (item->chromStarts[i] >= item->chromStart)
+                lineFileAbort(lf,
+                    "BED chromStarts offsets must be relative to chromStart, "
+                    "not absolute.  Try subtracting chromStart from each offset "
+                    "in chromStarts.");
+            else
+                lineFileAbort(lf,
+                    "BED chromStarts[i]+chromStart must be less than chromEnd.");
+            }
+        lastStart = item->chromStarts[i];
+        lastEnd = item->chromStart + item->chromStarts[i] + item->blockSizes[i];
+        }
+    if (item->chromStarts[0] != 0)
+        lineFileAbort(lf,
+            "BED blocks must span chromStart to chromEnd.  "
+            "BED chromStarts[0] must be 0 (==%d) so that (chromStart + "
+            "chromStarts[0]) equals chromStart.", item->chromStarts[0]);
+    i = item->blockCount-1;
+    if ((item->chromStart + item->chromStarts[i] + item->blockSizes[i]) !=
+        item->chromEnd)
+        {
+        lineFileAbort(lf,
+            "BED blocks must span chromStart to chromEnd.  (chromStart + "
+            "chromStarts[last] + blockSizes[last]) must equal chromEnd.");
+        }
+    }
+    /* these 2 should not be null (maybe empty string), but always last 2 */
+    item->id = cloneString(row[size-2]);
+    item->description = cloneString(row[size-1]);
+return item;
+}
+
