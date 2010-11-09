@@ -3507,7 +3507,7 @@ group varRep
 priority 500
 visibility hide
 subGroup1 view Projects A_PSU=PSU_Bushmen B_1kG=1000_Genomes_Pilot C_1off=Single-Genome_Projects
-subGroup2 id Genome A_KB1=KB1 B_NB1=NB1 C_MD8=MD8 D_TK1=TK1 E_ABT=ABT F_12878=NA12878 G_12891=NA12891 H_12892=NA12892 I_19240=NA19240 J_19238=NA19238 K_19239=NA19239 L_Venter=Venter M_Watson=Watson N_18507=NA18507 O_YH=YH P_SJK=SJK Q_AK1=AK1 R_Quake=Quake S_Saqqaq=Saqqaq
+subGroup2 id Genome A_KB1=KB1 B_NB1=NB1 C_MD8=MD8 D_TK1=TK1 E_ABT=ABT F_12878=NA12878 G_12891=NA12891 H_12892=NA12892 I_19240=NA19240 J_19238=NA19238 K_19239=NA19239 L_Venter=Venter M_Watson=Watson N_18507=NA18507 O_YH=YH P_SJK=SJK Q_AK1=AK1 R_Quake=Quake RS_Irish=Irish S_Saqqaq=Saqqaq
 dragAndDrop subTracks
 configurable on
 dimensions dimX=view dimY=id
@@ -3699,6 +3699,13 @@ type bed 4 +
         shortLabel S. Quake
         longLabel Stephen Quake (Stanford)
 
+        track pgIrish
+        parent pgSnp1off
+        subGroups view=C_1off id=RS_Irish
+        shortLabel Irish Male
+        longLabel Anonymous Irish Male
+        color 0,100,100
+
         track pgSaqqaq
         parent pgSnp1off
 	subGroups view=C_1off id=S_Saqqaq
@@ -3740,13 +3747,6 @@ type bed 4 +
     group varRep
     priority 20
     color 128,0,128
-
-    track pgIrish
-    parent pgSnpHgwdev
-    shortLabel Irish male
-    longLabel Anonymous Irish male
-    color 0,100,100
-    priority 53
 
 
 track darned
