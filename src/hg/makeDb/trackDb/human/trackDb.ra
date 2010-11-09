@@ -3733,6 +3733,14 @@ type bed 4 +
     longLabel KB1 Genome Variants, 454
     priority 2
 
+    track pgYoruban2
+    parent pgSnpHgwdev
+    shortLabel YRI '8507, SOLiD
+    longLabel YRI NA18507 Sequenced on the SOLiD Platform (PSU)
+    group varRep
+    priority 20
+    color 128,0,128
+
     track pgIrish
     parent pgSnpHgwdev
     shortLabel Irish male
