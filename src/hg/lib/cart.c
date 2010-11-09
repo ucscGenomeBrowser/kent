@@ -2112,10 +2112,10 @@ for(childRef = tdb->parent->children;childRef != NULL; childRef = childRef->next
             cartRemove(cart,child->track);
         else if (hTvFromString(cartVis) != tvHide)
             cartSetString(cart,child->track,"hide");
-        }
+            }
     else if (child->visibility != tvHide)
         cartSetString(cart,child->track,"hide");
-    }
+        }
 // and finally show the parent
 cartSetString(cart,tdb->parent->track,"show");
 WARN("Set %s to 'show'",tdb->parent->track);
@@ -2182,7 +2182,7 @@ return TRUE;
 
 #if defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 static int cartTdbParentShapeVis(struct cart *cart,struct trackDb *parent,char *view,struct hash *subVisHash,boolean reshapeFully)
-// This shapes one level of vis (view or container) based upon subtrack specific visibility.  Returns count of subtracks affected
+// This shapes one level of vis (view or container) based upon subtrack specific visibility.  Returns count of tracks affected
 {
 ASSERT(view || (tdbIsContainer(parent) && tdbIsContainerChild(parent->subtracks)));
 struct trackDb *subtrack = NULL;
@@ -2219,12 +2219,23 @@ for(subtrack = parent->subtracks;subtrack != NULL;subtrack = subtrack->next)
 
 // Now we need to update non-subtrack specific vis/sel in cart
 int countUnchecked=0;
-int countExplicitVis=0;
-if (visMax != visOrig || reshapeFully)
+int countVisChanged=0;
+// If view, this should always be set, since if a single view needs to be promoted, the composite will go to full.
+if (tdbIsCompositeView(parent))
     {
     cartSetString(cart,setting,hStringFromTv(visMax));    // Set this explicitly.  The visOrig may be inherited!
-    if (visOrig == tvHide && tdbIsSuperTrackChild(parent))
-        cartTdbOverrideSuperTracks(cart,parent,FALSE);      // deal with superTrack vis! cleanup
+    countVisChanged++;
+    }
+
+if (visMax != visOrig || reshapeFully)
+    {
+    if (!tdbIsCompositeView(parent)) // view vis is always shaped, but composite vis is conditionally shaped.
+        {
+        cartSetString(cart,setting,hStringFromTv(visMax));    // Set this explicitly.  The visOrig may be inherited!
+        countVisChanged++;
+        if (visOrig == tvHide && tdbIsSuperTrackChild(parent))
+            cartTdbOverrideSuperTracks(cart,parent,FALSE);      // deal with superTrack vis! cleanup
+        }
 
     // Now set all subtracks that inherit vis back to visOrig
     for(subtrack = parent->subtracks;subtrack != NULL;subtrack = subtrack->next)
@@ -2248,7 +2259,7 @@ if (visMax != visOrig || reshapeFully)
                         cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited
                     else
                         cartSetString(cart,subtrack->track,hStringFromTv(visOrig));
-                    countExplicitVis++;
+                    countVisChanged++;
                     }
                 }
             else if (tdbIsMultiTrack(parent))
@@ -2256,15 +2267,15 @@ if (visMax != visOrig || reshapeFully)
             }
         }
 
-    if (tdbIsCompositeView(parent))
-        {
-        visOrig = tdbVisLimitedByAncestry(cart, parent->parent, FALSE);
-        cartSetString(cart,parent->parent->track,"full");    // Now set composite to full.
-        if (visOrig == tvHide && tdbIsSuperTrackChild(parent->parent))
-            cartTdbOverrideSuperTracks(cart,parent->parent,FALSE);      // deal with superTrack vis! cleanup
-        }
+    // OUCH!  This cannot be until all the views are dealt with!
+    //if (tdbIsCompositeView(parent))
+    //    {
+    //    visOrig = tdbVisLimitedByAncestry(cart, parent->parent, FALSE);
+    //    cartSetString(cart,parent->parent->track,"full");    // Now set composite to full.
+    //    if (visOrig == tvHide && tdbIsSuperTrackChild(parent->parent))
+    //        cartTdbOverrideSuperTracks(cart,parent->parent,FALSE);      // deal with superTrack vis! cleanup
+    //    }
 
-    WARN("%s visOrig:%s visMax:%s unchecked:%d  explicitVis:%d",parent->track,hStringFromTv(visOrig),hStringFromTv(visMax),countUnchecked,countExplicitVis);
     }
 else if (tdbIsMultiTrack(parent))
     {
@@ -2277,8 +2288,10 @@ else if (tdbIsMultiTrack(parent))
             cartRemove(cart,cartVar->name);
         }
     }
+if (countUnchecked + countVisChanged)
+    WARN("%s visOrig:%s visMax:%s unchecked:%d  Vis changed:%d",parent->track,hStringFromTv(visOrig),hStringFromTv(visMax),countUnchecked,countVisChanged);
 
-return (countUnchecked + countExplicitVis);
+return (countUnchecked + countVisChanged);
 }
 #endif/// defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 
@@ -2319,7 +2332,7 @@ slFreeList(&tdbRefList);
 
 if (hashNumEntries(subVisHash) == 0)
     {
-    WARN("No subtrack level vis for %s",tdbContainer->track);
+    //WARN("No subtrack level vis for %s",tdbContainer->track);
     return FALSE;
     }
 
@@ -2378,6 +2391,13 @@ if (hasViews)
         char *view = NULL;
         if (tdbIsView(tdbView,&view) )
             count += cartTdbParentShapeVis(cart,tdbView,view,subVisHash,reshapeFully);
+        }
+    if (count > 0)
+        {
+        enum trackVisibility visOrig = tdbVisLimitedByAncestry(cart, tdbContainer, FALSE);
+        cartSetString(cart,tdbContainer->track,"full");    // Now set composite to full.
+        if (visOrig == tvHide && tdbIsSuperTrackChild(tdbContainer))
+            cartTdbOverrideSuperTracks(cart,tdbContainer,FALSE);      // deal with superTrack vis! cleanup
         }
     }
 else // If no views then composite is not set to fuul but to max of subtracks
@@ -2447,13 +2467,6 @@ if (hasViews)
         if (!tdbIsView(tdbView,&view))
             break;
 
-        // If just created and if vis is the same as tdb default then vis has not changed
-        safef(setting,sizeof(setting),"%s.%s.vis",tdb->track,view);
-        char *cartVis = cartOptionalString(newCart,setting);
-        char *oldValue = hashFindVal(oldVars,setting);
-        if (cartVis && oldValue == NULL && hTvFromString(cartVis) != tdbView->visibility)
-            viewVisChanged = FALSE;
-
         safef(setting,   sizeof(setting),"%s.%s.",tdb->track,view); // unfortunatly setting name could be containerName.View.???
         char settingAlt[512];
         safef(settingAlt,sizeof(settingAlt),"%s.",tdbView->track);  // or viewTrackName.???
@@ -2476,10 +2489,20 @@ if (hasViews)
                 viewVisChanged = TRUE;
                 }
             else if (cartRemoveFromTdbTree(newCart,tdbView,suffix,TRUE) > 0)
-                clensed++;
+                    clensed++;
 
             freeMem(oneName);
             }
+        if (viewVisChanged)
+            {
+            // If just created and if vis is the same as tdb default then vis has not changed
+            safef(setting,sizeof(setting),"%s.%s.vis",tdb->track,view);
+            char *cartVis = cartOptionalString(newCart,setting);
+            char *oldValue = hashFindVal(oldVars,setting);
+            if (cartVis && oldValue == NULL && hTvFromString(cartVis) != tdbView->visibility)
+                viewVisChanged = FALSE;
+            }
+
         if  (containerVisChanged || viewVisChanged)
             { // vis is a special additive case!
             WARN("Removing subtrack vis for %s.%s",tdb->track,view);
@@ -2498,7 +2521,7 @@ while ((oneName = slPopHead(&changedSettings)) != NULL)
         clensed++;
     freeMem(oneName);
     }
-if  (containerVisChanged || !hasViews)
+if  (containerVisChanged && !hasViews)
     { // vis is a special additive case!
     if (cartRemoveFromTdbTree(newCart,tdb,NULL,TRUE) > 0)
         clensed++;
