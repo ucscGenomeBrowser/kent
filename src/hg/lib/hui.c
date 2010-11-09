@@ -6760,7 +6760,7 @@ if (subtrackOverride)
     return vis;
 
 // subtracks without explicit (cart) vis but are selected, should get inherited vis
-if (vis == tvHide && tdbIsContainerChild(tdb))
+if (tdbIsContainerChild(tdb))
     {
     if (checkBoxToo && fourStateVisible(subtrackFourStateChecked(tdb,cart)))
         vis = tvFull; // to be limited by ancestry
