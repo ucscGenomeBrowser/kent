@@ -443,7 +443,6 @@ module PipelineBackground
     # cleanup: delete temporary upload subdirectory
     clean_out_dir uploadDir
 
-    new_status project, project.status
     return true
 
   end
@@ -660,6 +659,7 @@ private
       c = project.archives_active[n..n]
       if c == "1"
         unless expand_archive(project, a)
+          new_status project, "expand failed"
           return
         end
       end
