@@ -276,7 +276,7 @@ fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1174
 tableName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1
@@ -295,7 +295,7 @@ fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1174
 tableName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
@@ -314,7 +314,7 @@ fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1
@@ -333,7 +333,7 @@ fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2
@@ -352,7 +352,7 @@ fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1
@@ -371,7 +371,7 @@ fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2
@@ -466,7 +466,7 @@ fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1
@@ -485,7 +485,7 @@ fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2
@@ -922,7 +922,7 @@ fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
@@ -941,7 +941,7 @@ fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2
@@ -960,7 +960,7 @@ fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
@@ -979,7 +979,7 @@ fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
@@ -1568,7 +1568,7 @@ fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1
@@ -1587,7 +1587,7 @@ fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
+protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2

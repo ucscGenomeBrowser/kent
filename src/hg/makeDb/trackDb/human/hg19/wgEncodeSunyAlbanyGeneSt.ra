@@ -1,12 +1,11 @@
-
 track wgEncodeSunyAlbanyGeneSt
 compositeTrack on
 release alpha
 shortLabel SUNY GeneST 
-longLabel ENCODE SUNY Albany (Tenenbaum) RBP Associated RNA by GeneST
+longLabel ENCODE SUNY Albany (Tenenbaum) RBP Associated RNA by GeneST 
 group regulation
 subGroup1 view Views RbpAssocRna=Rbp_Assoc_Rna
-subGroup2 cellType Cell_Line  GM12878=GM12878 K562=K562 HeLaS3=HeLa-S3 HepG2=HepG2
+subGroup2 cellType Cell_Line  GM12878=GM12878&nbsp;(Tier_1) H1hESC=H1hESC&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HeLaS3=HeLa-S3 HepG2=HepG2
 subGroup3 antibody Antibody_Target  CELF1=CELF1 ELAVL1=ELAVL1 IGF2BP1=IGF2BP1 PABPC1=PABPC1 SLBP=SLBP T7Tag=T7Tag  ripInput=Input
 dimensions dimensionX=antibody dimensionY=cellType
 sortOrder cellType=+ antibody=+ 
@@ -37,8 +36,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStGm12878RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel GM12878   Input
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (Input in GM12878 cells)
+    	shortLabel GM12878 Input
+        longLabel GM12878 Input RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=ripInput
     	type broadPeak
     	color 153,38,0
@@ -47,8 +46,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStGm12878T7tagRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel GM12878   T7Tag
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (T7Tag in GM12878 cells)
+    	shortLabel GM12878 T7Tag
+        longLabel GM12878 T7Tag RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=T7Tag
     	type broadPeak
     	color 153,38,0
@@ -57,8 +56,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStGm12878Pabpc1RbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel GM12878  PABPC1
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (PABPC1 in GM12878 cells)
+    	shortLabel GM12878 PABPC1
+        longLabel GM12878 PABPC1 RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=PABPC1
     	type broadPeak
     	color 153,38,0
@@ -67,8 +66,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStGm12878SlbpRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel GM12878    SLBP
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (SLBP in GM12878 cells)
+    	shortLabel GM12878 SLBP
+        longLabel GM12878 SLBP RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=SLBP
     	type broadPeak
     	color 153,38,0
@@ -77,8 +76,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStGm12878Elavl1RbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel GM12878  ELAVL1
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (ELAVL1 in GM12878 cells)
+    	shortLabel GM12878 ELAVL1
+        longLabel GM12878 ELAVL1 RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=ELAVL1
     	type broadPeak
     	color 153,38,0
@@ -88,7 +87,7 @@ origAssembly hg19
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
     	shortLabel GM12878 IGF2BP1
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (IGF2BP1 in GM12878 cells)
+        longLabel GM12878 IGF2BP1 RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=IGF2BP1
     	type broadPeak
     	color 153,38,0
@@ -97,8 +96,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStGm12878Celf1RbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel GM12878   CELF1
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (CELF1 in GM12878 cells)
+    	shortLabel GM12878 CELF1
+        longLabel GM12878 CELF1 RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=GM12878 antibody=CELF1
     	type broadPeak
     	color 153,38,0
@@ -107,8 +106,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStK562RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel K562   Input
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (Input in K562 cells)
+    	shortLabel K562 Input
+        longLabel K562 Input RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=ripInput
     	type broadPeak
     	color 46,0,184
@@ -117,8 +116,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStK562T7tagRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel K562   T7Tag
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (T7Tag in K562 cells)
+    	shortLabel K562 T7Tag
+        longLabel K562 T7Tag RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=T7Tag
     	type broadPeak
     	color 46,0,184
@@ -127,8 +126,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStK562Pabpc1RbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel K562  PABPC1
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (PABPC1 in K562 cells)
+    	shortLabel K562 PABPC1
+        longLabel K562 PABPC1 RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=PABPC1
     	type broadPeak
     	color 46,0,184
@@ -137,8 +136,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStK562SlbpRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel K562    SLBP
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (SLBP in K562 cells)
+    	shortLabel K562 SLBP
+        longLabel K562 SLBP RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=SLBP
     	type broadPeak
     	color 46,0,184
@@ -147,8 +146,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStK562Elavl1RbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView
-    	shortLabel K562  ELAVL1
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (ELAVL1 in K562 cells)
+    	shortLabel K562 ELAVL1
+        longLabel K562 ELAVL1 RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=K562 antibody=ELAVL1
     	type broadPeak
     	color 46,0,184
@@ -157,8 +156,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStHelas3RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView off
-    	shortLabel HeLa-S3   Input
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (Input in HeLa-S3 cells)
+    	shortLabel HeLa-S3 Input
+        longLabel HeLa-S3 Input RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=HeLaS3 antibody=ripInput
     	type broadPeak
     	color 0,119,158
@@ -167,8 +166,8 @@ origAssembly hg19
     	track wgEncodeSunyAlbanyGeneStHepg2RipinputRbpAssocRna
     	release alpha
     	subTrack wgEncodeSunyAlbanyGeneStView off
-    	shortLabel HepG2   Input
-    	longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (Input in HepG2 cells)
+    	shortLabel HepG2 Input
+        longLabel HepG2 Input RBP Associated RNA by GeneST from ENCODE/SUNY
     	subGroups view=RbpAssocRna cellType=HepG2 antibody=ripInput
     	type broadPeak
     	color 189,0,157
@@ -177,8 +176,8 @@ origAssembly hg19
             track wgEncodeSunyAlbanyGeneStK562Celf1RbpAssocRna
             release alpha
             parent wgEncodeSunyAlbanyGeneStView
-            shortLabel K562   CELF1
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (CELF1 in K562 cells)
+            shortLabel K562 CELF1
+            longLabel K562 CELF1 RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=K562 antibody=CELF1
             type broadPeak
             color 46,0,184
@@ -187,8 +186,8 @@ origAssembly hg19
             track wgEncodeSunyAlbanyGeneStHelas3T7tagRbpAssocRna
             release alpha
             parent wgEncodeSunyAlbanyGeneStView off
-            shortLabel HeLa-S3   T7Tag
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (T7Tag in HeLa-S3 cells)
+            shortLabel HeLa-S3 T7Tag
+            longLabel HeLa-S3 T7Tag RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=HeLaS3 antibody=T7Tag
             type broadPeak
             color 0,119,158
@@ -198,7 +197,7 @@ origAssembly hg19
             release alpha
             parent wgEncodeSunyAlbanyGeneStView off
             shortLabel HeLa-S3  PABPC1
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (PABPC1 in HeLa-S3 cells)
+            longLabel HeLa-S3 PABPC1 RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=HeLaS3 antibody=PABPC1
             type broadPeak
             color 0,119,158
@@ -207,8 +206,8 @@ origAssembly hg19
             track wgEncodeSunyAlbanyGeneStHelas3Elavl1RbpAssocRna
             release alpha
             parent wgEncodeSunyAlbanyGeneStView off
-            shortLabel HeLa-S3   ELAV1
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (ELAV1 in HeLa-S3 cells)
+            shortLabel HeLa-S3 ELAV1
+            longLabel HeLa-S3 ELAV1 RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=HeLaS3 antibody=ELAVL1
             type broadPeak
             color 0,119,158
@@ -217,8 +216,8 @@ origAssembly hg19
             track wgEncodeSunyAlbanyGeneStHepg2T7tagRbpAssocRna
             release alpha
             parent wgEncodeSunyAlbanyGeneStView off
-            shortLabel HepG2   T7Tag
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (T7Tag in HepG2 cells)
+            shortLabel HepG2 T7Tag
+            longLabel HepG2 T7Tag RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=HepG2 antibody=T7Tag
             type broadPeak
             color 189,0,157
@@ -227,8 +226,8 @@ origAssembly hg19
             track wgEncodeSunyAlbanyGeneStHepg2Pabpc1RbpAssocRna
             release alpha
             parent wgEncodeSunyAlbanyGeneStView off
-            shortLabel HepG2   PABPC1
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (PABPC1 in HepG2 cells)
+            shortLabel HepG2 PABPC1
+            longLabel HepG2 PABPC1 RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=HepG2 antibody=PABPC1
             type broadPeak
             color 189,0,157
@@ -237,8 +236,8 @@ origAssembly hg19
             track wgEncodeSunyAlbanyGeneStHepg2Elavl1RbpAssocRna
             release alpha
             parent wgEncodeSunyAlbanyGeneStView off
-            shortLabel HepG2  ELAVL1
-            longLabel ENCODE SUNY Albany RBP Associated RNA by GeneST (ELAVL1 in HepG2 cells)
+            shortLabel HepG2 ELAVL1
+            longLabel HepG2 ELAVL1 RBP Associated RNA by GeneST from ENCODE/SUNY
             subGroups view=RbpAssocRna cellType=HepG2 antibody=ELAVL1
             type broadPeak
             color 189,0,157
