@@ -399,7 +399,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HTR8svn Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HTR8svn cells)
-        subGroups view=Peaks cellType=HTR8
+        subGroups view=Peaks cellType=HTR8 treatment=AANONE
         type narrowPeak
         # subId=2793 dateSubmitted=2010-11-02
 
@@ -408,7 +408,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel 8988T Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in 8988T cells)
-        subGroups view=Peaks cellType=8988T
+        subGroups view=Peaks cellType=8988T treatment=AANONE
         type narrowPeak
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -417,7 +417,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel PanIsletD Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in PanIsletD cells)
-        subGroups view=Peaks cellType=PanIsD
+        subGroups view=Peaks cellType=PanIsD treatment=AANONE
         type narrowPeak
         origAssembly hg18
         # subId=2785 dateSubmitted=2010-10-29
@@ -427,7 +427,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel HMEC Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in HMEC cells)
-        subGroups view=Peaks cellType=HMEC
+        subGroups view=Peaks cellType=HMEC treatment=AANONE
         type narrowPeak
         # subId=2764 dateSubmitted=2010-10-27
 
@@ -436,7 +436,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel Gliobla Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in Gliobla cells)
-        subGroups view=Peaks cellType=Gliobla
+        subGroups view=Peaks cellType=Gliobla treatment=AANONE
         type narrowPeak
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -445,7 +445,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewPeaks off
         shortLabel CLL Pk
         longLabel ENCODE Open Chromatin, Duke DNase-seq Peaks (in CLL cells)
-        subGroups view=Peaks cellType=CLL
+        subGroups view=Peaks cellType=CLL treatment=AANONE
         type narrowPeak
         # subId=2787 dateSubmitted=2010-11-01
 
@@ -812,7 +812,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HTR8svn Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HTR8svn cells)
-        subGroups view=SIG cellType=HTR8
+        subGroups view=SIG cellType=HTR8 treatment=AANONE
         type bigWig 0.000000 0.930700
         # subId=2793 dateSubmitted=2010-11-02
 
@@ -821,7 +821,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel 8988T Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in 8988T cells)
-        subGroups view=SIG cellType=8988T
+        subGroups view=SIG cellType=8988T treatment=AANONE
         type bigWig 0.000000 1.842900
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -830,7 +830,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel PanIsletD Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in PanIsletD cells)
-        subGroups view=SIG cellType=PanIsD
+        subGroups view=SIG cellType=PanIsD treatment=AANONE
         type bigWig 0.000000 1.462100
         origAssembly hg18
         # subId=2785 dateSubmitted=2010-10-29
@@ -840,7 +840,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel HMEC Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in HMEC cells)
-        subGroups view=SIG cellType=HMEC
+        subGroups view=SIG cellType=HMEC treatment=AANONE
         type bigWig 0.000000 2.710200
         # subId=2764 dateSubmitted=2010-10-27
 
@@ -849,7 +849,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel Gliobla Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in Gliobla cells)
-        subGroups view=SIG cellType=Gliobla
+        subGroups view=SIG cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 1.195300
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -858,7 +858,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSignal off
         shortLabel CLL Sig
         longLabel ENCODE Open Chromatin, Duke DNase-seq F-Seq Density Signal (in CLL cells)
-        subGroups view=SIG cellType=CLL
+        subGroups view=SIG cellType=CLL treatment=AANONE
         type bigWig 0.000000 0.697500
         # subId=2787 dateSubmitted=2010-11-01
 
@@ -1225,7 +1225,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HTR8svn
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HTR8svn cells)
-        subGroups view=SIGBO cellType=HTR8
+        subGroups view=SIGBO cellType=HTR8 treatment=AANONE
         type bigWig 0.000000 187.000000
         # subId=2793 dateSubmitted=2010-11-02
 
@@ -1234,7 +1234,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel 8988T
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in 8988T cells)
-        subGroups view=SIGBO cellType=8988T
+        subGroups view=SIGBO cellType=8988T treatment=AANONE
         type bigWig 0.000000 286.000000
         # subId=2786 dateSubmitted=2010-11-01
 
@@ -1243,7 +1243,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel PanIsletD
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in PanIsletD cells)
-        subGroups view=SIGBO cellType=PanIsD
+        subGroups view=SIGBO cellType=PanIsD treatment=AANONE
         type bigWig 0.000000 415.000000
         origAssembly hg18
         # subId=2785 dateSubmitted=2010-10-29
@@ -1253,7 +1253,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel HMEC
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in HMEC cells)
-        subGroups view=SIGBO cellType=HMEC
+        subGroups view=SIGBO cellType=HMEC treatment=AANONE
         type bigWig 0.000000 495.000000
         # subId=2764 dateSubmitted=2010-10-27
 
@@ -1262,7 +1262,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel Gliobla
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in Gliobla cells)
-        subGroups view=SIGBO cellType=Gliobla
+        subGroups view=SIGBO cellType=Gliobla treatment=AANONE
         type bigWig 0.000000 228.000000
         # subId=2514 dateSubmitted=2010-10-20
 
@@ -1271,7 +1271,7 @@ wgEncode 1
         parent wgEncodeOpenChromDnaseViewSigBo off
         shortLabel CLL
         longLabel ENCODE Open Chromatin, Duke DNase-seq Base Overlap Signal (in CLL cells)
-        subGroups view=SIGBO cellType=CLL
+        subGroups view=SIGBO cellType=CLL treatment=AANONE
         type bigWig 0.000000 302.000000
         # subId=2787 dateSubmitted=2010-11-01
 
