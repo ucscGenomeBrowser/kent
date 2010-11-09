@@ -237,7 +237,7 @@ pslSequence psl
 pslTable bed
 qValueFilter bed narrowPeak broadPeak
 qValueFilterLimits bed narrowPeak broadPeak
-refSeqAnnonVersion genePred
+refSeqAnnoVersion genePred
 release *
 retroMrnaInfo psl
 sGroup_Chimp wigMaf
