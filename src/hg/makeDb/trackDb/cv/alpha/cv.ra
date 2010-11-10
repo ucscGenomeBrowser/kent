@@ -218,7 +218,7 @@ vendorId 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
 termId BTO:0001521 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521&termName=pancreatic%20adenocarcinoma%20cell%20line
-protocol Open_Chromatin:8988T_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:8988T_Crawford_protocol.pdf
 
 term A549
 tag A549
@@ -235,7 +235,7 @@ termId BTO:0000018
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000018
 sex M
 tier 3
-protocol HudsonAlpha:A549_protocol.pdf Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
+protocol HudsonAlpha:A549_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:A549_Crawford_protocol.pdf UW_Stam:A549_Stam_protocol.pdf
 
 term AG04449
 tag AG04449
@@ -330,7 +330,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 termId BTO:0001685
-protocol Open_Chromatin:AoSMC_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:AoSMC_Crawford_protocol.pdf
 
 term Astrocy
 tag Astrocy
@@ -347,7 +347,7 @@ termId BTO:0000099
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000099&termName=astrocyte
 sex U
 tier 3
-protocol Open_Chromatin:Astrocytes_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Astrocytes_Crawford_protocol.pdf
 
 term BE2_C
 tag BE2C
@@ -478,7 +478,7 @@ vendorId
 orderUrl
 termId BTO:0001546
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001546&termName=chronic%20lymphocytic%20leukemia%20cell
-protocol Open_Chromatin:CLL_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:CLL_Crawford_protocol.pdf
 
 term Caco-2
 tag Caco2
@@ -511,7 +511,7 @@ termId BTO:0000252
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000252&termName=chorion
 sex U
 tier 3
-protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
 term CMK
 tag CMK
@@ -540,7 +540,7 @@ termId BTO:0001360
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001360&termName=decidua
 sex F
 tier 3
-protocol Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Chorion_and_decidua_Crawford_protocol.pdf
 
 term ECC-1
 tag ECC1
@@ -574,7 +574,7 @@ termId BTO:0000452
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000452&termName=fibroblast
 sex F
 tier 3
-protocol Open_Chromatin:fibroblast_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:fibroblast_Crawford_protocol.pdf
 
 term FibroP
 tag FIBROP
@@ -587,7 +587,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 termId BTO:0000452
 sex U
 tier 3
-protocol Open_Chromatin:FibroP_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:FibroP_Crawford_protocol.pdf
 
 term Gliobla
 tag Gliobla
@@ -600,7 +600,7 @@ termId BTO:0000527
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000527&termName=glioblastoma%20cell
 sex U
 tier 3
-protocol Open_Chromatin:D54_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:D54_Crawford_protocol.pdf
 
 term GM06990
 tag GM06990
@@ -791,7 +791,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol Open_Chromatin:GM12891_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM12891_Crawford_protocol.pdf
 
 term GM12892
 tag GM12892
@@ -807,7 +807,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol Open_Chromatin:GM12892_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM12892_Crawford_protocol.pdf
 
 term GM15510
 tag GM15510
@@ -854,7 +854,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062
 sex M
 tier 3
-protocol Open_Chromatin:GM18507_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM18507_protocol.pdf
 
 term GM18526
 tag GM18526
@@ -930,7 +930,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol Open_Chromatin:GM19238_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM19238_Crawford_protocol.pdf
 
 term GM19239
 tag GM19239
@@ -946,7 +946,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex M
 tier 3
-protocol Open_Chromatin:GM19239_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM19239_Crawford_protocol.pdf
 
 term GM19240
 tag GM19240
@@ -962,7 +962,7 @@ termId BTO:0002062 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002062&termName=B-lymphoblastoid%20cell%20line
 sex F
 tier 3
-protocol Open_Chromatin:GM19240_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:GM19240_Crawford_protocol.pdf
 
 term H7-hESC
 tag H7es
@@ -1352,7 +1352,7 @@ termId BTO:0002178
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002178&termName=HMEC%20cell
 sex U
 tier 3
-protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
+protocol Broad_Histone:HMEC_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HMEC_Crawford_protocol.pdf UW_Stam:HMEC_Stam_protocol.pdf
 
 term HMF
 tag HMF
@@ -1584,7 +1584,7 @@ termId BTO:0000256 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000256&termName=myoblast%20cell%20line
 sex U
 tier 3
-protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMM_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HSMMtube
 tag HSMMt
@@ -1600,7 +1600,7 @@ termId BTO:0001760 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001760&termName=myotube
 sex U
 tier 3
-protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
+protocol Broad_Histone:HSMMtube_Bernstein_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin:HSMM_HSMMtube_Crawford_protocol.pdf
 
 term HT-1080
 tag HT1080
@@ -1649,7 +1649,7 @@ vendorId HTR8svn
 orderUrl http://anatomy.queensu.ca/faculty/graham.cfm
 termId BTO:0001079
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001079
-protocol Open_Chromatin:HTR8svn_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:HTR8svn_Crawford_protocol.pdf
 
 term HVMF
 tag HVMF
@@ -1708,7 +1708,7 @@ karyotype Diploid
 #termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001948
 sex M
 tier 3
-protocol Open_Chromatin:LHSR_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:LHSR_Crawford_protocol.pdf
 
 term LNCaP
 tag LNCaP
@@ -1726,7 +1726,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 color 0,119,158
 sex M
 tier 3
-protocol Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:LNCaP_Crawford_protocol.pdf Yale_TFBS(Farnham):LNCaP_protocol.pdf UW_Stam:LNCaP_Stam_protocol.pdf
 
 term MCF-7
 tag MCF7
@@ -1743,7 +1743,7 @@ termId BTO:0000093
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000093&termName=MCF-7%20cell
 sex F
 tier 3
-protocol Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:MCF-7_Crawford_protocol.pdf Yale_TFBS(Farnham):MCF-7_Farnham_protocol.pdf UW_Stam:Stam_15_protocols.pdf
 
 #term MCF-10A
 #tag MCF10A
@@ -1808,7 +1808,7 @@ termId BTO:0001359
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001359&termName=medulloblastoma%20cell%20line
 sex U
 tier 3
-protocol Open_Chromatin:D721_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:D721_Crawford_protocol.pdf
 
 term Melano
 tag MELANO
@@ -1823,7 +1823,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 termId BTO:0000847
-protocol Open_Chromatin:Melano_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Melano_Crawford_protocol.pdf
 
 term Myometr
 tag MYOMETR
@@ -1836,7 +1836,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 termId BTO:0000907
 sex F
 tier 3
-protocol Open_Chromatin:Myometr_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Myometr_Crawford_protocol.pdf
 
 term NB4
 tag NB4
@@ -1885,7 +1885,7 @@ termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A
 sex U
 tier 3
 termId BTO:0002022
-protocol Open_Chromatin:NHBE_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:NHBE_Crawford_protocol.pdf
 
 term NHDF-Ad
 tag NHDF-Ad
@@ -1962,7 +1962,7 @@ termId BTO:0001593
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001593&termName=osteoblast
 sex U
 tier 3
-protocol Open_Chromatin:Osteoblast_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Osteoblast_Crawford_protocol.pdf
 
 term ovcar-3
 tag ovcar3
@@ -2011,7 +2011,7 @@ termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
 sex U
 tier 3
-protocol Open_Chromatin:PanIsletD_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIsletD_Crawford_protocol.pdf
 
 term PanIslets
 tag PanIslets
@@ -2026,7 +2026,7 @@ termId BTO:0000991 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000991&termName=pancreatic%20islet
 sex M
 tier 3
-protocol Open_Chromatin:PanIslets_Crawford_protocol.pdf Open_Chromatin(Lieb):PanIslets_Lieb_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:PanIslets_Crawford_protocol.pdf Duke/UNC/UTA/EBI_Open_Chromatin(Lieb):PanIslets_Lieb_protocol.pdf
 
 term PBDE
 tag PBDE
@@ -2076,7 +2076,7 @@ termId BTO:0001120 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001120&termName=epithelial%20cell%20line
 sex U
 tier 3
-protocol Open_Chromatin:pHTE_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:pHTE_Crawford_protocol.pdf
 
 term PrEC
 tag PrEC
@@ -2112,7 +2112,7 @@ termId BTO:0001255 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001255&termName=skin%20fibroblast
 sex U
 tier 3
-protocol Open_Chromatin:progeria_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:progeria_Crawford_protocol.pdf
 
 term prostate
 tag prostate
@@ -2296,7 +2296,7 @@ termId BTO:0001389 (non-specific)
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001389&termName=tracheal%20epithelium
 sex M
 tier 3
-protocol Open_Chromatin:TBEC_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:TBEC_Crawford_protocol.pdf
 
 term Th1
 tag Th1
@@ -2365,7 +2365,7 @@ vendorId Urothelia
 orderUrl http://pathology.med.und.nodak.edu/dept_home/MaryAnn.cfm
 termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO001267
 termId BTO:0001267
-protocol Open_Chromatin:Urothelia_Crawford_protocol.pdf
+protocol Duke/UNC/UTA/EBI_Open_Chromatin:Urothelia_Crawford_protocol.pdf
 
 term U87
 tag U87
@@ -6224,8 +6224,9 @@ tag uwStamGrowProt
 description Cells grown using the UW_Stam growth protocol.
 type protocol
 
-term Open_Chromatin
+term Duke/UNC/UTA/EBI_Open_Chromatin
 tag openChromGrowProt
+label Duke/UNC/UTA/EBI Open Chromatin
 description Cells grown using the Open_Chromatin growth protocol.
 type protocol
 
