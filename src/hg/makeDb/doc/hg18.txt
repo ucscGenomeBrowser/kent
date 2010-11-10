@@ -21380,7 +21380,8 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 
 
 ############################################################################
-# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
+# DGV V9 done 3/26/10
 # DGV V8 done 8/12/09 (changed color of inverted 11/05/09 kuhn)
 # DGV V7 done 3/11/09
 # DGV V6 thin regions dropped 2/23/09
@@ -21388,14 +21389,14 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
 # DGV V5 done 7/16/08
 # DGV V4 done 5/9/08
     ssh hgwdev
-    mkdir /hive/data/genomes/hg18/bed/dgv.v9
-    cd /hive/data/genomes/hg18/bed/dgv.v9
+    mkdir /hive/data/genomes/hg18/bed/dgv.v10
+    cd /hive/data/genomes/hg18/bed/dgv.v10
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg18.v10.nov.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg18.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg18.v10.nov.2010.txt
     # shuffle fields into bed8+
-    foreach f (*.v9.*.txt)
+    foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -21415,13 +21416,11 @@ XXX - running Tue Dec  2 15:42:18 PST 2008
                   $ref, $pmid, $method, $sample) . "\n";' \
           > $f:r.bed
     end
-    # Save previous version for comparison:
-    hgsql hg18 -e 'rename table dgv to dgvV8'
     hgLoadBed hg18 dgv *.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 89427 elements of size 15
+#Loaded 101923 elements of size 15
       hgsql hg18 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#38
+#42
 
 # 11-04-2009 color change from brown to magenta:
 # old color

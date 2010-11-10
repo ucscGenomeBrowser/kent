@@ -884,11 +884,13 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[7+3];
 int wordCount = chopLine(dupe, row); 
-if (wordCount != 7)
-    return FALSE;
-track->fieldCount = wordCount;
-char *ctDb = ctGenomeOrCurrent(track);
-boolean isPgSnp = rowIsPgSnp(row, ctDb);
+boolean isPgSnp = FALSE;
+if (wordCount == 7)
+    {
+    track->fieldCount = wordCount;
+    char *ctDb = ctGenomeOrCurrent(track);
+    isPgSnp = rowIsPgSnp(row, ctDb);
+    }
 freeMem(dupe);
 customPpReuse(cpp, line);
 return (isPgSnp);
