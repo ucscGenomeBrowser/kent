@@ -675,17 +675,17 @@ item->alleleCount = lineFileNeedNum(lf, row, 4);
 char alleles[128]; /* pattern to match alleles */
 safef(alleles, sizeof(alleles), "^[ACTG-]+(\\/[ACTG-]+){%d}$", item->alleleCount - 1);
 if (! matchRegex(row[3], alleles))
-    errAbort("invalid alleles %s", row[3]);
+    lineFileAbort(lf, "invalid alleles %s", row[3]);
 /* read count, comma separated list of numbers with above # of items */
 item->alleleFreq = cloneString(row[5]);
 char pattern[128];
 safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", item->alleleCount - 1);
 if (! matchRegex(row[5], pattern))
-    errAbort("invalid allele frequency, %s with count of %d", row[5], item->alleleCount);
+    lineFileAbort(lf, "invalid allele frequency, %s with count of %d", row[5], item->alleleCount);
 /* scores, comma separated list of numbers with above # of items */
 item->alleleScores = cloneString(row[6]);
 safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", item->alleleCount - 1);
 if (! matchRegex(row[6], pattern))
-    errAbort("invalid allele scores, %s with count of %d", row[6], item->alleleCount);
+    lineFileAbort(lf, "invalid allele scores, %s with count of %d", row[6], item->alleleCount);
 return item;
 }

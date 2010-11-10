@@ -36,6 +36,8 @@
 #include "makeItemsItem.h"
 #include "bedDetail.h"
 #include "pgSnp.h"
+/* for regular expressions */
+#include "hgFindSpec.h" 
 
 static char const rcsid[] = "$Id: customFactory.c,v 1.126 2010/06/01 20:38:07 galt Exp $";
 
@@ -691,6 +693,8 @@ static boolean bedDetailRecognizer(struct customFactory *fac,
 if (type != NULL && !sameType(type, fac->name) &&
     !sameString(type, "bedDetail") )
     return FALSE;
+if (type == NULL) 
+    return FALSE; /* just in case gets past bed etc. */
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
     return FALSE;
@@ -842,13 +846,37 @@ static struct customFactory bedDetailFactory =
 
 /*** pgSnp Factory - allow pgSnp(personal genome SNP) custom tracks ***/
 
+static boolean rowIsPgSnp (char **row, char *db) 
+/* return TRUE if row looks like a pgSnp row */
+{
+boolean isPgSnp = rowIsBed(row, 3, db);
+if (!isPgSnp) 
+    return FALSE;
+if (!isdigit(row[4][0]))
+    return FALSE;
+int count = atoi(row[4]);
+if (count < 1) 
+    return FALSE;
+char pattern[128]; /* include count in pattern */
+safef(pattern, sizeof(pattern), "^[ACTG-]+(\\/[ACTG-]+){%d}$", count - 1);
+if (! matchRegex(row[3], pattern))
+    return FALSE;
+safef(pattern, sizeof(pattern), "^[0-9]+(,[0-9]+){%d}$", count - 1);
+if (! matchRegex(row[5], pattern))
+    return FALSE;
+safef(pattern, sizeof(pattern), "^[0-9.]+(,[0-9.]+){%d}$", count - 1);
+if (! matchRegex(row[6], pattern))
+    return FALSE;
+/* if get here must be pgSnp format */
+return TRUE;
+}
+
 static boolean pgSnpRecognizer(struct customFactory *fac,
         struct customPp *cpp, char *type,
         struct customTrack *track)
 /* Return TRUE if looks like we're handling an pgSnp track */
 {
-if (type != NULL && !sameType(type, fac->name) &&
-    !sameString(type, "pgSnp") )
+if (type != NULL && !sameType(type, fac->name)) 
     return FALSE;
 char *line = customFactoryNextRealTilTrack(cpp);
 if (line == NULL)
@@ -856,16 +884,14 @@ if (line == NULL)
 char *dupe = cloneString(line);
 char *row[7+3];
 int wordCount = chopLine(dupe, row); 
-if (wordCount > 7 || wordCount < 5)
+if (wordCount != 7)
     return FALSE;
 track->fieldCount = wordCount;
-/* bed 4 + so is first 4 bed? */
 char *ctDb = ctGenomeOrCurrent(track);
-boolean isBed = rowIsBed(row, 4, ctDb);
-/* check col5 as int? or 4 as ACTG[/ACTG]? */
+boolean isPgSnp = rowIsPgSnp(row, ctDb);
 freeMem(dupe);
 customPpReuse(cpp, line);
-return (isBed);
+return (isPgSnp);
 }
 
 static struct pipeline *pgSnpLoaderPipe(struct customTrack *track)
@@ -2091,6 +2117,7 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &pslFactory);
     slAddTail(&factoryList, &gtfFactory);
     slAddTail(&factoryList, &gffFactory);
+    slAddTail(&factoryList, &pgSnpFactory);
     slAddTail(&factoryList, &bedFactory);
     slAddTail(&factoryList, &bigBedFactory);
     slAddTail(&factoryList, &bedGraphFactory);
@@ -2098,7 +2125,6 @@ if (factoryList == NULL)
     slAddTail(&factoryList, &coloredExonFactory);
     slAddTail(&factoryList, &encodePeakFactory);
     slAddTail(&factoryList, &bedDetailFactory);
-    slAddTail(&factoryList, &pgSnpFactory);
 #ifdef USE_BAM
     slAddTail(&factoryList, &bamFactory);
 #endif//def USE_BAM
