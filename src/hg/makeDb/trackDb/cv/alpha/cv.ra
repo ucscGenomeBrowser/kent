@@ -7008,6 +7008,18 @@ labPiFull Greg Crawford
 grantPi Hardison
 organism mouse
 
+term PSU-m
+tag PSU
+type lab
+label Hardison - Penn State University
+description (Provisional) Hardison - Penn State Universityy
+labInst PSU
+labPi Hardison
+labPiFull Ross Hardison
+grantPi Hardison
+organism mouse
+
+
 term UChicago-m
 tag UChicago
 type lab
