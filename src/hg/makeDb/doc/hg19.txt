@@ -8910,16 +8910,16 @@ TMPDIR=/scratch/tmp
          "/gbdb/hg19/targetDb/kgTargetSeq.2bit", 1, now(), "");'
 
 ########################################################################
-# DGV V9 (DATABASE OF GENOMIC VARIANTS) (DONE 3/26/10 angie)
+# DGV V10 (DATABASE OF GENOMIC VARIANTS) (DONE 11/10/10 angie)
     ssh hgwdev
-    mkdir /hive/data/genomes/hg19/bed/dgv.v9
-    cd /hive/data/genomes/hg19/bed/dgv.v9
+    mkdir /hive/data/genomes/hg19/bed/dgv.v10
+    cd /hive/data/genomes/hg19/bed/dgv.v10
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/variation.hg19.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/variation.hg19.v10.nov.2010.txt
     wget --timestamping \
-      http://projects.tcag.ca/variation/downloads/indel.hg19.v9.mar.2010.txt
+      http://projects.tcag.ca/variation/downloads/indel.hg19.v10.nov.2010.txt
     # shuffle fields into bed8+
-    foreach f (*.v9.*.txt)
+    foreach f (*.v10.*.txt)
       tail -n +2 $f \
       | perl -wpe 'chomp; \
         ($id, $landmark, $chr, $start, $end, $varType, \
@@ -8941,9 +8941,9 @@ TMPDIR=/scratch/tmp
     end
     hgLoadBed hg19 dgv *.bed \
       -sqlTable=$HOME/kent/src/hg/lib/dgv.sql -tab
-#Loaded 85689 elements of size 15
+#Loaded 101605 elements of size 15
       hgsql hg19 -NBe 'select count(distinct(pubMedId)) from dgv;'
-#38
+#42
 
 
 #######################################################################
