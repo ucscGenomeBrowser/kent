@@ -171,6 +171,99 @@ if (ccdsKgs != NULL)
     }
 }
 
+char *addComma(char *inStr)
+{
+char *chp;
+chp = inStr;
+
+while (*chp != '\0')
+    {
+    if (*chp == '|')
+       *chp = ',';
+    chp++;
+    }
+return inStr;
+}
+
+static void rgdGene2SynonymPrint(struct section *section,
+        struct sqlConnection *conn, char *rgdGeneId)
+{
+char *geneSym = NULL, *geneName = NULL;
+char query[256], **row;
+struct sqlResult *sr;
+if (rgdGeneId != NULL)
+    {
+    safef(query, sizeof(query), 
+	    "select old_symbol, old_name from genes_rat where gene_rgd_id = '%s'", 
+	    rgdGeneId+4L);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+	if (row[0][0] != 0 && !sameString(row[0], "n/a"))
+	    {
+	    geneSym = cloneString(row[0]);
+	    hPrintf("<B>Symbol:</B> %s ", addComma(row[0]));
+	    //hPrintf("<BR>\n");
+	    }
+	if (row[1][0] != 0 && !sameString(row[0], "n/a"))
+	    {
+	    geneName = cloneString(row[1]);
+	    hPrintf("<BR><B>Name:</B> %s ", addComma(geneName));
+	    hPrintf("<BR>\n");
+	    }
+	}
+    sqlFreeResult(&sr);
+
+    safef(query, sizeof(query), 
+	    "select value from rgdGene2ToRefSeq where name= '%s'", rgdGeneId);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+	{
+        hPrintf("<B>RefSeq Accession: </B> <A HREF=\"");
+	printOurRefseqUrl(stdout, row[0]);
+	hPrintf("\">%s</A><BR>\n", row[0]);
+	}
+    sqlFreeResult(&sr);
+    
+    safef(query, sizeof(query), 
+	    "select value from rgdGene2ToUniProt where name= '%s'", rgdGeneId);
+    sr = sqlGetResult(conn, query);
+    if ((row = sqlNextRow(sr)) != NULL)
+    	{
+	char *spId, *spDisplayId, *oldDisplayId;
+	spId = row[0];
+	hPrintf("<B>Protein: </B>");
+        hPrintf("<A HREF=\"http://www.uniprot.org/uniprot/%s\" "
+	    "TARGET=_blank>%s</A>\n",
+	    spId, spId);
+    
+        /* show SWISS-PROT display ID if it is different than the accession ID */
+        /* but, if display name is like: Q03399 | Q03399_HUMAN, then don't show display name */
+        spDisplayId = spAnyAccToId(spConn, spId);
+        if (spDisplayId == NULL) 
+    	    {
+	    errAbort("<br>The corresponding protein %s of this gene is not found in our current UniProtKB DB.", spId);
+	    }   
+	
+        if (strstr(spDisplayId, spId) == NULL)
+	    {
+	    hPrintf(" (aka %s", spDisplayId);
+	    /* show once if the new and old displayId are the same */
+ 	    oldDisplayId = oldSpDisplayId(spDisplayId);
+	    if (oldDisplayId != NULL)
+ 	    	{
+            	if (!sameWord(spDisplayId, oldDisplayId)
+                    && !sameWord(spId, oldDisplayId))
+	    	    {
+	    	    hPrintf(" or %s", oldDisplayId);
+	    	    }  
+	        }	
+	    hPrintf(")<BR>\n");
+	    }  
+   	}
+    sqlFreeResult(&sr);
+    }
+}
 static void synonymPrint(struct section *section, 
 	struct sqlConnection *conn, char *id)
 /* Print out SwissProt comments - looking up typeId/commentVal. */
@@ -185,6 +278,11 @@ char *kgProteinID;
 char *parAcc; /* parent accession of a variant splice protein */
 char *chp;
 
+if (isRgdGene(conn))
+    {
+    rgdGene2SynonymPrint(section,conn, id);
+    return;
+    }
 if (sqlTablesExist(conn, "kgAlias"))
     printAlias(id, conn);
 if (sameWord(genome, "Zebrafish"))

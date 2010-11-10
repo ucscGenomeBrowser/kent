@@ -5430,6 +5430,113 @@ else
     return lf->name;
 }
 
+char *getRgdGene2Symbol(struct sqlConnection *conn, char *acc)
+/* get gene symbol from rgdGene2ToSymbol or NULL if not found.
+ * WARNING: static return */
+{
+static char symbolBuf[256];
+char query[256], *symbol = NULL;
+if (hTableExists(database,  "rgdGene2ToSymbol"))
+    {
+    sprintf(query, "select geneSymbol from rgdGene2ToSymbol where rgdId = '%s'", acc);
+    symbol = sqlQuickQuery(conn, query, symbolBuf, sizeof(symbolBuf));
+    if ((symbol != NULL) && (symbol[0] == '\0'))
+        symbol = NULL;
+    }
+return symbol;
+}
+
+char *rgdGene2Name(struct track *tg, void *item)
+/* Get name to use for rgdGene2 item. */
+{
+struct linkedFeatures *lf = item;
+if (lf->extra != NULL)
+    return lf->extra;
+else
+    return lf->name;
+}
+
+char *rgdGene2MapName(struct track *tg, void *item)
+/* Return un-abbreviated gene name. */
+{
+struct linkedFeatures *lf = item;
+return lf->name;
+}
+
+void lookupRgdGene2Names(struct track *tg)
+/* This converts the RGD Gene ID to a gene name where possible. */
+{
+struct linkedFeatures *lf;
+struct sqlConnection *conn = hAllocConn(database);
+boolean labelStarted = FALSE;
+boolean useGeneName = FALSE;
+boolean useAcc =  FALSE;
+
+struct hashEl *rgdGene2Labels = cartFindPrefix(cart, "rgdGene2.label");
+struct hashEl *label;
+
+if (rgdGene2Labels == NULL)
+    {
+    useGeneName = TRUE; /* default to gene name */
+    /* set cart to match what doing */
+    cartSetBoolean(cart, "rgdGene2.label.gene", TRUE);
+    }
+for (label = rgdGene2Labels; label != NULL; label = label->next)
+    {
+    if (endsWith(label->name, "gene") && differentString(label->val, "0"))
+        useGeneName = TRUE;
+    else if (endsWith(label->name, "acc") && differentString(label->val, "0"))
+        useAcc = TRUE;
+    else if (!endsWith(label->name, "gene") &&
+             !endsWith(label->name, "acc") )
+        {
+        useGeneName = TRUE;
+        cartRemove(cart, label->name);
+        }
+    }
+
+for (lf = tg->items; lf != NULL; lf = lf->next)
+    {
+    struct dyString *name = dyStringNew(SMALLDYBUF);
+    labelStarted = FALSE; /* reset for each item in track */
+    if (useGeneName || useAcc)
+        {
+        char *org = getOrganismShort(conn, lf->name);
+        if (org != NULL)
+            dyStringPrintf(name, "%s ", org);
+        }
+    if (useGeneName)
+        {
+        char *gene = getRgdGene2Symbol(conn, lf->name);
+        if (gene != NULL)
+            {
+            dyStringAppend(name, gene);
+            }
+        labelStarted = TRUE;
+        }
+    if (useAcc)
+        {
+        if (labelStarted) dyStringAppendC(name, '/');
+        else labelStarted = TRUE;
+        dyStringAppend(name, lf->name);
+        }
+    lf->extra = dyStringCannibalize(&name);
+    }
+hFreeConn(&conn);
+}
+
+void loadRgdGene2(struct track *tg)
+/* Load up RGD genes. */
+{
+enum trackVisibility vis = tg->visibility;
+tg->items = lfFromGenePredInRange(tg, tg->table, chromName, winStart, winEnd);
+if (vis != tvDense)
+    {
+    lookupRgdGene2Names(tg);
+    }
+vis = limitVisibility(tg);
+}
+
 char *refGeneName(struct track *tg, void *item)
 /* Get name to use for refGene item. */
 {
@@ -5800,6 +5907,14 @@ tg->loadItems = loadRefGene;
 tg->itemName = refGeneName;
 tg->mapItemName = refGeneMapName;
 tg->itemColor = refGeneColor;
+}
+
+void rgdGene2Methods(struct track *tg)
+/* Make track of RGD genes. */
+{
+tg->loadItems = loadRgdGene2;
+tg->itemName = rgdGene2Name;
+tg->mapItemName = rgdGene2MapName;
 }
 
 boolean filterNonCoding(struct track *tg, void *item)
@@ -11634,6 +11749,7 @@ registerTrackHandler("decipher", decipherMethods);
 registerTrackHandler("rgdQtl", rgdQtlMethods);
 registerTrackHandler("rgdRatQtl", rgdQtlMethods);
 registerTrackHandler("refGene", refGeneMethods);
+registerTrackHandler("rgdGene2", rgdGene2Methods);
 registerTrackHandler("blastMm6", blastMethods);
 registerTrackHandler("blastDm1FB", blastMethods);
 registerTrackHandler("blastDm2FB", blastMethods);
