@@ -34,6 +34,8 @@ struct sqlConnection *spConn;	/* Connection to SwissProt database. */
 char *swissProtAcc;		/* SwissProt accession (may be NULL). */
 int  kgVersion = KG_UNKNOWN;	/* KG version */
 
+//#include "rgdInfo.c"
+
 void usage()
 /* Explain usage and exit. */
 {
@@ -148,6 +150,11 @@ char *getSwissProtAcc(struct sqlConnection *conn, struct sqlConnection *spConn,
 char *proteinSql = genomeSetting("proteinSql");
 char query[256];
 char *someAcc, *primaryAcc = NULL;
+if (isRgdGene(conn))
+    {
+    return(getRgdGeneUniProtAcc(curGeneId, conn));
+    }
+
 safef(query, sizeof(query), proteinSql, geneId);
 someAcc = sqlQuickString(conn, query);
 if (someAcc == NULL || someAcc[0] == 0)
@@ -338,6 +345,7 @@ static void addGoodSection(struct section *section,
 	struct sqlConnection *conn, struct section **pList)
 /* Add section to list if it is non-null and exists returns ok. */
 {
+//printf("<br>adding %s section \n", section->name);fflush(stdout);
 if (section != NULL && hashLookup(section->settings, "hide") == NULL
    && section->exists(section, conn, curGeneId))
      slAddHead(pList, section);
@@ -355,7 +363,17 @@ addGoodSection(linksSection(conn, sectionRa), conn, &sectionList);
 /* disable ortherOrg section for CGB servers for the time being */
 if (!hIsCgbServer()) addGoodSection(otherOrgsSection(conn, sectionRa), conn, &sectionList);
 addGoodSection(gadSection(conn, sectionRa), conn, &sectionList);
-addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
+    addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
+/*if (isRgdGene(conn))
+    {
+    addGoodSection(ctdRgdGene2Section(conn, sectionRa), conn, &sectionList);
+    }
+else
+    {
+    addGoodSection(ctdSection(conn, sectionRa), conn, &sectionList);
+    }
+*/
+addGoodSection(rgdGeneRawSection(conn, sectionRa), conn, &sectionList);
 
 //addGoodSection(microarraySection(conn, sectionRa), conn, &sectionList);
 /* temporarily disable microarray section for Zebrafish, until a bug is fixed */
@@ -438,6 +456,8 @@ for (section = sectionList; section != NULL; section = section->next)
     char *indicator = (isOpen ? "-" : "+");
     char *indicatorImg = (isOpen ? "../images/remove.gif" : "../images/add.gif");
     struct dyString *header = dyStringNew(0);
+    //keep the following line for future debugging need
+    //printf("<br>printing %s section\n", section->name);fflush(stdout);
     dyStringPrintf(header, "<A NAME=\"%s\"></A>", section->name);	
     dyStringPrintf(header, "<A HREF=\"%s?%s&%s=%s#%s\" class=\"bigBlue\"><IMG src=\"%s\" alt=\"%s\" class=\"bigBlue\"></A>&nbsp;&nbsp;",
     	geneCgi, cartSidUrlString(cart), closeVarName, otherState, section->name, indicatorImg, indicator);
@@ -552,7 +572,6 @@ char query[256];
 struct sqlResult *sr;
 char **row;
 struct genePred *gp = NULL;
-
 hFindSplitTable(sqlGetDatabase(conn), curGeneChrom, track, table, &hasBin);
 safef(query, sizeof(query), 
 	"select * from %s where name = '%s' "
@@ -609,6 +628,7 @@ else
     spConn = hAllocConn(UNIPROT_DB_NAME);
     swissProtAcc = getSwissProtAcc(conn, spConn, curGeneId);
 
+    if (isRgdGene(conn)) swissProtAcc=getRgdGeneUniProtAcc(curGeneId, conn);
     /* Check command variables, and do the ones that
      * don't want to put up the hot link bar etc. */
     if (cartVarExists(cart, hggDoGetMrnaSeq))

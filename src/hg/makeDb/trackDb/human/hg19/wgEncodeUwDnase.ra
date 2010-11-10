@@ -60,7 +60,7 @@ wgEncode 1
     scoreFilterLimits 500:1000
 
         track wgEncodeUwDnaseAg04450HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG04450 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in AG04450 cells)
@@ -70,7 +70,7 @@ wgEncode 1
         # subId=1550 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09309HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG09309 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in AG09309 cells)
@@ -80,7 +80,7 @@ wgEncode 1
         # subId=1551 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09319HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG09319 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in AG09319 cells)
@@ -90,7 +90,7 @@ wgEncode 1
         # subId=1554 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSaecHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel SAEC    Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in SAEC cells)
@@ -100,7 +100,7 @@ wgEncode 1
         # subId=1557 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNb4HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NB4     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NB4 cells)
@@ -110,7 +110,7 @@ wgEncode 1
         # subId=1559 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhlfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHLF    Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NHLF cells)
@@ -120,7 +120,7 @@ wgEncode 1
         # subId=1560 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHgfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HGF     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HGF cells)
@@ -130,7 +130,7 @@ wgEncode 1
         # subId=1563 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12865HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM12865 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in GM12865 cells)
@@ -140,7 +140,7 @@ wgEncode 1
         # subId=1564 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHaeHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HAEpiC  Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HAEpiC cells)
@@ -150,7 +150,7 @@ wgEncode 1
         # subId=1565 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHl60HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HL-60   Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HL-60 cells)
@@ -160,7 +160,7 @@ wgEncode 1
         # subId=1571 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHmecHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMEC    Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMEC cells)
@@ -170,7 +170,7 @@ wgEncode 1
         # subId=1572 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSkmcHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel SKMC    Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in SKMC cells)
@@ -180,7 +180,7 @@ wgEncode 1
         # subId=1573 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg10803HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG10803 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in AG10803 cells)
@@ -190,7 +190,7 @@ wgEncode 1
         # subId=1576 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrceHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HRCEpiC Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HRCEpiC cells)
@@ -200,7 +200,7 @@ wgEncode 1
         # subId=1577 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHreHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HRE     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HRE cells)
@@ -210,7 +210,7 @@ wgEncode 1
         # subId=1578 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseCmkHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel CMK     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in CMK cells)
@@ -220,7 +220,7 @@ wgEncode 1
         # subId=1586 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12878HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot
         shortLabel GM12878 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in GM12878 cells)
@@ -231,7 +231,7 @@ wgEncode 1
         # subId=1587 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseH1hescHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel H1-hESC Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in H1-hESC cells)
@@ -242,7 +242,7 @@ wgEncode 1
         # subId=1588 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHcfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCF     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HCF cells)
@@ -252,7 +252,7 @@ wgEncode 1
         # subId=1591 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseH7esHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in H7-hESC cells)
@@ -262,7 +262,7 @@ wgEncode 1
         # subId=1592 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpeHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCPEpiC Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HCPEpiC cells)
@@ -272,7 +272,7 @@ wgEncode 1
         # subId=1598 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcmHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCM     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HCM cells)
@@ -282,7 +282,7 @@ wgEncode 1
         # subId=1600 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHeeHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HEEpiC  Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HEEpiC cells)
@@ -292,7 +292,7 @@ wgEncode 1
         # subId=1601 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHelas3HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HeLa-S3 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HeLa-S3 cells)
@@ -303,7 +303,7 @@ wgEncode 1
         # subId=1605 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseGm06990HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM06990 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in GM06990 cells)
@@ -313,7 +313,7 @@ wgEncode 1
         # subId=1616 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HepG2   Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HepG2 cells)
@@ -324,7 +324,7 @@ wgEncode 1
         # subId=1617 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHnpceHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HNPCEpi Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HNPCEpiC cells)
@@ -334,7 +334,7 @@ wgEncode 1
         # subId=1619 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHrpeHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HRPEpiC Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HRPEpiC cells)
@@ -344,7 +344,7 @@ wgEncode 1
         # subId=1622 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHuvecHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HUVEC   Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HUVEC cells)
@@ -355,7 +355,7 @@ wgEncode 1
         # subId=1624 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnasePanc1HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel PANC-1  Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in PANC-1 cells)
@@ -365,7 +365,7 @@ wgEncode 1
         # subId=1627 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseMcf7HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF-7   Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in MCF-7 cells)
@@ -375,7 +375,7 @@ wgEncode 1
         # subId=1628 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseNhdfneoHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHDFneo Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NHDF-neo cells)
@@ -385,7 +385,7 @@ wgEncode 1
         # subId=1629 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseNhekHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHEK    Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NHEK cells)
@@ -396,7 +396,7 @@ wgEncode 1
         # subId=1630 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseSknshraHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel SKNSHRA Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in SK-N-SH_RA cells)
@@ -406,7 +406,7 @@ wgEncode 1
         # subId=1640 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseTh1HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th1     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Th1 cells)
@@ -416,7 +416,7 @@ wgEncode 1
         # subId=1641 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseCaco2HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel Caco-2  Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Caco-2 cells)
@@ -426,7 +426,7 @@ wgEncode 1
         # subId=1644 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseBjHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel BJ      Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in BJ cells)
@@ -436,7 +436,7 @@ wgEncode 1
         # subId=1648 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseK562HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot
         shortLabel K562    Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in K562 cells)
@@ -447,7 +447,7 @@ wgEncode 1
         # subId=1676 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseTh2HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel Th2     Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in Th2 cells)
@@ -457,7 +457,7 @@ wgEncode 1
         # subId=1677 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseAg04449HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG04449 Hs 1 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in AG04449 cells)
@@ -467,7 +467,7 @@ wgEncode 1
         # subId=1257 dateSubmitted=2010-06-07
 
         track wgEncodeUwDnaseAg04449HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG04449 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in AG04449 cells)
@@ -477,7 +477,7 @@ wgEncode 1
         # subId=1548 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg04450HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG04450 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in AG04450 cells)
@@ -487,7 +487,7 @@ wgEncode 1
         # subId=1549 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09309HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG09309 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in AG09309 cells)
@@ -497,7 +497,7 @@ wgEncode 1
         # subId=1552 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09319HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG09319 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in AG09319 cells)
@@ -507,7 +507,7 @@ wgEncode 1
         # subId=1553 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg10803HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AG10803 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in AG10803 cells)
@@ -517,7 +517,7 @@ wgEncode 1
         # subId=1555 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSaecHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel SAEC    Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in SAEC cells)
@@ -527,7 +527,7 @@ wgEncode 1
         # subId=1556 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNb4HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NB4     Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in NB4 cells)
@@ -537,7 +537,7 @@ wgEncode 1
         # subId=1558 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhlfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHLF    Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in NHLF cells)
@@ -547,7 +547,7 @@ wgEncode 1
         # subId=1561 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseMcf7HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel MCF-7   Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in MCF-7 cells)
@@ -557,7 +557,7 @@ wgEncode 1
         # subId=1562 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrceHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HRCEpiC Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HRCEpiC cells)
@@ -567,7 +567,7 @@ wgEncode 1
         # subId=1566 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHreHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HRE     Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HRE cells)
@@ -577,7 +577,7 @@ wgEncode 1
         # subId=1567 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhdfneoHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHDFneo Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in NHDF-neo cells)
@@ -587,7 +587,7 @@ wgEncode 1
         # subId=1568 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnasePanc1HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel PANC-1  Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in PANC-1 cells)
@@ -597,7 +597,7 @@ wgEncode 1
         # subId=1569 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHl60HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HL-60   Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HL-60 cells)
@@ -607,7 +607,7 @@ wgEncode 1
         # subId=1570 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHaeHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HAEpiC  Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HAEpiC cells)
@@ -617,7 +617,7 @@ wgEncode 1
         # subId=1579 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12865HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM12865 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in GM12865 cells)
@@ -627,7 +627,7 @@ wgEncode 1
         # subId=1589 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseCaco2HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel Caco-2  Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in Caco-2 cells)
@@ -637,7 +637,7 @@ wgEncode 1
         # subId=1590 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCF     Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HCF cells)
@@ -647,7 +647,7 @@ wgEncode 1
         # subId=1593 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcmHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCM     Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HCM cells)
@@ -657,7 +657,7 @@ wgEncode 1
         # subId=1595 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpeHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCPEpiC Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HCPEpiC cells)
@@ -667,7 +667,7 @@ wgEncode 1
         # subId=1599 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHeeHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HEEpiC  Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HEEpiC cells)
@@ -677,7 +677,7 @@ wgEncode 1
         # subId=1602 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHgfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HGF     Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HGF cells)
@@ -687,7 +687,7 @@ wgEncode 1
         # subId=1603 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHelas3HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HeLa-S3 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HeLa-S3 cells)
@@ -698,7 +698,7 @@ wgEncode 1
         # subId=1604 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseGm06990HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel GM06990 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in GM06990 cells)
@@ -708,7 +708,7 @@ wgEncode 1
         # subId=1614 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HepG2   Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HepG2 cells)
@@ -719,7 +719,7 @@ wgEncode 1
         # subId=1615 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseHnpceHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HNPCEpi Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HNPCEpiC cells)
@@ -729,7 +729,7 @@ wgEncode 1
         # subId=1620 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHrpeHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HRPEpiC Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HRPEpiC cells)
@@ -739,7 +739,7 @@ wgEncode 1
         # subId=1621 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseSkmcHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel SKMC    Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in SKMC cells)
@@ -749,7 +749,7 @@ wgEncode 1
         # subId=1642 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseSknshraHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel SKNSHRA Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in SK-N-SH_RA cells)
@@ -759,7 +759,7 @@ wgEncode 1
         # subId=1643 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseGm12878HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot
         shortLabel GM12878 Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in GM12878 cells)
@@ -770,7 +770,7 @@ wgEncode 1
         # subId=1649 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseK562HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot
         shortLabel K562    Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in K562 cells)
@@ -781,7 +781,7 @@ wgEncode 1
         # subId=1675 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseBjHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel BJ      Hs 2 
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in BJ cells)
@@ -791,7 +791,7 @@ wgEncode 1
         # subId=1249 dateSubmitted=2010-06-06
 
         track wgEncodeUwDnaseNhdfadHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHDF-Ad Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NHDF-Ad cells)
@@ -801,7 +801,7 @@ wgEncode 1
         # subId=2081 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseNhdfadHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NHDF-Ad Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in NHDF-Ad cells)
@@ -811,7 +811,7 @@ wgEncode 1
         # subId=2080 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHvmfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HVMF    Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HVMF cells)
@@ -821,7 +821,7 @@ wgEncode 1
         # subId=2079 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHvmfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HVMF    Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HVMF cells)
@@ -831,7 +831,7 @@ wgEncode 1
         # subId=2078 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpdlfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HPdLF   Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HPdLF cells)
@@ -841,7 +841,7 @@ wgEncode 1
         # subId=2077 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpdlfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HPdLF   Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HPdLF cells)
@@ -851,7 +851,7 @@ wgEncode 1
         # subId=2076 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HPF     Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HPF cells)
@@ -861,7 +861,7 @@ wgEncode 1
         # subId=2075 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HPF     Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HPF cells)
@@ -871,7 +871,7 @@ wgEncode 1
         # subId=2074 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpafHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HPAF    Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HPAF cells)
@@ -881,7 +881,7 @@ wgEncode 1
         # subId=2073 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpafHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HPAF    Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HPAF cells)
@@ -891,7 +891,7 @@ wgEncode 1
         # subId=2072 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdneoHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECN  Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-dNeo cells)
@@ -901,7 +901,7 @@ wgEncode 1
         # subId=2071 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdneoHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECN  Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-dNeo cells)
@@ -911,7 +911,7 @@ wgEncode 1
         # subId=2070 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyneoHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLN Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-dLy-Neo cells)
@@ -921,7 +921,7 @@ wgEncode 1
         # subId=2069 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyneoHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECdLN Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-dLy-Neo cells)
@@ -931,7 +931,7 @@ wgEncode 1
         # subId=2068 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyadHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLA Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-dLy-Ad cells)
@@ -941,7 +941,7 @@ wgEncode 1
         # subId=2067 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyadHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLA Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-dLy-Ad cells)
@@ -951,7 +951,7 @@ wgEncode 1
         # subId=2066 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdblneoHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECBN Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-dBl-Neo cells)
@@ -961,7 +961,7 @@ wgEncode 1
         # subId=2065 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdblneoHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECBN Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-dBl-Neo cells)
@@ -971,7 +971,7 @@ wgEncode 1
         # subId=2064 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdbladHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECBA Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-dBl-Ad cells)
@@ -981,7 +981,7 @@ wgEncode 1
         # subId=2063 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdbladHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECBA Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-dBl-Ad cells)
@@ -991,7 +991,7 @@ wgEncode 1
         # subId=2062 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecllyHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLL Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-LLy cells)
@@ -1001,7 +1001,7 @@ wgEncode 1
         # subId=2061 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecllyHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLL Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-LLy cells)
@@ -1011,7 +1011,7 @@ wgEncode 1
         # subId=2060 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmveclblHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLB Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMVEC-LBl cells)
@@ -1021,7 +1021,7 @@ wgEncode 1
         # subId=2059 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMF     Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMF cells)
@@ -1031,7 +1031,7 @@ wgEncode 1
         # subId=2058 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMF     Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMF cells)
@@ -1041,7 +1041,7 @@ wgEncode 1
         # subId=2057 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHconfHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HConF   Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HConF cells)
@@ -1051,7 +1051,7 @@ wgEncode 1
         # subId=2056 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHconfHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HConF   Pk 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HConF cells)
@@ -1061,7 +1061,7 @@ wgEncode 1
         # subId=2055 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHcfaaHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCFaa   Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HCFaa cells)
@@ -1071,7 +1071,7 @@ wgEncode 1
         # subId=2054 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHcfaaHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCFaa   Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HCFaa cells)
@@ -1081,7 +1081,7 @@ wgEncode 1
         # subId=2053 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseAoafHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AoAF    Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in AoAF cells)
@@ -1091,7 +1091,7 @@ wgEncode 1
         # subId=2052 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmecHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMEC    Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HMEC cells)
@@ -1101,7 +1101,7 @@ wgEncode 1
         # subId=2044 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116HotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCT-116 Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HCT-116 cells)
@@ -1111,7 +1111,7 @@ wgEncode 1
         # subId=2043 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116HotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HCT-116 Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HCT-116 cells)
@@ -1121,7 +1121,7 @@ wgEncode 1
         # subId=2040 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHmveclblHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HMVECLB Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in HMVEC-LBl cells)
@@ -1131,7 +1131,7 @@ wgEncode 1
         # subId=2039 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseAoafHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel AoAF    Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in AoAF cells)
@@ -1141,7 +1141,7 @@ wgEncode 1
         # subId=2038 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseH7esHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel H7-hESC Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in H7-hESC cells)
@@ -1151,7 +1151,7 @@ wgEncode 1
         # subId=2037 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseNhaHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NH-A    Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in NH-A cells)
@@ -1161,7 +1161,7 @@ wgEncode 1
         # subId=2089 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseHbmecHotspotsRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HBMEC   Hs 2
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 2 (in HBMEC cells)
@@ -1171,7 +1171,7 @@ wgEncode 1
         # subId=2087 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseNhaHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel NH-A    Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots Replicate 1 (in NH-A cells)
@@ -1181,7 +1181,7 @@ wgEncode 1
         # subId=2088 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseHbmecHotspotsRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewHot off
         shortLabel HBMEC   Hs 1
         longLabel ENCODE UW DNaseI HS Hotspots -  1st (in HBMEC cells)
@@ -1202,7 +1202,7 @@ wgEncode 1
     scoreFilterLimits 500:1000
 
         track wgEncodeUwDnaseAg04450PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04450 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in AG04450 cells)
@@ -1212,7 +1212,7 @@ wgEncode 1
         # subId=1550 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09309PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09309 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in AG09309 cells)
@@ -1222,7 +1222,7 @@ wgEncode 1
         # subId=1551 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09319PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09319 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in AG09319 cells)
@@ -1232,7 +1232,7 @@ wgEncode 1
         # subId=1554 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSaecPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SAEC    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in SAEC cells)
@@ -1242,7 +1242,7 @@ wgEncode 1
         # subId=1557 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNb4PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NB4     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in NB4 cells)
@@ -1252,7 +1252,7 @@ wgEncode 1
         # subId=1559 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhlfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHLF    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in NHLF cells)
@@ -1262,7 +1262,7 @@ wgEncode 1
         # subId=1560 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHgfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HGF     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HGF cells)
@@ -1272,7 +1272,7 @@ wgEncode 1
         # subId=1563 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12865PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12865 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in GM12865 cells)
@@ -1282,7 +1282,7 @@ wgEncode 1
         # subId=1564 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHaePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAEpiC  Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HAEpiC cells)
@@ -1292,7 +1292,7 @@ wgEncode 1
         # subId=1565 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHl60PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HL-60   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HL-60 cells)
@@ -1302,7 +1302,7 @@ wgEncode 1
         # subId=1571 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHmecPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMEC    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HMEC cells)
@@ -1312,7 +1312,7 @@ wgEncode 1
         # subId=1572 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSkmcPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKMC    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in SKMC cells)
@@ -1322,7 +1322,7 @@ wgEncode 1
         # subId=1573 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg10803PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG10803 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in AG10803 cells)
@@ -1332,7 +1332,7 @@ wgEncode 1
         # subId=1576 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrcePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRCEpiC Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HRCEpiC cells)
@@ -1342,7 +1342,7 @@ wgEncode 1
         # subId=1577 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRE     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HRE cells)
@@ -1352,7 +1352,7 @@ wgEncode 1
         # subId=1578 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseCmkPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel CMK     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in CMK cells)
@@ -1362,7 +1362,7 @@ wgEncode 1
         # subId=1586 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12878PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel GM12878 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in GM12878 cells)
@@ -1373,7 +1373,7 @@ wgEncode 1
         # subId=1587 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseH1hescPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H1-hESC Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in H1-hESC cells)
@@ -1384,7 +1384,7 @@ wgEncode 1
         # subId=1588 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHcfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCF     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HCF cells)
@@ -1394,7 +1394,7 @@ wgEncode 1
         # subId=1591 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseH7esPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7-hESC Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in H7-hESC cells)
@@ -1404,7 +1404,7 @@ wgEncode 1
         # subId=1592 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCPEpiC Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HCPEpiC cells)
@@ -1414,7 +1414,7 @@ wgEncode 1
         # subId=1598 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcmPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCM     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HCM cells)
@@ -1424,7 +1424,7 @@ wgEncode 1
         # subId=1600 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHeePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HEEpiC  Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HEEpiC cells)
@@ -1434,7 +1434,7 @@ wgEncode 1
         # subId=1601 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHelas3PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HeLa-S3 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HeLa-S3 cells)
@@ -1445,7 +1445,7 @@ wgEncode 1
         # subId=1605 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseGm06990PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM06990 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in GM06990 cells)
@@ -1455,7 +1455,7 @@ wgEncode 1
         # subId=1616 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HepG2   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HepG2 cells)
@@ -1466,7 +1466,7 @@ wgEncode 1
         # subId=1617 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHnpcePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HNPCEpi Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HNPCEpiC cells)
@@ -1476,7 +1476,7 @@ wgEncode 1
         # subId=1619 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHrpePkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRPEpiC Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HRPEpiC cells)
@@ -1486,7 +1486,7 @@ wgEncode 1
         # subId=1622 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHuvecPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HUVEC   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in HUVEC cells)
@@ -1497,7 +1497,7 @@ wgEncode 1
         # subId=1624 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnasePanc1PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PANC-1  Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in PANC-1 cells)
@@ -1507,7 +1507,7 @@ wgEncode 1
         # subId=1627 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseMcf7PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF-7   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in MCF-7 cells)
@@ -1517,7 +1517,7 @@ wgEncode 1
         # subId=1628 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseNhdfneoPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDFneo Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in NHDF-neo cells)
@@ -1527,7 +1527,7 @@ wgEncode 1
         # subId=1629 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseNhekPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHEK    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in NHEK cells)
@@ -1538,7 +1538,7 @@ wgEncode 1
         # subId=1630 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseSknshraPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKNSHRA Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in SK-N-SH_RA cells)
@@ -1548,7 +1548,7 @@ wgEncode 1
         # subId=1640 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseTh1PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th1     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in Th1 cells)
@@ -1558,7 +1558,7 @@ wgEncode 1
         # subId=1641 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseCaco2PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Caco-2  Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in Caco-2 cells)
@@ -1568,7 +1568,7 @@ wgEncode 1
         # subId=1644 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseBjPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BJ      Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in BJ cells)
@@ -1578,7 +1578,7 @@ wgEncode 1
         # subId=1648 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseK562PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel K562    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in K562 cells)
@@ -1589,7 +1589,7 @@ wgEncode 1
         # subId=1676 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseTh2PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Th2     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in Th2 cells)
@@ -1599,7 +1599,7 @@ wgEncode 1
         # subId=1677 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseAg04449PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04449 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 1 (in AG04449 cells)
@@ -1609,7 +1609,7 @@ wgEncode 1
         # subId=1257 dateSubmitted=2010-06-07
 
         track wgEncodeUwDnaseAg04449PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04449 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in AG04449 cells)
@@ -1619,7 +1619,7 @@ wgEncode 1
         # subId=1548 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg04450PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG04450 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in AG04450 cells)
@@ -1629,7 +1629,7 @@ wgEncode 1
         # subId=1549 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09309PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09309 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in AG09309 cells)
@@ -1639,7 +1639,7 @@ wgEncode 1
         # subId=1552 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09319PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG09319 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in AG09319 cells)
@@ -1649,7 +1649,7 @@ wgEncode 1
         # subId=1553 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg10803PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AG10803 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in AG10803 cells)
@@ -1659,7 +1659,7 @@ wgEncode 1
         # subId=1555 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSaecPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SAEC    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in SAEC cells)
@@ -1669,7 +1669,7 @@ wgEncode 1
         # subId=1556 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNb4PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NB4     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in NB4 cells)
@@ -1679,7 +1679,7 @@ wgEncode 1
         # subId=1558 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhlfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHLF    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in NHLF cells)
@@ -1689,7 +1689,7 @@ wgEncode 1
         # subId=1561 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseMcf7PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel MCF-7   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in MCF-7 cells)
@@ -1699,7 +1699,7 @@ wgEncode 1
         # subId=1562 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrcePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRCEpiC Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HRCEpiC cells)
@@ -1709,7 +1709,7 @@ wgEncode 1
         # subId=1566 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRE     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HRE cells)
@@ -1719,7 +1719,7 @@ wgEncode 1
         # subId=1567 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhdfneoPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDFneo Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in NHDF-neo cells)
@@ -1729,7 +1729,7 @@ wgEncode 1
         # subId=1568 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnasePanc1PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel PANC-1  Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in PANC-1 cells)
@@ -1739,7 +1739,7 @@ wgEncode 1
         # subId=1569 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHl60PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HL-60   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HL-60 cells)
@@ -1749,7 +1749,7 @@ wgEncode 1
         # subId=1570 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHaePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HAEpiC  Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HAEpiC cells)
@@ -1759,7 +1759,7 @@ wgEncode 1
         # subId=1579 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12865PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM12865 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in GM12865 cells)
@@ -1769,7 +1769,7 @@ wgEncode 1
         # subId=1589 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseCaco2PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel Caco-2  Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in Caco-2 cells)
@@ -1779,7 +1779,7 @@ wgEncode 1
         # subId=1590 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCF     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HCF cells)
@@ -1789,7 +1789,7 @@ wgEncode 1
         # subId=1593 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcmPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCM     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HCM cells)
@@ -1799,7 +1799,7 @@ wgEncode 1
         # subId=1595 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCPEpiC Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HCPEpiC cells)
@@ -1809,7 +1809,7 @@ wgEncode 1
         # subId=1599 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHeePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HEEpiC  Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HEEpiC cells)
@@ -1819,7 +1819,7 @@ wgEncode 1
         # subId=1602 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHgfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HGF     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HGF cells)
@@ -1829,7 +1829,7 @@ wgEncode 1
         # subId=1603 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHelas3PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HeLa-S3 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HeLa-S3 cells)
@@ -1840,7 +1840,7 @@ wgEncode 1
         # subId=1604 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseGm06990PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel GM06990 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in GM06990 cells)
@@ -1850,7 +1850,7 @@ wgEncode 1
         # subId=1614 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HepG2   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HepG2 cells)
@@ -1861,7 +1861,7 @@ wgEncode 1
         # subId=1615 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseHnpcePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HNPCEpi Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HNPCEpiC cells)
@@ -1871,7 +1871,7 @@ wgEncode 1
         # subId=1620 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHrpePkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HRPEpiC Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in HRPEpiC cells)
@@ -1881,7 +1881,7 @@ wgEncode 1
         # subId=1621 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseSkmcPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKMC    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in SKMC cells)
@@ -1891,7 +1891,7 @@ wgEncode 1
         # subId=1642 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseSknshraPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel SKNSHRA Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in SK-N-SH_RA cells)
@@ -1901,7 +1901,7 @@ wgEncode 1
         # subId=1643 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseGm12878PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel GM12878 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in GM12878 cells)
@@ -1912,7 +1912,7 @@ wgEncode 1
         # subId=1649 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseK562PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks
         shortLabel K562    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in K562 cells)
@@ -1923,7 +1923,7 @@ wgEncode 1
         # subId=1675 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseBjPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel BJ      Pk 2
         longLabel ENCODE UW DNaseI HS Peaks (FDR 1%) Replicate 2 (in BJ cells)
@@ -1933,7 +1933,7 @@ wgEncode 1
         # subId=1249 dateSubmitted=2010-06-06
 
         track wgEncodeUwDnaseNhdfadPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-Ad Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in NHDF-Ad cells)
@@ -1943,7 +1943,7 @@ wgEncode 1
         # subId=2081 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseNhdfadPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NHDF-Ad Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in NHDF-Ad cells)
@@ -1953,7 +1953,7 @@ wgEncode 1
         # subId=2080 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHvmfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HVMF    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HVMF cells)
@@ -1963,7 +1963,7 @@ wgEncode 1
         # subId=2079 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHvmfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HVMF    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HVMF cells)
@@ -1973,7 +1973,7 @@ wgEncode 1
         # subId=2078 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpdlfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPdLF   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HPdLF cells)
@@ -1983,7 +1983,7 @@ wgEncode 1
         # subId=2077 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpdlfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPdLF   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HPdLF cells)
@@ -1993,7 +1993,7 @@ wgEncode 1
         # subId=2076 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPF     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HPF cells)
@@ -2003,7 +2003,7 @@ wgEncode 1
         # subId=2075 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPF     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HPF cells)
@@ -2013,7 +2013,7 @@ wgEncode 1
         # subId=2074 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpafPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAF    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HPAF cells)
@@ -2023,7 +2023,7 @@ wgEncode 1
         # subId=2073 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpafPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HPAF    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HPAF cells)
@@ -2033,7 +2033,7 @@ wgEncode 1
         # subId=2072 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdneoPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECN  Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-dNeo cells)
@@ -2043,7 +2043,7 @@ wgEncode 1
         # subId=2071 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdneoPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECN  Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-dNeo cells)
@@ -2053,7 +2053,7 @@ wgEncode 1
         # subId=2070 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyneoPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLN Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-dLy-Neo cells)
@@ -2063,7 +2063,7 @@ wgEncode 1
         # subId=2069 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyneoPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLN Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-dLy-Neo cells)
@@ -2073,7 +2073,7 @@ wgEncode 1
         # subId=2068 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyadPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLA Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-dLy-Ad cells)
@@ -2083,7 +2083,7 @@ wgEncode 1
         # subId=2067 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyadPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLA Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-dLy-Ad cells)
@@ -2093,7 +2093,7 @@ wgEncode 1
         # subId=2066 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdblneoPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECBN Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-dBl-Neo cells)
@@ -2103,7 +2103,7 @@ wgEncode 1
         # subId=2065 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdblneoPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECBN Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-dBl-Neo cells)
@@ -2113,7 +2113,7 @@ wgEncode 1
         # subId=2064 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdbladPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECBA Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-dBl-Ad cells)
@@ -2123,7 +2123,7 @@ wgEncode 1
         # subId=2063 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdbladPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECBA Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-dBl-Ad cells)
@@ -2133,7 +2133,7 @@ wgEncode 1
         # subId=2062 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecllyPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLL Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-LLy cells)
@@ -2143,7 +2143,7 @@ wgEncode 1
         # subId=2061 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecllyPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLL Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-LLy cells)
@@ -2153,7 +2153,7 @@ wgEncode 1
         # subId=2060 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmveclblPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLB Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMVEC-LBl cells)
@@ -2163,7 +2163,7 @@ wgEncode 1
         # subId=2059 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMF     Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMF cells)
@@ -2173,7 +2173,7 @@ wgEncode 1
         # subId=2058 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMF     Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMF cells)
@@ -2183,7 +2183,7 @@ wgEncode 1
         # subId=2057 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHconfPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HConF   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HConF cells)
@@ -2193,7 +2193,7 @@ wgEncode 1
         # subId=2056 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHconfPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HConF   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HConF cells)
@@ -2203,7 +2203,7 @@ wgEncode 1
         # subId=2055 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHcfaaPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCFaa   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HCFaa cells)
@@ -2213,7 +2213,7 @@ wgEncode 1
         # subId=2054 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHcfaaPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCFaa   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HCFaa cells)
@@ -2223,7 +2223,7 @@ wgEncode 1
         # subId=2053 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseAoafPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AoAF    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in AoAF cells)
@@ -2233,7 +2233,7 @@ wgEncode 1
         # subId=2052 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmecPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMEC    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HMEC cells)
@@ -2243,7 +2243,7 @@ wgEncode 1
         # subId=2044 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116PkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCT-116 Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HCT-116 cells)
@@ -2253,7 +2253,7 @@ wgEncode 1
         # subId=2043 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116PkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HCT-116 Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HCT-116 cells)
@@ -2263,7 +2263,7 @@ wgEncode 1
         # subId=2040 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHmveclblPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HMVECLB Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HMVEC-LBl cells)
@@ -2273,7 +2273,7 @@ wgEncode 1
         # subId=2039 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseAoafPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel AoAF    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in AoAF cells)
@@ -2283,7 +2283,7 @@ wgEncode 1
         # subId=2038 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseH7esPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel H7-hESC Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in H7-hESC cells)
@@ -2293,7 +2293,7 @@ wgEncode 1
         # subId=2037 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseNhaPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NH-A    Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in NH-A cells)
@@ -2303,7 +2303,7 @@ wgEncode 1
         # subId=2089 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseHbmecPkRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBMEC   Pk 2
         longLabel ENCODE UW DNaseI HS Peaks Replicate 2 (in HBMEC cells)
@@ -2313,7 +2313,7 @@ wgEncode 1
         # subId=2087 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseNhaPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel NH-A    Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in NH-A cells)
@@ -2323,7 +2323,7 @@ wgEncode 1
         # subId=2088 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseHbmecPkRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewaPeaks off
         shortLabel HBMEC   Pk 1
         longLabel ENCODE UW DNaseI HS Peaks Replicate 1 (in HBMEC cells)
@@ -2346,7 +2346,7 @@ wgEncode 1
     windowingFunction maximum
 
         track wgEncodeUwDnaseAg04450RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04450 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in AG04450 cells)
@@ -2356,7 +2356,7 @@ wgEncode 1
         # subId=1550 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09309RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09309 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in AG09309 cells)
@@ -2366,7 +2366,7 @@ wgEncode 1
         # subId=1551 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09319RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09319 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in AG09319 cells)
@@ -2376,7 +2376,7 @@ wgEncode 1
         # subId=1554 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSaecRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SAEC    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in SAEC cells)
@@ -2386,7 +2386,7 @@ wgEncode 1
         # subId=1557 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNb4RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NB4     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NB4 cells)
@@ -2396,7 +2396,7 @@ wgEncode 1
         # subId=1559 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhlfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHLF    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NHLF cells)
@@ -2406,7 +2406,7 @@ wgEncode 1
         # subId=1560 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHgfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HGF     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HGF cells)
@@ -2416,7 +2416,7 @@ wgEncode 1
         # subId=1563 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12865RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM12865 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in GM12865 cells)
@@ -2426,7 +2426,7 @@ wgEncode 1
         # subId=1564 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHaeRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HAEpiC  Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HAEpiC cells)
@@ -2436,7 +2436,7 @@ wgEncode 1
         # subId=1565 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHl60RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HL-60   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HL-60 cells)
@@ -2446,7 +2446,7 @@ wgEncode 1
         # subId=1571 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHmecRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMEC    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMEC cells)
@@ -2456,7 +2456,7 @@ wgEncode 1
         # subId=1572 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSkmcRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKMC    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in SKMC cells)
@@ -2466,7 +2466,7 @@ wgEncode 1
         # subId=1573 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg10803RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG10803 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in AG10803 cells)
@@ -2476,7 +2476,7 @@ wgEncode 1
         # subId=1576 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrceRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRCEpiC Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HRCEpiC cells)
@@ -2486,7 +2486,7 @@ wgEncode 1
         # subId=1577 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHreRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRE     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HRE cells)
@@ -2496,7 +2496,7 @@ wgEncode 1
         # subId=1578 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseCmkRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel CMK     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in CMK cells)
@@ -2506,7 +2506,7 @@ wgEncode 1
         # subId=1586 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12878RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw
         shortLabel GM12878 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in GM12878 cells)
@@ -2517,7 +2517,7 @@ wgEncode 1
         # subId=1587 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseH1hescRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H1-hESC Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in H1-hESC cells)
@@ -2528,7 +2528,7 @@ wgEncode 1
         # subId=1588 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHcfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCF     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HCF cells)
@@ -2538,7 +2538,7 @@ wgEncode 1
         # subId=1591 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseH7esRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in H7-hESC cells)
@@ -2548,7 +2548,7 @@ wgEncode 1
         # subId=1592 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpeRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCPEpiC Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HCPEpiC cells)
@@ -2558,7 +2558,7 @@ wgEncode 1
         # subId=1598 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcmRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCM     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HCM cells)
@@ -2568,7 +2568,7 @@ wgEncode 1
         # subId=1600 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHeeRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HEEpiC  Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HEEpiC cells)
@@ -2578,7 +2578,7 @@ wgEncode 1
         # subId=1601 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHelas3RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HeLa-S3 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HeLa-S3 cells)
@@ -2589,7 +2589,7 @@ wgEncode 1
         # subId=1605 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseGm06990RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM06990 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in GM06990 cells)
@@ -2599,7 +2599,7 @@ wgEncode 1
         # subId=1616 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HepG2   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HepG2 cells)
@@ -2610,7 +2610,7 @@ wgEncode 1
         # subId=1617 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHnpceRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HNPCEpi Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HNPCEpiC cells)
@@ -2620,7 +2620,7 @@ wgEncode 1
         # subId=1619 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHrpeRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRPEpiC Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HRPEpiC cells)
@@ -2630,7 +2630,7 @@ wgEncode 1
         # subId=1622 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHuvecRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HUVEC   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HUVEC cells)
@@ -2641,7 +2641,7 @@ wgEncode 1
         # subId=1624 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnasePanc1RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel PANC-1  Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in PANC-1 cells)
@@ -2651,7 +2651,7 @@ wgEncode 1
         # subId=1627 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseMcf7RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in MCF-7 cells)
@@ -2661,7 +2661,7 @@ wgEncode 1
         # subId=1628 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseNhdfneoRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHDFneo Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NHDF-neo cells)
@@ -2671,7 +2671,7 @@ wgEncode 1
         # subId=1629 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseNhekRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHEK    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NHEK cells)
@@ -2682,7 +2682,7 @@ wgEncode 1
         # subId=1630 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseSknshraRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKNSHRA Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in SK-N-SH_RA cells)
@@ -2692,7 +2692,7 @@ wgEncode 1
         # subId=1640 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseTh1RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th1     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Th1 cells)
@@ -2702,7 +2702,7 @@ wgEncode 1
         # subId=1641 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseCaco2RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Caco-2  Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Caco-2 cells)
@@ -2712,7 +2712,7 @@ wgEncode 1
         # subId=1644 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseBjRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel BJ      Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in BJ cells)
@@ -2722,7 +2722,7 @@ wgEncode 1
         # subId=1648 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseK562RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw
         shortLabel K562    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in K562 cells)
@@ -2733,7 +2733,7 @@ wgEncode 1
         # subId=1676 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseTh2RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Th2     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in Th2 cells)
@@ -2743,7 +2743,7 @@ wgEncode 1
         # subId=1677 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseAg04449RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04449 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in AG04449 cells)
@@ -2753,7 +2753,7 @@ wgEncode 1
         # subId=1257 dateSubmitted=2010-06-07
 
         track wgEncodeUwDnaseAg04449RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04449 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in AG04449 cells)
@@ -2763,7 +2763,7 @@ wgEncode 1
         # subId=1548 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg04450RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG04450 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in AG04450 cells)
@@ -2773,7 +2773,7 @@ wgEncode 1
         # subId=1549 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09309RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09309 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in AG09309 cells)
@@ -2783,7 +2783,7 @@ wgEncode 1
         # subId=1552 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg09319RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG09319 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in AG09319 cells)
@@ -2793,7 +2793,7 @@ wgEncode 1
         # subId=1553 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseAg10803RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AG10803 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in AG10803 cells)
@@ -2803,7 +2803,7 @@ wgEncode 1
         # subId=1555 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseSaecRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SAEC    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in SAEC cells)
@@ -2813,7 +2813,7 @@ wgEncode 1
         # subId=1556 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNb4RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NB4     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in NB4 cells)
@@ -2823,7 +2823,7 @@ wgEncode 1
         # subId=1558 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhlfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHLF    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in NHLF cells)
@@ -2833,7 +2833,7 @@ wgEncode 1
         # subId=1561 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseMcf7RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel MCF-7   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in MCF-7 cells)
@@ -2843,7 +2843,7 @@ wgEncode 1
         # subId=1562 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHrceRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRCEpiC Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HRCEpiC cells)
@@ -2853,7 +2853,7 @@ wgEncode 1
         # subId=1566 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHreRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRE     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HRE cells)
@@ -2863,7 +2863,7 @@ wgEncode 1
         # subId=1567 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseNhdfneoRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHDFneo Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in NHDF-neo cells)
@@ -2873,7 +2873,7 @@ wgEncode 1
         # subId=1568 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnasePanc1RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel PANC-1  Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in PANC-1 cells)
@@ -2883,7 +2883,7 @@ wgEncode 1
         # subId=1569 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHl60RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HL-60   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HL-60 cells)
@@ -2893,7 +2893,7 @@ wgEncode 1
         # subId=1570 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseHaeRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HAEpiC  Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HAEpiC cells)
@@ -2903,7 +2903,7 @@ wgEncode 1
         # subId=1579 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseGm12865RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM12865 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in GM12865 cells)
@@ -2913,7 +2913,7 @@ wgEncode 1
         # subId=1589 dateSubmitted=2010-06-17
 
         track wgEncodeUwDnaseCaco2RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel Caco-2  Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in Caco-2 cells)
@@ -2923,7 +2923,7 @@ wgEncode 1
         # subId=1590 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCF     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HCF cells)
@@ -2933,7 +2933,7 @@ wgEncode 1
         # subId=1593 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcmRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCM     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HCM cells)
@@ -2943,7 +2943,7 @@ wgEncode 1
         # subId=1595 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHcpeRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCPEpiC Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HCPEpiC cells)
@@ -2953,7 +2953,7 @@ wgEncode 1
         # subId=1599 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHeeRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HEEpiC  Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HEEpiC cells)
@@ -2963,7 +2963,7 @@ wgEncode 1
         # subId=1602 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHgfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HGF     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HGF cells)
@@ -2973,7 +2973,7 @@ wgEncode 1
         # subId=1603 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHelas3RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HeLa-S3 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HeLa-S3 cells)
@@ -2984,7 +2984,7 @@ wgEncode 1
         # subId=1604 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseGm06990RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel GM06990 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in GM06990 cells)
@@ -2994,7 +2994,7 @@ wgEncode 1
         # subId=1614 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHepg2RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HepG2   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HepG2 cells)
@@ -3005,7 +3005,7 @@ wgEncode 1
         # subId=1615 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseHnpceRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HNPCEpi Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HNPCEpiC cells)
@@ -3015,7 +3015,7 @@ wgEncode 1
         # subId=1620 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseHrpeRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HRPEpiC Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HRPEpiC cells)
@@ -3025,7 +3025,7 @@ wgEncode 1
         # subId=1621 dateSubmitted=2010-06-18
 
         track wgEncodeUwDnaseSkmcRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKMC    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in SKMC cells)
@@ -3035,7 +3035,7 @@ wgEncode 1
         # subId=1642 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseSknshraRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel SKNSHRA Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in SK-N-SH_RA cells)
@@ -3045,7 +3045,7 @@ wgEncode 1
         # subId=1643 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseGm12878RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw
         shortLabel GM12878 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in GM12878 cells)
@@ -3056,7 +3056,7 @@ wgEncode 1
         # subId=1649 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseK562RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw
         shortLabel K562    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in K562 cells)
@@ -3067,7 +3067,7 @@ wgEncode 1
         # subId=1675 dateSubmitted=2010-06-19
 
         track wgEncodeUwDnaseBjRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel BJ      Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in BJ cells)
@@ -3077,7 +3077,7 @@ wgEncode 1
         # subId=1249 dateSubmitted=2010-06-06
 
         track wgEncodeUwDnaseNhdfadRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHDF-Ad Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NHDF-Ad cells)
@@ -3087,7 +3087,7 @@ wgEncode 1
         # subId=2081 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseNhdfadRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NHDF-Ad Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in NHDF-Ad cells)
@@ -3097,7 +3097,7 @@ wgEncode 1
         # subId=2080 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHvmfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HVMF    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HVMF cells)
@@ -3107,7 +3107,7 @@ wgEncode 1
         # subId=2079 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHvmfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HVMF    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HVMF cells)
@@ -3117,7 +3117,7 @@ wgEncode 1
         # subId=2078 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpdlfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HPdLF   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HPdLF cells)
@@ -3127,7 +3127,7 @@ wgEncode 1
         # subId=2077 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpdlfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HPdLF   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HPdLF cells)
@@ -3137,7 +3137,7 @@ wgEncode 1
         # subId=2076 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HPF     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HPF cells)
@@ -3147,7 +3147,7 @@ wgEncode 1
         # subId=2075 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HPF     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HPF cells)
@@ -3157,7 +3157,7 @@ wgEncode 1
         # subId=2074 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpafRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HPAF    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HPAF cells)
@@ -3167,7 +3167,7 @@ wgEncode 1
         # subId=2073 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHpafRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HPAF    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HPAF cells)
@@ -3177,7 +3177,7 @@ wgEncode 1
         # subId=2072 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdneoRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECN  Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-dNeo cells)
@@ -3187,7 +3187,7 @@ wgEncode 1
         # subId=2071 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdneoRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECN  Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-dNeo cells)
@@ -3197,7 +3197,7 @@ wgEncode 1
         # subId=2070 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyneoRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLN Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-dLy-Neo cells)
@@ -3207,7 +3207,7 @@ wgEncode 1
         # subId=2069 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyneoRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLN Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-dLy-Neo cells)
@@ -3217,7 +3217,7 @@ wgEncode 1
         # subId=2068 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyadRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLA Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-dLy-Ad cells)
@@ -3227,7 +3227,7 @@ wgEncode 1
         # subId=2067 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdlyadRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLA Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-dLy-Ad cells)
@@ -3237,7 +3237,7 @@ wgEncode 1
         # subId=2066 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdblneoRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECBN Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-dBl-Neo cells)
@@ -3247,7 +3247,7 @@ wgEncode 1
         # subId=2065 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdblneoRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECBN Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-dBl-Neo cells)
@@ -3257,7 +3257,7 @@ wgEncode 1
         # subId=2064 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdbladRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECBA Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-dBl-Ad cells)
@@ -3267,7 +3267,7 @@ wgEncode 1
         # subId=2063 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecdbladRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECBA Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-dBl-Ad cells)
@@ -3277,7 +3277,7 @@ wgEncode 1
         # subId=2062 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecllyRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLL Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-LLy cells)
@@ -3287,7 +3287,7 @@ wgEncode 1
         # subId=2061 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmvecllyRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLL Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-LLy cells)
@@ -3297,7 +3297,7 @@ wgEncode 1
         # subId=2060 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmveclblRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLB Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMVEC-LBl cells)
@@ -3307,7 +3307,7 @@ wgEncode 1
         # subId=2059 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMF     Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMF cells)
@@ -3317,7 +3317,7 @@ wgEncode 1
         # subId=2058 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMF     Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMF cells)
@@ -3327,7 +3327,7 @@ wgEncode 1
         # subId=2057 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHconfRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HConF   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HConF cells)
@@ -3337,7 +3337,7 @@ wgEncode 1
         # subId=2056 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHconfRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HConF   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HConF cells)
@@ -3347,7 +3347,7 @@ wgEncode 1
         # subId=2055 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHcfaaRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCFaa   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HCFaa cells)
@@ -3357,7 +3357,7 @@ wgEncode 1
         # subId=2054 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHcfaaRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCFaa   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HCFaa cells)
@@ -3367,7 +3367,7 @@ wgEncode 1
         # subId=2053 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseAoafRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AoAF    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in AoAF cells)
@@ -3377,7 +3377,7 @@ wgEncode 1
         # subId=2052 dateSubmitted=2010-07-26
 
         track wgEncodeUwDnaseHmecRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMEC    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HMEC cells)
@@ -3387,7 +3387,7 @@ wgEncode 1
         # subId=2044 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116RawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCT-116 Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HCT-116 cells)
@@ -3397,7 +3397,7 @@ wgEncode 1
         # subId=2043 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHct116RawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HCT-116 Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HCT-116 cells)
@@ -3407,7 +3407,7 @@ wgEncode 1
         # subId=2040 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseHmveclblRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HMVECLB Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HMVEC-LBl cells)
@@ -3417,7 +3417,7 @@ wgEncode 1
         # subId=2039 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseAoafRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel AoAF    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in AoAF cells)
@@ -3427,7 +3427,7 @@ wgEncode 1
         # subId=2038 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseH7esRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel H7-hESC Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in H7-hESC cells)
@@ -3437,7 +3437,7 @@ wgEncode 1
         # subId=2037 dateSubmitted=2010-07-24
 
         track wgEncodeUwDnaseNhaRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NH-A    Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in NH-A cells)
@@ -3447,7 +3447,7 @@ wgEncode 1
         # subId=2089 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseHbmecRawRep2
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HBMEC   Ra 2
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 2 (in HBMEC cells)
@@ -3457,7 +3457,7 @@ wgEncode 1
         # subId=2087 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseNhaRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel NH-A    Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in NH-A cells)
@@ -3467,7 +3467,7 @@ wgEncode 1
         # subId=2088 dateSubmitted=2010-07-31
 
         track wgEncodeUwDnaseHbmecRawRep1
-        release alpha
+        release alpha,beta
         parent wgEncodeUwDnaseViewzRaw off
         shortLabel HBMEC   Ra 1
         longLabel ENCODE UW DNaseI HS Raw Signal Replicate 1 (in HBMEC cells)
