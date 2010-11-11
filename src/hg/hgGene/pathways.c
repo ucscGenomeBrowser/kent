@@ -35,6 +35,18 @@ static void keggLink(struct pathwayLink *pl, struct sqlConnection *conn,
 char query[512], **row;
 struct sqlResult *sr;
 
+if (isRgdGene(conn))
+{
+safef(query, sizeof(query), 
+	"select k.locusID, k.mapID, keggMapDesc.description"
+	" from rgdGene2KeggPathway k, keggMapDesc, rgdGene2 x"
+	" where k.rgdId=x.name "
+	" and x.name='%s'"
+	" and k.mapID = keggMapDesc.mapID"
+	, geneId);
+}
+else
+{
 safef(query, sizeof(query), 
 	"select k.locusID, k.mapID, keggMapDesc.description"
 	" from keggPathway k, keggMapDesc, kgXref x"
@@ -42,6 +54,7 @@ safef(query, sizeof(query),
 	" and x.kgID='%s'"
 	" and k.mapID = keggMapDesc.mapID"
 	, geneId);
+}
 
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -58,8 +71,16 @@ static int keggCount(struct pathwayLink *pl, struct sqlConnection *conn,
 /* Count up number of hits. */
 {
 char query[256];
-safef(query, sizeof(query), 
+if (!isRgdGene(conn))
+    {
+    safef(query, sizeof(query), 
 	"select count(*) from keggPathway k, kgXref x where k.kgID=x.kgId and x.kgId='%s'", geneId);
+    }
+else
+    {
+    safef(query, sizeof(query), 
+	"select count(*) from rgdGene2KeggPathway k, rgdGene2 x where k.rgdId=x.name and x.name='%s'", geneId);
+    }
 return sqlQuickNum(conn, query);
 }
 
@@ -125,10 +146,25 @@ char *eventDesc;
 char *eventID;
 
 /* check the existence of kgXref table first */
-if (!sqlTableExists(conn, "kgXref")) return;
+if (isRgdGene(conn))
+    {
+    if (!sqlTableExists(conn, "rgdGene2Xref")) return;
+    }
+else
+    {
+    if (!sqlTableExists(conn, "kgXref")) return;
+    }
+if (isRgdGene(conn))
+    {
+    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
+    }
+else
+    {
+    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    spID = sqlGetField(database, "kgXref", "spID", condStr);
+    }
 
-safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
-spID = sqlGetField(database, "kgXref", "spID", condStr);
 if (spID != NULL)
     {
     /* convert splice variant UniProt ID to its main root ID */
@@ -247,12 +283,27 @@ char query[256];
 char *spID, *chp;
 char condStr[256];
 char *origSpID;
-
 /* check the existence of kgXref table first */
-if (!sqlTableExists(conn, "kgXref")) return(0);
+if (!isRgdGene(conn))
+    {
+    if (!sqlTableExists(conn, "kgXref")) return(0);
+    }
+else
+    {
+    if (!sqlTableExists(conn, "rgdGene2Xref")) return(0);
+    }
 
-safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
-spID = sqlGetField(database, "kgXref", "spID", condStr);
+if (isRgdGene(conn))
+    {
+    safef(condStr, sizeof(condStr), "name='%s'", geneId);
+    spID = sqlGetField(database, "rgdGene2ToUniProt", "value", condStr);
+    }
+else
+    {
+    safef(condStr, sizeof(condStr), "kgID='%s'", geneId);
+    spID = sqlGetField(database, "kgXref", "spID", condStr);
+    }
+
 if (spID != NULL)
     {
     origSpID = cloneString(spID);
@@ -260,9 +311,18 @@ if (spID != NULL)
     chp = strstr(spID, "-");
     if (chp != NULL) *chp = '\0';
 
-    safef(query, sizeof(query), 
+    if (!isRgdGene(conn))
+        {
+        safef(query, sizeof(query), 
 	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.kgXref where kgID='%s' and kgXref.spID=variant and variant = '%s' and spReactomeEvent.spID=parent", 
 	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
+	}
+    else
+    	{
+        safef(query, sizeof(query), 
+	  "select count(*) from %s.spReactomeEvent, %s.spVariant, %s.rgdGene2ToUniProt where name='%s' and value=variant and variant = '%s' and spReactomeEvent.spID=parent", 
+	  PROTEOME_DB_NAME, PROTEOME_DB_NAME, database, geneId, origSpID);
+	}
 
     ret = sqlQuickNum(conn, query);
     }
