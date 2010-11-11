@@ -1,6 +1,6 @@
 # Data Agreement File for PSU 5C (UMass) experiments for mm9
 
-#$Revision: 1.4 $
+#$Revision: 1.5 $
 
 # This file specifies the data agreement between your lab and 
 # the DCC.  It should not be changed unilaterally.
@@ -25,7 +25,7 @@ dafVersion        2.0
 
 # Lab and general info
 grant             Hardison
-lab               UMass-Mouse
+lab               UMass-m
 dataType          5C
 assembly          mm9
 variables         cell,strain
