@@ -1168,4 +1168,7 @@ int subtrackFourStateChecked(struct trackDb *subtrack, struct cart *cart);
 void subtrackFourStateCheckedSet(struct trackDb *subtrack, struct cart *cart,boolean checked, boolean enabled);
 /* Sets the fourState Checked in the cart and updates cached state */
 
+boolean hPrintPennantIcon(struct trackDb *tdb);
+// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+
 #endif /* HUI_H */

@@ -267,7 +267,7 @@ The format of the type fields:
     In dense mode do a density plot based on maximum coverage seen under pixel.  The maxVal
     corresponds to the count at which it gets as dark as it can get.  If maxVal is 0 then this
     will be calculated from the data itself.
-    
+
     The database loading procedure for the table can be:
 	hgBbiDbLink hg18 itemRgbBbTest /gbdb/hg18/bbi/itemRgb.hg18.bb
     which is equivalent to:
@@ -320,13 +320,13 @@ The format of the type fields:
 	sourceTable <tableName>
     Use the program hgBedsToBedExp to create the tables from a collection of
     (simpler) bed's one for each txn factor/cell combination.
-    
-21. type bedDetail 
-    This type is used for mostly bed like files but where you want to include 
+
+21. type bedDetail
+    This type is used for mostly bed like files but where you want to include
     some extra text for the details page or table browser filtering.  It also
-    includes an ID field, so if an URL is specified can link to another 
-    resource without affecting the name displayed in the track.  
-    
+    includes an ID field, so if an URL is specified can link to another
+    resource without affecting the name displayed in the track.
+
 If something lacks a type field it needs to have custom
 display routines.   You can remove a track from the
 browser by removing it from the .ra file and doing
@@ -391,6 +391,11 @@ configureByPopup - on, off                    - Default: on for most tracks, off
                                                 instead always forces user to hgTrackUi page; this is useful for very
                                                 complicated config pages like dbSnp or multiz which do not work well in a modal dialogs,
                                                 and snp tracks which use javascript that is not compatible with modal dialogs.
+pennantIcon - icon [url [hint]]               - Displays icon next to track in "parade" of tracks found in hgTracks config
+                                                MAY at some point appear in search tracks and next to title in hgTrackUi
+                                                Icon is required and must be in htdocs/images.
+                                                Url is optional and can be relative to the cgi-bin or absolute.
+                                                Hint is optional text for a toolTip.  Enclose in quotes for readability.
 
 The shortLabel and longLabel fields and the associated HTML files
 may have the following variables, which will be substituted:
