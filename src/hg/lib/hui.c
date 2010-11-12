@@ -6890,7 +6890,6 @@ if(setting != NULL)
             }
         else
             hPrintf("<a href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>\n",url,icon);
-        freeMem(url);
         }
     else
         hPrintf("<img height='16' width='16' src='%s'>\n",icon);
