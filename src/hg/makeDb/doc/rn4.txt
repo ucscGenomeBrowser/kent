@@ -5298,7 +5298,7 @@ _EOF_
 # *** Check these tables in rn4:
 # *** knownBlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
 #######################################################################################
-# RGD GENES BUILD (2010-10-05, Fan, DONE)
+# RGD GENES BUILD (2010-10-05, Fan, STARTED)
 
 ssh hgwdev
 
@@ -5372,12 +5372,10 @@ hgsql rn4 -e 'load data local infile "rgdGeneRaw2gene.tab" into table rgdGeneRaw
 hgsql rn4 -e 'load data local infile "rgdGeneRaw2exon.tab" into table rgdGeneRaw2exon'
 hgsql rn4 -e 'load data local infile "rgdGeneRaw2cds.tab" into table rgdGeneRaw2cds'
 
-
 hgsql rn4 -N -e \
 'select g.rgdId, g.strand, e.strand from rgdGeneRaw2gene g, rgdGeneRaw2exon e where e.rgdId=g.rgdId and g.strand <> e.strand'\
 |cut -f 1|sort -u|sed -e 's/RGD/del1 RGD/' >delAll
 chmod +x delAll
-
 
 # create the one line script del1 containing the following line:
 
@@ -5425,16 +5423,202 @@ sed -e 's/genericAlias/rgdGene2ToUniProt/' \
 hgLoadSqlTab rn4 rgdGene2ToUniProt rgdGene2ToUniProt.sql rgdGene2ToUniProtLoad.txt
 
 hgsql rn4 -N -e \
-'select rgdGeneId, info from rgdGene2Xref where infoType="Note"' > rgdGene2ToDescription.tab
+'select "RGD:", gene_rgd_id, "gene_desc", gene_desc from genes_rat where gene_desc <>""'\
+|sed -e 's/RGD:\t/RGD:/'|cut -f 1,3 |sort -u >rgdGene2ToDescription.tab
+
 hgsql rn4 -e 'drop table rgdGene2ToDescription'
 hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToDescription.sql
 hgsql rn4 -e 'load data local infile "rgdGene2ToDescription.tab" into table rgdGene2ToDescription'
 
 hgsql rn4 -N -e \
-'select name, u.val from rgdGene2ToUniProt, uniProt.protein u where acc=alias' > rgdGene2Pep.tab
+'select name, u.val from rgdGene2ToUniProt, uniProt.protein u where acc=value' > rgdGene2Pep.tab
 
 hgsql rn4 -e 'drop table rgdGene2Pep'
 hgsql rn4 < ~/kent/src/hg/lib/rgdGene2Pep.sql
-hgsql rn4 -e 'load data local infile "rgdGene2.tab" into table rgdGene2Pep'
+hgsql rn4 -e 'load data local infile "rgdGene2Pep.tab" into table rgdGene2Pep'
+
+cd /hive/data/outside/rgd/rat/093010
+wget --timestamping ftp://rgd.mcw.edu/pub/data_release/GENES_RAT .
+
+cd /hive/data/genomes/rn4/bed/rgdGene/093010
+cp -P /hive/data/outside/rgd/rat/093010/GENES_RAT .
+
+hgsql rn4 -e 'drop table genes_rat'
+hgsql rn4 < ~/kent/src/hg/lib/genes_rat.sql 
+hgsql rn4 -e \
+'load data local infile "GENES_RAT" into table genes_rat ignore 1 lines'
+
+doRgdGene2UniProt rn4 j.tmp
+cat j.tmp |sort -u > rgdGene2ToUniProt.tab
+
+hgsql rn4 -e 'drop table rgdGene2ToUniProt'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToUniProt.sql
+hgsql rn4 -e "load data local infile 'rgdGene2ToUniProt.tab' into table rgdGene2ToUniProt"
 
 #############################################################################
+# RE-BUILD HGNEAR PROTEIN BLAST TABLES for RGD GENES -- TARGET (DONE 10/18/10, Fan)
+    ssh hgwdev
+    
+    mkdir /hive/data/genomes/rn4/bed/blastpRgdGene2
+    cd /hive/data/genomes/rn4/bed/blastpRgdGene2
+
+    hgsql rn4 -N -e 'select * from rgdGene2Pep' |\
+    sed -e 's/\t/\n/'|sed -e 's/RGD\:/\>RGD\:/' > rgdGene2Pep.faa
+
+    /hive/data/outside/blast229/formatdb -i rgdGene2Pep.faa -t rgdGene2Pep -n rgdGene2Pep
+    
+    mkdir /hive/data/genomes/rn4/bed/hgNearBlastp/101018rgdGene2
+    cd /hive/data/genomes/rn4/bed/hgNearBlastp/101018rgdGene2
+    cat << _EOF_ > config.ra
+# Latest rat vs. other Gene Sorter orgs:
+# human, mouse, zebrafish, fly, worm, yeast
+
+targetGenesetPrefix rgdGene2
+targetDb rn4
+queryDbs hg19 mm9 danRer6 dm3 ce6 sacCer2
+
+rn4Fa /hive/data/genomes/rn4/bed/blastpRgdGene2/rgdGene2Pep.faa 
+hg19Fa /hive/data/genomes/hg19/bed/ucsc.12/ucscGenes.faa
+mm9Fa  /hive/data/genomes/mm9/bed/ucsc.12/ucscGenes.faa
+danRer6Fa /hive/data/genomes/danRer6/bed/blastp/danRer6.ensPep.faa
+dm3Fa /hive/data/genomes/dm3/bed/flybase5.3/flyBasePep.fa
+ce6Fa /hive/data/genomes/ce6/bed/hgNearBlastp/080711/ce6.sangerPep.faa
+sacCer2Fa /hive/data/genomes/sacCer2/bed/hgNearBlastp/090218/sgdPep.faa
+
+buildDir /hive/data/genomes/rn4/bed/hgNearBlastp/101018rgdGene2
+scratchDir  /hive/data/genomes/rn4/bed/hgNearBlastp/101018rgdGene2/tmp
+_EOF_
+    doHgNearBlastp.pl -targetOnly config.ra >& do.log & tail -f do.log
+# *** All done!
+# *** Check these tables in rn4:
+# *** rgdGene2BlastTab hgBlastTab mmBlastTab drBlastTab dmBlastTab ceBlastTab scBlastTab 
+
+###################################
+# Build tables for hgNear with RGD Genes as the main gene set for rn4
+
+mkdir /hive/data/genomes/rn4/bed/rgdGene/093010/near
+cd /hive/data/genomes/rn4/bed/rgdGene/093010/near
+
+# build Affy related tables
+
+hgMapToGene rn4 affyRAE230 rgdGene2 rgdGene2ToRAE230
+
+hgMapToGene rn4 affyU34A rgdGene2 rgdGene2ToU34A
+
+# build rgdGene2Canonical and rgdGene2Isoforms tables
+
+hgClusterGenes rn4 rgdGene2 rgdGene2Isoforms rgdGene2Canonical \
+      -protAccQuery='select name,value from rgdGene2ToUniProt'
+
+# build rgdGene2ToDisplayId table
+
+hgsql rn4 -N -e\
+'select name, val from rgdGene2ToUniProt, uniProt.displayId where acc=value' >rgdGene2ToDisplayId.tab
+ hgsql rn4 -e 'drop table rgdGene2ToDisplayId'
+ hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToDisplayId.sql
+ hgsql rn4 -e 'load data local infile "rgdGene2ToDisplayId.tab" into table rgdGene2ToDisplayId'
+
+# build rgdGene2ToEnsembl table
+
+doRgdGene2Col rn4 ensembl_id rgdGene2ToEnsembl.txt
+hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToEnsembl -lookup=rgdGene2ToEnsembl.txt
+
+# build rgdGene2ToLocusLink table
+
+doRgdGene2Col rn4 entrez_gene rgdGene2ToLl.txt
+hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToLocusLink -lookup=rgdGene2ToLl.txt
+
+# build rgdGene2ToGenbank table
+
+doRgdGene2Col rn4 genbank_nucleotide j.tmp
+cat j.tmp|grep -v "_" >rgdGene2ToGenbank.txt
+hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToGenbank -lookup=rgdGene2ToGenbank.txt
+
+# build rgdGene2ToGenbankAll table
+
+doRgdGene2Col rn4 genbank_nucleotide rgdGene2ToGenbankAll.txt
+hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToGenbankAll -lookup=rgdGene2ToGenbankAll.txt
+
+# build rgdGene2ToPDB table
+
+hgsql rn4 -N -e\
+'select name, extAC from rgdGene2ToUniProt, proteome.spXref2 where value=accession and extDB="PDB"' >rgdGene2ToPDB.tab
+ hgsql rn4 -e 'drop table rgdGene2ToPDB'
+ hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToPDB.sql
+ hgsql rn4 -e 'load data local infile "rgdGene2ToPDB.tab" into table rgdGene2ToPDB'
+
+# build rgdGene2ToPfam table
+
+ hgMapViaSwissProt rn4 rgdGene2ToUniProt name value Pfam rgdGene2ToPfam
+
+# build rgdGene2ToRefSeq table
+
+doRgdGene2Col rn4 genbank_nucleotide j
+fgrep "NM_" j > rgdGene2ToRefseq.txt
+hgMapToGene rn4 rgdGene2 rgdGene2 rgdGene2ToRefSeq -lookup=rgdGene2ToRefseq.txt
+
+# build rgdGene2ToCdsSnp table
+    
+hgMapToGene rn4 snp130 rgdGene2 rgdGene2ToCdsSnp -all -cds
+
+# build rgdGene2ToSuper table
+
+hgsql rn4 -N -e \
+'select r.name, s.superfamily from rgdGene2ToGenbankAll r, knownToSuper s where s.gene=r.value ' >j1
+
+hgsql rn4 -N -e \
+'select r.name, s.superfamily from rgdGene2ToRefSeq r, knownToSuper s where s.gene=r.value ' >j2
+
+cat j1 j2 |sort -u >rgdGene2ToSuper.tab
+
+hgsql rn4 -e 'drop table rgdGene2ToSuper'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToSuper.sql
+hgsql rn4 -e 'load data local infile "rgdGene2ToSuper.tab" into table rgdGene2ToSuper'
+
+
+# update KEGG pathway related tables
+
+mkdir -p /hive/data/genomes/hg18/bed/pathways/kegg/102510
+cd /hive/data/genomes/hg18/bed/pathways/kegg/102510
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/pathway/map_title.tab
+
+cat map_title.tab | sed -e 's/\t/\thsa\t/' > j.tmp
+cut -f 2 j.tmp >j.hsa
+cut -f 1,3 j.tmp >j.1
+paste j.hsa j.1 |sed -e 's/\t//' > keggMapDesc.tab
+rm j.hsa j.1
+rm j.tmp
+
+hgsql hg18 -e 'drop table keggMapDesc'
+hgsql hg18 < ~/kent/src/hg/lib/keggMapDesc.sql
+hgsql hg18 -e 'load data local infile "keggMapDesc.tab" into table keggMapDesc'
+
+wget --timestamping ftp://ftp.genome.jp/pub/kegg/genes/organisms/hsa/hsa_pathway.list
+
+cat hsa_pathway.list| sed -e 's/path://'|sed -e 's/:/\t/' > j.tmp
+hgsql hg18 -e 'drop table keggPathway'
+hgsql hg18 < ~/kent/src/hg/lib/keggPathway.sql
+hgsql hg18 -e 'load data local infile "j.tmp" into table keggPathway'
+
+hgsql hg18 -N -e \
+'select name, locusID, mapID from keggPathway p, knownToLocusLink l where p.locusID=l.value' \
+>keggPathway.tab
+
+hgsql hg18 -e 'delete from keggPathway'
+
+hgsql hg18 -e 'load data local infile "keggPathway.tab" into table keggPathway'
+
+rm j.tmp
+
+# Add KEGG column to rn4 Gene Sorter (Done, Fan, 10/25/2010)
+
+mkdir -p /hive/data/genomes/rn4/bed/geneSorter/102510
+cd /hive/data/genomes/rn4/bed/geneSorter/102510
+hgsql rn4 -N -e 'select rgdId, mapID, mapID, "+", locusID from rgdGene2KeggPathway' |\
+sort -u|sed -e 's/\t+\t/+/' > rgdGene2ToKeggEntrez.tab
+
+hgsql rn4 -e 'drop table rgdGene2ToKeggEntrez'
+hgsql rn4 < ~/kent/src/hg/lib/rgdGene2ToKeggEntrez.sql
+hgsql rn4 -e 'load data local infile "rgdGene2ToKeggEntrez.tab" into table rgdGene2ToKeggEntrez'
+
