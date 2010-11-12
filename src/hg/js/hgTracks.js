@@ -1705,6 +1705,14 @@ function makeContextMenuHitCallback(title)
     };
 }
 
+function makeImgTag(img)
+{
+// Return img tag with explicit dimensions for img (dimensions are currently hardwired).
+// This fixes the "weird shadow problem when first loading the right-click menu" seen in FireFox 3.X,
+// which occurred b/c FF doesn't actually fetch the image until the menu is being shown.
+    return "<img width='16px' height='16px' src='../images/" + img + "' />";
+}
+
 function loadContextMenu(img)
 {
     var menu = img.contextMenu(
@@ -1766,9 +1774,9 @@ function loadContextMenu(img)
                     var any = false;
                     if(isGene || isHgc) {
                         var title = selectedMenuItem.title || "feature";
-                        o["<img src='../images/magnify.png' /> Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
-                        o["<img src='../images/dnaIcon.png' /> Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
-                        o["<img src='../images/bookOut.png' /> Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
+                        o[makeImgTag("magnify.png") + " Zoom to " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "selectWholeGene"); return true; }};
+                        o[makeImgTag("dnaIcon.png") + " Get DNA for " +  title] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "getDna"); return true; }};
+                        o[makeImgTag("bookOut.png") + " Open details page in new window..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "openLink"); return true; }};
                         any = true;
                     }
                     if(selectedMenuItem.title != undefined && selectedMenuItem.title.length > 0
@@ -1780,9 +1788,9 @@ function loadContextMenu(img)
                             ; // suppress menu items for hgTracks links (e.g. Next/Prev map items).
                         } else {
                             if(str.indexOf("display density") != -1)
-                                str = "<img src='../images/toggle.png' /> " + str;
+                                str = makeImgTag("toggle.png") + str;
                             else
-                                str = "<img src='../images/book.png' /> Show details for " + str + "...";
+                                str = makeImgTag("book.png") + " Show details for " + str + "...";
                             o[str] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "followLink"); return true; }};
                             any = true;
                         }
@@ -1821,18 +1829,20 @@ function loadContextMenu(img)
             // Add cfg options at just shy of end...
             var o = new Object();
             if(tdbIsLeaf(rec)) {
-                o["<img src='../images/wrench.png' /> Configure "+rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                o[makeImgTag("wrench.png") + " Configure " + rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
                 if(rec.parentTrack != undefined)
-                    o["<img src='../images/folderWrench.png' /> Configure "+rec.parentLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                    o[makeImgTag("folderWrench.png") + " Configure " + rec.parentLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             } else
-                o["<img src='../images/folderWrench.png' /> Configure "+rec.shortLabel+" track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
             menu.push($.contextMenu.separator);
             menu.push(o);
                 menu.push($.contextMenu.separator);
             }
 
             // Add view image at end
-            menu.push({"<img src='../images/view.png' /> View image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
+            var o = new Object();
+            o[makeImgTag("eye.png") + " View image"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }};
+            menu.push(o);
 
             return menu;
         },
