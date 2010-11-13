@@ -24,6 +24,7 @@ type bed 3
 wgEncode 1
 origAssembly hg19
 nextItemButton on
+noInherit on
 #dataVersion through the ENCODE Jan 2010 Freeze
 
 	#Peak Track HAIB TFBS#
