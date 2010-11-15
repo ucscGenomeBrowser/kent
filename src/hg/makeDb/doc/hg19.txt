@@ -9683,6 +9683,67 @@ EOF
 
 
 ############################################################################
+# SPLIT SNP131 INTO MULTIMAPPED / HAPMAP+1000GENOMES / MISC (DONE 11/5/10 angie)
+# another swipe at http://redmine.soe.ucsc.edu/issues/559
+    cd /hive/data/outside/dbSNP/131/human
+
+    # First, separate out the "SNPs" that map to multiple genomic loci:
+    grep -Fw MultipleAlignments snp131Exceptions.bed | wc -l
+#3088435
+    grep -Fw MultipleAlignments snp131Exceptions.bed \
+    | cut -f 4 \
+    | sort -u > multipleMappingIds.txt
+    wc -l multipleMappingIds.txt
+#978068 multipleMappingIds.txt
+    grep -Fwf multipleMappingIds.txt snp131.bed > snp131NonUnique.bed
+    wc -l snp131NonUnique.bed
+#3088435 snp131NonUnique.bed
+    grep -vFwf multipleMappingIds.txt snp131.bed > snp131Unique.bed
+    wc -l snp131Unique.bed
+#22944618 snp131Unique.bed
+
+    # Next, separate the uniquely mapped SNPs into HapMap and/or 1000 Genomes
+    # (the ones that we are certain have been observed in a large number of 
+    # apparently healthy samples) vs. other ones (rarer SNPs, maybe clinical SNPs).
+
+#*** NOTE *** To do this right, we need to get allele freq data from dbSNP and use it
+#             as a filter here:
+
+    egrep -w 'by-hapmap|by-1000genomes' snp131Unique.bed > snp131Common.bed
+    wc -l snp131Common.bed
+#12750453 snp131Common.bed
+    egrep -vw 'by-hapmap|by-1000genomes' snp131Unique.bed > snp131Misc.bed
+    wc -l snp131Misc.bed
+#10194165 snp131Misc.bed
+
+    # How many "clinical" SNPs (i.e. included in a Locus-Specific Database) are in the common set?
+    grep -Fwf clinicalRsIds.txt snp131Common.bed > snp131CommonButClinical.bed
+    wc -l snp131CommonButClinical.bed
+#2373 snp131CommonButClinical.bed
+    calc 2373 / 16605
+#2373 / 16605 = 0.142909
+    # A higher percentage than I expected... are 15% of OMIM / LSDB SNPs common?  
+    # Spot-checking, OMIM will mention SNPs from GWAS, or as endpoints of an interval...
+    # the SNPs are clearly common but sometimes common variants are associated with
+    # a disorder.
+    # How many "clinical" SNPs in the NonUnique set?
+    grep -Fwf clinicalRsIds.txt snp131NonUnique.bed | wc -l
+#901
+
+    # Load tables:
+    foreach t (snp131Common snp131Misc snp131NonUnique)
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+        hg19 $t -sqlTable=snp131.sql -renameSqlTable $t.bed
+    end
+#Reading snp131Common.bed
+#Loaded 12750453 elements of size 17
+#Reading snp131Misc.bed
+#Loaded 10194165 elements of size 17
+#Reading snp131NonUnique.bed
+#Loaded 3088435 elements of size 17
+
+
+############################################################################
 # ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP131 (DONE 6/3/10 angie)
 # First done 4/15/10.  Then found that SNPs that appeared on both a main chrom
 # (like chr6) and on a haplo chrom (like chr6_cox_hap2) were being flagged
