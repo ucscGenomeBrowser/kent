@@ -632,6 +632,7 @@ enum baseColorDrawOpt
 
 /* Drawing mode per-track cart variable suffix: */
 #define BASE_COLOR_VAR_SUFFIX "baseColorDrawOpt"
+#define CODON_NUMBERING_SUFFIX "codonNumbering"
 
 /* trackDb settings: */
 #define BASE_COLOR_USE_CDS "baseColorUseCds"

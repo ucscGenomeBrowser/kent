@@ -962,3 +962,10 @@ function hideLoadingImage(id)
 {
     $('#' + id).remove();
 }
+
+function codonColoringChanged(name)
+{
+// Updated disabled state of codonNumbering checkbox based on current value of track coloring select.
+    var val = $("select[name='" + name + ".baseColorDrawOpt'] option:selected").text();
+    $("input[name='" + name + ".codonNumbering']").attr('disabled', val == "OFF");
+}
