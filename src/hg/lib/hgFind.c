@@ -2941,6 +2941,17 @@ hFreeConn(&conn);
 return foundIt;
 }
 
+static struct hgFindSpec *hfsFind(struct hgFindSpec *list, char *name)
+/* Return first element of list that matches name. */
+{
+struct hgFindSpec *el;
+for (el = list; el != NULL; el = el->next)
+    if (sameString(name, el->searchName))
+        return el;
+return NULL;
+}
+
+
 static boolean singleSearch(char *db, char *term, struct cart *cart, struct hgPositions *hgp)
 /* If a search type is specified in the CGI line (not cart), perform that search. 
  * If the search is successful, fill in hgp as a single-pos result and return TRUE. */
@@ -2954,7 +2965,17 @@ boolean foundIt = FALSE;
 if (sameString(search, "knownCanonical"))
     foundIt = searchKnownCanonical(db, term, hgp);
 else
-    warn("Unrecognized singleSearch=%s in URL", search);
+    {
+    struct hgFindSpec *shortList = NULL, *longList = NULL;
+    hgFindSpecGetAllSpecs(db, &shortList, &longList);
+    struct hgFindSpec *hfs = hfsFind(shortList, search);
+    if (hfs == NULL)
+	hfs = hfsFind(longList, search);
+    if (hfs != NULL)
+	foundIt = hgFindUsingSpec(db, hfs, term, hgp, FALSE, 0,0, FALSE);
+    else
+	warn("Unrecognized singleSearch=%s in URL", search);
+    }
 if (foundIt)
     {
     fixSinglePos(hgp);
