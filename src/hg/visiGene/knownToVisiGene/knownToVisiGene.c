@@ -44,6 +44,7 @@ struct prioritizedImage
     {
     int imageId;	/* ID of image */
     float priority;	/* Image priority - smaller is more urgent */
+    int geneId;         /* visiGene gene.id */
     };
 
 void createTable(struct sqlConnection *conn, char *tableName)
@@ -54,6 +55,7 @@ dyStringPrintf(dy,
 "CREATE TABLE  %s (\n"
 "    name varchar(255) not null,\n"
 "    value varchar(255) not null,\n"
+"    geneId int not null,\n"
 "              #Indices\n"
 "    PRIMARY KEY(name(16)),\n"
 "    INDEX(value(16))\n"
@@ -62,7 +64,7 @@ sqlRemakeTable(conn, tableName, dy->string);
 dyStringFree(&dy);
 }
 
-void addPrioritizedImage(struct hash *hash, int id, float priority, char *key)
+void addPrioritizedImage(struct hash *hash, int id, float priority, int geneId, char *key)
 /* Add image to hash, replacing what's already there if we have a better priority */
 {
 struct prioritizedImage *pi = hashFindVal(hash, key);
@@ -71,12 +73,14 @@ if (pi == NULL)
     AllocVar(pi);
     pi->imageId = id;
     pi->priority = priority;
+    pi->geneId = geneId;
     hashAdd(hash, key, pi);
     }
 else if (pi->priority > priority)
     {
     pi->imageId = id;
     pi->priority = priority;
+    pi->geneId = geneId;
     }
 }
 
@@ -177,22 +181,20 @@ for (gp = gpList; gp != NULL; gp = gp->next)
     }
 }
 
-int bestImage(char *kgId, struct hash *kgToHash, struct hash *imageHash)
+struct prioritizedImage *bestImage(char *kgId, struct hash *kgToHash, struct hash *imageHash)
 /* Return best image id if possible, otherwise 0 */
 {
 struct hashEl *extId = hashLookup(kgToHash, kgId);
-int best = 0;
-float bestPri = 1000000.0;
+struct prioritizedImage *best = NULL;
 
-while (extId != NULL)
+while (extId)
     {
     struct prioritizedImage *pi = hashFindVal(imageHash, extId->val);
-    if (pi != NULL)
+    if (pi)
 	{
-	if (bestPri > pi->priority)
+	if (!best || pi->priority < best->priority)
 	    {
-	    bestPri = pi->priority;
-	    best = pi->imageId;
+	    best = pi;
 	    }
 	}
     extId = hashLookupNext(extId);
@@ -232,7 +234,7 @@ vgAllProbes = sqlTableExists(probesConn,"vgAllProbes");
 /* Go through and make up hashes of images keyed by various fields. */
 sr = sqlGetResult(iConn,
         "select image.id,imageFile.priority,gene.name,gene.locusLink,gene.refSeq,gene.genbank"
-	",probe.id,submissionSet.privateUser,vgPrbMap.vgPrb"
+	",probe.id,submissionSet.privateUser,vgPrbMap.vgPrb,gene.id"
 	" from image,imageFile,imageProbe,probe,gene,submissionSet,vgPrbMap"
 	" where image.imageFile = imageFile.id"
 	" and image.id = imageProbe.image"
@@ -248,13 +250,14 @@ while ((row = sqlNextRow(sr)) != NULL)
     int privateUser = sqlSigned(row[7]);
     char vgPrb_Id[256];
     safef(vgPrb_Id, sizeof(vgPrb_Id), "vgPrb_%s",row[8]);
+    int geneId = sqlUnsigned(row[9]);
     if (privateUser == 0)
 	{
-	addPrioritizedImage(probeImageHash, id, priority, vgPrb_Id);
-	addPrioritizedImage(geneImageHash, id, priority, row[2]);
-	addPrioritizedImage(locusLinkImageHash, id, priority, row[3]);
-	addPrioritizedImage(refSeqImageHash, id, priority, row[4]);
-	addPrioritizedImage(genbankImageHash, id, priority, row[5]);
+	addPrioritizedImage(probeImageHash, id, priority, geneId, vgPrb_Id);
+	addPrioritizedImage(geneImageHash, id, priority, geneId, row[2]);
+	addPrioritizedImage(locusLinkImageHash, id, priority, geneId, row[3]);
+	addPrioritizedImage(refSeqImageHash, id, priority, geneId, row[4]);
+	addPrioritizedImage(genbankImageHash, id, priority, geneId, row[5]);
 	}
     }
 verbose(2, "Made hashes of image: geneImageHash %d, locusLinkImageHash %d, refSeqImageHash %d"
@@ -298,27 +301,25 @@ verbose(2, "knownToLocusLink %d, knownToRefSeq %d, knownToGene %d knownToProbe %
 for (known = knownList; known != NULL; known = known->next)
     {
     char *name = known->name;
-    int imageId = 0;
+    struct prioritizedImage *best = NULL;
     {
-    imageId = bestImage(name, knownToLocusLinkHash, locusLinkImageHash);
-    if (imageId == 0)
-	imageId = bestImage(name, knownToRefSeqHash, refSeqImageHash);
-    if (imageId == 0)
+    best = bestImage(name, knownToLocusLinkHash, locusLinkImageHash);
+    if (!best)
+	best = bestImage(name, knownToRefSeqHash, refSeqImageHash);
+    if (!best)
 	{
-	struct prioritizedImage *pi = hashFindVal(genbankImageHash, name);
-	if (pi != NULL)
-	    imageId = pi->imageId;
+	best = hashFindVal(genbankImageHash, name);
 	}
-    if (imageId == 0)
-	imageId = bestImage(name, knownToGeneHash, geneImageHash);
-    if (vgProbes && imageId == 0)
-	imageId = bestImage(name, knownToProbeHash, probeImageHash);
-    if (vgAllProbes && imageId == 0)
-	imageId = bestImage(name, knownToAllProbeHash, probeImageHash);
+    if (!best)
+	best = bestImage(name, knownToGeneHash, geneImageHash);
+    if (vgProbes && !best)
+	best = bestImage(name, knownToProbeHash, probeImageHash);
+    if (vgAllProbes && !best)
+	best = bestImage(name, knownToAllProbeHash, probeImageHash);
     }	    
-    if (imageId != 0)
+    if (best)
         {
-	fprintf(f, "%s\t%d\n", name, imageId);
+	fprintf(f, "%s\t%d\t%d\n", name, best->imageId, best->geneId);
 	}
     }
 
