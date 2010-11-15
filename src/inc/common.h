@@ -1341,4 +1341,10 @@ __attribute__((format(printf, 1, 2)))
 #define SETTING_NOT_ON(setting)   (!SETTING_IS_ON(setting))
 #define SETTING_IS_OFF(setting)   (setting && (sameWord(setting,"off") || sameWord(setting,"false") || sameWord(setting,"disabled") || atoi(setting) == 0))
 
+// Standard bit mask macros
+#define BITS_ADD(    flags,bits) ((flags) = ((flags) |  (bits)))
+#define BITS_REMOVE( flags,bits) ((flags) = ((flags) & ~(bits)))
+#define BITS_ARE_ON( flags,bits) (((flags) & (bits)) == (bits))
+#define BITS_ARE_OFF(flags,bits) (((flags) & (bits)) == 0)
+
 #endif /* COMMON_H */

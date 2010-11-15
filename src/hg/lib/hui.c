@@ -24,6 +24,7 @@
 #include "encode/encodePeak.h"
 #include "mdb.h"
 #include "web.h"
+#include "hPrint.h"
 
 static char const rcsid[] = "$Id: hui.c,v 1.297 2010/06/02 19:27:51 tdreszer Exp $";
 
@@ -207,7 +208,7 @@ for (mdbVar=mdbObj->vars;mdbVar!=NULL;mdbVar=mdbVar->next)
                         label = mdbVar->var;
                     char *linkOfType = controlledVocabLink(NULL,"type",mdbVar->var,label,label,NULL);
                     char *cvDefined=hashFindVal(cvTerm,"cvDefined");
-                    if (cvDefined != NULL && differentWord(cvDefined,"no") && differentWord(cvDefined,"0"))
+                    if (cvDefined != NULL && !SETTING_IS_OFF(cvDefined)) // assume setting is ON
                         {
                         char *linkOfTerm = controlledVocabLink(NULL,"term",mdbVar->val,mdbVar->val,mdbVar->val,NULL);
                         dyStringPrintf(dyTable,"<tr><td align=right><i>%s:</i></td><td nowrap>%s</td></tr>",linkOfType,linkOfTerm);
@@ -6869,3 +6870,36 @@ sqlFreeResult(&sr);
 webPrintLinkTableEnd();
 }
 
+
+boolean hPrintPennantIcon(struct trackDb *tdb)
+// Returns TRUE and prints out the "pennantIcon" when found.  Example: ENCODE tracks in hgTracks config list.
+{
+char *setting = trackDbSetting(tdb, "pennantIcon");
+if(setting != NULL)
+    {
+    setting = cloneString(setting);
+    char *icon = htmlEncodeText(nextWord(&setting),FALSE);
+    if (setting)
+        {
+        char *url = nextWord(&setting);
+        if (setting)
+            {
+            char *hint = htmlEncodeText(stripEnclosingDoubleQuotes(setting),FALSE);
+            hPrintf("<a title='%s' href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>\n",hint,url,icon);
+            freeMem(hint);
+            }
+        else
+            hPrintf("<a href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>\n",url,icon);
+        }
+    else
+        hPrintf("<img height='16' width='16' src='%s'>\n",icon);
+    freeMem(icon);
+    return TRUE;
+    }
+else if(trackDbSetting(tdb, "wgEncode") != NULL)
+    {
+    hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
+    return TRUE;
+    }
+return FALSE;
+}

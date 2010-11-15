@@ -408,7 +408,7 @@ priority 103.2
 
 	track phyloP30wayAll
 	release alpha,beta
-	subTrack cons30wayViewphyloP on
+	subTrack cons30wayViewphyloP off
 	subGroups view=phyloP clade=vert
 	shortLabel Vertebrate Cons
 	longLabel Vertebrate Basewise Conservation by PhyloP
