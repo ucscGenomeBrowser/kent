@@ -1438,7 +1438,7 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19Liftover.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
 
