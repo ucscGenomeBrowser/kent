@@ -2247,7 +2247,7 @@ if (visMax != visOrig || reshapeFully)
             {
             if (!hashFindVal(subVisHash, subtrack->track))   // if the subtrack doesn't have individual vis AND...
                 {
-                if (reshapeFully || visMax == tvHide)
+                if (reshapeFully || visOrig == tvHide)
                     {
                     subtrackFourStateCheckedSet(subtrack, cart,FALSE,fourStateEnabled(fourState)); // uncheck
                     cartRemove(cart,subtrack->track);  // Remove it if it exists, just in case
@@ -2266,16 +2266,6 @@ if (visMax != visOrig || reshapeFully)
                 cartRemove(cart,subtrack->track);  // MultiTrack vis is ALWAYS inherited vis and non-selected should not have vis
             }
         }
-
-    // OUCH!  This cannot be until all the views are dealt with!
-    //if (tdbIsCompositeView(parent))
-    //    {
-    //    visOrig = tdbVisLimitedByAncestry(cart, parent->parent, FALSE);
-    //    cartSetString(cart,parent->parent->track,"full");    // Now set composite to full.
-    //    if (visOrig == tvHide && tdbIsSuperTrackChild(parent->parent))
-    //        cartTdbOverrideSuperTracks(cart,parent->parent,FALSE);      // deal with superTrack vis! cleanup
-    //    }
-
     }
 else if (tdbIsMultiTrack(parent))
     {
@@ -2394,6 +2384,7 @@ if (hasViews)
         }
     if (count > 0)
         {
+        // At least on view was shaped, so all views will get explicit vis.  This means composite must be set to full
         enum trackVisibility visOrig = tdbVisLimitedByAncestry(cart, tdbContainer, FALSE);
         cartSetString(cart,tdbContainer->track,"full");    // Now set composite to full.
         if (visOrig == tvHide && tdbIsSuperTrackChild(tdbContainer))
@@ -2404,6 +2395,12 @@ else // If no views then composite is not set to fuul but to max of subtracks
     count = cartTdbParentShapeVis(cart,tdbContainer,NULL,subVisHash,reshapeFully);
 
 hashFree(&subVisHash);
+
+// If reshaped, be sure to set flag to stop composite cleanup
+#define RESHAPED_COMPOSITE "reshaped"
+if (count > 0)
+    tdbExtrasAddOrUpdate(tdbContainer,RESHAPED_COMPOSITE,(void *)(long)TRUE); // Exists for the life of the cgi only
+
 return TRUE;
 #endif/// defined(COMPOSITE_VIS_SHAPING_PLAN_A) || defined(COMPOSITE_VIS_SHAPING_PLAN_B)
 }
@@ -2414,6 +2411,10 @@ boolean cartTdbTreeCleanupOverrides(struct trackDb *tdb,struct cart *newCart,str
 {
 boolean anythingChanged = cartTdbOverrideSuperTracks(newCart,tdb,TRUE);
 if (!tdbIsContainer(tdb))
+    return anythingChanged;
+
+// If composite has been reshaped then don't clean it up
+if ((boolean)(long)tdbExtrasGetOrDefault(tdb,RESHAPED_COMPOSITE,(void *)(long)FALSE))
     return anythingChanged;
 
 // vis is a special additive case! composite or view level changes then remove subtrack vis
