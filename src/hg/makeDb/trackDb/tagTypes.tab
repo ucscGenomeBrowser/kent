@@ -228,6 +228,7 @@ parent *
 patDb expRatio
 patKey expRatio
 patTable expRatio
+pennantIcon *
 pgDbLink bed
 pgPolyphenPredTab bed
 pgSiftPredTab bed

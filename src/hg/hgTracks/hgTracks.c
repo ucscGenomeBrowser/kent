@@ -1560,47 +1560,8 @@ return scaleBases;
 enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
-#ifdef SUBTRACKS_HAVE_VIS
-if (tdbIsCompositeChild(subtrack->tdb))
-    {
-    if (fourStateVisible(subtrackFourStateChecked(subtrack->tdb,cart))) // Don't need all 4 states here.  Visible=checked&&enabled
-        {
-        char *var = cartOptionalString(cart, subtrack->track);
-        if (var)
-            {
-            subtrack->visibility = hTvFromString(var);
-
-            if (subtrack->limitedVisSet)
-                subtrack->limitedVis = tvMin(subtrack->visibility,subtrack->limitedVis);
-            else
-                {
-                //#ifdef OMIT
-                // Not sure this is needed at all!  OMITting because of the recursive loop that wigMafs fell into on rightClick
-                if (subtrack->visibility != tvHide && slCount(subtrack->items) == 0)
-                    {
-                    // wigMaf legitimately has no items even after loadItems, as it triggers a loop to ->loadItems() !
-                    // Really should protect against infinite loops better than this!
-                    if (!startsWith("wigMaf", subtrack->tdb->type) && !startsWith("maf", subtrack->tdb->type))
-                        {
-                        subtrack->loadItems(subtrack);
-                        }
-                    }
-                //#endif///def OMIT
-                limitVisibility(subtrack);
-                }
-            return hTvFromString(var);
-            }
-        }
-    else
-        return tvHide;
-    }
-#endif///def SUBTRACKS_HAVE_VIS
-
-enum trackVisibility vis = subtrack->limitedVis == tvHide ?
-                           subtrack->visibility :
-                           tvMin(subtrack->visibility,subtrack->limitedVis);
-struct trackDb *tdb = subtrack->tdb;
-if(tdbIsCompositeChild(tdb))
+enum trackVisibility vis = subtrack->limitedVisSet ? tvMin(subtrack->visibility,subtrack->limitedVis) : subtrack->visibility;
+if(tdbIsCompositeChild(subtrack->tdb))
     {
     if (!subtrack->limitedVisSet)
         {
@@ -1609,27 +1570,6 @@ if(tdbIsCompositeChild(tdb))
         return vis;
         }
     return subtrack->limitedVis;
-    /*
-    struct trackDb *parentTdb = tdbGetComposite(tdb);
-    assert(parentTdb != NULL);
-
-    char *viewName = NULL;
-    if (subgroupFind(tdb,"view",&viewName))
-	{
-        int len = strlen(parentTdb->track) + strlen(viewName) + 10;
-
-	// Create the view dropdown var name.  This needs to have the view name surrounded by dots
-	// in the middle for the javascript to work.
-	char ddName[len];
-        safef(ddName,len,"%s.%s.vis", parentTdb->track,viewName);
-        char * fromParent = cartOptionalString(cart, ddName);
-        if(fromParent)
-            vis = tvMin(vis,hTvFromString(fromParent));
-        else
-            vis = tvMin(vis,visCompositeViewDefault(parentTdb,viewName));
-        subgroupFree(&viewName);
-	}
-    */
     }
 return vis;
 }
@@ -4302,6 +4242,7 @@ for (;track != NULL; track = track->next)
     boolean shapedByubtrackOverride = FALSE;
     boolean cleanedByContainerSettings = FALSE;
 
+    // Top-down 'cleanup' (CleanupOverrides) must be before bottom-up 'Reshaping' (MatchSubtrackVis)
     cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
     if (tdbIsContainer(track->tdb))
@@ -4863,9 +4804,11 @@ if (!hideControls)
 		    {
 		    char *url = trackUrl(track->track, chromName);
 		    char *longLabel = replaceChars(track->longLabel, "\"", "&quot;");
-		    if(trackDbSetting(track->tdb, "wgEncode") != NULL)
-			hPrintf("<a title='encode project' href='../ENCODE'><img height='16' width='16' src='../images/encodeThumbnail.jpg'></a>\n");
-		    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, longLabel);
+                    hPrintPennantIcon(track->tdb);
+
+                    // Print an icon before the title when one is defined
+                    hPrintf("<A HREF=\"%s\" title=\"%s\">", url, longLabel);
+
 		    freeMem(url);
 		    freeMem(longLabel);
 		    }
