@@ -2577,7 +2577,7 @@ else if (drawOpt > baseColorDrawOff)
     if (gp && gp->cdsStart != gp->cdsEnd)
         {
         char var[256];
-        safef(var, sizeof(var), "%sCodonNumbering", tg->tdb->track);
+        safef(var, sizeof(var), "%s.%s", tg->tdb->track, CODON_NUMBERING_SUFFIX);
         lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBoolean(cart, var, FALSE));
         }
     }
