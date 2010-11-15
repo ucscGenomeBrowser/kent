@@ -9683,6 +9683,67 @@ EOF
 
 
 ############################################################################
+# SPLIT SNP131 INTO MULTIMAPPED / HAPMAP+1000GENOMES / MISC (DONE 11/5/10 angie)
+# another swipe at http://redmine.soe.ucsc.edu/issues/559
+    cd /hive/data/outside/dbSNP/131/human
+
+    # First, separate out the "SNPs" that map to multiple genomic loci:
+    grep -Fw MultipleAlignments snp131Exceptions.bed | wc -l
+#3088435
+    grep -Fw MultipleAlignments snp131Exceptions.bed \
+    | cut -f 4 \
+    | sort -u > multipleMappingIds.txt
+    wc -l multipleMappingIds.txt
+#978068 multipleMappingIds.txt
+    grep -Fwf multipleMappingIds.txt snp131.bed > snp131NonUnique.bed
+    wc -l snp131NonUnique.bed
+#3088435 snp131NonUnique.bed
+    grep -vFwf multipleMappingIds.txt snp131.bed > snp131Unique.bed
+    wc -l snp131Unique.bed
+#22944618 snp131Unique.bed
+
+    # Next, separate the uniquely mapped SNPs into HapMap and/or 1000 Genomes
+    # (the ones that we are certain have been observed in a large number of 
+    # apparently healthy samples) vs. other ones (rarer SNPs, maybe clinical SNPs).
+
+#*** NOTE *** To do this right, we need to get allele freq data from dbSNP and use it
+#             as a filter here:
+
+    egrep -w 'by-hapmap|by-1000genomes' snp131Unique.bed > snp131Common.bed
+    wc -l snp131Common.bed
+#12750453 snp131Common.bed
+    egrep -vw 'by-hapmap|by-1000genomes' snp131Unique.bed > snp131Misc.bed
+    wc -l snp131Misc.bed
+#10194165 snp131Misc.bed
+
+    # How many "clinical" SNPs (i.e. included in a Locus-Specific Database) are in the common set?
+    grep -Fwf clinicalRsIds.txt snp131Common.bed > snp131CommonButClinical.bed
+    wc -l snp131CommonButClinical.bed
+#2373 snp131CommonButClinical.bed
+    calc 2373 / 16605
+#2373 / 16605 = 0.142909
+    # A higher percentage than I expected... are 15% of OMIM / LSDB SNPs common?  
+    # Spot-checking, OMIM will mention SNPs from GWAS, or as endpoints of an interval...
+    # the SNPs are clearly common but sometimes common variants are associated with
+    # a disorder.
+    # How many "clinical" SNPs in the NonUnique set?
+    grep -Fwf clinicalRsIds.txt snp131NonUnique.bed | wc -l
+#901
+
+    # Load tables:
+    foreach t (snp131Common snp131Misc snp131NonUnique)
+      hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+        hg19 $t -sqlTable=snp131.sql -renameSqlTable $t.bed
+    end
+#Reading snp131Common.bed
+#Loaded 12750453 elements of size 17
+#Reading snp131Misc.bed
+#Loaded 10194165 elements of size 17
+#Reading snp131NonUnique.bed
+#Loaded 3088435 elements of size 17
+
+
+############################################################################
 # ORTHOLOGOUS ALLELES IN CHIMP AND MACAQUE FOR SNP131 (DONE 6/3/10 angie)
 # First done 4/15/10.  Then found that SNPs that appeared on both a main chrom
 # (like chr6) and on a haplo chrom (like chr6_cox_hap2) were being flagged
@@ -12240,5 +12301,434 @@ foreach f (/hive/data/genomes/hg19/nib/chr*.nib)
     ./runClusterRna
 
 hgLoadBed hg19 rnaCluster chrom/*.bed
+
+#############################################################################
+# dbSNP BUILD 132 (SNP132) BASIC TABLES (DONE 11/15/10 angie)
+    # Set up build directory
+    mkdir -p /hive/data/outside/dbSNP/132/{human,shared}
+
+    # Get field encodings -- if there are changes or additions to the
+    # encoding of the corresponding fields, you might need to update
+    # snpNcbiToUcsc, hgTracks, hgc and hgTrackUi (see also
+    # hg/lib/snp125Ui.c).
+    cd /hive/data/outside/dbSNP/132/shared
+    alias wg wget --timestamping
+    set ftpShared = ftp://ftp.ncbi.nih.gov/snp/database/shared_data
+    wg $ftpShared/LocTypeCode.bcp.gz
+    wg $ftpShared/SnpClassCode.bcp.gz
+    wg $ftpShared/SnpFunctionCode.bcp.gz
+    wg $ftpShared/SnpValidationCode.bcp.gz
+    wg $ftpShared/Allele.bcp.gz
+
+    ########################## DOWNLOAD #############################
+    cd /hive/data/outside/dbSNP/132/human
+    mkdir data schema rs_fasta
+    # Get data from NCBI (anonymous FTP)
+    set ftpSnpDb = ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/database
+    wg ftp://ftp.ncbi.nih.gov/snp/00readme.txt
+    cd /hive/data/outside/dbSNP/132/human/data
+    # ContigLoc table has coords, orientation, loc_type, and refNCBI allele
+    wg $ftpSnpDb/organism_data/b132_SNPContigLoc_37_1.bcp.gz
+    wg $ftpSnpDb/organism_data/b132_SNPContigLocusId_37_1.bcp.gz
+    wg $ftpSnpDb/organism_data/b132_ContigInfo_37_1.bcp.gz
+    # MapInfo has alignment weights
+    wg $ftpSnpDb/organism_data/b132_SNPMapInfo_37_1.bcp.gz
+    # SNP has univar_id, validation status and heterozygosity
+    wg $ftpSnpDb/organism_data/SNP.bcp.gz
+    wg $ftpSnpDb/organism_data/SNPAlleleFreq.bcp.gz
+
+    # Get schema
+    cd /hive/data/outside/dbSNP/132/human/schema
+    wg $ftpSnpDb/organism_schema/human_9606_table.sql.gz
+    wg $ftpSnpDb/shared_schema/dbSNP_main_table.sql.gz
+
+    # Get fasta files
+    # using headers of fasta files for molType, class, observed
+    cd /hive/data/outside/dbSNP/132/human/rs_fasta
+    wg ftp://ftp.ncbi.nih.gov/snp/organisms/human_9606/rs_fasta/\*.gz
+
+    ########################## LOAD NCBI TABLES #############################
+    # Simplify names of data files -- strip version & extras to get
+    # local canonical table names.
+    cd /hive/data/outside/dbSNP/132/human/data
+    foreach f (*.bcp.gz)
+      set new = `echo $f \
+                 | sed -e 's/^b132_SNP//; s/^b132_//; s/_37_1//; s/.bcp//;'`
+      mv $f $new
+      echo $new
+    end
+
+    cd /hive/data/outside/dbSNP/132/human/schema
+    zcat human_9606_table.sql.gz \
+    | perl -we '$/ = "\nGO\n\n\n"; \
+        while (<>) { \
+          next unless /^CREATE TABLE \[(b132_(SNP)?)?(ContigInfo|ContigLoc|ContigLocusId|MapInfo|SNP|SNPAlleleFreq)(_37_1)?\]/; \
+          s/b132_(SNP)?//; s/_37_1//; \
+          s/[\[\]]//g;  s/GO\n\n/;/;  s/smalldatetime/datetime/g; \
+          s/ON PRIMARY//g;  s/COLLATE//g;  s/Latin1_General_BIN//g; \
+          s/IDENTITY (1, 1) NOT NULL /NOT NULL AUTO_INCREMENT, PRIMARY KEY (id)/g; \
+          s/nvarchar/varchar/g;  s/set quoted/--set quoted/g; \
+          s/(image|varchar\s+\(\d+\))/BLOB/g; \
+          print; \
+        }' \
+      > table.sql
+    zcat dbSNP_main_table.sql.gz \
+    | sed -re 's/\r//g;' \
+    | perl -we '$/ = "\nGO\n\n\n";  \
+        while (<>) { \
+          next unless /^CREATE TABLE \[Allele\]/; \
+          s/[\[\]]//g;  s/GO\n\n\n/;\n/;  s/smalldatetime/datetime/g; \
+          print; \
+        }' \
+      >> table.sql
+
+    # load on hgwdev
+    hgsql -e 'create database hg19snp132'
+    cd /hive/data/outside/dbSNP/132/human/schema
+    hgsql hg19snp132 < table.sql
+    cd ../data
+
+    # Avoid wasting space by excluding mappings to non-reference contigs (ContigInfo.group_label):
+    zcat ContigInfo.gz | cut -f 12 | uniq | sort -u
+#CRA_TCAGchr7v2
+#Celera
+#GRCh37
+#HuRef
+    foreach t (ContigInfo MapInfo ContigLocusId)
+      zcat $t.gz \
+      | egrep -vw '(Celera|HuRef|CRA_TCAGchr7v2)' \
+      | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+      | hgLoadSqlTab -oldTable hg19snp132 $t placeholder stdin
+    end
+
+    # Compare contig list between liftContigs.lft and reference contigs in ContigInfo.
+    cut -f 2 /hive/data/genomes/hg19/jkStuff/liftContigs.lft | sort > /data/tmp/1
+    # (HuRef, Celera, CRA_TCAGchr7v2 grepped out above)
+    hgsql hg19snp132 -N -B -e 'select contig_acc from ContigInfo;' | sort > /data/tmp/2
+    diff /data/tmp/[12]
+#1c1
+#< NC_001807
+#---
+#> NC_012920
+    # darn mitochondria version oops.  Use NC_012920ToChrM.over.chain generated for snp131.
+
+    # Make sure there are no orient != 0 contigs among those selected.
+    hgsql hg19snp132 -NBe \
+      'select count(*) from ContigInfo where orient != 0;'
+#0
+
+    # ContigLoc is huge, and we want just the reference contig mappings.
+    # Keep lines only if they have a word match to some reference contig ID.
+    # That probably will allow some false positives from coord matches,
+    # but we can clean those up afterward.
+    zcat ContigInfo.gz | g -w GRCh37 | cut -f 1 | sort -n > GRCh37ContigInfo.ctg_id.txt
+    wc -l GRCh37ContigInfo.ctg_id.txt 
+#259 GRCh37ContigInfo.ctg_id.txt
+    zcat ContigLoc.gz \
+    | grep -Fwf GRCh37ContigInfo.ctg_id.txt \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp132 ContigLoc placeholder stdin
+#Warning 1366 Incorrect integer value: '' for column 'loc_sts_uid' at row 1
+#Warning 1366 Incorrect integer value: '' for column 'loc_sts_uid' at row 2
+#Warning 1366 Incorrect integer value: '' for column 'loc_sts_uid' at row 3
+#Warning 1366 Incorrect integer value: '' for column 'loc_sts_uid' at row 4
+#...
+#load of ContigLoc did not go as planned: 34610577 record(s), 0 row(s) skipped, 4143419 warning(s) loading /dev/stdin
+    # Get rid of those false positives (crazy slow, create indices first next time):
+    hgsql hg19snp132 -e 'create table ContigLocFix select cl.* from ContigLoc as cl, ContigInfo as ci where cl.ctg_id = ci.ctg_id;'
+    hgsql hg19snp132 -e 'drop table ContigLoc; \
+                         rename table ContigLocFix to ContigLoc;'
+
+    zcat SNP.gz \
+    | perl -wpe 's/(\d\d:\d\d:\d\d)\.0/$1/g;' \
+    | hgLoadSqlTab -oldTable hg19snp132 SNP placeholder stdin
+#Warning 1366 Incorrect integer value: '' for column 'CpG_code' at row 1
+#Warning 1366 Incorrect integer value: '' for column 'map_property' at row 1
+#Warning 1366 Incorrect integer value: '' for column 'CpG_code' at row 2
+#Warning 1366 Incorrect integer value: '' for column 'map_property' at row 2
+#Warning 1265 Data truncated for column 'avg_heterozygosity' at row 3
+#Warning 1265 Data truncated for column 'het_se' at row 3
+#...
+#load of SNP did not go as planned: 30443714 record(s), 0 row(s) skipped, 21366755 warning(s) loading /dev/stdin
+    # ... no big deal.
+    foreach t (ContigInfo ContigLoc ContigLocusId MapInfo SNP)
+     echo -n "${t}:\t"
+      hgsql -N -B hg19snp132 -e 'select count(*) from '$t
+    end
+#ContigInfo:     259
+#ContigLoc:      34610479
+#ContigLocusId:  19829016
+#MapInfo:        30399417
+#SNP:    	 30443714
+
+    #################### EXTRACT INFO FROM NCBI TABLES ####################
+    # Glom each SNP's function codes together and load up a new hg19Snp132 table.
+    # Also extract NCBI's annotations of coding SNPs' effects on translation.
+    # We extract ContigLocusId info only for reference assembly mapping.
+    # Some SNP's functional annotations are for an alternate assembly, so we will
+    # have no NCBI functional annotations to display for those (but our own are 
+    # available).
+    cd /hive/data/outside/dbSNP/132/human
+    # Add indices to tables for a big join (5 or 6 minutes):
+    hgsql hg19snp132 -e \
+      'alter table ContigInfo add index (ctg_id); \
+       alter table ContigLocusId add index (ctg_id);'
+    hgsql hg19snp132 -NBe 'select snp_id, ci.contig_acc, asn_from, asn_to, mrna_acc, \
+                           fxn_class, reading_frame, allele, residue, codon, cli.ctg_id \
+                           from ContigLocusId as cli, ContigInfo as ci \
+                           where cli.ctg_id = ci.ctg_id;' \
+      > ncbiFuncAnnotations.txt
+    wc -l ncbiFuncAnnotations.txt
+#19828052 ncbiFuncAnnotations.txt
+    # Ignore function code 8 (cds-reference, just means that some allele matches reference)
+    # and glom functions for each SNP id:
+    cut -f 1-4,6,11 ncbiFuncAnnotations.txt \
+    | sort -u -k1n,1n -k6n,6n -k3n,3n -k5n,5n \
+    | perl -we 'while (<>) { chomp; \
+                  ($id, undef, $s, $e, $f, $c) = split; \
+                  if (defined $prevId && $id == $prevId && $c == $prevC && $s == $prevS) { \
+                    $prevFunc .= "$f," unless ($f == 8); \
+                  } else { \
+                    if (defined $prevId) { \
+                      print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc); \
+                    } \
+                    $prevFunc = ($f == 8) ? "" : "$f,"; \
+                  } \
+                  ($prevId, $prevC, $prevS, $prevE) = ($id, $c, $s, $e); \
+                } \
+                print "$prevId\t$prevC\t$prevS\t$prevE\t$prevFunc\n" if ($prevFunc);' \
+      > ucscFunc.txt
+    wc -l ucscFunc.txt
+#11673179 ucscFunc.txt
+    cat > ucscFunc.sql <<EOF
+CREATE TABLE ucscFunc (
+        snp_id int NOT NULL ,
+        ctg_id int(10) NOT NULL ,
+        asn_from int(10) NOT NULL ,
+        asn_to int(10) NOT NULL ,
+        fxn_class varchar(255) NOT NULL ,
+        INDEX snp_id (snp_id),
+        INDEX ctg_id (ctg_id)
+);
+EOF
+    hgLoadSqlTab hg19snp132 ucscFunc{,.sql,.txt}
+    # ucscFunc coords are NCBI's 0-based, fully-closed, 2-base-wide insertions.
+    # We need to leave the coords alone here so ucscFunc can be joined below.
+    # Make a list of SNPs with func anno's that are insertion SNPs, so we can use 
+    # the list to determine what type of coord fix to apply to each annotation
+    # when making snp130CodingDbSnp below.
+    hgsql hg19snp132 -NBe \
+      'select ci.contig_acc, cl.asn_from, cl.asn_to, uf.snp_id \
+       from ucscFunc as uf, ContigLoc as cl, ContigInfo as ci \
+       where uf.snp_id = cl.snp_id and \
+             uf.ctg_id = cl.ctg_id and uf.asn_from = cl.asn_from and uf.asn_to = cl.asn_to and \
+             cl.loc_type = 3 and \
+             cl.ctg_id = ci.ctg_id' \
+      > ncbiFuncInsertions.ctg.bed
+    wc -l ncbiFuncInsertions.ctg.bed
+#1099530 ncbiFuncInsertions.ctg.bed
+
+    # Extract observed allele, molType and snp class from FASTA headers gnl
+    mkdir ../rs_fasta/rejects
+    mv ../rs_fasta/rs_ch{AltOnly,NotOn}.fas.gz ../rs_fasta/rejects/
+    zcat ../rs_fasta/rs_ch*.fas.gz \
+    | grep '^>gnl' \
+    | perl -wpe 's/^\S+rs(\d+) .*mol="(\w+)"\|class=(\d+)\|alleles="([^"]+)"\|build.*/$1\t$4\t$2\t$3/ || die "Parse error line $.:\n$_\n\t";' \
+    | sort -nu \
+      > ucscGnl.txt
+#533.151u 92.547s 5:52.01 177.7% 0+0k 0+0io 0pf+0w
+    wc -l ucscGnl.txt
+#30152349 ucscGnl.txt
+    cut -f 1 ucscGnl.txt | uniq | wc -l
+#30152349
+    cat > ucscGnl.sql <<EOF
+CREATE TABLE ucscGnl (
+        snp_id int NOT NULL ,
+        observed varchar(255) NOT NULL,
+        molType varchar(255) NOT NULL,
+        class varchar(255) NULL ,
+        INDEX snp_id (snp_id)
+);
+EOF
+    hgLoadSqlTab hg19snp132 ucscGnl{,.sql,.txt}
+
+    # Add indices to tables for a big join:
+    hgsql hg19snp132 -e \
+      'alter table ContigLoc  add index (ctg_id); \
+       alter table SNP        add index (snp_id); \
+       alter table MapInfo    add index (snp_id);'
+
+#TODO: add SNPAlleleFreq to this query and snpNcbiToUcsc (bitfield/"clinical" too)
+
+    # Big leftie join to bring together all of the columns that we want in snp132,
+    # using all of the available joining info:
+    hgsql hg19snp132 -NBe \
+     'SELECT ci.contig_acc, cl.asn_from, cl.asn_to, cl.snp_id, cl.orientation, cl.allele, \
+             ug.observed, ug.molType, ug.class, \
+             s.validation_status, s.avg_heterozygosity, s.het_se, \
+             uf.fxn_class, cl.loc_type, mi.weight, cl.phys_pos_from \
+      FROM \
+      ((((ContigLoc as cl JOIN ContigInfo as ci \
+               ON cl.ctg_id = ci.ctg_id) \
+          LEFT JOIN MapInfo as mi ON mi.snp_id = cl.snp_id and mi.assembly = ci.group_label) \
+         LEFT JOIN SNP as s ON s.snp_id = cl.snp_id) \
+        LEFT JOIN ucscGnl as ug ON ug.snp_id = cl.snp_id) \
+       LEFT JOIN ucscFunc as uf ON uf.snp_id = cl.snp_id and uf.ctg_id = cl.ctg_id \
+                                and uf.asn_from = cl.asn_from;' \
+      > ucscNcbiSnp.ctg.bed
+#67.019u 14.300s 22:33.74 6.0%   0+0k 0+0io 0pf+0w
+    wc -l ucscNcbiSnp.ctg.bed 
+#34610479 ucscNcbiSnp.ctg.bed
+
+    # Use liftUp for everything except mito, then liftOver for mito.
+    # There are some weird cases of length=1 but locType=range... in all the cases 
+    # that I checked, the length really seems to be 1 so I'm not sure where they got 
+    # the locType=range.  Tweak locType in those cases so we can keep those SNPs:
+    grep -vw ^NC_012920 ucscNcbiSnp.ctg.bed \
+    | awk -F"\t" 'BEGIN{OFS="\t";} \
+           $2 == $3 && $14 == 1 {$14=2; \
+                                 if (numTweaked < 10) {print $4 > "/dev/stderr";} \
+                                 numTweaked++;}  {print;} \
+           END{print numTweaked, "single-base, locType=range, tweaked locType" > "/dev/stderr";}' \
+    | liftUp ucscNcbiSnp.bed \
+      /hive/data/genomes/hg19/jkStuff/liftContigs.lft warn stdin
+#TODO: examine these again, report to dbSNP:
+#118203330
+#118203339
+#118203340
+#118203367
+#118203389
+#118203401
+#118203405
+#118203425
+#118203428
+#118203433
+#588     single-base, locType=range, tweaked locType
+#211.229u 29.884s 2:50.34 141.5% 0+0k 0+0io 0pf+0w
+    # For liftOver, convert 0-base fully-closed to 0-based half-open because liftOver
+    # doesn't deal with 0-base items.  Fake out phys_pos_from to 0 because many coords
+    # will differ, oh well.
+    grep -w NC_012920 ucscNcbiSnp.ctg.bed \
+    | awk -F"\t" 'BEGIN{OFS="\t";} {$3 += 1; $16 = 0; print;}' \
+    | liftOver -bedPlus=3 stdin \
+        /hive/data/outside/dbSNP/131/human/NC_012920ToChrM.over.chain stdout chrM.unmapped \
+    | awk -F"\t" 'BEGIN{OFS="\t";} {$3 -= 1; print;}' \
+    | sort -k2n,2n \
+      > chrMNcbiSnp.bed
+#2.805u 1.392s 0:51.90 8.0%      0+0k 0+0io 7pf+0w
+    # Good, got all but 3 SNPS (rs28693675, rs55749223 and rs112781979, partially deleted/deleted)
+    cat chrMNcbiSnp.bed >> ucscNcbiSnp.bed
+    wc -l ucscNcbiSnp.bed
+#34610476 ucscNcbiSnp.bed
+
+    # Translate NCBI's encoding into UCSC's, and perform a bunch of checks.
+    cd /hive/data/outside/dbSNP/132/human/
+    # Updated snpNcbiToUCSC for new MAX_SNPID (80M -> 120M), 
+    # new named alleles oddball formats: CHLC.GGAA2D04, GDB:190880, SHGC-35515, =D22S272
+    # new MAX_SNPSIZE (1k -> 16k)
+    snpNcbiToUcsc ucscNcbiSnp.bed /hive/data/genomes/hg19/hg19.2bit snp132
+#spaces stripped from observed:
+#chr12   6093134 6093134 rs41402545
+#count of snps with weight  0 = 69071
+#count of snps with weight  1 = 29465124
+#count of snps with weight  2 = 523595
+#count of snps with weight  3 = 3037908
+#count of snps with weight 10 = 1514756
+#Skipped 3957 snp mappings due to errors -- see snp132Errors.bed
+#203.984u 7.139s 5:14.30 67.1%   0+0k 0+0io 0pf+0w
+    head snp132Errors.bed
+#chr1    6511985 6511986 rs121908134     Missing observed value (deleted SNP?).
+#chr1    6512060 6512061 rs121908135     Missing observed value (deleted SNP?).
+#chr1    6512151 6512152 rs121908136     Missing observed value (deleted SNP?).
+#chr1    10318659        10318660        rs121908160     Missing observed value (deleted SNP?).
+#chr1    10357263        10357264        rs121908161     Missing observed value (deleted SNP?).
+#chr1    10384895        10384896        rs121908162     Missing observed value (deleted SNP?).
+#chr1    10406000        10406001        rs121908163     Missing observed value (deleted SNP?).
+#chr1    10425533        10425534        rs121908164     Missing observed value (deleted SNP?).
+#chr1    11073978        11073979        rs80356716      Missing observed value (deleted SNP?).
+#chr1    11076930        11076931        rs80356715      Missing observed value (deleted SNP?).
+    grep -v "Missing observed value" snp132Errors.bed | head
+#chr1    11082586        11082587        rs80356737      Unexpected refNCBI "AT" for locType "between" (3) -- expected "-"
+#chr1    11082586        11082587        rs80356737      rs80356737 is 1 bases long but refNCBI is different length: AT
+#chr1    43392806        43392807        rs80359840      Unexpected refNCBI "CA" for locType "between" (3) -- expected "-"
+#chr1    43392806        43392807        rs80359840      rs80359840 is 1 bases long but refNCBI is different length: CA
+#...
+    wc -l snp*
+#  33023181 snp132.bed
+#        22 snp132.sql
+#      3957 snp132Errors.bed
+#        18 snp132ExceptionDesc.tab
+#   4946553 snp132Exceptions.bed
+    # 7M new snps, not a big increase in exceptions (snp131 had 4281351)
+
+    # Make one big fasta file.
+    # It's a monster: 18G!  Can we split by hashing rsId?
+# NOTE: I found ~3000 IDs w/sequences in the wrong file, or just missing.
+# I hope that dbSNP re-dumps rs_fasta, in which case this will need to be redone:
+    zcat rs_fasta/rs_ch*.fas.gz \
+    | perl -wpe 's/^>gnl\|dbSNP\|(rs\d+) .*/>$1/ || ! /^>/ || die;' \
+      > snp132.fa
+#585.405u 124.169s 8:30.40 139.0%        0+0k 0+0io 0pf+0w
+    # Check for duplicates.
+    grep ^\>rs snp132.fa | sort > /data/tmp/seqHeaders
+    wc -l /data/tmp/seqHeaders
+#30152349 /data/tmp/seqHeaders
+    uniq /data/tmp/seqHeaders | wc -l
+#30152349
+    # Use hgLoadSeq to generate .tab output for sequence file offsets,
+    # and keep only the columns that we need: acc and file_offset.
+    # Index it and translate to snpSeq table format.
+    hgLoadSeq -test placeholder snp132.fa
+#30152349 sequences
+#53.111u 15.000s 11:34.70 9.8%   0+0k 0+0io 5pf+0w
+    cut -f 2,6 seq.tab > snp132Seq.tab
+    rm seq.tab
+
+    # Load up main track tables.
+    cd /hive/data/outside/dbSNP/132/human
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp132 -sqlTable=snp132.sql snp132.bed
+#Loaded 33023181 elements of size 17
+#162.666u 19.611s 8:53.56 34.1%  0+0k 0+0io 0pf+0w
+    hgLoadBed -tab -onServer -tmpDir=/data/tmp -allowStartEqualEnd \
+      hg19 snp132Exceptions -sqlTable=$HOME/kent/src/hg/lib/snp125Exceptions.sql -renameSqlTable \
+      snp132Exceptions.bed
+#Loaded 4946553 elements of size 5
+#14.952u 0.852s 0:52.43 30.1%    0+0k 0+0io 0pf+0w
+    hgLoadSqlTab hg19 snp132ExceptionDesc ~/kent/src/hg/lib/snp125ExceptionDesc.sql \
+      snp132ExceptionDesc.tab
+    # Load up sequences.
+    mkdir -p /gbdb/hg19/snp
+    ln -s /hive/data/outside/dbSNP/132/human/snp132.fa /gbdb/hg19/snp/snp132.fa
+    hgLoadSqlTab hg19 snp132Seq ~/kent/src/hg/lib/snpSeq.sql snp132Seq.tab
+
+    # Put in a link where one would expect to find the track build dir...
+    ln -s /hive/data/outside/dbSNP/132/human /hive/data/genomes/hg19/bed/snp132
+
+#*** TODO: ask cluster-admin to pack the snp132 table (or whatever tables we'll push)
+
+    # Look at the breakdown of exception categories:
+    cd /hive/data/outside/dbSNP/132/human
+    cut -f 5 snp132Exceptions.bed | sort | uniq -c | sort -nr
+#3644435 MultipleAlignments
+# 965849 ObservedMismatch
+#  89651 SingleClassTriAllelic
+#  77552 SingleClassZeroSpan
+#  43355 ObservedTooLong
+#  33650 MixedObserved
+#  26701 FlankMismatchGenomeShorter
+#  25574 SingleClassLongerSpan
+#  12222 RefAlleleMismatch
+#  11525 DuplicateObserved
+#   8258 SingleClassQuadAllelic
+#   4463 NamedDeletionZeroSpan
+#   2052 FlankMismatchGenomeLonger
+#    797 ObservedContainsIupac
+#    317 NamedInsertionNonzeroSpan
+#    150 FlankMismatchGenomeEqual
+#      1 RefAlleleRevComp
+#      1 ObservedWrongFormat
+#TODO: Sent a few bug reports to dbSNP
+
 
 #############################################################################
