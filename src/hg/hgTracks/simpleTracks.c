@@ -11668,6 +11668,7 @@ registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
 registerTrackHandler("snp131Clinical", snp125Methods);
 registerTrackHandler("snp131NonClinical", snp125Methods);
+registerTrackHandler("snp132", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
