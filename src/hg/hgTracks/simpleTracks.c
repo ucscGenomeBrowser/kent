@@ -11666,6 +11666,7 @@ registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
+registerTrackHandler("snp131Composite", snp125Methods);
 registerTrackHandler("snp131Clinical", snp125Methods);
 registerTrackHandler("snp131NonClinical", snp125Methods);
 registerTrackHandler("snp132", snp125Methods);

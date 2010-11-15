@@ -915,6 +915,57 @@ snpExceptions snp131Exceptions
 snpExceptionDesc snp131ExceptionDesc
 snpSeq snp131Seq
 
+track snp131Composite
+compositeTrack on
+shortLabel SNPs (131) Comp
+longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) -- Composite version
+group varRep
+priority 99.093
+visibility dense 
+url http://www.ncbi.nlm.nih.gov/SNP/snp_ref.cgi?type=rs&rs=$$
+urlLabel dbSNP: 
+defaultGeneTracks knownGene
+maxWindowToDraw 10000000
+type bed 6 +
+chimpOrangMacOrthoTable snp131OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp131CodingDbSnp,
+codingAnnoLabel_snp131CodingDbSnp dbSNP
+snpExceptions snp131Exceptions
+snpExceptionDesc snp131ExceptionDesc
+snpSeq snp131Seq
+subGroup1 view Views common=Common_SNPs misc=Misc_SNPs nonu=Non-Unique_SNPs
+dimensions dimX=view
+#configurable on
+
+    track snp131Common
+    parent snp131Composite
+    shortLabel Common SNPs (131)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) from HapMap and/or 1000Genomes
+    subGroups view=common
+    visibility pack
+    priority 1
+
+    track snp131Misc
+    parent snp131Composite
+    shortLabel Misc SNPs (131)
+    longLabel Simple Nucleotide Polymorphisms (dbSNP build 131) not from HapMap and/or 1000Genomes
+    subGroups view=misc
+    visibility dense
+    priority 2
+
+    track snp131NonUnique
+    parent snp131Composite
+    shortLabel Non-Unique SNPs
+    longLabel Non-uniquely Mapped Simple Nucleotide Polymorphisms (dbSNP build 131)
+    subGroups view=nonu
+    visibility hide
+    priority 3
+
+
 track hgdpGeo
 shortLabel HGDP Allele Freq
 longLabel Human Genome Diversity Project SNP Population Allele Frequencies
