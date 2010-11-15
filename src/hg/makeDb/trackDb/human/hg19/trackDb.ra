@@ -1464,6 +1464,17 @@ priority 103.29
         type bed 5 .
         priority 23
 
+track snp132 override
+release alpha
+visibility hide
+chimpOrangMacOrthoTable snp132OrthoPt2Pa2Rm2
+chimpDb panTro2
+orangDb ponAbe2
+macaqueDb rheMac2
+hapmapPhase III
+codingAnnotations snp132CodingDbSnp,
+codingAnnoLabel_snp132CodingDbSnp dbSNP
+
 track snp131Clinical override
 snpSeqFile /gbdb/hg19/snp/snp131.fa
 
@@ -1491,7 +1502,7 @@ macaqueDb rheMac2
 hapmapPhase III
 codingAnnotations snp130CodingDbSnp,
 codingAnnoLabel_snp130CodingDbSnp dbSNP
-pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19Liftover.html "lifted from hg18"
+pennantIcon 18.jpg ../goldenPath/help/hg18ToHg19LiftOver.html "lifted from hg18"
 # Use hg18 file so we don't have to duplicate the 18G:
 snpSeqFile /gbdb/hg18/snp/snp130.fa
 

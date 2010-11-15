@@ -717,6 +717,7 @@ else
     simpleSearch = FALSE;
     }
 
+stripChar(descSearch, '"');
 trackList = getTrackList(&groupList, -2); // global
 makeGlobalTrackHash(trackList);
 
