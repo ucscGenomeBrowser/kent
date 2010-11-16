@@ -2506,7 +2506,7 @@ function updateMetaDataHelpLinks(index)
                     } else {
                         str = "../ENCODE/cellTypes.html";
                     }
-                } else if (val == 'antibody') {
+                } else if (val.toLowerCase() == 'antibody') {
                     str = "../ENCODE/antibodies.html";
                 } else {
                     str = "../ENCODE/otherTerms.html#" + val;
@@ -2526,4 +2526,3 @@ function windowOpenFailedMsg()
 {
     alert("Your web browser prevented us from opening a new window.\n\nYou need to change your browser settings to allow popups from " + document.domain);
 }
-                                                     
