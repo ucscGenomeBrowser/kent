@@ -14,7 +14,7 @@ subGroup5 treatment Treatment DEXa=DEX_100nM DEXb=DEX_50nM DEXc=DEX_5nM DEXd=DEX
 subGroup6 rep Replicate rep1=1 rep2=2
 dimensions dimensionX=cellType dimensionY=factor dimA=rep dimB=protocol dimC=treatment
 dimensionAchecked rep1
-dimensionBchecked PCR1x,PCR2x
+dimensionBchecked PCR1x,PCR2x,V0416101,V0416102
 dimensionCchecked None
 sortOrder cellType=+ factor=+ treatment=+ protocol=+ rep=+ view=+
 dragAndDrop subTracks
