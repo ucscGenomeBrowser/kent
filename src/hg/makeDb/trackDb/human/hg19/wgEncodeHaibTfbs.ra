@@ -2229,7 +2229,7 @@ noInherit on
 
         track wgEncodeHaibTfbsK562Pol24h8V0416101PkRep1
         release alpha
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks 
         shortLabel K562 Pol2-4H8 Pk 1
         longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (Pol2-4H8 in K562 cells)
         subGroups view=Peaks factor=POL24H8 cellType=K562 protocol=V0416101 treatment=None rep=rep1
@@ -2269,7 +2269,7 @@ noInherit on
 
         track wgEncodeHaibTfbsK562Taf1V0416101PkRep1
         release alpha
-        parent wgEncodeHaibTfbsViewPeaks off
+        parent wgEncodeHaibTfbsViewPeaks
         shortLabel K562 TAF1 Pk 1
         longLabel ENCODE HudsonAlpha ChIP-Seq Peaks Replicate 1 (TAF1 in K562 cells)
         subGroups view=Peaks factor=TAF1 cellType=K562 protocol=V0416101 treatment=None rep=rep1
