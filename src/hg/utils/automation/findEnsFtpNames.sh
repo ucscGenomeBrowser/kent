@@ -80,3 +80,5 @@ BEGIN{ D="notYet" }
 }
 ' release.${VERSION}.fasta.ls-lR \
 	| sed -e "s#^#'x' => '#; s#\$#',#" > release.${VERSION}.fasta.names
+
+rm -f ftp.rsp
