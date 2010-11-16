@@ -249,7 +249,7 @@ if (*val == NULL)
     *val = nullString;
 }
 
-void docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
+char *docIdSubmit(struct sqlConnection *conn, struct docIdSub *docIdSub, 
     char *docIdDir, char *type)
 {
 
@@ -279,7 +279,7 @@ char *response = sqlQuickString(conn, query);
 printf("submitted got response %s\n", response);
 
 safef(query, sizeof query, "select last_insert_id()");
-char *docId = sqlQuickString(conn, query);
+char *docId = cloneString(sqlQuickString(conn, query));
 
 printf("submitted got docId %s\n", docId);
 
@@ -298,4 +298,6 @@ makeDirsOnPath(linkToFile);
 *slash = '/';
 if (link(docIdSub->submitPath, linkToFile) < 0)
     errnoAbort("can't link %s to file %s\n", docIdSub->submitPath, linkToFile);
+
+return docId;
 }
