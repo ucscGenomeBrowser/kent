@@ -1300,6 +1300,15 @@ $(document).ready(function()
         if($('#map').children("AREA").length > 0) {
             warn('Using imageV2, but old map is not empty!');
         }
+
+        // Retrieve tracks via AJAX that may take too long to draw initialliy (i.e. a remote bigWig)
+        var retrievables = $('#imgTbl').find("tr.mustRetrieve")
+        if($(retrievables).length > 0) {
+            $(retrievables).each( function (i) {
+                var trackName = $(this).attr('id').substring(3);
+                updateTrackImg(trackName,"","");
+            });
+        }
     }
     if($('img#chrom').length == 1) {
         if($('.cytoBand').length > 1) {
@@ -2517,3 +2526,4 @@ function windowOpenFailedMsg()
 {
     alert("Your web browser prevented us from opening a new window.\n\nYou need to change your browser settings to allow popups from " + document.domain);
 }
+                                                     

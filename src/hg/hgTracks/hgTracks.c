@@ -1952,7 +1952,7 @@ boolean safeHeight = TRUE;
 /* Hash tracks/subtracks, limit visibility and calculate total image height: */
 for (track = trackList; track != NULL; track = track->next)
     {
-    limitVisibility(track);
+        limitVisibility(track);
     if (!safeHeight)
         {
         track->limitedVis = tvHide;
@@ -2123,7 +2123,6 @@ if(theImgBox)
         }
     }
 
-
 /* Draw mini-buttons. */
 if (withLeftLabels && psOutput == NULL)
     {
@@ -2157,40 +2156,40 @@ if (withLeftLabels && psOutput == NULL)
         int h, yStart = y, yEnd;
         if (track->limitedVis != tvHide)
             {
-        y += trackPlusLabelHeight(track, fontHeight);
-        yEnd = y;
-        h = yEnd - yStart - 1;
+            y += trackPlusLabelHeight(track, fontHeight);
+            yEnd = y;
+            h = yEnd - yStart - 1;
 
-        /* alternate button colors for track groups*/
-        if (track->group != lastGroup)
-            grayButtonGroup = !grayButtonGroup;
-        lastGroup = track->group;
-        if (grayButtonGroup)
-            drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                        h, track->hasUi);
-        else
-            drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                        h, track->hasUi);
-        if(theImgBox)
-            {
-            // Mini-buttons (side label slice) for tracks
-            sliceHeight      = yEnd - yStart;
-            sliceOffsetY     = yStart - 1;
-            curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
-            curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
-            }
-        if (track->hasUi)
-            {
-            if(tdbIsCompositeChild(track->tdb))
-                {
-                struct trackDb *parent = tdbGetComposite(track->tdb);
-                mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
-                    parent->track, parent->shortLabel, track->track);
-                }
+            /* alternate button colors for track groups*/
+            if (track->group != lastGroup)
+                grayButtonGroup = !grayButtonGroup;
+            lastGroup = track->group;
+            if (grayButtonGroup)
+                drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
+                            h, track->hasUi);
             else
-                mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
+                drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
+                            h, track->hasUi);
+            if(theImgBox)
+                {
+                // Mini-buttons (side label slice) for tracks
+                sliceHeight      = yEnd - yStart;
+                sliceOffsetY     = yStart - 1;
+                curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
+                curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
+                }
+            if (track->hasUi)
+                {
+                if(tdbIsCompositeChild(track->tdb))
+                    {
+                    struct trackDb *parent = tdbGetComposite(track->tdb);
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, (yEnd - yStart - 1),
+                        parent->track, parent->shortLabel, track->track);
+                    }
+                else
+                    mapBoxTrackUi(hvgSide, trackTabX, yStart, trackTabWidth, h, track->track, track->shortLabel, track->track);
+                }
             }
-        }
         }
     butOff = trackTabX + trackTabWidth;
     leftLabelX += butOff;
@@ -2282,7 +2281,7 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
-        y = doLeftLabels(track, hvgSide, font, y);
+            y = doLeftLabels(track, hvgSide, font, y);
         }
     }
 else
@@ -2405,7 +2404,7 @@ if (withCenterLabels)
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
-        y = doDrawItems(track, hvg, font, y, &lastTime);
+            y = doDrawItems(track, hvg, font, y, &lastTime);
 
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
             mapBoxToggleVis(hvg, 0, yStart,tl.picWidth, sliceHeight,track); // Strange mabBoxToggleLogic handles reverse complement itself so x=0, width=tl.picWidth
@@ -4242,15 +4241,15 @@ for (;track != NULL; track = track->next)
     boolean shapedByubtrackOverride = FALSE;
     boolean cleanedByContainerSettings = FALSE;
 
-    // Top-down 'cleanup' (CleanupOverrides) must be before bottom-up 'Reshaping' (MatchSubtrackVis)
-    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
-
     if (tdbIsContainer(track->tdb))
         {
         shapedByubtrackOverride = cartTdbTreeMatchSubtrackVis(cart,track->tdb);
         if(shapedByubtrackOverride)
             track->visibility = tdbVisLimitedByAncestors(cart,track->tdb,TRUE,TRUE);
         }
+
+    // Top-down 'cleanup' can now follow reshaping because reshaping will flag itself for protection
+    cleanedByContainerSettings = cartTdbTreeCleanupOverrides(track->tdb,newCart,oldVars);
 
     if ((shapedByubtrackOverride || cleanedByContainerSettings) && tdbIsSuperTrackChild(track->tdb))  // Either cleanup may require supertrack intervention
         { // Need to update track visibility
