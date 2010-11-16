@@ -1623,7 +1623,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         var href = removeHgsid(selectedMenuItem.href);
         var chrom = $("input[name=chromName]").val();
         if(href.indexOf("c=" + chrom) == -1) {
-            // make sure the link contains chrom info (necessary b/c we are stripping hgsdi)
+            // make sure the link contains chrom info (necessary b/c we are stripping hgsid)
             href = href + "&c=" + chrom;
         }
         if(window.open(href) == null) {
