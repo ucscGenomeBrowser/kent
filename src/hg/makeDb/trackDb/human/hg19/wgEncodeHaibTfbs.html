@@ -5,8 +5,8 @@ followed by high-throughput sequencing (ChIP-Seq &mdash; see Johnson DS,
 <em>et al.</em>, 2007 and Fields S, 2007).
 </P><P>
 The ChIP-Seq method was used to assay chromatin fragments bound by
-specific or general transcription factors as described below. DNA isolated
-by ChIP-Seq was size-selected (~225 bp) and sequenced. Short
+specific or general transcription factors as described below.  DNA isolated
+by ChIP-Seq was size-selected (~225 bp) and sequenced.  Short
 reads of 25-36 bp were mapped to the human reference genome, and  enriched 
 regions of high read density relative to a total input chromatin
 control reads were identified.
@@ -30,7 +30,7 @@ in the ChIP experiment relative to total input chromatin control reads by
 <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A>
 (Zhang Y, <em>et al.</em>, 2008).</DD>
 <DT><I>Raw Signal</I></DT><DD> A continuous signal which indicates density of
-aligned reads.
+aligned reads.  
 The sequence reads were extended to the size-selected length (225 bp),
 and the read density computed as reads per million</DD>
 </DL>
@@ -38,9 +38,9 @@ and the read density computed as reads per million</DD>
 <a name="Methods"></a><h2> Methods </h2>
 Cells were grown according to the approved
 <A HREF="../../ENCODE/protocols/cell" TARGET=_BLANK>ENCODE cell culture protocols</A>.
-Cross-linked chromatin was immunoprecipitated with antibody,the protien.
-DNA corsslinks were reversed and the DNA fragments were recovered and sequenced
-Please see protocol notes below and go
+Cross-linked chromatin was immunoprecipitated with antibody, the protien:
+DNA corsslinks were reversed and the DNA fragments were recovered and sequenced.
+  Please see protocol notes below and go
 <a href="http://myers.hudsonalpha.org/content/protocols.html"
 TARGET=_blank title="http://myers.hudsonalpha.org/content/protocols.html"
 rel="nofollow">here</a> for the most current version of the protocol.
@@ -48,7 +48,7 @@ Biological replicates from each experiment were completed.
 </p></p>
 Libraries were sequenced with an Illumina Genome
 Analyzer I or an Illumina Genome Analyzer IIx according to the
-manufacturer's recommendations.
+manufacturer's recommendations.  
 Sequence data produced by the Illumina data pipeline software were quality
 filtered and then mapped to NCBI Build37 (hg19) using the integrated Eland
 software; 32 nt of the sequence reads were used for alignment;
@@ -59,57 +59,57 @@ To identify likely binding
 sites, peak calling was applied to the aligned sequence data sets using
 Model-based Analysis of Chip-Seq 
 <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html" TARGET=_BLANK>MACS</A>
-(Zhang Y,<em> et al.</em>, 2008). MACS models the shift size of ChIP-Seq tags 
+(Zhang Y,<em> et al.</em>, 2008).  MACS models the shift size of ChIP-Seq tags 
 empirically, and uses it to improve the spatial resolution of predicted 
-binding sites.
+binding sites.  
 MACS also uses a dynamic Poisson distribution to capture local biases in the genome,
-akkiws fir the more robust predictions (Zhang Y,<em> et al.</em>, 2008).
+allowing for  more robust predictions (Zhang Y,<em> et al.</em>, 2008).
 </p>
 
 <h2> Validation</h2>
 <p>
 First, we used the <A HREF="http://liulab.dfci.harvard.edu/MACS/00README.html"
 TARGET=_BLANK>MACS</A> peak caller to call significant peaks on the
-individual replicates of a ChIP-Seq experiment. We then use the
-irreproducible discovery rate (IDR) methode developed by
+individual replicates of a ChIP-Seq experiment.   We then used the
+irreproducible discovery rate (IDR) method developed by
 Li <em> et al.</em> (submitted) to quantify the consistency between pairs
-of ranked peaks lists from replicates. The IDR methods learns a model that
+of ranked peaks lists from replicates.  The IDR methods learns a model that
 assumes that the ranked lists of peaks in a pair of replicates consist of
-two groups - a reproducible group and ann irreproducible group. 
-In general, the signals in the reporducible group are more cinsistent (i.e.
+two groups - a reproducible group and an irreproducible group. 
+In general, the signals in the reproducible group are more consistent (i.e.
 with a larger rank correlation coefficient) and are ranked
-higher than the irreproducible group. The prorprtion of peaks that
-belong to the irrepoducible component and the correlation of the reproducible 
-component are estimated adaptivley from the data. The model also provides
-an IDR score for each peak, which reflects the posterior probabiluty
-of the peak belonging to the irreproducible group. We pool the 
+higher than the irreproducible group.  The proportion of peaks that
+belong to the irreproducible component and the correlation of the reproducible 
+component are estimated adaptively from the data.  The model also provides
+an IDR score for each peak, which reflects the posterior probability
+of the peak belonging to the irreproducible group.  We pool the 
 aligned reads from all replicates and use the MACS peak caller to call 
-significant peaks on the pooled data. Only datasets that have at
-least 100 peaks passing the IDR threshold are considered valida nd submitted
+significant peaks on the pooled data.  Only datasets that have at
+least 100 peaks passing the IDR threshold are considered valid and submitted
 for release. 
 </p>
 
 <h2> Protocol Notes </h2>
 <p> 
-Several changes and improvments were made to the original ChIP-Seq protocol
-(Jonshon <em>et al.</em>,2008). The major differences between protocols are the number
+Several changes and improvements were made to the original ChIP-Seq protocol
+(Jonshon <em>et al.</em>,2008).  The major differences between protocols are the number
 of cells and magnetic beads used for IP, the method of sonication used to 
 fragment DNA, and the number of cycles of PCR used to amplify the 
-sequencing library. The most current protocol used by the Myers lab
+sequencing library.  The most current protocol used by the Myers lab
 can be found <A HREF="http://hudsonalpha.org/myers-lab/protocols" TARGET=_BLANK>
-here</A>. The protocol field for each file denotes the
+here</A>.  The protocol field for each file denotes the
 version of the protocol used as being PCR1x, PCR2x or a version number
 (for examples, v041610.1).
 
 </p><p> The sequencing libraries labeld as PCR2x were made with two rounds
 of amplification (25 and 15 cycles) and those labeled as PCR1x were made with
-one 15-cycle round of amplification. These experiments were
+one 15-cycle round of amplification.  These experiments were
 completed prior to January 2010 and were originally aligned to NCBI Build36
-(hg18). They have been re-aligned to NCBI Build37 (hg19) with the 
+(hg18).  They have been re-aligned to NCBI Build37 (hg19) with the 
 <A HREF="http://bowtie-bio.sourceforge.net/index.shtml" TARGET=_BLANK>
-Bowtie</A> softwar (Langmead,<em> et al.</em>, 2009) for this data release.
+Bowtie</A> software (Langmead,<em> et al.</em>, 2009) for this data release.
 The libraries labeled with a protocol version number were competed after
-January 2010 and were only aligned to NCBI Build37 (hg19). Please
+January 2010 and were only aligned to NCBI Build37 (hg19).  Please
 refer to the <A HREF="http://hudsonalpha.org/myers-lab/protocols" 
 TARGET=_BLANK>Myers Lab website</A> for details on each protocol version.
 </p>
