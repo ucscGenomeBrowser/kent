@@ -107,7 +107,7 @@ endif
 
 ifeq (${HG_WARN},)
   ifeq (darwin,$(findstring darwin,${OSTYPE}))
-      HG_WARN = -Wall -Wno-unused-variable -Wno-long-double
+      HG_WARN = -Wall -Wno-unused-variable
       HG_WARN_UNINIT=
   else
     ifeq (solaris,$(findstring solaris,${OSTYPE}))

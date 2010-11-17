@@ -196,3 +196,29 @@ div.sliceDiv { overflow:hidden; }
 /* These are for dragReorder: both in imageV2 and in hgTrackUi subtrack list */
 .trDrag { background-color: #CCFFCC; }
 .dragHandle { cursor: s-resize; }
+
+.noscript {
+        background: none repeat scroll 0 0 #FFFF90;
+        border-color: #CFCFCF;
+        border-style: solid;
+        border-width: 0 0 1px;
+        color: #2F2F2F;
+        font-size: 12px;
+        line-height: 1.25;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+}
+
+.noscript .noscript-inner {
+        background:url("/images/caution.gif") no-repeat scroll 20px 50% transparent;
+        margin:0 auto;
+        padding:12px 0;
+        width:960px;
+        text-align: center;
+}
+
+.noscript p {
+        margin: 0;
+        text-align: center;
+}

@@ -854,6 +854,12 @@ else
 return imgTrack;
 }
 
+void imgTrackMarkForAjaxRetrieval(struct imgTrack *imgTrack,boolean ajaxRetrieval)
+/* Updates the imgTrack to trigger an ajax callback from the html client to get this track */
+{
+imgTrack->ajaxRetrieval = ajaxRetrieval;
+}
+
 int imgTrackOrderCmp(const void *va, const void *vb)
 /* Compare to sort on imgTrack->order */
 {
@@ -990,6 +996,8 @@ if(imgTrack)
         dyStringPrintf(myDy," centerLabel:%s",centerLabelSeenToString(imgTrack->centerLabelSeen));
     if(imgTrack->reorderable)
         dyStringPrintf(myDy," reorderable");
+    if(imgTrack->ajaxRetrieval)
+        dyStringPrintf(myDy," ajaxRetrieval");
     dyStringPrintf(myDy," order:%d vis:%s",imgTrack->order,hStringFromTv(imgTrack->vis));
     if(dy == NULL)
         warn("%s",dyStringCannibalize(&myDy));
@@ -1780,9 +1788,10 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 #endif
     //if(verbose && imgTrack->order == 3)
     //    imgTrackShow(NULL,imgTrack,0);
-    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s'>\n",trackName,imgTrack->order,
+    hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
-        (imgTrack->centerLabelSeen != clAlways?" clOpt":"") );
+        (imgTrack->centerLabelSeen != clAlways?" clOpt":""),
+        (imgTrack->ajaxRetrieval ?" mustRetrieve":""));
 
     if(imgBox->showSideLabel && imgBox->plusStrand)
         {
