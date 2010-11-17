@@ -656,7 +656,7 @@ if(theImgBox && curImgTrack)
     //    if(x < insideX && x+width > insideX)
     //        warn("mapBoxReinvoke(%s) map item spanning slices. LX:%d TY:%d RX:%d BY:%d  link:[%s]",hStringFromTv(toggleGroup->visibility),x, y, x+width, y+height, link);
     //#endif//def IMAGEv2_SHORT_MAPITEMS
-    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height, 
+    imgTrackAddMapItem(curImgTrack,link,(char *)(message != NULL?message:NULL),x, y, x+width, y+height,
                        track ? track->track : NULL);
     }
 else
@@ -2575,7 +2575,11 @@ else if (drawOpt > baseColorDrawOff)
     if (startsWith("genePred", tg->tdb->type))
 	gp = (struct genePred *)(lf->original);
     if (gp && gp->cdsStart != gp->cdsEnd)
-	lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons));
+        {
+        char var[256];
+        safef(var, sizeof(var), "%s.%s", tg->tdb->track, CODON_NUMBERING_SUFFIX);
+        lf->codons = baseColorCodonsFromGenePred(lf, gp, (drawOpt != baseColorDrawDiffCodons), cartUsualBoolean(cart, var, FALSE));
+        }
     }
 if (psl && drawOpt == baseColorDrawCds && !zoomedToCdsColorLevel)
     baseColorSetCdsBounds(lf, psl, tg);
@@ -9172,28 +9176,15 @@ bool isSubtrackVisible(struct track *subtrack)
 /* Has this subtrack not been deselected in hgTrackUi or declared with
  * "subTrack ... off"?  -- assumes composite track is visible. */
 {
-#ifdef SUBTRACKS_HAVE_VIS
 boolean overrideComposite = (NULL != cartOptionalString(cart, subtrack->track));
-#endif///def SUBTRACKS_HAVE_VIS
 if (subtrack->limitedVisSet && subtrack->limitedVis == tvHide)
     return FALSE;
 bool enabledInTdb = subtrackEnabledInTdb(subtrack);
 char option[SMALLBUF];
 safef(option, sizeof(option), "%s_sel", subtrack->track);
 boolean enabled = cartUsualBoolean(cart, option, enabledInTdb);
-#ifndef SUBTRACKS_HAVE_VIS
-/* Remove redundant cart settings to avoid cart bloat. */
-if (enabled == enabledInTdb)
-    {
-    char *var = cartOptionalString(cart, option);
-    if(var != NULL && (sameString(var,"on") || atoi(var) >= 0))
-        cartRemove(cart, option);     // Because disabled CBs need to remain in the cart.
-    }
-#endif///def SUBTRACKS_HAVE_VIS
-#ifdef SUBTRACKS_HAVE_VIS
 if(overrideComposite)
     enabled = TRUE;
-#endif///def SUBTRACKS_HAVE_VIS
 return enabled;
 }
 
@@ -9215,35 +9206,49 @@ enum trackVisibility limitVisibility(struct track *tg)
 {
 if (!tg->limitedVisSet)
     {
-    enum trackVisibility vis = tg->visibility;
-    int h;
-    int maxHeight = maximumTrackHeight(tg);
     tg->limitedVisSet = TRUE;
-    if (vis == tvHide)
-	{
-	tg->height = 0;
-	tg->limitedVis = tvHide;
-	return tvHide;
-	}
-    if (tg->subtracks != NULL)
-	{
-	struct track *subtrack;
-	int subCnt = subtrackCount(tg->subtracks);
-	maxHeight = maxHeight * max(subCnt,1);
-	for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
-	    limitVisibility(subtrack);
-	}
-    while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+    if (trackShouldUseAjaxRetrieval(tg))
         {
-        if (vis == tvFull && tg->canPack)
-            vis = tvPack;
-        else if (vis == tvPack)
-            vis = tvSquish;
-        else
-            vis = tvDense;
+        tg->limitedVis = tg->visibility;
+        tg->height = REMOTE_TRACK_HEIGHT;
         }
-    tg->height = h;
-    tg->limitedVis = vis;
+    else
+        {
+        enum trackVisibility vis = tg->visibility;
+        int h;
+        int maxHeight = maximumTrackHeight(tg);
+
+        // rightClick change vis should not fail quite so often.  Let larger tracks be displayed.
+        // TODO: Alternatively, give some feedback to user why rightclick failed to change visibility.
+        if (trackImgOnly && cgiVarExists("hgt.trackNameFilter"))
+            maxHeight *= 2;
+
+        if (vis == tvHide)
+            {
+            tg->height = 0;
+            tg->limitedVis = tvHide;
+            return tvHide;
+            }
+        if (tg->subtracks != NULL)
+            {
+            struct track *subtrack;
+            int subCnt = subtrackCount(tg->subtracks);
+            maxHeight = maxHeight * max(subCnt,1);
+            for (subtrack = tg->subtracks;  subtrack != NULL; subtrack = subtrack->next)
+                limitVisibility(subtrack);
+            }
+        while((h = tg->totalHeight(tg, vis)) > maxHeight && vis != tvDense)
+            {
+            if (vis == tvFull && tg->canPack)
+                vis = tvPack;
+            else if (vis == tvPack)
+                vis = tvSquish;
+            else
+                vis = tvDense;
+            }
+        tg->height = h;
+        tg->limitedVis = vis;
+        }
     }
 return tg->limitedVis;
 }
@@ -9621,10 +9626,10 @@ void loadPgSnp(struct track *tg)
 char query[256];
 struct customTrack *ct = tg->customPt;
 char *table = tg->table;
-struct sqlConnection *conn; 
-if (ct == NULL) 
+struct sqlConnection *conn;
+if (ct == NULL)
     conn = hAllocConn(database);
-else 
+else
     {
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
@@ -10600,13 +10605,13 @@ struct sqlResult *sr;
 char **row;
 int rowOffset = 0;
 struct customTrack *ct = tg->customPt;
-struct sqlConnection *conn; 
+struct sqlConnection *conn;
 char *table = tg->table;
 int bedSize = tg->bedSize; /* count of fields in bed part */
 
 if (ct == NULL)
     conn = hAllocConn(database);
-else 
+else
     {
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
@@ -10639,7 +10644,7 @@ struct customTrack *ct = tg->customPt;
 
 if (ct == NULL)
     conn = hAllocConn(database);
-else 
+else
     {
     conn = hAllocConn(CUSTOM_TRASH);
     table = ct->dbTableName;
@@ -11328,6 +11333,8 @@ if (sameWord(type, "bed"))
 else if (sameWord(type, "bigBed"))
     {
     bigBedMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
     }
 else if (sameWord(type, "bedGraph"))
     {
@@ -11336,6 +11343,8 @@ else if (sameWord(type, "bedGraph"))
 else if (sameWord(type, "bigWig"))
     {
     bigWigMethods(track, tdb, wordCount, words);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;  // TODO: Dummy drawItems as well?
     }
 else
 #endif /* GBROWSE */
@@ -11386,6 +11395,8 @@ else if (sameWord(type, "maf"))
 else if (sameWord(type, "bam"))
     {
     bamMethods(track);
+    if (trackShouldUseAjaxRetrieval(track))
+        track->loadItems = dontLoadItems;
     }
 else if (startsWith(type, "bedDetail"))
     {
@@ -11775,8 +11786,10 @@ registerTrackHandler("snp128", snp125Methods);
 registerTrackHandler("snp129", snp125Methods);
 registerTrackHandler("snp130", snp125Methods);
 registerTrackHandler("snp131", snp125Methods);
+registerTrackHandler("snp131Composite", snp125Methods);
 registerTrackHandler("snp131Clinical", snp125Methods);
 registerTrackHandler("snp131NonClinical", snp125Methods);
+registerTrackHandler("snp132", snp125Methods);
 registerTrackHandler("ld", ldMethods);
 registerTrackHandler("cnpSharp", cnpSharpMethods);
 registerTrackHandler("cnpSharp2", cnpSharp2Methods);
