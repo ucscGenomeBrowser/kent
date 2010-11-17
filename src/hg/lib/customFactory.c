@@ -1317,7 +1317,7 @@ bed->chrom = hashStoreName(chromHash, psl->tName);
 
 bed->score = 1000 - 2*pslCalcMilliBad(psl, TRUE);
 if (bed->score < 0) bed->score = 0;
-strncpy(bed->strand,  psl->strand, sizeof(bed->strand));
+bed->strand[0] = psl->strand[0];
 bed->strand[1] = 0;
 bed->blockCount = blockCount = psl->blockCount;
 bed->blockSizes = blockSizes = (int *)psl->blockSizes;
@@ -1354,6 +1354,10 @@ if (psl->strand[1] == '-')
 	{
 	chromStarts[i] = chromSize - chromStarts[i] - blockSizes[i];
 	}
+    if (bed->strand[0] == '-')
+        bed->strand[0] = '+';
+    else
+        bed->strand[0] = '-';
     }
 
 bed->thickStart = bed->chromStart = chromStart = chromStarts[0];
