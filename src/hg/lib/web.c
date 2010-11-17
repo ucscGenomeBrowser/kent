@@ -1055,9 +1055,9 @@ if (oldVars)
     char *oldDb = hashFindVal(oldVars, "db");
     char *oldOrg = hashFindVal(oldVars, "org");
     char *oldClade = hashFindVal(oldVars, "clade");
-    if ((oldDb    && differentWord(oldDb, *retDb)) ||
-	(oldOrg   && differentWord(oldOrg, *retGenome)) ||
-	(oldClade && differentWord(oldClade, *retClade)))
+    if ((!IS_CART_VAR_EMPTY(oldDb)    && differentWord(oldDb, *retDb)) ||
+	(!IS_CART_VAR_EMPTY(oldOrg)   && differentWord(oldOrg, *retGenome)) ||
+	(!IS_CART_VAR_EMPTY(oldClade) && differentWord(oldClade, *retClade)))
 	{
 	/* Change position to default -- unless it was passed in via CGI: */
 	if (cgiOptionalString("position") == NULL)
