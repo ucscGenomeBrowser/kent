@@ -269,7 +269,6 @@ for (group = groupList; group != NULL; group = group->next)
                     track->visibility = changeVis;
                     }
 
-                #ifdef SUBTRACKS_HAVE_VIS
                 // Whether super child or not, if its a composite, then handle the children
                 if (tdbIsComposite(tdb))
                     {
@@ -283,7 +282,6 @@ for (group = groupList; group != NULL; group = group->next)
                         subtrack->visibility = changeVis;
                         }
                     }
-                #endif///def SUBTRACKS_HAVE_VIS
                 }
             }
         }
@@ -371,10 +369,44 @@ void smallBreak()
 hPrintf("<FONT SIZE=1><BR></FONT>\n");
 }
 
+#ifdef REMOTE_TRACK_AJAX_CALLBACK
+static boolean trackUsesRemoteData(struct track *track)
+/* returns TRUE is this track has a remote datasource */
+{
+if (!IS_KNOWN(track->remoteDataSource))
+    {
+    SET_TO_NO(track->remoteDataSource);
+    //if (track->bbiFile != NULL)   // FIXME: Chicken or the egg.  bigWig/bigBed "bbiFile" filled in by loadItems, but we don't want to load items.
+    //    {
+    //    if (!startsWith("/gbdb/",track->bbiFile->fileName))
+    //        SET_TO_YES(track->remoteDataSource);
+    //    }
+    if (startsWithWord("bigWig",track->tdb->type) || startsWithWord("bigBed",track->tdb->type))
+        {
+        SET_TO_YES(track->remoteDataSource);
+        }
+    else if (startsWithWord("bam",track->tdb->type))
+        {
+        SET_TO_YES(track->remoteDataSource);
+        }
+    }
+return IS_YES(track->remoteDataSource);
+}
+
+boolean trackShouldUseAjaxRetrieval(struct track *track)
+/* Tracks with remote data sources should berendered via an ajax callback */
+{
+return (theImgBox && !trackImgOnly && trackUsesRemoteData(track));
+}
+#endif///def REMOTE_TRACK_AJAX_CALLBACK
+
 static int trackPlusLabelHeight(struct track *track, int fontHeight)
 /* Return the sum of heights of items in this track (or subtrack as it may be)
  * and the center label(s) above the items (if any). */
 {
+if (trackShouldUseAjaxRetrieval(track))
+    return REMOTE_TRACK_HEIGHT;
+
 int y = track->totalHeight(track, limitVisibility(track));
 if (isCenterLabelIncluded(track))
     y += fontHeight;
@@ -1560,18 +1592,16 @@ return scaleBases;
 enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
-enum trackVisibility vis = subtrack->limitedVisSet ? tvMin(subtrack->visibility,subtrack->limitedVis) : subtrack->visibility;
+assert(tdbIsCompositeChild(subtrack->tdb));
 if(tdbIsCompositeChild(subtrack->tdb))
     {
     if (!subtrack->limitedVisSet)
         {
         subtrack->visibility = tdbVisLimitedByAncestors(cart, subtrack->tdb, TRUE, TRUE);
         limitVisibility(subtrack);
-        return vis;
         }
-    return subtrack->limitedVis;
     }
-return vis;
+return subtrack->limitedVis;
 }
 
 static int makeRulerZoomBoxes(struct hvGfx *hvg, struct cart *cart, int winStart,int winEnd,
@@ -1952,87 +1982,58 @@ boolean safeHeight = TRUE;
 /* Hash tracks/subtracks, limit visibility and calculate total image height: */
 for (track = trackList; track != NULL; track = track->next)
     {
+    if(tdbIsCompositeChild(track->tdb)) // When single track is requested via AJAX, it could be a subtrack
+        limitedVisFromComposite(track);
+    else
         limitVisibility(track);
+
     if (!safeHeight)
         {
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
         continue;
         }
-#ifndef SUBTRACKS_HAVE_VIS
-    if (track->limitedVis != tvHide)
-#endif///ndef SUBTRACKS_HAVE_VIS
+
+    if (tdbIsComposite(track->tdb))
         {
-        if (tdbIsComposite(track->tdb))
+        struct track *subtrack;
+        for (subtrack = track->subtracks; subtrack != NULL;
+                        subtrack = subtrack->next)
             {
-            struct track *subtrack;
-            for (subtrack = track->subtracks; subtrack != NULL;
-                         subtrack = subtrack->next)
+            if (!isSubtrackVisible(subtrack))
+                continue;
+
+            // subtrack vis can be explicit or inherited from composite/view.  Then it could be limited because of pixel height
+            limitedVisFromComposite(subtrack);
+            assert(subtrack->limitedVisSet);
+
+            if (subtrack->limitedVis != tvHide)
                 {
-                if (!isSubtrackVisible(subtrack))
-                    continue;
-
-                // If the composite track has "view" based drop downs, set visibility based upon those
-                enum trackVisibility vis = limitedVisFromComposite(subtrack);
-                if(subtrack->visibility != vis)
-                    {
-                    subtrack->visibility = vis;
-                    if (subtrack->limitedVisSet)
-                        {
-                        subtrack->limitedVis = tvMin(vis, subtrack->limitedVis);
-                        }
-                    else
-                        {
-                        subtrack->limitedVis = tvMin(vis,subtrack->visibility);
-                        subtrack->limitedVisSet = (subtrack->limitedVis != tvHide && subtrack->visibility != subtrack->limitedVis);
-                        }
-                    }
-                if (!subtrack->limitedVisSet && track->limitedVisSet)
-                    {
-                    subtrack->visibility = track->visibility;
-                    subtrack->limitedVis = track->limitedVis;
-                    subtrack->limitedVisSet = track->limitedVisSet;
-                    }
-
-                #ifdef SUBTRACKS_HAVE_VIS
-                if (subtrack->limitedVis != tvHide)
-                #endif///def SUBTRACKS_HAVE_VIS
-                    {
-                    subtrack->hasUi = track->hasUi;
-                    flatTracksAdd(&flatTracks,subtrack,cart);
-                    }
+                subtrack->hasUi = track->hasUi;
+                flatTracksAdd(&flatTracks,subtrack,cart);
                 }
             }
-        else
-            #ifdef SUBTRACKS_HAVE_VIS
-            if (track->limitedVis != tvHide)
-            #endif///def SUBTRACKS_HAVE_VIS
-                flatTracksAdd(&flatTracks,track,cart);
-        if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
-            {
-            char numBuf[SMALLBUF];
-            sprintLongWithCommas(numBuf, maxSafeHeight);
-            printf("warning: image is over %s pixels high at "
-                "track '%s',<BR>remaining tracks set to hide "
-                "for this view.<BR>\n", numBuf, track->tdb->shortLabel);
-            safeHeight = FALSE;
-            track->limitedVis = tvHide;
-            track->limitedVisSet = TRUE;
-            }
         }
+    else if (track->limitedVis != tvHide)
+        flatTracksAdd(&flatTracks,track,cart);
     }
 flatTracksSort(&flatTracks); // Now we should have a perfectly good flat track list!
 struct track *prevTrack = NULL;
 for (flatTrack = flatTracks,prevTrack=NULL; flatTrack != NULL; flatTrack = flatTrack->next)
     {
     track = flatTrack->track;
-    if (maxSafeHeight < (pixHeight+trackPlusLabelHeight(track,fontHeight)))
+    assert(track->limitedVis != tvHide);
+    int totalHeight = pixHeight+trackPlusLabelHeight(track,fontHeight);
+    if (maxSafeHeight < totalHeight)
         {
         char numBuf[SMALLBUF];
         sprintLongWithCommas(numBuf, maxSafeHeight);
         printf("warning: image is over %s pixels high at "
             "track '%s',<BR>remaining tracks set to hide "
             "for this view.<BR>\n", numBuf, track->tdb->shortLabel);
+        warn("warning: image is over %s pixels high (%d pix) at "
+            "track '%s' (%s),<BR>remaining tracks set to hide "
+            "for this view.", numBuf, totalHeight, track->tdb->shortLabel,track->track);
         safeHeight = FALSE;
         track->limitedVis = tvHide;
         track->limitedVisSet = TRUE;
@@ -2113,12 +2114,12 @@ if(theImgBox)
         track = flatTrack->track;
         if (track->limitedVis != tvHide)
             {
-            #ifdef SUBTRACKS_HAVE_VIS
             if(track->labelColor == track->ixColor && track->ixColor == 0)
                 track->ixColor = hvGfxFindRgb(hvg, &track->color);
-            #endif//def SUBTRACKS_HAVE_VIS
             int order = flatTrack->order;
             curImgTrack = imgBoxTrackFindOrAdd(theImgBox,track->tdb,NULL,track->limitedVis,isCenterLabelIncluded(track),order);
+            if (trackShouldUseAjaxRetrieval(track))
+                imgTrackMarkForAjaxRetrieval(curImgTrack,TRUE);
             }
         }
     }
@@ -2281,6 +2282,9 @@ if (withLeftLabels)
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stSide,theSideImg,NULL,sliceWidth[stSide],sliceHeight,sliceOffsetX[stSide],sliceOffsetY);
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
+        if (trackShouldUseAjaxRetrieval(track))
+            y += REMOTE_TRACK_HEIGHT;
+        else
             y = doLeftLabels(track, hvgSide, font, y);
         }
     }
@@ -2372,7 +2376,10 @@ if (withCenterLabels)
             if (isCenterLabelConditional(track))
                 imgTrackUpdateCenterLabelSeen(curImgTrack,isCenterLabelConditionallySeen(track)?clNowSeen:clNotSeen);
             }
-        y = doCenterLabels(track, track, hvg, font, y);
+        if (trackShouldUseAjaxRetrieval(track))
+            y += REMOTE_TRACK_HEIGHT;
+        else
+            y = doCenterLabels(track, track, hvg, font, y);
         }
     hvGfxUnclip(hvg);
     }
@@ -2404,6 +2411,9 @@ if (withCenterLabels)
                 curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
                 }
             }
+        if (trackShouldUseAjaxRetrieval(track))
+            y += REMOTE_TRACK_HEIGHT;
+        else
             y = doDrawItems(track, hvg, font, y, &lastTime);
 
         if (theImgBox && track->limitedVis == tvDense && tdbIsCompositeChild(track->tdb))
@@ -2435,7 +2445,9 @@ if (withLeftLabels)
             curMap      = sliceMapFindOrStart(curSlice,track->tdb->track,NULL); // No common linkRoot
             }
 
-        if (track->drawLeftLabels != NULL)
+        if (trackShouldUseAjaxRetrieval(track))
+            y += REMOTE_TRACK_HEIGHT;
+        else if (track->drawLeftLabels != NULL)
             y = doOwnLeftLabels(track, hvgSide, font, y);
         else
             y += trackPlusLabelHeight(track, fontHeight);
@@ -2964,6 +2976,11 @@ tg->loadItems = ctLoadColoredExon;
 tg->canPack = TRUE;
 }
 
+void dontLoadItems(struct track *tg)
+/* No-op loadItems when we aren't going to try. */
+{
+}
+
 struct track *newCustomTrack(struct customTrack *ct)
 /* Make up a new custom track. */
 {
@@ -3015,6 +3032,8 @@ else if (sameString(type, "bigWig"))
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = ct->bbiFile;
     tg->nextItemButtonable = FALSE;
+    if (trackShouldUseAjaxRetrieval(tg))
+        tg->loadItems = dontLoadItems;
     }
 else if (sameString(type, "bigBed"))
     {
@@ -3030,6 +3049,8 @@ else if (sameString(type, "bigBed"))
     tg = trackFromTrackDb(tdb);
     tg->bbiFile = bbi;
     tg->nextItemButtonable = FALSE;
+    if (trackShouldUseAjaxRetrieval(tg))
+        tg->loadItems = dontLoadItems;
     }
 else if (sameString(type, "bedGraph"))
     {
@@ -3109,6 +3130,8 @@ else if (sameString(type, "bam"))
     tg = trackFromTrackDb(tdb);
     tg->customPt = ct;
     bamMethods(tg);
+    if (trackShouldUseAjaxRetrieval(tg))
+        tg->loadItems = dontLoadItems;
     tg->mapItemName = ctMapItemName;
     hashAdd(tdb->settingsHash, BASE_COLOR_USE_SEQUENCE, cloneString("lfExtra"));
     hashAdd(tdb->settingsHash, BASE_COLOR_DEFAULT, cloneString("diffBases"));
@@ -4165,11 +4188,6 @@ hvGfxBox(hvg, xOff, yOff, width, tg->heightPer, yellow);
 hvGfxTextCentered(hvg, xOff, yOff, width, tg->heightPer, MG_BLACK, font, message);
 }
 
-static void dontLoadItems(struct track *tg)
-/* No-op loadItems when we aren't going to try. */
-{
-}
-
 static void checkMaxWindowToDraw(struct track *tg)
 /* If (winEnd - winStart) > trackDb setting maxWindowToDraw, force track to a dense line
  * that will ask the user to zoom in closer to see track items and return TRUE so caller
@@ -4230,7 +4248,6 @@ else
     warn("Unrecognized jsCommand %s", command);
 }
 
-#ifdef SUBTRACKS_HAVE_VIS
 void parentChildCartCleanup(struct track *trackList,struct cart *newCart,struct hash *oldVars)
 /* When composite/view settings changes, remove subtrack specific vis
    When superTrackChild is found and selected, shape superTrack to match. */
@@ -4267,7 +4284,6 @@ for (;track != NULL; track = track->next)
         }
     }
 }
-#endif///def SUBTRACKS_HAVE_VIS
 
 void doTrackForm(char *psOutput, struct tempName *ideoTn)
 /* Make the tracks display form with the zoom/scroll buttons and the active
@@ -4330,9 +4346,7 @@ if(cgiVarExists("hgt.defaultImgOrder"))
     safef(wildCard,sizeof(wildCard),"*_%s",IMG_ORDER_VAR);
     cartRemoveLike(cart, wildCard);
     }
-#ifdef SUBTRACKS_HAVE_VIS
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
-#endif///def SUBTRACKS_HAVE_VIS
 
 
 /* Honor hideAll and visAll variables */

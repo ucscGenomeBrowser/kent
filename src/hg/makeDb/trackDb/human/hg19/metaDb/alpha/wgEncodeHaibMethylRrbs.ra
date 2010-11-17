@@ -302,6 +302,44 @@ tableName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1
+objType table
+cell GM12878-XiMat
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol HudsonAlpha
+replicate 1
+subId 2395
+tableName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2
+objType table
+cell GM12878-XiMat
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol HudsonAlpha
+replicate 2
+subId 2395
+tableName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1
 objType table
 cell GM12891
@@ -1575,6 +1613,44 @@ tableName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1
+objType table
+cell IMR90
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol UW_Stam
+replicate 1
+subId 2395
+tableName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2
+objType table
+cell IMR90
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol UW_Stam
+replicate 2
+subId 2395
+tableName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1
 objType table
 cell Jurkat
@@ -1687,6 +1763,82 @@ replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2
 treatment androgen
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol Yale_TFBS(Struhl)
+replicate 1
+subId 2395
+tableName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1
+treatment TAM_1uM_36hr
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol Yale_TFBS(Struhl)
+replicate 2
+subId 2395
+tableName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
+treatment TAM_1uM_36hr
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol Yale_TFBS(Struhl)
+replicate 1
+subId 2395
+tableName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
+objType table
+cell MCF10A-Er-Src
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol Yale_TFBS(Struhl)
+replicate 2
+subId 2395
+tableName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
+treatment None
 view Sites
 
 metaObject wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1
@@ -1898,6 +2050,44 @@ tableName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2
 treatment None
 view Sites
 
+metaObject wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1
+objType table
+cell NH-A
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol UW_Stam
+replicate 1
+subId 2395
+tableName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2
+objType table
+cell NH-A
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol UW_Stam
+replicate 2
+subId 2395
+tableName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2
+treatment None
+view Sites
+
 metaObject wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1
 objType table
 cell NHBE
@@ -2028,6 +2218,44 @@ protocol Yale_TFBS
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1
+objType table
+cell Osteobl
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol Open_Chromatin
+replicate 1
+subId 2395
+tableName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1
+treatment None
+view Sites
+
+metaObject wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2
+objType table
+cell Osteobl
+composite wgEncodeHaibMethylRrbs
+dataType MethylRrbs
+dataVersion ENCODE Jan 2011 Freeze
+dateSubmitted 2010-11-15
+dateUnrestricted 2011-08-15
+fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
+grant Myers
+lab HudsonAlpha
+project wgEncode
+protocol Open_Chromatin
+replicate 2
+subId 2395
+tableName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2
 treatment None
 view Sites
 
@@ -2316,4 +2544,4 @@ tableName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 1333541641
+# MAGIC: 1224538227
