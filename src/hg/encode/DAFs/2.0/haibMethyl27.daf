@@ -1,0 +1,35 @@
+# Data Agreement File for Myers/HudsonAlpha Methyl Illumina experiments
+# $Revision: 1.2 $
+
+# The header for the associated DDF should look like this:
+#files	view	cell	treatment	replicate	protocol	origAssembly
+
+#Explanation of DDF terms
+#files: The name of the files to be associated with this data
+#view: The type of view that these files are. The options are listed in this DAF
+#cell: The cell name. The cell registered vocbulary is found at: http://hgwdev.cse.ucsc.edu/ENCODE/cellTypes.html
+#replicate: The Replicate number. The replication number of a given experiment.
+#origAssembly: The assembly that the data was originally released on (hg18 or hg19)
+#labVersion:  This is free text for anything you would like associated with your data
+dafVersion      2.0
+
+# Lab info
+grant           Myers
+lab             HudsonAlpha
+dataType        MethylIllumina
+compositeSuffix HaibMethylIllumina
+variables       cell
+assembly        hg19
+
+validationSettings none
+
+
+
+##Do we want the view to be for 27 versus 450??
+
+# Track/view definition
+view             Sites
+longLabelPrefix  HudsonAlpha Methylation by Illumina 
+type             bed 12
+hasReplicates    yes
+required         yes
