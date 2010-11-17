@@ -10866,11 +10866,120 @@ else
     }
 }
 
+/* reserve space no more than 20 unique OMIM entries */
+char omimGeneBuffer[2000];
+
+char *omimGeneDiseaseList(struct track *tg, struct bed *item)
+/* Return list of diseases associated with a OMIM entry */
+{
+struct sqlConnection *conn;
+char query[256];
+struct sqlResult *sr;
+char **row;
+char *chp;
+int i=0;
+
+conn = hAllocConn(database);
+
+safef(query,sizeof(query),
+        "select distinct description from omimMorbidMap, omimGene where name='%s' and name=cast(omimId as char) order by description", item->name);
+sr = sqlMustGetResult(conn, query);
+row = sqlNextRow(sr);
+
+/* show up to 20 max entries */
+chp = omimGeneBuffer;
+while ((row != NULL) && i<20)
+    {
+    /* omimMorbidMap description field some times have trailing blanks. */
+    eraseTrailingSpaces(row[0]);
+    if (i != 0)
+	{
+	safef(chp, 3, "; ");
+	chp++;chp++;
+	}
+    safef(chp, 100, "%s", row[0]);
+    chp = chp+strlen(row[0]);
+    row = sqlNextRow(sr);
+    i++;
+    }
+
+if ((i == 20) && (row != NULL))
+    {
+    safef(chp, 5, " ...");
+    chp++;chp++;chp++;chp++;
+    }
+
+*chp = '\0';
+
+hFreeConn(&conn);
+sqlFreeResult(&sr);
+return(omimGeneBuffer);
+}
+
+static void omimGeneDrawAt(struct track *tg, void *item,
+	struct hvGfx *hvg, int xOff, int y,
+	double scale, MgFont *font, Color color, enum trackVisibility vis)
+/* Draw a single superfamily item at position. */
+{
+struct bed *bed = item;
+char *sPhenotypes;
+int heightPer = tg->heightPer;
+int x1 = round((double)((int)bed->chromStart-winStart)*scale) + xOff;
+int x2 = round((double)((int)bed->chromEnd-winStart)*scale) + xOff;
+int w;
+
+sPhenotypes = omimGeneDiseaseList(tg, item);
+w = x2-x1;
+if (w < 1)
+    w = 1;
+if (color)
+    {
+    hvGfxBox(hvg, x1, y, w, heightPer, omimGeneColor(tg, item, hvg));
+
+    if (vis == tvFull)
+        {
+        hvGfxTextRight(hvg, x1-mgFontStringWidth(font, sPhenotypes)-2, y,
+		    mgFontStringWidth(font, sPhenotypes),
+                    heightPer, MG_BLACK, font, sPhenotypes);
+        }
+    if (tg->drawName && vis != tvSquish)
+	{
+	/* Clip here so that text will tend to be more visible... */
+	char *s = tg->itemName(tg, bed);
+	w = x2-x1;
+	if (w > mgFontStringWidth(font, s))
+	    {
+	    Color textColor = hvGfxContrastingColor(hvg, color);
+	    hvGfxTextCentered(hvg, x1, y, w, heightPer, textColor, font, s);
+	    }
+	}
+    if (vis != tvDense)
+   	mapBoxHc(hvg, bed->chromStart, bed->chromEnd, x1, y, x2 - x1, heightPer,
+	         tg->track, tg->mapItemName(tg, bed), sPhenotypes);
+    }
+if (tg->subType == lfWithBarbs)
+    {
+    int dir = 0;
+    if (bed->strand[0] == '+')
+	dir = 1;
+    else if(bed->strand[0] == '-')
+	dir = -1;
+    if (dir != 0 && w > 2)
+	{
+	int midY = y + (heightPer>>1);
+	Color textColor = hvGfxContrastingColor(hvg, color);
+	clippedBarbs(hvg, x1, midY, w, tl.barbHeight, tl.barbSpacing,
+		dir, textColor, TRUE);
+	}
+    }
+}
+
 void omimGeneMethods (struct track *tg)
 {
 tg->itemColor 	  = omimGeneColor;
 tg->itemNameColor = omimGeneColor;
 tg->itemName      = omimGeneName;
+tg->drawItemAt    = omimGeneDrawAt;
 }
 
 Color restColor(struct track *tg, void *item, struct hvGfx *hvg)
