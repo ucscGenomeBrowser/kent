@@ -8,6 +8,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -29,6 +30,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dNaIlnaFastqRep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -51,6 +53,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -74,6 +77,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -96,6 +100,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -117,6 +122,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaJunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -138,6 +144,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -160,6 +167,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -182,6 +190,7 @@ dateResubmitted 2010-11-05
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -204,6 +213,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2011-10-06
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -227,6 +237,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -250,6 +261,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -271,6 +283,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -291,6 +304,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -311,6 +325,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -331,6 +346,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -352,6 +368,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -373,6 +390,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75NaIl400FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -393,6 +411,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -413,6 +432,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -433,6 +453,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -452,6 +473,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -471,6 +493,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -490,6 +513,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -509,6 +533,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -530,6 +555,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -551,6 +577,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -571,6 +598,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -591,6 +619,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -611,6 +640,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -632,6 +662,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -654,6 +685,7 @@ dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -675,6 +707,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -696,6 +729,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -718,6 +752,7 @@ dateSubmitted 2010-06-21
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -740,6 +775,7 @@ dateSubmitted 2010-07-07
 dateUnrestricted 2011-04-07
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -761,6 +797,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -781,6 +818,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -801,6 +839,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TrnscrptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -820,6 +859,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TrnscrptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -839,6 +879,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TrnscrptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -858,6 +899,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200TrnscrptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -878,6 +920,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -898,6 +941,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -917,6 +961,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -937,6 +982,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -959,6 +1005,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -980,6 +1027,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1002,6 +1050,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1024,6 +1073,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1047,6 +1097,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1069,6 +1120,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1089,6 +1141,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TrnscrptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1108,6 +1161,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-16
 dateUnrestricted 2011-08-15
 fileName wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400TrnscrptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1128,6 +1182,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1149,6 +1204,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dNaIlnaFastqRep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1171,6 +1227,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1194,6 +1251,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1216,6 +1274,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1237,6 +1296,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaJunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1258,6 +1318,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1280,6 +1341,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1302,6 +1364,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1324,6 +1387,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1347,6 +1411,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1370,6 +1435,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -1392,6 +1458,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1413,6 +1480,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1434,6 +1502,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep3.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1455,6 +1524,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd1Rep4.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1476,6 +1546,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1497,6 +1568,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1518,6 +1590,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep3.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1539,6 +1612,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl200FastqRd2Rep4.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1560,6 +1634,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1581,6 +1656,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75NaIl400FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -1602,6 +1678,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1623,6 +1700,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1644,6 +1722,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep3.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1665,6 +1744,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneDeNovoRep4.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1685,6 +1765,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1704,6 +1785,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1723,6 +1805,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV3cRep3.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1742,6 +1825,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV3cRep4.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1761,6 +1845,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1780,6 +1865,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1799,6 +1885,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV4Rep3.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1818,6 +1905,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneGencV4Rep4.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1838,6 +1926,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1860,6 +1949,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1882,6 +1972,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep3.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1904,6 +1995,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep4.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1926,6 +2018,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1947,6 +2040,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1968,6 +2062,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep3.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -1989,6 +2084,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200InsLengthRep4.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2010,6 +2106,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2031,6 +2128,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2052,6 +2150,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep3.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2073,6 +2172,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200JunctionsRep4.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2095,6 +2195,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2118,6 +2219,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2141,6 +2243,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2164,6 +2267,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2186,6 +2290,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2208,6 +2313,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2230,6 +2336,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2252,6 +2359,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2275,6 +2383,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2298,6 +2407,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2321,6 +2431,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2344,6 +2455,7 @@ dateSubmitted 2010-01-15
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2366,6 +2478,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2387,6 +2500,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2408,6 +2522,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep3.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2429,6 +2544,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptDeNovoRep4.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2449,6 +2565,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2468,6 +2585,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2487,6 +2605,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV3cRep3.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2506,6 +2625,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV3cRep4.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2525,6 +2645,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2544,6 +2665,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2563,6 +2685,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV4Rep3.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2582,6 +2705,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200TranscriptGencV4Rep4.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -2602,6 +2726,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2622,6 +2747,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2641,6 +2767,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2661,6 +2788,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2683,6 +2811,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2704,6 +2833,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2726,6 +2856,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2748,6 +2879,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2771,6 +2903,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-13
 fileIndex wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2793,6 +2926,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2813,6 +2947,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2832,6 +2967,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 400
 lab Caltech(Wold)
@@ -2852,6 +2988,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2873,6 +3010,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dNaIlnaFastqRep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2895,6 +3033,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2918,6 +3057,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2940,6 +3080,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2961,6 +3102,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaJunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -2982,6 +3124,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3004,6 +3147,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3026,6 +3170,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3048,6 +3193,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3071,6 +3217,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3094,6 +3241,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3116,6 +3264,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3137,6 +3286,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3158,6 +3308,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3179,6 +3330,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3200,6 +3352,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3221,6 +3374,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3241,6 +3395,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3260,6 +3415,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3279,6 +3435,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3298,6 +3455,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3318,6 +3476,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3340,6 +3499,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3362,6 +3522,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3383,6 +3544,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3404,6 +3566,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3425,6 +3588,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3447,6 +3611,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3470,6 +3635,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3492,6 +3658,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3514,6 +3681,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3537,6 +3705,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3560,6 +3729,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3582,6 +3752,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3603,6 +3774,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3623,6 +3795,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3642,6 +3815,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3661,6 +3835,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3681,6 +3856,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3702,6 +3878,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dNaIlnaFastqRep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3724,6 +3901,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3747,6 +3925,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3769,6 +3948,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3790,6 +3970,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaJunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3811,6 +3992,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3833,6 +4015,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3855,6 +4038,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3877,6 +4061,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3900,6 +4085,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3923,6 +4109,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -3945,6 +4132,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3966,6 +4154,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -3987,6 +4176,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4008,6 +4198,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqHepg2R2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4029,6 +4220,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4050,6 +4242,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4070,6 +4263,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4089,6 +4283,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4108,6 +4303,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4127,6 +4323,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4147,6 +4344,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4169,6 +4367,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4191,6 +4390,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4212,6 +4412,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4233,6 +4434,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4254,6 +4456,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4276,6 +4479,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4299,6 +4503,7 @@ dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4321,6 +4526,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4343,6 +4549,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4366,6 +4573,7 @@ dateSubmitted 2010-01-12
 dateUnrestricted 2010-10-11
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4389,6 +4597,7 @@ dateSubmitted 2010-01-22
 dateUnrestricted 2010-10-22
 fileIndex wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4411,6 +4620,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4432,6 +4642,7 @@ dateResubmitted 2010-06-21
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4452,6 +4663,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4471,6 +4683,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4490,6 +4703,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4509,6 +4723,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4528,6 +4743,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4548,6 +4764,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4568,6 +4785,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4588,6 +4806,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4608,6 +4827,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4628,6 +4848,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4648,6 +4869,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4667,6 +4889,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4686,6 +4909,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4705,6 +4929,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4724,6 +4949,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4745,6 +4971,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4766,6 +4993,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4785,6 +5013,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4804,6 +5033,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4824,6 +5054,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4845,6 +5076,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4867,6 +5099,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4888,6 +5121,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4909,6 +5143,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4931,6 +5166,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4953,6 +5189,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4974,6 +5211,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -4994,6 +5232,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5014,6 +5253,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5033,6 +5273,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5052,6 +5293,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5071,6 +5313,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5091,6 +5334,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5112,6 +5356,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dNaIlnaFastqRep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5134,6 +5379,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5157,6 +5403,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5179,6 +5426,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5200,6 +5448,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaJunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5221,6 +5470,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5243,6 +5493,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5265,6 +5516,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5287,6 +5539,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5310,6 +5563,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5333,6 +5587,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5355,6 +5610,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5376,6 +5632,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5397,6 +5654,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5418,6 +5676,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5439,6 +5698,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5460,6 +5720,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5480,6 +5741,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5499,6 +5761,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5518,6 +5781,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5537,6 +5801,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5557,6 +5822,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5579,6 +5845,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5601,6 +5868,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5622,6 +5890,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5643,6 +5912,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5664,6 +5934,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5686,6 +5957,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5709,6 +5981,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5731,6 +6004,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5753,6 +6027,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5776,6 +6051,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5799,6 +6075,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5821,6 +6098,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5842,6 +6120,7 @@ dateResubmitted 2010-06-22
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5862,6 +6141,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5881,6 +6161,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5900,6 +6181,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5919,6 +6201,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -5939,6 +6222,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5960,6 +6244,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqK562R1x75dNaIlnaFastqRep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -5982,6 +6267,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6005,6 +6291,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6027,6 +6314,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6048,6 +6336,7 @@ dateResubmitted 2010-06-19
 dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaJunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6069,6 +6358,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6091,6 +6381,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-06
 dateUnrestricted 2010-10-06
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6113,6 +6404,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6135,6 +6427,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6158,6 +6451,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6181,6 +6475,7 @@ dateSubmitted 2010-02-10
 dateUnrestricted 2010-11-09
 fileIndex wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -6202,6 +6497,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6222,6 +6518,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6242,6 +6539,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6262,6 +6560,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6282,6 +6581,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6302,6 +6602,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6322,6 +6623,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6341,6 +6643,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6360,6 +6663,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6379,6 +6683,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6398,6 +6703,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6419,6 +6725,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6440,6 +6747,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6460,6 +6768,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6480,6 +6789,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6500,6 +6810,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6521,6 +6832,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6543,6 +6855,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6564,6 +6877,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6585,6 +6899,7 @@ dataVersion ENCODE June 2010 Freeze
 dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6607,6 +6922,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6629,6 +6945,7 @@ dateSubmitted 2010-06-22
 dateUnrestricted 2011-03-21
 fileIndex wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6650,6 +6967,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6670,6 +6988,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6690,6 +7009,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6709,6 +7029,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6728,6 +7049,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6747,6 +7069,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqK562R2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6766,6 +7089,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6786,6 +7110,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6806,6 +7131,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6826,6 +7152,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6845,6 +7172,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6864,6 +7192,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6885,6 +7214,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6904,6 +7234,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6925,6 +7256,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6946,6 +7278,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6968,6 +7301,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -6989,6 +7323,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7009,6 +7344,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7028,6 +7364,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7048,6 +7385,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqNhekR1x75dNaIlnaFastqRep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -7070,6 +7408,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -7092,6 +7431,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaJunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -7113,6 +7453,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -7135,6 +7476,7 @@ dateResubmitted 2010-11-09
 dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -7158,6 +7500,7 @@ dateSubmitted 2010-01-14
 dateUnrestricted 2010-10-14
 fileIndex wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength ilNA
 lab Caltech(Wold)
@@ -7180,6 +7523,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7200,6 +7544,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7221,6 +7566,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7241,6 +7587,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7262,6 +7609,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7282,6 +7630,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7302,6 +7651,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7321,6 +7671,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7340,6 +7691,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7359,6 +7711,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7379,6 +7732,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7400,6 +7754,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7422,6 +7777,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7442,6 +7798,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7462,6 +7819,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7482,6 +7840,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7504,6 +7863,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7526,6 +7886,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7548,6 +7909,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7569,6 +7931,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7592,6 +7955,7 @@ dateSubmitted 2010-01-13
 dateUnrestricted 2010-10-12
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7614,6 +7978,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7636,6 +8001,7 @@ dateResubmitted 2010-06-18
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7656,6 +8022,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7676,6 +8043,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7695,6 +8063,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7714,6 +8083,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7733,6 +8103,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7752,6 +8123,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7772,6 +8144,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd1Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7792,6 +8165,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep1.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7812,6 +8186,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75NaIl200FastqRd2Rep2.fastq.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7832,6 +8207,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7852,6 +8228,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7872,6 +8249,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7891,6 +8269,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7910,6 +8289,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7929,6 +8309,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7948,6 +8329,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7969,6 +8351,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2.gtf.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -7990,6 +8373,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200InsLengthRep1.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8009,6 +8393,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200InsLengthRep2.insDist.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8028,6 +8413,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep1.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8048,6 +8434,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200JunctionsRep2.junction.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8069,6 +8456,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8091,6 +8479,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8112,6 +8501,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8133,6 +8523,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2.bigWig
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8155,6 +8546,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam.bai
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8177,6 +8569,7 @@ dateSubmitted 2010-07-13
 dateUnrestricted 2011-04-12
 fileIndex wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam.bai
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2.bam
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8198,6 +8591,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8218,6 +8612,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptDeNovoRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8238,6 +8633,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptGencV3cRep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8257,6 +8653,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptGencV3cRep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8276,6 +8673,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-05
 dateUnrestricted 2011-08-05
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptGencV4Rep1.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
@@ -8295,6 +8693,7 @@ dataVersion ENCODE Jan 2011 Freeze
 dateSubmitted 2010-11-09
 dateUnrestricted 2011-08-09
 fileName wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200TranscriptGencV4Rep2.fpkm.gz
+rnaExtract longPolyA
 grant Myers
 insertLength 200
 lab Caltech(Wold)
