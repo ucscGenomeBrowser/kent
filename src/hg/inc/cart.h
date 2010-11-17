@@ -14,6 +14,7 @@
 // If cgi set as CART_VAR_EMPTY, then removed from cart
 // If If cgi created new and oldVars are stored, then will be CART_VAR_EMPTY in old vars
 #define CART_VAR_EMPTY "[]"
+#define IS_CART_VAR_EMPTY(var) ((var) == NULL || sameString(var,CART_VAR_EMPTY))
 
 typedef struct sqlConnection *(*DbConnector)();
 /* funtion type used to get a connection to database */
