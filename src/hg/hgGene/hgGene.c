@@ -528,7 +528,7 @@ if (newChrom != NULL
 	&& newStarts != NULL
 	&& newEnds != NULL)
     {
-    if (IS_CART_VAR_EMPTY(oldGene) == NULL || IS_CART_VAR_EMPTY(oldStarts) == NULL || IS_CART_VAR_EMPTY(oldEnds) == NULL
+    if (IS_CART_VAR_EMPTY(oldGene) || IS_CART_VAR_EMPTY(oldStarts) || IS_CART_VAR_EMPTY(oldEnds)
     	|| sameString(oldGene, newGene))
 	{
 	curGeneChrom = newChrom;
