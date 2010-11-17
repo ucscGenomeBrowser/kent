@@ -582,7 +582,6 @@ else
         boolean checked = ( track->visibility != tvHide );
         if(tdbIsContainerChild(track->tdb))
             {
-            //track->visibility = limitedVisFromComposite(track);
             checked = fourStateVisible(subtrackFourStateChecked(track->tdb,cart)); // Don't need all 4 states here.  Visible=checked&&enabled
             checked = (checked && ( track->visibility != tvHide )); // Checked is only if subtrack level vis is also set!
             }
@@ -724,9 +723,7 @@ makeGlobalTrackHash(trackList);
 
 // NOTE: This is necessary when container cfg by '*' results in vis changes
 // This will handle composite/view override when subtrack specific vis exists, AND superTrack reshaping.
-#ifdef SUBTRACKS_HAVE_VIS
 parentChildCartCleanup(trackList,cart,oldVars); // Subtrack settings must be removed when composite/view settings are updated
-#endif///def SUBTRACKS_HAVE_VIS
 
 getSearchTrixFile(database, trixFile, sizeof(trixFile));
 trix = trixOpen(trixFile);
