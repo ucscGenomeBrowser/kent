@@ -31040,3 +31040,52 @@ close($OUTD); close($OUTM); close($OUTU);
 # --------------------------
 
 #########################################################################
+# DENISOVA (ANCIENT HUMAN) (DONE 11/16/10 angie)
+    mkdir /hive/data/genomes/hg18/bed/denisova
+    cd /hive/data/genomes/hg18/bed/denisova
+    # Use username and password emailed by Ed Green 9/30/10
+    alias wg     wget -r --user=xxx --password=xxx
+    wg ftp://cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2/\*
+    wg ftp://cdna.eva.mpg.de/Catalog_of_changes/\*
+    # Ed says we don't need files with 'hcca' or 'hcscca' in the names
+    # (only hg18 or panTro2).
+    find . -name \*h\*cca\* -exec echo rm {} \;
+    # Inspect & execute output of the find command to save a bit of space (11G of 83G).
+
+    # Combine the two sequence-lib files for Denisova into one bam.  First ensure that
+    # the headers are identical:
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam > h1
+    samtools view -H cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam > h2
+    cmp h1 h2
+    # No output, and they seem to be sorted by position, good to go:
+    samtools merge SL3003_SL3004_100122-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3003/SL3003-hg18.bam \
+     cdna.eva.mpg.de/Denisova_sequence_alignments_to_hg18_and_panTro2/SL3004_100122/SL3004-hg18.bam
+#1023.571u 22.997s 17:34.24 99.2%        0+0k 0+0io 0pf+0w
+    # Build BAM index (.bam.bai) files.
+    samtools index SL3003_SL3004_100122-hg18.bam
+#94.811u 3.560s 1:51.16 88.4%    0+0k 0+0io 0pf+0w
+    pushd cdna.eva.mpg.de/Present-day_human_sequence_alignments_to_hg18_and_panTro2
+    foreach f (*.bam)
+      echo $f
+      samtools index $f
+    end
+    popd
+
+    # Make /gbdb/ links and load database tables
+    mkdir /gbdb/hg18/denisova
+    ln -s `pwd`/SL3003_SL3004_100122-hg18.bam{,.bai} /gbdb/hg18/denisova/
+    mkdir /gbdb/hg18/denisova/modernHumanSeq
+    find `pwd` -name MMS\*hg18\*.bam\* -exec echo ln -s {} /gbdb/hg18/denisova/modernHumanSeq/ \;
+    # Inspect & execute output of the find command.
+
+    hgBbiDbLink hg18 bamSLDenisova /gbdb/hg18/denisova/SL3003_SL3004_100122-hg18.bam
+    foreach f (/gbdb/hg18/denisova/modernHumanSeq/MMS*.bam)
+      set track = `echo $f | perl -wpe 's/.*(MMS\d+)_HGDP\d+_(\w+)\..*/bam$1$2/ || die; s/_//;'`
+      echo $track
+      hgBbiDbLink hg18 $track $f
+    end
+
+
+#########################################################################

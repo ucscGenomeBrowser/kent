@@ -343,11 +343,11 @@ if (link != NULL)
     static boolean defaultWarningShown = FALSE;
     if(noScriptMsg == NULL && !defaultWarningShown)
         {
-        noScriptMsg = "<b>Your browser does not support JavaScript so some functionality may be missing!</b>";
+        noScriptMsg = "<b>JavaScript is disabled in your web browser</b></p><p>You must have JavaScript enabled in your web browser to use the Genome Browser";
         defaultWarningShown = TRUE;
         }
     if(noScriptMsg && strlen(noScriptMsg))
-        hPrintf("<noscript>%s</noscript>\n", noScriptMsg);
+        hPrintf("<noscript><div class='noscript'><div class='noscript-inner'><p>%s</p></div></div></noscript>\n", noScriptMsg);
     hPrintf("%s",link);
     freeMem(link);
     }
