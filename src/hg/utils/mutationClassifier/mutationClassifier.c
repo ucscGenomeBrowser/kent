@@ -633,6 +633,44 @@ for(; genes != NULL; genes = genes->next)
     return retVal;
 }
 
+struct hit
+{
+    struct hit *next;
+    float delta;
+    float absDelta;
+    float before;
+    float after;
+    int start;
+    char strand;
+    float maxScore;
+};
+
+static void addHit(struct hit **hit, float before, float after, int start, char strand)
+{
+double delta = after - before;
+double absDelta = delta < 0 ? -delta : delta;
+double maxScore = max(before, after);
+boolean add = FALSE;
+if((before > 0 || after > 0) && absDelta >= 1)
+    {
+    if(*hit == NULL)
+        {
+        add = TRUE;
+        *hit = needMem(sizeof(**hit));
+        }
+    if(add || absDelta > (*hit)->absDelta || (absDelta == (*hit)->absDelta && maxScore > (*hit)->maxScore))
+        {
+        (*hit)->delta = delta;
+        (*hit)->absDelta = absDelta;
+        (*hit)->start = start;
+        (*hit)->before = before;
+        (*hit)->after = after;
+        (*hit)->strand = strand;
+        (*hit)->maxScore = maxScore;
+        }
+    }
+}
+
 static void mutationClassifier(char *database, char **files, int fileCount)
 {
 int i, fileIndex = 0;
@@ -894,13 +932,7 @@ while(!done)
                 for (motif = motifs; motif != NULL; motif = motif->next)
                     {
                     int looper;
-                    float maxDelta = 0;
-                    float printBefore = 0;
-                    float printAfter = 0;
-                    float absMaxDelta = 0;
-                    int printStart = 0;
-                    char printStrand;
-
+                    struct hit *hit = NULL;
                     for (looper = 0; looper < 2; looper++)
                         {
                         int i = max(start, bed->chromStart - motif->columnCount + 1);
@@ -917,26 +949,13 @@ while(!done)
                                 reverseComplement(buf, motif->columnCount);
                             double after = dnaMotifBitScoreWithMark0Bg(motif, buf, mark0);
                             verbose(4, "%s: %s: %f => %f\n", motif->name, buf, before, after);
-                            double delta = after - before;
-                            double absDelta = delta < 0 ? -delta : delta;
-                            if((before > 0 || after > 0) && absDelta >= 1)
-                                {
-                                if(maxDelta == 0 || absDelta > absMaxDelta)
-                                    {
-                                    maxDelta = delta;
-                                    absMaxDelta = absDelta;
-                                    printStart = i;
-                                    printBefore = before;
-                                    printAfter = after;
-                                    printStrand = strand;
-                                    }
-                                }
+                            addHit(&hit, before, after, i, strand);
                             }
                         }
-                    if(maxDelta)
+                    if(hit)
                         {
-                        fprintf(output, "%s\t%d\t%d\t%s\t%d\t%.2f\t%.2f\t%c\n", 
-                                bed->chrom, printStart, printStart + motif->columnCount, motif->name, 0, printBefore, printAfter, printStrand);
+                        fprintf(output, "%s\t%d\t%d\t%s\t%.2f\t%.2f\t%.2f\t%c\n", 
+                                bed->chrom, hit->start, hit->start + motif->columnCount, motif->name, hit->absDelta, hit->before, hit->after, hit->strand);
                         }
                     }
                 }

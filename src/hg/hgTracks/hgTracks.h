@@ -272,6 +272,7 @@ struct simpleFeature
     int start, end;			/* Start/end in browser coordinates. */
     int qStart, qEnd;			/* query start/end */
     int grayIx;                         /* Level of gray usually. */
+    int codonIndex;                     /* 1-based codon index (ignored if 0) */
     };
 
 /* Some details of how to draw linked features. */

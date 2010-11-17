@@ -1043,16 +1043,24 @@ if (gotCds && gotSeq)
     }
 else if (gotCds)
     {
+    char buf[256];
+    char *disabled = NULL;
+    safef(buf, sizeof(buf), "onchange='codonColoringChanged(\"%s\")'", name);
     puts("<P><B>Color track by codons:</B>");
     cgiMakeDropListFull(var, baseColorDrawGenomicOptionLabels,
 			baseColorDrawGenomicOptionValues,
 			ArraySize(baseColorDrawGenomicOptionLabels),
-			curValue, NULL);
+			curValue, buf);
 #ifndef BAM_CFG_UI_CHANGES
     printf("<BR>");
 #endif///ndef BAM_CFG_UI_CHANGES
     printf("<A HREF=\"%s\">Help on codon coloring</A><BR>",
 	   CDS_HELP_PAGE);
+    safef(buf, sizeof(buf), "%s.%s", name, CODON_NUMBERING_SUFFIX);
+    puts("<br /><b>Show codon numbering</b>:\n");
+    if(curOpt == baseColorDrawOff)
+        disabled = "disabled";
+    cgiMakeCheckBoxJS(buf, cartUsualBoolean(cart, buf, FALSE), disabled);
     }
 else if (gotSeq)
     {
@@ -6890,7 +6898,6 @@ if(setting != NULL)
             }
         else
             hPrintf("<a href='%s' TARGET=ucscHelp><img height='16' width='16' src='../images/%s'></a>\n",url,icon);
-        freeMem(url);
         }
     else
         hPrintf("<img height='16' width='16' src='%s'>\n",icon);

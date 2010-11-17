@@ -1347,4 +1347,19 @@ __attribute__((format(printf, 1, 2)))
 #define BITS_ARE_ON( flags,bits) (((flags) & (bits)) == (bits))
 #define BITS_ARE_OFF(flags,bits) (((flags) & (bits)) == 0)
 
+// It is sometimes useful to distinguish between 3 "boolean" states: TRUE, FALSE and UNKNOWN
+enum enumBool
+    {
+    beUnknown=0,              // Not yet set
+    ebYes=1,                  // already set to TRUE
+    ebNo=-1                   // already set to FALSE
+    };
+#define SET_TO_YES(ebool) { (ebool) = ebYes; }
+#define SET_TO_NO(ebool)  { (ebool) = ebNo; }
+#define IS_YES(ebool)     ((ebool) == ebYes)
+#define IS_NO(ebool)      ((ebool) == ebNo)
+#define IS_KNOWN(ebool)   (IS_YES(ebool) || IS_NO(ebool))
+#define IS_TRUE           IS_YES
+#define IS_FALSE          IS_NO
+
 #endif /* COMMON_H */
