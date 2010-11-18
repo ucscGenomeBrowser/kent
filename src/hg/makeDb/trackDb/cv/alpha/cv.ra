@@ -6983,7 +6983,7 @@ term PSU-m
 tag PSU
 type lab
 label Hardison - Penn State University
-description (Provisional) Hardison - Penn State Universityy
+description Hardison - Penn State Universityy
 labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
@@ -7210,9 +7210,10 @@ projectName UNC-Giddings
 term typeOfTerm
 type typeOfTerm
 label Term types defined
-description Types of terms used frequently in controlled vocabulary or metadata should be defined here. (Provisional)
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here. 
 searchable no
-cvDefined no
+cvDefined yes
+validation cv.ra
 hidden yes
 
 term accession
@@ -7305,7 +7306,7 @@ validate cv
 term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
-description The ENCODE project declares specific data freezes for data to be used in papers or analysis. (Provisional)
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 searchable select
 cvDefined no
 validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
