@@ -15,7 +15,7 @@ priority 0
 type bed 3
 wgEncode 1
 noInherit on
-superTrack wgEncodeRnaSeqSuper
+superTrack wgEncodeRnaSeqSuper dense
 
     track wgEncodeCshlShortRnaSeqViewAlignments
     shortLabel Alignments
@@ -365,7 +365,7 @@ superTrack wgEncodeRnaSeqSuper
     track wgEncodeCshlShortRnaSeqViewTransfrags
     shortLabel Transfrags
     view 1-Transfrags
-    visibility full 
+    visibility pack 
     subTrack wgEncodeCshlShortRnaSeq
     scoreFilter 0
     scoreFilterLimits 0:1000
