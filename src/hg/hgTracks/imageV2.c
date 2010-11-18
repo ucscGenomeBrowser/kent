@@ -1628,7 +1628,7 @@ else
                 tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
-        hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN'></p>",trackName,(slice->link == NULL?"inset ":""));
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
