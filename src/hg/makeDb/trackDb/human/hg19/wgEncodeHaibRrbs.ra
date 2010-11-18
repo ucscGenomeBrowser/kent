@@ -24,13 +24,14 @@ itemRgb on
 noInherit on
 origAssembly hg19
 
-
-        track wgEncodeHaibRrbsViewSites
-        release alpha
-	shortLabel Sites 
-        view Sites 
-        visibility dense
-        subTrack wgEncodeHaibMethylRrbs
+    track wgEncodeHaibRrbsViewSites
+    release alpha
+    shortLabel Sites 
+    view Sites 
+    visibility dense
+    subTrack wgEncodeHaibMethylRrbs
+    scoreFilter 10
+    scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
         release alpha
