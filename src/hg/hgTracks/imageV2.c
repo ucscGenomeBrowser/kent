@@ -184,7 +184,7 @@ if (kindOfChild != kocOrphan)
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(track->tdb->subtracks));
 
 // Configuring?
-if (!configurable)
+if (!configurable || track->hasUi == FALSE)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
 else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
     matchRegex(track->track, "^snp[0-9]+$") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
@@ -1787,11 +1787,7 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
     struct track *track = hashFindVal(trackHash, trackName);
     if(track)
-        {
-        struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,stButton);
-        boolean configurable = (slice->link != NULL || sliceGetMap(slice,FALSE) != NULL); // sliceMap is overkill since stButton has no image
-        jsonTdbSettingsBuild(&jsonTdbVars, track, configurable);
-        }
+        jsonTdbSettingsBuild(&jsonTdbVars, track, TRUE);
 #endif
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
