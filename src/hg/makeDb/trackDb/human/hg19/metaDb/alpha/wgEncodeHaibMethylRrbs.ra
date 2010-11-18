@@ -9,8 +9,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep1
@@ -28,8 +28,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg04449UwstamgrowprotSitesRep2
@@ -47,8 +47,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep1
@@ -66,8 +66,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg04450UwstamgrowprotSitesRep2
@@ -85,8 +85,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep1
@@ -104,8 +104,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg09309UwstamgrowprotSitesRep2
@@ -123,8 +123,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep1
@@ -142,8 +142,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg09319UwstamgrowprotSitesRep2
@@ -161,8 +161,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep1
@@ -180,8 +180,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1217
 tableName wgEncodeHaibMethylRrbsAg10803UwstamgrowprotSitesRep2
@@ -199,8 +199,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1218
 tableName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep1
@@ -218,8 +218,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1218
 tableName wgEncodeHaibMethylRrbsCmkUwstamgrowprotSitesRep2
@@ -237,8 +237,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1218
 tableName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep1
@@ -256,8 +256,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1218
 tableName wgEncodeHaibMethylRrbsFibroblOpenchromgrowprotSitesRep2
@@ -275,8 +275,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1174
 tableName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep1
@@ -294,8 +294,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1174
 tableName wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
@@ -313,8 +313,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep1
@@ -332,8 +332,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HudsonAlpha
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsGm12878ximatHudsonalphagrowprotSitesRep2
@@ -351,8 +351,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep1
@@ -370,8 +370,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12891HudsonalphagrowprotSitesRep2
@@ -389,8 +389,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep1
@@ -408,8 +408,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsGm12892HudsonalphagrowprotSitesRep2
@@ -427,8 +427,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1219
 tableName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep1
@@ -446,8 +446,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1219
 tableName wgEncodeHaibMethylRrbsGm19239OpenchromgrowprotSitesRep2
@@ -465,8 +465,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1219
 tableName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep1
@@ -484,8 +484,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1219
 tableName wgEncodeHaibMethylRrbsGm19240OpenchromgrowprotSitesRep2
@@ -503,8 +503,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep1
@@ -522,8 +522,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsH1hescHudsonalphagrowprotSitesRep2
@@ -541,8 +541,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1219
 tableName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep1
@@ -560,8 +560,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1219
 tableName wgEncodeHaibMethylRrbsHaeUwstamgrowprotSitesRep2
@@ -579,8 +579,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1219
 tableName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep1
@@ -598,8 +598,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1219
 tableName wgEncodeHaibMethylRrbsHcfUwstamgrowprotSitesRep2
@@ -617,8 +617,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep1
@@ -636,8 +636,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHcmUwstamgrowprotSitesRep2
@@ -655,8 +655,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep1
@@ -674,8 +674,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHcmUwstamgrowthprotocolSitesRep2
@@ -693,8 +693,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep1
@@ -712,8 +712,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsHcpeUwstamgrowprotSitesRep2
@@ -731,8 +731,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 1
 subId 1222
 tableName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep1
@@ -750,8 +750,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 2
 subId 1222
 tableName wgEncodeHaibMethylRrbsHct116YalegrowprotSitesRep2
@@ -769,8 +769,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep1
@@ -788,8 +788,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHeeUwstamgrowprotSitesRep2
@@ -807,8 +807,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep1
@@ -826,8 +826,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHeeUwstamgrowthprotocolSitesRep2
@@ -845,8 +845,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep1
@@ -864,8 +864,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHek293UwstamgrowprotSitesRep2
@@ -883,8 +883,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep1
@@ -902,8 +902,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHek293UwstamgrowthprotocolSitesRep2
@@ -921,8 +921,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep1
@@ -940,8 +940,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsHek293YalegrowprotSitesRep2
@@ -959,8 +959,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep1
@@ -978,8 +978,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsHelas3HudsonalphagrowprotSitesRep2
@@ -997,8 +997,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep1
@@ -1016,8 +1016,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsHepg2HudsonalphagrowprotSitesRep2
@@ -1035,8 +1035,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep1
@@ -1054,8 +1054,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHepg2OpenchromatingrowthprotocolSitesRep2
@@ -1073,8 +1073,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1220
 tableName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep1
@@ -1092,8 +1092,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1220
 tableName wgEncodeHaibMethylRrbsHepg2OpenchromgrowprotSitesRep2
@@ -1111,8 +1111,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep1
@@ -1130,8 +1130,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHipeUwstamgrowprotSitesRep2
@@ -1149,8 +1149,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep1
@@ -1168,8 +1168,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHipeUwstamgrowthprotocolSitesRep2
@@ -1187,8 +1187,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep1
@@ -1206,8 +1206,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHmecUwstamgrowprotSitesRep2
@@ -1225,8 +1225,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep1
@@ -1244,8 +1244,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHmecUwstamgrowthprotocolSitesRep2
@@ -1263,8 +1263,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep1
@@ -1282,8 +1282,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowprotSitesRep2
@@ -1301,8 +1301,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep1
@@ -1320,8 +1320,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHnpceUwstamgrowthprotocolSitesRep2
@@ -1339,8 +1339,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep1
@@ -1358,8 +1358,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsHpaeUwstamgrowprotSitesRep2
@@ -1377,8 +1377,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep1
@@ -1396,8 +1396,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHrceUwstamgrowprotSitesRep2
@@ -1415,8 +1415,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1221
 tableName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep1
@@ -1434,8 +1434,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1221
 tableName wgEncodeHaibMethylRrbsHrceUwstamgrowthprotocolSitesRep2
@@ -1453,8 +1453,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1222
 tableName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep1
@@ -1472,8 +1472,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1222
 tableName wgEncodeHaibMethylRrbsHreUwstamgrowprotSitesRep2
@@ -1491,8 +1491,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1222
 tableName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep1
@@ -1510,8 +1510,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1222
 tableName wgEncodeHaibMethylRrbsHrpeUwstamgrowprotSitesRep2
@@ -1529,8 +1529,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 2471
 tableName wgEncodeHaibMethylRrbsHsmmSitesRep1
@@ -1548,8 +1548,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 2471
 tableName wgEncodeHaibMethylRrbsHsmmSitesRep2
@@ -1567,8 +1567,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsHsmmSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 3
 subId 2471
 tableName wgEncodeHaibMethylRrbsHsmmSitesRep3
@@ -1586,8 +1586,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1218
 tableName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep1
@@ -1605,8 +1605,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1218
 tableName wgEncodeHaibMethylRrbsHsmmtOpenchromgrowprotSitesRep2
@@ -1624,8 +1624,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep1
@@ -1643,8 +1643,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsImr90UwstamgrowprotSitesRep2
@@ -1662,8 +1662,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1222
 tableName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep1
@@ -1681,8 +1681,8 @@ dateUnrestricted 2011-04-15
 fileName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1222
 tableName wgEncodeHaibMethylRrbsJurkatUwstamgrowprotSitesRep2
@@ -1700,8 +1700,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 1
 subId 1152
 tableName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep1
@@ -1719,8 +1719,8 @@ dateUnrestricted 2011-04-16
 fileName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy HudsonAlpha
 project wgEncode
-protocol HAIB-p1
 replicate 2
 subId 1152
 tableName wgEncodeHaibMethylRrbsK562HudsonalphagrowprotSitesRep2
@@ -1738,8 +1738,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep1
@@ -1757,8 +1757,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsLncapAndroOpenchromgrowprotSitesRep2
@@ -1776,8 +1776,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS(Struhl)
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep1
@@ -1795,8 +1795,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS(Struhl)
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesTamYalestruhlgrowprotSitesRep2
@@ -1814,8 +1814,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS(Struhl)
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep1
@@ -1833,8 +1833,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS(Struhl)
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsMcf10aesYalestruhlgrowprotSitesRep2
@@ -1852,8 +1852,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 1223
 tableName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep1
@@ -1871,8 +1871,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsMcf7OpenchromgrowprotSitesRep2
@@ -1890,8 +1890,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1223
 tableName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep1
@@ -1909,8 +1909,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsMcf7UwstamgrowprotSitesRep2
@@ -1928,8 +1928,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep1
@@ -1947,8 +1947,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsMcf7YalegrowprotSitesRep2
@@ -1966,8 +1966,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 2471
 tableName wgEncodeHaibMethylRrbsMelanoSitesRep1
@@ -1985,8 +1985,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 2471
 tableName wgEncodeHaibMethylRrbsMelanoSitesRep2
@@ -2004,8 +2004,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsMelanoSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 3
 subId 2471
 tableName wgEncodeHaibMethylRrbsMelanoSitesRep3
@@ -2023,8 +2023,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1223
 tableName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep1
@@ -2042,8 +2042,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsNb4UwstamgrowprotSitesRep2
@@ -2061,8 +2061,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep1
@@ -2080,8 +2080,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsNhaUwstamgrowprotSitesRep2
@@ -2099,8 +2099,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1223
 tableName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep1
@@ -2118,8 +2118,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsNhbeUwstamgrowprotSitesRep2
@@ -2137,8 +2137,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep1
@@ -2156,8 +2156,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsNhdfneoUwstamgrowprotSitesRep2
@@ -2175,8 +2175,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsNt2d1UwstamgrowprotSitesRep2
@@ -2194,8 +2194,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 1
 subId 1223
 tableName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep1
@@ -2213,8 +2213,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Stanford
 project wgEncode
-protocol Yale_TFBS
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsNt2d1YalegrowprotSitesRep2
@@ -2232,8 +2232,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 2395
 tableName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep1
@@ -2251,8 +2251,8 @@ dateUnrestricted 2011-08-15
 fileName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 2395
 tableName wgEncodeHaibMethylRrbsOsteoblOpenchromgrowprotSitesRep2
@@ -2270,8 +2270,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 2471
 tableName wgEncodeHaibMethylRrbsPanisletsSitesRep1
@@ -2289,8 +2289,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 2471
 tableName wgEncodeHaibMethylRrbsPanisletsSitesRep2
@@ -2308,8 +2308,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep3.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 3
 subId 2471
 tableName wgEncodeHaibMethylRrbsPanisletsSitesRep3
@@ -2327,8 +2327,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep4.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 4
 subId 2471
 tableName wgEncodeHaibMethylRrbsPanisletsSitesRep4
@@ -2346,8 +2346,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsPanisletsSitesRep5.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 5
 subId 2471
 tableName wgEncodeHaibMethylRrbsPanisletsSitesRep5
@@ -2365,8 +2365,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsProgfibSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 1
 subId 2471
 tableName wgEncodeHaibMethylRrbsProgfibSitesRep1
@@ -2384,8 +2384,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsProgfibSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy Duke
 project wgEncode
-protocol Open_Chromatin
 replicate 2
 subId 2471
 tableName wgEncodeHaibMethylRrbsProgfibSitesRep2
@@ -2403,8 +2403,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsRptecSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2471
 tableName wgEncodeHaibMethylRrbsRptecSitesRep1
@@ -2422,8 +2422,8 @@ dateUnrestricted 2011-06-29
 fileName wgEncodeHaibMethylRrbsRptecSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2471
 tableName wgEncodeHaibMethylRrbsRptecSitesRep2
@@ -2441,8 +2441,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep1
@@ -2460,8 +2460,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsSaecUwstamgrowprotSitesRep2
@@ -2479,8 +2479,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 1223
 tableName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep1
@@ -2498,8 +2498,8 @@ dateUnrestricted 2011-04-13
 fileName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 1223
 tableName wgEncodeHaibMethylRrbsSkmcUwstamgrowprotSitesRep2
@@ -2517,8 +2517,8 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 1
 subId 2348
 tableName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep1
@@ -2536,12 +2536,12 @@ dateUnrestricted 2011-06-22
 fileName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2.bed9.gz
 grant Myers
 lab HudsonAlpha
+obtainedBy UW
 project wgEncode
-protocol UW_Stam
 replicate 2
 subId 2348
 tableName wgEncodeHaibMethylRrbsSknshraUwstamgrowprotSitesRep2
 treatment None
 view Sites
 
-# MAGIC: 1224538227
+# MAGIC: -1292842855
