@@ -6215,35 +6215,6 @@ tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
 type protocol
 
-##### Growth Protocols used, still of type protocol
-##### This is being used by Hudson Alpha and possibly CSHL.  They would like the cell type and the term to be able to link to the correct protocol
-
-
-term UW_Stam
-tag uwStamGrowProt
-description Cells grown using the UW_Stam growth protocol.
-type protocol
-
-term Duke/UNC/UTA/EBI_Open_Chromatin
-tag openChromGrowProt
-label Duke/UNC/UTA/EBI Open Chromatin
-description Cells grown using the Open_Chromatin growth protocol.
-type protocol
-
-term HudsonAlpha
-tag hudsonAlphaGrowProt
-description Cells grown using the HudsonAlpha growth protocol.
-type protocol
-
-term Yale_TFBS
-tag YaleGrowProt
-description Cells grown using the Yale TFBS growth protocol.
-type protocol
-
-term Yale_TFBS(Struhl)
-tag YaleStruhlGrowProt
-description Cells grown using the Yale TFBS(Struhl) growth protocol.
-type protocol
 
 ### phase
 term G1
@@ -7012,7 +6983,7 @@ term PSU-m
 tag PSU
 type lab
 label Hardison - Penn State University
-description (Provisional) Hardison - Penn State Universityy
+description Hardison - Penn State Universityy
 labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
@@ -7239,9 +7210,10 @@ projectName UNC-Giddings
 term typeOfTerm
 type typeOfTerm
 label Term types defined
-description Types of terms used frequently in controlled vocabulary or metadata should be defined here. (Provisional)
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here. 
 searchable no
-cvDefined no
+cvDefined yes
+validation cv.ra
 hidden yes
 
 term accession
@@ -7334,7 +7306,7 @@ validate cv
 term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
-description The ENCODE project declares specific data freezes for data to be used in papers or analysis. (Provisional)
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 searchable select
 cvDefined no
 validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"

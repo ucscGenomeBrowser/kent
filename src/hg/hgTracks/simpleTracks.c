@@ -9218,11 +9218,6 @@ if (!tg->limitedVisSet)
         int h;
         int maxHeight = maximumTrackHeight(tg);
 
-        // rightClick change vis should not fail quite so often.  Let larger tracks be displayed.
-        // TODO: Alternatively, give some feedback to user why rightclick failed to change visibility.
-        if (trackImgOnly && cgiVarExists("hgt.trackNameFilter"))
-            maxHeight *= 2;
-
         if (vis == tvHide)
             {
             tg->height = 0;

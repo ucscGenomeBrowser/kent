@@ -9,7 +9,7 @@ subGroup3 rep Replicate rep1=1 rep2=2
 subGroup4 rnaExtract RNA_Extract longPolyA=PolyA+
 subGroup5 localization Localization cell=Whole_Cell cytosol=Cytosol 
 dimensions dimensionY=localization dimensionX=cellType dimensionA=rep
-dimensionAchecked rep1
+dimensionAchecked rep1,rep2
 sortOrder cellType=+ localization=+ rnaExtract=+ view=+ rep=+
 controlledVocabulary encode/cv.ra cellType=cell localization=localization rnaExtract=rnaExtract
 dragAndDrop subTracks
@@ -17,12 +17,12 @@ priority 0
 type bed 3
 noInherit on
 wgEncode 1
-superTrack wgEncodeRnaSeqSuper
+superTrack wgEncodeRnaSeqSuper dense
 
     track wgEncodeGisRnaSeqViewPlusRawSignal
     shortLabel Plus Raw Signal
     view 1-PlusRawSignal
-    visibility dense
+    visibility full
     subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -40,7 +40,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqK562CytosolPapPlusRawRep2
-        parent wgEncodeGisRnaSeqViewPlusRawSignal off
+        parent wgEncodeGisRnaSeqViewPlusRawSignal on
         shortLabel K562 cyto pA+ + 2
         longLabel K562 cytosol polyA+ RNA-seq Plus raw signal rep 2 from ENCODE/GIS
         subGroups view=1-PlusRawSignal cellType=3-K562 rnaExtract=longPolyA rep=rep2 localization=cytosol
@@ -69,7 +69,7 @@ superTrack wgEncodeRnaSeqSuper
     track wgEncodeGisRnaSeqViewMinusRawSignal
     shortLabel Minus Raw Signal
     view 2-MinusRawSignal
-    visibility dense
+    visibility full 
     subTrack wgEncodeGisRnaSeq
     maxHeightPixels 100:24:16
     windowingFunction maximum
@@ -87,7 +87,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqK562CytosolPapMinusRawRep2
-        parent wgEncodeGisRnaSeqViewMinusRawSignal off
+        parent wgEncodeGisRnaSeqViewMinusRawSignal on
         shortLabel K562 cyto pA+ - 2
         longLabel K562 cytosol polyA+ RNA-seq Minus raw signal rep 2 from ENCODE/GIS
         subGroups view=2-MinusRawSignal cellType=3-K562 rnaExtract=longPolyA rep=rep2 localization=cytosol
@@ -116,7 +116,7 @@ superTrack wgEncodeRnaSeqSuper
     track wgEncodeGisRnaSeqViewAlignments
     shortLabel Alignments
     view 4-Alignments
-    visibility hide
+    visibility dense
     subTrack wgEncodeGisRnaSeq
     type bam
     pairEndsByName on
@@ -134,7 +134,7 @@ superTrack wgEncodeRnaSeqSuper
     color 46,0,184
 
         track wgEncodeGisRnaSeqK562CytosolPapAlnRep1
-        parent wgEncodeGisRnaSeqViewAlignments off
+        parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel K562 cyto pA+ 1
         longLabel K562 cytosol polyA+ RNA-seq Alignments rep 1 from ENCODE/GIS
         subGroups view=4-Alignments cellType=3-K562 rnaExtract=longPolyA rep=rep1 localization=cytosol
@@ -143,7 +143,7 @@ superTrack wgEncodeRnaSeqSuper
         # subId=1401 dateSubmitted=2010-07-01
 
         track wgEncodeGisRnaSeqK562CytosolPapAlnRep2
-        parent wgEncodeGisRnaSeqViewAlignments off
+        parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel K562 cyto pA+ 2
         longLabel K562 cytosol polyA+ RNA-seq Alignments rep 2 from ENCODE/GIS
         subGroups view=4-Alignments cellType=3-K562 rnaExtract=longPolyA rep=rep2 localization=cytosol
@@ -153,7 +153,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeGisRnaSeqGm12878CytosolPapAlnRep1
-        parent wgEncodeGisRnaSeqViewAlignments off
+        parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel GM12 cyto pA+ 1
         longLabel GM12878 cytosol polyA+ RNA-seq Alignments rep 1 from ENCODE/GIS
         subGroups view=4-Alignments cellType=1-GM12878  rnaExtract=longPolyA rep=rep1 localization=cytosol
@@ -163,7 +163,7 @@ superTrack wgEncodeRnaSeqSuper
 
 
         track wgEncodeGisRnaSeqH1hescCellPapAlnRep1
-        parent wgEncodeGisRnaSeqViewAlignments off
+        parent wgEncodeGisRnaSeqViewAlignments on
         shortLabel H1ES cell pA+ 1
         longLabel H1-hESC polyA+ RNA-seq Alignments rep 1 from ENCODE/GIS
         subGroups view=4-Alignments cellType=2-H1hESC  rnaExtract=longPolyA rep=rep1 localization=cell
