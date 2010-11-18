@@ -2145,7 +2145,8 @@ if (withLeftLabels && psOutput == NULL)
             curImgTrack = imgBoxTrackFind(theImgBox,NULL,RULER_TRACK_NAME);
             curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
             }
-        drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
+        else if(!trackImgOnly) // Side buttons only need to be drawn when drawing page with js advanced features off  // TODO: Should remove wasted pixels too
+            drawGrayButtonBox(hvgSide, trackTabX, y, trackTabWidth, height, TRUE);
         mapBoxTrackUi(hvgSide, trackTabX, y, trackTabWidth, height,
               RULER_TRACK_NAME, RULER_TRACK_LABEL, "ruler");
         y += height + 1;
@@ -2165,12 +2166,6 @@ if (withLeftLabels && psOutput == NULL)
             if (track->group != lastGroup)
                 grayButtonGroup = !grayButtonGroup;
             lastGroup = track->group;
-            if (grayButtonGroup)
-                drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
-            else
-                drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth,
-                            h, track->hasUi);
             if(theImgBox)
                 {
                 // Mini-buttons (side label slice) for tracks
@@ -2179,6 +2174,14 @@ if (withLeftLabels && psOutput == NULL)
                 curImgTrack = imgBoxTrackFind(theImgBox,track->tdb,NULL);
                 curSlice    = imgTrackSliceUpdateOrAdd(curImgTrack,stButton,NULL,NULL,sliceWidth[stButton],sliceHeight,sliceOffsetX[stButton],sliceOffsetY); // flatTracksButton is all html, no jpg
                 }
+            else if(!trackImgOnly) // Side buttons only need to be drawn when drawing page with js advanced features off
+                {
+                if (grayButtonGroup)
+                    drawGrayButtonBox(hvgSide, trackTabX, yStart, trackTabWidth, h, track->hasUi);
+                else
+                    drawBlueButtonBox(hvgSide, trackTabX, yStart, trackTabWidth, h, track->hasUi);
+                }
+
             if (track->hasUi)
                 {
                 if(tdbIsCompositeChild(track->tdb))
@@ -4455,6 +4458,12 @@ hPrintf("<CENTER>\n");
 
 if(trackImgOnly)
     {
+    struct track *ideoTrack = chromIdeoTrack(trackList);
+    if (ideoTrack)
+        {
+        ideoTrack->limitedVisSet = TRUE;
+        ideoTrack->limitedVis = tvHide; /* Don't draw in main gif. */
+        }
     makeActiveImage(trackList, psOutput);
     fflush(stdout);
     return;  // bail out b/c we are done
@@ -5120,8 +5129,11 @@ withIdeogram = cartUsualBoolean(cart, "ideogram", TRUE);
 withLeftLabels = cartUsualBoolean(cart, "leftLabels", TRUE);
 withCenterLabels = cartUsualBoolean(cart, "centerLabels", TRUE);
 withGuidelines = cartUsualBoolean(cart, "guidelines", TRUE);
-withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
-withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
+if (!cgiVarExists("hgt.imageV1"))
+    {
+    withNextItemArrows = cartUsualBoolean(cart, "nextItemArrows", FALSE);
+    withNextExonArrows = cartUsualBoolean(cart, "nextExonArrows", TRUE);
+    }
 if (!hIsGsidServer())
     {
     revCmplDisp = cartUsualBooleanDb(cart, database, REV_CMPL_DISP, FALSE);
@@ -5524,7 +5536,6 @@ if (cartUsualBoolean(cart, "hgt.trackImgOnly", FALSE))
     withNextExonArrows = FALSE;
     hgFindMatches = NULL;     // XXXX necessary ???
     }
-
 hWrites(commonCssStyles());
 jsIncludeFile("jquery.js", NULL);
 jsIncludeFile("utils.js", NULL);
