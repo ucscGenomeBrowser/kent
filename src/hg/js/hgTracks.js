@@ -1569,6 +1569,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                         else
                             document.TrackHeaderForm.submit();
                     } else {
+                        // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons, so this is dead code, but
+                        // I'm leaving it in case we try to implement this functionality in the future.
                         jQuery('body').css('cursor', '');
                         $.ajax({
                                    type: "GET",
@@ -2046,19 +2048,21 @@ function handleUpdateTrackMap(response, status)
             $('#chrom').attr('src', b[1]);
         }
     }
-    if(this.newVisibility) {
-        var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script><\!-- trackDbJson -->/m;
-        a = re.exec(response);
-        if(a && a[1]) {
-            var json = eval("(" + a[1] + ")");
+    var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script><\!-- trackDbJson -->/m;
+    a = re.exec(response);
+    if(a && a[1]) {
+        var json = eval("(" + a[1] + ")");
+        if(json && json[this.id]) {
             var visibility = visibilityStrsOrder[json[this.id].visibility];
-            if(this.newVisibility != visibility) {
+            if(this.newVisibility && this.newVisibility != visibility) {
                 alert("Unable to change visibility to " + this.newVisibility + ".\n\nThis occurs when there are too many items to display the track in " + this.newVisibility + " mode.");
-                updateVisibility(this.id, visibility);
             }
+            updateVisibility(this.id, visibility);
         } else {
-            alert("trackDbJson is missing from the response");
+            showWarning("Invalid trackDbJson received from the server");
         }
+    } else {
+        showWarning("trackDbJson is missing from the response");
     }
     if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
