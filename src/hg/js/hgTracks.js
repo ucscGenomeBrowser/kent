@@ -1569,6 +1569,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                         else
                             document.TrackHeaderForm.submit();
                     } else {
+                        // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons, so this is dead code, but
+                        // I'm leaving it in case we try to implement this functionality in the future.
                         jQuery('body').css('cursor', '');
                         $.ajax({
                                    type: "GET",
@@ -1649,7 +1651,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
         var selectUpdated = updateVisibility(id, cmd);
-        
+
         // Now change the track image
         if(imageV2 && cmd == 'hide')
         {
@@ -1828,17 +1830,17 @@ function loadContextMenu(img)
                 //menu.push({"view image": {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }}});
             }
 
-            if(selectedMenuItem && rec) {
-            // Add cfg options at just shy of end...
-            var o = new Object();
-            if(tdbIsLeaf(rec)) {
-                o[makeImgTag("wrench.png") + " Configure " + rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
-                if(rec.parentTrack != undefined)
-                    o[makeImgTag("folderWrench.png") + " Configure " + rec.parentLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-            } else
-                o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
-            menu.push($.contextMenu.separator);
-            menu.push(o);
+            if(selectedMenuItem && rec && rec["configureBy"] != 'none') {
+                // Add cfg options at just shy of end...
+                var o = new Object();
+                if(tdbIsLeaf(rec)) {
+                    o[makeImgTag("wrench.png") + " Configure " + rec.shortLabel] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_popup"); return true; }};
+                    if(rec.parentTrack != undefined)
+                        o[makeImgTag("folderWrench.png") + " Configure " + rec.parentLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                } else
+                    o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
+                menu.push($.contextMenu.separator);
+                menu.push(o);
                 menu.push($.contextMenu.separator);
             }
 
@@ -1921,21 +1923,25 @@ function _hgTrackUiPopUp(trackName,descriptionOnly)
         myLink += "&descriptionOnly=1";
 
     var rec = trackDbJson[trackName];
-    if(!descriptionOnly && rec != null && rec["configureByPopup"] != null && !rec["configureByPopup"]) {
-        window.location = myLink;
-    } else {
-        myLink += "&ajax=1";
-        $.ajax({
-                   type: "GET",
-                   url: myLink,
-                   dataType: "html",
-                   trueSuccess: handleTrackUi,
-                   success: catchErrorOrDispatch,
-                   error: errorHandler,
-                   cmd: selectedMenuItem,
-                   cache: false
-               });
-        }
+    if(!descriptionOnly && rec != null && rec["configureBy"] != null) {
+        if (rec["configureBy"] == 'none')
+            return;
+        else if (rec["configureBy"] == 'clickThrough') {
+            window.location = myLink;
+            return;
+        }  // default falls through to configureBy popup
+    }
+    myLink += "&ajax=1";
+    $.ajax({
+                type: "GET",
+                url: myLink,
+                dataType: "html",
+                trueSuccess: handleTrackUi,
+                success: catchErrorOrDispatch,
+                error: errorHandler,
+                cmd: selectedMenuItem,
+                cache: false
+            });
 }
 
 function hgTrackUiPopUp(trackName,descriptionOnly)
@@ -2046,19 +2052,21 @@ function handleUpdateTrackMap(response, status)
             $('#chrom').attr('src', b[1]);
         }
     }
-    if(this.newVisibility) {
-        var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script><\!-- trackDbJson -->/m;
-        a = re.exec(response);
-        if(a && a[1]) {
-            var json = eval("(" + a[1] + ")");
+    var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script>\n<\!-- trackDbJson -->/m;
+    a = re.exec(response);
+    if(a && a[1]) {
+        var json = eval("(" + a[1] + ")");
+        if(json && json[this.id]) {
             var visibility = visibilityStrsOrder[json[this.id].visibility];
-            if(this.newVisibility != visibility) {
+            if(this.newVisibility && this.newVisibility != visibility) {
                 alert("Unable to change visibility to " + this.newVisibility + ".\n\nThis occurs when there are too many items to display the track in " + this.newVisibility + " mode.");
-                updateVisibility(this.id, visibility);
             }
+            updateVisibility(this.id, visibility);
         } else {
-            alert("trackDbJson is missing from the response");
+            showWarning("Invalid trackDbJson received from the server");
         }
+    } else {
+        showWarning("trackDbJson is missing from the response");
     }
     if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
@@ -2532,7 +2540,7 @@ function windowOpenFailedMsg()
 
 function updateVisibility(track, visibility)
 {
-// Updates visibility state in trackDbJson and any visible elements on the page.    
+// Updates visibility state in trackDbJson and any visible elements on the page.
 // returns true if we modify at least one select in the group list
     var rec = trackDbJson[track];
     var selectUpdated = false;
