@@ -24,6 +24,7 @@ var selectedMenuItem;       // currently choosen context menu item (via context 
 var browser;                // browser ("msie", "safari" etc.)
 var mapIsUpdateable = true;
 var currentMapItem;
+var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");     // map browser numeric visibility codes to strings
 
 function initVars(img)
 {
@@ -1568,6 +1569,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                         else
                             document.TrackHeaderForm.submit();
                     } else {
+                        // XXXX This attempt to "update whole track image in place" didn't work for a variety of reasons, so this is dead code, but
+                        // I'm leaving it in case we try to implement this functionality in the future.
                         jQuery('body').css('cursor', '');
                         $.ajax({
                                    type: "GET",
@@ -1647,15 +1650,8 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
         // First change the select on our form:
         var id = selectedMenuItem.id;
         var rec = trackDbJson[id];
-        var selectUpdated = false;
-        $("select[name=" + id + "]").each(function(t) {
-            $(this).val(cmd);
-            selectUpdated = true;
-        });
-        if(rec) {
-            rec.localVisibility = cmd;
-        }
-
+        var selectUpdated = updateVisibility(id, cmd);
+        
         // Now change the track image
         if(imageV2 && cmd == 'hide')
         {
@@ -1698,6 +1694,7 @@ function contextMenuHitFinish(menuItemClicked, menuObject, cmd)
                        success: catchErrorOrDispatch,
                        error: errorHandler,
                        cmd: cmd,
+                       newVisibility: cmd,
                        id: id,
                        loadingId: loadingId,
                        cache: false
@@ -1757,7 +1754,6 @@ function loadContextMenu(img)
                 } else {
                     if(rec) {
                         // XXXX check current state from a hidden variable.
-                        var visibilityStrsOrder = new Array("hide", "dense", "full", "pack", "squish");
                         var visibilityStrs = new Array("hide", "dense", "squish", "pack", "full");
                         for (i in visibilityStrs) {
                             // XXXX use maxVisibility and change hgTracks so it can hide subtracks
@@ -1971,12 +1967,7 @@ function hgTrackUiPopCfgOk(popObj, trackName)
         } else {
             // Keep local state in sync if user changed visibility
             if(newVis != null) {
-                $("select[name=" + trackName + "]").each(function(t) {
-                    $(this).val(newVis);
-                });
-                if(rec) {
-                    rec.localVisibility = newVis;
-                }
+                updateVisibility(trackName, newVis);
             }
             var urlData = varHashToQueryString(changedVars);
             if(mapIsUpdateable) {
@@ -2056,6 +2047,22 @@ function handleUpdateTrackMap(response, status)
         if(b[1]) {
             $('#chrom').attr('src', b[1]);
         }
+    }
+    var re = /<\!-- trackDbJson -->\n<script>var trackDbJson = ([\S\s]+)<\/script><\!-- trackDbJson -->/m;
+    a = re.exec(response);
+    if(a && a[1]) {
+        var json = eval("(" + a[1] + ")");
+        if(json && json[this.id]) {
+            var visibility = visibilityStrsOrder[json[this.id].visibility];
+            if(this.newVisibility && this.newVisibility != visibility) {
+                alert("Unable to change visibility to " + this.newVisibility + ".\n\nThis occurs when there are too many items to display the track in " + this.newVisibility + " mode.");
+            }
+            updateVisibility(this.id, visibility);
+        } else {
+            showWarning("Invalid trackDbJson received from the server");
+        }
+    } else {
+        showWarning("trackDbJson is missing from the response");
     }
     if(imageV2 && this.id && this.cmd && this.cmd != 'wholeImage' && this.cmd != 'selectWholeGene') {
           // Extract <TR id='tr_ID'>...</TR> and update appropriate row in imgTbl;
@@ -2525,4 +2532,20 @@ function updateMetaDataHelpLinks(index)
 function windowOpenFailedMsg()
 {
     alert("Your web browser prevented us from opening a new window.\n\nYou need to change your browser settings to allow popups from " + document.domain);
+}
+
+function updateVisibility(track, visibility)
+{
+// Updates visibility state in trackDbJson and any visible elements on the page.    
+// returns true if we modify at least one select in the group list
+    var rec = trackDbJson[track];
+    var selectUpdated = false;
+    $("select[name=" + track + "]").each(function(t) {
+                                          $(this).val(visibility);
+                                          selectUpdated = true;
+                                      });
+    if(rec) {
+        rec.localVisibility = visibility;
+    }
+    return selectUpdated;
 }
