@@ -480,6 +480,22 @@ subId 1814
 tableName wgEncodeUwDgfHepg2Raw
 view RawSignal
 
+metaObject wgEncodeUwDgfHepg2RawData
+objType file
+cell HepG2
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfHepg2RawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 632
+view RawData
+
 metaObject wgEncodeUwDgfHepg2Sig
 objType table
 cell HepG2
@@ -1084,6 +1100,22 @@ subId 1795
 tableName wgEncodeUwDgfSknshraRaw
 view RawSignal
 
+metaObject wgEncodeUwDgfSknshraRawData
+objType file
+cell SK-N-SH_RA
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-02
+dateUnrestricted 2010-07-02
+fileName wgEncodeUwDgfSknshraRawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 631
+view RawData
+
 metaObject wgEncodeUwDgfSknshraSig
 objType table
 cell SK-N-SH_RA
@@ -1178,6 +1210,22 @@ subId 1816
 tableName wgEncodeUwDgfTh1Raw
 view RawSignal
 
+metaObject wgEncodeUwDgfTh1RawData
+objType file
+cell Th1
+composite wgEncodeUwDgf
+dataType DnaseDgf
+dataVersion ENCODE Sep 2009 Freeze
+dateSubmitted 2009-10-05
+dateUnrestricted 2010-07-05
+fileName wgEncodeUwDgfTh1RawData.fastq.gz
+grant Stam
+lab UW
+origAssembly hg18
+project wgEncode
+subId 637
+view RawData
+
 metaObject wgEncodeUwDgfTh1Sig
 objType table
 cell Th1
@@ -1196,4 +1244,4 @@ subId 1816
 tableName wgEncodeUwDgfTh1Sig
 view Signal
 
-# MAGIC: -1730278219
+# MAGIC: -873844582
