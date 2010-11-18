@@ -1724,7 +1724,8 @@ function loadContextMenu(img)
     var menu = img.contextMenu(
         function() {
             var menu = [];
-            var selectedImg = " <img src='../images/greenCheck.png' height='10' width='10' />";
+            var selectedImg = makeImgTag("greenChecksm.png");
+            var blankImg    = makeImgTag("invisible16.png");
             var done = false;
             if(selectedMenuItem && selectedMenuItem.id != null) {
                 var href = selectedMenuItem.href;
@@ -1742,10 +1743,9 @@ function loadContextMenu(img)
                 if(cur) {
                     select.children().each(function(index, o) {
                                                var title = $(this).val();
-                                               var str = title;
-                                               if(title == cur) {
-                                                   str += selectedImg;
-                                               }
+                                               var str =blankImg + " " + title;
+                                               if(title == cur)
+                                                   str = selectedImg + " " + title;
                                                var o = new Object();
                                                o[str] = {onclick: function (menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, title); return true;}};
                                                menu.push(o);
@@ -1758,14 +1758,14 @@ function loadContextMenu(img)
                         for (i in visibilityStrs) {
                             // XXXX use maxVisibility and change hgTracks so it can hide subtracks
                             var o = new Object();
-                            var str = visibilityStrs[i];
-                            if(rec.canPack || (str != "pack" && str != "squish")) {
+                            var str = blankImg + " " + visibilityStrs[i];
+                            if(rec.canPack || (visibilityStrs[i] != "pack" && visibilityStrs[i] != "squish")) {
                                 if(rec.localVisibility) {
-                                    if(rec.localVisibility == str) {
-                                        str += selectedImg;
+                                    if(visibilityStrs[i] == rec.localVisibility) {
+                                        str = selectedImg + " " + visibilityStrs[i];
                                     }
-                                } else if(str == visibilityStrsOrder[rec.visibility]) {
-                                    str += selectedImg;
+                                } else if(visibilityStrs[i] == visibilityStrsOrder[rec.visibility]) {
+                                    str = selectedImg + " " + visibilityStrs[i];
                                 }
                                 o[str] = {onclick: makeContextMenuHitCallback(visibilityStrs[i])};
                                 menu.push(o);
@@ -1841,12 +1841,12 @@ function loadContextMenu(img)
                     o[makeImgTag("folderWrench.png") + " Configure " + rec.shortLabel + " track set..."] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "hgTrackUi_follow"); return true; }};
                 menu.push($.contextMenu.separator);
                 menu.push(o);
-                menu.push($.contextMenu.separator);
             }
 
             // Add view image at end
             var o = new Object();
             o[makeImgTag("eye.png") + " View image"] = {onclick: function(menuItemClicked, menuObject) { contextMenuHit(menuItemClicked, menuObject, "viewImg"); return true; }};
+            menu.push($.contextMenu.separator);
             menu.push(o);
 
             return menu;
