@@ -566,7 +566,7 @@ else
             break;
 
         struct track *track = (struct track *) ptr->val;
-        jsonTdbSettingsBuild(&jsonTdbVars, track);
+        jsonTdbSettingsBuild(&jsonTdbVars, track, FALSE); // FALSE: No configuration from track search
 
         if (tdbIsFolder(track->tdb)) // supertrack
             hPrintf("<tr bgcolor='%s' valign='top' class='found'>\n","#EED5B7");//"#DEB887");//"#E6B426");//#FCECC0//COLOR_LTGREY);//COLOR_LTGREEN);//COLOR_TRACKLIST_LEVEL1);
