@@ -147,58 +147,64 @@ return kindOfChild;
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 {
 if (*jsonTdbSettingsString==NULL)
     {
     *jsonTdbSettingsString = newDyString(1024);
-    dyStringPrintf(*jsonTdbSettingsString, "<script>var trackDbJson = {\nruler: {shortLabel: 'ruler', longLabel: 'Base Position Controls', canPack: 0, visibility: %d},\n", rulerMode);
+    dyStringPrintf(*jsonTdbSettingsString, "<!-- trackDbJson -->\n<script>var trackDbJson = {\n\"ruler\": {\"shortLabel\": \"ruler\", \"longLabel\": \"Base Position Controls\", \"canPack\": 0, \"visibility\": %d},\n", rulerMode);
     }
 else
     dyStringAppend(*jsonTdbSettingsString, ",\n");
 
 // track name and type
-dyStringPrintf(*jsonTdbSettingsString, "\t%s: {", track->track);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\ttype: '%s',", track->tdb->type);
+dyStringPrintf(*jsonTdbSettingsString, "\t\"%s\": {", track->track);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"type\": \"%s\",", track->tdb->type);
 
 // Tell which kind of parent and which kind of child
 enum kindOfParent kindOfParent = tdbKindOfParent(track->tdb);
 enum kindOfChild  kindOfChild  = tdbKindOfChild(track->tdb);
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tkindOfParent: %d,\n\t\tkindOfChild: %d,",kindOfParent,kindOfChild);
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"kindOfParent\": %d,\n\t\t\"kindOfChild\": %d,",kindOfParent,kindOfChild);
 
 // Tell something about the parent and/or children
 if (kindOfChild != kocOrphan)
     {
     struct trackDb *parentTdb = (kindOfChild == kocFolderContent ? track->tdb->parent :tdbGetContainer(track->tdb));
 
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tparentTrack: '%s',\n\t\tparentLabel: '%s',",
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"parentTrack\": \"%s\",\n\t\t\"parentLabel\": \"%s\",",
                     parentTdb->track, javaScriptLiteralEncode(parentTdb->shortLabel));
     if (kindOfChild != kocFolderContent && !track->canPack)
         {
-        dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshouldPack: 0,"); // default vis is full, but pack is an option
+        dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shouldPack\": 0,"); // default vis is full, but pack is an option
         track->canPack = parentTdb->canPack;
         }
     }
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\thasChildren: %d,", slCount(track->tdb->subtracks));
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(track->tdb->subtracks));
 
-// Now some miscellaneous tidbids
-if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
+// Configuring?
+if (!configurable)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
+else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
     matchRegex(track->track, "^snp[0-9]+$") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\tconfigureByPopup: false,");
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
+else
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
+
+// Remote access by URL?
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\turl: '%s',", trackDbSetting(track->tdb, "url"));
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
 
 // Close with some standard vars
-dyStringPrintf(*jsonTdbSettingsString, "\n\t\tshortLabel: '%s',\n\t\tlongLabel: '%s',\n\t\tcanPack: %d,\n\t\tvisibility: %d\n\t}",
+dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"longLabel\": \"%s\",\n\t\t\"canPack\": %d,\n\t\t\"visibility\": %d\n\t}",
     javaScriptLiteralEncode(track->shortLabel), javaScriptLiteralEncode(track->longLabel), track->canPack, track->limitedVis);
 }
 
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
 // Closes and returns the contents of the jsonTdbSettingsString
 {
-dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n");
+dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n<!-- trackDbJson -->\n");
 return dyStringCannibalize(jsonTdbSettingsString);
 }
 
@@ -1622,7 +1628,7 @@ else
                 tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
-        hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN'></p>",trackName,(slice->link == NULL?"inset ":""));
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
@@ -1779,15 +1785,14 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-    if (!trackImgOnly)
+    struct track *track = hashFindVal(trackHash, trackName);
+    if(track)
         {
-        struct track *track = hashFindVal(trackHash, trackName);
-        if(track)
-            jsonTdbSettingsBuild(&jsonTdbVars, track);
+        struct imgSlice *slice = imgTrackSliceGetByType(imgTrack,stButton);
+        boolean configurable = (slice->link != NULL || sliceGetMap(slice,FALSE) != NULL); // sliceMap is overkill since stButton has no image
+        jsonTdbSettingsBuild(&jsonTdbVars, track, configurable);
         }
 #endif
-    //if(verbose && imgTrack->order == 3)
-    //    imgTrackShow(NULL,imgTrack,0);
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
         (imgTrack->centerLabelSeen != clAlways?" clOpt":""),
@@ -1846,7 +1851,7 @@ hPrintf("</TABLE>\n");
 hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
-if (!trackImgOnly && jsonTdbVars != NULL)
+if (jsonTdbVars != NULL)
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
 #endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }
