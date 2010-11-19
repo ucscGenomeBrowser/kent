@@ -38,7 +38,6 @@ wgEncode 1
         longLabel GM06990 Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=GM06990
         type broadPeak
-        origAssembly hg18
         # subId=1682 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSknshraHotspots
@@ -47,7 +46,6 @@ wgEncode 1
         longLabel SK-N-SH_RA Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKNSHRA
         type broadPeak
-        origAssembly hg18
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Hotspots
@@ -56,7 +54,6 @@ wgEncode 1
         longLabel HepG2 Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HepG2
         type broadPeak
-        origAssembly hg18
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
 
@@ -66,7 +63,6 @@ wgEncode 1
         longLabel K562 Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=K562
         type broadPeak
-        origAssembly hg18
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
 
@@ -76,7 +72,6 @@ wgEncode 1
         longLabel Th1 Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=Th1
         type broadPeak
-        origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSkmcHotspots
@@ -85,7 +80,6 @@ wgEncode 1
         longLabel SKMC Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=SKMC
         type broadPeak
-        origAssembly hg19
         # subId=2045 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfNhdfadHotspots
@@ -94,7 +88,6 @@ wgEncode 1
         longLabel NHDF-Ad Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=NHDF-Ad
         type broadPeak
-        origAssembly hg19
         # subId=2046 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfH7esHotspots
@@ -103,7 +96,6 @@ wgEncode 1
         longLabel H7-hESC Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=H7es
         type broadPeak
-        origAssembly hg19
         # subId=2047 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHaeHotspots
@@ -112,7 +104,6 @@ wgEncode 1
         longLabel HAEpiC Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HAE
         type broadPeak
-        origAssembly hg19
         # subId=2048 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmfHotspots
@@ -121,7 +112,6 @@ wgEncode 1
         longLabel HMF Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMF
         type broadPeak
-        origAssembly hg19
         # subId=2049 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHcpeHotspots
@@ -130,7 +120,6 @@ wgEncode 1
         longLabel HCPEpiC Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HCPE
         type broadPeak
-        origAssembly hg19
         # subId=2050 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmvecdbladHotspots
@@ -139,7 +128,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Hotspots from ENCODE/UW
         subGroups view=Hotspots cellType=HMVECdBlAd
         type broadPeak
-        origAssembly hg19
         # subId=2051 dateSubmitted=2010-07-25
 
 
@@ -160,7 +148,6 @@ wgEncode 1
         longLabel GM06990 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=GM06990
         type narrowPeak
-        origAssembly hg18
         # subId=1682 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSknshraPk
@@ -169,7 +156,6 @@ wgEncode 1
         longLabel SK-N-SH_RA Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=SKNSHRA
         type narrowPeak
-        origAssembly hg18
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Pk
@@ -178,7 +164,6 @@ wgEncode 1
         longLabel HepG2 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HepG2
         type narrowPeak
-        origAssembly hg18
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
 
@@ -188,7 +173,6 @@ wgEncode 1
         longLabel K562 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=K562
         type narrowPeak
-        origAssembly hg18
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
 
@@ -198,7 +182,6 @@ wgEncode 1
         longLabel Th1 Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=Th1
         type narrowPeak
-        origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSkmcPk
@@ -207,7 +190,6 @@ wgEncode 1
         longLabel SKMC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=SKMC
         type narrowPeak
-        origAssembly hg19
         # subId=2045 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfNhdfadPk
@@ -216,7 +198,6 @@ wgEncode 1
         longLabel NHDF-Ad Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=NHDF-Ad
         type narrowPeak
-        origAssembly hg19
         # subId=2046 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfH7esPk
@@ -225,7 +206,6 @@ wgEncode 1
         longLabel H7-hESC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=H7es
         type narrowPeak
-        origAssembly hg19
         # subId=2047 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHaePk
@@ -234,7 +214,6 @@ wgEncode 1
         longLabel HAEpiC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HAE
         type narrowPeak
-        origAssembly hg19
         # subId=2048 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmfPk
@@ -243,7 +222,6 @@ wgEncode 1
         longLabel HMF Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HMF
         type narrowPeak
-        origAssembly hg19
         # subId=2049 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHcpePk
@@ -252,7 +230,6 @@ wgEncode 1
         longLabel HCPEpiC Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HCPE
         type narrowPeak
-        origAssembly hg19
         # subId=2050 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmvecdbladPk
@@ -261,7 +238,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Peaks (FDR 1%) from ENCODE/UW
         subGroups view=Peaks cellType=HMVECdBlAd
         type narrowPeak
-        origAssembly hg19
         # subId=2051 dateSubmitted=2010-07-25
 
 
@@ -283,7 +259,6 @@ wgEncode 1
         longLabel GM06990 Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=GM06990
         type bigWig 1.000000 9745.000000
-        origAssembly hg18
         # subId=1682 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSknshraSig
@@ -292,7 +267,6 @@ wgEncode 1
         longLabel SK-N-SH_RA Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=SKNSHRA
         type bigWig 1.000000 6713.000000
-        origAssembly hg18
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Sig
@@ -301,7 +275,6 @@ wgEncode 1
         longLabel HepG2 Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=HepG2
         type bigWig 1.000000 23188.000000
-        origAssembly hg18
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
 
@@ -311,7 +284,6 @@ wgEncode 1
         longLabel K562 Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=K562
         type bigWig 1.000000 70530.000000
-        origAssembly hg18
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
 
@@ -321,7 +293,6 @@ wgEncode 1
         longLabel Th1 Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=Th1
         type bigWig 1.000000 15550.000000
-        origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSkmcSig
@@ -330,7 +301,6 @@ wgEncode 1
         longLabel SKMC Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=SKMC
         type bigWig 1.000000 31113.000000
-        origAssembly hg19
         # subId=2045 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfNhdfadSig
@@ -339,7 +309,6 @@ wgEncode 1
         longLabel NHDF-Ad Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=NHDF-Ad
         type bigWig 1.000000 25248.000000
-        origAssembly hg19
         # subId=2046 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfH7esSig
@@ -348,7 +317,6 @@ wgEncode 1
         longLabel H7-hESC Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=H7es
         type bigWig 1.000000 99682.000000
-        origAssembly hg19
         # subId=2047 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHaeSig
@@ -357,7 +325,6 @@ wgEncode 1
         longLabel HAEpiC Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=HAE
         type bigWig 1.000000 30034.000000
-        origAssembly hg19
         # subId=2048 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmfSig
@@ -366,7 +333,6 @@ wgEncode 1
         longLabel HMF Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=HMF
         type bigWig 1.000000 77693.000000
-        origAssembly hg19
         # subId=2049 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHcpeSig
@@ -375,7 +341,6 @@ wgEncode 1
         longLabel HCPEpiC Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=HCPE
         type bigWig 1.000000 28712.000000
-        origAssembly hg19
         # subId=2050 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmvecdbladSig
@@ -384,7 +349,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Per-base signal from ENCODE/UW
         subGroups view=Signal cellType=HMVECdBlAd
         type bigWig 1.000000 34767.000000
-        origAssembly hg19
         # subId=2051 dateSubmitted=2010-07-25
 
 
@@ -406,7 +370,6 @@ wgEncode 1
         longLabel GM06990 Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=GM06990
         type bigWig 1.000000 57178.000000
-        origAssembly hg18
         # subId=1682 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSknshraRaw
@@ -415,7 +378,6 @@ wgEncode 1
         longLabel SK-N-SH_RA Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=SKNSHRA
         type bigWig 1.000000 36298.000000
-        origAssembly hg18
         # subId=1795 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfHepg2Raw
@@ -424,7 +386,6 @@ wgEncode 1
         longLabel HepG2 Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=HepG2
         type bigWig 1.000000 102081.000000
-        origAssembly hg18
         color 189,0,157
         # subId=1814 dateSubmitted=2010-06-21
 
@@ -434,7 +395,6 @@ wgEncode 1
         longLabel K562 Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=K562
         type bigWig 1.000000 218367.000000
-        origAssembly hg18
         color 46,0,184
         # subId=1815 dateSubmitted=2010-06-21
 
@@ -444,7 +404,6 @@ wgEncode 1
         longLabel Th1 Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=Th1
         type bigWig 1.000000 108696.000000
-        origAssembly hg18
         # subId=1816 dateSubmitted=2010-06-21
 
         track wgEncodeUwDgfSkmcRaw
@@ -453,7 +412,6 @@ wgEncode 1
         longLabel SKMC Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=SKMC
         type bigWig 1.000000 178347.000000
-        origAssembly hg19
         # subId=2045 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfNhdfadRaw
@@ -462,7 +420,6 @@ wgEncode 1
         longLabel NHDF-Ad Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=NHDF-Ad
         type bigWig 1.000000 91896.000000
-        origAssembly hg19
         # subId=2046 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfH7esRaw
@@ -471,7 +428,6 @@ wgEncode 1
         longLabel H7-hESC Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=H7es
         type bigWig 1.000000 326258.000000
-        origAssembly hg19
         # subId=2047 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHaeRaw
@@ -480,7 +436,6 @@ wgEncode 1
         longLabel HAEpiC Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=HAE
         type bigWig 1.000000 110519.000000
-        origAssembly hg19
         # subId=2048 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmfRaw
@@ -489,7 +444,6 @@ wgEncode 1
         longLabel HMF Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=HMF
         type bigWig 1.000000 220489.000000
-        origAssembly hg19
         # subId=2049 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHcpeRaw
@@ -498,7 +452,6 @@ wgEncode 1
         longLabel HCPEpiC Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=HCPE
         type bigWig 1.000000 96000.000000
-        origAssembly hg19
         # subId=2050 dateSubmitted=2010-07-25
 
         track wgEncodeUwDgfHmvecdbladRaw
@@ -507,7 +460,6 @@ wgEncode 1
         longLabel HMVEC-dBl-Ad Digital Genomic Footprinting Raw signal from ENCODE/UW
         subGroups view=zRaw cellType=HMVECdBlAd
         type bigWig 1.000000 145895.000000
-        origAssembly hg19
         # subId=2051 dateSubmitted=2010-07-25
 
 
