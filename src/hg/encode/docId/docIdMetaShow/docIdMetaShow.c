@@ -78,9 +78,9 @@ while ((row = sqlNextRow(sr)) != NULL)
         docIdGetPath(buffer, docIdDir, docIdType, NULL) , 
         docIdDecorate(docIdSub->ix));
     printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>",   mdbObjFindValue(mdbObj, "assembly"),mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
-    printf("<td><a href=docIdMetaShow?docId=%s&meta=""> metadata</a></td>", buffer);
+    printf("<td><a href=docIdMetaShow?docId=%s&db=%s&meta=""> metadata</a></td>", buffer, database);
     printf("<td> %s</td>", docIdSub->valVersion);
-    printf("<td><a href=docIdMetaShow?docId=%s&report=""> report</a></td>", buffer);
+    printf("<td><a href=docIdMetaShow?docId=%s&db=%s&report=""> report</a></td>", buffer, database);
     printf("</tr>\n");
     }
 
@@ -103,7 +103,7 @@ trashDirFile(&tn, "docId", "meta", ".txt");
 char *tempFile = tn.forCgi;
 boolean beenHere = FALSE;
 
-printf("<a href=docIdMetaShow> Return </a><BR>");
+printf("<a href=docIdMetaShow?db=%s> Return </a><BR>", database);
 safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -153,7 +153,7 @@ struct sqlResult *sr;
 char **row;
 boolean beenHere = FALSE;
 
-printf("<a href=docIdMetaShow> Return </a><BR>");
+printf("<a href=docIdMetaShow?db=%s> Return </a><BR>", database);
 safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
 sr = sqlGetResult(conn, query);
 while ((row = sqlNextRow(sr)) != NULL)
@@ -196,6 +196,11 @@ int main(int argc, char *argv[])
 /* Process command line. */
 {
 cgiSpoof(&argc, argv);
+if (cgiVarExists("db"))
+    {
+    database=cgiOptionalString("db");
+    }
+
 cartEmptyShell(doMiddle, hUserCookie(), excludeVars, oldVars);
 return 0;
 }

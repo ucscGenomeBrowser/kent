@@ -207,15 +207,12 @@ if (sameString(dot, "bam") ||
 return FALSE;
 }
 
-static char *decorateType(char *type, char *submitPath)
+char *docDecorateType(char *type)
 // add .gz for types that should be compressed
 {
 if (sameString(type, "bam") ||
     sameString(type, "bigWig"))
         return type;
-
-if ((submitPath != NULL) && !endsWith(submitPath, ".gz"))
-    return type;
 
 char buffer[10 * 1024];
 
@@ -228,7 +225,7 @@ char *docIdGetPath(char *docId, char *docIdDir, char *type, char *submitPath)
 {
 char *ptr = docId + strlen(docId) - 1;
 struct dyString *dy = newDyString(20);
-char *suffix = decorateType(type, submitPath);
+char *suffix = docDecorateType(type);
 
 dyStringPrintf(dy, "%s/", docIdDir);
 for (; ptr != docId; ptr--)
