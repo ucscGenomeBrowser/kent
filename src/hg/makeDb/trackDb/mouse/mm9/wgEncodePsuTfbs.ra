@@ -15,6 +15,7 @@ sortOrder cellType=+ factor=+ sex=+ age=+ strain=+ control=+ view=+
 controlledVocabulary encode/cv.ra cellType factor sex age strain control
 dragAndDrop subTracks
 visibilityViewDefaults  Peaks=dense Signal=full
+noInherit on
 priority 0
 type bed 3
 wgEncode 1
