@@ -7384,20 +7384,21 @@ validate Exists
 term fragLength
 type typeOfTerm
 label Mean Length of DNA fragments
-description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. (Provisional)
+description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. 
 searchable no
 cvDefined no
-# Collapse with fragSize?
-#Cricket fill in with Special story
+# Cricket's special story (11/19/10): in fields.ra we have fragLength
+# and medianFragLength.  fragLength and medianFragLength appear to be
+# redundant, and should be collapsed into fragLength
+
 
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description (Provisional)
+description length of GIS DNA PET fragments, which has different values than fragLength
 searchable no
 cvDefined yes
-# WHAT IS THIS?
-#Cricket fill in with special story
+# With more investigation, this could be collapsed in with fragLength (11/19/10)
 
 term freezeDate
 type typeOfTerm
