@@ -35,7 +35,7 @@ orderUrl http://ccr.coriell.org/Sections/Search/Sample_Detail.aspx?Ref=GM12878&P
 karyotype relatively normal
 lineage International HapMap Project - CEPH/Utah - European Caucasion; Epstein-Barr Virus
 termId BTO:0002026 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0002026
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0002026
 color 153,38,0
 sex F
 tier 1
@@ -53,7 +53,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 termId BTO:0000664
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000664
 color 46,0,184
 sex F
 tier 1
@@ -71,7 +71,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 karyotype cancer
 lineage "The continuous cell line K-562 was established by Lozzio and Lozzio from the pleural effusion of a 53-year-old female with chronic myelogenous leukemia in terminal blast crises." - ATCC
 termId BTO:0000664
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000664
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000664
 color 46,0,184
 sex F
 tier 1
@@ -89,7 +89,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000559
 color 189,0,157
 sex M
 tier 2
@@ -107,7 +107,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage endoderm
 karyotype cancer
 termId BTO:0000559
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000559
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000559
 color 189,0,157
 sex M
 tier 2
@@ -125,7 +125,7 @@ orderUrl http://www.atcc.org/ATCCAdvancedCatalogSearch/ProductDetails/tabid/452/
 lineage ectoderm
 karyotype cancer
 termId BTO:0000568
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000568
 color 0,119,158
 sex F
 tier 2
@@ -143,7 +143,7 @@ protocol HeLa-S3:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_
 #lineage ectoderm
 #karyotype cancer
 #termId BTO:0000568
-#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000568
+#termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000568
 #color 0,119,158
 #tier 3
 #protocol Protocol:HeLa-S3_protocol.pdf HeLa-S3_IFN_Crawford:HeLa-S3_IFN_Crawford_protocol.pdf
@@ -160,7 +160,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&carea=DCEA1B392
 lineage mesoderm
 karyotype normal
 termId BTO:0001949
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001949
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0001949
 color 224,75,0
 sex U
 tier 2
@@ -178,7 +178,7 @@ orderUrl https://bcprd.lonza.com/shop/b2c/display/(xcm=lonza_b2b&layout=5.1-6_1_
 lineage ectoderm
 karyotype normal
 termId BTO:0000375
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0000375
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0000375
 color 179,0,134
 sex F
 tier 3
@@ -196,7 +196,7 @@ orderUrl http://www.cellulardynamics.com/
 lineage embryonic stem cells
 karyotype normal
 termId CL:0000007
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL%3A0000007&termName=early%20embryonic%20cell
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=CL&termId=CL0000007&termName=early%20embryonic%20cell
 color 0,107,27
 sex M
 tier 1
@@ -217,7 +217,7 @@ vendorName DSMZ
 vendorId 162
 orderUrl http://www.dsmz.de/human_and_animal_cell_lines/info.php?dsmz_nr=162&term=162&highlight=
 termId BTO:0001521 (non-specific)
-termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO%3A0001521&termName=pancreatic%20adenocarcinoma%20cell%20line
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO0001521
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:8988T_Crawford_protocol.pdf
 
 term A549
@@ -3660,7 +3660,7 @@ lab Bernstein
 lots 383111
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me1(Dot_plot):human_H3K4me1_validation_Bernstein.pdf
+validation H3K4me1(Dot_blot):human_H3K4me1_validation_Bernstein.pdf
 
 term H3K4me2
 tag H3K4me2
@@ -3675,7 +3675,7 @@ lab Bernstein
 lots 56293
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me2(Dot_plot):human_H3K4me2_validation_Bernstein.pdf
+validation H3K4me2(Dot_blot):human_H3K4me2_validation_Bernstein.pdf
 
 term H3K4me3
 tag H3K4me3
@@ -3693,7 +3693,7 @@ lab Bernstein
 lots 498616(Abcam:ab8580), 331024(Abcam:ab8580), R0903B0054(Millipore:07-473)
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K4me3(Dot_plot):human_H3K4me3_validation_Bernstein.pdf
+validation H3K4me3(Dot_blot):human_H3K4me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K4me3B
@@ -3771,7 +3771,7 @@ orderUrl http://www.abcam.com/index.html?datasheet=8898
 lab Farnham
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K9me3(Dot_plot):human_H3K9me3_validation_Bernstein.pdf
+validation H3K9me3(Dot_blot):human_H3K9me3_validation_Bernstein.pdf
 
 term H3K27ac
 tag H3K27ac
@@ -3786,7 +3786,7 @@ lab Bernstein
 lots 31456
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K27ac(Dot_plot):human_H3K27ac_validation_Bernstein.pdf
+validation H3K27ac(Dot_blot):human_H3K27ac_validation_Bernstein.pdf
 
 term H3K27me3
 tag H3K27me3
@@ -3801,7 +3801,7 @@ lab Bernstein
 lots DAM1387952
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K27me3(Dot_plot):human_H3K27me3_validation_Bernstein.pdf
+validation H3K27me3(Dot_blot):human_H3K27me3_validation_Bernstein.pdf
 
 ##This does not appear in metaDb
 term H3K27me3B
@@ -3833,7 +3833,7 @@ lab Bernstein
 lots 136353
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K36me3(Dot_plot):human_H3K36me3_validation_Bernstein.pdf
+validation H3K36me3(Dot_blot):human_H3K36me3_validation_Bernstein.pdf
 
 term H3K36me3B
 tag H3K36me3B
@@ -3864,7 +3864,7 @@ lab Bernstein
 lots 177/0100800
 targetId GeneCard:GC01M148078
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01M148078
-validation H3K79me2(Dot_plot):human_H3K79me2_validation_Bernstein.pdf
+validation H3K79me2(Dot_blot):human_H3K79me2_validation_Bernstein.pdf
 
 term H4K20me1
 tag H4K20me1
@@ -3879,7 +3879,7 @@ lab Bernstein
 lots 104513
 targetId GeneCard:GC01P148070
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC01P148070
-validation H4K20me1(Dot_plot):human_H4K20me1_validation_Bernstein.pdf
+validation H4K20me1(Dot_blot):human_H4K20me1_validation_Bernstein.pdf
 
 term HA-E2F1
 tag HAE2F1
@@ -6215,35 +6215,6 @@ tag V0416102
 description 2x10^7 cells, fragmentation by probe-in sonicator, one 15-cycle round of PCR (Myers)
 type protocol
 
-##### Growth Protocols used, still of type protocol
-##### This is being used by Hudson Alpha and possibly CSHL.  They would like the cell type and the term to be able to link to the correct protocol
-
-
-term UW_Stam
-tag uwStamGrowProt
-description Cells grown using the UW_Stam growth protocol.
-type protocol
-
-term Duke/UNC/UTA/EBI_Open_Chromatin
-tag openChromGrowProt
-label Duke/UNC/UTA/EBI Open Chromatin
-description Cells grown using the Open_Chromatin growth protocol.
-type protocol
-
-term HudsonAlpha
-tag hudsonAlphaGrowProt
-description Cells grown using the HudsonAlpha growth protocol.
-type protocol
-
-term Yale_TFBS
-tag YaleGrowProt
-description Cells grown using the Yale TFBS growth protocol.
-type protocol
-
-term Yale_TFBS(Struhl)
-tag YaleStruhlGrowProt
-description Cells grown using the Yale TFBS(Struhl) growth protocol.
-type protocol
 
 ### phase
 term G1
@@ -7012,7 +6983,7 @@ term PSU-m
 tag PSU
 type lab
 label Hardison - Penn State University
-description (Provisional) Hardison - Penn State Universityy
+description Hardison - Penn State Universityy
 labInst PSU
 labPi Hardison
 labPiFull Ross Hardison
@@ -7239,9 +7210,10 @@ projectName UNC-Giddings
 term typeOfTerm
 type typeOfTerm
 label Term types defined
-description Types of terms used frequently in controlled vocabulary or metadata should be defined here. (Provisional)
+description Types of terms used frequently in controlled vocabulary or metadata should be defined here. 
 searchable no
-cvDefined no
+cvDefined yes
+validation cv.ra
 hidden yes
 
 term accession
@@ -7288,11 +7260,14 @@ validation [0-9][0-9][0-9][A-Z]*
 term cellType
 type typeOfTerm
 label Cell, tissue or DNA sample
-description Cell line or tissue used as the source of experimental material. (Provisional)
+description Cell line or tissue used as the source of experimental material.
 searchable select
 cvDefined yes
 validation cv
-### Warning should be term cell but this is already in localization!
+### Warning should be "term cell line", but the term here has to be a single 
+### word.  Or, "term cell line" in the cell type definitions should be 
+### "term cellType", but that requires changing a huge amount of existing code.
+### (11/18/10)
 
 term composite
 type typeOfTerm
@@ -7334,7 +7309,7 @@ validate cv
 term dataVersion
 type typeOfTerm
 label ENCODE Data Freeze
-description The ENCODE project declares specific data freezes for data to be used in papers or analysis. (Provisional)
+description The ENCODE project declares specific data freezes for data to be used in papers or analysis.
 searchable select
 cvDefined no
 validate ENCODE Three letter month and 4 digit year, we currently abuse this with the "post Month Year"
@@ -7494,7 +7469,7 @@ term labVersion
 type typeOfTerm
 label Lab specific details
 description Free text field for labs to record miscellaneous details of their experiments and submitted data sets.
-searchable select
+searchable freeText
 cvDefined no
 validate none
 
@@ -7647,7 +7622,7 @@ term softwareVersion
 type typeOfTerm
 label Lab specific informatics
 description A free-text field for a lab to declare the software and computational methods used in an experiment.
-searchable select
+searchable freeText
 cvDefined no
 validate none
 

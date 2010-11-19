@@ -147,7 +147,7 @@ return kindOfChild;
 
 /////////////////////////
 // JSON support.  Eventually the whole imgTbl could be written out as JSON
-void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track)
+void jsonTdbSettingsBuild(struct dyString **jsonTdbSettingsString, struct track *track, boolean configurable)
 // Creates then successively adds trackDb settings to the jsonTdbSettingsString
 // Initially pass in NULL pointer to a dyString to properly begin building
 {
@@ -183,10 +183,16 @@ if (kindOfChild != kocOrphan)
     }
 dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"hasChildren\": %d,", slCount(track->tdb->subtracks));
 
-// Now some miscellaneous tidbids
-if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
+// Configuring?
+if (!configurable || track->hasUi == FALSE)
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"none\",");
+else if (sameString(trackDbSettingClosestToHomeOrDefault(track->tdb, "configureByPopup",
     matchRegex(track->track, "^snp[0-9]+$") || matchRegex(track->track, "^cons[0-9]+way") || matchRegex(track->track, "^multiz") ? "off" : "on"), "off"))
-    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureByPopup\": false,");
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"clickThrough\",");
+else
+    dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"configureBy\": \"popup\",");
+
+// Remote access by URL?
 if (sameWord(track->tdb->type, "remote") && trackDbSetting(track->tdb, "url") != NULL)
     dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"url\": \"%s\",", trackDbSetting(track->tdb, "url"));
 
@@ -198,7 +204,7 @@ dyStringPrintf(*jsonTdbSettingsString, "\n\t\t\"shortLabel\": \"%s\",\n\t\t\"lon
 char *jsonTdbSettingsUse(struct dyString **jsonTdbSettingsString)
 // Closes and returns the contents of the jsonTdbSettingsString
 {
-dyStringAppend(*jsonTdbSettingsString, "}\n</script><!-- trackDbJson -->\n");
+dyStringAppend(*jsonTdbSettingsString, "}\n</script>\n<!-- trackDbJson -->\n");
 return dyStringCannibalize(jsonTdbSettingsString);
 }
 
@@ -1622,7 +1628,7 @@ else
                 tdb = tdbGetComposite(tdb);
             trackName = tdb->track;
             }
-        hPrintf(" width:9px; display:none;' class='%s btn btnN'></p>",trackName);
+        hPrintf(" width:9px; display:none;' class='%s %sbtn btnN'></p>",trackName,(slice->link == NULL?"inset ":""));
         }
     else
         hPrintf("width:%dpx;'></p>",slice->width);
@@ -1781,10 +1787,8 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 #if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
     struct track *track = hashFindVal(trackHash, trackName);
     if(track)
-        jsonTdbSettingsBuild(&jsonTdbVars, track);
+        jsonTdbSettingsBuild(&jsonTdbVars, track, TRUE);
 #endif
-    //if(verbose && imgTrack->order == 3)
-    //    imgTrackShow(NULL,imgTrack,0);
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
         (imgTrack->centerLabelSeen != clAlways?" clOpt":""),

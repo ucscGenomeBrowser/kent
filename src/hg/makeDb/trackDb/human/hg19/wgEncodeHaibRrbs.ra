@@ -9,8 +9,7 @@ subGroup1 cellType Cell_Line K562=K562&nbsp;<i>Tier1</i> GM12878=GM12878&nbsp;<i
 subGroup2 view View Sites=Sites
 subGroup3 rep Replicate rep1=1 rep2=2 rep3=3 rep4=4 rep5=5
 subGroup4 treatment Treatment None=None ANDRO=Methyltrienolone(androgen) TAM=Tamoxifen
-subGroup5 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Yale=Yale OPEN=Open_Chromatin
-#subGroup6 lab Obtained_From UW=UW Open=OPEN_Chromatin haib=Hudson_Alpha Yale=Yale
+subGroup5 obtainedBy Obtained_by UW=UW HAIB=Hudson_Alpha Stanford=Stanford Duke=Duke
 dimensions dimensionX=obtainedBy dimensionY=cellType dimensionD=rep dimensionC=treatment 
 dimensionCchecked None
 dimensionDchecked rep1
@@ -25,13 +24,14 @@ itemRgb on
 noInherit on
 origAssembly hg19
 
-
-        track wgEncodeHaibRrbsViewSites
-        release alpha
-	shortLabel Sites 
-        view Sites 
-        visibility dense
-        subTrack wgEncodeHaibMethylRrbs
+    track wgEncodeHaibRrbsViewSites
+    release alpha
+    shortLabel Sites 
+    view Sites 
+    visibility dense
+    subTrack wgEncodeHaibMethylRrbs
+    scoreFilter 10
+    scoreFilterLimits 0:1000
 
         track wgEncodeHaibMethylRrbsGm12878HudsonalphagrowprotSitesRep2
         release alpha
@@ -59,7 +59,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCT-116 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HCT-116 cells)
-        subGroups view=Sites cellType=HCT116 obtainedBy=Yale treatment=None rep=rep2
+        subGroups view=Sites cellType=HCT116 obtainedBy=Stanford treatment=None rep=rep2
         type bed 9
         # subId=1222 dateSubmitted=2010-07-15
 
@@ -122,7 +122,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HCT-116 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HCT-116 cells)
-        subGroups view=Sites cellType=HCT116 obtainedBy=Yale treatment=None rep=rep1
+        subGroups view=Sites cellType=HCT116 obtainedBy=Stanford treatment=None rep=rep1
         type bed 9
         # subId=1222 dateSubmitted=2010-07-15
 
@@ -131,7 +131,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NT2-D1 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in NT2-D1 cells)
-        subGroups view=Sites cellType=NT2D1 obtainedBy=Yale treatment=None rep=rep2
+        subGroups view=Sites cellType=NT2D1 obtainedBy=Stanford treatment=None rep=rep2
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
@@ -140,7 +140,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in MCF-7 cells)
-        subGroups view=Sites cellType=MCF7 obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=MCF7 obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
@@ -149,7 +149,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in MCF-7 cells)
-        subGroups view=Sites cellType=MCF7 obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=MCF7 obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
@@ -239,7 +239,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel NT2-D1 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in NT2-D1 cells)
-        subGroups view=Sites cellType=NT2D1 obtainedBy=Yale treatment=None rep=rep1
+        subGroups view=Sites cellType=NT2D1 obtainedBy=Stanford treatment=None rep=rep1
         type bed 9
         # subId=1223 dateSubmitted=2010-07-13
 
@@ -266,7 +266,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Fibrobl 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in Fibrobl cells)
-        subGroups view=Sites cellType=Fibrobl obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=Fibrobl obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         # subId=1218 dateSubmitted=2010-07-13
 
@@ -275,7 +275,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Fibrobl 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in Fibrobl cells)
-        subGroups view=Sites cellType=Fibrobl obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=Fibrobl obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         # subId=1218 dateSubmitted=2010-07-13
 
@@ -284,7 +284,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMMtube 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HSMMtube cells)
-        subGroups view=Sites cellType=HSMMt obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=HSMMt obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         # subId=1218 dateSubmitted=2010-07-13
 
@@ -293,7 +293,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMMtube 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HSMMtube cells)
-        subGroups view=Sites cellType=HSMMt obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=HSMMt obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         # subId=1218 dateSubmitted=2010-07-13
 
@@ -302,7 +302,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19239 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM19239 cells)
-        subGroups view=Sites cellType=GM19239 obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=GM19239 obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         # subId=1219 dateSubmitted=2010-07-13
 
@@ -311,7 +311,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19240 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM19240 cells)
-        subGroups view=Sites cellType=GM19240 obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=GM19240 obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         # subId=1219 dateSubmitted=2010-07-13
 
@@ -338,7 +338,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19240 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in GM19240 cells)
-        subGroups view=Sites cellType=GM19240 obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=GM19240 obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         # subId=1219 dateSubmitted=2010-07-13
 
@@ -365,7 +365,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel GM19239 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in GM19239 cells)
-        subGroups view=Sites cellType=GM19239 obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=GM19239 obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         # subId=1219 dateSubmitted=2010-07-13
 
@@ -706,7 +706,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HepG2 cells)
-        subGroups view=Sites cellType=HepG2 obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=HepG2 obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         color 189,0,157
         # subId=1220 dateSubmitted=2010-07-13
@@ -716,7 +716,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HepG2 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HepG2 cells)
-        subGroups view=Sites cellType=HepG2 obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=HepG2 obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         color 189,0,157
         # subId=1220 dateSubmitted=2010-07-13
@@ -744,7 +744,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEK293 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HEK293 cells)
-        subGroups view=Sites cellType=HEK293 obtainedBy=Yale treatment=None rep=rep2
+        subGroups view=Sites cellType=HEK293 obtainedBy=Stanford treatment=None rep=rep2
         type bed 9
         # subId=2348 dateSubmitted=2010-09-22
 
@@ -753,7 +753,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HEK293 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HEK293 cells)
-        subGroups view=Sites cellType=HEK293 obtainedBy=Yale treatment=None rep=rep1
+        subGroups view=Sites cellType=HEK293 obtainedBy=Stanford treatment=None rep=rep1
         type bed 9
         # subId=2348 dateSubmitted=2010-09-22
 
@@ -780,7 +780,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel LNCaP 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in LNCaP cells)
-        subGroups view=Sites cellType=LNCaP obtainedBy=OPEN treatment=ANDRO rep=rep1
+        subGroups view=Sites cellType=LNCaP obtainedBy=Duke treatment=ANDRO rep=rep1
         type bed 9
         color 0,119,158
         # subId=2348 dateSubmitted=2010-09-22
@@ -790,7 +790,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel LNCaP 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in LNCaP cells)
-        subGroups view=Sites cellType=LNCaP obtainedBy=OPEN treatment=ANDRO rep=rep2
+        subGroups view=Sites cellType=LNCaP obtainedBy=Duke treatment=ANDRO rep=rep2
         type bed 9
         color 0,119,158
         # subId=2348 dateSubmitted=2010-09-22
@@ -800,7 +800,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in MCF-7 cells)
-        subGroups view=Sites cellType=MCF7 obtainedBy=Yale treatment=None rep=rep2
+        subGroups view=Sites cellType=MCF7 obtainedBy=Stanford treatment=None rep=rep2
         type bed 9
         # subId=2348 dateSubmitted=2010-09-22
 
@@ -809,7 +809,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF-7 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in MCF-7 cells)
-        subGroups view=Sites cellType=MCF7 obtainedBy=Yale treatment=None rep=rep1
+        subGroups view=Sites cellType=MCF7 obtainedBy=Stanford treatment=None rep=rep1
         type bed 9
         # subId=2348 dateSubmitted=2010-09-22
 
@@ -872,7 +872,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in PanIslets cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=PanIslets treatment=None rep=rep2 
+        subGroups view=Sites obtainedBy=Duke cellType=PanIslets treatment=None rep=rep2 
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -881,7 +881,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 5
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 5 (in PanIslets cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=PanIslets treatment=None rep=rep5
+        subGroups view=Sites obtainedBy=Duke cellType=PanIslets treatment=None rep=rep5
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -890,7 +890,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 4
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 4 (in PanIslets cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=PanIslets treatment=None rep=rep4
+        subGroups view=Sites obtainedBy=Duke cellType=PanIslets treatment=None rep=rep4
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -899,7 +899,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 3
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 3 (in PanIslets cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=PanIslets treatment=None rep=rep3
+        subGroups view=Sites obtainedBy=Duke cellType=PanIslets treatment=None rep=rep3
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -908,7 +908,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel PanIslets 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in PanIslets cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=PanIslets treatment=None rep=rep1
+        subGroups view=Sites obtainedBy=Duke cellType=PanIslets treatment=None rep=rep1
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -917,7 +917,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Melano 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in Melano cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=MELANO treatment=None rep=rep1
+        subGroups view=Sites obtainedBy=Duke cellType=MELANO treatment=None rep=rep1
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -926,7 +926,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Melano 3
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 3 (in Melano cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=MELANO treatment=None rep=rep3
+        subGroups view=Sites obtainedBy=Duke cellType=MELANO treatment=None rep=rep3
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -935,7 +935,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Melano 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in Melano cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=MELANO treatment=None rep=rep2
+        subGroups view=Sites obtainedBy=Duke cellType=MELANO treatment=None rep=rep2
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -944,7 +944,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel ProgFib 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in ProgFib cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=ProgFib treatment=None rep=rep2
+        subGroups view=Sites obtainedBy=Duke cellType=ProgFib treatment=None rep=rep2
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -962,7 +962,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMM 3
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 3 (in HSMM cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=HSMM treatment=None rep=rep3
+        subGroups view=Sites obtainedBy=Duke cellType=HSMM treatment=None rep=rep3
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -971,7 +971,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMM 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in HSMM cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=HSMM treatment=None rep=rep2
+        subGroups view=Sites obtainedBy=Duke cellType=HSMM treatment=None rep=rep2
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -980,7 +980,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel HSMM 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in HSMM cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=HSMM treatment=None rep=rep1
+        subGroups view=Sites obtainedBy=Duke cellType=HSMM treatment=None rep=rep1
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -989,7 +989,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel ProgFib 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in ProgFib cells)
-        subGroups view=Sites obtainedBy=OPEN cellType=ProgFib treatment=None rep=rep1
+        subGroups view=Sites obtainedBy=Duke cellType=ProgFib treatment=None rep=rep1
         type bed 9
         # subId=2471 dateSubmitted=2010-09-29
 
@@ -1043,7 +1043,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in MCF10A-Er-Src cells)
-        subGroups view=Sites cellType=MCF10AES obtainedBy=Yale treatment=TAM rep=rep2
+        subGroups view=Sites cellType=MCF10AES obtainedBy=Stanford treatment=TAM rep=rep2
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
 
@@ -1052,7 +1052,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in MCF10A-Er-Src cells)
-        subGroups view=Sites cellType=MCF10AES obtainedBy=Yale treatment=TAM rep=rep1
+        subGroups view=Sites cellType=MCF10AES obtainedBy=Stanford treatment=TAM rep=rep1
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
 
@@ -1061,7 +1061,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in MCF10A-Er-Src cells)
-        subGroups view=Sites cellType=MCF10AES obtainedBy=Yale treatment=None rep=rep2
+        subGroups view=Sites cellType=MCF10AES obtainedBy=Stanford treatment=None rep=rep2
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
 
@@ -1070,7 +1070,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel MCF10A-Er-Src 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in MCF10A-Er-Src cells)
-        subGroups view=Sites cellType=MCF10AES obtainedBy=Yale treatment=None rep=rep1
+        subGroups view=Sites cellType=MCF10AES obtainedBy=Stanford treatment=None rep=rep1
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
 
@@ -1097,7 +1097,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Osteobl 1
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 1 (in Osteobl cells)
-        subGroups view=Sites cellType=Osteobl obtainedBy=OPEN treatment=None rep=rep1
+        subGroups view=Sites cellType=Osteobl obtainedBy=Duke treatment=None rep=rep1
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
 
@@ -1106,7 +1106,7 @@ origAssembly hg19
         parent wgEncodeHaibRrbsViewSites off
         shortLabel Osteobl 2
         longLabel ENCODE HudsonAlpha Methyl-RRBS Sites Replicate 2 (in Osteobl cells)
-        subGroups view=Sites cellType=Osteobl obtainedBy=OPEN treatment=None rep=rep2
+        subGroups view=Sites cellType=Osteobl obtainedBy=Duke treatment=None rep=rep2
         type bed 9
         # subId=2395 dateSubmitted=2010-11-15
 

@@ -192,6 +192,7 @@ div.sliceDiv { overflow:hidden; }
 .btnD { border-width: 1px 1px 0px 1px; margin: 1px 1px 0px 1px; } /* connect down */
 .btnL { border-width: 0px 1px 0px 1px; margin: 0px 1px 0px 1px; } /* connect linear */
 .btnBlue { background-color:#91B3E6; }
+.inset { border-style: inset; } /* Flatten button if not configurable */
 
 /* These are for dragReorder: both in imageV2 and in hgTrackUi subtrack list */
 .trDrag { background-color: #CCFFCC; }
