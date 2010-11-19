@@ -116,7 +116,7 @@ loadDbTracks() {
     if [ -z "$strict" -a -f $dbpath/description.html ] ; then
 	if [ "X${UNAME_N}Y" = "XhgwdevY" ]; then
 	    if [ ! -L /gbdb/$db/html -a -d /cluster/data/$db/html ]; then
-		rm /gbdb/$db/html/description.html
+		rm -f /gbdb/$db/html/description.html
 		rmdir /gbdb/$db/html
 		ln -s /cluster/data/$db/html /gbdb/$db/html
 	    fi
