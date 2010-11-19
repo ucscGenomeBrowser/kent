@@ -4,7 +4,7 @@
 
 track wgEncodeUwDgf
 compositeTrack on
-superTrack wgEncodeDNAseSuper
+superTrack wgEncodeDNAseSuper dense
 shortLabel UW DNase DGF
 longLabel ENCODE Univ. Washington Digital DNase Genomic Footprinting
 group regulation
