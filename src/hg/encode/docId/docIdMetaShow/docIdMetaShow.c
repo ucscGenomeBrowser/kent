@@ -40,12 +40,15 @@ char *tempFile = tn.forCgi;
 
 printf("<table border=1>");
 printf("<tr><th>File</th>");
+printf("<th>assembly</th>");
 printf("<th>dataType</th>");
 printf("<th>view</th>");
 printf("<th>fileType</th>");
 printf("<th>cell type</th>");
 printf("<th>lab</th>");
 printf("<th>metadata</th>");
+printf("<th>val-version</th>");
+printf("<th>val-report</th>");
 printf("</tr>\n");
 safef(query, sizeof query, "select * from %s", docIdTable);
 sr = sqlGetResult(conn, query);
@@ -74,8 +77,10 @@ while ((row = sqlNextRow(sr)) != NULL)
     printf("<tr><td><a href=%s> %s</a></td>", 
         docIdGetPath(buffer, docIdDir, docIdType, NULL) , 
         docIdDecorate(docIdSub->ix));
-    printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>",   mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
-    printf("<td><a href=docIdMetaShow?docId=%s> metadata</a></td>", buffer);
+    printf("<td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td> <td>%s</td>",   mdbObjFindValue(mdbObj, "assembly"),mdbObjFindValue(mdbObj, "dataType"), mdbObjFindValue(mdbObj, "view"),mdbObjFindValue(mdbObj, "type"), mdbObjFindValue(mdbObj, "cell"), mdbObjFindValue(mdbObj, "lab"));
+    printf("<td><a href=docIdMetaShow?docId=%s&meta=""> metadata</a></td>", buffer);
+    printf("<td> %s</td>", docIdSub->valVersion);
+    printf("<td><a href=docIdMetaShow?docId=%s&report=""> report</a></td>", buffer);
     printf("</tr>\n");
     }
 
@@ -85,7 +90,7 @@ sqlDisconnect(&conn);
 cartWebEnd();
 }
 
-void doDocId(struct cart *theCart)
+void doDocIdMeta(struct cart *theCart)
 {
 char *docId = cartString(theCart, "docId");
 cartWebStart(cart, database, "ENCODE DCC:  Metadata for submission %s",docId);
@@ -138,11 +143,45 @@ while ((row = sqlNextRow(sr)) != NULL)
 cartWebEnd();
 }
 
+void doDocIdReport(struct cart *theCart)
+{
+char *docId = cartString(theCart, "docId");
+cartWebStart(cart, database, "ENCODE DCC:  Validation report for submission %s",docId);
+struct sqlConnection *conn = sqlConnect(database);
+char query[10 * 1024];
+struct sqlResult *sr;
+char **row;
+boolean beenHere = FALSE;
+
+printf("<a href=docIdMetaShow> Return </a><BR>");
+safef(query, sizeof query, "select * from %s where ix=%s", docIdTable,docId);
+sr = sqlGetResult(conn, query);
+while ((row = sqlNextRow(sr)) != NULL)
+    {
+    if (beenHere)
+        errAbort("found more than one record with ix value %s in table %s", 
+            docId, docIdTable);
+    beenHere = TRUE;
+
+    struct docIdSub *docIdSub = docIdSubLoad(row);
+    cgiDecode(docIdSub->valReport, docIdSub->valReport, strlen(docIdSub->valReport));
+    //printf("tempFile is %s\n<BR>", tempFile);
+    printf("<pre>%s", docIdSub->valReport);
+    }
+
+cartWebEnd();
+}
+
 void doMiddle(struct cart *theCart)
 /* Set up globals and make web page */
 {
 if (cgiVarExists("docId"))
-    doDocId(theCart);
+    {
+    if (cgiVarExists("meta"))
+        doDocIdMeta(theCart);
+    else if (cgiVarExists("report"))
+        doDocIdReport(theCart);
+    }
 else 
     doStandard(theCart);
 }
