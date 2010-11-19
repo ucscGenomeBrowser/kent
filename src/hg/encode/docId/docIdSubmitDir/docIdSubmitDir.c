@@ -77,6 +77,29 @@ struct mdbVar *mdbVar = addMdbTxtVar(mdbObj, stringInMdb, value);
 return mdbVar;
 }
 
+char *getReportVersion(char *blob)
+{
+if (blob == NULL)
+    errAbort("no report blob");
+
+char *start = strchr(blob, '+');
+if (start == NULL)
+    errAbort("no plus in report blob");
+
+start++;
+char *end = strchr(start, '+');
+if (end == NULL)
+    errAbort("no second plus in report blob");
+
+char save = *end;
+*end = 0;
+
+char *ret = cloneString(start);
+*end = save;
+
+return ret;
+}
+
 struct hash *readLoadRa(struct mdbObj *mdbObjs, char *submitDir)
 {
 char loadRa[10 * 1024];
@@ -213,6 +236,7 @@ for(; mdbObj; mdbObj = nextObj)
     docIdSub.valReport = NULL;
     docIdSub.submitDate = mdbObjFindValue(mdbObj, "dateSubmitted") ;
     docIdSub.submitter = mdbObjFindValue(mdbObj, "lab") ;
+    docIdSub.assembly = mdbObjFindValue(mdbObj, "assembly") ;
 
     char *type = mdbObjFindValue(mdbObj, "type") ;
     struct mdbVar *submitPathVar = mdbObjFind(mdbObj, "submitPath") ;
@@ -234,6 +258,7 @@ for(; mdbObj; mdbObj = nextObj)
     // step through the path and submit each file
     while(submitPath != NULL)
         {
+        char buffer[10 * 1024];
         char *space = strchr(submitPath, ' ');
         if (space)
             {
@@ -243,8 +268,6 @@ for(; mdbObj; mdbObj = nextObj)
         
         if (subPartVar)
             {
-            char buffer[10 * 1024];
-
             safef(buffer, sizeof buffer, "%d", subPart);
             subPartVar->val = cloneString(buffer);
             }
@@ -254,9 +277,15 @@ for(; mdbObj; mdbObj = nextObj)
         docIdSub.metaData = readBlob(tempFile);	
         unlink(tempFile);
 
+
         safef(file, sizeof file, "%s/%s", submitDir, submitPath);
         docIdSub.submitPath = cloneString(file);
         printf("submitPath %s\n", docIdSub.submitPath);
+
+        safef(buffer, sizeof buffer, "%s.report", file);
+        docIdSub.valReport = readBlob(buffer);	
+        docIdSub.valVersion = getReportVersion(docIdSub.valReport);
+
         char *docId = docIdSubmit(conn, &docIdSub, docIdDir, type);
         char *decoratedDocId = docIdDecorate(atoi(docId));
 
