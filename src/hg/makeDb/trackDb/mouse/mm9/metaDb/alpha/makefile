@@ -4,6 +4,6 @@ wgEncodeSydhHistone.ra \
 wgEncodeSydhTfbs.ra \
 wgEncodeUwDnase.ra \
 wgEncodeLicrHistone.ra \
-wgEncodePsuHistone.ra \
+wgEncodePsuTfbs.ra \
 wgEncodeLicrTfbs.ra
 include ../../../../makefile.metaDb
