@@ -349,6 +349,23 @@ sex U
 tier 3
 protocol Duke/UNC/UTA/EBI_Open_Chromatin:Astrocytes_Crawford_protocol.pdf
 
+term BC_Bladder_01-11002
+tag BCBladder0111002
+type Cell Line
+tier 3
+organism Human
+description Donor 01-11002; Age 83; Caucasian; DNA Extract
+tissue Urinary Bladder
+lineage Urinary Bladder
+karyotype Normal
+sex F
+vendorName BioChain
+vendorId BioChain_CP-S12-D1234010-05_B402059
+orderUrl http://www.biochain.com/biochain/homepage.htm
+termId BTO:0001418
+termUrl http://www.ebi.ac.uk/ontology-lookup/browse.do?ontName=BTO&termId=BTO:0001418
+protocol HudsonAlpha:Myers_BioChain_protocol.pdf 
+
 term BE2_C
 tag BE2C
 type Cell Line
@@ -7349,13 +7366,12 @@ validation date nine months more than dateSubmitted
 term fileIndex
 type typeOfTerm
 label BAM Index file
-description The name of the index file in the downloads directory associated with a particular track or raw data file. (Provisional)
+description  The name of the index file (.bai) that is associated with a particular bam file.
 searchable no
 cvDefined no
 validate Matches the fileName prefix with the suffix .bai
 #hidden yes
-#Cricket thinks, but could be wrong that the index file is only for bam files.  So the description should read:
-#description The name of the index file (.bai) that is associated with a particular bam file.
+
 
 term fileName
 type typeOfTerm
@@ -7363,25 +7379,26 @@ label File Name for downloading
 description The name of a downloadable file associated with a particular track in the browser. (Provisional)
 searchable no
 cvDefined no
-validate Exists?
+validate Exists
 
 term fragLength
 type typeOfTerm
 label Mean Length of DNA fragments
-description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. (Provisional)
+description DNA libraries built for ChIP-seq and similar experiments often involve fragmenting the DNA into lengths close to this size. 
 searchable no
 cvDefined no
-# Collapse with fragSize?
-#Cricket fill in with Special story
+# Cricket's special story (11/19/10): in fields.ra we have fragLength
+# and medianFragLength.  fragLength and medianFragLength appear to be
+# redundant, and should be collapsed into fragLength
+
 
 term fragSize
 type typeOfTerm
 label Length of GIS DNA PET fragments
-description (Provisional)
+description length of GIS DNA PET fragments, which has different values than fragLength
 searchable no
 cvDefined yes
-# WHAT IS THIS?
-#Cricket fill in with special story
+# With more investigation, this could be collapsed in with fragLength (11/19/10)
 
 term freezeDate
 type typeOfTerm
