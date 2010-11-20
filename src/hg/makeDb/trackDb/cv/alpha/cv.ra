@@ -3053,8 +3053,8 @@ orderUrl http://www.scbt.com/datasheet-10757-baf170-h-116-antibody.html
 vendorName Santa Cruz Biotech
 vendorId sc-10757
 lab Snyder
-targetId GeneCard:GC12M054843
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=GC12M054843
+targetId GeneCard:SMARCC2
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=SMARCC2
 validation missing
 
 term BATF
@@ -3081,7 +3081,7 @@ vendorName Abcam
 vendorId ab19489
 orderUrl http://www.abcam.com/Ctip1-antibody-18B12DE6-ab19489.html
 lab Myers
-targetId GeneCard:GC02M060589
+targetId GeneCard:BCL11A
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=BCL11A
 validation missing
 
@@ -3322,7 +3322,7 @@ vendorName Santa Cruz Biotech
 vendorId sc-15914
 lab Snyder
 targetId GeneCard:CTCF
-targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gc_id=CTCF
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=CTCF
 validation missing
 
 #(comma-separated list with entries of format: tag_submittingLab_protocol.pdf)
@@ -3519,7 +3519,7 @@ vendorId sc-6553
 orderUrl http://www.scbt.com/datasheet-6553-hnf-3alpha-beta-c-20-antibody.html
 lab Myers
 targetId GeneCard:FOXA1
-targetUrlhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=FOXA1
 validation FOXA1(Immunoblot):human_FOXA1_C-20_validation_Myers.pdf
 
 term FOXP2
@@ -4776,7 +4776,7 @@ vendorId ab62126
 orderUrl http://www.abcam.com/TATA-binding-protein-TBP-antibody-mAbcam-62126-Nuclear-Loading-Control-and-ChIP-Grade-ab62126.html
 lab Snyder
 targetId GeneCard:TBP
-targetUrl hhttp://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
+targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=TBP
 validation TBP(Immunoblot):human_TBP_validation_Snyder.pdf
 
 term TCF12
@@ -5229,7 +5229,7 @@ vendorId AF4185
 orderUrl http://www.rndsystems.com/
 lab Snyder
 lots ZIJ01
-targetId GeneCard:GC10P11195
+targetId GeneCard:MXI1
 targetUrl http://www.genecards.org/cgi-bin/carddisp.pl?gene=MXI1
 validation missing
 
