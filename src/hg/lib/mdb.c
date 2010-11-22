@@ -2166,6 +2166,12 @@ if (cvHashOfTermTypes == NULL)
         hashAdd(cvHashOfTermTypes,"cell",cellHash);
         hashReplace(cellHash, "term", cloneString("cell")); // spilling memory of 'cellType' val
         }
+    struct hash *abHash = hashRemove(cvHashOfTermTypes,"Antibody");
+    if (abHash)
+        {
+        hashAdd(cvHashOfTermTypes,"antibody",abHash);
+        hashReplace(abHash, "term", cloneString("antibody")); // spilling memory of 'Antibody' val
+        }
     }
 
 
