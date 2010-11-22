@@ -140,6 +140,7 @@ wgEncode 1
     pValueFilterLimits 1:324
     scoreFilter 100
     scoreFilterLimits 100:1000
+    maxWindowToDraw 10000000
     minGrayLevel 3
 
         track wgEncodeUwDgfGm06990Pk
