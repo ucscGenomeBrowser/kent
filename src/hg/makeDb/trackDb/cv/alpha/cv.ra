@@ -7182,7 +7182,7 @@ tag ren
 type grant
 description Ren
 grantInst LICR
-project LICR
+projectName LICR (Provisional)
 
 term Hardison
 tag hardison
@@ -7201,7 +7201,7 @@ projectName
 term Giddings
 tag giddings
 type grant
-description Diggings
+description Giddings (Provisional)
 grantInst University of North Carolina
 projectName UNC-Giddings
 
