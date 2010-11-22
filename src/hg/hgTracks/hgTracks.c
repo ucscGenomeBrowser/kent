@@ -1592,7 +1592,6 @@ return scaleBases;
 enum trackVisibility limitedVisFromComposite(struct track *subtrack)
 /* returns the subtrack visibility which may be limited by composite with multi-view dropdowns. */
 {
-assert(tdbIsCompositeChild(subtrack->tdb));
 if(tdbIsCompositeChild(subtrack->tdb))
     {
     if (!subtrack->limitedVisSet)
@@ -1601,6 +1600,8 @@ if(tdbIsCompositeChild(subtrack->tdb))
         limitVisibility(subtrack);
         }
     }
+else
+    limitVisibility(subtrack);
 return subtrack->limitedVis;
 }
 
@@ -3171,6 +3172,8 @@ else
 if (!ct->dbTrack)
     tg->nextItemButtonable = FALSE;
 tg->hasUi = TRUE;
+tg->customTrack = TRUE;// Explicitly declare this a custom track for flatTrack ordering
+
 freez(&typeDupe);
 return tg;
 }

@@ -317,11 +317,39 @@ else
 
         hPrintf("</td><td>and&nbsp;</td><td colspan=3 nowrap>\n");
         safef(buf, sizeof(buf), "%s%i", METADATA_NAME_PREFIX, i + 1);
+    #ifdef CV_SEARCH_SUPPORTS_FREETEXT
+        cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged2(this);'");
+        // TODO: move to lib since hgTracks and hgApi share
+        enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
+        if (searchBy == cvsSearchByMultiSelect)
+            {
+            // TO BE IMPLEMENTED
+            }
+        else if (searchBy == cvsSearchBySingleSelect)
+            {
+            safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
+            hPrintf("</td><td align='right' id='isLike%d' style='width:10px;'>is</td><td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
+            len = getTermArray(conn, &labels, &terms, mdbVar[i]);
+            cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal single' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
+            }
+        else if (searchBy == cvsSearchByFreeText)
+            {
+            safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
+            hPrintf("</td><td align='right' id='isLike%d' style='width:10px;'>contains</td><td nowrap id='%s' style='max-width:600px;'>\n",i + 1,buf);
+            hPrintf("<input type='text' name='%s' value='%s' class='mdbVal freeText' onkeyup='findTracksSearchButtonsEnable(true);' style='max-width:310px; width:310px; font-size:.9em;'>",
+                    buf,(mdbVal[i] ? mdbVal[i]: ""));
+            }
+        else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+            {
+            // TO BE IMPLEMENTED
+            }
+    #else//ifndef CV_SEARCH_SUPPORTS_FREETEXT
         cgiDropDownWithTextValsAndExtra(buf, mdbVarLabels, mdbVars,count,mdbVar[i],"class='mdbVar' style='font-size:.9em;' onchange='findTracksMdbVarChanged(this);'");
-        hPrintf("</td><td nowrap style='max-width:600px;'>is\n");
+        hPrintf("</td><td align='right' style='width:10px;'>is</td><td nowrap style='max-width:600px;'>is\n");
         len = getTermArray(conn, &labels, &terms, mdbVar[i]);
         safef(buf, sizeof(buf), "%s%i", METADATA_VALUE_PREFIX, i + 1);
         cgiMakeDropListFull(buf, labels, terms, len, mdbVal[i], "class='mdbVal' style='min-width:200px; font-size:.9em;' onchange='findTracksSearchButtonsEnable(true);'");
+    #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
         hPrintf("<span id='helpLink%d'>help</span></td>\n", i + 1);
         hPrintf("</tr>\n");
         }
@@ -367,11 +395,58 @@ struct slRef *tracks = NULL;
             {
             if(!isEmpty(mdbVal[i]))
                 {
+            #ifdef CV_SEARCH_SUPPORTS_FREETEXT
+                enum mdbCvSearchable searchBy = mdbCvSearchMethod(mdbVar[i]);
+                struct slName *tmp = NULL;
+                // If select is by free text then like
+                if (searchBy == cvsSearchByMultiSelect)
+                    {
+                    // TO BE IMPLEMENTED
+                    // The mdbVal[1] will hve to be filled cartOptionalSlNameList(cart,???)
+                    struct slName *choices = (struct slName *)mdbVal[i];
+                    if (slCount(choices) == 1)
+                        {
+                        tmp = mdbObjSearch(conn, mdbVar[i], choices->name, "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
+                        }
+                    else if(choices != NULL)
+                        {
+                        // Then slNames will need to be assembled into a string in the form of 'a','b','c'
+                        struct dyString *dyList = dyStringNew(256);
+                        dyStringPrintf(dyList,"'%s'",choices->name);
+                        struct slName *choice = choices->next;
+                        for(;choice!=NULL;choice=choice->next)
+                            dyStringPrintf(dyList,",'%s'",choice->name);
+                        tmp = mdbObjSearch(conn, mdbVar[i], dyStringContents(dyList), "in", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
+                        dyStringFree(&dyList);
+                        }
+                    }
+                else if (searchBy == cvsSearchBySingleSelect)
+                    {
+                    tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
+                    }
+                else if (searchBy == cvsSearchByFreeText)
+                    {
+                    tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "like", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
+                    }
+                else if (searchBy == cvsSearchByDateRange || searchBy == cvsSearchByIntegerRange)
+                    {
+                    // TO BE IMPLEMENTED
+                    // Requires new mdbObjSearch API and more than one mdbVal[i]
+                    }
+                if (tmp != NULL)
+                    {
+                    if(metaTracks == NULL)
+                        metaTracks = tmp;
+                    else
+                        metaTracks = slNameIntersection(metaTracks, tmp);
+                    }
+            #else///ifndif CV_SEARCH_SUPPORTS_FREETEXT
                 struct slName *tmp = mdbObjSearch(conn, mdbVar[i], mdbVal[i], "is", MDB_VAL_STD_TRUNCATION, TRUE, FALSE);
                 if(metaTracks == NULL)
                     metaTracks = tmp;
                 else
                     metaTracks = slNameIntersection(metaTracks, tmp);
+            #endif///ndef CV_SEARCH_SUPPORTS_FREETEXT
                 }
             }
         for (el = metaTracks; el != NULL; el = el->next)
@@ -780,7 +855,7 @@ hPrintf("</div>\n");
 // Advanced tab
 hPrintf("<div id='advancedTab' style='width:inherit;'>\n"
         "<table cellSpacing=0 style='width:inherit; font-size:.9em;'>\n");
-cols = 7;
+cols = 8;
 
 // Track Name contains
 hPrintf("<tr><td colspan=3></td>");
