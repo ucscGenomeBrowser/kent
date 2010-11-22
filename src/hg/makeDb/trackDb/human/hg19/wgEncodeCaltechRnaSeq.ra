@@ -1,5 +1,5 @@
 track wgEncodeCaltechRnaSeq
-superTrack wgEncodeRnaSeqSuper
+superTrack wgEncodeRnaSeqSuper dense
 compositeTrack on
 shortLabel Caltech RNA-seq
 longLabel ENCODE Caltech Wold RNA-seq
@@ -30,7 +30,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in H1-hESC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in H1-hESC cells paired read 
 		shortLabel H1hESC 2x75 Gtf 1
 		subGroups view=GeneModel cellType=H1hESC insertLength=il400 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -40,7 +40,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in NHLF cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in NHLF cells paired read 
 		shortLabel NHLF 2x75 Gtf 2
 		subGroups view=GeneModel cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -49,7 +49,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in HeLa-S3 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in HeLa-S3 cells paired read 
 		shortLabel HeLaS3 2x75 Gtf 1
 		subGroups view=GeneModel cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -59,7 +59,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in HUVEC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in HUVEC cells paired read 
 		shortLabel HUVE 2x75 Gtf 2
 		subGroups view=GeneModel cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -69,7 +69,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in NHEK cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in NHEK cells paired read 
 		shortLabel NHEK 2x75 Gtf 2
 		subGroups view=GeneModel cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -79,7 +79,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in MCF-7 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in MCF-7 cells paired read 
 		shortLabel MCF7 2x75 Gtf 2
 		subGroups view=GeneModel cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -88,7 +88,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in HSMM cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in HSMM cells paired read 
 		shortLabel HSMM 2x75 Gtf 1
 		subGroups view=GeneModel cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -97,7 +97,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep3
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on 
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 3 in H1-hESC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 3 in H1-hESC cells paired read 
 		shortLabel H1hESC 2x75 Gtf 3
 		subGroups view=GeneModel cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep3
 		type genePred
@@ -107,7 +107,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on 
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in H1-hESC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in H1-hESC cells paired read 
 		shortLabel H1hESC 2x75 Gtf 1
 		subGroups view=GeneModel cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -117,7 +117,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in HepG2 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in HepG2 cells paired read 
 		shortLabel HepG 2x75 Gtf 1
 		subGroups view=GeneModel cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -127,7 +127,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep4
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on 
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 4 in H1-hESC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 4 in H1-hESC cells paired read 
 		shortLabel H1hESC 2x75 Gtf 4
 		subGroups view=GeneModel cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep4
 		type genePred
@@ -137,7 +137,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on 
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in H1-hESC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in H1-hESC cells paired read 
 		shortLabel H1hESC 2x75 Gtf 2
 		subGroups view=GeneModel cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -147,7 +147,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in HSMM cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in HSMM cells paired read 
 		shortLabel HSMM 2x75 Gtf 2
 		subGroups view=GeneModel cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -156,7 +156,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in NHEK cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in NHEK cells paired read 
 		shortLabel NHEK 2x75 Gtf 1
 		subGroups view=GeneModel cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -166,7 +166,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in HUVEC cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in HUVEC cells paired read 
 		shortLabel HUVE 2x75 Gtf 1
 		subGroups view=GeneModel cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -176,7 +176,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in HepG2 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in HepG2 cells paired read 
 		shortLabel HepG 2x75 Gtf 2
 		subGroups view=GeneModel cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -186,7 +186,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in NHLF cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in NHLF cells paired read 
 		shortLabel NHLF 2x75 Gtf 1
 		subGroups view=GeneModel cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -195,7 +195,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel off
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in HeLa-S3 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in HeLa-S3 cells paired read 
 		shortLabel HeLaS3 2x75 Gtf 2
 		subGroups view=GeneModel cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -205,7 +205,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in GM12878 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in GM12878 cells paired read 
 		shortLabel GM12 2x75 Gtf 2
 		subGroups view=GeneModel cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -215,7 +215,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in GM12878 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in GM12878 cells paired read 
 		shortLabel GM12 2x75 Gtf 1
 		subGroups view=GeneModel cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -225,7 +225,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in K562 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in K562 cells paired read 
 		shortLabel K562 2x75 Gtf 2
 		subGroups view=GeneModel cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
@@ -235,7 +235,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200GeneModelRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel on
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 1 in K562 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in K562 cells paired read 
 		shortLabel K562 2x75 Gtf 1
 		subGroups view=GeneModel cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type genePred
@@ -245,26 +245,26 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400GeneModelRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewGeneModel
-		longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks rep 2 in GM12878 cells paired read 
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 2 in GM12878 cells paired read 
 		shortLabel GM12 2x75 Gtf 2
 		subGroups view=GeneModel cellType=GM12878 insertLength=il400 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type genePred
 		color 153,38,0
 		# subId=2943 dateSubmitted=2010-11-16
 
-        track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep1
-        release alpha
-        parent wgEncodeCaltechRnaSeqViewGeneModel off
-        shortLabel MCF-7 1
-        longLabel ENCODE Caltech RNA-seq Gene Models from Cufflinks Replicate 1 (in MCF-7 cells)
-        subGroups view=GeneModel cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
-        type genePred
-        # subId=3000 dateSubmitted=2010-11-18
+		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200GeneModelRep1
+		release alpha
+		parent wgEncodeCaltechRnaSeqViewGeneModel off
+		shortLabel MCF7 1
+		longLabel ENCODE Caltech RNA-seq Gene models from Cufflinks rep 1 in MCF-7 cells
+		subGroups view=GeneModel cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
+		type genePred
+		# subId=3000 dateSubmitted=2010-11-18
 
 	track wgEncodeCaltechRnaSeqViewSplices
 	view Splices
 	shortLabel Splices
-	visibility full
+	visibility squish
 	subTrack wgEncodeCaltechRnaSeq
         type bam
 	showNames on
@@ -281,7 +281,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in NHEK cells single read 
+                longLabel NHEK single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel NHEK 1x75D Sp 1
 		subGroups view=Splices cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -291,7 +291,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in NHEK cells paired read 
+                longLabel NHEK paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Sp 1
 		subGroups view=Splices cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -301,7 +301,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in H1-hESC cells single read 
+                longLabel H1-hESC single read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel H1hESC 1x75D Sp 2
 		subGroups view=Splices cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -311,7 +311,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in GM12878 cells single read 
+                longLabel GM12878 single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel GM12 1x75D Sp 1
 		subGroups view=Splices cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -321,7 +321,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaSplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in GM12878 cells single read 
+                longLabel GM12878 single read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel GM12 1x75D Sp 2
 		subGroups view=Splices cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -331,7 +331,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in H1-hESC cells single read 
+                longLabel H1-hESC single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 1x75D Sp 1
 		subGroups view=Splices cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -341,7 +341,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HeLa-S3 cells single read 
+                longLabel HeLa-S3 single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HeLaS3 1x75D Sp 1
 		subGroups view=Splices cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -351,7 +351,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaSplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HeLa-S3 cells single read 
+                longLabel HeLa-S3 single read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HeLaS3 1x75D Sp 2
 		subGroups view=Splices cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -361,7 +361,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HepG2 cells paired read 
+                longLabel HepG2 paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HepG 2x75 Sp 2
 		subGroups view=Splices cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -371,7 +371,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HepG2 cells paired read 
+                longLabel HepG2 paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HepG 2x75 Sp 1
 		subGroups view=Splices cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -381,7 +381,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HeLa-S3 cells paired read 
+                longLabel HeLa-S3 paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HeLaS3 2x75 Sp 2
 		subGroups view=Splices cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -391,7 +391,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HeLa-S3 cells paired read 
+                longLabel HeLa-S3 paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HeLaS3 2x75 Sp 1
 		subGroups view=Splices cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -401,7 +401,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HUVEC cells paired read 
+                longLabel HUVEC paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Sp 2
 		subGroups view=Splices cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -411,7 +411,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HUVEC cells paired read 
+                longLabel HUVEC paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Sp 1
 		subGroups view=Splices cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -421,7 +421,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep4
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 4 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Splice alignments rep 4 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sp 4
 		subGroups view=Splices cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep4
 		type bam
@@ -431,7 +431,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep3
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 3 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Splice alignments rep 3 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sp 3
 		subGroups view=Splices cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep3
 		type bam
@@ -441,7 +441,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sp 2
 		subGroups view=Splices cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -451,7 +451,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in H1-hESC cells paired read 400bpinsert
+                longLabel H1-hESC paired read (400 bp insert) RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 400 Sp 1
 		subGroups view=Splices cellType=H1hESC insertLength=il400 mapAlgorithm=TH1014 readType=r2x75400 rep=rep1
 		type bam
@@ -461,7 +461,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HepG2 cells single read 
+                longLabel HepG2 single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HepG 1x75D Sp 1
 		subGroups view=Splices cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -471,7 +471,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in K562 cells single read 
+                longLabel K562 single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel K562 1x75D Sp 1
 		subGroups view=Splices cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -482,7 +482,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaSplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HepG2 cells single read 
+                longLabel HepG2 single read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HepG 1x75D Sp 2
 		subGroups view=Splices cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -493,7 +493,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HUVEC cells single read 
+                longLabel HUVEC single read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HUVE 1x75D Sp 1
 		subGroups view=Splices cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -503,7 +503,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaSplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HUVEC cells single read 
+                longLabel HUVEC single read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HUVE 1x75D Sp 2
 		subGroups view=Splices cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -513,7 +513,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaSplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in K562 cells single read 
+                longLabel K562 single read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel K562 1x75D Sp 2
 		subGroups view=Splices cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -523,7 +523,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in GM12878 cells paired read 
+                longLabel GM12878 paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel GM12 2x75 Sp 1
 		subGroups view=Splices cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -533,7 +533,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in K562 cells paired read 
+                longLabel K562 paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel K562 2x75 Sp 2
 		subGroups view=Splices cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -543,7 +543,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in K562 cells paired read 
+                longLabel K562 paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel K562 2x75 Sp 1
 		subGroups view=Splices cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -553,7 +553,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on 
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sp 1
 		subGroups view=Splices cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -563,7 +563,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices on
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in GM12878 cells paired read 400bpinsert
+                longLabel GM12878 paired read (400 bp insert) RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 400 Sp 2
 		subGroups view=Splices cellType=GM12878 insertLength=il400 mapAlgorithm=TH1014 readType=r2x75400 rep=rep2
 		type bam
@@ -573,7 +573,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in GM12878 cells paired read 
+                longLabel GM12878 paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 Sp 2
 		subGroups view=Splices cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -583,7 +583,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in NHEK cells paired read 
+                longLabel NHEK paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Sp 2
 		subGroups view=Splices cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -593,7 +593,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in HSMM cells paired read 
+                longLabel HSMM paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Sp 2
 		subGroups view=Splices cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -602,7 +602,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in HSMM cells paired read 
+                longLabel HSMM paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Sp 1
 		subGroups view=Splices cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -611,7 +611,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 1 in NHLF cells paired read 
+                longLabel NHLF paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Sp 1
 		subGroups view=Splices cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -620,7 +620,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in NHLF cells paired read 
+                longLabel NHLF paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Sp 2
 		subGroups view=Splices cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -629,7 +629,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSplices off
-		longLabel ENCODE Caltech RNA-seq Splice Alignments rep 2 in MCF-7 cells paired read 
+                longLabel MCF-7 paired read RNA-seq Splice alignments rep 2 from ENCODE/Caltech
 		shortLabel MCF7 2x75 Sp 2
 		subGroups view=Splices cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -638,8 +638,8 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SplicesRep1
 		release alpha
 		parent wgEncodeCaltechRnaSeqViewSplices off
-		shortLabel MCF-7 1
-		longLabel ENCODE Caltech RNA-seq Splice Alignments Replicate 1 (in MCF-7 cells)
+		shortLabel MCF7 1
+                longLabel MCF-7 paired read RNA-seq Splice alignments rep 1 from ENCODE/Caltech
 		subGroups view=Splices cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
 		# subId=3000 dateSubmitted=2010-11-18
@@ -651,14 +651,14 @@ wgEncode 1
     	visibility hide
     	subTrack wgEncodeCaltechRnaSeq
 
-        track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1
-        release alpha
-        parent wgEncodeCaltechRnaSeqViewPaired off
-        shortLabel MCF-7 1
-        longLabel ENCODE Caltech RNA-seq Paired Alignments Replicate 1 (in MCF-7 cells)
-        subGroups view=Paired cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
-        type bam
-        # subId=3000 dateSubmitted=2010-11-18
+		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep1
+		release alpha
+		parent wgEncodeCaltechRnaSeqViewPaired off
+		shortLabel MCF7 1
+                longLabel MCF-7 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
+		subGroups view=Paired cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
+		type bam
+		# subId=3000 dateSubmitted=2010-11-18
 
 	track wgEncodeCaltechRnaSeqViewAligns
     	view Aligns
@@ -681,7 +681,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in NHEK cells paired read 
+                longLabel NHEK paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Al 1
 		subGroups view=Aligns cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -691,7 +691,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in HepG2 cells paired read 
+                longLabel HepG2 paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel HepG 2x75 Al 2
 		subGroups view=Aligns  cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -702,7 +702,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in HepG2 cells paired read 
+                longLabel HepG2 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel HepG 2x75 Al 1
 		subGroups view=Aligns  cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -713,7 +713,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in HeLa-S3 cells paired read 
+                longLabel HeLa-S3 paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel HeLaS3 2x75 Al 2
 		subGroups view=Aligns  cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -724,7 +724,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in HeLa-S3 cells paired read 
+                longLabel HeLa-S3 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel HeLaS3 2x75 Al 1
 		subGroups view=Aligns  cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -735,7 +735,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in HUVEC cells paired read 
+                longLabel HUVEC paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Al 2
 		subGroups view=Aligns  cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -746,7 +746,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in HUVEC cells paired read 
+                longLabel HUVEC paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Al 1
 		subGroups view=Aligns  cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -757,7 +757,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep4
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off 
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 4 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Paired alignments rep 4 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Al 4
 		subGroups view=Aligns cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep4
 		type bam
@@ -768,7 +768,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep3
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off 
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 3 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Paired alignments rep 3 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Al 3
 		subGroups view=Aligns  cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep3
 		type bam
@@ -779,7 +779,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off 
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Al 2
 		subGroups view=Aligns  cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -790,7 +790,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off 
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in H1-hESC cells paired read 400bpinsert
+                longLabel H1-hESC paired read (400 bp insert) RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 400 Al 1
 		subGroups view=Aligns  cellType=H1hESC insertLength=il400 mapAlgorithm=TH1014 readType=r2x75400 rep=rep1
 		type bam
@@ -800,7 +800,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in GM12878 cells paired read 
+                longLabel GM12878 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel GM12 2x75 Al 1
 		subGroups view=Aligns  cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -811,7 +811,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in K562 cells paired read 
+                longLabel K562 paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel K562 2x75 Al 2
 		subGroups view=Aligns  cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -822,7 +822,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in K562 cells paired read 
+                longLabel K562 paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel K562 2x75 Al 1
 		subGroups view=Aligns  cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -833,7 +833,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off 
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Al 1
 		subGroups view=Aligns  cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -844,7 +844,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in GM12878 cells paired read 400bpinsert
+                longLabel GM12878 paired read (400 bp insert) RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 400 Al 2
 		subGroups view=Aligns  cellType=GM12878 insertLength=il400 mapAlgorithm=TH1014 readType=r2x75400 rep=rep2
 		type bam
@@ -854,7 +854,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in GM12878 cells paired read 
+                longLabel GM12878 paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 Al 2
 		subGroups view=Aligns  cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -864,7 +864,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in NHEK cells paired read 
+                longLabel NHEK paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Al 2
 		subGroups view=Aligns  cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -874,7 +874,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in HSMM cells paired read 
+                longLabel HSMM paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Al 2
 		subGroups view=Aligns  cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -883,7 +883,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in HSMM cells paired read 
+                longLabel HSMM paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Al 1
 		subGroups view=Aligns  cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -892,7 +892,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 1 in NHLF cells paired read 
+                longLabel NHLF paired read RNA-seq Paired alignments rep 1 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Al 1
 		subGroups view=Aligns  cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bam
@@ -901,7 +901,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in NHLF cells paired read 
+                longLabel NHLF paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Al 2
 		subGroups view=Aligns  cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -910,7 +910,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200PairedRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns  off
-		longLabel ENCODE Caltech RNA-seq Paired Alignments rep 2 in MCF-7 cells paired read 
+                longLabel MCF-7 paired read RNA-seq Paired alignments rep 2 from ENCODE/Caltech
 		shortLabel MCF7 2x75 Al 2
 		subGroups view=Aligns  cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bam
@@ -919,7 +919,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in NHEK cells single read 
+                longLabel NHEK single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel NHEK 1x75D Al 1
 		subGroups view=Aligns cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -929,7 +929,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 2 in H1-hESC cells single read 
+                longLabel H1-hESC single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel H1hESC 1x75D Al 2
 		subGroups view=Aligns cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -940,7 +940,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in GM12878 cells single read 
+                longLabel GM12878 single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel GM12 1x75D Al 1
 		subGroups view=Aligns cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -951,7 +951,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaAlignsRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 2 in GM12878 cells single read 
+                longLabel GM12878 single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel GM12 1x75D Al 2
 		subGroups view=Aligns cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -962,7 +962,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in H1-hESC cells single read 
+                longLabel H1-hESC single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 1x75D Al 1
 		subGroups view=Aligns cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -973,7 +973,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in HeLa-S3 cells single read 
+                longLabel HeLa-S3 single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel HeLaS3 1x75D Al 1
 		subGroups view=Aligns cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -984,7 +984,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaAlignsRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 2 in HeLa-S3 cells single read 
+                longLabel HeLa-S3 single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel HeLaS3 1x75D Al 2
 		subGroups view=Aligns cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -995,7 +995,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in HepG2 cells single read 
+                longLabel HepG2 single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel HepG 1x75D Al 1
 		subGroups view=Aligns cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -1006,7 +1006,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in K562 cells single read 
+                longLabel K562 single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel K562 1x75D Al 1
 		subGroups view=Aligns cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -1016,7 +1016,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaAlignsRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 2 in HepG2 cells single read 
+                longLabel HepG2 single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel HepG 1x75D Al 2
 		subGroups view=Aligns cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -1026,7 +1026,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 1 in HUVEC cells single read 
+                longLabel HUVEC single read RNA-seq Alignments rep 1 from ENCODE/Caltech
 		shortLabel HUVE 1x75D Al 1
 		subGroups view=Aligns cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bam
@@ -1037,7 +1037,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaAlignsRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns off
-		longLabel ENCODE Caltech RNA-seq Alignments rep 2 in HUVEC cells single read 
+                longLabel HUVEC single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel HUVE 1x75D Al 2
 		subGroups view=Aligns cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -1048,7 +1048,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaAlignsRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewAligns
-		longLabel ENCODE Caltech RNA-seq Alignments rep 2 in K562 cells single read 
+                longLabel K562 single read RNA-seq Alignments rep 2 from ENCODE/Caltech
 		shortLabel K562 1x75D Al 2
 		subGroups view=Aligns cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bam
@@ -1070,7 +1070,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in NHEK cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in NHEK cells single read 
 		shortLabel NHEK 1x75D - 1
 		subGroups view=MinusSignal cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 69353.000000
@@ -1080,7 +1080,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on 
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 2 in H1-hESC cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 2 in H1-hESC cells single read 
 		shortLabel H1hESC 1x75D - 2
 		subGroups view=MinusSignal cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 16356.000000
@@ -1090,7 +1090,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in GM12878 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in GM12878 cells single read 
 		shortLabel GM12 1x75D - 1
 		subGroups view=MinusSignal cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 10632.000000
@@ -1100,7 +1100,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaMinusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 2 in GM12878 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 2 in GM12878 cells single read 
 		shortLabel GM12 1x75D - 2
 		subGroups view=MinusSignal cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 21736.000000
@@ -1110,7 +1110,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on 
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in H1-hESC cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in H1-hESC cells single read 
 		shortLabel H1hESC 1x75D - 1
 		subGroups view=MinusSignal cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 9159.000000
@@ -1120,7 +1120,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in HeLa-S3 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in HeLa-S3 cells single read 
 		shortLabel HeLaS3 1x75D - 1
 		subGroups view=MinusSignal cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 10004.000000
@@ -1130,7 +1130,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaMinusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 2 in HeLa-S3 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 2 in HeLa-S3 cells single read 
 		shortLabel HeLaS3 1x75D - 2
 		subGroups view=MinusSignal cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 12117.000000
@@ -1140,7 +1140,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in HepG2 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in HepG2 cells single read 
 		shortLabel HepG 1x75D - 1
 		subGroups view=MinusSignal cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 35894.000000
@@ -1150,7 +1150,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in K562 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in K562 cells single read 
 		shortLabel K562 1x75D - 1
 		subGroups view=MinusSignal cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 38907.000000
@@ -1160,7 +1160,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaMinusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 2 in HepG2 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 2 in HepG2 cells single read 
 		shortLabel HepG 1x75D - 2
 		subGroups view=MinusSignal cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 28660.000000
@@ -1170,7 +1170,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 1 in HUVEC cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 1 in HUVEC cells single read 
 		shortLabel HUVE 1x75D - 1
 		subGroups view=MinusSignal cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 16398.000000
@@ -1180,7 +1180,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaMinusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal off
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 2 in HUVEC cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 2 in HUVEC cells single read 
 		shortLabel HUVE 1x75D - 2
 		subGroups view=MinusSignal cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 11715.000000
@@ -1190,7 +1190,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaMinusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewMinusSignal on
-		longLabel ENCODE Caltech RNA-seq Minus Signal rep 2 in K562 cells single read 
+		longLabel ENCODE Caltech RNA-seq Minus signal rep 2 in K562 cells single read 
 		shortLabel K562 1x75D - 2
 		subGroups view=MinusSignal cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 12424.000000
@@ -1212,7 +1212,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in NHEK cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in NHEK cells single read 
 		shortLabel NHEK 1x75D + 1
 		subGroups view=PlusSignal cellType=NHEK insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 25640.000000
@@ -1222,7 +1222,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on 
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 2 in H1-hESC cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 2 in H1-hESC cells single read 
 		shortLabel H1hESC 1x75D + 2
 		subGroups view=PlusSignal cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 15507.000000
@@ -1232,7 +1232,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in GM12878 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in GM12878 cells single read 
 		shortLabel GM12 1x75D + 1
 		subGroups view=PlusSignal cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 12480.000000
@@ -1242,7 +1242,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R1x75dTh1014IlnaPlusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 2 in GM12878 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 2 in GM12878 cells single read 
 		shortLabel GM12 1x75D + 2
 		subGroups view=PlusSignal cellType=GM12878 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 18980.000000
@@ -1252,7 +1252,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal on 
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in H1-hESC cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in H1-hESC cells single read 
 		shortLabel H1hESC 1x75D + 1
 		subGroups view=PlusSignal cellType=H1hESC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 7250.000000
@@ -1262,7 +1262,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in HeLa-S3 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in HeLa-S3 cells single read 
 		shortLabel HeLaS3 1x75D + 1
 		subGroups view=PlusSignal cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 20015.000000
@@ -1272,7 +1272,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R1x75dTh1014IlnaPlusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 2 in HeLa-S3 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 2 in HeLa-S3 cells single read 
 		shortLabel HeLaS3 1x75D + 2
 		subGroups view=PlusSignal cellType=HeLaS3 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 24542.000000
@@ -1282,7 +1282,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in HepG2 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in HepG2 cells single read 
 		shortLabel HepG 1x75D + 1
 		subGroups view=PlusSignal cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 47159.000000
@@ -1292,7 +1292,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in K562 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in K562 cells single read 
 		shortLabel K562 1x75D + 1
 		subGroups view=PlusSignal cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 11738.000000
@@ -1302,7 +1302,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R1x75dTh1014IlnaPlusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 2 in HepG2 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 2 in HepG2 cells single read 
 		shortLabel HepG 1x75D + 2
 		subGroups view=PlusSignal cellType=HepG2 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 30478.000000
@@ -1312,7 +1312,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 1 in HUVEC cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 1 in HUVEC cells single read 
 		shortLabel HUVE 1x75D + 1
 		subGroups view=PlusSignal cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep1
 		type bigWig 1.000000 47486.000000
@@ -1322,7 +1322,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR1x75dTh1014IlnaPlusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal off
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 2 in HUVEC cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 2 in HUVEC cells single read 
 		shortLabel HUVE 1x75D + 2
 		subGroups view=PlusSignal cellType=HUVEC insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 22334.000000
@@ -1332,7 +1332,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R1x75dTh1014IlnaPlusSignalRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewPlusSignal
-		longLabel ENCODE Caltech RNA-seq Plus Signal rep 2 in K562 cells single read 
+		longLabel ENCODE Caltech RNA-seq Plus signal rep 2 in K562 cells single read 
 		shortLabel K562 1x75D + 2
 		subGroups view=PlusSignal cellType=K562 insertLength=ilNa mapAlgorithm=TH1014 readType=r1x75D rep=rep2
 		type bigWig 1.000000 14801.000000
@@ -1354,7 +1354,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in NHEK cells paired read 
+                longLabel NHEK paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Sg 1
 		subGroups view=Signal cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65534.000000
@@ -1364,7 +1364,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in HepG2 cells paired read 
+                longLabel HepG2 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HepG 2x75 Sg 2
 		subGroups view=Signal cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65535.000000
@@ -1374,7 +1374,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHepg2R2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in HepG2 cells paired read 
+                longLabel HepG2 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HepG 2x75 Sg 1
 		subGroups view=Signal cellType=HepG2 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65535.000000
@@ -1384,7 +1384,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in HeLa-S3 cells paired read 
+                longLabel HeLa-S3 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HeLaS3 2x75 Sg 2
 		subGroups view=Signal cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65447.000000
@@ -1394,7 +1394,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHelas3R2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in HeLa-S3 cells paired read 
+                longLabel HeLa-S3 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HeLaS3 2x75 Sg 1
 		subGroups view=Signal cellType=HeLaS3 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65483.000000
@@ -1404,7 +1404,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in HUVEC cells paired read 
+                longLabel HUVEC paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Sg 2
 		subGroups view=Signal cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65523.000000
@@ -1414,7 +1414,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHuvecR2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in HUVEC cells paired read 
+                longLabel HUVEC paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HUVE 2x75 Sg 1
 		subGroups view=Signal cellType=HUVEC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65535.000000
@@ -1424,7 +1424,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep4
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
-		longLabel ENCODE Caltech RNA-seq Signal rep 4 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Signal rep 4 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sg 4
 		subGroups view=Signal cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep4
 		type bigWig 0.000000 47970.000000
@@ -1434,7 +1434,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep3
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
-		longLabel ENCODE Caltech RNA-seq Signal rep 3 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Signal rep 3 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sg 3
 		subGroups view=Signal cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep3
 		type bigWig 0.000000 65528.000000
@@ -1444,7 +1444,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sg 2
 		subGroups view=Signal cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65529.000000
@@ -1454,7 +1454,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il400SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in H1-hESC cells paired read 400bpinsertion
+                longLabel H1-hESC paired read (400 bp insert) RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 400 Sg 1
 		subGroups view=Signal cellType=H1hESC insertLength=il400 mapAlgorithm=TH1014 readType=r2x75400 rep=rep1
 		type bigWig 0.000000 65522.000000
@@ -1464,7 +1464,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in GM12878 cells paired read 
+                longLabel GM12878 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel GM12 2x75 Sg 1
 		subGroups view=Signal cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65534.000000
@@ -1474,7 +1474,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in K562 cells paired read 
+                longLabel K562 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel K562 2x75 Sg 2
 		subGroups view=Signal cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65535.000000
@@ -1484,7 +1484,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqK562R2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in K562 cells paired read 
+                longLabel K562 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel K562 2x75 Sg 1
 		subGroups view=Signal cellType=K562 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65528.000000
@@ -1494,7 +1494,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqH1hescR2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on 
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in H1-hESC cells paired read 
+                longLabel H1-hESC paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel H1hESC 2x75 Sg 1
 		subGroups view=Signal cellType=H1hESC insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65177.000000
@@ -1504,7 +1504,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il400SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal on
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in GM12878 cells paired read 400bpinsertion
+                longLabel GM12878 paired read (400 bp insert) RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 400 Sg 2
 		subGroups view=Signal cellType=GM12878 insertLength=il400 mapAlgorithm=TH1014 readType=r2x75400 rep=rep2
 		type bigWig 0.000000 65495.000000
@@ -1514,7 +1514,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqGm12878R2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in GM12878 cells paired read 
+                longLabel GM12878 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel GM12 2x75 Sg 2
 		subGroups view=Signal cellType=GM12878 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65535.000000
@@ -1524,7 +1524,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhekR2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in NHEK cells paired read 
+                longLabel NHEK paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel NHEK 2x75 Sg 2
 		subGroups view=Signal cellType=NHEK insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65507.000000
@@ -1534,7 +1534,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in HSMM cells paired read 
+                longLabel HSMM paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Sg 2
 		subGroups view=Signal cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65517.000000
@@ -1543,7 +1543,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqHsmmR2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in HSMM cells paired read 
+                longLabel HSMM paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel HSMM 2x75 Sg 1
 		subGroups view=Signal cellType=HSMM insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65503.000000
@@ -1552,7 +1552,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep1
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 1 in NHLF cells paired read 
+                longLabel NHLF paired read RNA-seq Signal rep 1 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Sg 1
 		subGroups view=Signal cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
 		type bigWig 0.000000 65534.000000
@@ -1561,7 +1561,7 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqNhlfR2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in NHLF cells paired read 
+                longLabel NHLF paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel NHLF 2x75 Sg 2
 		subGroups view=Signal cellType=NHLF insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65524.000000
@@ -1570,17 +1570,17 @@ wgEncode 1
 		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep2
 		release alpha
 		subTrack wgEncodeCaltechRnaSeqViewSignal off
-		longLabel ENCODE Caltech RNA-seq Signal rep 2 in MCF-7 cells paired read 
+                longLabel MCF-7 paired read RNA-seq Signal rep 2 from ENCODE/Caltech
 		shortLabel MCF7 2x75 Sg 2
 		subGroups view=Signal cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep2
 		type bigWig 0.000000 65533.000000
 		# subId=1904 dateSubmitted=2010-07-13
 
-        track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
-        release alpha
-        parent wgEncodeCaltechRnaSeqViewSignal off
-        shortLabel MCF-7 Sig 1
-        longLabel ENCODE Caltech RNA-seq Signal Replicate 1 (in MCF-7 cells)
-        subGroups view=Signal cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
-        type bigWig 0.000000 65533.000000
-        # subId=3000 dateSubmitted=2010-11-18
+		track wgEncodeCaltechRnaSeqMcf7R2x75Th1014Il200SigRep1
+		release alpha
+		parent wgEncodeCaltechRnaSeqViewSignal off
+		shortLabel MCF7 Sig 1
+                longLabel MCF-7 paired read RNA-seq Signal rep 1 from ENCODE/Caltech
+		subGroups view=Signal cellType=MCF7 insertLength=il200 mapAlgorithm=TH1014 readType=r2x75 rep=rep1
+		type bigWig 0.000000 65533.000000
+		# subId=3000 dateSubmitted=2010-11-18
