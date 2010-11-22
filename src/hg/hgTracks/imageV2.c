@@ -1872,20 +1872,16 @@ hPrintf(" width=%d",imgBox->showPortal?(imgBox->portalWidth+imgBox->sideLabelWid
 hPrintf(" class='tableWithDragAndDrop'");
 hPrintf(" style='border:1px solid blue;border-collapse:separate;'>\n");
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 struct dyString *jsonTdbVars = NULL;
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 
 char *newLine = NEWLINE_TO_USE(cgiClientBrowser(NULL,NULL,NULL));
 struct imgTrack *imgTrack = imgBox->imgTracks;
 for(;imgTrack!=NULL;imgTrack=imgTrack->next)
     {
     char *trackName = (imgTrack->name != NULL ? imgTrack->name : imgTrack->tdb->track );
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
     struct track *track = hashFindVal(trackHash, trackName);
     if(track)
         jsonTdbSettingsBuild(&jsonTdbVars, track, TRUE);
-#endif
     hPrintf("<TR id='tr_%s' abbr='%d' class='imgOrd%s%s%s'>\n",trackName,imgTrack->order,
         (imgTrack->reorderable?" trDraggable":" nodrop nodrag"),
         (imgTrack->centerLabelSeen != clAlways?" clOpt":""),
@@ -1943,8 +1939,6 @@ for(;imgTrack!=NULL;imgTrack=imgTrack->next)
 hPrintf("</TABLE>\n");
 hPrintf("<!-- - - - - - - - ^^^ IMAGEv2 ^^^ - - - - - - - -->\n");  // DANGER FF interprets '--' as end of comment, not '-->'
 
-#if defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 if (jsonTdbVars != NULL)
     hWrites(jsonTdbSettingsUse(&jsonTdbVars));
-#endif/// defined(CONTEXT_MENU) || defined(TRACK_SEARCH)
 }

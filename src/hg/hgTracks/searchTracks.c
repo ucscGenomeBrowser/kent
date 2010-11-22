@@ -20,13 +20,6 @@
 #include "jsHelper.h"
 #include "imageV2.h"
 
-#ifndef TRACK_SEARCH
-void doSearchTracks(struct group *groupList)
-{
-    return;
-}
-#else///ifdef TRACK_SEARCH
-
 #define ANYLABEL                 "Any"
 #define TRACK_SEARCH_FORM        "trackSearch"
 #define SEARCH_RESULTS_FORM      "searchResults"
@@ -958,4 +951,3 @@ hPrintf("<BR><a target='_blank' href='../goldenPath/help/trackSearch.html'>more 
 
 webEndSectionTables();
 }
-#endif///def TRACK_SEARCH
