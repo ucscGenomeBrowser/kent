@@ -450,13 +450,11 @@ else
 	  organization, browserName, organism, freeze, database);
 webNewSection(buf);
 hPrintf("Tracks: ");
-#ifdef TRACK_SEARCH
 if(isSearchTracksSupported(database,cart))
     {
     cgiMakeButtonWithMsg(TRACK_SEARCH, TRACK_SEARCH_BUTTON,TRACK_SEARCH_HINT);
     hPrintf(" ");
     }
-#endif///def TRACK_SEARCH
 cgiMakeButtonWithMsg(configHideAll, "hide all","Hide all tracks in this genome assembly");
 hPrintf(" ");
 cgiMakeButtonWithMsg(configShowAll, "show all","Show all tracks in this genome assembly");
