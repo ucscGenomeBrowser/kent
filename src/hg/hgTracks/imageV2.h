@@ -279,9 +279,10 @@ struct imgTrack // IMAGEv2: imageBox conatins list of displayed imageTracks
     struct imgSlice *slices;  // Currently there should be three slices for every track: data, centerLabel, sideLabel
     };
 
-#define IMG_ANYORDER  -2
-#define IMG_FIXEDPOS  -1
-#define IMG_ORDEREND  1000
+#define IMG_ANYORDER -2
+#define IMG_FIXEDPOS -1
+#define IMG_ORDERTOP  10000
+#define IMG_ORDEREND  20000
 #define IMG_ORDER_VAR "imgOrd"
 
 struct imgTrack *imgTrackStart(struct trackDb *tdb,char *name,char *db,char *chrom,int chromStart,int chromEnd,boolean plusStrand,boolean hasCenterLabel,enum trackVisibility vis,int order);
