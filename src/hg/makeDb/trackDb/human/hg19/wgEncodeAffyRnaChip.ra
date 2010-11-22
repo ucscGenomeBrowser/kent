@@ -1,9 +1,9 @@
-# Affymetrix RNA-chip (wrangler: braney)
+# Affymetrix RNA-chip (wrangler: braney/cricket)
 
 track wgEncodeAffyRnaChip
 compositeTrack on
 shortLabel Affy RNA Loc
-longLabel ENCODE Affymetrix/CSHL Subcellular Microarray Localization by Tiling Array
+longLabel Subcellular RNA Localization by Microarray from ENCODE/Affymetrix/CSHL
 group expression
 subGroup1 view Views FiltTransfrags=Filtered_Transfrags Transfrags=Raw_Transfrags FiltRawSignal=Filtered_Signal RawSignal=Raw_Signal
 subGroup2 cellType Cell_Line GM12878=GM12878&nbsp;(Tier_1) K562=K562&nbsp;(Tier_1) HepG2=HepG2  NHEK=NHEK prostate=Prostate
