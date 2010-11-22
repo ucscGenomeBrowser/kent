@@ -1377,6 +1377,138 @@ tableName wgEncodeSydhHistoneNt2d1InputStdSig
 treatment None
 view Signal
 
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1.bam
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2763
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2.bam
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdAlnRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2763
+treatment None
+view Alignments
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+objType table
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdPk.narrowPeak.gz
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2763
+tableName wgEncodeSydhHistoneU2osH3k36me3bUcdPk
+treatment None
+view Peaks
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep1.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep1
+project wgEncode
+replicate 1
+setType exp
+subId 2763
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2
+objType file
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdRawDataRep2.fastq.gz
+grant Snyder
+lab UCD(Farnham)
+parentTable wgEncodeSydhHistoneU2osH3k36me3bUcdRawSignalRep2
+project wgEncode
+replicate 2
+setType exp
+subId 2763
+treatment None
+view RawData
+
+metaObject wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+objType table
+antibody H3K36me3B
+cell U2OS
+composite wgEncodeSydhHistone
+control UCDavis
+controlId U2OS/None/Input/UCDavis
+dataType ChIPseq
+dataVersion post ENCODE June 2010 Freeze
+dateSubmitted 2010-11-02
+dateUnrestricted 2011-08-02
+fileName wgEncodeSydhHistoneU2osH3k36me3bUcdSig.bigWig
+grant Snyder
+lab UCD(Farnham)
+labVersion PeakSeq1.0
+project wgEncode
+setType exp
+subId 2763
+tableName wgEncodeSydhHistoneU2osH3k36me3bUcdSig
+treatment None
+view Signal
+
 metaObject wgEncodeSydhHistoneU2osH3k9me3UcdAlnRep1
 objType file
 antibody H3K9me3
@@ -1507,4 +1639,4 @@ tableName wgEncodeSydhHistoneU2osH3k9me3UcdSig
 treatment None
 view Signal
 
-# MAGIC: 1041390786
+# MAGIC: 1376044456

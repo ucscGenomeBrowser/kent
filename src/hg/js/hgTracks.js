@@ -1743,7 +1743,7 @@ function loadContextMenu(img)
                 if(cur) {
                     select.children().each(function(index, o) {
                                                var title = $(this).val();
-                                               var str =blankImg + " " + title;
+                                               var str = blankImg + " " + title;
                                                if(title == cur)
                                                    str = selectedImg + " " + title;
                                                var o = new Object();
@@ -2094,7 +2094,7 @@ function handleUpdateTrackMap(response, status)
                    trackImgTbl.tableDnDUpdate();
           } else {
                showWarning("Couldn't parse out new image for id: " + id);
-               //showWarning(response);
+               //alert("Couldn't parse out new image for id: " + id+"BR"+response);  // Very helpful
           }
     } else {
         if(imageV2) {
@@ -2237,7 +2237,7 @@ function findTracksMdbVarChanged(obj)
 
 function findTracksHandleNewMdbVals(response, status)
 // Handle ajax response (repopulate a metadata val select)
-{
+{   // TODO Support for returning whole control, not list of values.
     var list = eval(response);
     var ele = $('select[name=' + this.cmd + ']');
     ele.empty();
@@ -2245,6 +2245,49 @@ function findTracksHandleNewMdbVals(response, status)
     for (var i = 0; i < list.length; i++) {
         var pair = list[i];
         ele.append("<option VALUE='" + pair[1] + "'>" + pair[0] + "</option>");
+    }
+    updateMetaDataHelpLinks(this.num);
+}
+
+// TODO: Replace findTracksMdbVarChanged() and findTracksHandleNewMdbVals()
+function findTracksMdbVarChanged2(obj)
+{ // Ajax call to repopulate a metadata vals select when mdb var changes
+    var newVar = $(obj).val();
+    var a = /hgt_mdbVar(\d+)/.exec(obj.name); // NOTE must match METADATA_NAME_PREFIX in hg/hgTracks/searchTracks.c
+    if(newVar != undefined && a && a[1]) {
+        var num = a[1];
+        $.ajax({
+                   type: "GET",
+                   url: "../cgi-bin/hgApi",
+                   data: "db=" + getDb() +  "&cmd=hgt_mdbVal" + num + "&var=" + newVar,
+                   trueSuccess: findTracksHandleNewMdbVals2,
+                   success: catchErrorOrDispatch,
+                   error: errorHandler,
+                   cache: true,
+                   cmd: "hgt_mdbVal" + num, // NOTE must match METADATA_VALUE_PREFIX in hg/hgTracks/searchTracks.c
+                   num: num
+               });
+    }
+    //findTracksSearchButtonsEnable(true);
+}
+
+function findTracksHandleNewMdbVals2(response, status)
+// Handle ajax response (repopulate a metadata val select)
+{   // TODO Support for returning whole control, not list of values.
+    //var list = eval(response);
+    var td = $('td#' + this.cmd );
+    if (td != undefined) {
+        td.empty();
+        td.append(response);
+        var inp = $(td).find('.mdbVal');
+        var tdIsLike = $('td#isLike'+this.num);
+        if (inp != undefined && tdIsLike != undefined) {
+            if ($(inp).hasClass('freeText')) {
+                $(tdIsLike).text('contains');
+            } else {
+                $(tdIsLike).text('is');
+            }
+        }
     }
     updateMetaDataHelpLinks(this.num);
 }

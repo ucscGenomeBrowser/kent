@@ -2482,7 +2482,7 @@ if(tdbIsContainer(tdb))
     if (1 == cartUsualInt(cart, setting, 0))
         cartRemoveAllForTdbAndChildren(cart,tdb);
     else if (!ajax) // Overkill on !ajax, because ajax shouldn't be called for a composite
-        cartTdbTreeMatchSubtrackVis(cart,tdb);
+        cartTdbTreeReshapeIfNeeded(cart,tdb);
     }
 
 printf("<FORM ACTION=\"%s\" NAME=\""MAIN_FORM"\" METHOD=%s>\n\n",
