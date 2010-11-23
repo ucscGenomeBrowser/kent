@@ -82,14 +82,14 @@ if (zoomed)
 
     if (chromEnd - chromStart == 3 && isCoding)
         {
-        if(justifyString)
+        if (justifyString)
             spreadBasesString(hvg, x1, y, w, height, whiteIndex(),  font, text, strlen(text),  TRUE);
         else
             hvGfxTextCentered(hvg, x1, y, w, height, whiteIndex(), font, text);
         }
     else if (chromEnd - chromStart < 3 && isCoding)
         {
-        if(justifyString)
+        if (justifyString)
             spreadBasesString(hvg, x1, y, w, height, cdsColor[CDS_PARTIAL_CODON], font, text, strlen(text), TRUE);
         else
             hvGfxTextCentered(hvg, x1, y, w, height, cdsColor[CDS_PARTIAL_CODON], font, text);
@@ -1233,7 +1233,7 @@ boolean useExonFrames = (gp->optFields >= genePredExonFramesFld);
                 errAbort("%s: Too much dna (%d - %d = %d)<br>\n", lf->name, 
 			 currentEnd, currentStart, currentSize);
 
-            if(codonIndex)
+            if (codonIndex)
                 sf->codonIndex = codonIndex++;
             slAddHead(&sfList, sf);
             if(posStrand)
@@ -1461,7 +1461,7 @@ void baseColorDrawItem(struct track *tg,  struct linkedFeatures *lf,
 {
 char codon[64] = " ";
 Color color = colorAndCodonFromGrayIx(hvg, codon, grayIx, originalColor);
-if(sf->codonIndex)
+if (sf->codonIndex)
     safef(codon, sizeof(codon), "%c %d", codon[0], sf->codonIndex);
 /* When we are zoomed out far enough so that multiple bases/codons share the 
  * same pixel, we have to draw differences in a separate pass (baseColorOverdrawDiff)
