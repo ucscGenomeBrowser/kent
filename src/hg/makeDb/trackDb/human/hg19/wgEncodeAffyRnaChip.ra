@@ -24,10 +24,10 @@ wgEncode 1
     view FiltTransfrags
     visibility pack
     subTrack wgEncodeAffyRnaChip
-    #scoreFilter 0
-    #scoreFilterLimits 100:1000
-    #scoreMin 100
-    #minGrayLevel 4
+    scoreFilter 0
+    scoreFilterLimits 100:1000
+    scoreMin 100
+    minGrayLevel 4
 
         track wgEncodeAffyRnaChipFiltTransfragsProstateCellLongnonpolya
         subTrack wgEncodeAffyRnaChipViewFiltTransfrags off
@@ -251,10 +251,10 @@ wgEncode 1
     view Transfrags
     visibility hide
     subTrack wgEncodeAffyRnaChip
-    #scoreFilter 100
-    #scoreFilterLimits 100:1000
-    #scoreMin 100
-    #minGrayLevel 4
+    scoreFilter 100
+    scoreFilterLimits 100:1000
+    scoreMin 100
+    minGrayLevel 4
 
         track wgEncodeAffyRnaChipTransfragsProstateCellLongnonpolya
         subTrack wgEncodeAffyRnaChipViewTransfrags off off
